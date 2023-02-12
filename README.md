@@ -8,21 +8,30 @@ The friction to measuring software emissions isn't that we need to know how, it'
 
 Therefore, the intent of this project is to build a single API codenamed *carbonQL* that you can use to measure your software emissions for every runtime environment. If your application runs on bare-metal servers in the private cloud, virtualized servers in the public cloud, mobile, desktop, and laptop end-user devices, the carbonQL API  gives you data for all of them.
 
-The carbonQL is:
--**Opinionated**: It’s the expertise in software measurement codified into software. Rather than giving you options, it gives you answers.
--**Ubiquitous**: Whatever the environment, bare metal, virtualized, mobile, IoT, carbon QL project will always be able to give you numbers.
--**Declarative**: You express your intentions, needs, and context, and carbonQL selects the correct measurement methodology. For example, if you are calculating an SCI score, the carbonQL API will return you data that meets the requirements of the SCI. Likewise, if you are calculating for GHG reporting, the API will return you information that meets the requirements of GHG reporting.
--**Free**: carbonQL is open source and comes linked with public data sources that are free to use. Using the library doesn't cost anything; however, the free sources might be limited.
+The carbonQL is:        
+
+-**Opinionated**: It’s the expertise in software measurement codified into software. Rather than giving you options, it gives you answers.   
+
+-**Ubiquitous**: Whatever the environment, bare metal, virtualized, mobile, IoT, carbon QL project will always be able to give you numbers.   
+
+-**Declarative**: You express your intentions, needs, and context, and carbonQL selects the correct measurement methodology. For example, if you are calculating an SCI score, the carbonQL API will return you data that meets the requirements of the SCI. Likewise, if you are calculating for GHG reporting, the API will return you information that meets the requirements of GHG reporting.      
+
+-**Free**: carbonQL is open source and comes linked with public data sources that are free to use. Using the library doesn't cost anything; however, the free sources might be limited.     
+
 -**Extendable**: The API can be enhanced to leverage more advanced commercial or private models, for example, real-time electricity carbon intensity feeds.
 
 
 **Audience**        
 
--Software monitoring products looking to add carbon as a software measurement metric.
--Software optimization tools looking to represent optimizations in terms of carbon reductions.
+-Software monitoring products looking to add carbon as a software measurement metric.       
+
+-Software optimization tools looking to represent optimizations in terms of carbon reductions.      
+
 -Developer tooling. Developer and Dev/Ops focussed products looking to add carbon measurement.
--Sustainability professionals who are interested in calculating the carbon emissions for reporting.
--Organizations looking to measure-for-action the carbon emissions reduction from migrating a software application from on-prem to the cloud. 
+-Sustainability professionals who are interested in calculating the carbon emissions for reporting.     
+
+-Organizations looking to measure-for-action the carbon emissions reduction from migrating a software application from on-prem to the cloud.        
+
 
 ## Integration with SCI Open Data
 
