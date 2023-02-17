@@ -44,7 +44,10 @@ As per SCI specifications, carbon emissions values are required for the 4 differ
 
 The carbonQL acts like a facade, it might call out to other APIs, CSV files, DBs, the underlying model can be of any format and in any location. 
 
-It provides a common interface to all the various models, makes opinionated decisions about which model to use and how its results should be transformed into the format you need for your calculations.
+![CarbonQL_architecture](https://user-images.githubusercontent.com/10396742/219698334-eb98bcfd-f968-400a-9ffd-b0aeaee8823f.JPG)
+
+
+It provides a common interface to all the various models, makes opinionated decisions about which model to use and how its results should be transformed into the format you need for your calculations. In the above diagram we can see that the carbonQL is intended to connect to various backend carbon datasets like Climatiq, Cloud carbon co-efficients to bring back emissions data given the usage.
 
 
 
