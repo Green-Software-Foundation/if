@@ -1,7 +1,7 @@
 ---
 name: Agenda
 about: The standard agenda template for carbon ql
-title: "[Agenda] ...."
+title: "GSF Carbon QL Meeting Agenda yyyy-mm-dd"
 labels: agenda
 assignees: ''
 
