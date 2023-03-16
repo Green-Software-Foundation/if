@@ -1,3 +1,12 @@
+---
+name: Agenda
+about: The standard agenda template for carbon ql
+title: "[Agenda] ...."
+labels: agenda
+assignees: ''
+
+---
+
 Time 12:00pm (GMT) - See the time in your [timezone](link)
 
 - Lead – @srini1978 (Microsoft)
