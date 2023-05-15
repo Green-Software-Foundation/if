@@ -6,7 +6,7 @@ The friction to measuring software emissions isn't that we need to know how, it'
 
 ## Solution
 
-Therefore, the intent of this project is to build a single API codenamed *carbonQL* that you can use to measure your software emissions for every runtime environment. If your application runs on bare-metal servers in the private cloud, virtualized servers in the public cloud, mobile, desktop, and laptop end-user devices, the carbonQL API  gives you data for all of them.
+Therefore, the intent of this project is to build a SDK or a framework codenamed *carbonQL* that you can use to measure your software emissions for every runtime environment. If your application runs on bare-metal servers in the private cloud, virtualized servers in the public cloud, mobile, desktop, and laptop end-user devices, the carbonQL SDK  gives you data for all of them.
 
 The carbonQL is:        
 
@@ -14,7 +14,7 @@ The carbonQL is:
 
 -**Ubiquitous**: Whatever the environment, bare metal, virtualized, mobile, IoT, carbon QL project will always be able to give you numbers.   
 
--**Declarative**: You express your intentions, needs, and context, and carbonQL selects the correct measurement methodology. For example, if you are calculating an SCI score, the carbonQL API will return you data that meets the requirements of the SCI. Likewise, if you are calculating for GHG reporting, the API will return you information that meets the requirements of GHG reporting.      
+-**Declarative**: You express your intentions, needs, and context, and carbonQL selects the correct measurement methodology. For example, if you are calculating an SCI score, the carbonQL SDK will return you data that meets the requirements of the SCI. Likewise, if you are calculating for GHG reporting, the SDK will return you information that meets the requirements of GHG reporting.      
 
 -**Free**: carbonQL is open source and comes linked with public data sources that are free to use. Using the library doesn't cost anything; however, the free sources might be limited.     
 
