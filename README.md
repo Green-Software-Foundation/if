@@ -18,7 +18,7 @@ The carbonQL is:
 
 -**Free**: carbonQL is open source and comes linked with public data sources that are free to use. Using the library doesn't cost anything; however, the free sources might be limited.     
 
--**Extendable**: The API can be enhanced to leverage more advanced commercial or private models, for example, real-time electricity carbon intensity feeds.
+-**Extendable**: The SDK can be enhanced to leverage more advanced commercial or private models, for example, real-time electricity carbon intensity feeds.
 
 
 **Audience**        
@@ -37,7 +37,7 @@ The carbonQL is:
 
 At the backend carbonQL project is planned to be integrated with multiple datasets that can be used to provide  carbon emissions values. These datasets could be public or private as well.
 
-As per SCI specifications, carbon emissions values are required for the 4 different components of the SCI equation E, I, M and R. There are reference emission value datasets like Climatiq, Boazvita, Cloud carbon co-efficients that need to be leveraged to provide values for these SCI components. We refer to these emission value datasets as SCI open data and there is a curated list of datasets available as part of the [SCI guidance project](https://sci-data.greensoftware.foundation/)
+As per SCI specifications, carbon emissions values are required for the 4 different components of the SCI equation E, I, M and R. There are reference emission value datasets like Climatiq, Boazvita, Cloud carbon co-efficients that need to be leveraged to provide values for these SCI components. We refer to these emission value datasets as SCI open data and there is a curated list of datasets available as part of the [SCI guidance project](https://sci-guide.greensoftware.foundation/)
 
 
 ## Architecture of the Solution
