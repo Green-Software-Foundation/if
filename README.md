@@ -49,6 +49,14 @@ The carbonQL acts like a facade, it might call out to other APIs, CSV files, DBs
 
 It provides a common interface to all the various models, makes opinionated decisions about which model to use and how its results should be transformed into the format you need for your calculations. In the above diagram we can see that the carbonQL is intended to connect to various backend carbon datasets like Climatiq, Cloud carbon co-efficients to bring back emissions data given the usage.
 
+The interface definition would be generic i.e irrespective of the underlying data sources (hereafter referred to as models) being used , the method names across all tge data models would be the same. This would provide uniformity to the callers or users to use the carbonQL SDK.  For example some of the methods we have envisioned  in the interface include :
+- Create
+- Historical
+- Snapshot
+- Stream
+- Dispose
+
+Also to ensure that we provide uniformity , we will try to keep the method signatures uniform across the different functions. We would try to use specific datatypes only when it is required but try to build methods that accept arrays and dictionary objects that can help the method to be scalable across different programming languages. 
 
 
 
