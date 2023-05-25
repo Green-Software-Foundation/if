@@ -6,7 +6,7 @@ The friction to measuring software emissions isn't that we need to know how, it'
 
 ## Solution
 
-Therefore, the intent of this project is to build a single API codenamed *carbonQL* that you can use to measure your software emissions for every runtime environment. If your application runs on bare-metal servers in the private cloud, virtualized servers in the public cloud, mobile, desktop, and laptop end-user devices, the carbonQL API  gives you data for all of them.
+Therefore, the intent of this project is to build a framework codenamed *carbonQL* that you can use to extend and measure  software emissions for every runtime environment. If your application runs on bare-metal servers in the private cloud, virtualized servers in the public cloud, mobile, desktop, and laptop end-user devices, the carbonQL framework  gives you data for all of them.
 
 The carbonQL is:        
 
@@ -14,11 +14,11 @@ The carbonQL is:
 
 -**Ubiquitous**: Whatever the environment, bare metal, virtualized, mobile, IoT, carbon QL project will always be able to give you numbers.   
 
--**Declarative**: You express your intentions, needs, and context, and carbonQL selects the correct measurement methodology. For example, if you are calculating an SCI score, the carbonQL API will return you data that meets the requirements of the SCI. Likewise, if you are calculating for GHG reporting, the API will return you information that meets the requirements of GHG reporting.      
+-**Declarative**: You express your intentions, needs, and context, and carbonQL selects the correct measurement methodology. For example, if you are calculating a SCI score, the carbonQL framework will return you data that meets the requirements of the SCI. Likewise, if you are calculating for GHG reporting, it will return you information that meets the requirements of GHG reporting.      
 
 -**Free**: carbonQL is open source and comes linked with public data sources that are free to use. Using the library doesn't cost anything; however, the free sources might be limited.     
 
--**Extendable**: The API can be enhanced to leverage more advanced commercial or private models, for example, real-time electricity carbon intensity feeds.
+-**Extendable**: The framework can be enhanced to leverage more advanced commercial or private models, for example, real-time electricity carbon intensity feeds.
 
 
 **Audience**        
@@ -37,7 +37,7 @@ The carbonQL is:
 
 At the backend carbonQL project is planned to be integrated with multiple datasets that can be used to provide  carbon emissions values. These datasets could be public or private as well.
 
-As per SCI specifications, carbon emissions values are required for the 4 different components of the SCI equation E, I, M and R. There are reference emission value datasets like Climatiq, Boazvita, Cloud carbon co-efficients that need to be leveraged to provide values for these SCI components. We refer to these emission value datasets as SCI open data and there is a curated list of datasets available as part of the [SCI guidance project](https://sci-data.greensoftware.foundation/)
+As per SCI specifications, carbon emissions values are required for the 4 different components of the SCI equation E, I, M and R. There are reference emission value datasets like Climatiq, Boazvita, Cloud carbon co-efficients that need to be leveraged to provide values for these SCI components. We refer to these emission value datasets as SCI open data and there is a curated list of datasets available as part of the [SCI guidance project](https://sci-guide.greensoftware.foundation/)
 
 
 ## Architecture of the Solution
@@ -49,6 +49,14 @@ The carbonQL acts like a facade, it might call out to other APIs, CSV files, DBs
 
 It provides a common interface to all the various models, makes opinionated decisions about which model to use and how its results should be transformed into the format you need for your calculations. In the above diagram we can see that the carbonQL is intended to connect to various backend carbon datasets like Climatiq, Cloud carbon co-efficients to bring back emissions data given the usage.
 
+The interface definition would be generic i.e irrespective of the underlying data sources (hereafter referred to as models) being used , the method names across all the data models would be the same. This would provide uniformity to the callers or users to use the framework.  For example some of the methods we have envisioned  in the interface include :
+- Create
+- Historical
+- Snapshot
+- Stream
+- Dispose
+
+Also to ensure that we provide uniformity , we will try to keep the method signatures uniform across the different functions. We would try to use specific datatypes only when it is required but try to build methods that accept arrays and dictionary objects that can help the method to be scalable across different programming languages. 
 
 
 
