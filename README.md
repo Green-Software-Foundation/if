@@ -6,7 +6,7 @@ The friction to measuring software emissions isn't that we need to know how, it'
 
 ## Solution
 
-Therefore, the intent of this project is to build a SDK or a framework codenamed *carbonQL* that you can use to measure your software emissions for every runtime environment. If your application runs on bare-metal servers in the private cloud, virtualized servers in the public cloud, mobile, desktop, and laptop end-user devices, the carbonQL SDK  gives you data for all of them.
+Therefore, the intent of this project is to build a framework codenamed *carbonQL* that you can use to extend and measure  software emissions for every runtime environment. If your application runs on bare-metal servers in the private cloud, virtualized servers in the public cloud, mobile, desktop, and laptop end-user devices, the carbonQL framework  gives you data for all of them.
 
 The carbonQL is:        
 
@@ -14,11 +14,11 @@ The carbonQL is:
 
 -**Ubiquitous**: Whatever the environment, bare metal, virtualized, mobile, IoT, carbon QL project will always be able to give you numbers.   
 
--**Declarative**: You express your intentions, needs, and context, and carbonQL selects the correct measurement methodology. For example, if you are calculating an SCI score, the carbonQL SDK will return you data that meets the requirements of the SCI. Likewise, if you are calculating for GHG reporting, the SDK will return you information that meets the requirements of GHG reporting.      
+-**Declarative**: You express your intentions, needs, and context, and carbonQL selects the correct measurement methodology. For example, if you are calculating a SCI score, the carbonQL framework will return you data that meets the requirements of the SCI. Likewise, if you are calculating for GHG reporting, it will return you information that meets the requirements of GHG reporting.      
 
 -**Free**: carbonQL is open source and comes linked with public data sources that are free to use. Using the library doesn't cost anything; however, the free sources might be limited.     
 
--**Extendable**: The SDK can be enhanced to leverage more advanced commercial or private models, for example, real-time electricity carbon intensity feeds.
+-**Extendable**: The framework can be enhanced to leverage more advanced commercial or private models, for example, real-time electricity carbon intensity feeds.
 
 
 **Audience**        
@@ -49,7 +49,7 @@ The carbonQL acts like a facade, it might call out to other APIs, CSV files, DBs
 
 It provides a common interface to all the various models, makes opinionated decisions about which model to use and how its results should be transformed into the format you need for your calculations. In the above diagram we can see that the carbonQL is intended to connect to various backend carbon datasets like Climatiq, Cloud carbon co-efficients to bring back emissions data given the usage.
 
-The interface definition would be generic i.e irrespective of the underlying data sources (hereafter referred to as models) being used , the method names across all tge data models would be the same. This would provide uniformity to the callers or users to use the carbonQL SDK.  For example some of the methods we have envisioned  in the interface include :
+The interface definition would be generic i.e irrespective of the underlying data sources (hereafter referred to as models) being used , the method names across all the data models would be the same. This would provide uniformity to the callers or users to use the framework.  For example some of the methods we have envisioned  in the interface include :
 - Create
 - Historical
 - Snapshot
