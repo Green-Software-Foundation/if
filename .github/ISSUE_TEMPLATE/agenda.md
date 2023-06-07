@@ -10,6 +10,7 @@ assignees: ''
 Time 12:00pm (GMT) - See the time in your [timezone](link)
 
 - Lead – @srini1978 (Microsoft)
+- Co-Lead @navveenb (Accenture)
 - PM – @Oleg-Zhymolokhov  (GSF)
 
 ## Antitrust Policy
@@ -22,8 +23,8 @@ Please add 'Attended' to this issue during the meeting to denote attendance.
 Any untracked attendees will be added by the GSF team below:
 
 ## Agenda
-- [] 
-- [] AOB
+- [ ] 
+- [ ] AOB
 
 ## Decisions 
 
