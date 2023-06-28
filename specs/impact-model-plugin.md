@@ -1,4 +1,4 @@
-## Impact Measurement Plugin Specification
+# Impact Measurement Plugin Specification
 
 Calculating these impacts for every software component requires the use of an **Impact Measurement Model** (IMM). IMMs convert some input telemetry into some output impact metric, for example models that convert CPU Utilisation into Energy Consumption.
 
@@ -16,7 +16,7 @@ If every IMM **exposed the same interface**, then those models can easily be plu
 
 The goal of the Impact Measurement Plugin (IMP) Spec is to define a common standardised interface to every IMM, current and future. 
 
-# Impact Model Interface Specification 
+## Impact Model Interface Specification 
 
 The Impact Model Interface Specification project is here to standardise an interface to existing and future impact models (IMOs). The ecosystem of solutions we need for software measurement will sit on a solid bedrock of Impact Model Interfaces (IMIs) that have the same interface, to enable reusability, and comparability. 
 
