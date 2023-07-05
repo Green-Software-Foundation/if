@@ -44,6 +44,11 @@ My Web Server Impact Graph
 
 The next step is figuring out which **Impact Measurement Models** we want to use to measure each **Impact Graph Node**. In the above example we want to use Boavista's **Impact Measurement Model** to measure the Backend Server and Load Balencer because those are runing on a mixture of different types of underlying chips. The cache servers might however only be running on Intel Chips and therefore we may want to use Intels IMM since it's more accurate for Intel products. To interact with each IMM we use an **Impact Measurement Plugin** which is just a class that extends the **Impact Measurement Interface** and implements the functions in the interface.
 
+If later on we wanted to use another IMM, perhaps the Cloud Carbon Footprint IMM, we would 
+
+1. install the CCF package
+2. import it
+3. use the CCF class instead of the Boavista class.
 
 ```
 My Web Server Impact Graph
@@ -52,11 +57,6 @@ My Web Server Impact Graph
 └── Cache Servers <- class IntelVM extends IMI -> Intel IMM.
 ```
 
-If later on we wanted to use another IMM, perhaps the Cloud Carbon Footprint IMM, we would 
-
-1. install the CCF package
-2. import it
-3. use the CCF class instead of the Boavista class.
 
 All IMPs expose the same class Interface (IMI) so can be swapped in and out easily.
 
