@@ -6,19 +6,19 @@ There are many different **Impact Measurement Models** (IMMs), [Boavizta](https:
 
 The set of IMMs are proliferating; however, no single IMM can possibly cover all impacts, scenarios, environments, contexts and use cases. To calculate the end-to-end impact of a software application you need to stitch together many different IMMs. IMMs differ in fundamental ways, in the inputs they accept, their interface, their calculation methodology, their outputs, their granularity, their coverage. 
 
-We expect the choice of which IMM to use for which software component to come down to an expert decision by a software measurement professional.
+We expect the choice of which IMM to use for which software component to come down to an expert decision by a Impact measurement professional.
 
 Currently if you want to consume an IMM you are required to craft custom interfaces, since every software measurement use case is bespoke. Swapping one IMM for another requires code changes and comparing IMMs or validating their accuracy/precision is challenging. 
 
 If every IMM **exposed the same interface**, then those models can easily be plugged in different applications, swapped in and out, upgraded, compared.
 
-**Our thesis is simple, if we want there to be a large, vibrant, ecosystem of people and tooling around software impact measurement then we need a standard, common, interface to all Impact Measurement Models.**
+**Our thesis is simple, if we want there to be a large, vibrant, ecosystem of people and tooling around Impact measurement then we need a standard, common, interface to all Impact Measurement Models.**
 
 The goal of the Impact Measurement Plugin (IMP) Spec is to define a common standardised interface to every IMM, current and future. 
 
 ## Impact Model Interface Specification 
 
-The Impact Model Interface Specification project is here to standardise an interface to existing and future impact models (IMOs). The ecosystem of solutions we need for software measurement will sit on a solid bedrock of Impact Model Interfaces (IMIs) that have the same interface, to enable reusability, and comparability. 
+The Impact Model Interface Specification project is here to standardise an interface to existing and future impact models (IMOs). The ecosystem of solutions we need for Impact measurement will sit on a solid bedrock of Impact Model Interfaces (IMIs) that have the same interface, to enable reusability, and comparability. 
 
 Any class library that exposes the IMI interface adheres to this specification.
 
