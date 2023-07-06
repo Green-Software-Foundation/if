@@ -58,7 +58,7 @@ My Web Server Impact Graph
 ```
 
 
-All IMPs expose the same class Interface (IMI) so can be swapped in and out easily.
+All IMPs extend from the same base class Interface (IMI), so can be swapped in and out easily. New IMPs can be added by Organizations/Users by extending the base class Interface.
 
 ### Measuring Impact
 
