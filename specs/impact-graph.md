@@ -20,7 +20,7 @@ Concrete example of how we might model the carbon impact of a web server using a
 My Web Server Impact Graph
 ```
 
-We first create an **Impact Graph** that describes the ontology we want to measure. This might be an application like this case which is a Web Server, but it also might be a campaign or even an individual user journey. It could even be used to measure the embodied carbon of physical devices. What we are proposing here isn't limited to just software.
+We first create an **Impact Graph** that describes the software boundary we want to measure. The software boundary is represented as an ontology. This might be an application like this case which is a Web Server, but it also might be a campaign or even an individual user journey. It could even be used to measure the embodied carbon of physical devices. What we are proposing here isn't limited to just software.
 
 ```
 My Web Server Impact Graph
