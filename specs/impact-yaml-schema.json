@@ -123,9 +123,6 @@
                               "value"
                             ]
                           }
-                        },
-                        "setupOnly": {
-                          "type": "boolean"
                         }
                       },
                       "required": [

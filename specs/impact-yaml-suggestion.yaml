@@ -27,8 +27,6 @@ components: # The nodes under this root node
               value: val2
               description: description
           model: # so we know which IMP to use to calculate this node
-            path: <a unique string, path to represent an IMP>
-            setupOnly: true #reuses the base model but with different setup
             setup:
               - name: name1 #<value>
                 value: val1
