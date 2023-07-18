@@ -3,6 +3,9 @@
   "title": "Generated schema for Root",
   "type": "object",
   "properties": {
+    "$schema": {
+      "type": "string"
+    },
     "name": {
       "type": "string"
     },
@@ -76,7 +79,7 @@
                     "name": {
                       "type": "string"
                     },
-                    "params": {
+                    "tags": {
                       "type": "array",
                       "items": {
                         "type": "object",
@@ -85,6 +88,9 @@
                             "type": "string"
                           },
                           "value": {
+                            "type": "string"
+                          },
+                          "description": {
                             "type": "string"
                           }
                         },
@@ -100,7 +106,7 @@
                         "path": {
                           "type": "string"
                         },
-                        "params": {
+                        "setup": {
                           "type": "array",
                           "items": {
                             "type": "object",
@@ -117,14 +123,60 @@
                               "value"
                             ]
                           }
+                        },
+                        "setupOnly": {
+                          "type": "boolean"
                         }
                       },
                       "required": [
                         "path",
-                        "params"
+                        "setup"
                       ]
                     },
-                    "telemetry": {}
+                    "telemetry": {
+                      "type": "object",
+                      "properties": {
+                        "metric": {
+                          "type": "string"
+                        },
+                        "unit": {
+                          "type": "string"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "timestamp": {
+                                "type": "string"
+                              },
+                              "duration": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "timestamp",
+                              "duration",
+                              "value"
+                            ]
+                          }
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "mapping": {
+                          "type": "array",
+                          "items": {}
+                        }
+                      },
+                      "required": [
+                        "metric",
+                        "unit"
+                      ]
+                    }
                   },
                   "required": [
                     "name",
@@ -148,6 +200,7 @@
     }
   },
   "required": [
+    "$schema",
     "name",
     "components"
   ]
