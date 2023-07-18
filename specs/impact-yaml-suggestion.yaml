@@ -1,0 +1,59 @@
+$schema: "./impact-yaml-schema.json"
+name: app-name # The name of the root node (the applicatio as a whole)
+components: # The nodes under this root node
+  - name: nodename # The name of this node
+    tags: # common static params
+      - name: field1
+        value: val1
+      - name: field2
+        value: val2
+        description: description
+    model: # so we know which IMP to use to calculate this node
+      path: com.boavizta.CloudPlugin
+      setup:
+        - name: field1
+          value: value1
+        - name: field2
+          value: value2
+    telemetry: # for more complex use cases can point to a CSV file
+      # Either a path to a CSV file
+      # Or you can add simple telemety inline in the YAML
+      components: # The sub nodes of this node
+        - name: name # The name of this node
+          params: # common static params
+            - name: name1 #<value>
+              value: val1
+          model: # so we know which IMP to use to calculate this node
+            path: <a unique string, path to represent an IMP>
+            params:
+              - name: name1 #<value>
+                value: val1
+          telemetry:
+            - timestamp: 2020-01-01T00:00:00.000Z
+              duration: 5s
+              metric: cpu
+              unit: percentage
+              value: 34
+        - name: name2 # The name of this node
+          telemetry:
+            path: 'path/to/csv/file.csv'
+            mapping:
+              - field: date
+                to: date
+              - field: percs
+                to: percentage
+        - name: name # The name of this node
+          params: # common static params
+            - name: name1 #<value>
+              value: val1
+          model: # so we know which IMP to use to calculate this node
+            path: <a unique string, path to represent an IMP>
+            params:
+              - name: name1 #<value>
+                value: val1
+          telemetry:
+            path: 'path/to/csv/file.csv'
+            mapping:
+              - date
+              - percentage
+              - duration
