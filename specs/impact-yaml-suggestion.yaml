@@ -31,22 +31,24 @@ components: # The nodes under this root node
               - name: name1 #<value>
                 value: val1
           telemetry:
-            metric: cpu
-            unit: percentage
             data:
               - timestamp: 2020-01-01T00:00:00.000Z
+                unit: percentage
+                metric: cpu
                 duration: 5s
                 value: 34
         - name: name2 # The name of this node
           telemetry:
             path: 'path/to/csv/file.csv'
-            metric: cpu
-            unit: percentage
             mapping:
               - field: date
-                to: date
-              - field: percs
-                to: percentage
+                for: timestamp
+              - field: cpu_percentage
+                metric: cpu
+                unit: percentage
+              - field: gpu_percentage
+                metric: gpu
+                unit: percentage
         - name: name # The name of this node
           tags: # common static params
             - name: name1 #<value>
@@ -61,6 +63,12 @@ components: # The nodes under this root node
             metric: cpu
             unit: percentage
             mapping:
-              - date
-              - percentage
-              - duration
+              - field: date
+                for: timestamp
+              - field: cpu_percentage
+                metric: gpu
+                unit: percentage
+              - field: gpu_percentage
+                metric: gpu
+                unit: percentage
+
