@@ -44,8 +44,8 @@ components: # The nodes under this root node
     telemetry: # for more complex use cases can point to a CSV file
       # Either a path to a CSV file
       # Or you can add simple telemety inline in the YAML
-      components: # The sub nodes of this node
-        <name>: <another component same as above>
+    components: # The sub nodes of this node
+      <name>: <another component same as above>
 ```
 
 ## Example

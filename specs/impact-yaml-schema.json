@@ -18,24 +18,9 @@
             "type": "string"
           },
           "tags": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "value": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "name",
-                "value"
-              ]
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
             }
           },
           "model": {
@@ -54,11 +39,20 @@
                     },
                     "value": {
                       "type": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "String",
+                        "Boolean",
+                        "Number"
+                      ]
                     }
                   },
                   "required": [
                     "name",
-                    "value"
+                    "value",
+                    "type"
                   ]
                 }
               }
@@ -68,18 +62,26 @@
               "setup"
             ]
           },
-          "telemetry": {
-            "type": "object",
-            "properties": {
-              "components": {
-                "type": "array",
-                "items": {
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "tags": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "model": {
                   "type": "object",
                   "properties": {
-                    "name": {
+                    "path": {
                       "type": "string"
-                    },
-                    "tags": {
+                    },              "setup": {
                       "type": "array",
                       "items": {
                         "type": "object",
@@ -90,108 +92,144 @@
                           "value": {
                             "type": "string"
                           },
-                          "description": {
-                            "type": "string"
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "String",
+                              "Boolean",
+                              "Number"
+                            ]
                           }
                         },
                         "required": [
                           "name",
+                          "value",
+                          "type"
+                        ]
+                      }
+                    }
+
+                  },
+                  "required": [
+                    "setup"
+                  ]
+                },
+                "telemetry": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "timestamp": {
+                            "type": "string"
+                          },
+                          "unit": {
+                            "type": "string"
+                          },
+                          "metric": {
+                            "type": "string"
+                          },
+                          "duration": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "timestamp",
+                          "unit",
+                          "metric",
+                          "duration",
                           "value"
                         ]
                       }
                     },
-                    "model": {
-                      "type": "object",
-                      "properties": {
-                        "path": {
-                          "type": "string"
-                        },
-                        "setup": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string"
-                              },
-                              "value": {
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "name",
-                              "value"
-                            ]
-                          }
-                        }
-                      },
-                      "required": [
-                        "path",
-                        "setup"
-                      ]
+                    "path": {
+                      "type": "string"
                     },
-                    "telemetry": {
-                      "type": "object",
-                      "properties": {
-                        "metric": {
-                          "type": "string"
-                        },
-                        "unit": {
-                          "type": "string"
-                        },
-                        "data": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "timestamp": {
-                                "type": "string"
-                              },
-                              "duration": {
-                                "type": "string"
-                              },
-                              "value": {
-                                "type": "number"
-                              }
-                            },
-                            "required": [
-                              "timestamp",
-                              "duration",
-                              "value"
-                            ]
+                    "mapping": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "field": {
+                            "type": "string"
+                          },
+                          "for": {
+                            "type": "string"
+                          },
+                          "metric": {
+                            "type": "string"
+                          },
+                          "unit": {
+                            "type": "string"
                           }
                         },
-                        "path": {
-                          "type": "string"
-                        },
-                        "mapping": {
-                          "type": "array",
-                          "items": {}
-                        }
-                      },
-                      "required": [
-                        "metric",
-                        "unit"
-                      ]
+                        "required": [
+                          "field"
+                        ]
+                      }
+                    },
+                    "metric": {
+                      "type": "string"
+                    },
+                    "unit": {
+                      "type": "string"
+                    }
+                  },
+                  "required": []
+                }
+              },
+              "required": [
+                "name",
+                "telemetry"
+              ]
+            }
+          },
+          "telemetry": {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "unit": {
+                      "type": "string"
+                    },
+                    "metric": {
+                      "type": "string"
+                    },
+                    "duration": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number"
                     }
                   },
                   "required": [
-                    "name",
-                    "telemetry"
+                    "timestamp",
+                    "unit",
+                    "metric",
+                    "duration",
+                    "value"
                   ]
                 }
               }
             },
             "required": [
-              "components"
+              "data"
             ]
           }
         },
         "required": [
-          "name",
-          "tags",
-          "model",
-          "telemetry"
+          "name"
         ]
       }
     }

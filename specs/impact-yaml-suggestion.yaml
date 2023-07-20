@@ -3,72 +3,75 @@ name: app-name # The name of the root node (the applicatio as a whole)
 components: # The nodes under this root node
   - name: nodename # The name of this node
     tags: # common tags for identifying the resource
-      - name: field1
-        value: val1
-      - name: field2
-        value: val2
-        description: description
+      field1: falce
+      field2: val2
     model: # so we know which IMP to use to calculate this node
       path: com.boavizta.CloudPlugin
       setup:
         - name: field1
           value: value1
+          type: String
         - name: field2
           value: value2
-    telemetry: # for more complex use cases can point to a CSV file
-      # Either a path to a CSV file
-      # Or you can add simple telemety inline in the YAML
-      components: # The sub nodes of this node
-        - name: name # The name of this node
-          tags: # common tags for identifying the resource
-            - name: field1
-              value: val1
-            - name: field2
-              value: val2
-              description: description
-          model: # so we know which IMP to use to calculate this node
-            setup:
-              - name: name1 #<value>
-                value: val1
-          telemetry:
-            data:
-              - timestamp: 2020-01-01T00:00:00.000Z
-                unit: percentage
-                metric: cpu
-                duration: 5s
-                value: 34
-        - name: name2 # The name of this node
-          telemetry:
-            path: 'path/to/csv/file.csv'
-            mapping:
-              - field: date
-                for: timestamp
-              - field: cpu_percentage
-                metric: cpu
-                unit: percentage
-              - field: gpu_percentage
-                metric: gpu
-                unit: percentage
-        - name: name # The name of this node
-          tags: # common static params
+          type: Number
+    components: # The sub nodes of this node
+      - name: name # The name of this node
+        tags: # common tags for identifying the resource
+          model: boavizta
+        model: # so we know which IMP to use to calculate this node
+          setup:
             - name: name1 #<value>
               value: val1
-          model: # so we know which IMP to use to calculate this node
-            path: <a unique string, path to represent an IMP>
-            setup:
-              - name: name1 #<value>
-                value: val1
-          telemetry:
-            path: 'path/to/csv/file.csv'
-            metric: cpu
-            unit: percentage
-            mapping:
-              - field: date
-                for: timestamp
-              - field: cpu_percentage
-                metric: gpu
-                unit: percentage
-              - field: gpu_percentage
-                metric: gpu
-                unit: percentage
-
+              type: String
+        telemetry:
+          data:
+            - timestamp: 2020-01-01T00:00:00.000Z
+              unit: percentage
+              metric: cpu
+              duration: 5s
+              value: 34
+      - name: name2 # The name of this node
+        telemetry:
+          path: 'path/to/csv/file.csv'
+          mapping:
+            - field: date
+              for: timestamp
+            - field: cpu_percentage
+              metric: cpu
+              unit: percentage
+            - field: gpu_percentage
+              metric: gpu
+              unit: percentage
+      - name: name # The name of this node
+        tags: # common static params
+          model: boavizta
+        model: # so we know which IMP to use to calculate this node
+          path: <a unique string, path to represent an IMP>
+          setup:
+            - name: name1 #<value>
+              value: val1
+              type: String
+        telemetry:
+          path: 'path/to/csv/file.csv'
+          metric: cpu
+          unit: percentage
+          mapping:
+            - field: date
+              for: timestamp
+            - field: cpu_percentage
+              metric: gpu
+              unit: percentage
+            - field: gpu_percentage
+              metric: gpu
+              unit: percentage
+  - name: nodename # The name of this node
+    tags: # common tags for identifying the resource
+      field1: val1
+      field2: val2
+    telemetry:
+      data:
+        - timestamp: 2020-01-01T00:00:00.000Z
+          unit: percentage
+          metric: cpu
+          duration: 5s
+          value: 34
