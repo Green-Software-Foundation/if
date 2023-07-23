@@ -42,14 +42,15 @@ components: # The nodes under this root node
       path: <a unique string, path to represent an IMP>
     config: # common static params
       <key>: <value>
-    measurement: # A single measurement
+    observation: # A set of data points for a moment and duration of time.
       <key>: <value>
       ...
-    measurements: # A series of measurements
+    observations: # Multiple sets of data points for multiples moments and durations of time.
       shared:
         <key>: <value> # Data that is repeated for every measurement, e.g machine type.
-      series: 
-    measurements: # A series of measurements stored in a CSV file
+      series:
+        - <first observation>
+    observations: # Observations stored in a CSV file
       path: <file> # Path to a CSV file containing the measurements
     components: # The sub nodes of this node
       - <name>: <another component same as above>
@@ -73,18 +74,10 @@ components:
       config: 
         vendor: gcp
         region: west-us
-      measurements:
-        shared: ~
-        data:
-          - 2023-07-06T00:00:
-            duration: 5s
-            cpu: 0.34
-          - 2023-07-06T00:05:
-            duration: 5s
-            cpu: 0.23
-          - 2023-07-06T00:05:
-            duration: 5s
-            cpu: 0.11
+      observation:
+        2023-07-06T00:00:
+        duration: 15s
+        cpu: 0.34
       components: ~ 
   - backend server:
       model: 
@@ -92,10 +85,10 @@ components:
       params: 
         vendor: azure
         region: east-us
-      measurements: 
+      observations: 
         shared:
           sku: AC2
-        data:
+        series:
           - 2023-07-06T00:00:
             duration: 5s
             cpu: 0.34
@@ -112,10 +105,10 @@ components:
       params: 
         vendor: aws
         region: france
-      measurements: 
+      observations: 
         shared:
           sku: EC2
-        data:      
+        series:      
           - 2023-07-06T00:00:
             duration: 5s
             cpu: 0.34
