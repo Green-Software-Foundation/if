@@ -34,11 +34,13 @@ This version of the specification does not pick any specific language, but it do
 
 This is a simple dictionary used to set up an IMM. Each IMM is different and can have a wide variety of parameters. The specification cannot define what these parameters will be, so we choose to have a simple data type of a dictionary which accepts all types and quantity of params.
 
-### Measuerment
+### Observation
 
-This is a unit of data to describe some inputs to an IMM. Since every IMM is different we can’t prescribe too much in the specification, however the only two fields that would be mandatory for each unit of measurement is the date/time when the measurement was gathered and the time-range for which the measurement is valid for. For example, you might have some measurement for CPU utilisation, but we also need to know when this measurement was gathered and for what period of time does the measurement span.
+- An observation is a unit of data to describe some inputs to an IMM. 
+- Since every IMM is different we can’t prescribe too much in the specification, however the only two fields that would be mandatory for each observation is the date/time when the measurement was gathered and the duration for which the observation is valid for. 
+- For example, you might have some observation for CPU utilisation, but we also need to know when this observation was gathered and for what period of time does the observation span.
 
-Measurement can be aggregate or granular, for example it might contain an average of cpu utilization across a range of machines.
+An observation can be aggregate or granular, for example it might contain an average of cpu utilization across a range of machines.
 
 `{ “date-time”: xxxx, “duration”: xxx, “cpu-util”: 0.5 }`
 
@@ -50,7 +52,7 @@ Or it might contain even more granular data to the process level:
 
 `{ “date-time”: xxxx, “duration”: xxx, machines: { “gsf-001”: { processes: { “process-001”: “cpu-util”: 0.5 } }  }`
 
-This is just an example to demonstrate just how wide a variety of data there can be for measurements, there may be an infinite variety of inputs here. The measurement is really defined by the IMM, if the IMM does per processes modelling then the measurement can provide per process data.
+This is just an example to demonstrate just how wide a variety of data there can be for observations, there may be an infinite variety of inputs here. The observation is really defined by the IMM, if the IMM does per processes modelling then the observation can provide per process data.
 
 ### ImpactMetric
 
@@ -71,7 +73,7 @@ Whereas the Measurement can vary wildly depending on IMM, we do need to normalis
 interface ImpactModelInterface {
   public configure(name: string, params: StaticParams): ImpactModelInterface
   public authenticate(authParams: AuthParams): void
-  public calculate(measurements: Arrray<Measurement>): ImpactMetric
+  public calculate(observations: Arrray<Observation>): ImpactMetric
 }
 ```
 
@@ -165,7 +167,7 @@ This function estimates the emissions based on the telemetry provided for a sing
 #### Signature
 
 ```ts
-public calcualte(measure: Measurement): ImpactMetric
+public calcualte(observations: Array<Observation>): ImpactMetric
 ```
 
 #### Example usage
@@ -174,8 +176,8 @@ public calcualte(measure: Measurement): ImpactMetric
 class ConcreteVM extends ImpactModelInterface { ... }
 let model = new ConcreteVM().configure("backend-server", {vendor: "GCP"});
 try {
-    let measurement = {“date-time”: xxxx, “duration”: xxx, “cpu-util”: 0.5};
-    let impact = model.snapshot(measurement);
+    let observation = {“date-time”: xxxx, “duration”: xxx, “cpu-util”: 0.5};
+    let impact = model.calculate([observation]);
     console.log(impact);
 } catch {
     ...
@@ -184,14 +186,14 @@ try {
 
 #### Responsibilities
 
-* Checked that the passed in measurements have all the required fields for this model.
-* Performs what validations it can that the provided measurements is not malformed.
-* Passes the measurements to the underlying carbon model, executes the model and translates the response to match the emissions data data type.
+* Checked that the passed in observations have all the required fields for this model.
+* Performs what validations it can that the provided observations is not malformed.
+* Passes the observations to the underlying carbon model, executes the model and translates the response to match the emissions data data type.
 
 #### Parameters
 
 * **measures** 
-  * This is an array of measurements. 
+  * This is an array of observations. 
   * Each model can work with different types of inputs, the spec cannot predict what types of inputs will be used by all models so we need to keep this very open. 
   * It's an array since we will (in the future) need to deal with GridEMissions (`I`) and that requires input data in a fine grain to make sure we map to `I` at the same granularity. E.g. we might want to output carbon per hour, but the input energy data is in 5min increments so we can make to the grid emissions in the same 5 min increments.
 
