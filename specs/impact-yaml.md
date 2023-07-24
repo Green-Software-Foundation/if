@@ -75,7 +75,7 @@ components:
         vendor: gcp
         region: west-us
       observation:
-        2023-07-06T00:00:
+        datetime: 2023-07-06T00:00
         duration: 15s
         cpu: 0.34
       components: ~ 
@@ -89,13 +89,13 @@ components:
         shared:
           sku: AC2
         series:
-          - 2023-07-06T00:00:
+          - datetime: 2023-07-06T00:00
             duration: 5s
             cpu: 0.34
-          - 2023-07-06T00:05:
+          - datetime: 2023-07-06T00:05
             duration: 5s
             cpu: 0.23
-          - 2023-07-06T00:05:
+          - datetime: 2023-07-06T00:05:
             duration: 5s
             cpu: 0.11
       components: ~ 
@@ -109,13 +109,13 @@ components:
         shared:
           sku: EC2
         series:      
-          - 2023-07-06T00:00:
+          - datetime: 2023-07-06T00:00
             duration: 5s
             cpu: 0.34
-          - 2023-07-06T00:05:
+          - datetime: 2023-07-06T00:05
             duration: 5s
             cpu: 0.23
-          - 2023-07-06T00:05:
+          - datetime: 2023-07-06T00:05
             duration: 5s
             cpu: 0.11
       components: ~
