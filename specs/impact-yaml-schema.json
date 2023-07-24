@@ -81,7 +81,8 @@
                   "properties": {
                     "path": {
                       "type": "string"
-                    },              "setup": {
+                    },
+                    "setup": {
                       "type": "array",
                       "items": {
                         "type": "object",
@@ -108,7 +109,6 @@
                         ]
                       }
                     }
-
                   },
                   "required": [
                     "setup"
