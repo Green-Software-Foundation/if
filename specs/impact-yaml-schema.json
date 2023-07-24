@@ -114,7 +114,7 @@
                     "setup"
                   ]
                 },
-                "telemetry": {
+                "observation": {
                   "type": "object",
                   "properties": {
                     "data": {
@@ -185,11 +185,11 @@
               },
               "required": [
                 "name",
-                "telemetry"
+                "observation"
               ]
             }
           },
-          "telemetry": {
+          "observation": {
             "type": "object",
             "properties": {
               "data": {

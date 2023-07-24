@@ -3,7 +3,7 @@ name: app-name # The name of the root node (the applicatio as a whole)
 components: # The nodes under this root node
   - name: nodename # The name of this node
     tags: # common tags for identifying the resource
-      field1: falce
+      field1: val1
       field2: val2
     model: # so we know which IMP to use to calculate this node
       path: com.boavizta.CloudPlugin
@@ -23,7 +23,7 @@ components: # The nodes under this root node
             - name: name1 #<value>
               value: val1
               type: String
-        telemetry:
+        observation:
           data:
             - timestamp: 2020-01-01T00:00:00.000Z
               unit: percentage
@@ -31,7 +31,7 @@ components: # The nodes under this root node
               duration: 5s
               value: 34
       - name: name2 # The name of this node
-        telemetry:
+        observation:
           path: 'path/to/csv/file.csv'
           mapping:
             - field: date
@@ -43,15 +43,12 @@ components: # The nodes under this root node
               metric: gpu
               unit: percentage
       - name: name # The name of this node
-        tags: # common static params
-          model: boavizta
         model: # so we know which IMP to use to calculate this node
-          path: <a unique string, path to represent an IMP>
           setup:
             - name: name1 #<value>
-              value: val1
+              value: val2
               type: String
-        telemetry:
+        observation:
           path: 'path/to/csv/file.csv'
           metric: cpu
           unit: percentage
@@ -68,7 +65,7 @@ components: # The nodes under this root node
     tags: # common tags for identifying the resource
       field1: val1
       field2: val2
-    telemetry:
+    observation:
       data:
         - timestamp: 2020-01-01T00:00:00.000Z
           unit: percentage
