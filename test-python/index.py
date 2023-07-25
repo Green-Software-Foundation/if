@@ -5,7 +5,7 @@ import carbon_ql
 cpu_component = carbon_ql.BoaviztaComponentImpactModel().create_typed(name="app_server",
                                                                       static_params={"componentType": "cpu"})
 print(json.dumps(
-    cpu_component.snapshot(
+    cpu_component.usage(
         {
             "core_units": 2,
             "name": "Intel Xeon Platinum 8272CL",
@@ -19,7 +19,7 @@ print(json.dumps(
 ))
 
 print(json.dumps(
-    cpu_component.snapshot(
+    cpu_component.usage(
         {
             "core_units": 2,
             "name": "Intel SP8160",

@@ -61,6 +61,9 @@ export class BoaviztaComponentImpactModel implements IImpactModelInterface {
         if ('componentType' in staticParamCast) {
             this.componentType = staticParamCast.componentType;
         }
+        if (this.componentType === undefined) {
+            throw new Error("Improper Initialization: Missing componentType")
+        }
         this.name = name;
         return this;
     }
