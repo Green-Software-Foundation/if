@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const boavizta_1 = require("../lib/boavizta");
+const newModel = new boavizta_1.BoaviztaCloudImpactModel();
+newModel.configure('test', { provider: 'aws' });
+newModel.usage({
+    "provider": "aws",
+    "instance_type": "t4g.micro",
+}).then((resp) => {
+    console.log(JSON.stringify(resp));
+    // console.log(util.inspect(resp, {showHidden: false, depth: null}))
+});
+// alternative shortcut
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLDhDQUF5RDtBQUV6RCxNQUFNLFFBQVEsR0FBRyxJQUFJLG1DQUF3QixFQUFFLENBQUM7QUFDaEQsUUFBUSxDQUFDLFNBQVMsQ0FBQyxNQUFNLEVBQUUsRUFBQyxRQUFRLEVBQUUsS0FBSyxFQUFDLENBQUMsQ0FBQztBQUM5QyxRQUFRLENBQUMsS0FBSyxDQUFDO0lBQ1gsVUFBVSxFQUFFLEtBQUs7SUFDakIsZUFBZSxFQUFFLFdBQVc7Q0FDL0IsQ0FBQyxDQUFDLElBQUksQ0FDSCxDQUFDLElBQUksRUFBRSxFQUFFO0lBQ0wsT0FBTyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUE7SUFDakMsb0VBQW9FO0FBQ3hFLENBQUMsQ0FDSixDQUFDO0FBQ0YsdUJBQXVCIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHtCb2F2aXp0YUNsb3VkSW1wYWN0TW9kZWx9IGZyb20gXCIuLi9saWIvYm9hdml6dGFcIjtcblxuY29uc3QgbmV3TW9kZWwgPSBuZXcgQm9hdml6dGFDbG91ZEltcGFjdE1vZGVsKCk7XG5uZXdNb2RlbC5jb25maWd1cmUoJ3Rlc3QnLCB7cHJvdmlkZXI6ICdhd3MnfSk7XG5uZXdNb2RlbC51c2FnZSh7XG4gICAgXCJwcm92aWRlclwiOiBcImF3c1wiLFxuICAgIFwiaW5zdGFuY2VfdHlwZVwiOiBcInQ0Zy5taWNyb1wiLFxufSkudGhlbihcbiAgICAocmVzcCkgPT4ge1xuICAgICAgICBjb25zb2xlLmxvZyhKU09OLnN0cmluZ2lmeShyZXNwKSlcbiAgICAgICAgLy8gY29uc29sZS5sb2codXRpbC5pbnNwZWN0KHJlc3AsIHtzaG93SGlkZGVuOiBmYWxzZSwgZGVwdGg6IG51bGx9KSlcbiAgICB9XG4pO1xuLy8gYWx0ZXJuYXRpdmUgc2hvcnRjdXRcbiJdfQ==

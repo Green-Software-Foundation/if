@@ -1,0 +1,66 @@
+{
+  "name": "carbonql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "jsii",
+    "build:watch": "jsii --watch",
+    "package": "jsii-pacmak"
+  },
+  "author": {
+    "name": "Green Software Foundation",
+    "email": "info@gsf.com"
+  },
+  "repository": {
+    "url": "https://github.com/Green-Software-Foundation/carbon-ql.git"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "stability": "stable",
+  "types": "lib/index.d.ts",
+  "bundledDependencies": [
+    "node-fetch",
+    "axios",
+    "ts-sync-request",
+    "@cloud-carbon-footprint/core",
+    "@types/node"
+  ],
+  "jsii": {
+    "outdir": "dist",
+    "versionFormat": "full",
+    "targets": {
+      "java": {
+        "package": "org.greensoftware.carbonql",
+        "maven": {
+          "groupId": "org.greensoftware",
+          "artifactId": "carbonql"
+        }
+      },
+      "python": {
+        "distName": "carbon-ql.core",
+        "module": "carbon_ql"
+      },
+      "go": {
+        "moduleName": "github.com/Green-Software-Foundation",
+        "packageName": "carbonql",
+        "versionSuffix": "-devprefix"
+      },
+      "dotnet": {
+        "namespace": "GreenSoftwareFoundation.CarbonQL",
+        "packageId": "GreenSoftwareFoundation.CarbonQL"
+      }
+    }
+  },
+  "dependencies": {
+    "@types/node": "^20.4.2",
+    "axios": "^1.4.0",
+    "@cloud-carbon-footprint/core": "*",
+    "ts-sync-request": "^1.4.1",
+    "node-fetch": "^3.3.1"
+  },
+  "devDependencies": {
+    "jsii": "^5.1.6",
+    "jsii-pacmak": "^1.84.0"
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "impacts": {
+    "gwp": {
+      "manufacture": 11.1,
+      "use": 0.04,
+      "unit": "kgCO2eq"
+    },
+    "pe": {
+      "manufacture": 182,
+      "use": 1,
+      "unit": "MJ"
+    },
+    "adp": {
+      "manufacture": 0.02,
+      "use": 1e-08,
+      "unit": "kgSbeq"
+    }
+  },
+  "verbose": {
+    "units": 1,
+    "manufacture_impacts": {
+      "gwp": {
+        "value": 11.1,
+        "unit": "kgCO2eq"
+      },
+      "pe": {
+        "value": 182,
+        "unit": "MJ"
+      },
+      "adp": {
+        "value": 0.02,
+        "unit": "kgSbeq"
+      }
+    },
+    "core_units": {
+      "value": 2,
+      "unit": "none",
+      "status": "INPUT",
+      "source": null
+    },
+    "die_size_per_core": {
+      "value": 0.245,
+      "unit": "cm2",
+      "status": "DEFAULT",
+      "source": null
+    },
+    "manufacturer": {
+      "value": "intel",
+      "unit": "none",
+      "status": "COMPLETED",
+      "source": null
+    },
+    "USAGE": {
+      "usage_impacts": {
+        "gwp": {
+          "value": 0.04,
+          "unit": "kgCO2eq"
+        },
+        "pe": {
+          "value": 1,
+          "unit": "MJ"
+        },
+        "adp": {
+          "value": 1e-08,
+          "unit": "kgSbeq"
+        }
+      },
+      "hours_electrical_consumption": {
+        "value": 104.81,
+        "unit": "W",
+        "status": "COMPLETED",
+        "source": null
+      },
+      "time_workload": {
+        "value": 18.392,
+        "unit": "%",
+        "status": "INPUT",
+        "source": null
+      },
+      "usage_location": {
+        "value": "USA",
+        "unit": "CodSP3 - NCS Country Codes - NATO",
+        "status": "INPUT",
+        "source": null
+      },
+      "adp_factor": {
+        "value": 9.86e-08,
+        "unit": "KgSbeq/kWh",
+        "status": "COMPLETED",
+        "source": "ADEME BASE IMPACT"
+      },
+      "gwp_factor": {
+        "value": 0.37,
+        "unit": "kgCO2e/kWh",
+        "status": "COMPLETED",
+        "source": "https://ember-climate.org/data/data-explorer"
+      },
+      "pe_factor": {
+        "value": 11.358,
+        "unit": "MJ/kWh",
+        "status": "COMPLETED",
+        "source": "ADPf / (1-%renewable_energy)"
+      },
+      "use_time": {
+        "value": 1,
+        "unit": "hours",
+        "status": "INPUT",
+        "source": null
+      },
+      "params": {
+        "value": {
+          "a": 171.2,
+          "b": 0.0354,
+          "c": 36.89,
+          "d": -10.13
+        },
+        "unit": "none",
+        "status": "DEFAULT",
+        "source": null
+      }
+    }
+  }
+}
