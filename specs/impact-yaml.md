@@ -50,6 +50,10 @@ components: # The nodes under this root node
         <key>: <value> # Data that is repeated for every measurement, e.g machine type.
       series:
         - <first observation>
+      mapping: # map the obversations into the format this model requires
+        <key>: # the key in the observation data (e.g. cpu, duration)
+          units: <unit> # what units this field is in, e.g. percentage, hours, secs
+          to: <to-key> # tranform the input <key> into <to-key>, e.g. transform "span" into "duration"
     observations: # Observations stored in a CSV file
       path: <file> # Path to a CSV file containing the measurements
     components: # The sub nodes of this node
@@ -74,9 +78,9 @@ components:
       config: 
         vendor: gcp
         region: west-us
-      observation:
+      observation: # a single observation for the whole duration
         datetime: 2023-07-06T00:00
-        duration: 15s
+        duration: 15
         cpu: 0.34
       components: ~ 
   - backend server:
@@ -90,14 +94,18 @@ components:
           sku: AC2
         series:
           - datetime: 2023-07-06T00:00
-            duration: 5s
+            span: 5 # this data is using span, but the model expects duration
             cpu: 0.34
           - datetime: 2023-07-06T00:05
-            duration: 5s
+            span: 5
             cpu: 0.23
           - datetime: 2023-07-06T00:05:
-            duration: 5s
+            span: 5
             cpu: 0.11
+        mapping:
+          span:
+            units: seconds
+            to: duration
       components: ~ 
   - caching layer:
       model: 
