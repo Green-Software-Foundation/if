@@ -1,9 +1,8 @@
-
 export interface IImpactModelInterface {
 
     modelIdentifier(): string
 
-    configure(name: string, staticParams: object | undefined): IImpactModelInterface
+    configure(name: string, staticParams: { [key: string]: any } | undefined): IImpactModelInterface
 
     //
     authenticate(authParams: object): void

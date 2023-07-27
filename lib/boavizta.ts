@@ -9,84 +9,6 @@ export {
 export const camelToSnake = (str: string): string =>
     str.replace(/([A-Z])/g, ($1: string) => `_${$1.toLowerCase()}`);
 
-export interface IBoaviztaStaticParams {
-    provider?: string;
-    componentType?: string;
-}
-
-export interface IBoaviztaCpuParams {
-    coreUnits?: number;
-    dieSize?: number;
-    dieSizePerCore?: number;
-    manufacturer?: string;
-    modelRange?: string;
-    family?: string;
-    name?: string;
-    tdp?: number;
-    verbose?: boolean;
-    allocation?: string;
-}
-
-export class BoaviztaCpuParams implements IBoaviztaCpuParams {
-    coreUnits?: number;
-    dieSize?: number;
-    dieSizePerCore?: number;
-    manufacturer?: string;
-    modelRange?: string;
-    family?: string;
-    name?: string;
-    tdp?: number;
-    verbose?: boolean;
-    allocation?: string;
-}
-
-export class BoaviztaCloudImpactModel implements IImpactModelInterface {
-    public provider: string | undefined;
-    public name: string | undefined;
-    protected authCredentials: any = undefined;
-
-    modelIdentifier(): string {
-        return "boavizta.cloud.sci"
-    }
-
-    configure(name: string, staticParams: object | undefined): IImpactModelInterface {
-        const staticParamCast = staticParams as IBoaviztaStaticParams;
-        if (staticParamCast?.hasOwnProperty('provider')) {
-            this.provider = staticParamCast.provider;
-        }
-        this.name = name;
-        return this;
-    }
-
-    configureTyped(name: string, staticParamCast: IBoaviztaStaticParams): IImpactModelInterface {
-        if (staticParamCast?.hasOwnProperty('provider')) {
-            this.provider = staticParamCast.provider;
-        }
-        this.name = name;
-        return this;
-    }
-
-    authenticate(authParams: object) {
-        this.authCredentials = authParams;
-    }
-
-
-    async usage(data: object | object[]): Promise<object> {
-        const dataCast = data as { [key: string]: any };
-        if ('provider' in dataCast) {
-            if (this.provider !== undefined) {
-                dataCast.provider = this.provider;
-            } else {
-                throw new Error('Malformed Telemetry: Missing provider');
-            }
-        }
-        if ('instance_type' in dataCast) {
-            throw new Error('Malformed Telemetry: Missing instance_type');
-        }
-        const response = await axios.post('https://api.boavizta.org/v1/cloud/', dataCast);
-        return response.data;
-    }
-}
 
 export interface IBoaviztaUsageSCI {
     e: number;
@@ -95,7 +17,7 @@ export interface IBoaviztaUsageSCI {
 
 export class BoaviztaCpuImpactModel implements IImpactModelInterface {
     private componentType = "cpu";
-    private sharedParams: IBoaviztaCpuParams | undefined;
+    private sharedParams: { [key: string]: any } | undefined = undefined;
     public name: string | undefined;
     public verbose: boolean = false;
     public allocation: string = "TOTAL";
@@ -110,16 +32,15 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
         this.authCredentials = authParams;
     }
 
-    configure(name: string, staticParams: object | undefined): IImpactModelInterface {
-        const staticParamCast = this.captureStaticParams(staticParams as IBoaviztaCpuParams)
+    configure(name: string, staticParams: { [key: string]: any } | undefined = undefined): IImpactModelInterface {
         this.name = name;
-        this.sharedParams = staticParamCast;
+        if (staticParams !== undefined) {
+            this.sharedParams = this.captureStaticParams(staticParams as { [key: string]: any });
+        }
         return this;
     }
 
-    private captureStaticParams(staticParamCast: IBoaviztaCpuParams | (IBoaviztaCpuParams & {
-        verbose: unknown
-    }) | (IBoaviztaCpuParams & { allocation: unknown })) {
+    protected captureStaticParams(staticParamCast: { [key: string]: any }) {
         if ('verbose' in staticParamCast) {
             this.verbose = staticParamCast.verbose ?? false;
             staticParamCast.verbose = undefined;
@@ -131,14 +52,7 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
         return staticParamCast
     }
 
-    configureTyped(name: string, staticParamCast: IBoaviztaCpuParams): IImpactModelInterface {
-        staticParamCast = this.captureStaticParams(staticParamCast)
-        this.name = name;
-        this.sharedParams = staticParamCast;
-        return this;
-    }
-
-    async usage(data: object | object[]): Promise<object> {
+    async usage(data: object | object[] = {}): Promise<object> {
         const usageCast = data as { [key: string]: any };
         let mTotal = 0;
         let eTotal = 0;
@@ -169,7 +83,7 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
         return this.formatResponse(response);
     }
 
-    private normalizeData(dataParams: object): { [key: string]: any } {
+    protected normalizeData(dataParams: object): { [key: string]: any } {
         const dataCast: { [key: string]: any } = Object.assign(dataParams);
         for (let key in dataCast) {
             dataCast[camelToSnake(key)] = dataCast[key]
