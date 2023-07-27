@@ -12,11 +12,24 @@ export interface IBoaviztaStaticParams {
 }
 
 export interface IBoaviztaCpuParams {
-    coreUnits?: number;
-    dieSize?: number;
-    dieSizePerCore?: number;
+    core_units?: number;
+    die_size?: number;
+    die_size_per_core?: number;
     manufacturer?: string;
-    modelRange?: string;
+    model_range?: string;
+    family?: string;
+    name?: string;
+    tdp?: number;
+    verbose?: boolean;
+    allocation?: string;
+}
+
+export class BoaviztaCpuParams implements IBoaviztaCpuParams {
+    core_units?: number;
+    die_size?: number;
+    die_size_per_core?: number;
+    manufacturer?: string;
+    model_range?: string;
     family?: string;
     name?: string;
     tdp?: number;
@@ -118,20 +131,39 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
         return this;
     }
 
-    async usage(data: object): Promise<object> {
+    async usage(data: object | object[]): Promise<object> {
         const usageCast = data as { [key: string]: any };
+        let mTotal = 0;
+        let eTotal = 0;
+        if (Array.isArray(usageCast)) {
+            for (const usage of usageCast) {
+                const {m, e} = await this.singleUsage(usage);
+                mTotal += m;
+                eTotal += e;
+            }
+        } else {
+            const {m, e} = await this.singleUsage(usageCast);
+            mTotal += m;
+            eTotal += e;
+        }
+        return {
+            "m": mTotal,
+            "e": eTotal,
+        };
+    }
+
+    private async singleUsage(usageCast: { [p: string]: any }) {
         if (this.sharedParams === undefined) {
             throw new Error("Improper Initialization: Missing configuration parameters")
         }
         const dataCast: { [key: string]: any } = Object.assign(this.sharedParams);
         dataCast['usage'] = usageCast
+        console.log(dataCast);
         const response = await axios.post(`https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`, dataCast);
-        const m = response.data['gwp']['manufacture'] * 1000
+        console.log(response.data);
+        const m = response.data['impacts']['gwp']['manufacture'] * 1000
         // MJ to kWh , 1MJ eq 0.277778kWh
-        const e = response.data['pe']['use'] / 3.6;
-        return {
-            "m": m,
-            "e": e,
-        };
+        const e = response.data['impacts']['pe']['use'] / 3.6;
+        return {"m": m, "e": e};
     }
 }

@@ -5,11 +5,23 @@ export interface IBoaviztaStaticParams {
     componentType?: string;
 }
 export interface IBoaviztaCpuParams {
-    coreUnits?: number;
-    dieSize?: number;
-    dieSizePerCore?: number;
+    core_units?: number;
+    die_size?: number;
+    die_size_per_core?: number;
     manufacturer?: string;
-    modelRange?: string;
+    model_range?: string;
+    family?: string;
+    name?: string;
+    tdp?: number;
+    verbose?: boolean;
+    allocation?: string;
+}
+export declare class BoaviztaCpuParams implements IBoaviztaCpuParams {
+    core_units?: number;
+    die_size?: number;
+    die_size_per_core?: number;
+    manufacturer?: string;
+    model_range?: string;
     family?: string;
     name?: string;
     tdp?: number;
@@ -37,5 +49,6 @@ export declare class BoaviztaCpuImpactModel implements IImpactModelInterface {
     authenticate(authParams: object): void;
     configure(name: string, staticParams: object | undefined): IImpactModelInterface;
     configureTyped(name: string, staticParamCast: IBoaviztaCpuParams): IImpactModelInterface;
-    usage(data: object): Promise<object>;
+    usage(data: object | object[]): Promise<object>;
+    private singleUsage;
 }

@@ -22,11 +22,16 @@ cpu_component2 = carbon_ql.BoaviztaCpuImpactModel().configure_typed(name="app_se
                                                                     static_param_cast=component_params)
 
 print(json.dumps(
-    cpu_component2.usage(
+    cpu_component2.usage([
         {
             "hours_use_time": 1,
             "usage_location": "USA",
             "time_workload": 10,
-        }
-    )
+        },
+        {
+            "hours_use_time": 1,
+            "usage_location": "USA",
+            "time_workload": 10,
+        },
+    ])
 ))
