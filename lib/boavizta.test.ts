@@ -13,7 +13,7 @@ describe('initialization test', () => {
         impactModel.configure('test');
         expect(impactModel.name).toBe('test');
         // initialization without static params will cause improper initialization error
-        await expect(impactModel.usage())
+        await expect(impactModel.calculate())
             .rejects
             .toStrictEqual(
                 Error("Improper Initialization: Missing configuration parameters")
@@ -26,7 +26,7 @@ describe('initialize with params', () => {
         impactModel.configure('test', {name: 'Intel Xeon Platinum 8160 Processor', coreUnits: 2});
         expect(impactModel.name).toBe('test');
         // initialization without static params will cause improper initialization error
-        await expect(impactModel.usage({
+        await expect(impactModel.calculate({
             "hours_use_time": 1,
             "usage_location": "USA",
             "time_workload": 50,
@@ -41,7 +41,7 @@ describe('initialize with params', () => {
         impactModel.configure('test', {name: 'Intel Xeon Platinum 8160 Processor', coreUnits: 2});
         expect(impactModel.name).toBe('test');
         // initialization without static params will cause improper initialization error
-        await expect(impactModel.usage([{
+        await expect(impactModel.calculate([{
             "hours_use_time": 1,
             "usage_location": "USA",
             "time_workload": 50,

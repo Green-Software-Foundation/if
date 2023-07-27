@@ -52,15 +52,45 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
         return staticParamCast
     }
 
-    async usage(data: object | object[] = {}): Promise<object> {
+    private convertToHours(timeString: string): number {
+        const numberPart = parseFloat(timeString);
+        const unit = timeString.slice(-1).toLowerCase();
+
+        switch (unit) {
+            case 's':
+                return numberPart / 3600; // 1 hour = 3600 seconds
+            case 'm':
+                return numberPart / 60; // 1 hour = 60 minutes
+            case 'h':
+                return numberPart;
+            default:
+                throw new Error('Invalid time string. Supported units are "s", "m", and "h".');
+        }
+    }
+
+    async calculate(data: object | object[] | undefined = undefined): Promise<object> {
         const usageCast = data as { [key: string]: any };
         let mTotal = 0;
         let eTotal = 0;
         if (Array.isArray(usageCast)) {
-            for (const usage of usageCast) {
-                const {m, e} = await this.singleUsage(usage) as IBoaviztaUsageSCI;
-                mTotal = m;
-                eTotal += e;
+            for (const usageRaw of usageCast) {
+                const {datetime, duration, cpu} = usageRaw;
+                if (datetime !== undefined && duration !== undefined && cpu !== undefined) {
+                    const usageInput: { [key: string]: any } = {
+                        "hours_use_time": this.convertToHours(duration),
+                        "time_workload": cpu * 100.0,
+                    }
+                    if (this.sharedParams !== undefined && 'location' in this.sharedParams) {
+                        usageInput['usage_location'] = this.sharedParams['location']
+                    }
+                    const {m, e} = await this.singleUsage(usageInput) as IBoaviztaUsageSCI
+                    mTotal = m;
+                    eTotal += e;
+                } else {
+                    const {m, e} = await this.singleUsage(usageRaw) as IBoaviztaUsageSCI
+                    mTotal = m;
+                    eTotal += e;
+                }
             }
         } else {
             const {m, e} = await this.singleUsage(usageCast) as IBoaviztaUsageSCI

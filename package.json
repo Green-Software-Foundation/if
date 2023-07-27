@@ -58,6 +58,7 @@
     "@cloud-carbon-footprint/core": "*",
     "@types/node": "^20.4.2",
     "axios": "^1.4.0",
+    "dayjs": "^1.11.9",
     "node-fetch": "^3.3.1",
     "ts-sync-request": "^1.4.1",
     "typescript": "^5.1.6"
