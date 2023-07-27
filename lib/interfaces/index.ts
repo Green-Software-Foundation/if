@@ -8,5 +8,5 @@ export interface IImpactModelInterface {
     authenticate(authParams: object): void
 
     //
-    usage(data: object | object[]): Promise<object>
+    usage(data: object | object[] | undefined): Promise<object>
 }

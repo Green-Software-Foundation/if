@@ -23,6 +23,7 @@
   "bundledDependencies": [
     "node-fetch",
     "axios",
+    "typescript",
     "ts-sync-request",
     "@cloud-carbon-footprint/core",
     "@types/node"

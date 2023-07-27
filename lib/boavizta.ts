@@ -59,7 +59,7 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
         if (Array.isArray(usageCast)) {
             for (const usage of usageCast) {
                 const {m, e} = await this.singleUsage(usage) as IBoaviztaUsageSCI;
-                mTotal += m;
+                mTotal = m;
                 eTotal += e;
             }
         } else {

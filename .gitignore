@@ -1,5 +1,6 @@
 
-
+src/**/*.js
+src/**/*.d.ts
 node_modules
 .idea
 *.tsbuildinfo

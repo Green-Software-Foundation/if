@@ -11,7 +11,8 @@
     "@types/node": "^20.4.2",
     "axios": "^1.4.0",
     "node-fetch": "^3.3.1",
-    "ts-sync-request": "^1.4.1"
+    "ts-sync-request": "^1.4.1",
+    "typescript": "^5.1.6"
   },
   "description": "",
   "docs": {
@@ -63,208 +64,6 @@
     }
   },
   "types": {
-    "carbonql.BoaviztaCloudImpactModel": {
-      "assembly": "carbonql",
-      "docs": {
-        "stability": "stable"
-      },
-      "fqn": "carbonql.BoaviztaCloudImpactModel",
-      "initializer": {
-        "docs": {
-          "stability": "stable"
-        }
-      },
-      "interfaces": [
-        "carbonql.IImpactModelInterface"
-      ],
-      "kind": "class",
-      "locationInModule": {
-        "filename": "lib/boavizta.ts",
-        "line": 43
-      },
-      "methods": [
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 69
-          },
-          "name": "authenticate",
-          "overrides": "carbonql.IImpactModelInterface",
-          "parameters": [
-            {
-              "name": "authParams",
-              "type": {
-                "primitive": "json"
-              }
-            }
-          ]
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 52
-          },
-          "name": "configure",
-          "overrides": "carbonql.IImpactModelInterface",
-          "parameters": [
-            {
-              "name": "name",
-              "type": {
-                "primitive": "string"
-              }
-            },
-            {
-              "name": "staticParams",
-              "optional": true,
-              "type": {
-                "primitive": "json"
-              }
-            }
-          ],
-          "returns": {
-            "type": {
-              "fqn": "carbonql.IImpactModelInterface"
-            }
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 61
-          },
-          "name": "configureTyped",
-          "parameters": [
-            {
-              "name": "name",
-              "type": {
-                "primitive": "string"
-              }
-            },
-            {
-              "name": "staticParamCast",
-              "type": {
-                "fqn": "carbonql.IBoaviztaStaticParams"
-              }
-            }
-          ],
-          "returns": {
-            "type": {
-              "fqn": "carbonql.IImpactModelInterface"
-            }
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 48
-          },
-          "name": "modelIdentifier",
-          "overrides": "carbonql.IImpactModelInterface",
-          "returns": {
-            "type": {
-              "primitive": "string"
-            }
-          }
-        },
-        {
-          "async": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 74
-          },
-          "name": "usage",
-          "overrides": "carbonql.IImpactModelInterface",
-          "parameters": [
-            {
-              "name": "data",
-              "type": {
-                "union": {
-                  "types": [
-                    {
-                      "primitive": "json"
-                    },
-                    {
-                      "collection": {
-                        "elementtype": {
-                          "primitive": "json"
-                        },
-                        "kind": "array"
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ],
-          "returns": {
-            "type": {
-              "primitive": "json"
-            }
-          }
-        }
-      ],
-      "name": "BoaviztaCloudImpactModel",
-      "properties": [
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 46
-          },
-          "name": "authCredentials",
-          "protected": true,
-          "type": {
-            "primitive": "any"
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 45
-          },
-          "name": "name",
-          "optional": true,
-          "type": {
-            "primitive": "string"
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 44
-          },
-          "name": "provider",
-          "optional": true,
-          "type": {
-            "primitive": "string"
-          }
-        }
-      ],
-      "symbolId": "lib/boavizta:BoaviztaCloudImpactModel"
-    },
     "carbonql.BoaviztaCpuImpactModel": {
       "assembly": "carbonql",
       "docs": {
@@ -282,7 +81,7 @@
       "kind": "class",
       "locationInModule": {
         "filename": "lib/boavizta.ts",
-        "line": 96
+        "line": 18
       },
       "methods": [
         {
@@ -291,7 +90,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 109
+            "line": 31
           },
           "name": "authenticate",
           "overrides": "carbonql.IImpactModelInterface",
@@ -310,7 +109,41 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 113
+            "line": 43
+          },
+          "name": "captureStaticParams",
+          "parameters": [
+            {
+              "name": "staticParamCast",
+              "type": {
+                "collection": {
+                  "elementtype": {
+                    "primitive": "any"
+                  },
+                  "kind": "map"
+                }
+              }
+            }
+          ],
+          "protected": true,
+          "returns": {
+            "type": {
+              "collection": {
+                "elementtype": {
+                  "primitive": "any"
+                },
+                "kind": "map"
+              }
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 35
           },
           "name": "configure",
           "overrides": "carbonql.IImpactModelInterface",
@@ -325,7 +158,12 @@
               "name": "staticParams",
               "optional": true,
               "type": {
-                "primitive": "json"
+                "collection": {
+                  "elementtype": {
+                    "primitive": "any"
+                  },
+                  "kind": "map"
+                }
               }
             }
           ],
@@ -341,36 +179,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 134
-          },
-          "name": "configureTyped",
-          "parameters": [
-            {
-              "name": "name",
-              "type": {
-                "primitive": "string"
-              }
-            },
-            {
-              "name": "staticParamCast",
-              "type": {
-                "fqn": "carbonql.IBoaviztaCpuParams"
-              }
-            }
-          ],
-          "returns": {
-            "type": {
-              "fqn": "carbonql.IImpactModelInterface"
-            }
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 105
+            "line": 27
           },
           "name": "modelIdentifier",
           "overrides": "carbonql.IImpactModelInterface",
@@ -381,13 +190,42 @@
           }
         },
         {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 86
+          },
+          "name": "normalizeData",
+          "parameters": [
+            {
+              "name": "dataParams",
+              "type": {
+                "primitive": "json"
+              }
+            }
+          ],
+          "protected": true,
+          "returns": {
+            "type": {
+              "collection": {
+                "elementtype": {
+                  "primitive": "any"
+                },
+                "kind": "map"
+              }
+            }
+          }
+        },
+        {
           "async": true,
           "docs": {
             "stability": "stable"
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 162
+            "line": 76
           },
           "name": "singleUsage",
           "parameters": [
@@ -416,13 +254,14 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 141
+            "line": 55
           },
           "name": "usage",
           "overrides": "carbonql.IImpactModelInterface",
           "parameters": [
             {
               "name": "data",
+              "optional": true,
               "type": {
                 "union": {
                   "types": [
@@ -457,7 +296,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 101
+            "line": 23
           },
           "name": "allocation",
           "type": {
@@ -470,7 +309,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 102
+            "line": 24
           },
           "name": "authCredentials",
           "protected": true,
@@ -484,7 +323,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 100
+            "line": 22
           },
           "name": "verbose",
           "type": {
@@ -497,7 +336,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 99
+            "line": 21
           },
           "name": "name",
           "optional": true,
@@ -508,392 +347,6 @@
       ],
       "symbolId": "lib/boavizta:BoaviztaCpuImpactModel"
     },
-    "carbonql.BoaviztaCpuParams": {
-      "assembly": "carbonql",
-      "docs": {
-        "stability": "stable"
-      },
-      "fqn": "carbonql.BoaviztaCpuParams",
-      "initializer": {
-        "docs": {
-          "stability": "stable"
-        }
-      },
-      "interfaces": [
-        "carbonql.IBoaviztaCpuParams"
-      ],
-      "kind": "class",
-      "locationInModule": {
-        "filename": "lib/boavizta.ts",
-        "line": 30
-      },
-      "name": "BoaviztaCpuParams",
-      "properties": [
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 40
-          },
-          "name": "allocation",
-          "optional": true,
-          "overrides": "carbonql.IBoaviztaCpuParams",
-          "type": {
-            "primitive": "string"
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 31
-          },
-          "name": "coreUnits",
-          "optional": true,
-          "overrides": "carbonql.IBoaviztaCpuParams",
-          "type": {
-            "primitive": "number"
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 32
-          },
-          "name": "dieSize",
-          "optional": true,
-          "overrides": "carbonql.IBoaviztaCpuParams",
-          "type": {
-            "primitive": "number"
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 33
-          },
-          "name": "dieSizePerCore",
-          "optional": true,
-          "overrides": "carbonql.IBoaviztaCpuParams",
-          "type": {
-            "primitive": "number"
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 36
-          },
-          "name": "family",
-          "optional": true,
-          "overrides": "carbonql.IBoaviztaCpuParams",
-          "type": {
-            "primitive": "string"
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 34
-          },
-          "name": "manufacturer",
-          "optional": true,
-          "overrides": "carbonql.IBoaviztaCpuParams",
-          "type": {
-            "primitive": "string"
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 35
-          },
-          "name": "modelRange",
-          "optional": true,
-          "overrides": "carbonql.IBoaviztaCpuParams",
-          "type": {
-            "primitive": "string"
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 37
-          },
-          "name": "name",
-          "optional": true,
-          "overrides": "carbonql.IBoaviztaCpuParams",
-          "type": {
-            "primitive": "string"
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 38
-          },
-          "name": "tdp",
-          "optional": true,
-          "overrides": "carbonql.IBoaviztaCpuParams",
-          "type": {
-            "primitive": "number"
-          }
-        },
-        {
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 39
-          },
-          "name": "verbose",
-          "optional": true,
-          "overrides": "carbonql.IBoaviztaCpuParams",
-          "type": {
-            "primitive": "boolean"
-          }
-        }
-      ],
-      "symbolId": "lib/boavizta:BoaviztaCpuParams"
-    },
-    "carbonql.IBoaviztaCpuParams": {
-      "assembly": "carbonql",
-      "docs": {
-        "stability": "stable"
-      },
-      "fqn": "carbonql.IBoaviztaCpuParams",
-      "kind": "interface",
-      "locationInModule": {
-        "filename": "lib/boavizta.ts",
-        "line": 17
-      },
-      "name": "IBoaviztaCpuParams",
-      "properties": [
-        {
-          "abstract": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 27
-          },
-          "name": "allocation",
-          "optional": true,
-          "type": {
-            "primitive": "string"
-          }
-        },
-        {
-          "abstract": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 18
-          },
-          "name": "coreUnits",
-          "optional": true,
-          "type": {
-            "primitive": "number"
-          }
-        },
-        {
-          "abstract": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 19
-          },
-          "name": "dieSize",
-          "optional": true,
-          "type": {
-            "primitive": "number"
-          }
-        },
-        {
-          "abstract": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 20
-          },
-          "name": "dieSizePerCore",
-          "optional": true,
-          "type": {
-            "primitive": "number"
-          }
-        },
-        {
-          "abstract": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 23
-          },
-          "name": "family",
-          "optional": true,
-          "type": {
-            "primitive": "string"
-          }
-        },
-        {
-          "abstract": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 21
-          },
-          "name": "manufacturer",
-          "optional": true,
-          "type": {
-            "primitive": "string"
-          }
-        },
-        {
-          "abstract": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 22
-          },
-          "name": "modelRange",
-          "optional": true,
-          "type": {
-            "primitive": "string"
-          }
-        },
-        {
-          "abstract": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 24
-          },
-          "name": "name",
-          "optional": true,
-          "type": {
-            "primitive": "string"
-          }
-        },
-        {
-          "abstract": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 25
-          },
-          "name": "tdp",
-          "optional": true,
-          "type": {
-            "primitive": "number"
-          }
-        },
-        {
-          "abstract": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 26
-          },
-          "name": "verbose",
-          "optional": true,
-          "type": {
-            "primitive": "boolean"
-          }
-        }
-      ],
-      "symbolId": "lib/boavizta:IBoaviztaCpuParams"
-    },
-    "carbonql.IBoaviztaStaticParams": {
-      "assembly": "carbonql",
-      "docs": {
-        "stability": "stable"
-      },
-      "fqn": "carbonql.IBoaviztaStaticParams",
-      "kind": "interface",
-      "locationInModule": {
-        "filename": "lib/boavizta.ts",
-        "line": 12
-      },
-      "name": "IBoaviztaStaticParams",
-      "properties": [
-        {
-          "abstract": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 14
-          },
-          "name": "componentType",
-          "optional": true,
-          "type": {
-            "primitive": "string"
-          }
-        },
-        {
-          "abstract": true,
-          "docs": {
-            "stability": "stable"
-          },
-          "locationInModule": {
-            "filename": "lib/boavizta.ts",
-            "line": 13
-          },
-          "name": "provider",
-          "optional": true,
-          "type": {
-            "primitive": "string"
-          }
-        }
-      ],
-      "symbolId": "lib/boavizta:IBoaviztaStaticParams"
-    },
     "carbonql.IBoaviztaUsageSCI": {
       "assembly": "carbonql",
       "docs": {
@@ -903,7 +356,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "lib/boavizta.ts",
-        "line": 91
+        "line": 13
       },
       "name": "IBoaviztaUsageSCI",
       "properties": [
@@ -914,7 +367,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 92
+            "line": 14
           },
           "name": "e",
           "type": {
@@ -928,7 +381,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 93
+            "line": 15
           },
           "name": "m",
           "type": {
@@ -947,7 +400,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "lib/interfaces/index.ts",
-        "line": 2
+        "line": 1
       },
       "methods": [
         {
@@ -957,7 +410,7 @@
           },
           "locationInModule": {
             "filename": "lib/interfaces/index.ts",
-            "line": 9
+            "line": 8
           },
           "name": "authenticate",
           "parameters": [
@@ -976,7 +429,7 @@
           },
           "locationInModule": {
             "filename": "lib/interfaces/index.ts",
-            "line": 6
+            "line": 5
           },
           "name": "configure",
           "parameters": [
@@ -990,7 +443,12 @@
               "name": "staticParams",
               "optional": true,
               "type": {
-                "primitive": "json"
+                "collection": {
+                  "elementtype": {
+                    "primitive": "any"
+                  },
+                  "kind": "map"
+                }
               }
             }
           ],
@@ -1007,7 +465,7 @@
           },
           "locationInModule": {
             "filename": "lib/interfaces/index.ts",
-            "line": 4
+            "line": 3
           },
           "name": "modelIdentifier",
           "returns": {
@@ -1024,12 +482,13 @@
           },
           "locationInModule": {
             "filename": "lib/interfaces/index.ts",
-            "line": 12
+            "line": 11
           },
           "name": "usage",
           "parameters": [
             {
               "name": "data",
+              "optional": true,
               "type": {
                 "union": {
                   "types": [
@@ -1061,5 +520,5 @@
     }
   },
   "version": "1.0.0",
-  "fingerprint": "PGSIT90BMEYDQC/jNK5EFAvhJRE0jxDT1SfEc8gWMHM="
+  "fingerprint": "W5WnijEjHziLm7ntQOBxA2EjdV5F4y7lTahX+IzsLaE="
 }
