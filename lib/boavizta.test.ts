@@ -56,4 +56,36 @@ describe('initialize with params', () => {
                 {"e": 0.5555555555555556 * 2, "m": 23800}
             )
     });
+    test('initialize with params and call multiple usages', async () => {
+        const impactModel = new BoaviztaCpuImpactModel();
+        impactModel.configure('test', {
+            name: 'Intel Xeon Gold 6138f',
+            coreUnits: 24,
+            location: 'USA'
+        });
+        expect(impactModel.name).toBe('test');
+        // initialization without static params will cause improper initialization error
+        await expect(impactModel.calculate([
+            {
+                "duration": '15s',
+                "cpu": 0.34,
+            },
+            {
+                "duration": '15s',
+                "cpu": 0.12,
+            },
+            {
+                "duration": '15s',
+                "cpu": 0.01,
+            },
+            {
+                "duration": '15s',
+                "cpu": 0.78,
+            },
+        ]))
+            .resolves
+            .toStrictEqual(
+                {"e": 1.1111111111111112, "m": 23800}
+            )
+    });
 });

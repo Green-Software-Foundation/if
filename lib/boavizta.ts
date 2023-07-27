@@ -31,7 +31,6 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
     authenticate(authParams: object) {
         this.authCredentials = authParams;
     }
-
     configure(name: string, staticParams: { [key: string]: any } | undefined = undefined): IImpactModelInterface {
         this.name = name;
         if (staticParams !== undefined) {
