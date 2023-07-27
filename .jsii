@@ -80,7 +80,7 @@
       "kind": "class",
       "locationInModule": {
         "filename": "lib/boavizta.ts",
-        "line": 40
+        "line": 43
       },
       "methods": [
         {
@@ -89,7 +89,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 66
+            "line": 69
           },
           "name": "authenticate",
           "overrides": "carbonql.IImpactModelInterface",
@@ -108,7 +108,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 49
+            "line": 52
           },
           "name": "configure",
           "overrides": "carbonql.IImpactModelInterface",
@@ -139,7 +139,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 58
+            "line": 61
           },
           "name": "configureTyped",
           "parameters": [
@@ -168,7 +168,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 45
+            "line": 48
           },
           "name": "modelIdentifier",
           "overrides": "carbonql.IImpactModelInterface",
@@ -185,7 +185,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 71
+            "line": 74
           },
           "name": "usage",
           "overrides": "carbonql.IImpactModelInterface",
@@ -193,7 +193,21 @@
             {
               "name": "data",
               "type": {
-                "primitive": "json"
+                "union": {
+                  "types": [
+                    {
+                      "primitive": "json"
+                    },
+                    {
+                      "collection": {
+                        "elementtype": {
+                          "primitive": "json"
+                        },
+                        "kind": "array"
+                      }
+                    }
+                  ]
+                }
               }
             }
           ],
@@ -212,7 +226,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 43
+            "line": 46
           },
           "name": "authCredentials",
           "protected": true,
@@ -226,7 +240,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 42
+            "line": 45
           },
           "name": "name",
           "optional": true,
@@ -240,7 +254,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 41
+            "line": 44
           },
           "name": "provider",
           "optional": true,
@@ -268,7 +282,7 @@
       "kind": "class",
       "locationInModule": {
         "filename": "lib/boavizta.ts",
-        "line": 88
+        "line": 96
       },
       "methods": [
         {
@@ -277,7 +291,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 101
+            "line": 109
           },
           "name": "authenticate",
           "overrides": "carbonql.IImpactModelInterface",
@@ -296,7 +310,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 105
+            "line": 113
           },
           "name": "configure",
           "overrides": "carbonql.IImpactModelInterface",
@@ -327,7 +341,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 120
+            "line": 128
           },
           "name": "configureTyped",
           "parameters": [
@@ -356,7 +370,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 97
+            "line": 105
           },
           "name": "modelIdentifier",
           "overrides": "carbonql.IImpactModelInterface",
@@ -373,7 +387,36 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 134
+            "line": 163
+          },
+          "name": "singleUsage",
+          "parameters": [
+            {
+              "name": "usageCast",
+              "type": {
+                "collection": {
+                  "elementtype": {
+                    "primitive": "any"
+                  },
+                  "kind": "map"
+                }
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "json"
+            }
+          }
+        },
+        {
+          "async": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 142
           },
           "name": "usage",
           "overrides": "carbonql.IImpactModelInterface",
@@ -381,7 +424,21 @@
             {
               "name": "data",
               "type": {
-                "primitive": "json"
+                "union": {
+                  "types": [
+                    {
+                      "primitive": "json"
+                    },
+                    {
+                      "collection": {
+                        "elementtype": {
+                          "primitive": "json"
+                        },
+                        "kind": "array"
+                      }
+                    }
+                  ]
+                }
               }
             }
           ],
@@ -400,7 +457,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 93
+            "line": 101
           },
           "name": "allocation",
           "type": {
@@ -413,7 +470,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 94
+            "line": 102
           },
           "name": "authCredentials",
           "protected": true,
@@ -427,7 +484,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 92
+            "line": 100
           },
           "name": "verbose",
           "type": {
@@ -440,7 +497,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 91
+            "line": 99
           },
           "name": "name",
           "optional": true,
@@ -468,7 +525,7 @@
       "kind": "class",
       "locationInModule": {
         "filename": "lib/boavizta.ts",
-        "line": 27
+        "line": 30
       },
       "name": "BoaviztaCpuParams",
       "properties": [
@@ -478,7 +535,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 37
+            "line": 40
           },
           "name": "allocation",
           "optional": true,
@@ -493,7 +550,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 28
+            "line": 31
           },
           "name": "coreUnits",
           "optional": true,
@@ -508,7 +565,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 29
+            "line": 32
           },
           "name": "dieSize",
           "optional": true,
@@ -523,7 +580,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 30
+            "line": 33
           },
           "name": "dieSizePerCore",
           "optional": true,
@@ -538,7 +595,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 33
+            "line": 36
           },
           "name": "family",
           "optional": true,
@@ -553,7 +610,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 31
+            "line": 34
           },
           "name": "manufacturer",
           "optional": true,
@@ -568,7 +625,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 32
+            "line": 35
           },
           "name": "modelRange",
           "optional": true,
@@ -583,7 +640,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 34
+            "line": 37
           },
           "name": "name",
           "optional": true,
@@ -598,7 +655,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 35
+            "line": 38
           },
           "name": "tdp",
           "optional": true,
@@ -613,7 +670,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 36
+            "line": 39
           },
           "name": "verbose",
           "optional": true,
@@ -634,7 +691,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "lib/boavizta.ts",
-        "line": 14
+        "line": 17
       },
       "name": "IBoaviztaCpuParams",
       "properties": [
@@ -645,7 +702,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 24
+            "line": 27
           },
           "name": "allocation",
           "optional": true,
@@ -660,7 +717,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 15
+            "line": 18
           },
           "name": "coreUnits",
           "optional": true,
@@ -675,7 +732,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 16
+            "line": 19
           },
           "name": "dieSize",
           "optional": true,
@@ -690,7 +747,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 17
+            "line": 20
           },
           "name": "dieSizePerCore",
           "optional": true,
@@ -705,7 +762,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 20
+            "line": 23
           },
           "name": "family",
           "optional": true,
@@ -720,7 +777,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 18
+            "line": 21
           },
           "name": "manufacturer",
           "optional": true,
@@ -735,7 +792,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 19
+            "line": 22
           },
           "name": "modelRange",
           "optional": true,
@@ -750,7 +807,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 21
+            "line": 24
           },
           "name": "name",
           "optional": true,
@@ -765,7 +822,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 22
+            "line": 25
           },
           "name": "tdp",
           "optional": true,
@@ -780,7 +837,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 23
+            "line": 26
           },
           "name": "verbose",
           "optional": true,
@@ -800,7 +857,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "lib/boavizta.ts",
-        "line": 9
+        "line": 12
       },
       "name": "IBoaviztaStaticParams",
       "properties": [
@@ -811,7 +868,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 11
+            "line": 14
           },
           "name": "componentType",
           "optional": true,
@@ -826,7 +883,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 10
+            "line": 13
           },
           "name": "provider",
           "optional": true,
@@ -837,6 +894,50 @@
       ],
       "symbolId": "lib/boavizta:IBoaviztaStaticParams"
     },
+    "carbonql.IBoaviztaUsageSCI": {
+      "assembly": "carbonql",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "carbonql.IBoaviztaUsageSCI",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "lib/boavizta.ts",
+        "line": 91
+      },
+      "name": "IBoaviztaUsageSCI",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 92
+          },
+          "name": "e",
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 93
+          },
+          "name": "m",
+          "type": {
+            "primitive": "number"
+          }
+        }
+      ],
+      "symbolId": "lib/boavizta:IBoaviztaUsageSCI"
+    },
     "carbonql.IImpactModelInterface": {
       "assembly": "carbonql",
       "docs": {
@@ -846,7 +947,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "lib/interfaces/index.ts",
-        "line": 1
+        "line": 2
       },
       "methods": [
         {
@@ -856,7 +957,7 @@
           },
           "locationInModule": {
             "filename": "lib/interfaces/index.ts",
-            "line": 7
+            "line": 9
           },
           "name": "authenticate",
           "parameters": [
@@ -875,7 +976,7 @@
           },
           "locationInModule": {
             "filename": "lib/interfaces/index.ts",
-            "line": 5
+            "line": 6
           },
           "name": "configure",
           "parameters": [
@@ -906,7 +1007,7 @@
           },
           "locationInModule": {
             "filename": "lib/interfaces/index.ts",
-            "line": 3
+            "line": 4
           },
           "name": "modelIdentifier",
           "returns": {
@@ -923,14 +1024,28 @@
           },
           "locationInModule": {
             "filename": "lib/interfaces/index.ts",
-            "line": 9
+            "line": 12
           },
           "name": "usage",
           "parameters": [
             {
               "name": "data",
               "type": {
-                "primitive": "json"
+                "union": {
+                  "types": [
+                    {
+                      "primitive": "json"
+                    },
+                    {
+                      "collection": {
+                        "elementtype": {
+                          "primitive": "json"
+                        },
+                        "kind": "array"
+                      }
+                    }
+                  ]
+                }
               }
             }
           ],
@@ -946,5 +1061,5 @@
     }
   },
   "version": "1.0.0",
-  "fingerprint": "qqJ5wHHSUL0LXOwc6QhDGEVTPBNFBv0YP3KcvippL/Y="
+  "fingerprint": "sCK77DUjl6XLSDraEBCbBUwQMt6a8HflBl15/aIVElM="
 }

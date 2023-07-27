@@ -1,15 +1,16 @@
 import { IImpactModelInterface } from "./interfaces/index";
 export { IImpactModelInterface } from "./interfaces/index";
+export declare const camelToSnake: (str: string) => string;
 export interface IBoaviztaStaticParams {
     provider?: string;
     componentType?: string;
 }
 export interface IBoaviztaCpuParams {
-    core_units?: number;
-    die_size?: number;
-    die_size_per_core?: number;
+    coreUnits?: number;
+    dieSize?: number;
+    dieSizePerCore?: number;
     manufacturer?: string;
-    model_range?: string;
+    modelRange?: string;
     family?: string;
     name?: string;
     tdp?: number;
@@ -17,11 +18,11 @@ export interface IBoaviztaCpuParams {
     allocation?: string;
 }
 export declare class BoaviztaCpuParams implements IBoaviztaCpuParams {
-    core_units?: number;
-    die_size?: number;
-    die_size_per_core?: number;
+    coreUnits?: number;
+    dieSize?: number;
+    dieSizePerCore?: number;
     manufacturer?: string;
-    model_range?: string;
+    modelRange?: string;
     family?: string;
     name?: string;
     tdp?: number;
@@ -36,7 +37,11 @@ export declare class BoaviztaCloudImpactModel implements IImpactModelInterface {
     configure(name: string, staticParams: object | undefined): IImpactModelInterface;
     configureTyped(name: string, staticParamCast: IBoaviztaStaticParams): IImpactModelInterface;
     authenticate(authParams: object): void;
-    usage(data: object): Promise<object>;
+    usage(data: object | object[]): Promise<object>;
+}
+export interface IBoaviztaUsageSCI {
+    e: number;
+    m: number;
 }
 export declare class BoaviztaCpuImpactModel implements IImpactModelInterface {
     private componentType;
@@ -50,5 +55,7 @@ export declare class BoaviztaCpuImpactModel implements IImpactModelInterface {
     configure(name: string, staticParams: object | undefined): IImpactModelInterface;
     configureTyped(name: string, staticParamCast: IBoaviztaCpuParams): IImpactModelInterface;
     usage(data: object | object[]): Promise<object>;
-    private singleUsage;
+    singleUsage(usageCast: {
+        [p: string]: any;
+    }): Promise<object>;
 }

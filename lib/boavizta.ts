@@ -6,17 +6,20 @@ export {
 } from "./interfaces/index";
 
 
+export const camelToSnake = (str: string): string =>
+    str.replace(/([A-Z])/g, ($1: string) => `_${$1.toLowerCase()}`);
+
 export interface IBoaviztaStaticParams {
     provider?: string;
     componentType?: string;
 }
 
 export interface IBoaviztaCpuParams {
-    core_units?: number;
-    die_size?: number;
-    die_size_per_core?: number;
+    coreUnits?: number;
+    dieSize?: number;
+    dieSizePerCore?: number;
     manufacturer?: string;
-    model_range?: string;
+    modelRange?: string;
     family?: string;
     name?: string;
     tdp?: number;
@@ -25,11 +28,11 @@ export interface IBoaviztaCpuParams {
 }
 
 export class BoaviztaCpuParams implements IBoaviztaCpuParams {
-    core_units?: number;
-    die_size?: number;
-    die_size_per_core?: number;
+    coreUnits?: number;
+    dieSize?: number;
+    dieSizePerCore?: number;
     manufacturer?: string;
-    model_range?: string;
+    modelRange?: string;
     family?: string;
     name?: string;
     tdp?: number;
@@ -68,7 +71,7 @@ export class BoaviztaCloudImpactModel implements IImpactModelInterface {
     }
 
 
-    async usage(data: object): Promise<object> {
+    async usage(data: object | object[]): Promise<object> {
         const dataCast = data as { [key: string]: any };
         if ('provider' in dataCast) {
             if (this.provider !== undefined) {
@@ -85,17 +88,22 @@ export class BoaviztaCloudImpactModel implements IImpactModelInterface {
     }
 }
 
+export interface IBoaviztaUsageSCI {
+    e: number;
+    m: number;
+}
+
 export class BoaviztaCpuImpactModel implements IImpactModelInterface {
     private componentType = "cpu";
     private sharedParams: IBoaviztaCpuParams | undefined;
     public name: string | undefined;
     public verbose: boolean = false;
-    public allocation: string = "total";
+    public allocation: string = "TOTAL";
     protected authCredentials: any = undefined;
 
 
     modelIdentifier(): string {
-        return "boavizta.component.sci"
+        return "boavizta.cpu.sci"
     }
 
     authenticate(authParams: object) {
@@ -137,33 +145,48 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
         let eTotal = 0;
         if (Array.isArray(usageCast)) {
             for (const usage of usageCast) {
-                const {m, e} = await this.singleUsage(usage);
+                const {m, e} = await this.singleUsage(usage) as IBoaviztaUsageSCI;
                 mTotal += m;
                 eTotal += e;
             }
         } else {
-            const {m, e} = await this.singleUsage(usageCast);
+            const {m, e} = await this.singleUsage(usageCast) as IBoaviztaUsageSCI
             mTotal += m;
             eTotal += e;
         }
         return {
-            "m": mTotal,
             "e": eTotal,
+            "m": mTotal
         };
     }
 
-    private async singleUsage(usageCast: { [p: string]: any }) {
+    async singleUsage(usageCast: { [p: string]: any }): Promise<object> {
         if (this.sharedParams === undefined) {
             throw new Error("Improper Initialization: Missing configuration parameters")
         }
         const dataCast: { [key: string]: any } = Object.assign(this.sharedParams);
+        for (let key in dataCast) {
+            dataCast[camelToSnake(key)] = dataCast[key]
+            if (/[A-Z]/.test(key)) {
+                delete dataCast[key]
+            }
+        }
         dataCast['usage'] = usageCast
         console.log(dataCast);
         const response = await axios.post(`https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`, dataCast);
         console.log(response.data);
-        const m = response.data['impacts']['gwp']['manufacture'] * 1000
-        // MJ to kWh , 1MJ eq 0.277778kWh
-        const e = response.data['impacts']['pe']['use'] / 3.6;
-        return {"m": m, "e": e};
+        let m = 0;
+        let e = 0;
+        if ('impacts' in response.data) {
+            m = response.data['impacts']['gwp']['manufacture'] * 1000
+            e = response.data['impacts']['pe']['use'] / 3.6;
+        } else if ('gwp' in response.data && 'pe' in response.data) {
+            m = response.data['gwp']['manufacture'] * 1000
+            e = response.data['pe']['use'] / 3.6;
+        }
+        return {
+            "e": e,
+            "m": m
+        };
     }
 }

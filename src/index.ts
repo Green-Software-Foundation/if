@@ -6,7 +6,7 @@ async function test() {
     params.allocation = 'TOTAL';
     params.verbose = true;
     params.name = 'Intel Xeon Platinum 8160 Processor'
-    params.core_units = 2;
+    params.coreUnits = 2;
     newModel.configureTyped('test', params);
     const usage = await newModel.usage([
         {
