@@ -1,0 +1,25 @@
+name: sample-app
+components:
+  -   name: "app-server"
+      model:
+        path: bovizta.cpu.sci
+      config:
+        verbose: true
+        allocation: total
+        name: Intel Xeon Platinum 8272CL
+        core_units: 24
+        location: FRA
+      observations:
+        series:
+          -   datetime: 2023-07-06T00:00
+              duration: 15s                               # translated into days_use_time
+              cpu: 0.34                                      # translated into time_workload
+          -   datetime: 2023-07-06T00:15
+              duration: 15s
+              cpu: 0.12
+          -   datetime: 2023-07-06T00:30
+              duration: 15s
+              cpu: 0.01
+          -   datetime: 2023-07-06T00:40
+              duration: 15s
+              cpu: 0.78

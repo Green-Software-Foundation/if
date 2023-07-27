@@ -2,8 +2,11 @@ import json
 
 import carbon_ql
 
-cpu_component = carbon_ql.BoaviztaComponentImpactModel().create_typed(name="app_server",
-                                                                      static_params={"componentType": "cpu"})
+component_params = carbon_ql.IBoaviztaStaticParams()
+component_params.component_type = "cpu"
+
+cpu_component = carbon_ql.BoaviztaComponentImpactModel().configure_typed(name="app_server",
+                                                                         static_param_cast=component_params)
 print(json.dumps(
     cpu_component.usage(
         {
@@ -31,5 +34,3 @@ print(json.dumps(
         }
     )
 ))
-
-
