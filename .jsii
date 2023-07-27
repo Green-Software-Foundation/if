@@ -341,7 +341,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 128
+            "line": 134
           },
           "name": "configureTyped",
           "parameters": [
@@ -387,7 +387,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 163
+            "line": 162
           },
           "name": "singleUsage",
           "parameters": [
@@ -416,7 +416,7 @@
           },
           "locationInModule": {
             "filename": "lib/boavizta.ts",
-            "line": 142
+            "line": 141
           },
           "name": "usage",
           "overrides": "carbonql.IImpactModelInterface",
@@ -1061,5 +1061,5 @@
     }
   },
   "version": "1.0.0",
-  "fingerprint": "sCK77DUjl6XLSDraEBCbBUwQMt6a8HflBl15/aIVElM="
+  "fingerprint": "PGSIT90BMEYDQC/jNK5EFAvhJRE0jxDT1SfEc8gWMHM="
 }

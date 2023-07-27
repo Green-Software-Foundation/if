@@ -53,9 +53,12 @@ export declare class BoaviztaCpuImpactModel implements IImpactModelInterface {
     modelIdentifier(): string;
     authenticate(authParams: object): void;
     configure(name: string, staticParams: object | undefined): IImpactModelInterface;
+    private captureStaticParams;
     configureTyped(name: string, staticParamCast: IBoaviztaCpuParams): IImpactModelInterface;
     usage(data: object | object[]): Promise<object>;
     singleUsage(usageCast: {
         [p: string]: any;
     }): Promise<object>;
+    private normalizeData;
+    private formatResponse;
 }

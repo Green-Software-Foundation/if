@@ -111,21 +111,15 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
     }
 
     configure(name: string, staticParams: object | undefined): IImpactModelInterface {
-        const staticParamCast = staticParams as IBoaviztaCpuParams
-        if ('verbose' in staticParamCast) {
-            this.verbose = staticParamCast.verbose ?? false;
-            staticParamCast.verbose = undefined;
-        }
-        if ('allocation' in staticParamCast) {
-            this.allocation = staticParamCast.allocation ?? "total";
-            staticParamCast.allocation = undefined;
-        }
+        const staticParamCast = this.captureStaticParams(staticParams as IBoaviztaCpuParams)
         this.name = name;
         this.sharedParams = staticParamCast;
         return this;
     }
 
-    configureTyped(name: string, staticParamCast: IBoaviztaCpuParams): IImpactModelInterface {
+    private captureStaticParams(staticParamCast: IBoaviztaCpuParams | (IBoaviztaCpuParams & {
+        verbose: unknown
+    }) | (IBoaviztaCpuParams & { allocation: unknown })) {
         if ('verbose' in staticParamCast) {
             this.verbose = staticParamCast.verbose ?? false;
             staticParamCast.verbose = undefined;
@@ -134,6 +128,11 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
             this.allocation = staticParamCast.allocation ?? "total";
             staticParamCast.allocation = undefined;
         }
+        return staticParamCast
+    }
+
+    configureTyped(name: string, staticParamCast: IBoaviztaCpuParams): IImpactModelInterface {
+        staticParamCast = this.captureStaticParams(staticParamCast)
         this.name = name;
         this.sharedParams = staticParamCast;
         return this;
@@ -164,17 +163,24 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
         if (this.sharedParams === undefined) {
             throw new Error("Improper Initialization: Missing configuration parameters")
         }
-        const dataCast: { [key: string]: any } = Object.assign(this.sharedParams);
+        const dataCast = this.normalizeData(this.sharedParams);
+        dataCast['usage'] = usageCast
+        const response = await axios.post(`https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`, dataCast);
+        return this.formatResponse(response);
+    }
+
+    private normalizeData(dataParams: object): { [key: string]: any } {
+        const dataCast: { [key: string]: any } = Object.assign(dataParams);
         for (let key in dataCast) {
             dataCast[camelToSnake(key)] = dataCast[key]
             if (/[A-Z]/.test(key)) {
                 delete dataCast[key]
             }
         }
-        dataCast['usage'] = usageCast
-        console.log(dataCast);
-        const response = await axios.post(`https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`, dataCast);
-        console.log(response.data);
+        return dataCast;
+    }
+
+    private formatResponse(response: any) {
         let m = 0;
         let e = 0;
         if ('impacts' in response.data) {
@@ -184,9 +190,6 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
             m = response.data['gwp']['manufacture'] * 1000
             e = response.data['pe']['use'] / 3.6;
         }
-        return {
-            "e": e,
-            "m": m
-        };
+        return {m, e};
     }
 }
