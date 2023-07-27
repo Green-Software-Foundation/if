@@ -1,0 +1,9 @@
+
+src/**/*.js
+src/**/*.d.ts
+lib/**/*.js
+lib/**/*.d.ts
+node_modules
+.idea
+*.tsbuildinfo
+dist
