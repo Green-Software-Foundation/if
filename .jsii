@@ -1,0 +1,495 @@
+{
+  "author": {
+    "email": "info@gsf.com",
+    "name": "Green Software Foundation",
+    "roles": [
+      "author"
+    ]
+  },
+  "bundled": {
+    "@cloud-carbon-footprint/core": "*",
+    "@types/node": "^20.4.2",
+    "axios": "^1.4.0",
+    "node-fetch": "^3.3.1",
+    "ts-sync-request": "^1.4.1",
+    "typescript": "^5.1.6"
+  },
+  "description": "",
+  "docs": {
+    "stability": "stable"
+  },
+  "homepage": "https://github.com/Green-Software-Foundation/carbon-ql.git",
+  "jsiiVersion": "5.1.6 (build d8f400c)",
+  "keywords": [],
+  "license": "ISC",
+  "metadata": {
+    "jsii": {
+      "pacmak": {
+        "hasDefaultInterfaces": true
+      }
+    }
+  },
+  "name": "carbonql",
+  "readme": {
+    "markdown": "# carbonQL\n\nModern applications are composed of many smaller pieces of software (components) running on many different environments, for example, private cloud, public cloud, bare-metal, virtualized, containerized, mobile, laptops, and desktops.\nEvery environment requires a different way of measurement, and there is no single solution you can use to calculate the carbon emissions for all environments.\nThe friction to measuring software emissions isn't that we need to know how, it's that we run software on many things and each thing has several different ways to measure.\n\n## Solution\n\nTherefore, the intent of this project is to build a framework codenamed *carbonQL* that you can use to extend and measure  software emissions for every runtime environment. If your application runs on bare-metal servers in the private cloud, virtualized servers in the public cloud, mobile, desktop, and laptop end-user devices, the carbonQL framework  gives you data for all of them.\n\nThe carbonQL is:\n\n-**Opinionated**: It’s the expertise in software measurement codified into software. Rather than giving you options, it gives you answers.\n\n-**Ubiquitous**: Whatever the environment, bare metal, virtualized, mobile, IoT, carbon QL project will always be able to give you numbers.\n\n-**Declarative**: You express your intentions, needs, and context, and carbonQL selects the correct measurement methodology. For example, if you are calculating a SCI score, the carbonQL framework will return you data that meets the requirements of the SCI. Likewise, if you are calculating for GHG reporting, it will return you information that meets the requirements of GHG reporting.\n\n-**Free**: carbonQL is open source and comes linked with public data sources that are free to use. Using the library doesn't cost anything; however, the free sources might be limited.\n\n-**Extendable**: The framework can be enhanced to leverage more advanced commercial or private models, for example, real-time electricity carbon intensity feeds.\n\n\n**Audience**\n\n-Software monitoring products looking to add carbon as a software measurement metric.\n\n-Software optimization tools looking to represent optimizations in terms of carbon reductions.\n\n-Developer tooling. Developer and Dev/Ops focussed products looking to add carbon measurement.\n-Sustainability professionals who are interested in calculating the carbon emissions for reporting.\n\n-Organizations looking to measure-for-action the carbon emissions reduction from migrating a software application from on-prem to the cloud.\n\n\n## Integration with SCI Open Data\n\nAt the backend carbonQL project is planned to be integrated with multiple datasets that can be used to provide  carbon emissions values. These datasets could be public or private as well.\n\nAs per SCI specifications, carbon emissions values are required for the 4 different components of the SCI equation E, I, M and R. There are reference emission value datasets like Climatiq, Boazvita, Cloud carbon co-efficients that need to be leveraged to provide values for these SCI components. We refer to these emission value datasets as SCI open data and there is a curated list of datasets available as part of the [SCI guidance project](https://sci-guide.greensoftware.foundation/)\n\n\n## Architecture of the Solution\n\nThe carbonQL acts like a facade, it might call out to other APIs, CSV files, DBs, the underlying model can be of any format and in any location.\n\n![CarbonQL_architecture](https://user-images.githubusercontent.com/10396742/219698334-eb98bcfd-f968-400a-9ffd-b0aeaee8823f.JPG)\n\n\nIt provides a common interface to all the various models, makes opinionated decisions about which model to use and how its results should be transformed into the format you need for your calculations. In the above diagram we can see that the carbonQL is intended to connect to various backend carbon datasets like Climatiq, Cloud carbon co-efficients to bring back emissions data given the usage.\n\nThe interface definition would be generic i.e irrespective of the underlying data sources (hereafter referred to as models) being used , the method names across all the data models would be the same. This would provide uniformity to the callers or users to use the framework.  For example some of the methods we have envisioned  in the interface include :\n- Create\n- Historical\n- Snapshot\n- Stream\n- Dispose\n\nAlso to ensure that we provide uniformity , we will try to keep the method signatures uniform across the different functions. We would try to use specific datatypes only when it is required but try to build methods that accept arrays and dictionary objects that can help the method to be scalable across different programming languages.\n\n\n\n"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Green-Software-Foundation/carbon-ql.git"
+  },
+  "schema": "jsii/0.10.0",
+  "targets": {
+    "dotnet": {
+      "namespace": "GreenSoftwareFoundation.CarbonQL",
+      "packageId": "GreenSoftwareFoundation.CarbonQL"
+    },
+    "go": {
+      "moduleName": "github.com/Green-Software-Foundation",
+      "packageName": "carbonql",
+      "versionSuffix": "-devprefix"
+    },
+    "java": {
+      "maven": {
+        "artifactId": "carbonql",
+        "groupId": "org.greensoftware"
+      },
+      "package": "org.greensoftware.carbonql"
+    },
+    "js": {
+      "npm": "carbonql"
+    },
+    "python": {
+      "distName": "carbon-ql.core",
+      "module": "carbon_ql"
+    }
+  },
+  "types": {
+    "carbonql.BoaviztaCpuImpactModel": {
+      "assembly": "carbonql",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "carbonql.BoaviztaCpuImpactModel",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        }
+      },
+      "interfaces": [
+        "carbonql.IImpactModelInterface"
+      ],
+      "kind": "class",
+      "locationInModule": {
+        "filename": "lib/boavizta.ts",
+        "line": 18
+      },
+      "methods": [
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 31
+          },
+          "name": "authenticate",
+          "overrides": "carbonql.IImpactModelInterface",
+          "parameters": [
+            {
+              "name": "authParams",
+              "type": {
+                "primitive": "json"
+              }
+            }
+          ]
+        },
+        {
+          "async": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 71
+          },
+          "name": "calculate",
+          "overrides": "carbonql.IImpactModelInterface",
+          "parameters": [
+            {
+              "name": "data",
+              "optional": true,
+              "type": {
+                "union": {
+                  "types": [
+                    {
+                      "primitive": "json"
+                    },
+                    {
+                      "collection": {
+                        "elementtype": {
+                          "primitive": "json"
+                        },
+                        "kind": "array"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "json"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 43
+          },
+          "name": "captureStaticParams",
+          "parameters": [
+            {
+              "name": "staticParams",
+              "type": {
+                "primitive": "json"
+              }
+            }
+          ],
+          "protected": true,
+          "returns": {
+            "type": {
+              "primitive": "json"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 35
+          },
+          "name": "configure",
+          "overrides": "carbonql.IImpactModelInterface",
+          "parameters": [
+            {
+              "name": "name",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "staticParams",
+              "optional": true,
+              "type": {
+                "primitive": "json"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "carbonql.IImpactModelInterface"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 27
+          },
+          "name": "modelIdentifier",
+          "overrides": "carbonql.IImpactModelInterface",
+          "returns": {
+            "type": {
+              "primitive": "string"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 115
+          },
+          "name": "normalizeData",
+          "parameters": [
+            {
+              "name": "dataParams",
+              "type": {
+                "primitive": "json"
+              }
+            }
+          ],
+          "protected": true,
+          "returns": {
+            "type": {
+              "primitive": "json"
+            }
+          }
+        },
+        {
+          "async": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 105
+          },
+          "name": "singleUsage",
+          "parameters": [
+            {
+              "name": "usageCast",
+              "optional": true,
+              "type": {
+                "primitive": "json"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "json"
+            }
+          }
+        }
+      ],
+      "name": "BoaviztaCpuImpactModel",
+      "properties": [
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 23
+          },
+          "name": "allocation",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 24
+          },
+          "name": "authCredentials",
+          "protected": true,
+          "type": {
+            "primitive": "any"
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 22
+          },
+          "name": "verbose",
+          "type": {
+            "primitive": "boolean"
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 21
+          },
+          "name": "name",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        }
+      ],
+      "symbolId": "lib/boavizta:BoaviztaCpuImpactModel"
+    },
+    "carbonql.IBoaviztaUsageSCI": {
+      "assembly": "carbonql",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "carbonql.IBoaviztaUsageSCI",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "lib/boavizta.ts",
+        "line": 13
+      },
+      "name": "IBoaviztaUsageSCI",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 14
+          },
+          "name": "e",
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/boavizta.ts",
+            "line": 15
+          },
+          "name": "m",
+          "type": {
+            "primitive": "number"
+          }
+        }
+      ],
+      "symbolId": "lib/boavizta:IBoaviztaUsageSCI"
+    },
+    "carbonql.IImpactModelInterface": {
+      "assembly": "carbonql",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "carbonql.IImpactModelInterface",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "lib/interfaces/index.ts",
+        "line": 1
+      },
+      "methods": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/interfaces/index.ts",
+            "line": 6
+          },
+          "name": "authenticate",
+          "parameters": [
+            {
+              "name": "authParams",
+              "type": {
+                "primitive": "json"
+              }
+            }
+          ]
+        },
+        {
+          "abstract": true,
+          "async": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/interfaces/index.ts",
+            "line": 8
+          },
+          "name": "calculate",
+          "parameters": [
+            {
+              "name": "data",
+              "optional": true,
+              "type": {
+                "union": {
+                  "types": [
+                    {
+                      "primitive": "json"
+                    },
+                    {
+                      "collection": {
+                        "elementtype": {
+                          "primitive": "json"
+                        },
+                        "kind": "array"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "json"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/interfaces/index.ts",
+            "line": 4
+          },
+          "name": "configure",
+          "parameters": [
+            {
+              "name": "name",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "staticParams",
+              "optional": true,
+              "type": {
+                "primitive": "json"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "carbonql.IImpactModelInterface"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "lib/interfaces/index.ts",
+            "line": 2
+          },
+          "name": "modelIdentifier",
+          "returns": {
+            "type": {
+              "primitive": "string"
+            }
+          }
+        }
+      ],
+      "name": "IImpactModelInterface",
+      "symbolId": "lib/interfaces/index:IImpactModelInterface"
+    }
+  },
+  "version": "1.0.0",
+  "fingerprint": "640YLe3zIx71hG80d1vvOA2dgvD0iVGJiqSITdZ6Sko="
+}
