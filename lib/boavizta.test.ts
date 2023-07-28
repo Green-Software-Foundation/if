@@ -1,31 +1,46 @@
-import {describe, expect, test} from '@jest/globals';
-import {BoaviztaCpuImpactModel} from "./boavizta";
+import {describe, expect, jest, test} from '@jest/globals';
+import { BoaviztaCpuImpactModel} from "./boavizta";
 
-describe('initialization test', () => {
+jest.setTimeout(30000);
 
-    test('initialize without params', async () => {
+describe('cpu:configure test', () => {
+
+    test('initialize without params should throw error', async () => {
         const impactModel = new BoaviztaCpuImpactModel();
-        impactModel.configure('test');
+        await expect(impactModel.configure('test')).rejects.toThrowError(Error("Improper configure: Missing name parameter"));
         expect(impactModel.name).toBe('test');
     });
-    test('initialize without params and call usage', async () => {
+    test('initialize wrong params should throw error', async () => {
         const impactModel = new BoaviztaCpuImpactModel();
-        impactModel.configure('test');
+        await expect(impactModel.configure('test', {'allocation': 'wrong'})).rejects.toThrowError();
         expect(impactModel.name).toBe('test');
-        // initialization without static params will cause improper initialization error
+    });
+    test('initialize without params throws error for parameter and call calculate without params throws error for observation', async () => {
+        const impactModel = new BoaviztaCpuImpactModel();
+        await expect(impactModel.configure('test')).rejects.toThrow(Error("Improper configure: Missing name parameter"));
+        expect(impactModel.name).toBe('test');
+        // not providing observations will throw a missing observations error
         await expect(impactModel.calculate())
             .rejects
             .toStrictEqual(
-                Error("Improper Initialization: Missing configuration parameters")
+                Error("Parameter Not Given: Missing observations parameter")
+            )
+        // improper observations will throw a invalid observations error
+        await expect(impactModel.calculate({"invalid": "observation"}))
+            .rejects
+            .toStrictEqual(
+                Error("Invalid Input: Invalid observations parameter")
             )
     });
 });
-describe('initialize with params', () => {
-    test('initialize with params and call usage', async () => {
+describe('cpu:initialize with params', () => {
+    test('initialize with params and call usage in RAW Format', async () => {
         const impactModel = new BoaviztaCpuImpactModel();
-        impactModel.configure('test', {name: 'Intel Xeon Platinum 8160 Processor', coreUnits: 2});
+        await expect(impactModel.configure('test', {name: 'Intel Xeon Platinum 8160 Processor', core_units: 2}))
+            .resolves
+            .toBeInstanceOf(BoaviztaCpuImpactModel);
         expect(impactModel.name).toBe('test');
-        // initialization without static params will cause improper initialization error
+        // configure without static params will cause improper configure error
         await expect(impactModel.calculate({
             "hours_use_time": 1,
             "usage_location": "USA",
@@ -36,11 +51,13 @@ describe('initialize with params', () => {
                 {"e": 0.5555555555555556, "m": 23800}
             )
     });
-    test('initialize with params and call multiple usages', async () => {
+    test('initialize with params and call multiple usages in RAW Format', async () => {
         const impactModel = new BoaviztaCpuImpactModel();
-        impactModel.configure('test', {name: 'Intel Xeon Platinum 8160 Processor', coreUnits: 2});
+        await expect(impactModel.configure('test', {name: 'Intel Xeon Platinum 8160 Processor', core_units: 2}))
+            .resolves
+            .toBeInstanceOf(BoaviztaCpuImpactModel);
         expect(impactModel.name).toBe('test');
-        // initialization without static params will cause improper initialization error
+        // configure without static params will cause improper configure error
         await expect(impactModel.calculate([{
             "hours_use_time": 1,
             "usage_location": "USA",
@@ -56,36 +73,40 @@ describe('initialize with params', () => {
                 {"e": 0.5555555555555556 * 2, "m": 23800}
             )
     });
-    test('initialize with params and call multiple usages', async () => {
+    test('initialize with params and call multiple usages in IMPL format', async () => {
         const impactModel = new BoaviztaCpuImpactModel();
-        impactModel.configure('test', {
+        await expect(impactModel.configure('test', {
             name: 'Intel Xeon Gold 6138f',
-            coreUnits: 24,
+            core_units: 24,
             location: 'USA'
-        });
+        })).resolves.toBeInstanceOf(BoaviztaCpuImpactModel);
         expect(impactModel.name).toBe('test');
-        // initialization without static params will cause improper initialization error
+        // configure without static params will cause improper configure error
         await expect(impactModel.calculate([
             {
+                "datetime": "2021-01-01T00:00:00Z",
                 "duration": '15s',
                 "cpu": 0.34,
             },
             {
+                "datetime": "2021-01-01T00:00:15Z",
                 "duration": '15s',
                 "cpu": 0.12,
             },
             {
+                "datetime": "2021-01-01T00:00:30Z",
                 "duration": '15s',
                 "cpu": 0.01,
             },
             {
+                "datetime": "2021-01-01T00:00:45Z",
                 "duration": '15s',
                 "cpu": 0.78,
             },
         ]))
             .resolves
             .toStrictEqual(
-                {"e": 1.1111111111111112, "m": 23800}
+                {"e": 0.0037311666666666665, "m": 23800}
             )
     });
 });

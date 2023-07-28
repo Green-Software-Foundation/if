@@ -49,6 +49,7 @@ print(json.dumps(
 print(json.dumps(
     cpu_component2.calculate([
         {
+            "datetime": "2020-01-01T00:00:00Z",
             "duration": "1h",
             "cpu": 0.82
         },

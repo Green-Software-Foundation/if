@@ -1,13 +1,12 @@
-import {BoaviztaCpuImpactModel} from "../lib";
+import {BoaviztaCloudImpactModel, BoaviztaCpuImpactModel} from "../lib";
 
 async function test() {
-    const newModel = new BoaviztaCpuImpactModel();
     const params: { [key: string]: any } = {};
     params.allocation = 'TOTAL';
     params.verbose = true;
     params.name = 'Intel Xeon Platinum 8160 Processor'
-    params.coreUnits = 2;
-    newModel.configure('test', params);
+    params.core_units = 24;
+    const newModel = await (new BoaviztaCpuImpactModel()).configure('test', params);
     const usage = await newModel.calculate([
         {
             "hours_use_time": 1,
@@ -20,7 +19,31 @@ async function test() {
             "time_workload": 5,
         }
     ])
+    const cloudModel = await (new BoaviztaCloudImpactModel()).configure('test', params);
+    const usage2 = await cloudModel.calculate([
+        {
+            "datetime": "2021-01-01T00:00:00Z",
+            "duration": '15s',
+            "cpu": 0.34,
+        },
+        {
+            "datetime": "2021-01-01T00:00:15Z",
+            "duration": '15s',
+            "cpu": 0.12,
+        },
+        {
+            "datetime": "2021-01-01T00:00:30Z",
+            "duration": '15s',
+            "cpu": 0.01,
+        },
+        {
+            "datetime": "2021-01-01T00:00:45Z",
+            "duration": '15s',
+            "cpu": 0.78,
+        },
+    ])
     console.log(usage);
+    console.log(usage2);
 }
 
 test();

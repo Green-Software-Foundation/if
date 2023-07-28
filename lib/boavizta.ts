@@ -6,53 +6,37 @@ export {
 } from "./interfaces/index";
 
 
-export const camelToSnake = (str: string): string =>
-    str.replace(/([A-Z])/g, ($1: string) => `_${$1.toLowerCase()}`);
+abstract class BoaviztaImpactModel implements IImpactModelInterface {
+    protected authCredentials: object | undefined;
+    name: string | undefined;
+    sharedParams: object | undefined = undefined;
+    metricType: "cpu" | "gpu" | "ram" = "cpu";
 
-
-export interface IBoaviztaUsageSCI {
-    e: number;
-    m: number;
-}
-
-export class BoaviztaCpuImpactModel implements IImpactModelInterface {
-    private componentType = "cpu";
-    private sharedParams: object | undefined = undefined;
-    public name: string | undefined;
-    public verbose: boolean = false;
-    public allocation: string = "TOTAL";
-    protected authCredentials: any = undefined;
-
-
-    modelIdentifier(): string {
-        return "boavizta.cpu.sci"
-    }
 
     authenticate(authParams: object) {
         this.authCredentials = authParams;
     }
 
-    configure(name: string, staticParams: object | undefined = undefined): IImpactModelInterface {
+    async configure(name: string, staticParams: object | undefined = undefined): Promise<IImpactModelInterface> {
         this.name = name;
-        if (staticParams !== undefined) {
-            this.sharedParams = this.captureStaticParams(staticParams);
-        }
-        return this;
+        this.sharedParams = await this.captureStaticParams(staticParams ?? {});
+        return this
     }
 
-    protected captureStaticParams(staticParams: object) {
-        if ('verbose' in staticParams) {
-            this.verbose = staticParams.verbose as boolean ?? false;
-            staticParams.verbose = undefined;
-        }
-        if ('allocation' in staticParams) {
-            this.allocation = staticParams.allocation as string ?? "TOTAL";
-            staticParams.allocation = undefined;
-        }
-        return staticParams
+    //abstract subs to make compatibility
+    protected abstract captureStaticParams(staticParams: object): any
+
+    abstract modelIdentifier(): string
+
+    abstract fetchData(usageData: object | undefined): Promise<object>
+
+
+    async supportedLocations(): Promise<string[]> {
+        const countries = await axios.get(`https://api.boavizta.org/v1/utils/country_code`)
+        return Object.values(countries.data);
     }
 
-    private convertToHours(timeString: string): number {
+    protected convertToHours(timeString: string): number {
         const numberPart = parseFloat(timeString);
         const unit = timeString.slice(-1).toLowerCase();
 
@@ -63,70 +47,16 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
                 return numberPart / 60; // 1 hour = 60 minutes
             case 'h':
                 return numberPart;
+            case 'd':
+                return numberPart * 24;
+            case 'w':
+                return numberPart * 24 * 7;
             default:
                 throw new Error('Invalid time string. Supported units are "s", "m", and "h".');
         }
     }
 
-    async calculate(data: object | object[] | undefined = undefined): Promise<object> {
-        let mTotal = 0;
-        let eTotal = 0;
-        if (Array.isArray(data)) {
-            for (const usageRaw of data) {
-                const {datetime, duration, cpu} = usageRaw;
-                if (datetime !== undefined && duration !== undefined && cpu !== undefined) {
-                    const usageInput: { [key: string]: any } = {
-                        "hours_use_time": this.convertToHours(duration),
-                        "time_workload": cpu * 100.0,
-                    }
-                    if (this.sharedParams !== undefined && 'location' in this.sharedParams) {
-                        usageInput['usage_location'] = this.sharedParams['location']
-                    }
-                    const {m, e} = await this.singleUsage(usageInput) as IBoaviztaUsageSCI
-                    mTotal = m;
-                    eTotal += e;
-                } else {
-                    if (this.sharedParams !== undefined && 'location' in this.sharedParams) {
-                        usageRaw['usage_location'] = this.sharedParams['location']
-                    }
-                    const {m, e} = await this.singleUsage(usageRaw) as IBoaviztaUsageSCI
-                    mTotal = m;
-                    eTotal += e;
-                }
-            }
-        } else {
-            const {m, e} = await this.singleUsage(data) as IBoaviztaUsageSCI
-            mTotal += m;
-            eTotal += e;
-        }
-        return {
-            "e": eTotal,
-            "m": mTotal
-        };
-    }
-
-    async singleUsage(usageCast: object | undefined): Promise<object> {
-        if (this.sharedParams === undefined) {
-            throw new Error("Improper Initialization: Missing configuration parameters")
-        }
-        const dataCast = this.normalizeData(this.sharedParams) as { [key: string]: any };
-        dataCast['usage'] = usageCast
-        const response = await axios.post(`https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`, dataCast);
-        return this.formatResponse(response);
-    }
-
-    protected normalizeData(dataParams: object): object {
-        const dataCast: { [key: string]: any } = Object.assign(dataParams);
-        for (let key in dataCast) {
-            dataCast[camelToSnake(key)] = dataCast[key]
-            if (/[A-Z]/.test(key)) {
-                delete dataCast[key]
-            }
-        }
-        return dataCast;
-    }
-
-    private formatResponse(response: any): { m: number, e: number } {
+    protected formatResponse(response: any): { [key: string]: any } {
         let m = 0;
         let e = 0;
         if ('impacts' in response.data) {
@@ -138,4 +68,122 @@ export class BoaviztaCpuImpactModel implements IImpactModelInterface {
         }
         return {m, e};
     }
+
+    transformToBoaviztaUsage(duration: any, metric: any) {
+        let usageInput: { [key: string]: any } = {
+            "hours_use_time": this.convertToHours(duration),
+            "time_workload": metric * 100.0,
+        }
+        usageInput = this.addLocationToUsage(usageInput);
+        return usageInput;
+    }
+
+    async calculate(observations: object | object[] | undefined = undefined): Promise<object> {
+        let mTotal = 0;
+        let eTotal = 0;
+        if (Array.isArray(observations)) {
+            if (observations.length === 0) {
+                throw new Error("Parameter Not Given: Missing observations parameter")
+            }
+            for (const usageRaw of observations) {
+                const usageResult = await this.calculateUsageForItem(usageRaw);
+                mTotal = usageResult.m;
+                eTotal += usageResult.e;
+            }
+        } else {
+            let m = 0, e = 0;
+            if (observations !== undefined) {
+                const usageResult = await this.calculateUsageForItem(observations);
+                m = usageResult.m;
+                e = usageResult.e;
+            } else {
+                throw new Error("Parameter Not Given: Missing observations parameter")
+            }
+            mTotal += m;
+            eTotal += e;
+        }
+        return {
+            "e": eTotal,
+            "m": mTotal
+        };
+    }
+
+    protected async calculateUsageForItem(usageRaw: { [key: string]: any }) {
+        if ('datetime' in usageRaw && 'duration' in usageRaw && this.metricType in usageRaw) {
+            const usageInput = this.transformToBoaviztaUsage(usageRaw['duration'], usageRaw[this.metricType]);
+            return await this.fetchData(usageInput) as IBoaviztaUsageSCI
+        } else if ('hours_use_time' in usageRaw && 'time_workload' in usageRaw) {
+            const usageRawWithLocation = this.addLocationToUsage(usageRaw);
+            return await this.fetchData(usageRawWithLocation) as IBoaviztaUsageSCI
+        } else {
+            throw new Error("Invalid Input: Invalid observations parameter")
+        }
+    }
+
+    addLocationToUsage(usageRaw: { [key: string]: any }) {
+        if (this.sharedParams !== undefined && 'location' in this.sharedParams) {
+            usageRaw['usage_location'] = this.sharedParams['location']
+        }
+        return usageRaw;
+    }
 }
+
+export interface IBoaviztaUsageSCI {
+    e: number;
+    m: number;
+}
+
+
+export class BoaviztaCpuImpactModel extends BoaviztaImpactModel implements IImpactModelInterface {
+    private readonly componentType = "cpu";
+    sharedParams: object | undefined = undefined;
+    public name: string | undefined;
+    public verbose: boolean = false;
+    public allocation: string = "TOTAL";
+
+    constructor() {
+        super();
+        this.metricType = "cpu";
+        this.componentType = "cpu";
+    }
+
+    modelIdentifier(): string {
+        return "org.boavizta.cpu.sci"
+    }
+
+    protected async captureStaticParams(staticParams: object): Promise<object> {
+        if ('verbose' in staticParams) {
+            this.verbose = staticParams.verbose as boolean ?? false;
+            staticParams.verbose = undefined;
+        }
+        if ('allocation' in staticParams) {
+            const allocation = staticParams.allocation as string ?? "TOTAL";
+            if (["TOTAL", "LINEAR"].includes(allocation)) {
+                this.allocation = allocation;
+            } else {
+                throw new Error("Improper configure: Invalid allocation parameter. Either TOTAL or LINEAR");
+            }
+            staticParams.allocation = undefined;
+        }
+        if (!('name' in staticParams)) {
+            throw new Error("Improper configure: Missing name parameter");
+        }
+        if (!('core_units' in staticParams)) {
+            throw new Error("Improper configure: Missing core_units parameter");
+        }
+        this.sharedParams = Object.assign({}, staticParams);
+        return this.sharedParams
+    }
+
+
+    async fetchData(usageData: object | undefined): Promise<object> {
+        if (this.sharedParams === undefined) {
+            throw new Error("Improper configure: Missing configuration parameters")
+        }
+        const dataCast = this.sharedParams as { [key: string]: any };
+        dataCast['usage'] = usageData
+        const response = await axios.post(`https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`, dataCast);
+        return this.formatResponse(response);
+    }
+}
+
