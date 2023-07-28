@@ -1,9 +1,10 @@
 export interface IImpactModelInterface {
     modelIdentifier(): string
 
-    configure(name: string, staticParams: object | undefined): IImpactModelInterface
+    // params is a reserved keyword in C#. Hence it can not be used.
+    configure(name: string, staticParams: object | undefined): Promise<IImpactModelInterface>
 
     authenticate(authParams: object): void
 
-    calculate(data: object | object[] | undefined): Promise<object>
+    calculate(observations: object | object[] | undefined): Promise<object>
 }
