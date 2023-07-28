@@ -1,4 +1,4 @@
-import {BoaviztaCloudImpactModel, BoaviztaCpuImpactModel} from "../lib";
+import {BoaviztaCpuImpactModel} from "../lib";
 
 async function test() {
     const params: { [key: string]: any } = {};
@@ -19,8 +19,7 @@ async function test() {
             "time_workload": 5,
         }
     ])
-    const cloudModel = await (new BoaviztaCloudImpactModel()).configure('test', params);
-    const usage2 = await cloudModel.calculate([
+    const usage2 = await newModel.calculate([
         {
             "datetime": "2021-01-01T00:00:00Z",
             "duration": '15s',
