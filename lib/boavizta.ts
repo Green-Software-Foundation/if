@@ -26,8 +26,10 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     //abstract subs to make compatibility with base interface. allows configure to be defined in base class
     protected abstract captureStaticParams(staticParams: object): any
 
+    //defines the model identifier
     abstract modelIdentifier(): string
 
+    //fetches data from Boavizta API according to the specific endpoint of the model
     abstract fetchData(usageData: object | undefined): Promise<object>
 
 
