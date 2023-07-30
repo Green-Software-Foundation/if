@@ -25,7 +25,9 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
 
     //abstract subs to make compatibility with base interface. allows configure to be defined in base class
     protected abstract captureStaticParams(staticParams: object): any
+
     abstract modelIdentifier(): string
+
     abstract fetchData(usageData: object | undefined): Promise<object>
 
 
@@ -88,14 +90,14 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
             if (observations.length === 0) {
                 throw new Error("Parameter Not Given: Missing observations parameter")
             }
-            for (const usageRaw of observations) {
-                const usageResult = await this.calculateUsageForObservation(usageRaw);
+            for (const observation of observations) {
+                const usageResult = await this.calculateUsageForObservation(observation);
                 mTotal = usageResult.m;
                 eTotal += usageResult.e;
             }
         } else {
             let m = 0, e = 0;
-            if (observations !== undefined) {
+            if (observations !== undefined && observations !== null && Object.keys(observations).length > 0) {
                 const usageResult = await this.calculateUsageForObservation(observations);
                 m = usageResult.m;
                 e = usageResult.e;
