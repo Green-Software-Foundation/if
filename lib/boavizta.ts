@@ -86,14 +86,14 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
                 throw new Error("Parameter Not Given: Missing observations parameter")
             }
             for (const usageRaw of observations) {
-                const usageResult = await this.calculateUsageForItem(usageRaw);
+                const usageResult = await this.calculateUsageForObservation(usageRaw);
                 mTotal = usageResult.m;
                 eTotal += usageResult.e;
             }
         } else {
             let m = 0, e = 0;
             if (observations !== undefined) {
-                const usageResult = await this.calculateUsageForItem(observations);
+                const usageResult = await this.calculateUsageForObservation(observations);
                 m = usageResult.m;
                 e = usageResult.e;
             } else {
@@ -108,7 +108,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         };
     }
 
-    protected async calculateUsageForItem(usageRaw: { [key: string]: any }) {
+    protected async calculateUsageForObservation(usageRaw: { [key: string]: any }) {
         if ('datetime' in usageRaw && 'duration' in usageRaw && this.metricType in usageRaw) {
             const usageInput = this.transformToBoaviztaUsage(usageRaw['duration'], usageRaw[this.metricType]);
             return await this.fetchData(usageInput) as IBoaviztaUsageSCI
