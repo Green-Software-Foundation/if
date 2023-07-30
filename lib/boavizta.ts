@@ -23,19 +23,19 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         return this
     }
 
-    //abstract subs to make compatibility
+    //abstract subs to make compatibility with base interface. allows configure to be defined in base class
     protected abstract captureStaticParams(staticParams: object): any
-
     abstract modelIdentifier(): string
-
     abstract fetchData(usageData: object | undefined): Promise<object>
 
 
+    // list of supported locations by the model
     async supportedLocations(): Promise<string[]> {
         const countries = await axios.get(`https://api.boavizta.org/v1/utils/country_code`)
         return Object.values(countries.data);
     }
 
+    // converts the time string to hours
     protected convertToHours(timeString: string): number {
         const numberPart = parseFloat(timeString);
         const unit = timeString.slice(-1).toLowerCase();
@@ -56,6 +56,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         }
     }
 
+    // extracts information from Boavizta API response to return the impact in the format required by IMPL
     protected formatResponse(response: any): { [key: string]: any } {
         let m = 0;
         let e = 0;
@@ -69,6 +70,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         return {m, e};
     }
 
+    // converts the usage from IMPL input to the format required by Boavizta API.
     transformToBoaviztaUsage(duration: any, metric: any) {
         let usageInput: { [key: string]: any } = {
             "hours_use_time": this.convertToHours(duration),
@@ -78,6 +80,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         return usageInput;
     }
 
+    // Calculates the impact of the given usage
     async calculate(observations: object | object[] | undefined = undefined): Promise<object> {
         let mTotal = 0;
         let eTotal = 0;
@@ -108,6 +111,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         };
     }
 
+    // converts the usage to the format required by Boavizta API.
     protected async calculateUsageForObservation(usageRaw: { [key: string]: any }) {
         if ('datetime' in usageRaw && 'duration' in usageRaw && this.metricType in usageRaw) {
             const usageInput = this.transformToBoaviztaUsage(usageRaw['duration'], usageRaw[this.metricType]);
@@ -120,6 +124,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         }
     }
 
+    // Adds location to usage if location is defined in sharedParams
     addLocationToUsage(usageRaw: { [key: string]: any }) {
         if (this.sharedParams !== undefined && 'location' in this.sharedParams) {
             usageRaw['usage_location'] = this.sharedParams['location']
