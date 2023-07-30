@@ -183,7 +183,7 @@ export class BoaviztaCloudImpactModel extends BoaviztaImpactModel implements IIm
             staticParams.allocation = undefined;
         }
         // if no valid provider found, throw error
-        this.validateProvider(staticParams);
+        await this.validateProvider(staticParams);
         // if no valid instance_type found, throw error
         await this.validateInstanceType(staticParams);
         // if no valid location found, throw error
@@ -222,11 +222,11 @@ export class BoaviztaCloudImpactModel extends BoaviztaImpactModel implements IIm
         }
     }
 
-    validateProvider(staticParamsCast: object) {
+    async validateProvider(staticParamsCast: object) {
         if (!('provider' in staticParamsCast)) {
             throw new Error("Improper configure: Missing provider parameter");
         } else {
-            const supportedProviders = ["aws"];
+            const supportedProviders = await this.supportedProvidersList();
             if (!(supportedProviders.includes(staticParamsCast.provider as string))) {
                 throw new Error("Improper configure: Invalid provider parameter: '" + staticParamsCast.provider + "'. Valid values are : " + supportedProviders.join(", "));
             }
@@ -236,6 +236,11 @@ export class BoaviztaCloudImpactModel extends BoaviztaImpactModel implements IIm
     async supportedInstancesList(provider: string) {
         const instances = await axios.get(`https://api.boavizta.org/v1/cloud/all_instances?provider=${provider}`)
         return instances.data;
+    }
+
+    async supportedProvidersList(): Promise<string[]> {
+        const providers = await axios.get(`https://api.boavizta.org/v1/utils/all_providers`)
+        return Object.values(providers.data);
     }
 
 
