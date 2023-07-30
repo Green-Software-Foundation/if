@@ -168,27 +168,26 @@ export class BoaviztaCloudImpactModel extends BoaviztaImpactModel implements IIm
     }
 
     protected async captureStaticParams(staticParams: object) {
-        const staticParamsCast = staticParams;
-        if ('verbose' in staticParamsCast) {
-            this.verbose = staticParamsCast.verbose as boolean ?? false;
-            staticParamsCast.verbose = undefined;
+        if ('verbose' in staticParams) {
+            this.verbose = staticParams.verbose as boolean ?? false;
+            staticParams.verbose = undefined;
         }
-        if ('allocation' in staticParamsCast) {
-            const allocation = staticParamsCast.allocation as string ?? "TOTAL";
+        if ('allocation' in staticParams) {
+            const allocation = staticParams.allocation as string ?? "TOTAL";
             // allocation has to be either TOTAL or LINEAR
             if (["TOTAL", "LINEAR"].includes(allocation)) {
                 this.allocation = allocation;
             } else {
                 throw new Error("Improper configure: Invalid allocation parameter. Either TOTAL or LINEAR");
             }
-            staticParamsCast.allocation = undefined;
+            staticParams.allocation = undefined;
         }
         // if no valid provider found, throw error
-        this.validateProvider(staticParamsCast);
+        this.validateProvider(staticParams);
         // if no valid instance_type found, throw error
-        await this.validateInstanceType(staticParamsCast);
+        await this.validateInstanceType(staticParams);
         // if no valid location found, throw error
-        await this.validateLocation(staticParamsCast);
+        await this.validateLocation(staticParams);
         this.sharedParams = Object.assign({}, staticParams);
         return this.sharedParams
     }
