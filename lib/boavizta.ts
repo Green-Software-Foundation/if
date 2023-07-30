@@ -114,13 +114,13 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     }
 
     // converts the usage to the format required by Boavizta API.
-    protected async calculateUsageForObservation(usageRaw: { [key: string]: any }) {
-        if ('datetime' in usageRaw && 'duration' in usageRaw && this.metricType in usageRaw) {
-            const usageInput = this.transformToBoaviztaUsage(usageRaw['duration'], usageRaw[this.metricType]);
+    protected async calculateUsageForObservation(observation: { [key: string]: any }) {
+        if ('datetime' in observation && 'duration' in observation && this.metricType in observation) {
+            const usageInput = this.transformToBoaviztaUsage(observation['duration'], observation[this.metricType]);
             return await this.fetchData(usageInput) as IBoaviztaUsageSCI
-        } else if ('hours_use_time' in usageRaw && 'time_workload' in usageRaw) {
-            const usageRawWithLocation = this.addLocationToUsage(usageRaw);
-            return await this.fetchData(usageRawWithLocation) as IBoaviztaUsageSCI
+        } else if ('hours_use_time' in observation && 'time_workload' in observation) {
+            const observationWithLocation = this.addLocationToUsage(observation);
+            return await this.fetchData(observationWithLocation) as IBoaviztaUsageSCI
         } else {
             throw new Error("Invalid Input: Invalid observations parameter")
         }
