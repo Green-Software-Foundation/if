@@ -13,6 +13,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     gcpList: { [key: string]: any } = {};
     azureList: { [key: string]: any } = {};
     awsList: { [key: string]: any } = {};
+    provider: string = '';
 
     constructor() {
         this.standardizeInstanceMetrics();
@@ -24,6 +25,25 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
 
     async configure(name: string, staticParams: object | undefined = undefined): Promise<IImpactModelInterface> {
         console.log(name, staticParams)
+        if (staticParams === undefined) {
+            throw new Error('Required Parameters not provided');
+        }
+        if ('provider' in staticParams) {
+            const provider = staticParams?.provider as string;
+            if (['aws', 'gcp', 'azure'].includes(provider)) {
+                this.provider = provider;
+            } else {
+                throw new Error('Provider not supported');
+            }
+        }
+        if ('instance_type' in staticParams) {
+            const instanceType = staticParams?.instance_type as string;
+            if (instanceType in this.computeInstances[this.provider]) {
+                this.name = instanceType;
+            } else {
+                throw new Error('Instance Type not supported');
+            }
+        }
         return this;
     }
 

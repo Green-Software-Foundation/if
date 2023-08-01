@@ -7,6 +7,6 @@ describe('ccf:configure test', () => {
 
     test('initialize without params should throw error', async () => {
         const impactModel = new CloudCarbonFootprint();
-        await impactModel.configure('test');
+        await impactModel.configure('test',{'provider': 'aws', 'instance_type': 't2.micro'});
     });
 });
