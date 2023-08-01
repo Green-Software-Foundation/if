@@ -10,10 +10,28 @@ import * as gcp_embodied from './gcp-embodied.json';
 import * as aws_embodied from './aws-embodied.json';
 import * as azure_embodied from './azure-embodied.json';
 
+interface IConsumption {
+    idle?: number;
+    tenPercent?: number;
+    fiftyPercent?: number;
+    hundredPercent?: number;
+    minWatts?: number;
+    maxWatts?: number;
+}
+
+interface IComputeInstance {
+    consumption: IConsumption;
+    embodiedEmission: number;
+    name: string;
+    vCPUs?: number;
+}
+
 export class CloudCarbonFootprint implements IImpactModelInterface {
     authParams: object | undefined;
+    // name of the data source
     name: string | undefined;
-    computeInstances: { [key: string]: any } = {};
+    // compute instances grouped by the provider with usage data
+    computeInstances: { [key: string]: { [key: string]: IComputeInstance } } = {};
     gcpList: { [key: string]: any } = {};
     azureList: { [key: string]: any } = {};
     awsList: { [key: string]: any } = {};
@@ -81,24 +99,27 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         //     get the wattage for the instance type
         let wattage = 0;
         if (this.provider === 'aws') {
-            const idle = this.computeInstances['aws'][this.instanceType]['instance_idle'];
-            const tenPercent = this.computeInstances['aws'][this.instanceType]['instance_10'];
-            const fiftyPercent = this.computeInstances['aws'][this.instanceType]['instance_50'];
-            const hundredPercent = this.computeInstances['aws'][this.instanceType]['instance_100'];
             const x = [0, 10, 50, 100];
-            const y: number[] = [idle, tenPercent, fiftyPercent, hundredPercent];
+            const y: number[] = [
+                this.computeInstances['aws'][this.instanceType].consumption.idle ?? 0,
+                this.computeInstances['aws'][this.instanceType].consumption.tenPercent ?? 0,
+                this.computeInstances['aws'][this.instanceType].consumption.fiftyPercent ?? 0,
+                this.computeInstances['aws'][this.instanceType].consumption.hundredPercent ?? 0
+            ];
             const spline = new Spline(x, y);
-            wattage = spline.at(cpu) as number;
+            wattage = spline.at(cpu);
         } else if (this.provider === 'gcp' || this.provider === 'azure') {
-            const idle = this.computeInstances[this.provider][this.instanceType]['Min Watts'];
-            const max = this.computeInstances[this.provider][this.instanceType]['Max Watts'];
+            const idle = this.computeInstances[this.provider][this.instanceType].consumption.minWatts ?? 0;
+            const max = this.computeInstances[this.provider][this.instanceType].consumption.maxWatts ?? 0;
             const x = [0, 100];
             const y: number[] = [idle, max];
             const spline = new Spline(x, y);
-            wattage = spline.at(cpu) as number;
+            wattage = spline.at(cpu);
         }
-        const energy = wattage * duration / 3600.0;
-        return energy;
+        //  1 Wh = 3600 J
+        //  J / 3600 = Wh
+        //  Wh / 1000 = kWh
+        return wattage * duration / 3600 / 1000;
     }
 
 
@@ -144,12 +165,20 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         });
         aws_instances.forEach((instance: { [key: string]: any }) => {
             this.computeInstances['aws'][instance['Instance type']] = {
-                'instance_idle': instance['Instance @ Idle'].replace(',', '.'),
-                'instance_10': instance['Instance @ 10%'].replace(',', '.'),
-                'instance_50': instance['Instance @ 50%'].replace(',', '.'),
-                'instance_100': instance['Instance @ 100%'].replace(',', '.'),
-                'vCPUs': instance['Instance vCPU'],
-            };
+                'consumption': {
+                    'idle': parseFloat(instance['Instance @ Idle'].replace(',', '.')),
+                    'tenPercent': parseFloat(instance['Instance @ 10%'].replace(',', '.')),
+                    'fiftyPercent': parseFloat(instance['Instance @ 50%'].replace(',', '.')),
+                    'hundredPercent': parseFloat(instance['Instance @ 100%'].replace(',', '.')),
+                },
+                'vCPUs': parseInt(instance['Instance vCPU'], 10),
+                'name': instance['Instance type'],
+                // 'instance_idle': instance['Instance @ Idle'].replace(',', '.'),
+                // 'instance_10': instance['Instance @ 10%'].replace(',', '.'),
+                // 'instance_50': instance['Instance @ 50%'].replace(',', '.'),
+                // 'instance_100': instance['Instance @ 100%'].replace(',', '.'),
+                // 'vCPUs': instance['Instance vCPU'],
+            } as IComputeInstance;
         });
         gcp_instances.forEach((instance: { [key: string]: any }) => {
             const cpus = parseInt(instance['Instance vCPUs'], 10);
@@ -158,10 +187,13 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                 architecture = 'Average';
             }
             this.computeInstances['gcp'][instance['Machine type']] = {
-                'instance_min': this.gcpList[architecture]['Min Watts'] * cpus,
-                'instance_max': this.gcpList[architecture]['Max Watts'] * cpus,
-                'vCPUs': cpus
-            };
+                'name': instance['Machine type'],
+                'vCPUs': cpus,
+                'consumption': {
+                    'minWatts': this.gcpList[architecture]['Min Watts'] * cpus,
+                    'maxWatts': this.gcpList[architecture]['Max Watts'] * cpus,
+                },
+            } as IComputeInstance;
         });
         azure_instances.forEach((instance: { [key: string]: any }) => {
             const cpus = parseInt(instance['Instance vCPUs'], 10);
@@ -170,23 +202,28 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                 architecture = 'Average';
             }
             this.computeInstances['azure'][instance['Virtual Machine']] = {
-                'instance_min': this.azureList[architecture]['Min Watts'] * cpus,
-                'instance_max': this.azureList[architecture]['Max Watts'] * cpus,
-                'cpu': instance['Instance vCPUs'],
-            };
+                // 'instance_min': this.azureList[architecture]['Min Watts'] * cpus,
+                // 'instance_max': this.azureList[architecture]['Max Watts'] * cpus,
+                consumption: {
+                    'minWatts': this.azureList[architecture]['Min Watts'] * cpus,
+                    'maxWatts': this.azureList[architecture]['Max Watts'] * cpus,
+                },
+                'name': instance['Virtual Machine'],
+                'vCPUs': instance['Instance vCPUs'],
+            } as IComputeInstance;
         });
         aws_embodied.forEach((instance: { [key: string]: any }) => {
-            this.computeInstances['aws'][instance['type']]['embodied'] = instance['total'];
+            this.computeInstances['aws'][instance['type']].embodiedEmission = instance['total'];
         });
         gcp_embodied.forEach((instance: { [key: string]: any }) => {
-            this.computeInstances['gcp'][instance['type']]['embodied'] = instance['total'];
+            this.computeInstances['gcp'][instance['type']].embodiedEmission = instance['total'];
         });
         azure_embodied.forEach((instance: { [key: string]: any }) => {
-            this.computeInstances['azure'][instance['type']]['embodied'] = instance['total'];
+            this.computeInstances['azure'][instance['type']].embodiedEmission = instance['total'];
         });
     }
 
-    embodiedEmissions() {
-        return this.computeInstances[this.provider][this.instanceType]['embodied'];
+    embodiedEmissions(): number {
+        return this.computeInstances[this.provider][this.instanceType].embodiedEmission;
     }
 }
