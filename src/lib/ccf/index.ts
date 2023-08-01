@@ -18,7 +18,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     azureList: { [key: string]: any } = {};
     awsList: { [key: string]: any } = {};
     provider: string = '';
-    instance_type: string = '';
+    instanceType: string = '';
 
     constructor() {
         this.standardizeInstanceMetrics();
@@ -44,7 +44,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         if ('instance_type' in staticParams) {
             const instanceType = staticParams?.instance_type as string;
             if (instanceType in this.computeInstances[this.provider]) {
-                this.instance_type = instanceType;
+                this.instanceType = instanceType;
             } else {
                 throw new Error('Instance Type not supported');
             }
@@ -58,7 +58,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
             throw new Error('Required Parameters not provided');
         }
         let eTotal = 0.0;
-        let mTotal = this.getEmbodiedEmissions();
+        let mTotal = this.embodiedEmissions();
         if (Array.isArray(observations)) {
             observations.forEach((observation: { [key: string]: any }) => {
                 eTotal += this.calculateEnergy(observation);
@@ -81,17 +81,17 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         //     get the wattage for the instance type
         let wattage = 0;
         if (this.provider === 'aws') {
-            const idle = this.computeInstances['aws'][this.instance_type]['instance_idle'];
-            const tenPercent = this.computeInstances['aws'][this.instance_type]['instance_10'];
-            const fiftyPercent = this.computeInstances['aws'][this.instance_type]['instance_50'];
-            const hundredPercent = this.computeInstances['aws'][this.instance_type]['instance_100'];
+            const idle = this.computeInstances['aws'][this.instanceType]['instance_idle'];
+            const tenPercent = this.computeInstances['aws'][this.instanceType]['instance_10'];
+            const fiftyPercent = this.computeInstances['aws'][this.instanceType]['instance_50'];
+            const hundredPercent = this.computeInstances['aws'][this.instanceType]['instance_100'];
             const x = [0, 10, 50, 100];
             const y: number[] = [idle, tenPercent, fiftyPercent, hundredPercent];
             const spline = new Spline(x, y);
             wattage = spline.at(cpu) as number;
         } else if (this.provider === 'gcp' || this.provider === 'azure') {
-            const idle = this.computeInstances[this.provider][this.instance_type]['Min Watts'];
-            const max = this.computeInstances[this.provider][this.instance_type]['Max Watts'];
+            const idle = this.computeInstances[this.provider][this.instanceType]['Min Watts'];
+            const max = this.computeInstances[this.provider][this.instanceType]['Max Watts'];
             const x = [0, 100];
             const y: number[] = [idle, max];
             const spline = new Spline(x, y);
@@ -186,7 +186,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         });
     }
 
-    getEmbodiedEmissions() {
-        return this.computeInstances[this.provider][this.instance_type]['embodied'];
+    embodiedEmissions() {
+        return this.computeInstances[this.provider][this.instanceType]['embodied'];
     }
 }
