@@ -18,12 +18,6 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
 
     async configure(name: string, staticParams: object | undefined = undefined): Promise<IImpactModelInterface> {
         console.log(name, staticParams)
-        // if ('provider' in staticParams) {
-        //
-        // }
-        console.log(aws_instances);
-        console.log(azure_instances);
-        console.log(gcp_instances);
         return this;
     }
 
@@ -42,7 +36,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         this.computeInstances['gcp'] = {};
         this.computeInstances['azure'] = {};
         aws_instances.forEach((instance: { [key: string]: any }) => {
-            this.computeInstances['aws'][instance['Instance Type']] = {
+            this.computeInstances['aws'][instance['Instance type']] = {
                 'instance_idle': instance['Instance @ Idle'],
                 'instance_10': instance['Instance @ 10%'],
                 'instance_50': instance['Instance @ 50%'],
@@ -50,17 +44,22 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                 'cpu': instance['Instance vCPU'],
             };
         });
+        gcp_instances.forEach((instance: { [key: string]: any }) => {
+            this.computeInstances['gcp'][instance['Machine type']] = {
+                // 'instance_idle': instance['Instance @ Idle'],
+                // 'instance_10': instance['Instance @ 10%'],
+                // 'instance_50': instance['Instance @ 50%'],
+                // 'instance_100': instance['Instance @ 100%'],
+                'cpu': instance['Instance vCPU'],
+            };
+            console.log(instance);
+        });
+        azure_instances.forEach((instance: { [key: string]: any }) => {
+            if ('Instance Type' in instance) {
+
+            }
+        });
         console.log(this.computeInstances);
-        // for (let instance: { [key: string]: any } of aws_instances) {
-        //     this.computeInstances[instance['Instance Type']] = {
-        //         "cpu": instance.vcpu,
-        //         "memory": instance.memory,
-        //         "storage": instance.storage,
-        //         "network": instance.network_performance,
-        //         "cost": instance.pricing.on_demand,
-        //         "provider": "aws"
-        //     }
-        // }
     }
 
 }
