@@ -202,8 +202,6 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                 architecture = 'Average';
             }
             this.computeInstances['azure'][instance['Virtual Machine']] = {
-                // 'instance_min': this.azureList[architecture]['Min Watts'] * cpus,
-                // 'instance_max': this.azureList[architecture]['Max Watts'] * cpus,
                 consumption: {
                     'minWatts': this.azureList[architecture]['Min Watts'] * cpus,
                     'maxWatts': this.azureList[architecture]['Max Watts'] * cpus,
