@@ -1,10 +1,14 @@
 import {IImpactModelInterface} from "../interfaces";
+import Spline from 'typescript-cubic-spline';
 import * as aws_instances from './aws-instances.json';
 import * as gcp_instances from './gcp-instances.json';
 import * as gcp_use from './gcp-use.json';
 import * as aws_use from './aws-use.json';
 import * as azure_use from './azure-use.json';
 import * as azure_instances from './azure-instances.json';
+import * as gcp_embodied from './gcp-embodied.json';
+import * as aws_embodied from './aws-embodied.json';
+import * as azure_embodied from './azure-embodied.json';
 
 export class CloudCarbonFootprint implements IImpactModelInterface {
     authParams: object | undefined;
@@ -14,6 +18,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     azureList: { [key: string]: any } = {};
     awsList: { [key: string]: any } = {};
     provider: string = '';
+    instance_type: string = '';
 
     constructor() {
         this.standardizeInstanceMetrics();
@@ -39,7 +44,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         if ('instance_type' in staticParams) {
             const instanceType = staticParams?.instance_type as string;
             if (instanceType in this.computeInstances[this.provider]) {
-                this.name = instanceType;
+                this.instance_type = instanceType;
             } else {
                 throw new Error('Instance Type not supported');
             }
@@ -47,9 +52,53 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         return this;
     }
 
-    calculate(observations: object | object[] | undefined): Promise<object> {
+    async calculate(observations: object | object[] | undefined): Promise<object> {
         console.log(observations);
-        return Promise.resolve({});
+        if (observations === undefined) {
+            throw new Error('Required Parameters not provided');
+        }
+        let eTotal = 0.0;
+        let mTotal = this.getEmbodiedEmissions();
+        if (Array.isArray(observations)) {
+            observations.forEach((observation: { [key: string]: any }) => {
+                eTotal += this.calculateEnergy(observation);
+            });
+        }
+        console.log(mTotal, eTotal)
+        return {
+            "e": eTotal,
+            "m": mTotal,
+        };
+    }
+
+    calculateEnergy(observation: { [key: string]: any; }) {
+        if (!('duration' in observation) || !('cpu' in observation) || !('datetime' in observation)) {
+            throw new Error('Required Parameters duration,cpu,datetime not provided for observation');
+        }
+        const duration = observation['duration'];
+        //     convert cpu usage to percentage
+        const cpu = observation['cpu'] * 100.0;
+        //     get the wattage for the instance type
+        let wattage = 0;
+        if (this.provider === 'aws') {
+            const idle = this.computeInstances['aws'][this.instance_type]['instance_idle'];
+            const tenPercent = this.computeInstances['aws'][this.instance_type]['instance_10'];
+            const fiftyPercent = this.computeInstances['aws'][this.instance_type]['instance_50'];
+            const hundredPercent = this.computeInstances['aws'][this.instance_type]['instance_100'];
+            const x = [0, 10, 50, 100];
+            const y: number[] = [idle, tenPercent, fiftyPercent, hundredPercent];
+            const spline = new Spline(x, y);
+            wattage = spline.at(cpu) as number;
+        } else if (this.provider === 'gcp' || this.provider === 'azure') {
+            const idle = this.computeInstances[this.provider][this.instance_type]['Min Watts'];
+            const max = this.computeInstances[this.provider][this.instance_type]['Max Watts'];
+            const x = [0, 100];
+            const y: number[] = [idle, max];
+            const spline = new Spline(x, y);
+            wattage = spline.at(cpu) as number;
+        }
+        const energy = wattage * duration / 3600.0;
+        return energy;
     }
 
 
@@ -126,7 +175,18 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                 'cpu': instance['Instance vCPUs'],
             };
         });
-        console.log(this.computeInstances);
+        aws_embodied.forEach((instance: { [key: string]: any }) => {
+            this.computeInstances['aws'][instance['type']]['embodied'] = instance['total'];
+        });
+        gcp_embodied.forEach((instance: { [key: string]: any }) => {
+            this.computeInstances['gcp'][instance['type']]['embodied'] = instance['total'];
+        });
+        azure_embodied.forEach((instance: { [key: string]: any }) => {
+            this.computeInstances['azure'][instance['type']]['embodied'] = instance['total'];
+        });
     }
 
+    getEmbodiedEmissions() {
+        return this.computeInstances[this.provider][this.instance_type]['embodied'];
+    }
 }
