@@ -23,10 +23,10 @@ describe('cpu:configure test', () => {
         await expect(impactModel.calculate())
             .rejects
             .toStrictEqual(
-                Error("Parameter Not Given: Missing observations parameter")
+                Error("Parameter Not Given: invalid observations parameter. Expecting an array of observations")
             )
         // improper observations will throw a invalid observations error
-        await expect(impactModel.calculate({"invalid": "observation"}))
+        await expect(impactModel.calculate([{"invalid": "observation"}]))
             .rejects
             .toStrictEqual(
                 Error("Invalid Input: Invalid observations parameter")
@@ -46,22 +46,22 @@ describe('cpu:initialize with params', () => {
         await expect(impactModel.calculate([
             {
                 "datetime": "2021-01-01T00:00:00Z",
-                "duration": '15s',
+                "duration": 15,
                 "cpu": 0.34,
             },
             {
                 "datetime": "2021-01-01T00:00:15Z",
-                "duration": '15s',
+                "duration": 15,
                 "cpu": 0.12,
             },
             {
                 "datetime": "2021-01-01T00:00:30Z",
-                "duration": '15s',
+                "duration": 15,
                 "cpu": 0.01,
             },
             {
                 "datetime": "2021-01-01T00:00:45Z",
-                "duration": '15s',
+                "duration": 15,
                 "cpu": 0.78,
             },
         ]))
