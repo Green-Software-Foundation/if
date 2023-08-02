@@ -65,10 +65,18 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         let m = 0;
         let e = 0;
         if ('impacts' in response.data) {
+            // manufacture impact is in kgCO2eq, convert to gCO2eq
             m = response.data['impacts']['gwp']['manufacture'] * 1000
+            // use impact is in J , convert to kWh.
+            // 1,000,000 J / 3600 = 277.7777777777778 Wh.
+            // 1 MJ / 3.6 = 0.278 kWh
             e = response.data['impacts']['pe']['use'] / 3.6;
         } else if ('gwp' in response.data && 'pe' in response.data) {
+            // manufacture impact is in kgCO2eq, convert to gCO2eq
             m = response.data['gwp']['manufacture'] * 1000
+            // use impact is in J , convert to kWh.
+            // 1,000,000 J / 3600 = 277.7777777777778 Wh.
+            // 1 MJ / 3.6 = 0.278 kWh
             e = response.data['pe']['use'] / 3.6;
         }
         return {m, e};
