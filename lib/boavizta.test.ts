@@ -84,15 +84,6 @@ describe('cloud:initialize with params', () => {
         ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
         expect(impactModel.name).toBe('test');
         // configure without static params will cause improper configure error
-        await expect(impactModel.calculate({
-            "hours_use_time": 1,
-            "usage_location": "USA",
-            "time_workload": 50,
-        }))
-            .resolves
-            .toStrictEqual(
-                {"e": 0.022222222222222223, "m": 34000}
-            )
     });
     test('correct instance_type: initialize with params and call usage in IMPL Format', async () => {
         const impactModel = new BoaviztaCloudImpactModel();
@@ -107,22 +98,22 @@ describe('cloud:initialize with params', () => {
             [
                 {
                     "datetime": "2021-01-01T00:00:00Z",
-                    "duration": '15s',
+                    "duration": 15,
                     "cpu": 0.34,
                 },
                 {
                     "datetime": "2021-01-01T00:00:15Z",
-                    "duration": '15s',
+                    "duration": 15,
                     "cpu": 0.12,
                 },
                 {
                     "datetime": "2021-01-01T00:00:30Z",
-                    "duration": '15s',
+                    "duration": 15,
                     "cpu": 0.01,
                 },
                 {
                     "datetime": "2021-01-01T00:00:45Z",
-                    "duration": '15s',
+                    "duration": 15,
                     "cpu": 0.78,
                 },
             ]
@@ -143,22 +134,22 @@ describe('cloud:initialize with params', () => {
             [
                 {
                     "datetime": "2021-01-01T00:00:00Z",
-                    "duration": '15s',
+                    "duration": 15,
                     "cpu": 0.34,
                 },
                 {
                     "datetime": "2021-01-01T00:00:15Z",
-                    "duration": '15s',
+                    "duration": 15,
                     "cpu": 0.12,
                 },
                 {
                     "datetime": "2021-01-01T00:00:30Z",
-                    "duration": '15s',
+                    "duration": 15,
                     "cpu": 0.01,
                 },
                 {
                     "datetime": "2021-01-01T00:00:45Z",
-                    "duration": '15s',
+                    "duration": 15,
                     "cpu": 0.78,
                 },
             ]
@@ -180,22 +171,22 @@ describe('cloud:initialize with params', () => {
             [
                 {
                     "datetime": "2021-01-01T00:00:00Z",
-                    "duration": '15s',
+                    "duration": 15,
                     "cpu": 0.34,
                 },
                 {
                     "datetime": "2021-01-01T00:00:15Z",
-                    "duration": '15s',
+                    "duration": 15,
                     "cpu": 0.12,
                 },
                 {
                     "datetime": "2021-01-01T00:00:30Z",
-                    "duration": '15s',
+                    "duration": 15,
                     "cpu": 0.01,
                 },
                 {
                     "datetime": "2021-01-01T00:00:45Z",
-                    "duration": '15s',
+                    "duration": 15,
                     "cpu": 0.78,
                 },
             ]

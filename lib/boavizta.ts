@@ -239,7 +239,7 @@ export class BoaviztaCloudImpactModel extends BoaviztaImpactModel implements IIm
     }
 
     async supportedProvidersList(): Promise<string[]> {
-        const providers = await axios.get(`https://api.boavizta.org/v1/utils/all_providers`)
+        const providers = await axios.get(`https://api.boavizta.org/v1/cloud/all_providers`)
         return Object.values(providers.data);
     }
 
