@@ -39,27 +39,6 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         return Object.values(countries.data);
     }
 
-    // converts the time string to hours
-    protected convertToHours(timeString: string): number {
-        const numberPart = parseFloat(timeString);
-        const unit = timeString.slice(-1).toLowerCase();
-
-        switch (unit) {
-            case 's':
-                return numberPart / 3600; // 1 hour = 3600 seconds
-            case 'm':
-                return numberPart / 60; // 1 hour = 60 minutes
-            case 'h':
-                return numberPart;
-            case 'd':
-                return numberPart * 24;
-            case 'w':
-                return numberPart * 24 * 7;
-            default:
-                throw new Error('Invalid time string. Supported units are "s", "m", and "h".');
-        }
-    }
-
     // extracts information from Boavizta API response to return the impact in the format required by IMPL
     protected formatResponse(response: any): { [key: string]: any } {
         let m = 0;
@@ -85,7 +64,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     // converts the usage from IMPL input to the format required by Boavizta API.
     transformToBoaviztaUsage(duration: any, metric: any) {
         let usageInput: { [key: string]: any } = {
-            "hours_use_time": this.convertToHours(duration),
+            "hours_use_time": duration / 3600.0,
             "time_workload": metric * 100.0,
         }
         usageInput = this.addLocationToUsage(usageInput);
