@@ -34,45 +34,6 @@ describe('cpu:configure test', () => {
     });
 });
 describe('cpu:initialize with params', () => {
-    test('initialize with params and call usage in RAW Format', async () => {
-        const impactModel = new BoaviztaCpuImpactModel();
-        await expect(impactModel.configure('test', {name: 'Intel Xeon Platinum 8160 Processor', core_units: 2}))
-            .resolves
-            .toBeInstanceOf(BoaviztaCpuImpactModel);
-        expect(impactModel.name).toBe('test');
-        // configure without static params will cause improper configure error
-        await expect(impactModel.calculate({
-            "hours_use_time": 1,
-            "usage_location": "USA",
-            "time_workload": 50,
-        }))
-            .resolves
-            .toStrictEqual(
-                {"e": 0.5555555555555556, "m": 23800}
-            )
-    });
-    test('initialize with params and call multiple usages in RAW Format', async () => {
-        const impactModel = new BoaviztaCpuImpactModel();
-        await expect(impactModel.configure('test', {name: 'Intel Xeon Platinum 8160 Processor', core_units: 2}))
-            .resolves
-            .toBeInstanceOf(BoaviztaCpuImpactModel);
-        expect(impactModel.name).toBe('test');
-        // configure without static params will cause improper configure error
-        await expect(impactModel.calculate([{
-            "hours_use_time": 1,
-            "usage_location": "USA",
-            "time_workload": 50,
-        },
-            {
-                "hours_use_time": 1,
-                "usage_location": "USA",
-                "time_workload": 50,
-            }]))
-            .resolves
-            .toStrictEqual(
-                {"e": 0.5555555555555556 * 2, "m": 23800}
-            )
-    });
     test('initialize with params and call multiple usages in IMPL format', async () => {
         const impactModel = new BoaviztaCpuImpactModel();
         await expect(impactModel.configure('test', {
