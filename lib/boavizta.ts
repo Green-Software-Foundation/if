@@ -85,16 +85,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
                 eTotal += usageResult.e;
             }
         } else {
-            let m = 0, e = 0;
-            if (observations !== undefined && observations !== null && Object.keys(observations).length > 0) {
-                const usageResult = await this.calculateUsageForObservation(observations);
-                m = usageResult.m;
-                e = usageResult.e;
-            } else {
-                throw new Error("Parameter Not Given: Missing observations parameter")
-            }
-            mTotal += m;
-            eTotal += e;
+            throw new Error("Parameter Not Given: invalid observations parameter. Expecting an array of observations")
         }
         return {
             "e": eTotal,
@@ -107,9 +98,6 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         if ('datetime' in observation && 'duration' in observation && this.metricType in observation) {
             const usageInput = this.transformToBoaviztaUsage(observation['duration'], observation[this.metricType]);
             return await this.fetchData(usageInput) as IBoaviztaUsageSCI
-        } else if ('hours_use_time' in observation && 'time_workload' in observation) {
-            const observationWithLocation = this.addLocationToUsage(observation);
-            return await this.fetchData(observationWithLocation) as IBoaviztaUsageSCI
         } else {
             throw new Error("Invalid Input: Invalid observations parameter")
         }
