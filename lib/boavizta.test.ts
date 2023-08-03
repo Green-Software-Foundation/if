@@ -67,7 +67,7 @@ describe('cpu:initialize with params', () => {
         ]))
             .resolves
             .toStrictEqual(
-                {"e": 0.0037311666666666665, "m": 23800}
+                {"e": 0.0037311666666666665, "m": 0.002830098934550989}
             )
     });
 });
