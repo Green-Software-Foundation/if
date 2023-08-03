@@ -119,7 +119,7 @@ describe('cloud:initialize with params', () => {
             ]
         ))
             .resolves
-            .toStrictEqual({"e": 0.0002969, "m": 34000});
+            .toStrictEqual({"e": 0.0002969, "m": 0.0040429984779299846});
     });
     test('wrong instance_type: initialize with params and call usage in IMPL Format throws error', async () => {
         const impactModel = new BoaviztaCloudImpactModel();
