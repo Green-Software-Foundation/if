@@ -11,6 +11,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     name: string | undefined;
     sharedParams: object | undefined = undefined;
     metricType: "cpu" | "gpu" | "ram" = "cpu";
+    expectedLifespan: number = 4;
 
 
     authenticate(authParams: object) {
@@ -40,7 +41,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     }
 
     // extracts information from Boavizta API response to return the impact in the format required by IMPL
-    protected formatResponse(response: any): { [key: string]: any } {
+    protected formatResponse(response: any, usageData: { [key: string]: any } = {}): { [p: string]: any } {
         let m = 0;
         let e = 0;
         if ('impacts' in response.data) {
@@ -58,6 +59,17 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
             // 1 MJ / 3.6 = 0.278 kWh
             e = response.data['pe']['use'] / 3.6;
         }
+        const hours_use_time = usageData['hours_use_time'] ?? 0;
+        // M = TE * (TR/EL) * (RR/TR)
+        //
+        // Where:
+        //
+        // TE = Total Embodied Emissions, the sum of Life Cycle Assessment(LCA) emissions for all hardware components
+        // TR = Time Reserved, the length of time the hardware is reserved for use by the software
+        // EL = Expected Lifespan, the anticipated time that the equipment will be installed
+        // RR = Resources Reserved, the number of resources reserved for use by the software.
+        // TR = Total Resources, the total number of resources available.
+        m = m * (hours_use_time / (8760.0 * this.expectedLifespan)) * (1.0 / 1.0);
         return {m, e};
     }
 
@@ -124,6 +136,7 @@ export class BoaviztaCpuImpactModel extends BoaviztaImpactModel implements IImpa
     public name: string | undefined;
     public verbose: boolean = false;
     public allocation: string = "TOTAL";
+    public expectedLifespan: number = 4;
 
     constructor() {
         super();
@@ -155,6 +168,9 @@ export class BoaviztaCpuImpactModel extends BoaviztaImpactModel implements IImpa
         if (!('core_units' in staticParams)) {
             throw new Error("Improper configure: Missing core_units parameter");
         }
+        if ('expected_lifespan' in staticParams) {
+            this.expectedLifespan = staticParams.expected_lifespan as number ?? 0;
+        }
         this.sharedParams = Object.assign({}, staticParams);
         return this.sharedParams
     }
@@ -167,7 +183,7 @@ export class BoaviztaCpuImpactModel extends BoaviztaImpactModel implements IImpa
         const dataCast = this.sharedParams as { [key: string]: any };
         dataCast['usage'] = usageData
         const response = await axios.post(`https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`, dataCast);
-        return this.formatResponse(response);
+        return this.formatResponse(response, usageData);
     }
 }
 
