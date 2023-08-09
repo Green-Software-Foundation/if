@@ -1,15 +1,15 @@
-**Status**: Draft
-**Author**: Asim Hussain (@jawache)
-**Abstract**: Describes the structure and purpose of Impact YAML, a file format to represent an Impact Graph.
+---
+author: Asim Hussain (@jawache)
+abstract: Describes the structure and purpose of Impact YAML, a file format to represent an Impact Graph.
+---
+# Impl (Impact YAML)
 
-# Introduction 
-
-- Impact YAML (IMPL) is a file format based on [yaml](https://circleci.com/blog/what-is-yaml-a-beginner-s-guide/)  to represent an [Impact Graph](design/Impact%20Graph.md). 
+- Impact YAML (IMPL) is a file format based on [yaml](https://circleci.com/blog/what-is-yaml-a-beginner-s-guide/)  to represent an [Impact Graph](Impact%20Graph.md). 
 - Just like an Impact Graph, an IMPL is a calculation manifest containing everything you want to measure and how you want to measure it. 
 - IMPL being YAML means it's more human-readable and can be used as a **formal method of writing use cases**, such as SCI use cases.
 - IMPL files can be named `.yaml` (or `.impl`).
 - IMPLs can be computed on the command line using the [Rimpl](Rimpl.md) tool, printing out the results to file or STDOUT.
-- You can do much more using the [Impact Graph](design/Impact%20Graph.md) SDK directly; however, for many use cases, IMPL works fine.
+- You can do much more using the [Impact Graph](Impact%20Graph.md) SDK directly; however, for many use cases, IMPL works fine.
 
 ## Use Cases
 
@@ -157,7 +157,7 @@ graph:
     children: 
       queue: # a leaf component
         observations: 
-          common:
+          config:
             sku: AC2
           series:
             - timestamp: 2023-07-06T00:00
@@ -179,7 +179,7 @@ graph:
           vendor: aws
           region: france
         observations: 
-          common:
+          config:
             sku: EC2
           series:      
             - datetime: 2023-07-06T00:00

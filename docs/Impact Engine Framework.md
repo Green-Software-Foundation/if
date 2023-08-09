@@ -1,33 +1,40 @@
 # Impact Engine Framework
 
-A Framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environmental impacts of software
+A Framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environmental impacts of software.
 
+> [!note] Key
+> - ✅ Done
+> - ✍🏽 Draft
+> - 👷🏽‍♂️Todo
+> - 🔥Priority
 ## Concepts
-- [x] [Background](concepts/Background.md)
-- [x] [Motivation](concepts/Motivation.md)
-- [ ] [4Ms](4Ms)
-- [ ] [Measurement for Reporting vs Action](Measurement%20for%20Reporting%20vs%20Action)
+- ✅ [Background](Background.md)
+- ✅ [Motivation](Motivation.md)
+- 👷🏽‍♂️ [4Ms](4Ms) 🔥🔥
+- 👷🏽‍♂️ [Measurement for Reporting vs Action](Measurement%20for%20Reporting%20vs%20Action) 🔥🔥
 
 ## Non Functional Requirements
-- [ ] [5 Mins to Wow](5%20Mins%20to%20Wow)
+- 👷🏽‍♂️ [5 Mins to Wow](5%20Mins%20to%20Wow) 🔥🔥
 
 ## Functional Requirements
-[User Stories](User%20Stories)
+- 👷🏽‍♂️ [User Stories](User%20Stories) 🔥
 
 ## Design Docs
-- [x] [Terminology](design/Terminology.md)
-- [x] [Impact Graph](design/Impact%20Graph.md)
-	- [x] [Observations](design/Observations.md)
-	- [x] [Durations](design/Durations.md)
-	- [x] [Granularity](design/Granularity.md)
-- [x] [Impact YAML](design/Impact%20YAML.md)
-- [x] [Impact Model Plugin](design/Impact%20Model%20Plugin.md)
-- [x] [Impact Graph Pipeline](design/Impact%20Graph%20Pipeline.md)
+- ✅ [Terminology](Terminology.md)
+- ✅ [Impact Graph](Impact%20Graph.md)
+	- ✅ [Observation](Observation.md)
+	- ✅ [Durations](Durations.md)
+	- ✅ [Granularity](Granularity.md)
+- ✅ [Impl (Impact YAML)](Impl%20(Impact%20YAML).md)
+- 👷🏽‍♂️[Impact Model](Impact%20Model.md)
+- ✅ [Impact Model Plugin](Impact%20Model%20Plugin.md)
+- ✅ [Computation Pipeline](Computation%20Pipeline.md)
+- 👷🏽‍♂️ Computation Pipeline Plugin 🔥
+- 👷🏽‍♂️ [Impact Metric](Impact%20Metric) 🔥
+- ✍🏽 [Rimpl](Rimpl.md) 
 
+## Use Cases 
 
-**To Draft/Review**
-- [ ] [Impact Metric](Impact%20Metric)
-- [ ] [Rimpl](Rimpl.md) 
-## Applications
-- [ ] [Open Source Software](Open%20Source%20Software)
-- [ ] [Calculating an SCI Score](Calculating%20an%20SCI%20Score)
+- 👷🏽‍♂️ [Open Source Software](Open%20Source%20Software) 🔥
+- 👷🏽‍♂️ [Calculating an SCI Score](Calculating%20an%20SCI%20Score)
+- 👷🏽‍♂️ [Higher Order Impact Models](Higher%20Order%20Impact%20Models.md)
