@@ -1,10 +1,10 @@
+---
+author: Asim Hussain (@jawache)
+abstract: Why granularity is important to impact graphing and the two main types of granularity you can add.
+---
+# Granularity
 
-**Status**: Draft
-**Author**: Asim Hussain (@jawache)
-**Abstract**: Why granularity is important to impact graphing and the two main types of granularity you can add.
-
-
-An [Impact Graph](design/Impact%20Graph.md) (graph) can be created that is very coarse-grained, a single top-level component, with a single observation of long duration.
+An [Impact Graph](Impact%20Graph.md) (graph) can be created that is very coarse-grained, a single top-level component, with a single observation of long duration.
 
 ```yaml
 name: My application

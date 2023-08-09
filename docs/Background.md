@@ -1,12 +1,18 @@
+---
+author: Asim Hussain (@jawache)
+abstract: Discussion of the history and evolution of this project in the GSF.
+---
+# Background
+
 This project has evolved over the two years of the GSF's existence. 
 
-During the development of the SCI, we acknowledged that the biggest blocker to adoption was data regarding the emissions of software components on different platforms and runtimes.
+During the development of the [SCI](grnsft.org/sci), we acknowledged that the biggest blocker to adoption was data regarding the emissions of software components on different platforms and runtimes.
 
 We then launched the sci-data project to help create the data sets required to calculate an SCI score.
 
 After some investigation, the original sci-data team quickly realized that there were several existing data sources, and many more were in development, free open source or private commercial. The future challenge wouldn't be to source them, it would be knowing which data set to use for which use case, how data sets differed in their methodology and interface and when to use one over the other, the pros/cons, and trade-offs.
 
-The project evolved into the sci-guide to document existing data sets, providing guidance for when to use one over another and how to use it to create your own software measurement reports.
+The project evolved into the [sci-guide](https://sci-guide.greensoftware.foundation/) to document existing data sets, providing guidance for when to use one over another and how to use it to create your own software measurement reports.
 
 Finally, we had enough information, and SCI use cases started to be written. This was a milestone moment.
 

@@ -1,8 +1,14 @@
-Calculating [Impact Metric](Impact%20Metric) 's (impacts) for every component in an [Impact Graph](design/Impact%20Graph.md) (graph) requires the use of an **Impact Model** (model) called through an [Impact Model Plugin](design/Impact%20Model%20Plugin.md) (model plugin).
+---
+author: Asim Hussain (@jawache)
+abstract: Standardising the interface to measurement models.
+---
+# Impact Model Plugin
+
+Calculating [Impact Metric](Impact%20Metric) 's (impacts) for every component in an [Impact Graph](Impact%20Graph.md) (graph) requires the use of an **Impact Model** (model) called through an [Impact Model Plugin](Impact%20Model%20Plugin.md) (model plugin).
 
 ## What are Impact Models?
 
-A model converts an input [Observations](design/Observations.md) into some output [Impact Metric](Impact%20Metric), for example, models that convert an observation of CPU utilization into an impact of energy.
+A model converts an input [Observation](Observation.md) into some output [Impact Metric](Impact%20Metric), for example, models that convert an observation of CPU utilization into an impact of energy.
 
 There are many different **models**, [Boavizta](https://dataviz.boavizta.org/), [Cloud Carbon Footprint](https://github.com/cloud-carbon-footprint/ccf-coefficients), [Climatiq](https://www.climatiq.io/data) are some great examples of open-source IMs, there are **many other** closed source, commercial and private models being built in-house inside organizations.
 
@@ -38,7 +44,7 @@ This is a simple dictionary used to set up a model. Each model is different and 
 
 ### Observation
 
-- An [Observations](design/Observations.md) is a data unit describing some inputs to a model. 
+- An [Observation](Observation.md) is a data unit describing some inputs to a model. 
 - Since every model differs, we can only specify a little. However, the only two fields that would be mandatory for each observation are the date/time when the measurement was gathered and the duration for which the observation is valid. 
 - For example, you might have some observation for CPU utilization, but we also need to know when this observation was gathered and for what period the observation spans.
 

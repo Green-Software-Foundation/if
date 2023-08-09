@@ -1,8 +1,11 @@
-**Status**: Draft
-**Author**: Asim Hussain (@jawache)
-**Abstract**: Describes an observation in the context of an Impact Graph.
+---
+author: Asim Hussain (@jawache)
+abstract: Describes an observation in the context of an Impact Graph.
+---
 
-Observations are a core component of an [Impact Graph](design/Impact%20Graph.md) (graph), and they form the primary input into an [Impact Model Plugin](design/Impact%20Model%20Plugin.md) (model).
+# Observation
+
+Observations are a core component of an [Impact Graph](Impact%20Graph.md) (graph), and they form the primary input into an [Impact Model Plugin](Impact%20Model%20Plugin.md) (model).
 
 An **observation** is something you measure regarding a component in your software system. For example, an observation about a server might be CPU utilization. Observations are passed into models which generate impact metrics.
 
@@ -12,7 +15,7 @@ Different models require different kinds of observations. If a model converts bi
 - Observations can be n-dimensional; each time and duration can have multiple values, e.g., CPU and Mem utilization.
 - Observations are always a time series. Even if you only pass in one observation with a long duration, it's still a time series with one entry.
 
-In [Impact YAML](design/Impact%20YAML.md), observations are expressed like so:
+In [Impl (Impact YAML)](Impl%20(Impact%20YAML).md), observations are expressed like so:
 
 ```yaml
   series:      
@@ -56,10 +59,10 @@ Each component in your graph needs observations; we need observations to compute
 
 A helpful feature of the engine is that you don't need to synchronize all your input observations for all your components with each other. You can provide observations at different intervals for every component in the graph. 
 
-![](attachment/72efce519e8c2264406864148a8a3151.png)
+![](images/72efce519e8c2264406864148a8a3151.png)
+%%[🖋 Edit in Excalidraw](Observations%20-%20Synchronization.excalidraw.md), and the [dark exported image](Observations%20-%20Synchronization.excalidraw.dark.png)%%
 
-
-In the [Normalization](design/Impact%20Graph%20Pipeline.md#Normalization|Normalization) phase of the computation of a graph, we do synchronize the output Impact Metrices, but we don't need the input Observations synchronized to do this.
+In the [](Computation%20Pipeline.md#Normalization|Normalization) phase of the computation of a graph, we do synchronize the output Impact Metrices, but we don't need the input Observations synchronized to do this.
 
 ### How does an Observation differ from Telemetry?
 
@@ -67,11 +70,11 @@ Telemetry is the automatic recording and transmission of very fine-grain data ab
 
 ### Observations drive temporal granularity
 
-As discussed in the [Granularity](design/Granularity.md) design document, an essential feature of the [Impact Engine Framework](Impact%20Engine%20Framework.md) is to provide a granular analysis of the impacts of a software system.
+As discussed in the [Granularity](Granularity.md) design document, an essential feature of the [Impact Engine Framework](Impact%20Engine%20Framework.md) is to provide a granular analysis of the impacts of a software system.
 
 One dimension of granularity is time, and observations are how we provide that temporal granularity.
 
-You can provide one single observation for a long duration for every component in an [Impact Graph](design/Impact%20Graph.md); however, this won't give you a view of how the impacts changed over time. 
+You can provide one single observation for a long duration for every component in an [Impact Graph](Impact%20Graph.md); however, this won't give you a view of how the impacts changed over time. 
 
 This is why Observations are a time series; the more observations you can provide about components over time, the more the engine can surface impacts over time.
 
