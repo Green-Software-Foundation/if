@@ -64,17 +64,19 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         //
         // Where:
         //
-        // TE = Total Embodied Emissions, the sum of Life Cycle Assessment(LCA) emissions for all hardware components
-        // TR = Time Reserved, the length of time the hardware is reserved for use by the software
-        // EL = Expected Lifespan, the anticipated time that the equipment will be installed
-        // RR = Resources Reserved, the number of resources reserved for use by the software.
-        // TR = Total Resources, the total number of resources available.
+        // m                      = TE                   = Total Embodied Emissions, the sum of Life Cycle Assessment(LCA) emissions for all hardware components
+        // hours_use_time                                = Time Reserved, the length of time the hardware is reserved for use by the software
+        // expectedLifespan(years) x 8760 (hours / year) = Expected Lifespan, the anticipated time that the equipment will be installed
+        // 1.0                    = RR = Resources Reserved, the number of resources reserved for use by the software.
+        // 1.0                    = TR = Total Resources, the total number of resources available.
         m = m * (hours_use_time / (8760.0 * this.expectedLifespan)) * (1.0 / 1.0);
         return {m, e};
     }
 
     // converts the usage from IMPL input to the format required by Boavizta API.
     transformToBoaviztaUsage(duration: any, metric: any) {
+        // duration is in seconds, convert to hours
+        // metric is between 0 and 1, convert to percentage
         let usageInput: { [key: string]: any } = {
             "hours_use_time": duration / 3600.0,
             "time_workload": metric * 100.0,
