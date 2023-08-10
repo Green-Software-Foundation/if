@@ -93,10 +93,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         if (!('duration' in observation) || !('cpu' in observation) || !('datetime' in observation)) {
             throw new Error('Required Parameters duration,cpu,datetime not provided for observation');
         }
+        //    duration is in seconds
         const duration = observation['duration'];
-        //     convert cpu usage to percentage
+        //    convert cpu usage to percentage
         const cpu = observation['cpu'] * 100.0;
-        //     get the wattage for the instance type
+        //  get the wattage for the instance type
         let wattage = 0;
         if (this.provider === 'aws') {
             const x = [0, 10, 50, 100];
@@ -116,10 +117,16 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
             const spline = new Spline(x, y);
             wattage = spline.at(cpu);
         }
+        //  duration is in seconds
+        //  wattage is in watts
+        //  eg: 30W x 300s = 9000 J
         //  1 Wh = 3600 J
+        //  9000 J / 3600 = 2.5 Wh
         //  J / 3600 = Wh
+        //  2.5 Wh / 1000 = 0.0025 kWh
         //  Wh / 1000 = kWh
-        return wattage * duration / 3600 / 1000;
+        // (wattage * duration) / (seconds in an hour) / 1000 = kWh
+        return ((wattage * duration) / 3600) / 1000;
     }
 
 
@@ -134,8 +141,12 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         let gcpMin = 0.0;
         let gcpMax = 0.0;
         let gcpCount = 0;
+        // standardize gcp emissions
         gcp_use.forEach((instance: { [key: string]: any }) => {
             this.gcpList[instance['Architecture']] = instance;
+            gcpMin += parseFloat(instance['Min Watts']);
+            gcpMax += parseFloat(instance['Max Watts']);
+            gcpCount += 1;
         });
         const gcpAvgMin = gcpMin / gcpCount;
         const gcpAvgMax = gcpMax / gcpCount;
@@ -173,11 +184,6 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                 },
                 'vCPUs': parseInt(instance['Instance vCPU'], 10),
                 'name': instance['Instance type'],
-                // 'instance_idle': instance['Instance @ Idle'].replace(',', '.'),
-                // 'instance_10': instance['Instance @ 10%'].replace(',', '.'),
-                // 'instance_50': instance['Instance @ 50%'].replace(',', '.'),
-                // 'instance_100': instance['Instance @ 100%'].replace(',', '.'),
-                // 'vCPUs': instance['Instance vCPU'],
             } as IComputeInstance;
         });
         gcp_instances.forEach((instance: { [key: string]: any }) => {
