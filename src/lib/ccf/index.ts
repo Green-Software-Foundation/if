@@ -21,9 +21,10 @@ interface IConsumption {
 
 interface IComputeInstance {
     consumption: IConsumption;
-    embodiedEmission: number;
+    embodiedEmission?: number;
     name: string;
     vCPUs?: number;
+    maxVCPUs?: number;
 }
 
 export class CloudCarbonFootprint implements IImpactModelInterface {
@@ -37,6 +38,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     awsList: { [key: string]: any } = {};
     provider: string = '';
     instanceType: string = '';
+    expectedLifespan = 4;
 
     constructor() {
         this.standardizeInstanceMetrics();
@@ -67,6 +69,9 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                 throw new Error('Instance Type not supported');
             }
         }
+        if ('expected_lifespan' in staticParams) {
+            this.expectedLifespan = staticParams?.expected_lifespan as number;
+        }
         return this;
     }
 
@@ -76,10 +81,12 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
             throw new Error('Required Parameters not provided');
         }
         let eTotal = 0.0;
-        let mTotal = this.embodiedEmissions();
+        let mTotal = 0.0;
+        // let mTotal = this.embodiedEmissions();
         if (Array.isArray(observations)) {
             observations.forEach((observation: { [key: string]: any }) => {
                 eTotal += this.calculateEnergy(observation);
+                mTotal += this.embodiedEmissions(observation);
             });
         }
         console.log(mTotal, eTotal)
@@ -183,6 +190,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                     'hundredPercent': parseFloat(instance['Instance @ 100%'].replace(',', '.')),
                 },
                 'vCPUs': parseInt(instance['Instance vCPU'], 10),
+                'maxvCPUs': parseInt(instance['Platform Total Number of vCPU'], 10),
                 'name': instance['Instance type'],
             } as IComputeInstance;
         });
@@ -199,6 +207,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                     'minWatts': this.gcpList[architecture]['Min Watts'] * cpus,
                     'maxWatts': this.gcpList[architecture]['Max Watts'] * cpus,
                 },
+                'maxvCPUs': parseInt(instance['Platform vCPUs (highest vCPU possible)'], 10)
             } as IComputeInstance;
         });
         azure_instances.forEach((instance: { [key: string]: any }) => {
@@ -214,6 +223,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                 },
                 'name': instance['Virtual Machine'],
                 'vCPUs': instance['Instance vCPUs'],
+                'maxvCPUs': parseInt(instance['Platform vCPUs (highest vCPU possible)'], 10)
             } as IComputeInstance;
         });
         aws_embodied.forEach((instance: { [key: string]: any }) => {
@@ -227,7 +237,21 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         });
     }
 
-    embodiedEmissions(): number {
-        return this.computeInstances[this.provider][this.instanceType].embodiedEmission;
+    embodiedEmissions(observation: { [key: string]: any; }): number {
+        // duration
+        const duration_in_hours = observation['duration'] / 3600;
+        // M = TE * (TR/EL) * (RR/TR)
+        // Where:
+        // TE = Total Embodied Emissions, the sum of Life Cycle Assessment(LCA) emissions for all hardware components
+        // TR = Time Reserved, the length of time the hardware is reserved for use by the software
+        // EL = Expected Lifespan, the anticipated time that the equipment will be installed
+        // RR = Resources Reserved, the number of resources reserved for use by the software.
+        // TR = Total Resources, the total number of resources available.
+        const TotalEmissions = this.computeInstances[this.provider][this.instanceType].embodiedEmission ?? 0;
+        const TimeReserved = duration_in_hours;
+        const ExpectedLifespan = 8760 * this.expectedLifespan;
+        const ReservedResources = this.computeInstances[this.provider][this.instanceType].vCPUs ?? 1.0;
+        const TotalResources = this.computeInstances[this.provider][this.instanceType].maxVCPUs ?? 1.0;
+        return TotalEmissions * (TimeReserved / ExpectedLifespan) * (ReservedResources / TotalResources);
     }
 }
