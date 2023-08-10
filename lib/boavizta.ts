@@ -59,17 +59,6 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
             // 1 MJ / 3.6 = 0.278 kWh
             e = response.data['pe']['use'] / 3.6;
         }
-        const hours_use_time = usageData['hours_use_time'] ?? 0;
-        // M = TE * (TR/EL) * (RR/TR)
-        //
-        // Where:
-        //
-        // m                      = TE                   = Total Embodied Emissions, the sum of Life Cycle Assessment(LCA) emissions for all hardware components
-        // hours_use_time                                = Time Reserved, the length of time the hardware is reserved for use by the software
-        // expectedLifespan(years) x 8760 (hours / year) = Expected Lifespan, the anticipated time that the equipment will be installed
-        // 1.0                    = RR = Resources Reserved, the number of resources reserved for use by the software.
-        // 1.0                    = TR = Total Resources, the total number of resources available.
-        m = m * (hours_use_time / (8760.0 * this.expectedLifespan)) * (1.0 / 1.0);
         return {m, e};
     }
 
