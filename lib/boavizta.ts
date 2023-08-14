@@ -11,7 +11,6 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     name: string | undefined;
     sharedParams: object | undefined = undefined;
     metricType: "cpu" | "gpu" | "ram" = "cpu";
-    expectedLifespan: number = 4;
 
 
     authenticate(authParams: object) {
@@ -41,7 +40,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     }
 
     // extracts information from Boavizta API response to return the impact in the format required by IMPL
-    protected formatResponse(response: any, usageData: { [key: string]: any } = {}): { [p: string]: any } {
+    protected formatResponse(response: any): { [p: string]: any } {
         let m = 0;
         let e = 0;
         if ('impacts' in response.data) {
@@ -76,24 +75,16 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
 
     // Calculates the impact of the given usage
     async calculate(observations: object | object[] | undefined = undefined): Promise<object> {
-        let mTotal = 0;
-        let eTotal = 0;
         if (Array.isArray(observations)) {
-            if (observations.length === 0) {
-                throw new Error("Parameter Not Given: Missing observations parameter")
-            }
+            const results = [];
             for (const observation of observations) {
                 const usageResult = await this.calculateUsageForObservation(observation);
-                mTotal = usageResult.m;
-                eTotal += usageResult.e;
+                results.push(usageResult);
             }
+            return results;
         } else {
             throw new Error("Parameter Not Given: invalid observations parameter. Expecting an array of observations")
         }
-        return {
-            "e": eTotal,
-            "m": mTotal
-        };
     }
 
     // converts the usage to the format required by Boavizta API.
@@ -126,8 +117,7 @@ export class BoaviztaCpuImpactModel extends BoaviztaImpactModel implements IImpa
     sharedParams: object | undefined = undefined;
     public name: string | undefined;
     public verbose: boolean = false;
-    public allocation: string = "TOTAL";
-    public expectedLifespan: number = 4;
+    public allocation: string = "LINEAR";
 
     constructor() {
         super();
@@ -144,23 +134,11 @@ export class BoaviztaCpuImpactModel extends BoaviztaImpactModel implements IImpa
             this.verbose = staticParams.verbose as boolean ?? false;
             staticParams.verbose = undefined;
         }
-        if ('allocation' in staticParams) {
-            const allocation = staticParams.allocation as string ?? "TOTAL";
-            if (["TOTAL", "LINEAR"].includes(allocation)) {
-                this.allocation = allocation;
-            } else {
-                throw new Error("Improper configure: Invalid allocation parameter. Either TOTAL or LINEAR");
-            }
-            staticParams.allocation = undefined;
-        }
         if (!('name' in staticParams)) {
             throw new Error("Improper configure: Missing name parameter");
         }
         if (!('core_units' in staticParams)) {
             throw new Error("Improper configure: Missing core_units parameter");
-        }
-        if ('expected_lifespan' in staticParams) {
-            this.expectedLifespan = staticParams.expected_lifespan as number ?? 0;
         }
         this.sharedParams = Object.assign({}, staticParams);
         return this.sharedParams
@@ -174,7 +152,7 @@ export class BoaviztaCpuImpactModel extends BoaviztaImpactModel implements IImpa
         const dataCast = this.sharedParams as { [key: string]: any };
         dataCast['usage'] = usageData
         const response = await axios.post(`https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`, dataCast);
-        return this.formatResponse(response, usageData);
+        return this.formatResponse(response);
     }
 }
 
