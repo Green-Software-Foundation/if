@@ -161,7 +161,7 @@ export class BoaviztaCloudImpactModel extends BoaviztaImpactModel implements IIm
     public instanceTypes: { [key: string]: string[] } = {};
     public name: string | undefined;
     public verbose: boolean = false;
-    public allocation: string = "TOTAL";
+    public allocation: string = "LINEAR";
 
     modelIdentifier(): string {
         return "org.boavizta.cloud.sci"
@@ -171,16 +171,6 @@ export class BoaviztaCloudImpactModel extends BoaviztaImpactModel implements IIm
         if ('verbose' in staticParams) {
             this.verbose = staticParams.verbose as boolean ?? false;
             staticParams.verbose = undefined;
-        }
-        if ('allocation' in staticParams) {
-            const allocation = staticParams.allocation as string ?? "TOTAL";
-            // allocation has to be either TOTAL or LINEAR
-            if (["TOTAL", "LINEAR"].includes(allocation)) {
-                this.allocation = allocation;
-            } else {
-                throw new Error("Improper configure: Invalid allocation parameter. Either TOTAL or LINEAR");
-            }
-            staticParams.allocation = undefined;
         }
         // if no valid provider found, throw error
         await this.validateProvider(staticParams);
