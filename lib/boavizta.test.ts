@@ -1,5 +1,5 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import { BoaviztaCpuImpactModel} from "./boavizta";
+import {BoaviztaCpuImpactModel} from "./boavizta";
 
 jest.setTimeout(30000);
 
@@ -67,7 +67,12 @@ describe('cpu:initialize with params', () => {
         ]))
             .resolves
             .toStrictEqual(
-                {"e": 0.0037311666666666665, "m": 0.002830098934550989}
+                [
+                    {
+                        "e": 0.0037311666666666665,
+                        "m": 0.002830098934550989
+                    }
+                ]
             )
     });
 });
