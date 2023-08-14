@@ -81,6 +81,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
                 const usageResult = await this.calculateUsageForObservation(observation);
                 results.push(usageResult);
             }
+            console.log(results);
             return results;
         } else {
             throw new Error("Parameter Not Given: invalid observations parameter. Expecting an array of observations")
