@@ -46,7 +46,7 @@ describe('cpu:initialize with params', () => {
         await expect(impactModel.calculate([
             {
                 "datetime": "2021-01-01T00:00:00Z",
-                "duration": 15,
+                "duration": 3600,
                 "cpu": 0.34,
             },
             {
@@ -68,10 +68,10 @@ describe('cpu:initialize with params', () => {
             .resolves
             .toStrictEqual(
                 [
-                    {
-                        "e": 0.0037311666666666665,
-                        "m": 0.002830098934550989
-                    }
+                    { m: 0.905, e: 0.25 },
+                    { m: 0.00377, e: 0.0007702777777777777 },
+                    { m: 0.00377, e: 0.000439 },
+                    { m: 0.00377, e: 0.0014238333333333332 }
                 ]
             )
     });
