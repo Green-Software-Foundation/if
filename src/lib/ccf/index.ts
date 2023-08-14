@@ -49,7 +49,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     }
 
     async configure(name: string, staticParams: object | undefined = undefined): Promise<IImpactModelInterface> {
-        console.log(name, staticParams)
+        this.name = name;
         if (staticParams === undefined) {
             throw new Error('Required Parameters not provided');
         }
@@ -76,24 +76,24 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     }
 
     async calculate(observations: object | object[] | undefined): Promise<object> {
-        console.log(observations);
         if (observations === undefined) {
             throw new Error('Required Parameters not provided');
         }
-        let eTotal = 0.0;
-        let mTotal = 0.0;
         // let mTotal = this.embodiedEmissions();
+        const results: any[] = [];
         if (Array.isArray(observations)) {
+
             observations.forEach((observation: { [key: string]: any }) => {
-                eTotal += this.calculateEnergy(observation);
-                mTotal += this.embodiedEmissions(observation);
+                const e = this.calculateEnergy(observation);
+                const m = this.embodiedEmissions(observation);
+                results.push({
+                    "e": e,
+                    "m": m,
+                });
             });
+
         }
-        console.log(mTotal, eTotal)
-        return {
-            "e": eTotal,
-            "m": mTotal,
-        };
+        return results;
     }
 
     calculateEnergy(observation: { [key: string]: any; }) {
