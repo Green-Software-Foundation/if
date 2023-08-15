@@ -58,22 +58,23 @@ graph:
       total_resources_available: 16
       lifespan: 4 #years
       children:
-        observations:
-          common:
-            server:  Intel® Xeon® Platinum 8272CL
-            tdp: 205 #W
-            carbon_intensity: 951
-            tdp_coeff: 0.32
-            n_cores: 2
-            n_chips: 1
-          series: 
-            - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-              span: 1
-              cpu_utilization: 18.392
-          mapping:
-            span: 
-              units: hour
-              to: duration
+        child:
+          observations:
+            common:
+              server:  Intel® Xeon® Platinum 8272CL
+              tdp: 205 #W
+              carbon_intensity: 951
+              tdp_coeff: 0.32
+              n_cores: 2
+              n_chips: 1
+            series: 
+              - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+                span: 1
+                cpu_utilization: 18.392
+            mapping:
+              span: 
+                units: hour
+                to: duration
   db-server:
     config:
       embodied_c: 1433.12 # kgCO2eq
@@ -82,19 +83,20 @@ graph:
       total_resources_available: 16
       lifespan: 4 #years
       children:
-        observations:
-          common:
-            server:  Intel® Xeon® Platinum 8272CL
-            tdp: 150 #W
-            carbon_intensity: 951
-            tdp_coeff: 0.32
-            n_cores: 2
-            n_chips: 1
-          series: 
-            - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-              span: 1
-              cpu_utilization: 10 #%
-          mapping:
-            span: 
-              units: hour
-              to: duration
+        child:
+          observations:
+            common:
+              server:  Intel® Xeon® Platinum 8272CL
+              tdp: 150 #W
+              carbon_intensity: 951
+              tdp_coeff: 0.32
+              n_cores: 2
+              n_chips: 1
+            series: 
+              - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+                span: 1
+                cpu_utilization: 10 #%
+            mapping:
+              span: 
+                units: hour
+                to: duration
