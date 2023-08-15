@@ -1,0 +1,32 @@
+name: aveva
+description: https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/AVEVA_case_study.md
+tags:
+  kind: web
+  complexity: moderate
+  category: on-premise
+config:
+  pipeline:
+    calculation: msft-eshoppen
+    normalization: default
+    aggregation: default
+    enrichment: default
+graph:
+  pc: 
+    config: 
+    children: 
+      child: 
+        observations: 
+          common:
+            embodied_c: 350000 # g CO2eq
+            time_share: 20 # % of the total lifespan used by application
+            resource-share: 100 # % of the available resources allocated to application
+          series:
+            - timestamp: 2023-07-06T00:00 
+              measured_power: 16.009 # average over timespan
+              baseline_power: 11.335 # average over timespan
+              annual_usage: 8322 # (hours in year * average uptime e.g. 95%)
+              emission_factor: 474.8 # gCO2e/kWh
+          mapping: 
+            span: 
+              units: hour # unit to convert to
+              to: duration
