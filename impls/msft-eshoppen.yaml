@@ -1,0 +1,100 @@
+name: msft-eshoppen
+description: https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/msft-eShoppen.md
+tags:
+  kind: web
+  complexity: moderate
+  category: cloud
+config:
+  pipeline:
+    calculation: msft-eshoppen
+    normalization: default
+    aggregation: default
+graph:
+  front-end:
+    config:
+      embodied_c: 350 # kgCO2eq
+      reserved_time: 1 # hour
+      resources_reserved: 1
+      total_resources_available: 1
+      lifespan: 4 #years
+    children:
+      cpu:
+        observations:
+          common:
+            server:  Intel® Xeon® Platinum 8272CL
+            tdp: 28 # W
+            carbon_intensity: 951
+            tdp_coeff: 0.32
+            n_cores: 2
+          series: 
+            - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+              span: 1
+              cpu_utilization: 18.392
+          mapping:
+            span: 
+              units: hour
+              to: duration
+      memory:
+        observations:
+          common:
+            server:  Intel® Xeon® Platinum 8272CL
+            tdp: 12.16 # W
+            carbon_intensity: 951
+            tdp_coeff: 0.32
+            n_cores: 2
+          series: 
+            - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+              span: 1
+              mem_utilization: 0.1 #%
+          mapping:
+            span: 
+              units: hour
+              to: duration
+  app-server:
+    config:
+      embodied_c: 1205.52 # kgCO2eq
+      reserved_time: 1 # hour
+      resources_reserved: 2
+      total_resources_available: 16
+      lifespan: 4 #years
+      children:
+        observations:
+          common:
+            server:  Intel® Xeon® Platinum 8272CL
+            tdp: 205 #W
+            carbon_intensity: 951
+            tdp_coeff: 0.32
+            n_cores: 2
+            n_chips: 1
+          series: 
+            - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+              span: 1
+              cpu_utilization: 18.392
+          mapping:
+            span: 
+              units: hour
+              to: duration
+  db-server:
+    config:
+      embodied_c: 1433.12 # kgCO2eq
+      reserved_time: 1 # hour
+      resources_reserved: 2
+      total_resources_available: 16
+      lifespan: 4 #years
+      children:
+        observations:
+          common:
+            server:  Intel® Xeon® Platinum 8272CL
+            tdp: 150 #W
+            carbon_intensity: 951
+            tdp_coeff: 0.32
+            n_cores: 2
+            n_chips: 1
+          series: 
+            - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+              span: 1
+              cpu_utilization: 10 #%
+          mapping:
+            span: 
+              units: hour
+              to: duration
