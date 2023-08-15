@@ -1,0 +1,29 @@
+name: farm-insights
+description: https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/farm-insights-Raspberry-Pi.md
+tags:
+  kind: iot
+  complexity: simple
+  category: device
+config:
+  pipeline:
+    calculation: farm-insights
+    normalization: default
+    aggregation: default
+    enrichment: default
+graph:
+  rasp-pi: 
+    config:
+      embodied-c: 55 #kg CO2eq
+      margin-emissions: 0.713 #kg/kWh/day
+    children:
+      child:
+        observations:
+          common:
+          series:
+            - timestamp: 2023-07-06T00:00
+              span: 86400 # one day in seconds
+              energy_efficiency: 0.003 #kWh/day
+          mapping:
+            span:
+              units: year
+              to: duration
