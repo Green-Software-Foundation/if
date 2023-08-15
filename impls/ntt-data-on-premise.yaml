@@ -9,6 +9,7 @@ config:
     calculation: ntt-web
     normalization: default
     aggregation: default
+    enrichment: default
 # Single observation
 graph:
   layer-3-switch: # an advanced grouping node

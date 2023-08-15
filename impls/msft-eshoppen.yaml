@@ -9,6 +9,7 @@ config:
     calculation: msft-eshoppen
     normalization: default
     aggregation: default
+    enrichment: default
 graph:
   front-end:
     config:

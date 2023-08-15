@@ -1,0 +1,50 @@
+# Calculating Carbon per User for the GSF website.
+name: "Green Software Foundation Website"
+description: "https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/dow-msft-Graph-DB.md"
+tags:
+  MAU: 40000
+  data-last-month: 34.2
+  builds-last-month: 67
+graph:
+  building:
+      model: default  
+    config: 
+      vendor: azure
+      region: east-us  # lookup carbon intensity from region
+    children:
+      netlify:     
+        model: sci # a generic sci value multiplier
+        config: 2.4 # 2.4 g per "build" - maybe we calculated seperately.
+        measurement: $builds-last-month # 67 "build"
+        format: 
+          div: $users-last-month      
+      gh-pages:     
+        model: sci # a generic sci value multiplier
+        config: 0.4 # 2.4 g per "build" - maybe we calculated seperately.
+        measurement: $builds-last-month # 67 "build"
+        format: 
+          div: $users-last-month      
+  serving: 
+    netlify: 
+      model: netlify-serving # a specific model which returns carbon for netlify serving websites
+      config:
+        output: user # we are telling the model we want results by user      
+        page-views-per-user: 2.1
+      measurement: 
+        users: $users-last-month
+      format: ~ # already returning data by user
+  traffic:
+    model: co2.js
+    config:
+      kind: 1byte # https://developers.thegreenwebfoundation.org/co2js/models/
+      green-hosting: true
+    measurement: 
+      gb: $data-last-month
+    format: 
+      div: $users-last-month      
+  browser:
+    model: sci
+    config: 1.2
+    measurement: $users-last-month
+    format: 
+      div: $users-last-month
