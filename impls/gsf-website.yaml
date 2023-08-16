@@ -1,50 +1,88 @@
-# Calculating Carbon per User for the GSF website.
-name: "Green Software Foundation Website"
+name:  "Green Software Foundation Website"
 description: "https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/dow-msft-Graph-DB.md"
-tags:
-  MAU: 40000
-  data-last-month: 34.2
-  builds-last-month: 67
+config:
+  global-data:
+  pipeline:
+    calculation: default
+    normalization: default
+    aggregation: default
+    enrichment: default
 graph:
-  building:
-      model: default  
+  build: 
     config: 
-      vendor: azure
-      region: east-us  # lookup carbon intensity from region
-    children:
-      netlify:     
-        model: sci # a generic sci value multiplier
-        config: 2.4 # 2.4 g per "build" - maybe we calculated seperately.
-        measurement: $builds-last-month # 67 "build"
-        format: 
-          div: $users-last-month      
-      gh-pages:     
-        model: sci # a generic sci value multiplier
-        config: 0.4 # 2.4 g per "build" - maybe we calculated seperately.
-        measurement: $builds-last-month # 67 "build"
-        format: 
-          div: $users-last-month      
+    children: 
+      netlify:
+        common:
+          model: netlify-build
+        observations:
+          common:
+          series:
+            - timestamp: 2023-07-06T00:00 
+              span: 1
+              users: 40000
+              builds: 67 #how many builds in most recent month
+              c-per-build: 2.4 # g
+      gh-pages:
+        observations:
+          common:
+            model: gh-pages-build
+          series:
+            - timespan: 2023-07-06T00:00
+              span: 1
+              users: 40000
+              builds: 67 #how many builds in most recent month
+              c-per-build: 2.4 # g
+          mapping:
+            span:
+              units: month
+              to: duration
   serving: 
-    netlify: 
-      model: netlify-serving # a specific model which returns carbon for netlify serving websites
-      config:
-        output: user # we are telling the model we want results by user      
-        page-views-per-user: 2.1
-      measurement: 
-        users: $users-last-month
-      format: ~ # already returning data by user
+    children: 
+      netlify:
+        observations:
+          common:
+            model: netlify-serve
+            functional-unit: user
+          series:
+            - timestamp: 2023-07-06T00:00 
+              span: 1
+              views-per-user: 2.1
+              users: 2000 # unique users in most recent month
+      gh-pages:
+        observations:
+          common:
+            model: gh-pages-server
+            functional-unit: user
+          series:
+            - timestamp: 2023-07-06T00:00 
+              span: 1
+              views-per-user: 2.1
+              users: 2000 # unique users in most recent month
+          mapping:
+            span:
+              units: month
+              to: duration
   traffic:
-    model: co2.js
-    config:
-      kind: 1byte # https://developers.thegreenwebfoundation.org/co2js/models/
-      green-hosting: true
-    measurement: 
-      gb: $data-last-month
-    format: 
-      div: $users-last-month      
+    children:
+      child:
+        observations:
+          common:
+            model: co2.js
+            kind: 1byte # https://developers.thegreenwebfoundation.org/co2js/models/
+            green-hosting: true
+          series:
+            - timestamp: 2023-07-06T00:00 
+              data: 20 #GB data transferred in most recent month
+              users: 2000 # unique users in most recent month                
   browser:
-    model: sci
-    config: 1.2
-    measurement: $users-last-month
-    format: 
-      div: $users-last-month
+    children:
+      child:
+        observations:
+          common:
+            model: sci
+            kind: 1byte # https://developers.thegreenwebfoundation.org/co2js/models/
+            green-hosting: true
+          series:
+            - timestamp: 2023-07-06T00:00 
+              data: 20 #GB data transferred in most recent month
+              users: 2000 # unique users in most recent month
