@@ -21,9 +21,7 @@ graph:
           common:
           series:
             - timestamp: 2023-07-06T00:00
-              span: 86400 # one day in seconds
+              duration: 86400 # one day in seconds
               energy_efficiency: 0.003 #kWh/day
           mapping:
-            span:
               units: year
-              to: duration

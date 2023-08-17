@@ -29,12 +29,10 @@ graph:
             n_cores: 2
           series: 
             - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-              span: 1
+              duration: 1
               cpu_utilization: 18.392
           mapping:
-            span: 
-              units: hour
-              to: duration
+            units: hour
       memory:
         observations:
           common:
@@ -45,12 +43,10 @@ graph:
             n_cores: 2
           series: 
             - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-              span: 1
+              duration: 1
               mem_utilization: 0.1 #%
           mapping:
-            span: 
-              units: hour
-              to: duration
+            units: hour
   app-server:
     config:
       embodied_c: 1205.52 # kgCO2eq
@@ -70,12 +66,11 @@ graph:
               n_chips: 1
             series: 
               - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-                span: 1
+                duration: 1
                 cpu_utilization: 18.392
             mapping:
-              span: 
-                units: hour
-                to: duration
+              units: hour
+
   db-server:
     config:
       embodied_c: 1433.12 # kgCO2eq
@@ -95,9 +90,7 @@ graph:
               n_chips: 1
             series: 
               - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-                span: 1
+                duration: 1
                 cpu_utilization: 10 #%
             mapping:
-              span: 
-                units: hour
-                to: duration
+              units: hour

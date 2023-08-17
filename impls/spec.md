@@ -26,11 +26,9 @@ graph: # [KEYWORD] [ANY-SUBFIELDS] graph is the set of components that make up t
           common: # [KEYWORD] [ANY-SUBFIELDS] these measurements are common across all timeseries elements for this child
           series: # [KEYWORD] [ANY-SUBFIELDS] in here are measurements at specific times - can be any number of these per child
             - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-              span: 1 # [KEYWORD] [NO-SUBFIELDS] how many of the given time units does each observation represent?
+              duration: 1 # [KEYWORD] [NO-SUBFIELDS] how many of the given time units does each observation represent?
           mapping: # [KEYWORD] [1-SUBFIELD] details for any unit conversions required
-            span: # [KEYWORD] [2-SUBFIELDS] maps span of time to real time units
-              units: #[KEYWORD] [NO-SUBFIELDS]
-              to: # [KEYWORD] [NO-SUBFIELDS]
+              units: #[KEYWORD] [NO-SUBFIELDS] time unit to normalize results to
 
 # ... more children 
 ```
@@ -39,13 +37,13 @@ graph: # [KEYWORD] [ANY-SUBFIELDS] graph is the set of components that make up t
 
 Each type of observation has a **default unit** and **default name**. For example, if you observe a CPU utilization, the name of the observation dimension is `CPU`, and the unit is as a `percentage`. The data passed in is expected to be in that format.
 
-| Dimension | Unit                |
-| --------- | ------------------- |
-| CPU       | Percentage Utilized |
-| MEM       | Percentage Full     |
-| Disk      | GB                  |
-| Duration  | Seconds             |
-| Timestamp | ISO Time            |
+| Dimension     | Unit                |
+| ------------- | ------------------- |
+| CPU_used      | Percentage Utilized |
+| mem_used      | Percentage Full     |
+| mem_allocated | GB                  |
+| Duration      | Seconds             |
+| Timestamp     | ISO Time            |
 
 
 

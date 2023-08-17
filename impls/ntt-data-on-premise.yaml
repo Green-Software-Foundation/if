@@ -26,13 +26,13 @@ graph:
             pue: 1.5
         observations: 
           series:
-          - timestamp: 2023-07-06T00:00
+            timestamp: 2023-07-06T00:00
+            duration: 1
             five-min-input-rate: 100
             five-min-output-rate: 100
           mapping:
-            span:
               units: hours
-              to: duration
+
   layer-2-switch:
     model: default  
     config:
@@ -47,13 +47,12 @@ graph:
             pue: 1.5
         observations: 
           series:
-          - timestamp: 2023-07-06T00:00
+            timestamp: 2023-07-06T00:00
+            duration: 1
             five-min-input-rate: 100
             five-min-output-rate: 100
           mapping:
-            span:
-              units: hours
-              to: duration
+            units: hours
       switch-2:
         common:
             p_baseline: 22.8 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
@@ -64,13 +63,12 @@ graph:
             pue: 1.5
         observations: 
           series:
-          - timestamp: 2023-07-06T00:00
+            timestamp: 2023-07-06T00:00
+            duration: 1
             five-min-input-rate: 100
             five-min-output-rate: 100
           mapping:
-            span:
               units: hours
-              to: duration
       switch-3:
         common:
             p_baseline: 22.8 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
@@ -81,13 +79,12 @@ graph:
             pue: 1.5
         observations: 
           series:
-          - timestamp: 2023-07-06T00:00
+            timestamp: 2023-07-06T00:00
+            duration: 1
             five-min-input-rate: 100
             five-min-output-rate: 100
           mapping:
-            span:
               units: hours
-              to: duration
       switch-4:
         common:
             p_baseline: 22.8 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
@@ -98,13 +95,12 @@ graph:
             pue: 1.5
         observations: 
           series:
-          - timestamp: 2023-07-06T00:00
+            timestamp: 2023-07-06T00:00
+            duration: 1
             five-min-input-rate: 100
             five-min-output-rate: 100
           mapping:
-            span:
-              units: seconds
-              to: duration
+            units: seconds
   db-servers:
     model: default  
     config:
@@ -116,16 +112,15 @@ graph:
           pue: 1.5
         observations: 
         series:
-          - timestamp: 2023-07-06T00:00
-            instantaneous-power: 176
-            min_in_sample: 1
-            max_in_sample: 6560
-            mean_over_sample: 113
-            sampling_period: 0.0000001 #seconds
+          timestamp: 2023-07-06T00:00
+          duration: 1
+          instantaneous-power: 176
+          min_in_sample: 1
+          max_in_sample: 6560
+          mean_over_sample: 113
+          sampling_period: 0.0000001 #seconds
         mapping:
-          span:
             units: seconds
-            to: duration
   app-servers:
     model: default  
     config:
@@ -137,16 +132,15 @@ graph:
           pue: 1.5
         observations: 
         series:
-          - timestamp: 2023-07-06T00:00
-            instantaneous-power: 176
-            min_in_sample: 1
-            max_in_sample: 6560
-            mean_over_sample: 113
-            sampling_period: 0.0000001 #seconds
+          timestamp: 2023-07-06T00:00
+          duration: 1
+          instantaneous-power: 176
+          min_in_sample: 1
+          max_in_sample: 6560
+          mean_over_sample: 113
+          sampling_period: 0.0000001 #seconds
         mapping:
-          span:
-            units: seconds
-            to: duration
+          units: seconds
   web-servers:
     model: default  
     config:
@@ -158,15 +152,14 @@ graph:
           pue: 1.5
         observations: 
         series:
-          - timestamp: 2023-07-06T00:00
-            instantaneous-power: 176
-            min_in_sample: 1
-            max_in_sample: 6560
-            mean_over_sample: 113
-            sampling_period: 0.0000001 #seconds
+          timestamp: 2023-07-06T00:00
+          duration: 1
+          instantaneous-power: 176
+          min_in_sample: 1
+          max_in_sample: 6560
+          mean_over_sample: 113
+          sampling_period: 0.0000001 #seconds
         mapping:
-          span:
-            units: seconds
-            to: duration
+          units: seconds
 
 
