@@ -8,7 +8,7 @@ The `NO-SUBFIELDS`, `N-SUBFIELDS` or `ANY-SUBFILEDS` tags define whether there a
 
 ```yaml
 name:  # [KEYWORD] [NO-SUBFIELDS] project name
-description: # [KEYWORD] [NO-SUBFIELDS] description or external link to project site/docs
+description: # [KEYWORD] [NO-SUBFIELDS] description or external link to project site/docs 
 tags: # [KEYWORD] [ANY-SUBFIELDS] contains sub-fields with any relevant topic tags
 config: # [KEYWORD] [ANY-SUBFIELDS] determines global config for generating energy calcs that apply to all nodes 
   global-data: # [KEYWORD] [ANY-SUBFIELDS] sub-fields containing any data that is common across the entire graph
@@ -34,6 +34,47 @@ graph: # [KEYWORD] [ANY-SUBFIELDS] graph is the set of components that make up t
 
 # ... more children 
 ```
+
+## Units
+
+Each type of observation has a **default unit** and **default name**. For example, if you observe a CPU utilization, the name of the observation dimension is `CPU`, and the unit is as a `percentage`. The data passed in is expected to be in that format.
+
+| Dimension | Unit                |
+| --------- | ------------------- |
+| CPU       | Percentage Utilized |
+| MEM       | Percentage Full     |
+| Disk      | GB                  |
+| Duration  | Seconds             |
+| Timestamp | ISO Time            |
+
+
+
+## TDP coefficient
+
+The TDP coefficient accounts for the non-linear relationhsip between CPU utilization and power. For example, the TDP of a CPU operating at 20% of the max capacity is not equal to `max TDP * 0.2`. Instead, there is a curve that describes the relationship. Four known points on this curve are:
+
+| CPU Utilisation | TDP Coefficient |
+| --------------- | --------------- |
+| 0               | 0.12            |
+| 10              | 0.32            |
+| 50              | 0.75            |
+| 100             | 1.02            |
+
+This is a naive model to convert utilization to energy consumption proposed by Benjamin Davy in this article https://medium.com/teads-engineering/building-an-aws-ec2-carbon-emissions-dataset-3f0fd76c98ac. The TDP coeffcient for any utilization value can be calculated by interpolating these points.
+
+
+## Power use efficiency (PUE)
+
+PUE values are derived from this [source](https://github.com/cloud-carbon-footprint/cloud-carbon-footprint/blob/e48c659f6dafc8b783e570053024f28b88aafc79/microsite/docs/Methodology.md#power-usage-effectiveness).
+
+| Cloud provider | Power usage efficiency (PUE) |
+| -------------- | ---------------------------- |
+| AWS            | 1.135                        |
+| GCP            | 1.1                          |
+| Azure          | 1.185                        |
+
+
+
 
 
 ## Example
