@@ -156,3 +156,91 @@ export class BoaviztaCpuImpactModel extends BoaviztaImpactModel implements IImpa
     }
 }
 
+export class BoaviztaCloudImpactModel extends BoaviztaImpactModel implements IImpactModelInterface {
+    public sharedParams: object | undefined = undefined;
+    public instanceTypes: { [key: string]: string[] } = {};
+    public name: string | undefined;
+    public verbose: boolean = false;
+    public allocation: string = "LINEAR";
+
+    modelIdentifier(): string {
+        return "org.boavizta.cloud.sci"
+    }
+
+    protected async captureStaticParams(staticParams: object) {
+        if ('verbose' in staticParams) {
+            this.verbose = staticParams.verbose as boolean ?? false;
+            staticParams.verbose = undefined;
+        }
+        // if no valid provider found, throw error
+        await this.validateProvider(staticParams);
+        // if no valid instance_type found, throw error
+        await this.validateInstanceType(staticParams);
+        // if no valid location found, throw error
+        await this.validateLocation(staticParams);
+        this.sharedParams = Object.assign({}, staticParams);
+        return this.sharedParams
+    }
+
+    async validateLocation(staticParamsCast: object) {
+        if ('location' in staticParamsCast) {
+            const location = staticParamsCast.location as string ?? "USA";
+            const countries = await this.supportedLocations();
+            if (!(countries.includes(location))) {
+                throw new Error("Improper configure: Invalid location parameter: '" + location + "'. Valid values are : " + countries.join(", "));
+            }
+        }
+    }
+
+    async validateInstanceType(staticParamsCast: object) {
+        if (!('instance_type' in staticParamsCast)) {
+            throw new Error("Improper configure: Missing instance_type parameter");
+        }
+        if (!('provider' in staticParamsCast)) {
+            throw new Error("Improper configure: Missing provider parameter");
+        }
+        let provider = staticParamsCast.provider as string;
+        if (this.instanceTypes[provider] === undefined || this.instanceTypes[provider].length === 0) {
+            this.instanceTypes[provider] = await this.supportedInstancesList(provider)
+        }
+        if ('instance_type' in staticParamsCast) {
+            if (!(this.instanceTypes[provider].includes(staticParamsCast.instance_type as string))) {
+                throw new Error("Improper configure: Invalid instance_type parameter: '" + staticParamsCast.instance_type + "'. Valid values are : " + this.instanceTypes[provider].join(", "));
+            }
+        } else {
+            throw new Error("Improper configure: Missing instance_type parameter");
+        }
+    }
+
+    async validateProvider(staticParamsCast: object) {
+        if (!('provider' in staticParamsCast)) {
+            throw new Error("Improper configure: Missing provider parameter");
+        } else {
+            const supportedProviders = await this.supportedProvidersList();
+            if (!(supportedProviders.includes(staticParamsCast.provider as string))) {
+                throw new Error("Improper configure: Invalid provider parameter: '" + staticParamsCast.provider + "'. Valid values are : " + supportedProviders.join(", "));
+            }
+        }
+    }
+
+    async supportedInstancesList(provider: string) {
+        const instances = await axios.get(`https://api.boavizta.org/v1/cloud/all_instances?provider=${provider}`)
+        return instances.data;
+    }
+
+    async supportedProvidersList(): Promise<string[]> {
+        const providers = await axios.get(`https://api.boavizta.org/v1/cloud/all_providers`)
+        return Object.values(providers.data);
+    }
+
+
+    async fetchData(usageData: object | undefined): Promise<object> {
+        if (this.sharedParams === undefined) {
+            throw new Error("Improper configure: Missing configuration parameters")
+        }
+        const dataCast = this.sharedParams as { [key: string]: any };
+        dataCast['usage'] = usageData
+        const response = await axios.post(`https://api.boavizta.org/v1/cloud/?verbose=${this.verbose}&allocation=${this.allocation}`, dataCast);
+        return this.formatResponse(response);
+    }
+}
