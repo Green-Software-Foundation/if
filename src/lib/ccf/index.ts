@@ -76,8 +76,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     }
 
     async calculate(observations: object | object[] | undefined): Promise<object> {
-        if (observations === undefined|| this.instanceType === '' || this.provider === '') {
+        if (observations === undefined) {
             throw new Error('Required Parameters not provided');
+        }
+        if (this.instanceType === '' || this.provider === '') {
+            throw new Error('Configuration is incomplete');
         }
         // let mTotal = this.embodiedEmissions();
         const results: any[] = [];
