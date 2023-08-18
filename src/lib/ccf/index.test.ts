@@ -63,4 +63,13 @@ describe('ccf:configure test', () => {
             .rejects
             .toThrowError();
     });
+
+    test('initialize with correct params but wrong observation', async () => {
+        const impactModel = new CloudCarbonFootprint();
+        await expect(impactModel.configure('test', {'provider': 'aws', 'instance_type': 't2.micro'}))
+            .resolves.toBeInstanceOf(CloudCarbonFootprint);
+        await expect(impactModel.calculate([{'duration': 3600, 'cpus': 0.5, 'datetime': '2021-01-01T00:00:00Z'}]))
+            .rejects
+            .toThrowError();
+    });
 });
