@@ -11,8 +11,8 @@ describe('ccf:configure test', () => {
             .resolves
             .toStrictEqual([
                 {
-                    e:0.004900000000000001,
-                    m:0.04216723744292237
+                    e: 0.004900000000000001,
+                    m: 0.04216723744292237
                 },
             ]);
     });
@@ -26,7 +26,7 @@ describe('ccf:configure test', () => {
                 'datetime': '2021-01-01T00:00:00Z'
             },
             {
-                'duration': 3600*2,
+                'duration': 3600 * 2,
                 'cpu': 0.5,
                 'datetime': '2021-01-02T00:00:00Z'
             }
@@ -34,14 +34,33 @@ describe('ccf:configure test', () => {
             .resolves
             .toStrictEqual([
                 {
-                    e:0.004900000000000001,
-                    m:0.04216723744292237
+                    e: 0.004900000000000001,
+                    m: 0.04216723744292237
                 },
                 {
-                    e:0.004900000000000001*2,
-                    m:0.04216723744292237*2
+                    e: 0.004900000000000001 * 2,
+                    m: 0.04216723744292237 * 2
                 },
             ]);
 
+    });
+
+    test('initialize with wrong params', async () => {
+        const impactModel = new CloudCarbonFootprint();
+        await expect(impactModel.configure('test', {'provider': 'aws', 'instance_type': 't5.micro'}))
+            .rejects
+            .toThrowError();
+        await expect(impactModel.calculate([{'duration': 3600, 'cpu': 0.5, 'datetime': '2021-01-01T00:00:00Z'}]))
+            .rejects
+            .toThrowError();
+    });
+    test('initialize with wrong params', async () => {
+        const impactModel = new CloudCarbonFootprint();
+        await expect(impactModel.configure('test', {'provider': 'aws2', 'instance_type': 't2.micro'}))
+            .rejects
+            .toThrowError();
+        await expect(impactModel.calculate([{'duration': 3600, 'cpu': 0.5, 'datetime': '2021-01-01T00:00:00Z'}]))
+            .rejects
+            .toThrowError();
     });
 });
