@@ -17,5 +17,5 @@
 - 
 
 
-<!-- Make sure tests pass on Travis CI. -->
+<!-- Make sure tests and lint pass on CI. -->
 
