@@ -9,3 +9,5 @@ node_modules
 dist
 tsconfig.json
 .jsii
+yarn-error.log
+build
