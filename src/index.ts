@@ -1,11 +1,14 @@
-import {BoaviztaCpuImpactModel} from '../lib';
+import {BoaviztaCpuImpactModel} from './lib';
+
+import {KeyValuePair} from './types/boavizta';
 
 async function test() {
-  const params: {[key: string]: any} = {};
+  const params: KeyValuePair = {};
   params.allocation = 'TOTAL';
   params.verbose = true;
   params.name = 'Intel Xeon Platinum 8160 Processor';
   params.core_units = 24;
+
   const newModel = await new BoaviztaCpuImpactModel().configure('test', params);
   const usage = await newModel.calculate([
     {
