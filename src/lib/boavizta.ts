@@ -1,7 +1,17 @@
-import {IImpactModelInterface} from './interfaces/index';
 import axios from 'axios';
 
-export {IImpactModelInterface} from './interfaces/index';
+import {IImpactModelInterface} from './interfaces';
+
+import {CONFIG} from '../config';
+
+import {
+  BoaviztaInstanceTypes,
+  IBoaviztaUsageSCI,
+  KeyValuePair,
+} from '../types/boavizta';
+
+const {BOAVIZTA} = CONFIG;
+const {CPU_IMPACT_MODEL_ID, CLOUD_IMPACT_MODEL_ID} = BOAVIZTA;
 
 abstract class BoaviztaImpactModel implements IImpactModelInterface {
   protected authCredentials: object | undefined;
@@ -43,6 +53,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   protected formatResponse(response: any): {[p: string]: any} {
     let m = 0;
     let e = 0;
+
     if ('impacts' in response.data) {
       // manufacture impact is in kgCO2eq, convert to gCO2eq
       m = response.data['impacts']['gwp']['manufacture'] * 1000;
@@ -58,6 +69,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
       // 1 MJ / 3.6 = 0.278 kWh
       e = response.data['pe']['use'] / 3.6;
     }
+
     return {m, e};
   }
 
@@ -65,11 +77,12 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   transformToBoaviztaUsage(duration: any, metric: any) {
     // duration is in seconds, convert to hours
     // metric is between 0 and 1, convert to percentage
-    let usageInput: {[key: string]: any} = {
+    let usageInput: KeyValuePair = {
       hours_use_time: duration / 3600.0,
       time_workload: metric * 100.0,
     };
     usageInput = this.addLocationToUsage(usageInput);
+
     return usageInput;
   }
 
@@ -93,9 +106,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   }
 
   // converts the usage to the format required by Boavizta API.
-  protected async calculateUsageForObservation(observation: {
-    [key: string]: any;
-  }) {
+  protected async calculateUsageForObservation(observation: KeyValuePair) {
     if (
       'datetime' in observation &&
       'duration' in observation &&
@@ -112,17 +123,13 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   }
 
   // Adds location to usage if location is defined in sharedParams
-  addLocationToUsage(usageRaw: {[key: string]: any}) {
+  addLocationToUsage(usageRaw: KeyValuePair) {
     if (this.sharedParams !== undefined && 'location' in this.sharedParams) {
       usageRaw['usage_location'] = this.sharedParams['location'];
     }
+
     return usageRaw;
   }
-}
-
-export interface IBoaviztaUsageSCI {
-  e: number;
-  m: number;
 }
 
 export class BoaviztaCpuImpactModel
@@ -142,7 +149,7 @@ export class BoaviztaCpuImpactModel
   }
 
   modelIdentifier(): string {
-    return 'org.boavizta.cpu.sci';
+    return CPU_IMPACT_MODEL_ID;
   }
 
   protected async captureStaticParams(staticParams: object): Promise<object> {
@@ -150,13 +157,17 @@ export class BoaviztaCpuImpactModel
       this.verbose = (staticParams.verbose as boolean) ?? false;
       staticParams.verbose = undefined;
     }
+
     if (!('name' in staticParams)) {
       throw new Error('Improper configure: Missing name parameter');
     }
+
     if (!('core_units' in staticParams)) {
       throw new Error('Improper configure: Missing core_units parameter');
     }
+
     this.sharedParams = Object.assign({}, staticParams);
+
     return this.sharedParams;
   }
 
@@ -164,12 +175,14 @@ export class BoaviztaCpuImpactModel
     if (this.sharedParams === undefined) {
       throw new Error('Improper configure: Missing configuration parameters');
     }
-    const dataCast = this.sharedParams as {[key: string]: any};
+
+    const dataCast = this.sharedParams as KeyValuePair;
     dataCast['usage'] = usageData;
     const response = await axios.post(
       `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`,
       dataCast
     );
+
     return this.formatResponse(response);
   }
 }
@@ -179,13 +192,13 @@ export class BoaviztaCloudImpactModel
   implements IImpactModelInterface
 {
   public sharedParams: object | undefined = undefined;
-  public instanceTypes: {[key: string]: string[]} = {};
+  public instanceTypes: BoaviztaInstanceTypes = {};
   public name: string | undefined;
   public verbose = false;
   public allocation = 'LINEAR';
 
   modelIdentifier(): string {
-    return 'org.boavizta.cloud.sci';
+    return CLOUD_IMPACT_MODEL_ID;
   }
 
   protected async captureStaticParams(staticParams: object) {
@@ -200,6 +213,7 @@ export class BoaviztaCloudImpactModel
     // if no valid location found, throw error
     await this.validateLocation(staticParams);
     this.sharedParams = Object.assign({}, staticParams);
+
     return this.sharedParams;
   }
 
@@ -222,10 +236,13 @@ export class BoaviztaCloudImpactModel
     if (!('instance_type' in staticParamsCast)) {
       throw new Error('Improper configure: Missing instance_type parameter');
     }
+
     if (!('provider' in staticParamsCast)) {
       throw new Error('Improper configure: Missing provider parameter');
     }
+
     const provider = staticParamsCast.provider as string;
+
     if (
       this.instanceTypes[provider] === undefined ||
       this.instanceTypes[provider].length === 0
@@ -233,6 +250,7 @@ export class BoaviztaCloudImpactModel
       this.instanceTypes[provider] =
         await this.supportedInstancesList(provider);
     }
+
     if ('instance_type' in staticParamsCast) {
       if (
         !this.instanceTypes[provider].includes(
@@ -256,6 +274,7 @@ export class BoaviztaCloudImpactModel
       throw new Error('Improper configure: Missing provider parameter');
     } else {
       const supportedProviders = await this.supportedProvidersList();
+
       if (!supportedProviders.includes(staticParamsCast.provider as string)) {
         throw new Error(
           "Improper configure: Invalid provider parameter: '" +
@@ -271,6 +290,7 @@ export class BoaviztaCloudImpactModel
     const instances = await axios.get(
       `https://api.boavizta.org/v1/cloud/all_instances?provider=${provider}`
     );
+
     return instances.data;
   }
 
@@ -278,6 +298,7 @@ export class BoaviztaCloudImpactModel
     const providers = await axios.get(
       'https://api.boavizta.org/v1/cloud/all_providers'
     );
+
     return Object.values(providers.data);
   }
 
@@ -285,12 +306,14 @@ export class BoaviztaCloudImpactModel
     if (this.sharedParams === undefined) {
       throw new Error('Improper configure: Missing configuration parameters');
     }
-    const dataCast = this.sharedParams as {[key: string]: any};
+
+    const dataCast = this.sharedParams as KeyValuePair;
     dataCast['usage'] = usageData;
     const response = await axios.post(
       `https://api.boavizta.org/v1/cloud/?verbose=${this.verbose}&allocation=${this.allocation}`,
       dataCast
     );
+
     return this.formatResponse(response);
   }
 }
