@@ -10,6 +10,7 @@ import * as gcp_embodied from './gcp-embodied.json';
 import * as aws_embodied from './aws-embodied.json';
 import * as azure_embodied from './azure-embodied.json';
 
+// consumption information for a single instance
 interface IConsumption {
     idle?: number;
     tenPercent?: number;
@@ -19,6 +20,7 @@ interface IConsumption {
     maxWatts?: number;
 }
 
+// information about a single compute instance
 interface IComputeInstance {
     consumption: IConsumption;
     embodiedEmission?: number;
@@ -33,9 +35,12 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     name: string | undefined;
     // compute instances grouped by the provider with usage data
     computeInstances: { [key: string]: { [key: string]: IComputeInstance } } = {};
+
+    // list of all the compute instances by Architecture
     gcpList: { [key: string]: any } = {};
     azureList: { [key: string]: any } = {};
     awsList: { [key: string]: any } = {};
+
     provider: string = '';
     instanceType: string = '';
     expectedLifespan = 4;
@@ -47,7 +52,13 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     authenticate(authParams: object): void {
         this.authParams = authParams;
     }
-
+    /*
+    *  Configuration Parameters for StaticParams
+    *
+    *  provider: aws, gcp, azure
+    *  instance_type: instance type from the list of supported instances
+    *  expected_lifespan: expected lifespan of the instance in years
+    */
     async configure(name: string, staticParams: object | undefined = undefined): Promise<IImpactModelInterface> {
         this.name = name;
         if (staticParams === undefined) {
@@ -75,6 +86,14 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         return this;
     }
 
+    /*
+     * Calculate the total emissions for a list of observations
+     *
+     * Each Observation require:
+     *  datetime: ISO 8601 datetime string
+     *  duration: duration of the observation in seconds
+     *  cpu: cpu usage in percentage
+     */
     async calculate(observations: object | object[] | undefined): Promise<object> {
         if (observations === undefined) {
             throw new Error('Required Parameters not provided');
@@ -143,6 +162,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         return "ccf.cloud.sci";
     }
 
+    /*
+     * Standardize the instance metrics for all the providers
+     *
+     * Maps the instance metrics to a standard format (min, max, idle, 10%, 50%, 100%) for all the providers
+     */
     standardizeInstanceMetrics() {
         this.computeInstances['aws'] = {};
         this.computeInstances['gcp'] = {};
@@ -239,6 +263,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         });
     }
 
+    // Calculates the embodied emissions for a given observation
     embodiedEmissions(observation: { [key: string]: any; }): number {
         // duration
         const duration_in_hours = observation['duration'] / 3600;
