@@ -72,15 +72,10 @@
   "scripts": {
     "build": "jsii",
     "build:watch": "jsii --watch",
-    "clean": "gts clean",
-    "compile": "tsc",
     "fix": "gts fix",
     "fix:package": "fixpack",
     "lint": "gts lint",
     "package": "jsii-pacmak",
-    "posttest": "yarn run lint",
-    "prepare": "yarn run compile",
-    "pretest": "yarn run compile",
     "test": "jest"
   },
   "stability": "stable",
