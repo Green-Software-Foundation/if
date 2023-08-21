@@ -1,6 +1,4 @@
-import {BoaviztaCpuImpactModel} from '../src/lib';
-
-import {KeyValuePair} from '../src/types/boavizta';
+import {BoaviztaCpuImpactModel, KeyValuePair} from '../src';
 
 async function test() {
   const params: KeyValuePair = {};
