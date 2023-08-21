@@ -77,9 +77,13 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
      */
     async configure(name: string, staticParams: object | undefined = undefined): Promise<IImpactModelInterface> {
         this.name = name;
+
+
         if (staticParams === undefined) {
             throw new Error('Required Parameters not provided');
         }
+
+
         if ('provider' in staticParams) {
             const provider = staticParams?.provider as string;
             if (['aws', 'gcp', 'azure'].includes(provider)) {
@@ -90,6 +94,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         } else {
             throw new Error('Provider not provided');
         }
+
+
         if ('instance_type' in staticParams) {
             const instanceType = staticParams?.instance_type as string;
             if (instanceType in this.computeInstances[this.provider]) {
@@ -100,9 +106,13 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         } else {
             throw new Error('Instance Type not provided');
         }
+
+
         if ('expected_lifespan' in staticParams) {
             this.expectedLifespan = staticParams?.expected_lifespan as number;
         }
+
+
         if ('interpolation' in staticParams) {
             if (this.provider !== 'aws') {
                 throw new Error('Interpolation method not supported');
@@ -114,6 +124,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                 throw new Error('Interpolation method not supported');
             }
         }
+
         return this;
     }
 
@@ -126,24 +137,29 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
      *  cpu: cpu usage in percentage
      */
     async calculate(observations: object | object[] | undefined): Promise<object> {
+
         if (observations === undefined) {
             throw new Error('Required Parameters not provided');
         }
+
         if (this.instanceType === '' || this.provider === '') {
             throw new Error('Configuration is incomplete');
         }
+
         const results: any[] = [];
         if (Array.isArray(observations)) {
             observations.forEach((observation: { [key: string]: any }) => {
+
                 const e = this.calculateEnergy(observation);
                 const m = this.embodiedEmissions(observation);
+
                 results.push({
                     "e": e,
                     "m": m,
                 });
             });
-
         }
+
         return results;
     }
 
@@ -158,28 +174,39 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
      * Uses a spline method for AWS and linear interpolation for GCP and Azure
      */
     calculateEnergy(observation: { [key: string]: any; }) {
+
         if (!('duration' in observation) || !('cpu' in observation) || !('datetime' in observation)) {
             throw new Error('Required Parameters duration,cpu,datetime not provided for observation');
         }
+
         //    duration is in seconds
         const duration = observation['duration'];
+
         //    convert cpu usage to percentage
         const cpu = observation['cpu'] * 100.0;
+
         //  get the wattage for the instance type
         let wattage;
+
         if (this.provider === 'aws' && this.interpolation === 'spline') {
+
             const x = [0, 10, 50, 100];
+
             const y: number[] = [
                 this.computeInstances['aws'][this.instanceType].consumption.idle ?? 0,
                 this.computeInstances['aws'][this.instanceType].consumption.tenPercent ?? 0,
                 this.computeInstances['aws'][this.instanceType].consumption.fiftyPercent ?? 0,
                 this.computeInstances['aws'][this.instanceType].consumption.hundredPercent ?? 0
             ];
+
             const spline = new Spline(x, y);
+
             wattage = spline.at(cpu);
         } else {
+
             const idle = this.computeInstances[this.provider][this.instanceType].consumption.minWatts ?? 0;
             const max = this.computeInstances[this.provider][this.instanceType].consumption.maxWatts ?? 0;
+
             // linear interpolation
             wattage = idle + (max - idle) * (cpu / 100);
         }
@@ -338,12 +365,15 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     // Architecture strings are different between Instances-Use.JSON and the bundled Typescript from CCF.
     // This function resolves the differences.
     private resolveAwsArchitecture(architecture: string) {
+
         if (architecture.includes('AMD ')) {
             architecture = architecture.substring(4);
         }
+
         if (architecture.includes("Skylake")) {
             architecture = "Sky Lake";
         }
+
         if (architecture.includes('Graviton')) {
             if (architecture.includes('2')) {
                 architecture = 'Graviton2';
@@ -353,12 +383,15 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                 architecture = 'Graviton';
             }
         }
+
         if (architecture.includes('Unknown')) {
             architecture = 'Average';
         }
+
         if (!(architecture in this.awsList)) {
             console.log("ARCHITECTURE:", architecture)
         }
+
         return architecture;
     }
 
@@ -380,6 +413,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         const ExpectedLifespan = 8760 * this.expectedLifespan;
         const ReservedResources = this.computeInstances[this.provider][this.instanceType].vCPUs ?? 1.0;
         const TotalResources = this.computeInstances[this.provider][this.instanceType].maxVCPUs ?? 1.0;
+
+
         return TotalEmissions * (TimeReserved / ExpectedLifespan) * (ReservedResources / TotalResources);
     }
 }
