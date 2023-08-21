@@ -117,6 +117,16 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         return results;
     }
 
+    /*
+     * Calculates the energy consumption for a single observation
+     * requires
+     *
+     * duration: duration of the observation in seconds
+     * cpu: cpu usage in percentage
+     * datetime: ISO 8601 datetime string
+     *
+     * Uses a spline method for AWS and linear interpolation for GCP and Azure
+     */
     calculateEnergy(observation: { [key: string]: any; }) {
         if (!('duration' in observation) || !('cpu' in observation) || !('datetime' in observation)) {
             throw new Error('Required Parameters duration,cpu,datetime not provided for observation');
