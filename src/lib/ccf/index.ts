@@ -45,6 +45,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     provider: string = '';
     instanceType: string = '';
     expectedLifespan = 4;
+    interpolation: string = 'linear';
 
     constructor() {
         this.standardizeInstanceMetrics();
@@ -60,6 +61,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     *  provider: aws, gcp, azure
     *  instance_type: instance type from the list of supported instances
     *  expected_lifespan: expected lifespan of the instance in years
+    *  interpolation: linear(All Clouds), spline (only for AWS)
     */
     async configure(name: string, staticParams: object | undefined = undefined): Promise<IImpactModelInterface> {
         this.name = name;
@@ -84,6 +86,14 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         }
         if ('expected_lifespan' in staticParams) {
             this.expectedLifespan = staticParams?.expected_lifespan as number;
+        }
+        if ('interpolation' in staticParams) {
+            const interpolation = staticParams?.interpolation as string;
+            if (['linear', 'spline'].includes(interpolation)) {
+                this.interpolation = interpolation;
+            } else {
+                throw new Error('Interpolation method not supported');
+            }
         }
         return this;
     }
@@ -139,7 +149,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         const cpu = observation['cpu'] * 100.0;
         //  get the wattage for the instance type
         let wattage = 0;
-        if (this.provider === 'aws') {
+        if (this.provider === 'aws' && this.interpolation === 'spline') {
             const x = [0, 10, 50, 100];
             const y: number[] = [
                 this.computeInstances['aws'][this.instanceType].consumption.idle ?? 0,
@@ -149,13 +159,12 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
             ];
             const spline = new Spline(x, y);
             wattage = spline.at(cpu);
-        } else if (this.provider === 'gcp' || this.provider === 'azure') {
+        } else {
             const idle = this.computeInstances[this.provider][this.instanceType].consumption.minWatts ?? 0;
             const max = this.computeInstances[this.provider][this.instanceType].consumption.maxWatts ?? 0;
-            const x = [0, 100];
-            const y: number[] = [idle, max];
-            const spline = new Spline(x, y);
-            wattage = spline.at(cpu);
+            // linear interpolation
+            wattage = idle + (max - idle) * (cpu / 100);
+            console.log('idle', idle, 'max', max, 'cpu', cpu, 'wattage', wattage);
         }
         //  duration is in seconds
         //  wattage is in watts
