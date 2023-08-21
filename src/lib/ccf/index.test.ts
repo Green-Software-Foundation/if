@@ -11,7 +11,7 @@ describe('ccf:configure test', () => {
             'instance_type': 't2.micro',
             'interpolation': 'spline'
         });
-        await expect(impactModel.calculate([{'duration': 3600, 'cpu': 1, 'datetime': '2021-01-01T00:00:00Z'}]))
+        await expect(impactModel.calculate([{'duration': 3600, 'cpu': 0.5, 'datetime': '2021-01-01T00:00:00Z'}]))
             .resolves
             .toStrictEqual([
                 {
@@ -22,16 +22,20 @@ describe('ccf:configure test', () => {
     });
     test('initialize with params', async () => {
         const impactModel = new CloudCarbonFootprint();
-        await impactModel.configure('test', {'provider': 'aws', 'instance_type': 't2.micro'});
+        await impactModel.configure('test', {
+            'provider': 'aws',
+            'instance_type': 't2.micro',
+            'interpolation': 'spline'
+        });
         await expect(impactModel.calculate([
             {
                 'duration': 3600,
-                'cpu': 1,
+                'cpu': 0.5,
                 'datetime': '2021-01-01T00:00:00Z'
             },
             {
                 'duration': 3600 * 2,
-                'cpu': 1,
+                'cpu': 0.5,
                 'datetime': '2021-01-02T00:00:00Z'
             }
         ]))
@@ -51,10 +55,14 @@ describe('ccf:configure test', () => {
 
     test('initialize with wrong params', async () => {
         const impactModel = new CloudCarbonFootprint();
-        await expect(impactModel.configure('test', {'provider': 'aws', 'instance_type': 't5.micro'}))
+        await expect(impactModel.configure('test', {
+            'provider': 'aws',
+            'instance_type': 't5.micro',
+            'interpolation': 'spline',
+        }))
             .rejects
             .toThrowError();
-        await expect(impactModel.calculate([{'duration': 3600, 'cpu': 1, 'datetime': '2021-01-01T00:00:00Z'}]))
+        await expect(impactModel.calculate([{'duration': 3600, 'cpu': 0.5, 'datetime': '2021-01-01T00:00:00Z'}]))
             .rejects
             .toThrowError();
     });
@@ -63,7 +71,7 @@ describe('ccf:configure test', () => {
         await expect(impactModel.configure('test', {'provider': 'aws2', 'instance_type': 't2.micro'}))
             .rejects
             .toThrowError();
-        await expect(impactModel.calculate([{'duration': 3600, 'cpu': 1, 'datetime': '2021-01-01T00:00:00Z'}]))
+        await expect(impactModel.calculate([{'duration': 3600, 'cpu': 0.5, 'datetime': '2021-01-01T00:00:00Z'}]))
             .rejects
             .toThrowError();
     });
