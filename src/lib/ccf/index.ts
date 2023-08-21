@@ -163,7 +163,6 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
             const max = this.computeInstances[this.provider][this.instanceType].consumption.maxWatts ?? 0;
             // linear interpolation
             wattage = idle + (max - idle) * (cpu / 100);
-            console.log('idle', idle, 'max', max, 'cpu', cpu, 'wattage', wattage);
         }
         //  duration is in seconds
         //  wattage is in watts

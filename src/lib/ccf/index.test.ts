@@ -6,7 +6,11 @@ jest.setTimeout(30000);
 describe('ccf:configure test', () => {
     test('initialize with params', async () => {
         const impactModel = new CloudCarbonFootprint();
-        await impactModel.configure('test', {'provider': 'aws', 'instance_type': 't2.micro'});
+        await impactModel.configure('test', {
+            'provider': 'aws',
+            'instance_type': 't2.micro',
+            'interpolation': 'spline'
+        });
         await expect(impactModel.calculate([{'duration': 3600, 'cpu': 1, 'datetime': '2021-01-01T00:00:00Z'}]))
             .resolves
             .toStrictEqual([
