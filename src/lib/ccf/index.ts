@@ -340,7 +340,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         return architecture;
     }
 
-// Calculates the embodied emissions for a given observation
+    // Calculates the embodied emissions for a given observation
     embodiedEmissions(observation: { [key: string]: any; }): number {
         // duration
         const duration_in_hours = observation['duration'] / 3600;
