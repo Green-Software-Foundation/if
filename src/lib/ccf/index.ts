@@ -194,6 +194,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         let gcpMax = 0.0;
         let gcpCount = 0;
         // standardize gcp emissions
+        // gcp_use loaded from coefficients-gcp-use.csv file from CCF
         gcp_use.forEach((instance: { [key: string]: any }) => {
             this.gcpList[instance['Architecture']] = instance;
             gcpMin += parseFloat(instance['Min Watts']);
@@ -210,6 +211,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         let azureMin = 0.0;
         let azureMax = 0.0;
         let azureCount = 0;
+        // azure_use loaded from coefficients-azure-use.csv file from CCF
         azure_use.forEach((instance: { [key: string]: any }) => {
             this.azureList[instance['Architecture']] = instance;
             azureMin += parseFloat(instance['Min Watts']);
@@ -226,6 +228,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         let awsMin = 0.0;
         let awsMax = 0.0;
         let awsCount = 0;
+        // aws_use loaded from coefficients-aws-use.csv file from CCF
         aws_use.forEach((instance: { [key: string]: any }) => {
             this.awsList[instance['Architecture']] = instance;
             awsMin += parseFloat(instance['Min Watts']);
@@ -320,7 +323,13 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
             architecture = "Sky Lake";
         }
         if (architecture.includes('Graviton')) {
-            architecture = 'Graviton';
+            if (architecture.includes('2')) {
+                architecture = 'Graviton2';
+            } else if (architecture.includes('3')) {
+                architecture = 'Graviton3';
+            } else {
+                architecture = 'Graviton';
+            }
         }
         if (architecture.includes('Unknown')) {
             architecture = 'Average';
