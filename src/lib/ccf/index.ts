@@ -85,6 +85,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
             } else {
                 throw new Error('Provider not supported');
             }
+        } else {
+            throw new Error('Provider not provided');
         }
         if ('instance_type' in staticParams) {
             const instanceType = staticParams?.instance_type as string;
@@ -93,6 +95,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
             } else {
                 throw new Error('Instance Type not supported');
             }
+        } else {
+            throw new Error('Instance Type not provided');
         }
         if ('expected_lifespan' in staticParams) {
             this.expectedLifespan = staticParams?.expected_lifespan as number;
@@ -102,8 +106,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
                 throw new Error('Interpolation method not supported');
             }
             const interpolation = staticParams?.interpolation as Interpolation;
-            if (interpolation in Interpolation) {
-                this.interpolation = interpolation;
+            if (Object.values(Interpolation).includes(interpolation)) {
+                this.interpolation = interpolation as Interpolation;
             } else {
                 throw new Error('Interpolation method not supported');
             }

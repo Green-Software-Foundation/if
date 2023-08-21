@@ -1,5 +1,5 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {CloudCarbonFootprint} from "./index";
+import {CloudCarbonFootprint, Interpolation} from "./index";
 
 jest.setTimeout(30000);
 
@@ -9,7 +9,7 @@ describe('ccf:configure test', () => {
         await impactModel.configure('test', {
             'provider': 'aws',
             'instance_type': 't2.micro',
-            'interpolation': 'spline'
+            'interpolation': Interpolation.SPLINE
         });
         await expect(impactModel.calculate([{'duration': 3600, 'cpu': 0.5, 'datetime': '2021-01-01T00:00:00Z'}]))
             .resolves
@@ -25,7 +25,7 @@ describe('ccf:configure test', () => {
         await impactModel.configure('test', {
             'provider': 'aws',
             'instance_type': 't2.micro',
-            'interpolation': 'spline'
+            'interpolation': Interpolation.SPLINE
         });
         await expect(impactModel.calculate([
             {
@@ -58,7 +58,7 @@ describe('ccf:configure test', () => {
         await expect(impactModel.configure('test', {
             'provider': 'aws',
             'instance_type': 't5.micro',
-            'interpolation': 'spline',
+            'interpolation': Interpolation.SPLINE
         }))
             .rejects
             .toThrowError();
