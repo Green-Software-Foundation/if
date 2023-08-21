@@ -113,7 +113,6 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         if (this.instanceType === '' || this.provider === '') {
             throw new Error('Configuration is incomplete');
         }
-        // let mTotal = this.embodiedEmissions();
         const results: any[] = [];
         if (Array.isArray(observations)) {
             observations.forEach((observation: { [key: string]: any }) => {
@@ -148,7 +147,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         //    convert cpu usage to percentage
         const cpu = observation['cpu'] * 100.0;
         //  get the wattage for the instance type
-        let wattage = 0;
+        let wattage;
         if (this.provider === 'aws' && this.interpolation === 'spline') {
             const x = [0, 10, 50, 100];
             const y: number[] = [
