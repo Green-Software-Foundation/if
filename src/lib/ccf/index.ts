@@ -239,21 +239,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
             let maxWatts = 0.0;
             let count = 0;
             architectures.forEach((architecture: string) => {
-                if (architecture.includes('AMD ')) {
-                    architecture  = architecture.substring(4);
-                }
-                if (architecture.includes("Skylake")) {
-                    architecture = "Sky Lake";
-                }
-                if (architecture.includes('Graviton')) {
-                    architecture = 'Graviton';
-                }
-                if (architecture.includes('Unknown')) {
-                    architecture = 'Average';
-                }
-                if (!(architecture in this.awsList)){
-                    console.log("ARCHITECTURE:", architecture)
-                }
+                architecture = this.resolveAwsArchitecture(architecture);
                 minWatts += this.awsList[architecture]['Min Watts'] ?? 0;
                 maxWatts += this.awsList[architecture]['Max Watts'] ?? 0;
                 count += 1;
@@ -317,7 +303,28 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         });
     }
 
-    // Calculates the embodied emissions for a given observation
+    // Architecture strings are different between Instances-Use.JSON and the bundled Typescript from CCF.
+    // This function resolves the differences.
+    private resolveAwsArchitecture(architecture: string) {
+        if (architecture.includes('AMD ')) {
+            architecture = architecture.substring(4);
+        }
+        if (architecture.includes("Skylake")) {
+            architecture = "Sky Lake";
+        }
+        if (architecture.includes('Graviton')) {
+            architecture = 'Graviton';
+        }
+        if (architecture.includes('Unknown')) {
+            architecture = 'Average';
+        }
+        if (!(architecture in this.awsList)) {
+            console.log("ARCHITECTURE:", architecture)
+        }
+        return architecture;
+    }
+
+// Calculates the embodied emissions for a given observation
     embodiedEmissions(observation: { [key: string]: any; }): number {
         // duration
         const duration_in_hours = observation['duration'] / 3600;
