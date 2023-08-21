@@ -105,9 +105,9 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
             if (this.provider !== 'aws') {
                 throw new Error('Interpolation method not supported');
             }
-            const interpolation = staticParams?.interpolation as string;
+            const interpolation = staticParams?.interpolation as Interpolation;
             if (Object.values(Interpolation).includes(interpolation)) {
-                this.interpolation = interpolation as Interpolation;
+                this.interpolation = interpolation;
             } else {
                 throw new Error('Interpolation method not supported');
             }
