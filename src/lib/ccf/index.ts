@@ -1,3 +1,4 @@
+import {INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING} from "@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes";
 import {IImpactModelInterface} from "../interfaces";
 import Spline from 'typescript-cubic-spline';
 import * as aws_instances from './aws-instances.json';
@@ -52,6 +53,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     authenticate(authParams: object): void {
         this.authParams = authParams;
     }
+
     /*
     *  Configuration Parameters for StaticParams
     *
@@ -214,18 +216,60 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
             'Max Watts': azureAvgMax,
             'Architecture': 'Average',
         }
+        let awsMin = 0.0;
+        let awsMax = 0.0;
+        let awsCount = 0;
         aws_use.forEach((instance: { [key: string]: any }) => {
             this.awsList[instance['Architecture']] = instance;
+            awsMin += parseFloat(instance['Min Watts']);
+            awsMax += parseFloat(instance['Max Watts']);
+            awsCount += 1;
         });
+        const awsAvgMin = awsMin / awsCount;
+        const awsAvgMax = awsMax / awsCount;
+        this.awsList['Average'] = {
+            'Min Watts': awsAvgMin,
+            'Max Watts': awsAvgMax,
+            'Architecture': 'Average',
+        }
         aws_instances.forEach((instance: { [key: string]: any }) => {
+            const cpus = parseInt(instance['Instance vCPU'], 10);
+            let architectures = INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING[instance['Instance type']] ?? ['Average']
+            let minWatts = 0.0;
+            let maxWatts = 0.0;
+            let count = 0;
+            architectures.forEach((architecture: string) => {
+                if (architecture.includes('AMD ')) {
+                    architecture  = architecture.substring(4);
+                }
+                if (architecture.includes("Skylake")) {
+                    architecture = "Sky Lake";
+                }
+                if (architecture.includes('Graviton')) {
+                    architecture = 'Graviton';
+                }
+                if (architecture.includes('Unknown')) {
+                    architecture = 'Average';
+                }
+                if (!(architecture in this.awsList)){
+                    console.log("ARCHITECTURE:", architecture)
+                }
+                minWatts += this.awsList[architecture]['Min Watts'] ?? 0;
+                maxWatts += this.awsList[architecture]['Max Watts'] ?? 0;
+                count += 1;
+            });
+            minWatts = minWatts / count;
+            maxWatts = maxWatts / count;
             this.computeInstances['aws'][instance['Instance type']] = {
                 'consumption': {
                     'idle': parseFloat(instance['Instance @ Idle'].replace(',', '.')),
                     'tenPercent': parseFloat(instance['Instance @ 10%'].replace(',', '.')),
                     'fiftyPercent': parseFloat(instance['Instance @ 50%'].replace(',', '.')),
                     'hundredPercent': parseFloat(instance['Instance @ 100%'].replace(',', '.')),
+                    'minWatts': minWatts,
+                    'maxWatts': maxWatts,
                 },
-                'vCPUs': parseInt(instance['Instance vCPU'], 10),
+                'vCPUs': cpus,
                 'maxvCPUs': parseInt(instance['Platform Total Number of vCPU'], 10),
                 'name': instance['Instance type'],
             } as IComputeInstance;
