@@ -1,10 +1,15 @@
 import axios from 'axios';
 
 import {IImpactModelInterface} from './interfaces';
-
+export {IImpactModelInterface} from './interfaces';
 import {CONFIG} from '../config';
 
 import {
+  BoaviztaInstanceTypes,
+  IBoaviztaUsageSCI,
+  KeyValuePair,
+} from '../types/boavizta';
+export {
   BoaviztaInstanceTypes,
   IBoaviztaUsageSCI,
   KeyValuePair,
