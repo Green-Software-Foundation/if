@@ -30,7 +30,13 @@ interface IComputeInstance {
     maxVCPUs?: number;
 }
 
+export enum Interpolation {
+    LINEAR = 'linear',
+    SPLINE = 'spline'
+}
+
 export class CloudCarbonFootprint implements IImpactModelInterface {
+    // Defined for compatibility. Not used in CCF.
     authParams: object | undefined;
     // name of the data source
     name: string | undefined;
@@ -45,17 +51,21 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     provider: string = '';
     instanceType: string = '';
     expectedLifespan = 4;
-    interpolation: string = 'linear';
+
+    interpolation = Interpolation.LINEAR;
 
     constructor() {
         this.standardizeInstanceMetrics();
     }
 
+    // Defined for compatibility. Not used in CCF.
     authenticate(authParams: object): void {
         this.authParams = authParams;
     }
 
     /*
+    *  Parameters:
+    *   name: name of the resource
     *  Configuration Parameters for StaticParams
     *
     *  provider: aws, gcp, azure
@@ -88,8 +98,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
             this.expectedLifespan = staticParams?.expected_lifespan as number;
         }
         if ('interpolation' in staticParams) {
-            const interpolation = staticParams?.interpolation as string;
-            if (['linear', 'spline'].includes(interpolation)) {
+            if (this.provider !== 'aws') {
+                throw new Error('Interpolation method not supported');
+            }
+            const interpolation = staticParams?.interpolation as Interpolation;
+            if (interpolation in Interpolation) {
                 this.interpolation = interpolation;
             } else {
                 throw new Error('Interpolation method not supported');
