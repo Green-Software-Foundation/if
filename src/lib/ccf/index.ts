@@ -41,18 +41,18 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     // name of the data source
     name: string | undefined;
     // compute instances grouped by the provider with usage data
-    computeInstances: { [key: string]: { [key: string]: IComputeInstance } } = {};
+    private computeInstances: { [key: string]: { [key: string]: IComputeInstance } } = {};
 
     // list of all the compute instances by Architecture
-    gcpList: { [key: string]: any } = {};
-    azureList: { [key: string]: any } = {};
-    awsList: { [key: string]: any } = {};
+    private gcpList: { [key: string]: any } = {};
+    private azureList: { [key: string]: any } = {};
+    private awsList: { [key: string]: any } = {};
 
-    provider: string = '';
-    instanceType: string = '';
-    expectedLifespan = 4;
+    private provider: string = '';
+    private instanceType: string = '';
+    private expectedLifespan = 4;
 
-    interpolation = Interpolation.LINEAR;
+    private interpolation = Interpolation.LINEAR;
 
     constructor() {
         this.standardizeInstanceMetrics();
@@ -132,9 +132,9 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
      * Calculate the total emissions for a list of observations
      *
      * Each Observation require:
-     *  datetime: ISO 8601 datetime string
-     *  duration: duration of the observation in seconds
-     *  cpu: cpu usage in percentage
+     *  @param datetime ISO 8601 datetime string
+     *  @param duration duration of the observation in seconds
+     *  @param cpu: cpu usage in percentage
      */
     async calculate(observations: object | object[] | undefined): Promise<object> {
 
