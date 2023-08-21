@@ -58,21 +58,23 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         this.standardizeInstanceMetrics();
     }
 
-    // Defined for compatibility. Not used in CCF.
+    /**
+     * Defined for compatibility. Not used in CCF.
+     */
     authenticate(authParams: object): void {
         this.authParams = authParams;
     }
 
-    /*
-    *  Parameters:
-    *   name: name of the resource
-    *  Configuration Parameters for StaticParams
-    *
-    *  provider: aws, gcp, azure
-    *  instance_type: instance type from the list of supported instances
-    *  expected_lifespan: expected lifespan of the instance in years
-    *  interpolation: linear(All Clouds), spline (only for AWS)
-    */
+    /**
+     *  Parameters:
+     *   name: name of the resource
+     *  Configuration Parameters for StaticParams
+     *
+     *  provider: aws, gcp, azure
+     *  instance_type: instance type from the list of supported instances
+     *  expected_lifespan: expected lifespan of the instance in years
+     *  interpolation: linear(All Clouds), spline (only for AWS)
+     */
     async configure(name: string, staticParams: object | undefined = undefined): Promise<IImpactModelInterface> {
         this.name = name;
         if (staticParams === undefined) {
@@ -115,7 +117,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         return this;
     }
 
-    /*
+    /**
      * Calculate the total emissions for a list of observations
      *
      * Each Observation require:
@@ -145,7 +147,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         return results;
     }
 
-    /*
+    /**
      * Calculates the energy consumption for a single observation
      * requires
      *
@@ -194,11 +196,14 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     }
 
 
+    /**
+     * Returns model identifier
+     */
     modelIdentifier(): string {
         return "ccf.cloud.sci";
     }
 
-    /*
+    /**
      * Standardize the instance metrics for all the providers
      *
      * Maps the instance metrics to a standard format (min, max, idle, 10%, 50%, 100%) for all the providers
@@ -357,8 +362,10 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         return architecture;
     }
 
-    // Calculates the embodied emissions for a given observation
-    embodiedEmissions(observation: { [key: string]: any; }): number {
+    /**
+     * Calculates the embodied emissions for a given observation
+     */
+    private embodiedEmissions(observation: { [key: string]: any; }): number {
         // duration
         const duration_in_hours = observation['duration'] / 3600;
         // M = TE * (TR/EL) * (RR/TR)
