@@ -38,8 +38,11 @@
     "yarn": "1.22.19"
   },
   "jsii": {
-    "outdir": "dist",
     "versionFormat": "full",
+    "tsc": {
+      "outDir": "./dist",
+      "rootDir": "./src"
+    },
     "targets": {
       "java": {
         "package": "org.greensoftware.carbonql",
@@ -65,7 +68,7 @@
   },
   "keywords": [],
   "license": "ISC",
-  "main": "lib/index.js",
+  "main": "src/lib/index.ts",
   "repository": {
     "url": "https://github.com/Green-Software-Foundation/carbon-ql.git"
   },
@@ -79,5 +82,5 @@
     "test": "jest"
   },
   "stability": "stable",
-  "types": "lib/index.d.ts"
+  "types": "src/lib/index.d.ts"
 }
