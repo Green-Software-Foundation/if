@@ -6,7 +6,7 @@ tags:
   category: on-premise
 config:
   pipeline:
-    calculation: msft-eshoppen
+    calculation: default
     normalization: default
     aggregation: default
     enrichment: default

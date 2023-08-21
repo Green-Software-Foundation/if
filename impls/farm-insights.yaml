@@ -6,22 +6,19 @@ tags:
   category: device
 config:
   pipeline:
-    calculation: farm-insights
+    calculation: default
     normalization: default
     aggregation: default
     enrichment: default
 graph:
   rasp-pi: 
+    model: sci-coefficient
     config:
-      embodied-c: 55 #kg CO2eq
-      margin-emissions: 0.713 #kg/kWh/day
-    children:
-      child:
-        observations:
-          common:
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 86400 # one day in seconds
-              energy_efficiency: 0.003 #kWh/day
-          mapping:
-              units: year
+      e: 0.003
+      i: 0.713
+      r: 1 (day?)
+      te: 55
+      tir: 1 (day?)
+      el: 1095 (days?)
+      rr: 1
+      tor: 1
