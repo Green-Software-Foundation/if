@@ -268,8 +268,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
           hundredPercent: parseFloat(
             instance['Instance @ 100%'].replace(',', '.')
           ),
-          minWatts: minWatts,
-          maxWatts: maxWatts,
+          minWatts: minWatts * cpus,
+          maxWatts: maxWatts * cpus,
         },
         vCPUs: cpus,
         maxvCPUs: parseInt(instance['Platform Total Number of vCPU'], 10),

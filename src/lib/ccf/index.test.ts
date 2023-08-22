@@ -1,6 +1,5 @@
 import {describe, expect, jest, test} from '@jest/globals';
 import {CloudCarbonFootprint} from './index';
-import {Interpolation} from '../interfaces';
 
 jest.setTimeout(30000);
 
@@ -10,7 +9,6 @@ describe('ccf:configure test', () => {
     await impactModel.configure('test', {
       provider: 'aws',
       instance_type: 't2.micro',
-      interpolation: Interpolation.SPLINE,
     });
     await expect(
       impactModel.calculate([
@@ -18,39 +16,125 @@ describe('ccf:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        e: 0.004900000000000001,
+        e: 0.0023031270462730543,
         m: 0.04216723744292237,
       },
     ]);
   });
-  test('initialize with params', async () => {
+  test('initialize with params:aws', async () => {
     const impactModel = new CloudCarbonFootprint();
     await impactModel.configure('test', {
       provider: 'aws',
-      instance_type: 't2.micro',
-      interpolation: Interpolation.SPLINE,
+      instance_type: 'm5n.large',
     });
     await expect(
       impactModel.calculate([
+        {
+          duration: 3600,
+          cpu: 0.1,
+          datetime: '2021-01-01T00:00:00Z',
+        },
         {
           duration: 3600,
           cpu: 0.5,
           datetime: '2021-01-01T00:00:00Z',
         },
         {
-          duration: 3600 * 2,
-          cpu: 0.5,
-          datetime: '2021-01-02T00:00:00Z',
+          duration: 3600,
+          cpu: 1,
+          datetime: '2021-01-01T00:00:00Z',
         },
       ])
     ).resolves.toStrictEqual([
       {
-        e: 0.004900000000000001,
-        m: 0.04216723744292237,
+        e: 0.0019435697915529846,
+        m: 0.09194006849315069,
       },
       {
-        e: 0.004900000000000001 * 2,
-        m: 0.04216723744292237 * 2,
+        e: 0.0046062540925461085,
+        m: 0.09194006849315069,
+      },
+      {
+        e: 0.007934609468787513,
+        m: 0.09194006849315069,
+      },
+    ]);
+  });
+  test('initialize with params:azure', async () => {
+    const impactModel = new CloudCarbonFootprint();
+    await impactModel.configure('test', {
+      provider: 'azure',
+      instance_type: 'D2 v4',
+    });
+    await expect(
+      impactModel.calculate([
+        {
+          duration: 3600,
+          cpu: 0.1,
+          datetime: '2021-01-01T00:00:00Z',
+        },
+        {
+          duration: 3600,
+          cpu: 0.5,
+          datetime: '2021-01-01T00:00:00Z',
+        },
+        {
+          duration: 3600,
+          cpu: 1,
+          datetime: '2021-01-01T00:00:00Z',
+        },
+      ])
+    ).resolves.toStrictEqual([
+      {
+        e: 0.0019435697915529846,
+        m:0.08179908675799086,
+      },
+      {
+        e:0.0046062540925461085,
+        m:0.08179908675799086,
+      },
+      {
+        e: 0.007934609468787513,
+        m:0.08179908675799086,
+      },
+    ]);
+  });
+  test('initialize with params:gcp', async () => {
+    const impactModel = new CloudCarbonFootprint();
+    await impactModel.configure('test', {
+      provider: 'gcp',
+      instance_type: 'n2-standard-2',
+    });
+    await expect(
+      impactModel.calculate([
+        {
+          duration: 3600,
+          cpu: 0.1,
+          datetime: '2021-01-01T00:00:00Z',
+        },
+        {
+          duration: 3600,
+          cpu: 0.5,
+          datetime: '2021-01-01T00:00:00Z',
+        },
+        {
+          duration: 3600,
+          cpu: 1,
+          datetime: '2021-01-01T00:00:00Z',
+        },
+      ])
+    ).resolves.toStrictEqual([
+      {
+        e: 0.0018785992503765141,
+        m: 0.10778881278538813,
+      },
+      {
+        e: 0.004281401386663755,
+        m: 0.10778881278538813,
+      },
+      {
+        e: 0.0072849040570228075,
+        m: 0.10778881278538813,
       },
     ]);
   });
@@ -61,7 +145,6 @@ describe('ccf:configure test', () => {
       impactModel.configure('test', {
         provider: 'aws',
         instance_type: 't5.micro',
-        interpolation: Interpolation.SPLINE,
       })
     ).rejects.toThrowError();
     await expect(
