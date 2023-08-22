@@ -4,7 +4,7 @@ import {CloudCarbonFootprint} from './index';
 jest.setTimeout(30000);
 
 describe('ccf:configure test', () => {
-  test('initialize with params', async () => {
+  test('initialize with params', async () =>  {
     const impactModel = new CloudCarbonFootprint();
     await impactModel.configure('test', {
       provider: 'aws',
