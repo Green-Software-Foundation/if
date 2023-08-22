@@ -46,9 +46,9 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     {};
 
   // list of all the compute instances by Architecture
-  private gcpList: {[key: string]: any} = {};
-  private azureList: {[key: string]: any} = {};
-  private awsList: {[key: string]: any} = {};
+  private gcpList: KeyValuePair = {};
+  private azureList: KeyValuePair = {};
+  private awsList: KeyValuePair = {};
 
   private provider = '';
   private instanceType = '';
@@ -151,7 +151,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
 
     const results: any[] = [];
     if (Array.isArray(observations)) {
-      observations.forEach((observation: {[key: string]: any}) => {
+      observations.forEach((observation: KeyValuePair) => {
         const e = this.calculateEnergy(observation);
         const m = this.embodiedEmissions(observation);
 
@@ -255,7 +255,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     let gcpCount = 0;
     // standardize gcp emissions
     // gcp_use loaded from coefficients-gcp-use.csv file from CCF
-    gcp_use.forEach((instance: {[key: string]: any}) => {
+    gcp_use.forEach((instance: KeyValuePair) => {
       this.gcpList[instance['Architecture']] = instance;
       gcpMin += parseFloat(instance['Min Watts']);
       gcpMax += parseFloat(instance['Max Watts']);
@@ -272,7 +272,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     let azureMax = 0.0;
     let azureCount = 0;
     // azure_use loaded from coefficients-azure-use.csv file from CCF
-    azure_use.forEach((instance: {[key: string]: any}) => {
+    azure_use.forEach((instance: KeyValuePair) => {
       this.azureList[instance['Architecture']] = instance;
       azureMin += parseFloat(instance['Min Watts']);
       azureMax += parseFloat(instance['Max Watts']);
@@ -289,7 +289,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     let awsMax = 0.0;
     let awsCount = 0;
     // aws_use loaded from coefficients-aws-use.csv file from CCF
-    aws_use.forEach((instance: {[key: string]: any}) => {
+    aws_use.forEach((instance: KeyValuePair) => {
       this.awsList[instance['Architecture']] = instance;
       awsMin += parseFloat(instance['Min Watts']);
       awsMax += parseFloat(instance['Max Watts']);
@@ -302,7 +302,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       'Max Watts': awsAvgMax,
       Architecture: 'Average',
     };
-    aws_instances.forEach((instance: {[key: string]: any}) => {
+    aws_instances.forEach((instance: KeyValuePair) => {
       const cpus = parseInt(instance['Instance vCPU'], 10);
       const architectures = INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING[
         instance['Instance type']
@@ -336,7 +336,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         name: instance['Instance type'],
       } as IComputeInstance;
     });
-    gcp_instances.forEach((instance: {[key: string]: any}) => {
+    gcp_instances.forEach((instance: KeyValuePair) => {
       const cpus = parseInt(instance['Instance vCPUs'], 10);
       let architecture = instance['Microarchitecture'];
       if (!(architecture in this.azureList)) {
@@ -355,7 +355,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         ),
       } as IComputeInstance;
     });
-    azure_instances.forEach((instance: {[key: string]: any}) => {
+    azure_instances.forEach((instance: KeyValuePair) => {
       const cpus = parseInt(instance['Instance vCPUs'], 10);
       let architecture = instance['Microarchitecture'];
       if (!(architecture in this.azureList)) {
@@ -374,15 +374,15 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         ),
       } as IComputeInstance;
     });
-    aws_embodied.forEach((instance: {[key: string]: any}) => {
+    aws_embodied.forEach((instance: KeyValuePair) => {
       this.computeInstances['aws'][instance['type']].embodiedEmission =
         instance['total'];
     });
-    gcp_embodied.forEach((instance: {[key: string]: any}) => {
+    gcp_embodied.forEach((instance: KeyValuePair) => {
       this.computeInstances['gcp'][instance['type']].embodiedEmission =
         instance['total'];
     });
-    azure_embodied.forEach((instance: {[key: string]: any}) => {
+    azure_embodied.forEach((instance: KeyValuePair) => {
       this.computeInstances['azure'][instance['type']].embodiedEmission =
         instance['total'];
     });
@@ -423,7 +423,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
   /**
    * Calculates the embodied emissions for a given observation
    */
-  private embodiedEmissions(observation: {[key: string]: any}): number {
+  private embodiedEmissions(observation: KeyValuePair): number {
     // duration
     const duration_in_hours = observation['duration'] / 3600;
     // M = TE * (TR/EL) * (RR/TR)
