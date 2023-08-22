@@ -10,7 +10,7 @@ import * as azure_instances from './azure-instances.json';
 import * as gcp_embodied from './gcp-embodied.json';
 import * as aws_embodied from './aws-embodied.json';
 import * as azure_embodied from './azure-embodied.json';
-import {KeyValuePair} from "../../types/boavizta";
+import {KeyValuePair} from '../../types/boavizta';
 
 // consumption information for a single instance
 interface IConsumption {
