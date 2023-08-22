@@ -12,6 +12,8 @@
     "typescript",
     "ts-sync-request",
     "@cloud-carbon-footprint/core",
+    "@cloud-carbon-footprint/aws",
+    "typescript-cubic-spline",
     "@types/node"
   ],
   "dependencies": {
