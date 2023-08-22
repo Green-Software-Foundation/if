@@ -1,5 +1,10 @@
 import {INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING} from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
-import {ICcfResult, IComputeInstance, IImpactModelInterface, Interpolation} from '../interfaces';
+import {
+  ICcfResult,
+  IComputeInstance,
+  IImpactModelInterface,
+  Interpolation,
+} from '../interfaces';
 import Spline from 'typescript-cubic-spline';
 import * as AWS_INSTANCES from './aws-instances.json';
 import * as GCP_INSTANCES from './gcp-instances.json';
@@ -26,9 +31,9 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
 
   // list of all the by Architecture
   private computeInstanceUsageByArchitecture: KeyValuePair = {
-    'gcp': {},
-    'aws': {},
-    'azure': {},
+    gcp: {},
+    aws: {},
+    azure: {},
   };
   private provider = '';
   private instanceType = '';
@@ -235,14 +240,20 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       const cpus = parseInt(instance['Instance vCPU'], 10);
       const architectures = INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING[
         instance['Instance type']
-        ] ?? ['Average'];
+      ] ?? ['Average'];
       let minWatts = 0.0;
       let maxWatts = 0.0;
       let count = 0;
       architectures.forEach((architecture: string) => {
         architecture = this.resolveAwsArchitecture(architecture);
-        minWatts += this.computeInstanceUsageByArchitecture['aws'][architecture]['Min Watts'] ?? 0;
-        maxWatts += this.computeInstanceUsageByArchitecture['aws'][architecture]['Max Watts'] ?? 0;
+        minWatts +=
+          this.computeInstanceUsageByArchitecture['aws'][architecture][
+            'Min Watts'
+          ] ?? 0;
+        maxWatts +=
+          this.computeInstanceUsageByArchitecture['aws'][architecture][
+            'Max Watts'
+          ] ?? 0;
         count += 1;
       });
       minWatts = minWatts / count;
@@ -266,7 +277,6 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       } as IComputeInstance;
     });
     GCP_INSTANCES.forEach((instance: KeyValuePair) => {
-
       const cpus = parseInt(instance['Instance vCPUs'], 10);
       let architecture = instance['Microarchitecture'];
 
@@ -277,8 +287,14 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         name: instance['Machine type'],
         vCPUs: cpus,
         consumption: {
-          minWatts: this.computeInstanceUsageByArchitecture['gcp'][architecture]['Min Watts'] * cpus,
-          maxWatts: this.computeInstanceUsageByArchitecture['gcp'][architecture]['Max Watts'] * cpus,
+          minWatts:
+            this.computeInstanceUsageByArchitecture['gcp'][architecture][
+              'Min Watts'
+            ] * cpus,
+          maxWatts:
+            this.computeInstanceUsageByArchitecture['gcp'][architecture][
+              'Max Watts'
+            ] * cpus,
         },
         maxvCPUs: parseInt(
           instance['Platform vCPUs (highest vCPU possible)'],
@@ -294,8 +310,14 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       }
       this.computeInstances['azure'][instance['Virtual Machine']] = {
         consumption: {
-          minWatts: this.computeInstanceUsageByArchitecture['azure'][architecture]['Min Watts'] * cpus,
-          maxWatts: this.computeInstanceUsageByArchitecture['azure'][architecture]['Max Watts'] * cpus,
+          minWatts:
+            this.computeInstanceUsageByArchitecture['azure'][architecture][
+              'Min Watts'
+            ] * cpus,
+          maxWatts:
+            this.computeInstanceUsageByArchitecture['azure'][architecture][
+              'Max Watts'
+            ] * cpus,
         },
         name: instance['Virtual Machine'],
         vCPUs: instance['Instance vCPUs'],
@@ -324,7 +346,9 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     let max = 0.0;
     let count = 0.0;
     instanceList.forEach((instance: KeyValuePair) => {
-      this.computeInstanceUsageByArchitecture[provider][instance['Architecture']] = instance;
+      this.computeInstanceUsageByArchitecture[provider][
+        instance['Architecture']
+      ] = instance;
       min += parseFloat(instance['Min Watts']);
       max += parseFloat(instance['Max Watts']);
       count += 1.0;
@@ -335,10 +359,10 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       'Min Watts': avgMin,
       'Max Watts': avgMax,
       Architecture: 'Average',
-    }
+    };
   }
 
-// Architecture strings are different between Instances-Use.JSON and the bundled Typescript from CCF.
+  // Architecture strings are different between Instances-Use.JSON and the bundled Typescript from CCF.
   // This function resolves the differences.
   private resolveAwsArchitecture(architecture: string) {
     if (architecture.includes('AMD ')) {
@@ -362,7 +386,6 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     if (architecture.includes('Unknown')) {
       architecture = 'Average';
     }
-
 
     if (!(architecture in this.computeInstanceUsageByArchitecture['aws'])) {
       console.log('ARCHITECTURE:', architecture);
