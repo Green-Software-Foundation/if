@@ -11,7 +11,6 @@ import * as gcp_embodied from './gcp-embodied.json';
 import * as aws_embodied from './aws-embodied.json';
 import * as azure_embodied from './azure-embodied.json';
 import {KeyValuePair} from '../../types/boavizta';
-import {IUsageData} from "@cloud-carbon-footprint/core/dist";
 
 // consumption information for a single instance
 interface IConsumption {
