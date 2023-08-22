@@ -1,15 +1,15 @@
 import {INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING} from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
 import {IImpactModelInterface} from '../interfaces';
 import Spline from 'typescript-cubic-spline';
-import * as aws_instances from './aws-instances.json';
-import * as gcp_instances from './gcp-instances.json';
-import * as gcp_use from './gcp-use.json';
-import * as aws_use from './aws-use.json';
-import * as azure_use from './azure-use.json';
-import * as azure_instances from './azure-instances.json';
-import * as gcp_embodied from './gcp-embodied.json';
-import * as aws_embodied from './aws-embodied.json';
-import * as azure_embodied from './azure-embodied.json';
+import * as AWS_INSTANCES from './aws-instances.json';
+import * as GCP_INSTANCES from './gcp-instances.json';
+import * as AZURE_INSTANCES from './azure-instances.json';
+import * as GCP_USE from './gcp-use.json';
+import * as AWS_USE from './aws-use.json';
+import * as AZURE_USE from './azure-use.json';
+import * as GCP_EMBODIED from './gcp-embodied.json';
+import * as AWS_EMBODIED from './aws-embodied.json';
+import * as AZURE_EMBODIED from './azure-embodied.json';
 import {KeyValuePair} from '../../types/boavizta';
 
 // consumption information for a single instance
@@ -53,11 +53,12 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     };
   } = {};
 
-  // list of all the compute instances by Architecture
-  private gcpList: KeyValuePair = {};
-  private azureList: KeyValuePair = {};
-  private awsList: KeyValuePair = {};
-
+  // list of all the by Architecture
+  private computeInstanceUsageByArchitecture: KeyValuePair = {
+    'gcp': {},
+    'aws': {},
+    'azure': {},
+  };
   private provider = '';
   private instanceType = '';
   private expectedLifespan = 4;
@@ -256,70 +257,21 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     this.computeInstances['aws'] = {};
     this.computeInstances['gcp'] = {};
     this.computeInstances['azure'] = {};
-    let gcpMin = 0.0;
-    let gcpMax = 0.0;
-    let gcpCount = 0;
-    // standardize gcp emissions
-    // gcp_use loaded from coefficients-gcp-use.csv file from CCF
-    gcp_use.forEach((instance: KeyValuePair) => {
-      this.gcpList[instance['Architecture']] = instance;
-      gcpMin += parseFloat(instance['Min Watts']);
-      gcpMax += parseFloat(instance['Max Watts']);
-      gcpCount += 1;
-    });
-    const gcpAvgMin = gcpMin / gcpCount;
-    const gcpAvgMax = gcpMax / gcpCount;
-    this.gcpList['Average'] = {
-      'Min Watts': gcpAvgMin,
-      'Max Watts': gcpAvgMax,
-      Architecture: 'Average',
-    };
-    let azureMin = 0.0;
-    let azureMax = 0.0;
-    let azureCount = 0;
-    // azure_use loaded from coefficients-azure-use.csv file from CCF
-    azure_use.forEach((instance: KeyValuePair) => {
-      this.azureList[instance['Architecture']] = instance;
-      azureMin += parseFloat(instance['Min Watts']);
-      azureMax += parseFloat(instance['Max Watts']);
-      azureCount += 1;
-    });
-    const azureAvgMin = azureMin / azureCount;
-    const azureAvgMax = azureMax / azureCount;
-    this.azureList['Average'] = {
-      'Min Watts': azureAvgMin,
-      'Max Watts': azureAvgMax,
-      Architecture: 'Average',
-    };
-    let awsMin = 0.0;
-    let awsMax = 0.0;
-    let awsCount = 0;
-    // aws_use loaded from coefficients-aws-use.csv file from CCF
-    aws_use.forEach((instance: KeyValuePair) => {
-      this.awsList[instance['Architecture']] = instance;
-      awsMin += parseFloat(instance['Min Watts']);
-      awsMax += parseFloat(instance['Max Watts']);
-      awsCount += 1;
-    });
-    const awsAvgMin = awsMin / awsCount;
-    const awsAvgMax = awsMax / awsCount;
-    this.awsList['Average'] = {
-      'Min Watts': awsAvgMin,
-      'Max Watts': awsAvgMax,
-      Architecture: 'Average',
-    };
-    aws_instances.forEach((instance: KeyValuePair) => {
+    this.calculateAverage('gcp', GCP_USE);
+    this.calculateAverage('azure', AZURE_USE);
+    this.calculateAverage('aws', AWS_USE);
+    AWS_INSTANCES.forEach((instance: KeyValuePair) => {
       const cpus = parseInt(instance['Instance vCPU'], 10);
       const architectures = INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING[
         instance['Instance type']
-      ] ?? ['Average'];
+        ] ?? ['Average'];
       let minWatts = 0.0;
       let maxWatts = 0.0;
       let count = 0;
       architectures.forEach((architecture: string) => {
         architecture = this.resolveAwsArchitecture(architecture);
-        minWatts += this.awsList[architecture]['Min Watts'] ?? 0;
-        maxWatts += this.awsList[architecture]['Max Watts'] ?? 0;
+        minWatts += this.computeInstanceUsageByArchitecture['aws'][architecture]['Min Watts'] ?? 0;
+        maxWatts += this.computeInstanceUsageByArchitecture['aws'][architecture]['Max Watts'] ?? 0;
         count += 1;
       });
       minWatts = minWatts / count;
@@ -342,18 +294,20 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         name: instance['Instance type'],
       } as IComputeInstance;
     });
-    gcp_instances.forEach((instance: KeyValuePair) => {
+    GCP_INSTANCES.forEach((instance: KeyValuePair) => {
+
       const cpus = parseInt(instance['Instance vCPUs'], 10);
       let architecture = instance['Microarchitecture'];
-      if (!(architecture in this.azureList)) {
+
+      if (!(architecture in this.computeInstanceUsageByArchitecture['gcp'])) {
         architecture = 'Average';
       }
       this.computeInstances['gcp'][instance['Machine type']] = {
         name: instance['Machine type'],
         vCPUs: cpus,
         consumption: {
-          minWatts: this.gcpList[architecture]['Min Watts'] * cpus,
-          maxWatts: this.gcpList[architecture]['Max Watts'] * cpus,
+          minWatts: this.computeInstanceUsageByArchitecture['gcp'][architecture]['Min Watts'] * cpus,
+          maxWatts: this.computeInstanceUsageByArchitecture['gcp'][architecture]['Max Watts'] * cpus,
         },
         maxvCPUs: parseInt(
           instance['Platform vCPUs (highest vCPU possible)'],
@@ -361,16 +315,16 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         ),
       } as IComputeInstance;
     });
-    azure_instances.forEach((instance: KeyValuePair) => {
+    AZURE_INSTANCES.forEach((instance: KeyValuePair) => {
       const cpus = parseInt(instance['Instance vCPUs'], 10);
       let architecture = instance['Microarchitecture'];
-      if (!(architecture in this.azureList)) {
+      if (!(architecture in this.computeInstanceUsageByArchitecture['azure'])) {
         architecture = 'Average';
       }
       this.computeInstances['azure'][instance['Virtual Machine']] = {
         consumption: {
-          minWatts: this.azureList[architecture]['Min Watts'] * cpus,
-          maxWatts: this.azureList[architecture]['Max Watts'] * cpus,
+          minWatts: this.computeInstanceUsageByArchitecture['azure'][architecture]['Min Watts'] * cpus,
+          maxWatts: this.computeInstanceUsageByArchitecture['azure'][architecture]['Max Watts'] * cpus,
         },
         name: instance['Virtual Machine'],
         vCPUs: instance['Instance vCPUs'],
@@ -380,21 +334,40 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         ),
       } as IComputeInstance;
     });
-    aws_embodied.forEach((instance: KeyValuePair) => {
+    AWS_EMBODIED.forEach((instance: KeyValuePair) => {
       this.computeInstances['aws'][instance['type']].embodiedEmission =
         instance['total'];
     });
-    gcp_embodied.forEach((instance: KeyValuePair) => {
+    GCP_EMBODIED.forEach((instance: KeyValuePair) => {
       this.computeInstances['gcp'][instance['type']].embodiedEmission =
         instance['total'];
     });
-    azure_embodied.forEach((instance: KeyValuePair) => {
+    AZURE_EMBODIED.forEach((instance: KeyValuePair) => {
       this.computeInstances['azure'][instance['type']].embodiedEmission =
         instance['total'];
     });
   }
 
-  // Architecture strings are different between Instances-Use.JSON and the bundled Typescript from CCF.
+  private calculateAverage(provider: string, instanceList: KeyValuePair[]) {
+    let min = 0.0;
+    let max = 0.0;
+    let count = 0.0;
+    instanceList.forEach((instance: KeyValuePair) => {
+      this.computeInstanceUsageByArchitecture[provider][instance['Architecture']] = instance;
+      min += parseFloat(instance['Min Watts']);
+      max += parseFloat(instance['Max Watts']);
+      count += 1.0;
+    });
+    const avgMin = min / count;
+    const avgMax = max / count;
+    this.computeInstanceUsageByArchitecture[provider]['Average'] = {
+      'Min Watts': avgMin,
+      'Max Watts': avgMax,
+      Architecture: 'Average',
+    }
+  }
+
+// Architecture strings are different between Instances-Use.JSON and the bundled Typescript from CCF.
   // This function resolves the differences.
   private resolveAwsArchitecture(architecture: string) {
     if (architecture.includes('AMD ')) {
@@ -419,7 +392,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       architecture = 'Average';
     }
 
-    if (!(architecture in this.awsList)) {
+
+    if (!(architecture in this.computeInstanceUsageByArchitecture['aws'])) {
       console.log('ARCHITECTURE:', architecture);
     }
 
@@ -431,7 +405,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
    */
   private embodiedEmissions(observation: KeyValuePair): number {
     // duration
-    const duration_in_hours = observation['duration'] / 3600;
+    const durationInHours = observation['duration'] / 3600;
     // M = TE * (TR/EL) * (RR/TR)
     // Where:
     // TE = Total Embodied Emissions, the sum of Life Cycle Assessment(LCA) emissions for all hardware components
@@ -439,20 +413,20 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     // EL = Expected Lifespan, the anticipated time that the equipment will be installed
     // RR = Resources Reserved, the number of resources reserved for use by the software.
     // TR = Total Resources, the total number of resources available.
-    const TotalEmissions =
+    const totalEmissions =
       this.computeInstances[this.provider][this.instanceType]
         .embodiedEmission ?? 0;
-    const TimeReserved = duration_in_hours;
-    const ExpectedLifespan = 8760 * this.expectedLifespan;
-    const ReservedResources =
+    const timeReserved = durationInHours;
+    const expectedLifespan = 8760 * this.expectedLifespan;
+    const reservedResources =
       this.computeInstances[this.provider][this.instanceType].vCPUs ?? 1.0;
-    const TotalResources =
+    const totalResources =
       this.computeInstances[this.provider][this.instanceType].maxVCPUs ?? 1.0;
 
     return (
-      TotalEmissions *
-      (TimeReserved / ExpectedLifespan) *
-      (ReservedResources / TotalResources)
+      totalEmissions *
+      (timeReserved / expectedLifespan) *
+      (reservedResources / totalResources)
     );
   }
 }
