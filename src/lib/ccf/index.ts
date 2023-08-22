@@ -47,8 +47,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
   // name of the data source
   name: string | undefined;
   // compute instances grouped by the provider with usage data
-  private computeInstances: {[key: string]: {[key: string]: IComputeInstance}} =
-    {};
+  private computeInstances: {
+    [key: string]: {
+      [key: string]: IComputeInstance;
+    };
+  } = {};
 
   // list of all the compute instances by Architecture
   private gcpList: KeyValuePair = {};
@@ -73,10 +76,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
   }
 
   /**
-   *  Parameters:
-   *   name: name of the resource
-   *  Configuration Parameters for StaticParams
-   *
+   *  Configures the CCF Plugin for IEF
+   *  @param {string} name name of the resource
    *  @param {Object} staticParams static parameters for the resource
    *  @param {("aws"|"gcp"|"azure")} staticParams.provider aws, gcp, azure
    *  @param {string} staticParams.instance_type instance type from the list of supported instances
@@ -311,7 +312,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       const cpus = parseInt(instance['Instance vCPU'], 10);
       const architectures = INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING[
         instance['Instance type']
-      ] ?? ['Average'];
+        ] ?? ['Average'];
       let minWatts = 0.0;
       let maxWatts = 0.0;
       let count = 0;
