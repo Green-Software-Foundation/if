@@ -312,7 +312,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       const cpus = parseInt(instance['Instance vCPU'], 10);
       const architectures = INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING[
         instance['Instance type']
-        ] ?? ['Average'];
+      ] ?? ['Average'];
       let minWatts = 0.0;
       let maxWatts = 0.0;
       let count = 0;
