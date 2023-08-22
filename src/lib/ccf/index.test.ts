@@ -1,6 +1,6 @@
 import {describe, expect, jest, test} from '@jest/globals';
 import {CloudCarbonFootprint} from './index';
-import {Interpolation} from "../interfaces";
+import {Interpolation} from '../interfaces';
 
 jest.setTimeout(30000);
 
