@@ -1,5 +1,5 @@
 import {INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING} from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
-import {IImpactModelInterface} from '../interfaces';
+import {ICcfResult, IComputeInstance, IImpactModelInterface, Interpolation} from '../interfaces';
 import Spline from 'typescript-cubic-spline';
 import * as AWS_INSTANCES from './aws-instances.json';
 import * as GCP_INSTANCES from './gcp-instances.json';
@@ -11,35 +11,6 @@ import * as GCP_EMBODIED from './gcp-embodied.json';
 import * as AWS_EMBODIED from './aws-embodied.json';
 import * as AZURE_EMBODIED from './azure-embodied.json';
 import {KeyValuePair} from '../../types/boavizta';
-
-// consumption information for a single instance
-interface IConsumption {
-  idle?: number;
-  tenPercent?: number;
-  fiftyPercent?: number;
-  hundredPercent?: number;
-  minWatts?: number;
-  maxWatts?: number;
-}
-
-// information about a single compute instance
-interface IComputeInstance {
-  consumption: IConsumption;
-  embodiedEmission?: number;
-  name: string;
-  vCPUs?: number;
-  maxVCPUs?: number;
-}
-
-export enum Interpolation {
-  LINEAR = 'linear',
-  SPLINE = 'spline',
-}
-
-export interface ICcfResult {
-  e: number;
-  m: number;
-}
 
 export class CloudCarbonFootprint implements IImpactModelInterface {
   // Defined for compatibility. Not used in CCF.
