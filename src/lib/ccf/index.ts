@@ -142,7 +142,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
    *  @param {Object[]} observations  ISO 8601 datetime string
    *  @param {string} observations[].datetime ISO 8601 datetime string
    *  @param {number} observations[].duration observation duration in seconds
-   *  @param {number} observations[].cpu: cpu usage in percentage
+   *  @param {number} observations[].cpu percentage cpu usage
    */
   async calculate(
     observations: object | object[] | undefined
