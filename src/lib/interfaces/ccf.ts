@@ -1,5 +1,5 @@
 // consumption information for a single instance
-interface IConsumption {
+export interface IConsumption {
   idle?: number;
   tenPercent?: number;
   fiftyPercent?: number;
