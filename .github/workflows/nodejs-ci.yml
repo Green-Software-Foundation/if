@@ -17,12 +17,12 @@ jobs:
           cache: 'yarn'
 
 
-      - name: Run lint
-        run: yarn lint
-        
       - name: Install dependencies
         run: yarn install
 
+      - name: Run lint
+        run: yarn lint
+      
       - name: Build
         run: yarn build
 
