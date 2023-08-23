@@ -416,9 +416,10 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       this.computeInstances[this.provider][this.instanceType].vCPUs ?? 1.0;
     const totalResources =
       this.computeInstances[this.provider][this.instanceType].maxVCPUs ?? 1.0;
-
+    // Multiply totalEmissions by 1000 to convert from kgCO2e to gCO2e
     return (
       totalEmissions *
+      1000 *
       (timeReserved / expectedLifespan) *
       (reservedResources / totalResources)
     );
