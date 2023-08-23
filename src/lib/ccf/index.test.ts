@@ -4,7 +4,7 @@ import {CloudCarbonFootprint} from './index';
 jest.setTimeout(30000);
 
 describe('ccf:configure test', () => {
-  test('initialize with params', async () =>  {
+  test('initialize with params', async () => {
     const impactModel = new CloudCarbonFootprint();
     await impactModel.configure('test', {
       provider: 'aws',
@@ -87,15 +87,15 @@ describe('ccf:configure test', () => {
     ).resolves.toStrictEqual([
       {
         e: 0.0019435697915529846,
-        m:0.08179908675799086,
+        m: 0.08179908675799086,
       },
       {
-        e:0.0046062540925461085,
-        m:0.08179908675799086,
+        e: 0.0046062540925461085,
+        m: 0.08179908675799086,
       },
       {
         e: 0.007934609468787513,
-        m:0.08179908675799086,
+        m: 0.08179908675799086,
       },
     ]);
   });
