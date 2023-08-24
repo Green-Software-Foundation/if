@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import {IImpactModelInterface} from './interfaces';
-export {IImpactModelInterface} from './interfaces';
 import {CONFIG} from '../config';
 
 import {
@@ -9,6 +8,9 @@ import {
   IBoaviztaUsageSCI,
   KeyValuePair,
 } from '../types/boavizta';
+
+export {IImpactModelInterface} from './interfaces';
+
 export {
   BoaviztaInstanceTypes,
   IBoaviztaUsageSCI,
@@ -23,6 +25,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   name: string | undefined;
   sharedParams: object | undefined = undefined;
   metricType: 'cpu' | 'gpu' | 'ram' = 'cpu';
+  expectedLifespan = 4;
 
   authenticate(authParams: object) {
     this.authCredentials = authParams;
@@ -86,6 +89,9 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
       hours_use_time: duration / 3600.0,
       time_workload: metric * 100.0,
     };
+    if (typeof this.expectedLifespan === 'number') {
+      usageInput['years_life_time'] = this.expectedLifespan;
+    }
     usageInput = this.addLocationToUsage(usageInput);
 
     return usageInput;
@@ -171,6 +177,9 @@ export class BoaviztaCpuImpactModel
       throw new Error('Improper configure: Missing core_units parameter');
     }
 
+    if ('expected_lifespan' in staticParams) {
+      this.expectedLifespan = staticParams.expected_lifespan as number;
+    }
     this.sharedParams = Object.assign({}, staticParams);
 
     return this.sharedParams;
@@ -217,6 +226,10 @@ export class BoaviztaCloudImpactModel
     await this.validateInstanceType(staticParams);
     // if no valid location found, throw error
     await this.validateLocation(staticParams);
+    if ('expected_lifespan' in staticParams) {
+      this.expectedLifespan = staticParams.expected_lifespan as number;
+    }
+
     this.sharedParams = Object.assign({}, staticParams);
 
     return this.sharedParams;
