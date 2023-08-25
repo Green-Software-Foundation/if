@@ -46,4 +46,4 @@ function shellCommand(impl, execPath, omplName) {
 //example invocation
 // calling prototype python model available in ief-sandbox repo
 
-//shellCommand('intel.yaml', '/bin/cli', 'ompl.yaml')
+//shellCommand('intel.yaml', '/bin/pimpl.py', 'ompl.yaml')
