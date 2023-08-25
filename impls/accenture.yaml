@@ -1,0 +1,137 @@
+name:  accenture
+description: sci calculation for accenture model (note need to add app gateway SCI to final calculation)
+tags: 
+config:
+  pue: 1.125
+  emission_factor: 350.861
+  embodied_c: 458 #kgCo2 @ 4yr lifespan
+  requests_per_month: 890000
+  embodied_emissions: 763.33
+  pipeline:
+    calculation: default
+    normalization: default
+    aggregation: default
+    enrichment: default
+graph: 
+  vm:
+    config:
+    children:
+      vm1: 
+        observations: 
+          series:
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu_utilization: 15
+              ram_utilization: 75
+              power: 5.26
+              energy: 4.26
+          mapping: 
+              units: month
+      vm2: 
+        observations: 
+          series:
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu_utilization: 12
+              ram_utilization: 72
+              power: 5.26
+              energy: 4.26
+          mapping: 
+              units: month
+      vm3: 
+        observations: 
+          series:
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu_utilization: 10
+              ram_utilization: 65
+              power: 5.20
+              energy: 4.21
+          mapping: 
+              units: month
+      vm4: 
+        observations: 
+          series:
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu_utilization: 9
+              ram_utilization: 70
+              power: 5.20
+              energy: 4.21
+          mapping: 
+              units: month
+      vm5: 
+        observations: 
+          series:
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu_utilization: 9
+              ram_utilization: 70
+              power: 5.20
+              energy: 4.21
+          mapping: 
+              units: month
+      vm6: 
+        observations: 
+          series:
+            - timestamp: 2023-07-06T00:00 
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu_utilization: 8
+              ram_utilization: 65
+              power: 4.06
+              energy: 3.29
+          mapping: 
+              units: month
+      vm7: 
+        observations: 
+          series:
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu_utilization: 7
+              ram_utilization: 72
+              power: 4.06
+              energy: 3.29
+          mapping: 
+              units: month
+      vm8: 
+        observations: 
+          series:
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu_utilization: 6
+              ram_utilization: 70
+              power: 4.06
+              energy: 3.29
+          mapping: 
+              units: month
+  db:
+    config:
+    children:
+      db:
+        observations:
+          series:
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu_utilization: 4
+              ram_utilization: 40
+              power: 3.31
+              energy: 2.68
+          mapping: 
+              units: month
+  monitoring:
+    config:
+    children:
+      monitoring:
+        observations: 
+          series:
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu_utilization: 20
+              ram_utilization: 0
+              power: 5.70
+              energy: 4.62
+          mapping: 
+              units: month
+  app-gateway: # note that the app gateway does not have observations, its SCI is assumed equal to 5% of the total emissions
+    config:
+      sci: 1053.94
