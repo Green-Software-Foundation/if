@@ -5,92 +5,69 @@ tags:
   complexity: moderate
   category: cloud
 config:
-  pipeline:
-    calculation: msft-eshoppen
-    normalization: default
-    aggregation: default
-    enrichment: default
+  models:
+    - name: sci-m # a model that returns an embodied value given the sci embodied attribution equation.
+      path: builtin  
+    - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
+      path: builtin             
+    - name: teads-curve # a model that returns energy based on the generalised teads power curve and tdp
+      path: builtin
 graph:
   front-end:
+    pipeline: 
+      - teads-curve # tdp & cpu -> energy
+      - sci-m # duration & config -> embodied
+      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
     config:
-      embodied_c: 350 # kgCO2eq
-      reserved_time: 1 # hour
-      resources_reserved: 1
-      total_resources_available: 1
-      lifespan: 4 #years
-    children:
-      cpu:
-        observations:
-          common:
-            server:  Intel® Xeon® Platinum 8272CL
-            tdp: 28 # W
-            carbon_intensity: 951
-            tdp_coeff: 0.32
-            n_cores: 2
-          series: 
-            - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-              duration: 1
-              cpu_utilization: 18.392
-          mapping:
-            units: hour
-      memory:
-        observations:
-          common:
-            server:  Intel® Xeon® Platinum 8272CL
-            tdp: 12.16 # W
-            carbon_intensity: 951
-            tdp_coeff: 0.32
-            n_cores: 2
-          series: 
-            - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-              duration: 1
-              mem_utilization: 0.1 #%
-          mapping:
-            units: hour
+      sci-m:
+        te: 350 # kgCO2eq
+        tir: "duration" # get this value from the duration field
+        el: 126144000 # 4 years in seconds        
+        rr: 1
+        tor: 1
+    observations:
+      - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+        processor: Intel® Core™ i7-1185G7
+        duration: 3600 # Secs
+        tdp: 28 # W
+        cpu: 18.392
+        grid-carbon-intensity: 951 # gCO2e/kWh
   app-server:
+    pipeline: 
+          - teads-curve # tdp & cpu -> energy
+          - sci-m # duration & config -> embodied
+          - sci-c # energy & grid-carbon-intensity & embodied -> carbon  
     config:
-      embodied_c: 1205.52 # kgCO2eq
-      reserved_time: 1 # hour
-      resources_reserved: 2
-      total_resources_available: 16
-      lifespan: 4 #years
-      children:
-        child:
-          observations:
-            common:
-              server:  Intel® Xeon® Platinum 8272CL
-              tdp: 205 #W
-              carbon_intensity: 951
-              tdp_coeff: 0.32
-              n_cores: 2
-              n_chips: 1
-            series: 
-              - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-                duration: 1
-                cpu_utilization: 18.392
-            mapping:
-              units: hour
-
+      sci-m:
+        te: 1205.52 # kgCO2eq
+        tir: duration # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 2 # using cores
+        tor: 26 # the original report has a typo, says 16 but actually has 26 cores.
+    observations:
+      - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+        duration: 3600
+        processor:  Intel® Xeon® Platinum 8272CL
+        tdp: 205 # W
+        cpu: 18.392
+        grid-carbon-intensity: 951 # gCO2e/kWh
   db-server:
+    pipeline: 
+          - teads-curve # tdp & cpu & duration-> energy
+          - sci-m # duration & config -> embodied
+          - sci-c # energy & grid-carbon-intensity & embodied -> carbon  
     config:
-      embodied_c: 1433.12 # kgCO2eq
-      reserved_time: 1 # hour
-      resources_reserved: 2
-      total_resources_available: 16
-      lifespan: 4 #years
-      children:
-        child:
-          observations:
-            common:
-              server:  Intel® Xeon® Platinum 8272CL
-              tdp: 150 #W
-              carbon_intensity: 951
-              tdp_coeff: 0.32
-              n_cores: 2
-              n_chips: 1
-            series: 
-              - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-                duration: 1
-                cpu_utilization: 10 #%
-            mapping:
-              units: hour
+      sci-m:
+        te: 1433.12 # kgCO2eq
+        tir: duration # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 2 # using cores
+        tor: 24 # total cores  
+    observations:
+      - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+        duration: 3600
+        cpu_utilization: 10 #%
+        processor:  Intel® Xeon® Platinum 8160
+        tdp: 150 # W
+        cpu: 10
+        grid-carbon-intensity: 951 # gCO2e/kWh          
