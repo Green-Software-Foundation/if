@@ -130,7 +130,6 @@ export class TEADSEngineeringAWS implements IImpactModelInterface {
     const cpu = observation['cpu'] * 100.0;
 
     //  get the wattage for the instance type
-    let wattage;
 
     const x = [0, 10, 50, 100];
 
@@ -143,7 +142,7 @@ export class TEADSEngineeringAWS implements IImpactModelInterface {
 
     const spline = new Spline(x, y);
 
-    wattage = spline.at(cpu);
+    const wattage = spline.at(cpu);
     //  duration is in seconds
     //  wattage is in watts
     //  eg: 30W x 300s = 9000 J
