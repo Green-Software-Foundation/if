@@ -7,7 +7,7 @@ memory:
   unit: GB
   aggregation: avg
 disk:
-  description: refers to GB of disk written/read
+  description: refers to GB of data written/read from disk
   unit: GB
   aggregation: sum
 duration:
