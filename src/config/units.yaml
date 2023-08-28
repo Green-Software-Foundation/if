@@ -1,0 +1,36 @@
+cpu:
+  description: refers to CPU utilization.
+  unit: percentage
+  aggregation: avg
+memory:
+  description: refers to GB of memory utilized.
+  unit: GB
+  aggregation: avg
+disk:
+  description: refers to GB of disk written/read
+  unit: GB
+  aggregation: sum
+duration:
+  description: refers to the duration of the observation
+  unit: S
+  aggregation: sum
+timestamp:
+  description: refers to the time of occurrence of the observation
+  unit: ISO8601 / RFC3339 compatible timestamp
+  aggregation: None
+carbon:
+  description: an amount of carbon emitted into the atmosphere
+  unit: gCO2e
+  aggregation: sum
+energy:
+  description: amount of energy utilised by the component
+  unit: KWh
+  aggregation: sum
+embodied_emission:
+  description: Embodied Emissions of the component
+  unit: gCO2e
+  aggregation: sum
+expected_life_span:
+  description: Total Expected Lifespan of the Component in Years
+  unit: Years
+  aggregation: None
