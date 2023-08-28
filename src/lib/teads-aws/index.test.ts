@@ -3,7 +3,7 @@ import {TEADSEngineeringAWS} from './index';
 
 jest.setTimeout(30000);
 
-describe('ccf:configure test', () => {
+describe('teads:configure test', () => {
   test('initialize with params', async () => {
     const impactModel = new TEADSEngineeringAWS();
     await impactModel.configure('test', {
@@ -15,12 +15,12 @@ describe('ccf:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        e: 0.0023031270462730543,
+        e:  0.004900000000000001,
         m: 0.04216723744292237 * 1000,
       },
     ]);
   });
-  test('initialize with params:aws', async () => {
+  test('teads:initialize with params', async () => {
     const impactModel = new TEADSEngineeringAWS();
     await impactModel.configure('test', {
       instance_type: 'm5n.large',
@@ -45,15 +45,15 @@ describe('ccf:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        e: 0.0019435697915529846,
+        e: 0.0067,
         m: 91.94006849315068,
       },
       {
-        e: 0.0046062540925461085,
+        e: 0.011800000000000001,
         m: 91.94006849315068,
       },
       {
-        e: 0.007934609468787513,
+        e: 0.016300000000000002,
         m: 91.94006849315068,
       },
     ]);
