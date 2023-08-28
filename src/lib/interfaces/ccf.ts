@@ -23,6 +23,6 @@ export enum Interpolation {
 }
 
 export interface ICcfResult {
-  e: number;
-  m: number;
+  energy: number;
+  embodied_emissions: number;
 }

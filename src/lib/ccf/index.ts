@@ -135,12 +135,12 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     const results: ICcfResult[] = [];
     if (Array.isArray(observations)) {
       observations.forEach((observation: KeyValuePair) => {
-        const e = this.calculateEnergy(observation);
-        const m = this.embodiedEmissions(observation);
+        const energy = this.calculateEnergy(observation);
+        const embodiedEmissions = this.embodiedEmissions(observation);
 
         results.push({
-          e: e,
-          m: m,
+          energy: energy,
+          embodied_emissions: embodiedEmissions,
         });
       });
     }
