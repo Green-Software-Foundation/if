@@ -14,6 +14,8 @@ Additionally, **TEADS model curve for AWS** available in the CCF dataset can be 
 
 Resulting values are generally approximation and should be revalidated across different models as there can be significant difference between values.
 
+New instances across all cloud providers might not be recognized by CCF. Earliest possible instances recognized are released before 2021 December.
+
 ## Usage
 
 Configure method has to be called on the instantiated object before any other calls are done. 
