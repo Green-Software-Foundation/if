@@ -58,7 +58,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   }
 
   // extracts information from Boavizta API response to return the impact in the format required by IMPL
-  protected formatResponse(response: any): {[p: string]: any} {
+  protected formatResponse(response: any): KeyValuePair {
     let m = 0;
     let e = 0;
 
@@ -78,7 +78,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
       e = response.data['pe']['use'] / 3.6;
     }
 
-    return {m, e};
+    return {embodied_emission: m, energy: e};
   }
 
   // converts the usage from IMPL input to the format required by Boavizta API.
@@ -89,9 +89,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
       hours_use_time: duration / 3600.0,
       time_workload: metric * 100.0,
     };
-    if (typeof this.expectedLifespan === 'number') {
-      usageInput['years_life_time'] = this.expectedLifespan;
-    }
+    usageInput['years_life_time'] = this.expectedLifespan;
     usageInput = this.addLocationToUsage(usageInput);
 
     return usageInput;
@@ -128,7 +126,8 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         observation['duration'],
         observation[this.metricType]
       );
-      return (await this.fetchData(usageInput)) as IBoaviztaUsageSCI;
+      const usage = (await this.fetchData(usageInput)) as IBoaviztaUsageSCI;
+      return {...usage};
     } else {
       throw new Error('Invalid Input: Invalid observations parameter');
     }
@@ -193,6 +192,7 @@ export class BoaviztaCpuImpactModel
 
     const dataCast = this.sharedParams as KeyValuePair;
     dataCast['usage'] = usageData;
+
     const response = await axios.post(
       `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`,
       dataCast

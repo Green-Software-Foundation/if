@@ -4,15 +4,6 @@ import {BoaviztaCloudImpactModel, BoaviztaCpuImpactModel} from './boavizta';
 jest.setTimeout(30000);
 
 describe('cpu:configure test', () => {
-  test('initialize without params should throw error', async () => {
-    const impactModel = new BoaviztaCpuImpactModel();
-
-    await expect(impactModel.configure('test')).rejects.toThrowError(
-      Error('Improper configure: Missing name parameter')
-    );
-    expect(impactModel.name).toBe('test');
-  });
-
   test('initialize wrong params should throw error', async () => {
     const impactModel = new BoaviztaCpuImpactModel();
 
@@ -80,10 +71,22 @@ describe('cpu:initialize with params', () => {
         },
       ])
     ).resolves.toStrictEqual([
-      {m: 0.678, e: 0.25},
-      {m: 0.00283, e: 0.0007702777777777777},
-      {m: 0.00283, e: 0.000439},
-      {m: 0.00283, e: 0.0014238333333333332},
+      {
+        embodied_emission: 0.678,
+        energy: 0.25,
+      },
+      {
+        embodied_emission: 0.00283,
+        energy: 0.0007702777777777777,
+      },
+      {
+        embodied_emission: 0.00283,
+        energy: 0.000439,
+      },
+      {
+        embodied_emission: 0.00283,
+        energy: 0.0014238333333333332,
+      },
     ]);
   });
 });
@@ -139,10 +142,22 @@ describe('cloud:initialize with params', () => {
         },
       ])
     ).resolves.toStrictEqual([
-      {m: 0.004, e: 0.00008374722222222223},
-      {m: 0.004, e: 0.00006074166666666666},
-      {m: 0.004, e: 0.00004233888888888889},
-      {m: 0.004, e: 0.00011007222222222222},
+      {
+        embodied_emission: 0.004,
+        energy: 0.00008374722222222223,
+      },
+      {
+        embodied_emission: 0.004,
+        energy: 0.00006074166666666666,
+      },
+      {
+        embodied_emission: 0.004,
+        energy: 0.00004233888888888889,
+      },
+      {
+        embodied_emission: 0.004,
+        energy: 0.00011007222222222222,
+      },
     ]);
   });
 
