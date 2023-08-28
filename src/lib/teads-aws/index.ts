@@ -1,6 +1,4 @@
-import {
-  IImpactModelInterface,
-} from '../interfaces';
+import {IImpactModelInterface} from '../interfaces';
 import Spline from 'typescript-cubic-spline';
 import * as AWS_INSTANCES from './aws-instances.json';
 import * as AWS_EMBODIED from './aws-embodied.json';
@@ -64,7 +62,6 @@ export class TEADSEngineeringAWS implements IImpactModelInterface {
     if ('expected_lifespan' in staticParams) {
       this.expectedLifespan = staticParams?.expected_lifespan as number;
     }
-
 
     return this;
   }
@@ -139,12 +136,9 @@ export class TEADSEngineeringAWS implements IImpactModelInterface {
 
     const y: number[] = [
       this.computeInstances[this.instanceType].consumption.idle ?? 0,
-      this.computeInstances[this.instanceType].consumption
-        .tenPercent ?? 0,
-      this.computeInstances[this.instanceType].consumption
-        .fiftyPercent ?? 0,
-      this.computeInstances[this.instanceType].consumption
-        .hundredPercent ?? 0,
+      this.computeInstances[this.instanceType].consumption.tenPercent ?? 0,
+      this.computeInstances[this.instanceType].consumption.fiftyPercent ?? 0,
+      this.computeInstances[this.instanceType].consumption.hundredPercent ?? 0,
     ];
 
     const spline = new Spline(x, y);
@@ -213,8 +207,7 @@ export class TEADSEngineeringAWS implements IImpactModelInterface {
     // RR = Resources Reserved, the number of resources reserved for use by the software.
     // TR = Total Resources, the total number of resources available.
     const totalEmissions =
-      this.computeInstances[this.instanceType]
-        .embodiedEmission ?? 0;
+      this.computeInstances[this.instanceType].embodiedEmission ?? 0;
     const timeReserved = durationInHours;
     const expectedLifespan = 8760 * this.expectedLifespan;
     const reservedResources =

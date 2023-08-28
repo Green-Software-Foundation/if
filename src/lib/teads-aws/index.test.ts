@@ -15,7 +15,7 @@ describe('teads:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        e:  0.004900000000000001,
+        e: 0.004900000000000001,
         m: 0.04216723744292237 * 1000,
       },
     ]);
