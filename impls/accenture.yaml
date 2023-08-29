@@ -3,18 +3,30 @@ description: sci calculation for accenture model (note need to add app gateway S
 tags: 
 config:
   pue: 1.125
-  emission_factor: 350.861
-  embodied_c: 458 #kgCo2 @ 4yr lifespan
   requests_per_month: 890000
-  embodied_emissions: 763.33
-  pipeline:
-    calculation: default
-    normalization: default
-    aggregation: default
-    enrichment: default
+  models:
+    - name: sci-m
+      path: builtin
+    - name: sci-c
+      path: builtin
+    - name: teads-curve
+      path: builtin
 graph: 
   vm:
+    pipeline:
+      - teads-curve
+      - sci-c
+      - sci-m
     config:
+      sci-m:
+        te: 458 #kgCo2 @ 4yr lifespan
+        tir: "duration"
+        el: 126144000
+        rr: 1
+        tor: 1
+      sci-c:
+        i:  350.861
+        m: 763.33
     children:
       vm1: 
         observations: 
@@ -105,7 +117,20 @@ graph:
           mapping: 
               units: month
   db:
+    pipeline:
+      - teads-curve
+      - sci-c
+      - sci-m
     config:
+      sci-m:
+        te: 458 #kgCo2 @ 4yr lifespan
+        tir: "duration"
+        el: 126144000
+        rr: 1
+        tor: 1
+      sci-c:
+        i:  350.861
+        m: 763.33
     children:
       db:
         observations:
@@ -119,7 +144,21 @@ graph:
           mapping: 
               units: month
   monitoring:
+    pipeline:
+      - teads-curve
+      - sci-c
+      - sci-m
     config:
+    config:
+      sci-m:
+        te: 458 #kgCo2 @ 4yr lifespan
+        tir: "duration"
+        el: 126144000
+        rr: 1
+        tor: 1
+      sci-c:
+        i:  350.861
+        m: 763.33
     children:
       monitoring:
         observations: 
