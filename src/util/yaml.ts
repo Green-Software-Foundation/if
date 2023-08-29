@@ -2,23 +2,19 @@ import {readFile, writeFile} from 'fs/promises';
 
 import * as YAML from 'js-yaml';
 
-import {ImpactYaml} from '../types/yaml';
-
 /**
  * Reads and parses `yaml` file to object.
  */
-export const openYamlFileAsObject = async (
-  filePath: string
-): Promise<ImpactYaml> => {
+export const openYamlFileAsObject = async (filePath: string): Promise<any> => {
   const yamlFileBuffer = await readFile(filePath, 'utf8');
 
-  return YAML.load(yamlFileBuffer) as ImpactYaml;
+  return YAML.load(yamlFileBuffer);
 };
 
 /**
  * Saves given `yaml` dump as a file.
  */
-export const saveYamlFileAs = (object: ImpactYaml, name: string) => {
+export const saveYamlFileAs = (object: any, name: string) => {
   const path = `${__dirname}/${name}`;
   const yamlString = YAML.dump(object);
 
