@@ -12,9 +12,7 @@ const rimplPOCScript = async () => {
     const yamlPath = parseProcessArgument();
     const impl = await openYamlFileAsObject(yamlPath);
 
-    const servers = impl.graph.backend.children.servers?.observations;
-
-    console.log(`Check object here: ${servers}`);
+    console.log(`Check object here: ${impl}`);
   } catch (error) {
     console.error(error);
   }
