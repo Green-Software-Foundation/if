@@ -6,19 +6,16 @@ tags:
   category: device
 config:
   pipeline:
-    calculation: default
-    normalization: default
-    aggregation: default
-    enrichment: default
+    - sci-coefficient
 graph:
   rasp-pi: 
     model: sci-coefficient
     config:
       e: 0.003
       i: 0.713
-      r: 1 (day?)
+      r: 86400 # 1 day in seconds
       te: 55
-      tir: 1 (day?)
-      el: 1095 (days?)
+      tir: 86400 # 1 day in seconds
+      el: 94608000 # 1095 days in seconds
       rr: 1
       tor: 1

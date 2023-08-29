@@ -5,46 +5,68 @@ tags:
   complexity: moderate
   category: on-premise
 config:
-  pipeline:
-    calculation: ntt-web
-    normalization: default
-    aggregation: default
-    enrichment: default
-# Single observation
+  models:
+    - name: switch # a model that returns an embodied value given the sci embodied attribution equation.
+      path: plugin  
+    - name: sci-m # a model that calculatyes m from te, tir, el, rr and rtor
+      path: builtin
+    - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
+      path: builtin             
+    - name: teads-curve # a model that returns energy based on the generalised teads power curve and tdp
+      path: builtin
 graph:
   layer-3-switch: # an advanced grouping node
-    model: default  
+    pipeline:
+      - switch
+      - pue
+      - teads-curve
+      - sci-m
+      - sci-c  
     config:
-    children: 
-      switch-1:
-        common:
-            p_baseline: 92.5 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
-            n_ports: 24
-            c_intensity: 457 # gCO2/kwh
-            embodied_c: 0.251 #g per unit
-            lifespan: 4 # years
-            pue: 1.5
-        observations: 
-          series:
-            timestamp: 2023-07-06T00:00
-            duration: 1
-            five-min-input-rate: 100
-            five-min-output-rate: 100
-          mapping:
-              units: hours
-
+      switch:
+        p_baseline: 92.5 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
+        n_ports: 24
+      pue:
+        pue: 1.5
+      sci-m:
+        te: 0.251 # kgCO2eq
+        tir: duration # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 1 
+        tor: 1 
+      sci-c:
+        i: 457 # gCO2/kwh
+    observations: 
+      series:
+        - timestamp: 2023-07-06T00:00
+          duration: 1
+          five-min-input-rate: 100
+          five-min-output-rate: 100
+      mapping:
+          units: hours
   layer-2-switch:
-    model: default  
+    pipeline: 
+      - switch-model
+      - pue-model
+      - teads-curve # tdp & cpu -> energy
+      - sci-m # duration & config -> embodied
+      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
     config:
+      switch:
+        p_baseline: 22.8 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
+        n_ports: 24
+      pue:
+        pue: 1.5
+      sci-m:
+        te: 0.251 # kgCO2eq
+        tir: duration # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 1 
+        tor: 1 
+      sci-c:
+        i: 457 # gCO2/kwh
     children: 
       switch-1:
-        common:
-            p_baseline: 22.8 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
-            n_ports: 24
-            c_intensity: 457 # gCO2/kwh
-            embodied_c: 7.16 #g per unit
-            lifespan: 4 # years
-            pue: 1.5
         observations: 
           series:
             timestamp: 2023-07-06T00:00
@@ -54,13 +76,6 @@ graph:
           mapping:
             units: hours
       switch-2:
-        common:
-            p_baseline: 22.8 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
-            n_ports: 24
-            c_intensity: 457 # gCO2/kwh
-            embodied_c: 7.16 #g per unit
-            lifespan: 4 # years
-            pue: 1.5
         observations: 
           series:
             timestamp: 2023-07-06T00:00
@@ -70,13 +85,6 @@ graph:
           mapping:
               units: hours
       switch-3:
-        common:
-            p_baseline: 22.8 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
-            n_ports: 24
-            c_intensity: 457 # gCO2/kwh
-            embodied_c: 7.16 #g per unit
-            lifespan: 4 # years
-            pue: 1.5
         observations: 
           series:
             timestamp: 2023-07-06T00:00
@@ -86,13 +94,6 @@ graph:
           mapping:
               units: hours
       switch-4:
-        common:
-            p_baseline: 22.8 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
-            n_ports: 24
-            c_intensity: 457 # gCO2/kwh
-            embodied_c: 7.16 #g per unit
-            lifespan: 4 # years
-            pue: 1.5
         observations: 
           series:
             timestamp: 2023-07-06T00:00
@@ -102,64 +103,79 @@ graph:
           mapping:
             units: seconds
   db-servers:
-    model: default  
+    pipeline: 
+      - server-energy # average power -> energy in kwh
+      - sci-m # duration & config -> embodied
+      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
     config:
-    children: 
-        common:
-          c_intensity: 457 # gCO2/kwh
-          embodied_c: 6270 #g per unit
-          lifespan: 4 # years
-          pue: 1.5
-        observations: 
-        series:
-          timestamp: 2023-07-06T00:00
-          duration: 1
-          instantaneous-power: 176
-          min_in_sample: 1
-          max_in_sample: 6560
-          mean_over_sample: 113
-          sampling_period: 0.0000001 #seconds
-        mapping:
-            units: seconds
+      sci-m:
+        te: 6270 # kgCO2eq
+        tir: duration # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 1 
+        tor: 1 
+      sci-c:
+        i: 457 # gCO2/kwh
+    observations: 
+      series:
+        timestamp: 2023-07-06T00:00
+        duration: 1
+        instantaneous-power: 176
+        min_in_sample: 1
+        max_in_sample: 6560
+        mean_over_sample: 113
+        sampling_period: 0.0000001 #seconds
+      mapping:
+          units: seconds
   app-servers:
-    model: default  
+    pipeline: 
+      - server-energy # average power -> energy in kwh
+      - sci-m # duration & config -> embodied
+      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
     config:
-    children: 
-        common:
-          c_intensity: 457 # gCO2/kwh
-          embodied_c: 6270 #g per unit
-          lifespan: 4 # years
-          pue: 1.5
-        observations: 
-        series:
-          timestamp: 2023-07-06T00:00
-          duration: 1
-          instantaneous-power: 176
-          min_in_sample: 1
-          max_in_sample: 6560
-          mean_over_sample: 113
-          sampling_period: 0.0000001 #seconds
-        mapping:
-          units: seconds
+      sci-m:
+        te: 6270 # kgCO2eq
+        tir: duration # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 1 
+        tor: 1 
+      sci-c:
+        i: 457 # gCO2/kwh        
+    observations: 
+      series:
+        timestamp: 2023-07-06T00:00
+        duration: 1
+        instantaneous-power: 176
+        min_in_sample: 1
+        max_in_sample: 6560
+        mean_over_sample: 113
+        sampling_period: 0.0000001 #seconds
+      mapping:
+        units: seconds
   web-servers:
-    model: default  
+    pipeline: 
+      - server-energy # average power -> energy in kwh
+      - sci-m # duration & config -> embodied
+      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
     config:
-    children: 
-        common:
-          c_intensity: 457 # gCO2/kwh
-          embodied_c: 6270 #g per unit
-          lifespan: 4 # years
-          pue: 1.5
-        observations: 
-        series:
-          timestamp: 2023-07-06T00:00
-          duration: 1
-          instantaneous-power: 176
-          min_in_sample: 1
-          max_in_sample: 6560
-          mean_over_sample: 113
-          sampling_period: 0.0000001 #seconds
-        mapping:
-          units: seconds
+      sci-m:
+        te: 6270 # kgCO2eq
+        tir: duration # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 1 
+        tor: 1 
+      sci-c:
+        i: 457 # gCO2/kwh  
+    observations: 
+      series:
+        timestamp: 2023-07-06T00:00
+        duration: 1
+        instantaneous-power: 176
+        min_in_sample: 1
+        max_in_sample: 6560
+        mean_over_sample: 113
+        sampling_period: 0.0000001 #seconds
+      mapping:
+        units: WIPS #web interactions-per-second
 
 
