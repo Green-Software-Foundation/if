@@ -1,4 +1,3 @@
-// require these libraries
 const fs = require('fs');
 const yaml = require('js-yaml');
 const cp = require('child_process');
