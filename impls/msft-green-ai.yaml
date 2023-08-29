@@ -1,0 +1,44 @@
+name: mft-green-ai
+description: "https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/msft-green-ai.md"
+tags:
+  kind: ml
+  complexity: simple
+  category: cloud
+config:
+  funit:
+    - name: job
+      scale-factor: 1 # divide SCI by this value to get SCI per ml job
+  models:
+    - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
+      path: builtin       
+graph:
+  DenseNet: # an advanced grouping node
+    pipeline: 
+      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+    config: 
+      sci-c:
+        processor: nvidia-t4-nc16as-v3
+        e: 17.97
+        i: 1 # data not provided in case study
+        m: 0
+    observations: 
+      series:
+        - timestamp: 2023-07-06T00:00
+          duration: 1336 # 22.27 min runtime in seconds
+      mapping:
+        units: duration # R is per job, and the job took `duration` seconds
+  InceptionV3: # an advanced grouping node
+    pipeline: 
+      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+    config: 
+      sci-c:
+        processor: nvidia-t4-nc16as-v3
+        e: 14.37
+        i: 1 # data not provided in case study
+        m: 0
+    observations: 
+      series:
+        - timestamp: 2023-07-06T00:00
+          duration: 1205 # 22.27 min runtime in seconds
+      mapping:
+        units: duration # R is per job, and the job took `duration` seconds

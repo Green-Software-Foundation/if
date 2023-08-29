@@ -20,7 +20,7 @@ config:
 # Single observation
 graph:
   backend: # an advanced grouping node
-      pipeline: 
+    pipeline: 
       - teads-curve # tdp & cpu -> energy
       - sci-mem # calculates energy used by memory as component of sci-m
       - sci-m # duration & config -> embodied
