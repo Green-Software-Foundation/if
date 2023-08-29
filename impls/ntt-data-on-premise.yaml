@@ -11,7 +11,7 @@ config:
   models:
     - name: switch # a model that returns an embodied value given the sci embodied attribution equation.
       path: plugin  
-    - name: sci-m # a model that calculatyes m from te, tir, el, rr and rtor
+    - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
       path: builtin
     - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
       path: builtin             
