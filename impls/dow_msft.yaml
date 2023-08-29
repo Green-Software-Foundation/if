@@ -5,73 +5,123 @@ tags:
   complexity: simple
   category: cloud
 config:
-  pipeline:
-    calculation: dow-msft
-    normalization: default
-    aggregation: default
-    enrichment: default
+  funit:
+    - name: api-call
+      scale-factor: 32000 # divide SCI (per hour) by this value to get SCI per api call
+  models:
+    - name: tdp-curve # a model that returns an embodied value given the sci embodied attribution equation.
+      path: builtin
+    - name: sci-mem
+      path: plugin  
+    - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
+      path: builtin
+    - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
+      path: builtin             
 # Single observation
 graph:
   backend: # an advanced grouping node
-    model: default  
+      pipeline: 
+      - teads-curve # tdp & cpu -> energy
+      - sci-mem # calculates energy used by memory as component of sci-m
+      - sci-m # duration & config -> embodied
+      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
     config: 
       vendor: azure
       region: east-us  # lookup carbon intensity from region
     children: 
       tiger-database: # a leaf component
+        config:
+          teads-curve:
+            processor: Intel-xeon-platinum-8380
+            tdp: 270
+          sci-mem:
+            mem_allocation: 32 # GB
+            mem-energy: 0.38 # kwh/GB
+          sci-m:
+            te: 1533.12 # kgCO2eq
+            tir: 3600 # get this value from the duration field
+            el: 94608000 # 3 years in seconds        
+            rr: 1
+            tor: 8
+          sci-c:
+            i: 554 # gCO2e/kWh
         observations: 
-          common:
-            n_cpu: 8
-            ram: 32
-            server: Intel-xeon-platinum-8380 # can lookup TPU and total embodied coefficients from model name
           series:
             timestamp: 2023-07-06T00:00
-            duration: 1 
-            tdp_coeff: 0.4
-            cpu_utilization: 17.12
-            memory_utilization: 6.2
+            cpu: 17.12
+            ram: 19.375 # % of available
           mapping:
             units: hours
       tiger-api: # a leaf component
+        config:
+          teads-curve:
+            processor: Intel-xeon-platinum-8270
+            tdp: 205
+          sci-mem:
+            mem_allocation: 1.75 # GB
+            mem-energy: 0.38 # kwh/GB
+          sci-m:
+            te: 1216.62 # kgCO2eq
+            tir: 3600 # get this value from the duration field
+            el: 94608000 # 3 years in seconds        
+            rr: 1
+            tor: 8
+          sci-c:
+            i: 554 # gCO2e/kWh
         observations: 
-          common:
-            n_cpu: 1
-            ram: 1.75 #total allocated
-            server: Intel-xeon-platinum-8270 # will lookup TPU and total embodied coefficients from model name
           series:      
             timestamp: 2023-08-06T00:00
             duration: 1
-            tdp_coeff: 0.4
             cpu_utilization: 25
-            memory_utilization: 1.22 # 70% of memory allocation, as per docs
+            memory_utilization: 70 # % of total
           mapping:
             units: hours
       neo4j-database: # a leaf component
-        observations: 
-          common:
-            n_cpu: 8
-            ram: 32 # total allocated in GB
-            server: Intel-xeon-platinum-8380 # will lookup TPU and total embodied coefficients from model name
+        config:
+          teads-curve:
+            processor: Intel-xeon-platinum-8270
+            tdp: 270
+          sci-mem:
+            mem_allocation: 32 # GB
+            mem-energy: 0.38 # kwh/GB
+          sci-m:
+            te: 1216.62 # kgCO2eq
+            tir: 3600 # get this value from the duration field
+            el: 94608000 # 3 years in seconds        
+            rr: 2
+            tor: 64
+          sci-c:
+            i: 554 # gCO2e/kWh
+        observations:
           series:
             timestamp: 2023-07-06T00:00
             duration: 1 # this data is using span, but the model expects duration
-            tdp_coeff: 0.5 #% total available cpu usage as fraction in range 0-1
             cpu_utilization: 28.05
-            memory_utilization: 6.3
+            memory_utilization: 19.375
           mapping:
             units: hours
       neo4j-api: # a leaf component
-        observations: 
-          common:
-            n_cpu: 1
-            ram: 1.75 #total allocated
-            server: Intel-xeon-platinum-8270 # will lookup TPU and total embodied coefficients from model name
+        config:
+          teads-curve:
+            processor: Intel-xeon-platinum-8270
+            tdp: 205
+          sci-mem:
+            mem_allocation: 1.75 # GB
+            mem-energy: 0.38 # kwh/GB
+          sci-m:
+            te: 1216.62 # kgCO2eq
+            tir: 3600 # get this value from the duration field
+            el: 94608000 # 3 years in seconds        
+            rr: 2
+            tor: 64
+          sci-c:
+            i: 554 # gCO2e/kWh
+        observations:
           series:      
             timestamp: 2023-08-06T00:00
             duration: 1
-            tdp_coeff: 0.8
             cpu_utilization: 14
-            memory_utilization: 1.13 # 65% of memory allocation, as per docs
+            memory_utilization: 65 
           mapping:
             units: hours
 
