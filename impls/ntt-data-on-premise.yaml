@@ -5,6 +5,9 @@ tags:
   complexity: moderate
   category: on-premise
 config:
+  funit:
+    - name: web interactions
+      scale-factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction
   models:
     - name: switch # a model that returns an embodied value given the sci embodied attribution equation.
       path: plugin  
@@ -14,6 +17,8 @@ config:
       path: builtin             
     - name: teads-curve # a model that returns energy based on the generalised teads power curve and tdp
       path: builtin
+    - name: server-energy # average power -> energy in kwh
+      path: plugin
 graph:
   layer-3-switch: # an advanced grouping node
     pipeline:
@@ -101,7 +106,7 @@ graph:
             five-min-input-rate: 100
             five-min-output-rate: 100
           mapping:
-            units: seconds
+            units: hours
   db-servers:
     pipeline: 
       - server-energy # average power -> energy in kwh
@@ -126,7 +131,7 @@ graph:
         mean_over_sample: 113
         sampling_period: 0.0000001 #seconds
       mapping:
-          units: seconds
+          units: hours
   app-servers:
     pipeline: 
       - server-energy # average power -> energy in kwh
@@ -151,7 +156,7 @@ graph:
         mean_over_sample: 113
         sampling_period: 0.0000001 #seconds
       mapping:
-        units: seconds
+        units: hours
   web-servers:
     pipeline: 
       - server-energy # average power -> energy in kwh
@@ -176,6 +181,6 @@ graph:
         mean_over_sample: 113
         sampling_period: 0.0000001 #seconds
       mapping:
-        units: WIPS #web interactions-per-second
+        units: hours
 
 
