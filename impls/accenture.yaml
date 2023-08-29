@@ -2,6 +2,9 @@ name:  accenture
 description: sci calculation for accenture model (note need to add app gateway SCI to final calculation)
 tags: 
 config:
+  funit:
+    - name: requests
+      scale_factor: 890000 #' divide SCI per month by this to yield SCi per request'
   pue: 1.125
   requests_per_month: 890000
   models:
@@ -25,7 +28,7 @@ graph:
         rr: 1
         tor: 1
       sci-c:
-        i:  350.861
+        i: 350.861
         m: 763.33
     children:
       vm1: 
