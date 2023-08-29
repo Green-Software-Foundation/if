@@ -131,18 +131,16 @@ graph:
       sci-c:
         i:  350.861
         m: 763.33
-    children:
-      db:
-        observations:
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 2419200 # seconds in a month (7 days * 4 weeks)
-              cpu_utilization: 4
-              ram_utilization: 40
-              power: 3.31
-              energy: 2.68
-          mapping: 
-              units: month
+    observations:
+      series:
+        - timestamp: 2023-07-06T00:00
+          duration: 2419200 # seconds in a month (7 days * 4 weeks)
+          cpu_utilization: 4
+          ram_utilization: 40
+          power: 3.31
+          energy: 2.68
+      mapping: 
+          units: month
   monitoring:
     pipeline:
       - teads-curve
@@ -159,18 +157,16 @@ graph:
       sci-c:
         i:  350.861
         m: 763.33
-    children:
-      monitoring:
-        observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 2419200 # seconds in a month (7 days * 4 weeks)
-              cpu_utilization: 20
-              ram_utilization: 0
-              power: 5.70
-              energy: 4.62
-          mapping: 
-              units: month
+    observations: 
+      series:
+        - timestamp: 2023-07-06T00:00
+          duration: 2419200 # seconds in a month (7 days * 4 weeks)
+          cpu_utilization: 20
+          ram_utilization: 0
+          power: 5.70
+          energy: 4.62
+      mapping: 
+          units: month
   app-gateway: # note that the app gateway does not have observations, its SCI is assumed equal to 5% of the total emissions
     config:
       sci: 1053.94
