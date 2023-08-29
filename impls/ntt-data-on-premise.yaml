@@ -74,37 +74,37 @@ graph:
       switch-1:
         observations: 
           series:
-            timestamp: 2023-07-06T00:00
-            duration: 1
-            five-min-input-rate: 100
-            five-min-output-rate: 100
+            - timestamp: 2023-07-06T00:00
+              duration: 1
+              five-min-input-rate: 100
+              five-min-output-rate: 100
           mapping:
             units: hours
       switch-2:
         observations: 
           series:
-            timestamp: 2023-07-06T00:00
-            duration: 1
-            five-min-input-rate: 100
-            five-min-output-rate: 100
+            - timestamp: 2023-07-06T00:00
+              duration: 1
+              five-min-input-rate: 100
+              five-min-output-rate: 100
           mapping:
               units: hours
       switch-3:
         observations: 
           series:
-            timestamp: 2023-07-06T00:00
-            duration: 1
-            five-min-input-rate: 100
-            five-min-output-rate: 100
+            - timestamp: 2023-07-06T00:00
+              duration: 1
+              five-min-input-rate: 100
+              five-min-output-rate: 100
           mapping:
               units: hours
       switch-4:
         observations: 
           series:
-            timestamp: 2023-07-06T00:00
-            duration: 1
-            five-min-input-rate: 100
-            five-min-output-rate: 100
+            - timestamp: 2023-07-06T00:00
+              duration: 1
+              five-min-input-rate: 100
+              five-min-output-rate: 100
           mapping:
             units: hours
   db-servers:
@@ -123,13 +123,13 @@ graph:
         i: 457 # gCO2/kwh
     observations: 
       series:
-        timestamp: 2023-07-06T00:00
-        duration: 1
-        instantaneous-power: 176
-        min_in_sample: 1
-        max_in_sample: 6560
-        mean_over_sample: 113
-        sampling_period: 0.0000001 #seconds
+        - timestamp: 2023-07-06T00:00
+          duration: 1
+          instantaneous-power: 176
+          min_in_sample: 1
+          max_in_sample: 6560
+          mean_over_sample: 113
+          sampling_period: 0.0000001 #seconds
       mapping:
           units: hours
   app-servers:
@@ -148,13 +148,13 @@ graph:
         i: 457 # gCO2/kwh        
     observations: 
       series:
-        timestamp: 2023-07-06T00:00
-        duration: 1
-        instantaneous-power: 176
-        min_in_sample: 1
-        max_in_sample: 6560
-        mean_over_sample: 113
-        sampling_period: 0.0000001 #seconds
+        - timestamp: 2023-07-06T00:00
+          duration: 1
+          instantaneous-power: 176
+          min_in_sample: 1
+          max_in_sample: 6560
+          mean_over_sample: 113
+          sampling_period: 0.0000001 #seconds
       mapping:
         units: hours
   web-servers:
@@ -173,13 +173,13 @@ graph:
         i: 457 # gCO2/kwh  
     observations: 
       series:
-        timestamp: 2023-07-06T00:00
-        duration: 1
-        instantaneous-power: 176
-        min_in_sample: 1
-        max_in_sample: 6560
-        mean_over_sample: 113
-        sampling_period: 0.0000001 #seconds
+        - timestamp: 2023-07-06T00:00
+          duration: 1
+          instantaneous-power: 176
+          min_in_sample: 1
+          max_in_sample: 6560
+          mean_over_sample: 113
+          sampling_period: 0.0000001 #seconds
       mapping:
         units: hours
 
