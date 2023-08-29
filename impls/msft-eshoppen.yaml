@@ -5,6 +5,9 @@ tags:
   complexity: moderate
   category: cloud
 config:
+  funit:
+    - name: requests
+      scale-factor: 500 # divide SCi per hour by this to get SCI per request
   models:
     - name: sci-m # a model that returns an embodied value given the sci embodied attribution equation.
       path: builtin  
@@ -25,18 +28,22 @@ graph:
         el: 126144000 # 4 years in seconds        
         rr: 1
         tor: 1
+      sci-c:
+        i: 951 # gCO2e/kWh
+      teads-curve:
+        processor: Intel® Core™ i7-1185G7
+        tdp: 28 # W
     observations:
       - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-        processor: Intel® Core™ i7-1185G7
         duration: 3600 # Secs
-        tdp: 28 # W
         cpu: 18.392
-        grid-carbon-intensity: 951 # gCO2e/kWh
+      - mapping:
+        units: hour
   app-server:
     pipeline: 
-          - teads-curve # tdp & cpu -> energy
-          - sci-m # duration & config -> embodied
-          - sci-c # energy & grid-carbon-intensity & embodied -> carbon  
+      - teads-curve # tdp & cpu -> energy
+      - sci-m # duration & config -> embodied
+      - sci-c # energy & grid-carbon-intensity & embodied -> carbon  
     config:
       sci-m:
         te: 1205.52 # kgCO2eq
@@ -44,18 +51,22 @@ graph:
         el: 126144000 # 4 years in seconds    
         rr: 2 # using cores
         tor: 26 # the original report has a typo, says 16 but actually has 26 cores.
+      sci-c:
+        i: 951 # gCO2e/kWh
+      teads-curve:
+        processor: Intel® Xeon® Platinum 8272CL
+        tdp: 205
     observations:
       - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
         duration: 3600
-        processor:  Intel® Xeon® Platinum 8272CL
-        tdp: 205 # W
         cpu: 18.392
-        grid-carbon-intensity: 951 # gCO2e/kWh
+      - mapping:
+          units: hour
   db-server:
     pipeline: 
-          - teads-curve # tdp & cpu & duration-> energy
-          - sci-m # duration & config -> embodied
-          - sci-c # energy & grid-carbon-intensity & embodied -> carbon  
+      - teads-curve # tdp & cpu & duration-> energy
+      - sci-m # duration & config -> embodied
+      - sci-c # energy & grid-carbon-intensity & embodied -> carbon  
     config:
       sci-m:
         te: 1433.12 # kgCO2eq
@@ -63,11 +74,14 @@ graph:
         el: 126144000 # 4 years in seconds    
         rr: 2 # using cores
         tor: 24 # total cores  
+      sci-c:
+        i: 951
+      teads-curve:
+        processor:  Intel® Xeon® Platinum 8160
+        tdp: 150 # W
     observations:
       - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
         duration: 3600
-        cpu_utilization: 10 #%
-        processor:  Intel® Xeon® Platinum 8160
-        tdp: 150 # W
         cpu: 10
-        grid-carbon-intensity: 951 # gCO2e/kWh          
+      - mapping:
+        units: hour
