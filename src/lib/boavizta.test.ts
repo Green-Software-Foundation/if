@@ -25,7 +25,6 @@ mockAxios.get.mockImplementation(url => {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 mockAxios.post.mockImplementation(url => {
-  console.log('RESOLVING:', url);
   switch (url) {
     case 'https://api.boavizta.org/v1/component/cpu?verbose=false&allocation=LINEAR':
       return Promise.resolve({
