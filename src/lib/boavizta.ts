@@ -54,28 +54,29 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     const countries = await axios.get(
       'https://api.boavizta.org/v1/utils/country_code'
     );
+    console.log('countries: ' + JSON.stringify(countries.data));
     return Object.values(countries.data);
   }
 
   // extracts information from Boavizta API response to return the impact in the format required by IMPL
-  protected formatResponse(response: any): KeyValuePair {
+  protected formatResponse(data: any): KeyValuePair {
     let m = 0;
     let e = 0;
 
-    if ('impacts' in response.data) {
+    if ('impacts' in data) {
       // manufacture impact is in kgCO2eq, convert to gCO2eq
-      m = response.data['impacts']['gwp']['manufacture'] * 1000;
+      m = data['impacts']['gwp']['manufacture'] * 1000;
       // use impact is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
-      e = response.data['impacts']['pe']['use'] / 3.6;
-    } else if ('gwp' in response.data && 'pe' in response.data) {
+      e = data['impacts']['pe']['use'] / 3.6;
+    } else if ('gwp' in data && 'pe' in data) {
       // manufacture impact is in kgCO2eq, convert to gCO2eq
-      m = response.data['gwp']['manufacture'] * 1000;
+      m = data['gwp']['manufacture'] * 1000;
       // use impact is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
-      e = response.data['pe']['use'] / 3.6;
+      e = data['pe']['use'] / 3.6;
     }
 
     return {embodied_emission: m, energy: e};
@@ -198,7 +199,7 @@ export class BoaviztaCpuImpactModel
       dataCast
     );
 
-    return this.formatResponse(response);
+    return this.formatResponse(response.data);
   }
 }
 
@@ -334,6 +335,6 @@ export class BoaviztaCloudImpactModel
       dataCast
     );
 
-    return this.formatResponse(response);
+    return this.formatResponse(response.data);
   }
 }
