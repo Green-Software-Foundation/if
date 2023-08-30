@@ -2,7 +2,7 @@ import {IImpactModelInterface} from '../interfaces';
 import Spline from 'typescript-cubic-spline';
 import {KeyValuePair} from '../../types/boavizta';
 
-export class TeadsCPUModel implements IImpactModelInterface {
+export class TeadsCurveModel implements IImpactModelInterface {
   // Defined for compatibility. Not used in TEADS.
   authParams: object | undefined;
   // name of the data source
