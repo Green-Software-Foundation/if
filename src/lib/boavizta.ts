@@ -104,8 +104,9 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     if (Array.isArray(observations)) {
       const results = [];
       for (const observation of observations) {
-        const usageResult =
-          await this.calculateUsageForObservation(observation);
+        const usageResult = await this.calculateUsageForObservation(
+          observation
+        );
         results.push(usageResult);
       }
       return results;
@@ -265,8 +266,9 @@ export class BoaviztaCloudImpactModel
       this.instanceTypes[provider] === undefined ||
       this.instanceTypes[provider].length === 0
     ) {
-      this.instanceTypes[provider] =
-        await this.supportedInstancesList(provider);
+      this.instanceTypes[provider] = await this.supportedInstancesList(
+        provider
+      );
     }
 
     if ('instance_type' in staticParamsCast) {
