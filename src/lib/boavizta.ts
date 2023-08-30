@@ -117,7 +117,9 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   }
 
   // converts the usage to the format required by Boavizta API.
-  protected async calculateUsageForObservation(observation: KeyValuePair) {
+  protected async calculateUsageForObservation(
+    observation: KeyValuePair
+  ): Promise<KeyValuePair> {
     if (
       'datetime' in observation &&
       'duration' in observation &&
@@ -128,7 +130,8 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         observation[this.metricType]
       );
       const usage = (await this.fetchData(usageInput)) as IBoaviztaUsageSCI;
-      return {...usage};
+      const result = {...usage};
+      return result;
     } else {
       throw new Error('Invalid Input: Invalid observations parameter');
     }
