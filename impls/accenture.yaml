@@ -2,24 +2,32 @@ name:  accenture
 description: sci calculation for accenture model (note need to add app gateway SCI to final calculation)
 tags: 
 config:
-  funit:
-    - name: requests
-      scale_factor: 890000 #' divide SCI per month by this to yield SCi per request'
-  pue: 1.125
-  requests_per_month: 890000
   models:
+    - name: add-obs # a model that just copies some values into every observation.
+      path: builtin
+    - name: teads-curve
+      path: builtin  
+    - name: pue
+      path: builtin
+      config:
+        pue: 1.125
     - name: sci-m
       path: builtin
     - name: sci-c
       path: builtin
-    - name: teads-curve
+    - name: sci
       path: builtin
+      config:
+        r: 890000 # a common denominator (R) for all sci calcs, in this case number of requests for month
 graph: 
   vm:
     pipeline:
-      - teads-curve
-      - sci-c
-      - sci-m
+      - add-obs     # add common values to every observertion
+      - teads-curve # converts cpu-util to energy based on a tdp and a built in set of coeff.
+      - pue         # multiplies every energy by a pue coeff.
+      - sci-m       # adds embodied to the observeation.
+      - sci-c       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+      - sci         # calculates sci by dividing carbon by `r`
     config:
       sci-m:
         te: 458 #kgCo2 @ 4yr lifespan
@@ -27,129 +35,91 @@ graph:
         el: 126144000
         rr: 1
         tor: 1
-      sci-c:
-        i: 350.861
-        m: 763.33
+      teads-curve:
+        tdp: ??? # what's the TDP for this server
+      add-obs: 
+        grid-ci: 350.861 # Just copies any values under here to the observation as is.
     children:
       vm1: 
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 2419200 # seconds in a month (7 days * 4 weeks)
-              cpu_utilization: 15
-              ram_utilization: 75
-              power: 5.26
-              energy: 4.26
-          mapping: 
-              units: month
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 15
+            ram-util: 75
       vm2: 
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 2419200 # seconds in a month (7 days * 4 weeks)
-              cpu_utilization: 12
-              ram_utilization: 72
-              power: 5.26
-              energy: 4.26
-          mapping: 
-              units: month
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 12
+            ram-util: 72         
       vm3: 
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 2419200 # seconds in a month (7 days * 4 weeks)
-              cpu_utilization: 10
-              ram_utilization: 65
-              power: 5.20
-              energy: 4.21
-          mapping: 
-              units: month
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 10
+            ram-util: 65         
       vm4: 
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 2419200 # seconds in a month (7 days * 4 weeks)
-              cpu_utilization: 9
-              ram_utilization: 70
-              power: 5.20
-              energy: 4.21
-          mapping: 
-              units: month
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 9
+            ram-util: 70           
       vm5: 
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 2419200 # seconds in a month (7 days * 4 weeks)
-              cpu_utilization: 9
-              ram_utilization: 70
-              power: 5.20
-              energy: 4.21
-          mapping: 
-              units: month
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 9
+            ram-util: 70
       vm6: 
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00 
-              duration: 2419200 # seconds in a month (7 days * 4 weeks)
-              cpu_utilization: 8
-              ram_utilization: 65
-              power: 4.06
-              energy: 3.29
-          mapping: 
-              units: month
+          - timestamp: 2023-07-06T00:00 
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 8
+            ram-util: 65   
       vm7: 
-        observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 2419200 # seconds in a month (7 days * 4 weeks)
-              cpu_utilization: 7
-              ram_utilization: 72
-              power: 4.06
-              energy: 3.29
-          mapping: 
-              units: month
+        observations:
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 7
+            ram-util: 72 
       vm8: 
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 2419200 # seconds in a month (7 days * 4 weeks)
-              cpu_utilization: 6
-              ram_utilization: 70
-              power: 4.06
-              energy: 3.29
-          mapping: 
-              units: month
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 6
+            ram-util: 70       
   db:
     pipeline:
-      - teads-curve
-      - sci-c
-      - sci-m
+      - add-obs     # add common values to every observertion
+      - teads-curve # converts cpu-util to energy based on a tdp and a built in set of coeff.
+      - pue         # multiplies every energy by a pue coeff.
+      - sci-m       # adds embodied to the observeation.
+      - sci-c       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+      - sci         # calculates sci by dividing carbon by `r`
     config:
       sci-m:
         te: 458 #kgCo2 @ 4yr lifespan
         tir: "duration"
         el: 126144000
         rr: 1
-        tor: 1
-      sci-c:
-        i:  350.861
-        m: 763.33
+        tor: 1 
+      teads-curve:
+        tdp: ??? # what's the TDP for this server
+      add-obs: 
+        grid-ci: 350.861 # Just copies any values under here to the observation as is.
     observations:
-      series:
-        - timestamp: 2023-07-06T00:00
-          duration: 2419200 # seconds in a month (7 days * 4 weeks)
-          cpu_utilization: 4
-          ram_utilization: 40
-          power: 3.31
-          energy: 2.68
-      mapping: 
-          units: month
+      - timestamp: 2023-07-06T00:00
+        duration: 2419200 # seconds in a month (7 days * 4 weeks)
+        cpu-util: 4
+        ram-util: 40
   monitoring:
     pipeline:
-      - teads-curve
-      - sci-c
-      - sci-m
-    config:
+      - add-obs     # add common values to every observertion
+      - teads-curve # converts cpu-util to energy based on a tdp and a built in set of coeff.
+      - pue         # multiplies every energy by a pue coeff.
+      - sci-m       # adds embodied to the observeation.
+      - sci-c       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+      - sci         # calculates sci by dividing carbon by `r`
     config:
       sci-m:
         te: 458 #kgCo2 @ 4yr lifespan
@@ -157,19 +127,16 @@ graph:
         el: 126144000
         rr: 1
         tor: 1
-      sci-c:
-        i:  350.861
-        m: 763.33
+      teads-curve:
+        tdp: ??? # what's the TDP for this server
+      add-obs: 
+        grid-ci: 350.861 # Just copies any values under here to the observation as is.
     observations: 
-      series:
-        - timestamp: 2023-07-06T00:00
-          duration: 2419200 # seconds in a month (7 days * 4 weeks)
-          cpu_utilization: 20
-          ram_utilization: 0
-          power: 5.70
-          energy: 4.62
-      mapping: 
-          units: month
+      - timestamp: 2023-07-06T00:00
+        duration: 2419200 # seconds in a month (7 days * 4 weeks)
+        cpu-util: 20
+        ram-util: 0
   app-gateway: # note that the app gateway does not have observations, its SCI is assumed equal to 5% of the total emissions
+    # NOTE - There is currently no way to model this in the current infra (this is part of the total, but needs the total to know it's value :/)
     config:
-      sci: 1053.94
+      sci: 1053.94 
