@@ -182,5 +182,3 @@ graph:
           sampling_period: 0.0000001 #seconds
       mapping:
         units: hours
-
-

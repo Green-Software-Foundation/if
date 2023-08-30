@@ -36,4 +36,5 @@ graph:
             baseline_power: 11.335 # average over timespan
             annual_usage: 8322 # (hours in year * average uptime e.g. 95%)
           mapping: 
-            units: hour 
+            units: hour
+
