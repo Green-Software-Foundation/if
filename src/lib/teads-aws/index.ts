@@ -5,7 +5,7 @@ import * as AWS_EMBODIED from './aws-embodied.json';
 import {KeyValuePair} from '../../types/boavizta';
 
 export class TEADSEngineeringAWS implements IImpactModelInterface {
-  // Defined for compatibility. Not used in CCF.
+  // Defined for compatibility. Not used in TEADS.
   authParams: object | undefined;
   // name of the data source
   name: string | undefined;
@@ -23,20 +23,18 @@ export class TEADSEngineeringAWS implements IImpactModelInterface {
   }
 
   /**
-   * Defined for compatibility. Not used in CCF.
+   * Defined for compatibility. Not used in TEADS.
    */
   authenticate(authParams: object): void {
     this.authParams = authParams;
   }
 
   /**
-   *  Configures the CCF Plugin for IEF
+   *  Configures the TEADS Plugin for IEF
    *  @param {string} name name of the resource
    *  @param {Object} staticParams static parameters for the resource
-   *  @param {("aws"|"gcp"|"azure")} staticParams.provider aws, gcp, azure
    *  @param {string} staticParams.instance_type instance type from the list of supported instances
    *  @param {number} staticParams.expected_lifespan expected lifespan of the instance in years
-   *  @param {Interpolation} staticParams.interpolation linear(All Clouds), spline (only for AWS)
    */
   async configure(
     name: string,
@@ -159,7 +157,7 @@ export class TEADSEngineeringAWS implements IImpactModelInterface {
    * Returns model identifier
    */
   modelIdentifier(): string {
-    return 'ccf.cloud.sci';
+    return 'teads.cloud.sci';
   }
 
   /**
