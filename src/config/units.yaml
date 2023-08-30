@@ -12,7 +12,7 @@ disk:
   aggregation: sum
 duration:
   description: refers to the duration of the observation
-  unit: S
+  unit: s
   aggregation: sum
 timestamp:
   description: refers to the time of occurrence of the observation
