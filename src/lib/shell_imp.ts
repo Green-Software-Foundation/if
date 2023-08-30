@@ -18,13 +18,17 @@ returns:
 - ompl data to disk as omplName.yaml
 */
 function runModelInShell(impl, execPath, omplName) {
-    const result = cp.spawnSync(execPath, ['--calculate', '--impl=' + impl]).stdout.toString();
-    const yamlData = yaml.dump(yaml.load(result))
-    fs.writeFileSync(omplName, yamlData, 'utf8');
-    return yamlData
+    try {
+        const result = cp.spawnSync(execPath, ['--calculate', '--impl=' + impl]).stdout.toString();
+        const yamlData = yaml.dump(yaml.load(result))
+        fs.writeFileSync(omplName, yamlData, 'utf8');
+        return yamlData
+    } catch {
+        console.error("Error spawning shell process")
+    }
 }
 
 //example invocation
 // calling prototype python model available in ief-sandbox repo
-// let out = runModelInShell('dow_msft.yaml', '/home/joe/Code/ief-sandbox/dist/cli/cli', 'ompl2.yaml')
+// let out = runModelInShell('dow_msft.yaml', '~/ief-sandbox/dist/cli/cli', 'ompl2.yaml')
 // console.log(out)
