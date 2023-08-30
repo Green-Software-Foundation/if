@@ -1,11 +1,11 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {TeadsCPUModel} from './index';
+import {TeadsCurveModel} from './index';
 
 jest.setTimeout(30000);
 
 describe('teads:configure test', () => {
   test('initialize with params', async () => {
-    const impactModel = new TeadsCPUModel();
+    const impactModel = new TeadsCurveModel();
     await impactModel.configure('test', {
       tdp: 200,
     });
@@ -27,7 +27,7 @@ describe('teads:configure test', () => {
     ]);
   });
   test('teads:initialize with params', async () => {
-    const impactModel = new TeadsCPUModel();
+    const impactModel = new TeadsCurveModel();
     await impactModel.configure('test', {
       tdp: 300,
     });
