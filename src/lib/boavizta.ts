@@ -54,7 +54,6 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     const countries = await axios.get(
       'https://api.boavizta.org/v1/utils/country_code'
     );
-    console.log('countries: ' + JSON.stringify(countries.data));
     return Object.values(countries.data);
   }
 
