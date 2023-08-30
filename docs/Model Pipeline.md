@@ -34,13 +34,15 @@ All the model plugins used in any component in the graph are configured at the t
 ```yaml
 .
 .
-initialize:
-  plugins:
+config:
+  models:
     - name: <model-name-1>
+      kind: builtin | plugin | shell
       path: <path-to-ts-module-to-load>
       config:
 	       <key>: <value>
     - name: <model-name-2>
+      kind: builtin | plugin | shell    
       path: <path-to-ts-module-to-load>
       config:
 	       <key>: <value>	       
@@ -55,7 +57,10 @@ In component nodes, we then configure the models we want to use in a pipeline li
 
 ```yaml
 backend:
-  pipeline: "model-1 | model-2 | model-3"
+  pipeline:
+    - model-1
+    - model-2
+    - model-3  
   config: 
     model-1:
       <key>: <value>
@@ -80,27 +85,17 @@ backend:
 - `config` in this part of the graph is config for each model in the pipeline (if any is required). Since we have multiple models, we need to define each config independently.
 - `observations` are the source observations, the values we are pumping into the start of this pipeline.
 
-The above is the short form; the long form would be to use a YAML array, like so:
 
-```yaml
-backend:
-  pipeline: 
-    - model-1
-    - model-2
-    - model-3
-  config: 
-    model-1:
-      <key>: <value>
-    model-2:
-      <key>: <value>        
-    model-3:
-      <key>: <value>
-```
 ## Example
 
 Let's look at a simple pseudo example, to begin with a pipeline like so:
 
-`instance-metadata | tdp | teads-curve`
+```yaml
+pipeline:
+  - instance-metadata
+  - tdp
+  - teads-curve
+```
 
 Using the above, we can combine multiple smaller models together to calculate the energy consumed by this observation:
 
@@ -108,9 +103,9 @@ Using the above, we can combine multiple smaller models together to calculate th
 observations: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
-    instance_type: m5d.large
+    instance-type: m5d.large
     duration: 5
-    cpu: 33
+    cpu-util: 33
 ```
 
 ### `instance-metadata`
@@ -121,9 +116,9 @@ This model plugin takes as input an *instance type* and outputs the name of the 
 observations: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
-    instance_type: m5d.large
+    instance-type: m5d.large
     duration: 5
-    cpu: 33
+    cpu-util: 33
 ```
 
 to 
@@ -132,12 +127,12 @@ to
 observations: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
-    instance_type: m5d.large
+    instance-type: m5d.large
     duration: 5
-    cpu: 33
-    physical_processor: Intel Xeon Platinum 8175 # <-- output
-    used_cores: 1 # <-- output
-    total_cores: 26	# <-- output  	 
+    cpu-util: 33
+    physical-processor: Intel Xeon Platinum 8175 # <-- output
+    used-cores: 1 # <-- output
+    total-cores: 26	# <-- output  	 
 ```
 
 
@@ -149,12 +144,12 @@ Takes as input details about a physical processor, does a lookup against a [data
 observations: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
-    instance_type: m5d.large
+    instance-type: m5d.large
     duration: 5
-    cpu: 33
-    physical_processor: Intel Xeon Platinum 8175 # <-- input
-    used_cores: 1
-    total_cores: 26
+    cpu-util: 33
+    physical-processor: Intel Xeon Platinum 8175 # <-- input
+    used-cores: 1
+    total-cores: 26
 ```
 
 to
@@ -163,12 +158,12 @@ to
 observations: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
-    instance_type: m5d.large
+    instance-type: m5d.large
     duration: 5
     cpu: 33
-    physical_processor: Intel Xeon Platinum 8175
-    used_cores: 1
-    total_cores: 26
+    physical-processor: Intel Xeon Platinum 8175
+    used-cores: 1
+    total-cores: 26
     tdp: 165 # <-- output
 ```
 
@@ -192,12 +187,12 @@ Using a `teads-curve` model, we'd be able to estimate energy like so:
 observations: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
-    instance_type: m5d.large
+    instance-type: m5d.large
     duration: 5 # <-- input
-    cpu: 33 # <-- input
-    physical_processor: Intel Xeon Platinum 8175
-    used_cores: 1 # <-- input
-    total_cores: 26 # <-- input
+    cpu-util: 33 # <-- input
+    physical-processor: Intel Xeon Platinum 8175
+    used-cores: 1 # <-- input
+    total-cores: 26 # <-- input
     tdp: 165 # <-- input
 ```
 
@@ -207,12 +202,12 @@ to
 observations: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
-    instance_type: m5d.large
+    instance-type: m5d.large
     duration: 5
-    cpu: 33
-    physical_processor: Intel Xeon Platinum 8175
-    used_cores: 1
-    total_cores: 26
+    cpu-util: 33
+    physical-processor: Intel Xeon Platinum 8175
+    used-cores: 1
+    total-cores: 26
     tdp: 165 
     energy: 0.004 # <-- output
 ```
@@ -231,9 +226,10 @@ For example, several existing models (Boavizta, Cloud Carbon Footprint, and Clim
 If a single model plugin existed, and all it did was map cloud instance types to microarchitectures and did that one job very well. Then other models may choose to rely on that one as a pre-requisite instead of implementing the functionality themselves:
 
 ```yaml
-pipeline: instance-metadata | ccf
+pipeline:
+  - instance-metadata
+  - ccf
 ```
-
 
 > [!important] Ecosystem of plugins
 > The model plugins are the bulk of functionality for the impact engine. A small set of tightly focused model plugins can be combined in multiple ways to meet many use cases.
@@ -259,7 +255,11 @@ Through a set of simulation plugins, you can investigate **what if scenarios**, 
 
 ```yaml
 component:
-  pipeline: "change-instance-type | instance-metadata | tdp | teads"
+  pipeline:
+    - change-instance-type 
+    - instance-metadata
+    - tdp
+    - teads  
   config: 
     change-instance-type:
       to-instance: m5d.xlarge            
@@ -275,7 +275,11 @@ component:
 
 ```yaml
 component:
-  pipeline: "change-instance-type | instance-metadata | tdp | teads"
+  pipeline:
+    - change-instance-type 
+    - instance-metadata
+    - tdp
+    - teads  
   config: 
     change-instance-type:
       to-instance: m5d.xlarge            
@@ -312,7 +316,11 @@ Imagine we had an adaptor model called `aws-lambda-to-instance`, which transform
 
 ```yaml
 component:
-  pipeline: "aws-lambda-to-instance | instance-metadata | tdp | teads"     
+  pipeline:
+    - aws-lambda-to-instance 
+    - instance-metadata
+    - tdp
+    - teads       
   observations: 
     - timestamp: 2023-07-06T00:00
       duration: 5
@@ -323,7 +331,11 @@ component:
 
 ```yaml
 component:
-  pipeline: "aws-lambda-to-instance | instance-metadata | tdp | teads"     
+  pipeline:
+    - aws-lambda-to-instance 
+    - instance-metadata
+    - tdp
+    - teads      
   observations: 
     - timestamp: 2023-07-06T00:00
       duration: 5
@@ -341,7 +353,8 @@ Another future is one where a model is created that directly translates `gb-s` t
 
 ```yaml
 component:
-  pipeline: "aws-lambda"     
+  pipeline:
+    - aws-lambda
   observations: 
     - timestamp: 2023-07-06T00:00
       duration: 5
