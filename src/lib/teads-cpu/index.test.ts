@@ -14,7 +14,7 @@ describe('teads:configure test', () => {
         {
           duration: 3600,
           cpu: 0.5,
-          datetime: '2021-01-01T00:00:00Z'
+          datetime: '2021-01-01T00:00:00Z',
         },
       ])
     ).resolves.toStrictEqual([
