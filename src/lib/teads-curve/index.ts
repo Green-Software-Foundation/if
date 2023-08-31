@@ -47,8 +47,9 @@ export class TeadsCurveModel implements IImpactModelInterface {
       );
     }
 
-    if ('curve' in staticParams) {
+    if ('curve' in staticParams && 'points' in staticParams) {
       this.curve = staticParams?.curve as number[];
+      this.points = staticParams?.points as number[];
       this.spline = new Spline(this.points, this.curve);
     }
 
@@ -69,19 +70,18 @@ export class TeadsCurveModel implements IImpactModelInterface {
   ): Promise<object> {
     if (observations === undefined) {
       throw new Error('Required Parameters not provided');
+    } else if (!Array.isArray(observations)) {
+      throw new Error('Observations must be an array');
     }
 
     const results: KeyValuePair[] = [];
-    if (Array.isArray(observations)) {
-      observations.forEach((observation: KeyValuePair) => {
-        const e = this.calculateEnergy(observation);
-        results.push({
-          energy: e,
-          ...observation,
-        });
+    for (const observation of observations) {
+      const e = this.calculateEnergy(observation);
+      results.push({
+        energy: e,
+        ...observation,
       });
     }
-
     return results;
   }
 
@@ -110,9 +110,18 @@ export class TeadsCurveModel implements IImpactModelInterface {
     const duration = observation['duration'];
 
     //    convert cpu usage to percentage
-    const cpu = observation['cpu'] * 100.0;
+    const cpu = observation['cpu'];
+    if (cpu < 0 || cpu > 100) {
+      throw new Error('cpu usage must be between 0 and 100');
+    }
 
-    const wattage = this.spline.at(cpu) * this.tdp;
+    let tdp = this.tdp;
+
+    if ('tdp' in observation) {
+      tdp = observation['tdp'] as number;
+    }
+
+    const wattage = this.spline.at(cpu) * tdp;
     //  duration is in seconds
     //  wattage is in watts
     //  eg: 30W x 300s = 9000 J
