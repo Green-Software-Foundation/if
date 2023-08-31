@@ -15,10 +15,9 @@ export const openYamlFileAsObject = async (filePath: string): Promise<any> => {
  * Saves given `yaml` dump as a file.
  */
 export const saveYamlFileAs = (object: any, name: string) => {
-  const path = `${__dirname}/${name}`;
   const yamlString = YAML.dump(object);
 
-  return writeFile(path, yamlString);
+  return writeFile(name, yamlString);
 };
 
 /**
