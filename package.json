@@ -15,19 +15,20 @@
     "@cloud-carbon-footprint/aws",
     "typescript-cubic-spline",
     "js-yaml",
-    "@types/node"
+    "@types/node",
+    "ts-command-line-args"
   ],
   "dependencies": {
-    "@cloud-carbon-footprint/core": "*",
     "@cloud-carbon-footprint/aws": "^0.14.5",
-    "typescript-cubic-spline": "*",
+    "@cloud-carbon-footprint/core": "*",
     "@types/node": "^20.4.5",
     "axios": "^1.4.0",
     "js-yaml": "^4.1.0",
     "node-fetch": "^3.3.1",
     "ts-command-line-args": "^2.5.1",
     "ts-sync-request": "^1.4.1",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "typescript-cubic-spline": "*"
   },
   "devDependencies": {
     "@babel/core": "7.22.10",
