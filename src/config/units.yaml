@@ -1,18 +1,18 @@
-cpu:
+cpu-util:
   description: refers to CPU utilization.
   unit: percentage
   aggregation: avg
-memory:
+ram-util:
   description: refers to GB of memory utilized.
   unit: GB
   aggregation: avg
-disk:
+disk-io:
   description: refers to GB of data written/read from disk
   unit: GB
   aggregation: sum
 duration:
   description: refers to the duration of the observation
-  unit: s
+  unit: seconds
   aggregation: sum
 timestamp:
   description: refers to the time of occurrence of the observation
@@ -24,9 +24,9 @@ carbon:
   aggregation: sum
 energy:
   description: amount of energy utilised by the component
-  unit: KWh
+  unit: kWh
   aggregation: sum
-embodied_emission:
+embodied:
   description: Embodied Emissions of the component
   unit: gCO2e
   aggregation: sum
