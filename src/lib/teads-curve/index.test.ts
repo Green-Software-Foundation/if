@@ -13,7 +13,7 @@ describe('teads:configure test', () => {
       impactModel.calculate([
         {
           duration: 3600,
-          cpu: 0.5,
+          cpu: 50.0,
           datetime: '2021-01-01T00:00:00Z',
         },
       ])
@@ -21,7 +21,7 @@ describe('teads:configure test', () => {
       {
         energy: 0.15,
         duration: 3600,
-        cpu: 0.5,
+        cpu: 50.0,
         datetime: '2021-01-01T00:00:00Z',
       },
     ]);
@@ -35,36 +35,36 @@ describe('teads:configure test', () => {
       impactModel.calculate([
         {
           duration: 3600,
-          cpu: 0.1,
+          cpu: 10.0,
           datetime: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 0.5,
+          cpu: 50.0,
           datetime: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 1,
+          cpu: 100.0,
           datetime: '2021-01-01T00:00:00Z',
         },
       ])
     ).resolves.toStrictEqual([
       {
         duration: 3600,
-        cpu: 0.1,
+        cpu: 10.0,
         datetime: '2021-01-01T00:00:00Z',
         energy: 0.096,
       },
       {
         duration: 3600,
-        cpu: 0.5,
+        cpu: 50.0,
         datetime: '2021-01-01T00:00:00Z',
         energy: 0.225,
       },
       {
         duration: 3600,
-        cpu: 1,
+        cpu: 100.0,
         datetime: '2021-01-01T00:00:00Z',
         energy: 0.306,
       },
