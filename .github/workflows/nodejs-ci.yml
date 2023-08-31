@@ -19,14 +19,12 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-        
+
       - name: Run lint
         run: yarn lint
-
-      - name: Build
-        run: yarn build
-
 
       - name: Run tests
         run: yarn test
 
+      - name: Build
+        run: yarn build
