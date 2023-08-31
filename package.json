@@ -38,6 +38,7 @@
     "fixpack": "^4.0.0",
     "gts": "^5.0.0",
     "jest": "^29.6.1",
+    "jest-mock-axios": "^4.7.2",
     "jsii": "^5.1.6",
     "jsii-pacmak": "^1.84.0",
     "ts-jest": "^29.1.1"
@@ -48,9 +49,7 @@
   },
   "jsii": {
     "versionFormat": "full",
-    "outdir": "./dist",
     "tsc": {
-      "outDir": "./dist",
       "rootDir": "./src"
     },
     "targets": {
