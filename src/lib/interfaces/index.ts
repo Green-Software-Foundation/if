@@ -11,3 +11,4 @@ export interface IImpactModelInterface {
 
   calculate(observations: object | object[] | undefined): Promise<object>;
 }
+export * from './ccf';

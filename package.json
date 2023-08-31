@@ -12,10 +12,15 @@
     "typescript",
     "ts-sync-request",
     "@cloud-carbon-footprint/core",
+    "@cloud-carbon-footprint/aws",
+    "typescript-cubic-spline",
+    "js-yaml",
     "@types/node"
   ],
   "dependencies": {
     "@cloud-carbon-footprint/core": "*",
+    "@cloud-carbon-footprint/aws": "^0.14.5",
+    "typescript-cubic-spline": "*",
     "@types/node": "^20.4.5",
     "axios": "^1.4.0",
     "js-yaml": "^4.1.0",
