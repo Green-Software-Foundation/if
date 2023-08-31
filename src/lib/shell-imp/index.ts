@@ -1,6 +1,8 @@
 import { IImpactModelInterface } from '../interfaces';
 import { KeyValuePair } from '../../types/boavizta';
-
+const fs = require('fs');
+const yaml = require('js-yaml');
+const cp = require('child_process');
 
 export class ShellModel implements IImpactModelInterface {
   // Defined for compatibility. Not used in TEADS.
