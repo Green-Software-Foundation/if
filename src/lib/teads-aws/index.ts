@@ -4,7 +4,12 @@ import * as AWS_INSTANCES from './aws-instances.json';
 import * as AWS_EMBODIED from './aws-embodied.json';
 import {KeyValuePair} from '../../types/boavizta';
 
-export class TEADSEngineeringAWS implements IImpactModelInterface {
+export enum Interpolation {
+  SPLINE = 'spline',
+  LINEAR = 'linear',
+}
+
+export class TeadsAWS implements IImpactModelInterface {
   // Defined for compatibility. Not used in TEADS.
   authParams: object | undefined;
   // name of the data source
@@ -17,6 +22,7 @@ export class TEADSEngineeringAWS implements IImpactModelInterface {
   // list of all the by Architecture
   private instanceType = '';
   private expectedLifespan = 4;
+  private interpolation = Interpolation.SPLINE;
 
   constructor() {
     this.standardizeInstanceMetrics();
@@ -91,8 +97,8 @@ export class TEADSEngineeringAWS implements IImpactModelInterface {
         const m = this.embodiedEmissions(observation);
 
         results.push({
-          e: e,
-          m: m,
+          energy: e,
+          embodied: m,
         });
       });
     }
@@ -113,7 +119,7 @@ export class TEADSEngineeringAWS implements IImpactModelInterface {
   private calculateEnergy(observation: KeyValuePair) {
     if (
       !('duration' in observation) ||
-      !('cpu' in observation) ||
+      !('cpu-util' in observation) ||
       !('datetime' in observation)
     ) {
       throw new Error(

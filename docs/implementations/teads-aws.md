@@ -16,9 +16,9 @@ Resulting values are an approximation / estimation based on the testing done by 
 
 ## Example
 ```typescript
-import {TEADSEngineeringAWS} from 'ief';
+import {TeadsAWS} from 'ief';
 
-const teads = new TEADSEngineeringAWS();
+const teads = new TeadsAWS();
 teads.configure({
   instance_type: 'c6i.large'
 })
