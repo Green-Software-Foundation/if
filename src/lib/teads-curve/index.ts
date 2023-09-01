@@ -142,13 +142,15 @@ export class TeadsCurveModel implements IImpactModelInterface {
       let max = 1;
       const x = this.points;
       const y = this.curve;
-      for (let i = 0; i < x.length; i++) {
-        if (cpu >= x[i] && cpu <= x[i + 1]) {
-          min = i;
-          max = i + 1;
-        }
+      if (cpu > 10 && cpu <= 50) {
+        min = 1;
+        max = 2;
       }
-      wattage = (y[0] + ((y[max] - y[min]) / (x[max] - x[min])) * cpu) / 100.0;
+      if (cpu > 50 && cpu <= 100) {
+        min = 2;
+        max = 3;
+      }
+      wattage = y[0] + ((y[max] - y[min]) / (x[max] - x[min])) * cpu;
     }
     //  duration is in seconds
     //  wattage is in watts
