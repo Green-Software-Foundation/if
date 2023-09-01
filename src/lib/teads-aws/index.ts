@@ -90,25 +90,58 @@ export class TeadsAWS implements IImpactModelInterface {
     if (observations === undefined) {
       throw new Error('Required Parameters not provided');
     }
+    if (!Array.isArray(observations)) {
+      throw new Error('Observations should be an array');
+    }
 
     if (this.instanceType === '') {
       throw new Error('Configuration is incomplete');
     }
 
-    const results: KeyValuePair[] = [];
-    if (Array.isArray(observations)) {
-      observations.forEach((observation: KeyValuePair) => {
-        const e = this.calculateEnergy(observation);
-        const m = this.embodiedEmissions(observation);
+    return observations.map((observation: KeyValuePair) => {
+      const e = this.calculateEnergy(observation);
+      const m = this.embodiedEmissions(observation);
+      observation['energy'] = e;
+      observation['embodied'] = m;
+      return observation;
+    });
+  }
 
-        results.push({
-          energy: e,
-          embodied: m,
-        });
-      });
-    }
+  /**
+   * Returns model identifier
+   */
+  modelIdentifier(): string {
+    return 'teads.cloud.sci';
+  }
 
-    return results;
+  /**
+   * Standardize the instance metrics for all the providers
+   *
+   * Maps the instance metrics to a standard format (min, max, idle, 10%, 50%, 100%) for all the providers
+   */
+  standardizeInstanceMetrics() {
+    AWS_INSTANCES.forEach((instance: KeyValuePair) => {
+      const cpus = parseInt(instance['Instance vCPU'], 10);
+      this.computeInstances[instance['Instance type']] = {
+        consumption: {
+          idle: parseFloat(instance['Instance @ Idle'].replace(',', '.')),
+          tenPercent: parseFloat(instance['Instance @ 10%'].replace(',', '.')),
+          fiftyPercent: parseFloat(
+            instance['Instance @ 50%'].replace(',', '.')
+          ),
+          hundredPercent: parseFloat(
+            instance['Instance @ 100%'].replace(',', '.')
+          ),
+        },
+        vCPUs: cpus,
+        maxvCPUs: parseInt(instance['Platform Total Number of vCPU'], 10),
+        name: instance['Instance type'],
+      } as KeyValuePair;
+    });
+    AWS_EMBODIED.forEach((instance: KeyValuePair) => {
+      this.computeInstances[instance['type']].embodiedEmission =
+        instance['total'];
+    });
   }
 
   /**
@@ -177,43 +210,6 @@ export class TeadsAWS implements IImpactModelInterface {
     //  Wh / 1000 = kWh
     // (wattage * duration) / (seconds in an hour) / 1000 = kWh
     return (wattage * duration) / 3600 / 1000;
-  }
-
-  /**
-   * Returns model identifier
-   */
-  modelIdentifier(): string {
-    return 'teads.cloud.sci';
-  }
-
-  /**
-   * Standardize the instance metrics for all the providers
-   *
-   * Maps the instance metrics to a standard format (min, max, idle, 10%, 50%, 100%) for all the providers
-   */
-  standardizeInstanceMetrics() {
-    AWS_INSTANCES.forEach((instance: KeyValuePair) => {
-      const cpus = parseInt(instance['Instance vCPU'], 10);
-      this.computeInstances[instance['Instance type']] = {
-        consumption: {
-          idle: parseFloat(instance['Instance @ Idle'].replace(',', '.')),
-          tenPercent: parseFloat(instance['Instance @ 10%'].replace(',', '.')),
-          fiftyPercent: parseFloat(
-            instance['Instance @ 50%'].replace(',', '.')
-          ),
-          hundredPercent: parseFloat(
-            instance['Instance @ 100%'].replace(',', '.')
-          ),
-        },
-        vCPUs: cpus,
-        maxvCPUs: parseInt(instance['Platform Total Number of vCPU'], 10),
-        name: instance['Instance type'],
-      } as KeyValuePair;
-    });
-    AWS_EMBODIED.forEach((instance: KeyValuePair) => {
-      this.computeInstances[instance['type']].embodiedEmission =
-        instance['total'];
-    });
   }
 
   /**
