@@ -35,6 +35,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
    *  @param {string} name name of the resource
    *  @param {Object} staticParams static parameters for the resource
    *  @param {number} staticParams.tdp Thermal Design Power in Watts
+   *  @param {Interpolation} staticParams.interpolation Interpolation method
    */
   async configure(
     name: string,
@@ -133,7 +134,22 @@ export class TeadsCurveModel implements IImpactModelInterface {
       tdp = observation['tdp'] as number;
     }
 
-    const wattage = this.spline.at(cpu) * tdp;
+    let wattage = 0.0;
+    if (this.interpolation === Interpolation.SPLINE) {
+      wattage = this.spline.at(cpu) * tdp;
+    } else if (this.interpolation === Interpolation.LINEAR) {
+      let min = 0;
+      let max = 1;
+      const x = this.points;
+      const y = this.curve;
+      for (let i = 0; i < x.length; i++) {
+        if (cpu >= x[i] && cpu <= x[i + 1]) {
+          min = i;
+          max = i + 1;
+        }
+      }
+      wattage = (y[0] + ((y[max] - y[min]) / (x[max] - x[min])) * cpu) / 100.0;
+    }
     //  duration is in seconds
     //  wattage is in watts
     //  eg: 30W x 300s = 9000 J
