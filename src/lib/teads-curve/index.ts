@@ -2,6 +2,11 @@ import {IImpactModelInterface} from '../interfaces';
 import Spline from 'typescript-cubic-spline';
 import {KeyValuePair} from '../../types/boavizta';
 
+export enum Interpolation {
+  SPLINE = 'spline',
+  LINEAR = 'linear',
+}
+
 export class TeadsCurveModel implements IImpactModelInterface {
   // Defined for compatibility. Not used in TEADS.
   authParams: object | undefined;
@@ -15,6 +20,8 @@ export class TeadsCurveModel implements IImpactModelInterface {
   points: number[] = [0, 10, 50, 100];
   // spline interpolation of the power curve
   spline: Spline = new Spline(this.points, this.curve);
+  // interpolation method
+  interpolation: Interpolation = Interpolation.SPLINE;
 
   /**
    * Defined for compatibility. Not used in TEADS.
@@ -53,6 +60,10 @@ export class TeadsCurveModel implements IImpactModelInterface {
       this.spline = new Spline(this.points, this.curve);
     }
 
+    if ('interpolation' in staticParams) {
+      this.interpolation = staticParams?.interpolation as Interpolation;
+    }
+
     return this;
   }
 
@@ -73,16 +84,17 @@ export class TeadsCurveModel implements IImpactModelInterface {
     } else if (!Array.isArray(observations)) {
       throw new Error('Observations must be an array');
     }
+    return observations.map(observation => {
+      observation['energy'] = this.calculateEnergy(observation);
+      return observation;
+    });
+  }
 
-    const results: KeyValuePair[] = [];
-    for (const observation of observations) {
-      const e = this.calculateEnergy(observation);
-      results.push({
-        energy: e,
-        ...observation,
-      });
-    }
-    return results;
+  /**
+   * Returns model identifier
+   */
+  modelIdentifier(): string {
+    return 'teads.curve';
   }
 
   /**
@@ -132,12 +144,5 @@ export class TeadsCurveModel implements IImpactModelInterface {
     //  Wh / 1000 = kWh
     // (wattage * duration) / (seconds in an hour) / 1000 = kWh
     return (wattage * duration) / 3600 / 1000;
-  }
-
-  /**
-   * Returns model identifier
-   */
-  modelIdentifier(): string {
-    return 'teads.cpu';
   }
 }
