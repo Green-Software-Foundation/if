@@ -26,10 +26,55 @@ describe('teads:configure test', () => {
       },
     ]);
   });
-  test('teads:initialize with params', async () => {
+  test('teads:initialize with params:spline', async () => {
     const impactModel = new TeadsCurveModel();
     await impactModel.configure('test', {
       tdp: 300,
+    });
+    await expect(
+      impactModel.calculate([
+        {
+          duration: 3600,
+          cpu: 10.0,
+          datetime: '2021-01-01T00:00:00Z',
+        },
+        {
+          duration: 3600,
+          cpu: 50.0,
+          datetime: '2021-01-01T00:00:00Z',
+        },
+        {
+          duration: 3600,
+          cpu: 100.0,
+          datetime: '2021-01-01T00:00:00Z',
+        },
+      ])
+    ).resolves.toStrictEqual([
+      {
+        duration: 3600,
+        cpu: 10.0,
+        datetime: '2021-01-01T00:00:00Z',
+        energy: 0.096,
+      },
+      {
+        duration: 3600,
+        cpu: 50.0,
+        datetime: '2021-01-01T00:00:00Z',
+        energy: 0.225,
+      },
+      {
+        duration: 3600,
+        cpu: 100.0,
+        datetime: '2021-01-01T00:00:00Z',
+        energy: 0.306,
+      },
+    ]);
+  });
+  test('teads:initialize with params:linear', async () => {
+    const impactModel = new TeadsCurveModel();
+    await impactModel.configure('test', {
+      tdp: 300,
+      interpolation: 'linear',
     });
     await expect(
       impactModel.calculate([
