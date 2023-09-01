@@ -1,12 +1,12 @@
-import { IImpactModelInterface } from "../interfaces";
-import Spline from "typescript-cubic-spline";
-import * as AWS_INSTANCES from "./aws-instances.json";
-import * as AWS_EMBODIED from "./aws-embodied.json";
-import { KeyValuePair } from "../../types/boavizta";
+import {IImpactModelInterface} from '../interfaces';
+import Spline from 'typescript-cubic-spline';
+import * as AWS_INSTANCES from './aws-instances.json';
+import * as AWS_EMBODIED from './aws-embodied.json';
+import {KeyValuePair} from '../../types/boavizta';
 
 export enum Interpolation {
-  SPLINE = "spline",
-  LINEAR = "linear",
+  SPLINE = 'spline',
+  LINEAR = 'linear',
 }
 
 export class TeadsAWS implements IImpactModelInterface {
@@ -20,7 +20,7 @@ export class TeadsAWS implements IImpactModelInterface {
   } = {};
 
   // list of all the by Architecture
-  private instanceType = "";
+  private instanceType = '';
   private expectedLifespan = 4;
   private interpolation = Interpolation.SPLINE;
 
@@ -50,25 +50,25 @@ export class TeadsAWS implements IImpactModelInterface {
     this.name = name;
 
     if (staticParams === undefined) {
-      throw new Error("Required Parameters not provided");
+      throw new Error('Required Parameters not provided');
     }
 
-    if ("instance_type" in staticParams) {
+    if ('instance_type' in staticParams) {
       const instanceType = staticParams?.instance_type as string;
       if (instanceType in this.computeInstances) {
         this.instanceType = instanceType;
       } else {
-        throw new Error("Instance Type not supported");
+        throw new Error('Instance Type not supported');
       }
     } else {
-      throw new Error("Instance Type not provided");
+      throw new Error('Instance Type not provided');
     }
 
-    if ("expected_lifespan" in staticParams) {
+    if ('expected_lifespan' in staticParams) {
       this.expectedLifespan = staticParams?.expected_lifespan as number;
     }
 
-    if ("interpolation" in staticParams) {
+    if ('interpolation' in staticParams) {
       this.interpolation = staticParams?.interpolation as Interpolation;
     }
 
@@ -88,11 +88,11 @@ export class TeadsAWS implements IImpactModelInterface {
     observations: object | object[] | undefined
   ): Promise<object> {
     if (observations === undefined) {
-      throw new Error("Required Parameters not provided");
+      throw new Error('Required Parameters not provided');
     }
 
-    if (this.instanceType === "") {
-      throw new Error("Configuration is incomplete");
+    if (this.instanceType === '') {
+      throw new Error('Configuration is incomplete');
     }
 
     const results: KeyValuePair[] = [];
@@ -103,7 +103,7 @@ export class TeadsAWS implements IImpactModelInterface {
 
         results.push({
           energy: e,
-          embodied: m
+          embodied: m,
         });
       });
     }
@@ -123,20 +123,20 @@ export class TeadsAWS implements IImpactModelInterface {
    */
   private calculateEnergy(observation: KeyValuePair) {
     if (
-      !("duration" in observation) ||
-      !("cpu" in observation) ||
-      !("datetime" in observation)
+      !('duration' in observation) ||
+      !('cpu' in observation) ||
+      !('datetime' in observation)
     ) {
       throw new Error(
-        "Required Parameters duration,cpu,datetime not provided for observation"
+        'Required Parameters duration,cpu,datetime not provided for observation'
       );
     }
 
     //    duration is in seconds
-    const duration = observation["duration"];
+    const duration = observation['duration'];
 
     //    convert cpu usage to percentage
-    const cpu = observation["cpu"] * 100.0;
+    const cpu = observation['cpu'] * 100.0;
 
     //  get the wattage for the instance type
 
@@ -146,7 +146,7 @@ export class TeadsAWS implements IImpactModelInterface {
       this.computeInstances[this.instanceType].consumption.idle ?? 0,
       this.computeInstances[this.instanceType].consumption.tenPercent ?? 0,
       this.computeInstances[this.instanceType].consumption.fiftyPercent ?? 0,
-      this.computeInstances[this.instanceType].consumption.hundredPercent ?? 0
+      this.computeInstances[this.instanceType].consumption.hundredPercent ?? 0,
     ];
 
     const spline = new Spline(x, y);
@@ -155,15 +155,15 @@ export class TeadsAWS implements IImpactModelInterface {
     if (this.interpolation === Interpolation.SPLINE) {
       wattage = spline.at(cpu);
     } else if (this.interpolation === Interpolation.LINEAR) {
-      let min = 0
-      let max = 1
+      let min = 0;
+      let max = 1;
       if (cpu > 10 && cpu <= 50) {
-        min = 1
-        max = 2
+        min = 1;
+        max = 2;
       }
       if (cpu > 50 && cpu <= 100) {
-        min = 2
-        max = 3
+        min = 2;
+        max = 3;
       }
       wattage = y[0] + ((y[max] - y[min]) / (x[max] - x[min])) * cpu;
     }
@@ -183,7 +183,7 @@ export class TeadsAWS implements IImpactModelInterface {
    * Returns model identifier
    */
   modelIdentifier(): string {
-    return "teads.cloud.sci";
+    return 'teads.cloud.sci';
   }
 
   /**
@@ -193,26 +193,26 @@ export class TeadsAWS implements IImpactModelInterface {
    */
   standardizeInstanceMetrics() {
     AWS_INSTANCES.forEach((instance: KeyValuePair) => {
-      const cpus = parseInt(instance["Instance vCPU"], 10);
-      this.computeInstances[instance["Instance type"]] = {
+      const cpus = parseInt(instance['Instance vCPU'], 10);
+      this.computeInstances[instance['Instance type']] = {
         consumption: {
-          idle: parseFloat(instance["Instance @ Idle"].replace(",", ".")),
-          tenPercent: parseFloat(instance["Instance @ 10%"].replace(",", ".")),
+          idle: parseFloat(instance['Instance @ Idle'].replace(',', '.')),
+          tenPercent: parseFloat(instance['Instance @ 10%'].replace(',', '.')),
           fiftyPercent: parseFloat(
-            instance["Instance @ 50%"].replace(",", ".")
+            instance['Instance @ 50%'].replace(',', '.')
           ),
           hundredPercent: parseFloat(
-            instance["Instance @ 100%"].replace(",", ".")
-          )
+            instance['Instance @ 100%'].replace(',', '.')
+          ),
         },
         vCPUs: cpus,
-        maxvCPUs: parseInt(instance["Platform Total Number of vCPU"], 10),
-        name: instance["Instance type"]
+        maxvCPUs: parseInt(instance['Platform Total Number of vCPU'], 10),
+        name: instance['Instance type'],
       } as KeyValuePair;
     });
     AWS_EMBODIED.forEach((instance: KeyValuePair) => {
-      this.computeInstances[instance["type"]].embodiedEmission =
-        instance["total"];
+      this.computeInstances[instance['type']].embodiedEmission =
+        instance['total'];
     });
   }
 
@@ -221,7 +221,7 @@ export class TeadsAWS implements IImpactModelInterface {
    */
   private embodiedEmissions(observation: KeyValuePair): number {
     // duration
-    const durationInHours = observation["duration"] / 3600;
+    const durationInHours = observation['duration'] / 3600;
     // M = TE * (TR/EL) * (RR/TR)
     // Where:
     // TE = Total Embodied Emissions, the sum of Life Cycle Assessment(LCA) emissions for all hardware components
