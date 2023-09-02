@@ -58,6 +58,11 @@ export class TeadsCurveModel implements IImpactModelInterface {
     if ('curve' in staticParams && 'points' in staticParams) {
       this.curve = staticParams?.curve as number[];
       this.points = staticParams?.points as number[];
+      if (this.curve.length !== this.points.length) {
+        throw new Error(
+          'Number of points and curve values must be the same length'
+        );
+      }
       this.spline = new Spline(this.points, this.curve);
     }
 
@@ -138,19 +143,28 @@ export class TeadsCurveModel implements IImpactModelInterface {
     if (this.interpolation === Interpolation.SPLINE) {
       wattage = this.spline.at(cpu) * tdp;
     } else if (this.interpolation === Interpolation.LINEAR) {
-      let min = 0;
-      let max = 1;
       const x = this.points;
       const y = this.curve;
-      if (cpu > 10 && cpu <= 50) {
-        min = 1;
-        max = 2;
+      // base rate is from which level of cpu linear interpolation is applied at
+      let base_rate = 0;
+      let base_cpu = 0;
+      let ratio = 0;
+      // find the base rate and ratio
+      for (let i = 0; i < x.length; i++) {
+        if (cpu === x[i]) {
+          base_rate = y[i];
+          base_cpu = x[i];
+          break;
+        } else if (cpu > x[i] && cpu < x[i + 1]) {
+          base_rate = y[i];
+          base_cpu = x[i];
+          ratio = (y[i + 1] - y[i]) / (x[i + 1] - x[i]);
+          break;
+        }
       }
-      if (cpu > 50 && cpu <= 100) {
-        min = 2;
-        max = 3;
-      }
-      wattage = y[0] + ((y[max] - y[min]) / (x[max] - x[min])) * cpu;
+      // sum of base_rate + (cpu - base_cpu) * ratio = total rate of cpu usage
+      // total rate * tdp = wattage
+      wattage = (base_rate + (cpu - base_cpu) * ratio) * tdp;
     }
     //  duration is in seconds
     //  wattage is in watts
