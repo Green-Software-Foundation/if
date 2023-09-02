@@ -1,39 +1,50 @@
 import {parseProcessArgument} from '../src/util/args';
 import {openYamlFileAsObject, saveYamlFileAs} from '../src/util/yaml';
 
-import {ObservationPipeline} from '../src/util/observation-pipeline';
+import {Observatory} from '../src/util/observatory';
 import {KeyValuePair} from '../src';
 
 /**
  * Computes impact based on given `observations` and `params`.
  */
-const computeImpact = async (observations: any[], params: any) => {
-  const observatory = new ObservationPipeline(observations);
-  const computation = await observatory.pipe('boavizta', params);
+const runPipelineComputer = async (
+  observations: any[],
+  params: any,
+  pipeline: string[]
+) => {
+  const observatory = new Observatory(observations);
 
-  return computation.getObservationsData();
+  for (const model of pipeline) {
+    await observatory.doInvestigationsWith(model, params);
+  }
+
+  return observatory.getObservationsData();
 };
 
 /**
  * For each graph builds params, then passes it to computing fn.
  */
-const calculateImpactsBasedOnGraph = (graphs: any) => (title: string) => {
-  const serviceData = graphs[title];
-  const {observations} = serviceData;
+const calculateImpactsBasedOnGraph =
+  (graphs: any) => async (service: string) => {
+    const serviceData = graphs[service];
+    const {observations, pipeline} = serviceData;
 
-  const params: KeyValuePair = {
-    allocation: 'TOTAL',
-    verbose: true,
-    name: observations[0].processor,
-    core_units: 24,
-  };
+    /**
+     * Building params should be optimized to support any model.
+     * Mock params for boavizta model.
+     */
+    const params: KeyValuePair = {
+      allocation: 'TOTAL',
+      verbose: true,
+      name: observations[0].processor,
+      core_units: 24,
+    };
 
-  return computeImpact(observations, params).then(result => {
-    graphs[title].observations = result;
+    const result = await runPipelineComputer(observations, params, pipeline);
+    graphs[service].observations = result;
 
     return graphs;
-  });
-};
+  };
 
 /**
  * 1. Parses yml input/output process arguments.
@@ -54,10 +65,10 @@ const rimplPOCScript = async () => {
     const graphs = impl.graph;
 
     // calculate for single graph
-    const serviceTitles = Object.keys(graphs).splice(0);
+    const services = Object.keys(graphs).splice(0);
 
     const graphsUpdated = await Promise.all(
-      serviceTitles.map(calculateImpactsBasedOnGraph(graphs))
+      services.map(calculateImpactsBasedOnGraph(graphs))
     );
 
     impl.graph = graphsUpdated[0];
