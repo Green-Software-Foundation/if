@@ -93,6 +93,21 @@ describe('teads:configure test', () => {
           cpu: 100.0,
           datetime: '2021-01-01T00:00:00Z',
         },
+        {
+          duration: 3600,
+          cpu: 15.0,
+          datetime: '2021-01-01T00:00:00Z',
+        },
+        {
+          duration: 3600,
+          cpu: 55.0,
+          datetime: '2021-01-01T00:00:00Z',
+        },
+        {
+          duration: 3600,
+          cpu: 75.0,
+          datetime: '2021-01-01T00:00:00Z',
+        },
       ])
     ).resolves.toStrictEqual([
       {
@@ -112,6 +127,25 @@ describe('teads:configure test', () => {
         cpu: 100.0,
         datetime: '2021-01-01T00:00:00Z',
         energy: 0.306,
+      },
+
+      {
+        duration: 3600,
+        cpu: 15.0,
+        datetime: '2021-01-01T00:00:00Z',
+        energy: 0.11212500000000002,
+      },
+      {
+        duration: 3600,
+        cpu: 55.0,
+        datetime: '2021-01-01T00:00:00Z',
+        energy: 0.2331,
+      },
+      {
+        duration: 3600,
+        cpu: 75.0,
+        datetime: '2021-01-01T00:00:00Z',
+        energy: 0.2655,
       },
     ]);
   });
