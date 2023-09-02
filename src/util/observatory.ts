@@ -3,7 +3,7 @@ import {BoaviztaCpuImpactModel} from '../lib';
 /**
  * Pipeline for computing impacts based on observation.
  */
-export class ObservationPipeline {
+export class Observatory {
   private observations: any;
 
   /**
@@ -45,7 +45,7 @@ export class ObservationPipeline {
   /**
    * Apply appropriate observation.
    */
-  private doObservationsUsing(modelType: string, params: any) {
+  public doInvestigationsWith(modelType: string, params: any) {
     switch (modelType) {
       case 'boavizta':
         return this.boaviztaHandler(params);
@@ -59,14 +59,5 @@ export class ObservationPipeline {
    */
   public getObservationsData() {
     return this.observations;
-  }
-
-  /**
-   * Pipe function which takes model, and returns the observation instance.
-   */
-  public async pipe(modelType: string, params: any) {
-    await this.doObservationsUsing(modelType, params);
-
-    return this;
   }
 }
