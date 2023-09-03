@@ -4,6 +4,9 @@ abstract: How to process the outputs of an impact graph calculation, enriching i
 ---
 # Computation Pipeline
 
+> [!note] Outdated
+> This document is now outdated and has been superceded by other aspects of this spec esp. the spec around [Rimpl](Rimpl.md). Parts of this doc are still in the processes of being migrated over to other parts of the spec so it's still here for now.
+
 ## Introduction
 
 The execution of a  graph involves 4 phases:

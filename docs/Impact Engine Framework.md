@@ -5,8 +5,9 @@ A Framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environm
 > [!note] Key
 > - ✅ Done
 > - ✍🏽 Draft
-> - 👷🏽‍♂️Todo
-> - 🔥Priority
+> - 👷🏽‍♂️ Todo
+> - 🔥 Priority
+> - 🦖 Outdated
 ## Concepts
 - ✅ [Background](Background.md)
 - ✅ [Motivation](Motivation.md)
@@ -28,7 +29,7 @@ A Framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environm
 - ✅ [Impl (Impact YAML)](Impl%20(Impact%20YAML).md)
 - 👷🏽‍♂️[Impact Model](Impact%20Model.md)
 - ✅ [Impact Model Plugin](Impact%20Model%20Plugin.md)
-- ✅ [Computation Pipeline](Computation%20Pipeline.md)
+- 🦖 ~~[Computation Pipeline](Computation%20Pipeline.md)~~
 - 👷🏽‍♂️ Computation Pipeline Plugin 🔥
 - 👷🏽‍♂️ [Impact Metric](Impact%20Metric) 🔥
 - ✍🏽 [Rimpl](Rimpl.md) 
