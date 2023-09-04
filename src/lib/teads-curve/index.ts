@@ -77,8 +77,8 @@ export class TeadsCurveModel implements IImpactModelInterface {
    * Calculate the total emissions for a list of observations
    *
    * Each Observation require:
-   *  @param {Object[]} observations  ISO 8601 datetime string
-   *  @param {string} observations[].datetime ISO 8601 datetime string
+   *  @param {Object[]} observations  RFC3339 datetime string
+   *  @param {string} observations[].datetime RFC3339 datetime string
    *  @param {number} observations[].duration observation duration in seconds
    *  @param {number} observations[].cpu percentage cpu usage
    */
@@ -109,7 +109,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
    *
    * duration: duration of the observation in seconds
    * cpu: cpu usage in percentage
-   * datetime: ISO 8601 datetime string
+   * datetime: RFC3339 datetime string
    *
    * Uses a spline method on the teads cpu wattage data
    */
