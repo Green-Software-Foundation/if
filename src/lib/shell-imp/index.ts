@@ -1,14 +1,13 @@
-import { IImpactModelInterface } from '../interfaces';
-import { KeyValuePair } from '../../types/boavizta';
-const fs = require('fs');
-const yaml = require('js-yaml');
-const cp = require('child_process');
+import {IImpactModelInterface} from '../interfaces';
+import * as cp from 'child_process';
+import {KeyValuePair} from '../../types/boavizta';
 
 export class ShellModel implements IImpactModelInterface {
   // Defined for compatibility. Not used in TEADS.
   authParams: object | undefined;
   // name of the data source
   name: string | undefined;
+  staticParams: object | undefined;
 
   /**
    * Defined for compatibility. Not used in TEADS.
@@ -28,10 +27,38 @@ export class ShellModel implements IImpactModelInterface {
     staticParams: object | undefined = undefined
   ): Promise<IImpactModelInterface> {
     this.name = name;
+    this.staticParams = staticParams;
     return this;
   }
 
-  /* 
+  async calculate(
+    observations: object | object[] | undefined
+  ): Promise<object[]> {
+    if (observations === undefined) {
+      throw new Error('Required Parameters not provided');
+    }
+
+    const input: KeyValuePair = {};
+    input['observations'] = observations;
+    if (this.staticParams !== undefined) {
+      input['config'] = this.staticParams;
+    }
+
+    const inputAsString = yaml.dump(input);
+
+    const results = this.runModelInShell(inputAsString, '/usr/bin/pimpl');
+
+    return results['impacts'];
+  }
+
+  /**
+   * Returns model identifier
+   */
+  modelIdentifier(): string {
+    return 'shellModel';
+  }
+
+  /*
   description:
     spawns a child process to run an external IMP
     expects execPath to be a path to an executable with a CLI exposing two methods: --calculate and --impl
@@ -46,40 +73,21 @@ export class ShellModel implements IImpactModelInterface {
   - ompl data to stdout
   - ompl data to disk as omplName.yaml
 */
-  private runModelInShell(observations, execPath, omplName) {
-    try {
-      const result = cp.spawnSync(execPath, ['--calculate', '--impl=' + observations]).stdout.toString();
-      const yamlData = yaml.dump(yaml.load(result))
-      fs.writeFileSync(omplName, yamlData, 'utf8');
-      return yamlData
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  async calculate(
-    observations: object | object[] | undefined
-  ): Promise<object> {
-    if (observations === undefined) {
-      throw new Error('Required Parameters not provided');
-    }
-
-    // TODO: NEED TO CONVERT OBSERVATIONS TO YAML STRING HERE
-
-    const resultsYaml = this.runModelInShell(observations, "/usr/bin/pimpl.py", "ompl.yaml")
-
-    // TODO: NEED TO PARSE YAML RETURNED FROM MODEL TO RESULTS OBJECT
-    // TODO: RETURN THE RESULTS OBJECT
-
-    //return results;
-  }
-
-
-
   /**
-   * Returns model identifier
+   * Runs the model in a shell
+   * @param input
+   * @param execPath
+   * @param omplName
+   * @private
    */
-  modelIdentifier(): string {
-    return 'shellModel';
+  private runModelInShell(input: object[], execPath: string) {
+    try {
+      const result = cp
+        .spawnSync(execPath, ['--calculate', '--impl=' + input])
+        .stdout.toString();
+      return yaml.load(result);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
