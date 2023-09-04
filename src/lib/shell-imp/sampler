@@ -1,0 +1,30 @@
+#!/opt/homebrew/bin/python3
+import sys
+import yaml
+import copy
+
+# Initialize an empty list to collect lines
+input_lines = []
+
+for line in sys.stdin:
+  # Collect the lines
+  input_lines.append(line)
+
+# Join the collected lines into a single string
+yaml_input = ''.join(input_lines)
+
+try:
+  # Parse the entire YAML input
+  data = yaml.safe_load(yaml_input)
+
+  if data is not None:
+    data['impacts'] = []
+    for impact in data['observations']:
+      imp = copy.deepcopy(impact)
+      imp['e'] = 1
+      data['impacts'].append(imp)
+    print(yaml.dump(data, default_flow_style=False))
+  else:
+    print("No valid YAML input provided.")
+except yaml.YAMLError as e:
+  print("Error parsing YAML:", e)

@@ -9,6 +9,7 @@ export class ShellModel implements IImpactModelInterface {
   // name of the data source
   name: string | undefined;
   staticParams: object | undefined;
+  executable = '';
 
   /**
    * Defined for compatibility. Not used in TEADS.
@@ -28,6 +29,13 @@ export class ShellModel implements IImpactModelInterface {
     staticParams: object | undefined = undefined
   ): Promise<IImpactModelInterface> {
     this.name = name;
+    if (staticParams === undefined) {
+      throw new Error('Required staticParams not provided');
+    }
+    if ('executable' in staticParams) {
+      this.executable = staticParams['executable'] as string;
+      delete staticParams['executable'];
+    }
     this.staticParams = staticParams;
     return this;
   }
@@ -47,7 +55,7 @@ export class ShellModel implements IImpactModelInterface {
 
     const inputAsString: string = yaml.dump(input);
 
-    const results = this.runModelInShell(inputAsString, '/usr/bin/pimpl');
+    const results = this.runModelInShell(inputAsString, this.executable);
 
     return results['impacts'];
   }
@@ -83,9 +91,11 @@ export class ShellModel implements IImpactModelInterface {
    */
   private runModelInShell(input: string, execPath: string): KeyValuePair {
     try {
+      console.log('input', input);
       const result = cp
-        .spawnSync(execPath, ['--calculate', '--impl=' + input])
+        .spawnSync(execPath, ['--calculate'], {input: input, encoding: 'utf8'})
         .stdout.toString();
+      console.log('result', result);
       return yaml.load(result) as KeyValuePair;
     } catch (e: any) {
       throw new Error(e.message);
