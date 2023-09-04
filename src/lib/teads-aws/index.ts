@@ -22,7 +22,7 @@ export class TeadsAWS implements IImpactModelInterface {
   // list of all the by Architecture
   private instanceType = '';
   private expectedLifespan = 4;
-  private interpolation = Interpolation.SPLINE;
+  private interpolation = Interpolation.LINEAR;
 
   constructor() {
     this.standardizeInstanceMetrics();
@@ -205,10 +205,6 @@ export class TeadsAWS implements IImpactModelInterface {
           break;
         }
       }
-      console.log('base_rate', base_rate);
-      console.log('base_cpu', base_cpu);
-      console.log('ratio', ratio);
-      console.log('cpu', cpu);
       // sum of base_rate + (cpu - base_cpu) * ratio = total rate of cpu usage
       wattage = base_rate + (cpu - base_cpu) * ratio;
     }

@@ -8,6 +8,7 @@ describe('teads:configure test', () => {
   test('initialize with params', async () => {
     const impactModel = new TeadsAWS();
     await impactModel.configure('test', {
+      interpolation: Interpolation.LINEAR,
       instance_type: 't2.micro',
     });
     await expect(
