@@ -15,12 +15,15 @@ config:
       path: builtin             
     - name: teads-curve # a model that returns energy based on the generalised teads power curve and tdp
       path: builtin
+    - name: sci # sums SCI components and converts to f.unit
+      path: builtin
 graph:
   front-end:
     pipeline: 
       - teads-curve # tdp & cpu -> energy
       - sci-m # duration & config -> embodied
       - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci #
     config:
       sci-m:
         te: 350 # kgCO2eq
@@ -33,12 +36,13 @@ graph:
       teads-curve:
         processor: Intel® Core™ i7-1185G7
         tdp: 28 # W
+      sci:
+        time: hour # signal to convert /s -> /hr
+        factor: 1 # factor to convert per time to per f.unit ()
     observations:
       - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
         duration: 3600 # Secs
-        cpu: 18.392
-      - mapping:
-        units: hour
+        cpu_util: 18.392
   app-server:
     pipeline: 
       - teads-curve # tdp & cpu -> energy
@@ -56,12 +60,13 @@ graph:
       teads-curve:
         processor: Intel® Xeon® Platinum 8272CL
         tdp: 205
+      sci:
+        time: hour # signal to convert /s -> /hr
+        factor: 1 # factor to convert per time to per f.unit ()
     observations:
       - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
         duration: 3600
-        cpu: 18.392
-      - mapping:
-          units: hour
+        cpu_util: 18.392
   db-server:
     pipeline: 
       - teads-curve # tdp & cpu & duration-> energy
@@ -79,9 +84,11 @@ graph:
       teads-curve:
         processor:  Intel® Xeon® Platinum 8160
         tdp: 150 # W
+      sci:
+        time: hour # signal to convert /s -> /hr
+        factor: 1 # factor to convert per time to per f.unit ()
     observations:
       - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
         duration: 3600
-        cpu: 10
-      - mapping:
-        units: hour
+        cpu_util: 10
+

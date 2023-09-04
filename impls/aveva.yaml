@@ -16,6 +16,7 @@ config:
     - name: sci-m  # a model that calculates m from te, tir, el, rr and rtor.          
     - name: teads-curve # a model that returns energy based on the generalised teads power curve and tdp
       path: builtin
+    - name: sci # sums SCI components and converts to f.unit
 graph:
   pc: 
     config:
@@ -27,14 +28,11 @@ graph:
         tor: 1
       sci-m:
         i: 474.8 #gCo2/kWh 
-    children: 
-      child: 
-        observations: 
-          series:
-            timestamp: 2023-07-06T00:00 
-            measured_power: 16.009 # average over timespan
-            baseline_power: 11.335 # average over timespan
-            annual_usage: 8322 # (hours in year * average uptime e.g. 95%)
-          mapping: 
-            units: hour
+      observations: 
+        series:
+          timestamp: 2023-07-06T00:00 
+          measured_power: 16.009 # average over timespan
+          baseline_power: 11.335 # average over timespan
+          annual_usage: 8322 # (hours in year * average uptime e.g. 95%)
+
 

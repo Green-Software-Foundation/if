@@ -17,8 +17,6 @@ config:
       path: builtin
     - name: sci
       path: builtin
-      config:
-        r: 890000 # a common denominator (R) for all sci calcs, in this case number of requests for month
 graph: 
   vm:
     pipeline:
@@ -39,6 +37,9 @@ graph:
         tdp: ??? # what's the TDP for this server
       add-obs: 
         grid-ci: 350.861 # Just copies any values under here to the observation as is.
+      sci:
+        time: hour # signal to convert /s -> /hr
+        factor: 89000 # factor to convert per time to per f.unit
     children:
       vm1: 
         observations: 
@@ -107,6 +108,9 @@ graph:
         tdp: ??? # what's the TDP for this server
       add-obs: 
         grid-ci: 350.861 # Just copies any values under here to the observation as is.
+      sci:
+        time: hour # signal to convert /s -> /hr
+        factor: 89000 # factor to convert per time to per f.unit
     observations:
       - timestamp: 2023-07-06T00:00
         duration: 2419200 # seconds in a month (7 days * 4 weeks)
@@ -131,6 +135,9 @@ graph:
         tdp: ??? # what's the TDP for this server
       add-obs: 
         grid-ci: 350.861 # Just copies any values under here to the observation as is.
+      sci:
+        time: hour # signal to convert /s -> /hr
+        factor: 89000 # factor to convert per time to per f.unit
     observations: 
       - timestamp: 2023-07-06T00:00
         duration: 2419200 # seconds in a month (7 days * 4 weeks)

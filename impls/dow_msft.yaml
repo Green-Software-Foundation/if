@@ -5,18 +5,19 @@ tags:
   complexity: simple
   category: cloud
 config:
-  funit:
-    - name: api-call
-      scale-factor: 32000 # divide SCI (per hour) by this value to get SCI per api call
   models:
     - name: tdp-curve # a model that returns an embodied value given the sci embodied attribution equation.
       path: builtin
-    - name: sci-mem
+    - name: sci-mem # a model that calculates a carbon value for memory
       path: plugin  
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
       path: builtin
     - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
-      path: builtin             
+      path: builtin     
+    - name: sci-sum
+      path: builtin # a model that knows to sum the carbon values for cpu and memory before calculating total SCI
+    - name: functional-unit
+      path: builtin # builtin model that normalizes all metrics from the default /s to /hr
 # Single observation
 graph:
   backend: # an advanced grouping node
@@ -25,6 +26,7 @@ graph:
       - sci-mem # calculates energy used by memory as component of sci-m
       - sci-m # duration & config -> embodied
       - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci # add cpu and memory components and convert to f.unit
     config: 
       vendor: azure
       region: east-us  # lookup carbon intensity from region
@@ -45,13 +47,14 @@ graph:
             tor: 8
           sci-c:
             i: 554 # gCO2e/kWh
+          sci:
+            time: hour # signal to convert /s -> /hr
+            factor: 32000 # factor to convert per time to per f.unit
         observations: 
           series:
             timestamp: 2023-07-06T00:00
             cpu: 17.12
             ram: 19.375 # % of available
-          mapping:
-            units: hours
       tiger-api: # a leaf component
         config:
           teads-curve:
@@ -68,14 +71,15 @@ graph:
             tor: 8
           sci-c:
             i: 554 # gCO2e/kWh
+          sci:
+            time: hour # signal to convert /s -> /hr
+            factor: 32000 # factor to convert per time to per f.unit
         observations: 
           series:      
             timestamp: 2023-08-06T00:00
             duration: 1
-            cpu_utilization: 25
-            memory_utilization: 70 # % of total
-          mapping:
-            units: hours
+            cpu_util: 25
+            memory_util: 70 # % of total
       neo4j-database: # a leaf component
         config:
           teads-curve:
@@ -92,14 +96,15 @@ graph:
             tor: 64
           sci-c:
             i: 554 # gCO2e/kWh
+          sci:
+            time: hour # signal to convert /s -> /hr
+            factor: 32000 # factor to convert per time to per f.unit
         observations:
           series:
             timestamp: 2023-07-06T00:00
             duration: 1 # this data is using span, but the model expects duration
-            cpu_utilization: 28.05
-            memory_utilization: 19.375
-          mapping:
-            units: hours
+            cpu_util: 28.05
+            memory_util: 19.375
       neo4j-api: # a leaf component
         config:
           teads-curve:
@@ -116,12 +121,13 @@ graph:
             tor: 64
           sci-c:
             i: 554 # gCO2e/kWh
+          sci:
+            time: hour # signal to convert /s -> /hr
+            factor: 32000 # factor to convert per time to per f.unit
         observations:
           series:      
             timestamp: 2023-08-06T00:00
             duration: 1
-            cpu_utilization: 14
-            memory_utilization: 65 
-          mapping:
-            units: hours
+            cpu_util: 14
+            memory_util: 65 
 

@@ -5,28 +5,31 @@ tags:
   complexity: simple
   category: cloud
 config:
-  funit:
-    - name: job
-      scale-factor: 1 # divide SCI by this value to get SCI per ml job
   models:
     - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
-      path: builtin       
+      path: builtin
+    - name: wattime
+      path: builtin
+    - name: sci
+      path: builtin
 graph:
   DenseNet: # an advanced grouping node
     pipeline: 
       - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci
     config: 
       sci-c:
         processor: nvidia-t4-nc16as-v3
         e: 17.97
         i: 1 # data not provided in case study
         m: 0
+      sci:
+        time: s # no time normalization
+        factor: 1 # no unit normalization
     observations: 
       series:
         - timestamp: 2023-07-06T00:00
           duration: 1336 # 22.27 min runtime in seconds
-      mapping:
-        units: duration # R is per job, and the job took `duration` seconds
   InceptionV3: # an advanced grouping node
     pipeline: 
       - sci-c # energy & grid-carbon-intensity & embodied -> carbon
@@ -36,9 +39,10 @@ graph:
         e: 14.37
         i: 1 # data not provided in case study
         m: 0
+      sci:
+        time: s # no time normalization
+        factor: 1 # no unit normalization
     observations: 
       series:
         - timestamp: 2023-07-06T00:00
           duration: 1205 # 22.27 min runtime in seconds
-      mapping:
-        units: duration # R is per job, and the job took `duration` seconds

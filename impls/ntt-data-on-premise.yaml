@@ -5,9 +5,6 @@ tags:
   complexity: moderate
   category: on-premise
 config:
-  funit:
-    - name: web interactions
-      scale-factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction
   models:
     - name: switch # a model that returns an embodied value given the sci embodied attribution equation.
       path: plugin  
@@ -19,6 +16,8 @@ config:
       path: builtin
     - name: server-energy # average power -> energy in kwh
       path: plugin
+    - name: sci
+      path: builtin
 graph:
   layer-3-switch: # an advanced grouping node
     pipeline:
@@ -26,7 +25,8 @@ graph:
       - pue
       - teads-curve
       - sci-m
-      - sci-c  
+      - sci-c
+      - sci
     config:
       switch:
         p_baseline: 92.5 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
@@ -41,14 +41,15 @@ graph:
         tor: 1 
       sci-c:
         i: 457 # gCO2/kwh
+      sci:
+        time: hour
+        factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction
     observations: 
       series:
         - timestamp: 2023-07-06T00:00
           duration: 1
           five-min-input-rate: 100
           five-min-output-rate: 100
-      mapping:
-          units: hours
   layer-2-switch:
     pipeline: 
       - switch-model
@@ -56,6 +57,7 @@ graph:
       - teads-curve # tdp & cpu -> energy
       - sci-m # duration & config -> embodied
       - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci
     config:
       switch:
         p_baseline: 22.8 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
@@ -70,6 +72,9 @@ graph:
         tor: 1 
       sci-c:
         i: 457 # gCO2/kwh
+      sci:
+        time: hour
+        factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction
     children: 
       switch-1:
         observations: 
@@ -105,13 +110,12 @@ graph:
               duration: 1
               five-min-input-rate: 100
               five-min-output-rate: 100
-          mapping:
-            units: hours
   db-servers:
     pipeline: 
       - server-energy # average power -> energy in kwh
       - sci-m # duration & config -> embodied
       - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci
     config:
       sci-m:
         te: 6270 # kgCO2eq
@@ -121,6 +125,9 @@ graph:
         tor: 1 
       sci-c:
         i: 457 # gCO2/kwh
+      sci:
+        time: hour
+        factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction
     observations: 
       series:
         - timestamp: 2023-07-06T00:00
@@ -130,13 +137,12 @@ graph:
           max_in_sample: 6560
           mean_over_sample: 113
           sampling_period: 0.0000001 #seconds
-      mapping:
-          units: hours
   app-servers:
     pipeline: 
       - server-energy # average power -> energy in kwh
       - sci-m # duration & config -> embodied
       - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci
     config:
       sci-m:
         te: 6270 # kgCO2eq
@@ -145,7 +151,10 @@ graph:
         rr: 1 
         tor: 1 
       sci-c:
-        i: 457 # gCO2/kwh        
+        i: 457 # gCO2/kwh   
+      sci:
+        time: hour
+        factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction     
     observations: 
       series:
         - timestamp: 2023-07-06T00:00
@@ -155,13 +164,12 @@ graph:
           max_in_sample: 6560
           mean_over_sample: 113
           sampling_period: 0.0000001 #seconds
-      mapping:
-        units: hours
   web-servers:
     pipeline: 
       - server-energy # average power -> energy in kwh
       - sci-m # duration & config -> embodied
       - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci
     config:
       sci-m:
         te: 6270 # kgCO2eq
@@ -171,6 +179,9 @@ graph:
         tor: 1 
       sci-c:
         i: 457 # gCO2/kwh  
+      sci:
+        time: hour
+        factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction
     observations: 
       series:
         - timestamp: 2023-07-06T00:00
@@ -180,5 +191,3 @@ graph:
           max_in_sample: 6560
           mean_over_sample: 113
           sampling_period: 0.0000001 #seconds
-      mapping:
-        units: hours
