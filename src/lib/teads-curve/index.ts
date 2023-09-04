@@ -1,6 +1,6 @@
-import { IImpactModelInterface } from '../interfaces';
+import {IImpactModelInterface} from '../interfaces';
 import Spline from 'typescript-cubic-spline';
-import { KeyValuePair } from '../../types/boavizta';
+import {KeyValuePair} from '../../types/boavizta';
 
 export enum Interpolation {
   SPLINE = 'spline',
