@@ -1,6 +1,6 @@
-import {IImpactModelInterface} from '../interfaces';
+import { IImpactModelInterface } from '../interfaces';
 import * as cp from 'child_process';
-import {KeyValuePair} from '../../types/boavizta';
+import { KeyValuePair } from '../../types/boavizta';
 
 export class ShellModel implements IImpactModelInterface {
   // Defined for compatibility. Not used in TEADS.
@@ -46,10 +46,7 @@ export class ShellModel implements IImpactModelInterface {
 
     const inputAsString = yaml.dump(input);
 
-    const results = this.runModelInShell(
-      inputAsString,
-      '/home/gnanakeethan/pimpl.py'
-    );
+    const results = this.runModelInShell(inputAsString, '/usr/bin/pimpl');
 
     return results['impacts'];
   }
