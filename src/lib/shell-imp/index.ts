@@ -47,7 +47,7 @@ export class ShellModel implements IImpactModelInterface {
 
     const inputAsString: string = yaml.dump(input);
 
-    const results: string = this.runModelInShell(inputAsString, '/usr/bin/pimpl');
+    const results = this.runModelInShell(inputAsString, '/usr/bin/pimpl');
 
     return results['impacts'];
   }
@@ -81,14 +81,14 @@ export class ShellModel implements IImpactModelInterface {
    * @param omplName
    * @private
    */
-  private runModelInShell(input: string, execPath: string): any {
+  private runModelInShell(input: string, execPath: string): KeyValuePair {
     try {
       const result = cp
         .spawnSync(execPath, ['--calculate', '--impl=' + input])
         .stdout.toString();
-      return yaml.load(result);
+      return yaml.load(result) as KeyValuePair;
     } catch (e) {
-      console.error(e);
+      throw new Error(e.message);
     }
   }
 }
