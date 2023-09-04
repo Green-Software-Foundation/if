@@ -87,7 +87,7 @@ export class ShellModel implements IImpactModelInterface {
         .spawnSync(execPath, ['--calculate', '--impl=' + input])
         .stdout.toString();
       return yaml.load(result) as KeyValuePair;
-    } catch (e) {
+    } catch (e: any) {
       throw new Error(e.message);
     }
   }
