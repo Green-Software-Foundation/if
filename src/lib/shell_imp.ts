@@ -1,8 +1,8 @@
-const fs = require('fs');
-const yaml = require('js-yaml');
-const cp = require('child_process');
+// const fs = require('fs');
+// const yaml = require('js-yaml');
+// const cp = require('child_process');
 
-/* 
+/*
 description:
     spawns a child process to run an external IMP
     expects execPath to be a path to an executable with a CLI exposing two methods: --calculate and --impl
@@ -17,18 +17,20 @@ returns:
 - ompl data to stdout
 - ompl data to disk as omplName.yaml
 */
-function runModelInShell(impl, execPath, omplName) {
-    try {
-        const result = cp.spawnSync(execPath, ['--calculate', '--impl=' + impl]).stdout.toString();
-        const yamlData = yaml.dump(yaml.load(result))
-        fs.writeFileSync(omplName, yamlData, 'utf8');
-        return yamlData
-    } catch (e) {
-        console.error(e)
-    }
-}
-
-//example invocation
-// calling prototype python model available in ief-sandbox repo
-//let out = runModelInShell('dow_msft.yaml', '~/ief-sandbox/dist/cli/cli', 'ompl2.yaml')
-//console.log(out)
+// function runModelInShell(impl, execPath, omplName) {
+//   try {
+//     const result = cp
+//       .spawnSync(execPath, ['--calculate', '--impl=' + impl])
+//       .stdout.toString();
+//     const yamlData = yaml.dump(yaml.load(result));
+//     fs.writeFileSync(omplName, yamlData, 'utf8');
+//     return yamlData;
+//   } catch (e) {
+//     console.error(e);
+//   }
+// }
+//
+// //example invocation
+// // calling prototype python model available in ief-sandbox repo
+// //let out = runModelInShell('dow_msft.yaml', '~/ief-sandbox/dist/cli/cli', 'ompl2.yaml')
+// //console.log(out)
