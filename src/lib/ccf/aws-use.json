@@ -1,0 +1,79 @@
+[
+  {
+    "": "0",
+    "Architecture": "Graviton",
+    "Min Watts": "0.4742621527777778",
+    "Max Watts": "1.6929615162037037",
+    "GB/Chip": "129.77777777777777"
+  },
+  {
+    "": "1",
+    "Architecture": "Ivy Bridge",
+    "Min Watts": "3.0369270833333335",
+    "Max Watts": "8.248611111111112",
+    "GB/Chip": "14.933333333333334"
+  },
+  {
+    "": "2",
+    "Architecture": "Sandy Bridge",
+    "Min Watts": "2.1694411458333334",
+    "Max Watts": "8.575357663690477",
+    "GB/Chip": "16.480916030534353"
+  },
+  {
+    "": "3",
+    "Architecture": "Haswell",
+    "Min Watts": "1.9005681818181814",
+    "Max Watts": "6.012910353535353",
+    "GB/Chip": "27.310344827586206"
+  },
+  {
+    "": "4",
+    "Architecture": "Sky Lake",
+    "Min Watts": "0.6446044454253452",
+    "Max Watts": "4.193436438541878",
+    "GB/Chip": "80.43037974683544"
+  },
+  {
+    "": "5",
+    "Architecture": "Cascade Lake",
+    "Min Watts": "0.6389493581523519",
+    "Max Watts": "3.9673047343937564",
+    "GB/Chip": "98.11764705882354"
+  },
+  {
+    "": "6",
+    "Architecture": "EPYC 2nd Gen",
+    "Min Watts": "0.4742621527777778",
+    "Max Watts": "1.6929615162037037",
+    "GB/Chip": "129.77777777777777"
+  },
+  {
+    "": "7",
+    "Architecture": "Graviton2",
+    "Min Watts": "0.4742621527777778",
+    "Max Watts": "1.6929615162037037",
+    "GB/Chip": "129.77777777777777"
+  },
+  {
+    "": "8",
+    "Architecture": "Broadwell",
+    "Min Watts": "0.7128342245989304",
+    "Max Watts": "3.6853275401069516",
+    "GB/Chip": "69.6470588235294"
+  },
+  {
+    "": "9",
+    "Architecture": "EPYC 1st Gen",
+    "Min Watts": "0.82265625",
+    "Max Watts": "2.553125",
+    "GB/Chip": "89.6"
+  },
+  {
+    "": "10",
+    "Architecture": "Coffee Lake",
+    "Min Watts": "1.138425925925926",
+    "Max Watts": "5.421759259259258",
+    "GB/Chip": "19.555555555555557"
+  }
+]

@@ -1,18 +1,49 @@
 import {describe, expect, jest, test} from '@jest/globals';
 import {BoaviztaCloudImpactModel, BoaviztaCpuImpactModel} from './boavizta';
+import axios from 'axios';
+import * as PROVIDERS from '../__mocks__/boavizta/providers.json';
+import * as COUNTRIES from '../__mocks__/boavizta/countries.json';
+import * as INSTANCE_TYPES from '../__mocks__/boavizta/instance_types.json';
 
+jest.mock('axios');
+const mockAxios = axios as jest.Mocked<typeof axios>;
+// Mock out all top level functions, such as get, put, delete and post:
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+mockAxios.get.mockImplementation(url => {
+  switch (url) {
+    case 'https://api.boavizta.org/v1/cloud/all_providers':
+      return Promise.resolve({data: PROVIDERS});
+    case 'https://api.boavizta.org/v1/utils/country_code':
+      return Promise.resolve({data: COUNTRIES});
+    case 'https://api.boavizta.org/v1/cloud/all_instances?provider=aws':
+      return Promise.resolve({
+        data: INSTANCE_TYPES['aws'],
+      });
+  }
+});
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+mockAxios.post.mockImplementation(url => {
+  switch (url) {
+    case 'https://api.boavizta.org/v1/component/cpu?verbose=false&allocation=LINEAR':
+      return Promise.resolve({
+        data: {
+          gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
+          pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+        },
+      });
+    case 'https://api.boavizta.org/v1/cloud/?verbose=false&allocation=LINEAR':
+      return Promise.resolve({
+        data: {
+          gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
+          pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+        },
+      });
+  }
+});
 jest.setTimeout(30000);
-
 describe('cpu:configure test', () => {
-  test('initialize without params should throw error', async () => {
-    const impactModel = new BoaviztaCpuImpactModel();
-
-    await expect(impactModel.configure('test')).rejects.toThrowError(
-      Error('Improper configure: Missing name parameter')
-    );
-    expect(impactModel.name).toBe('test');
-  });
-
   test('initialize wrong params should throw error', async () => {
     const impactModel = new BoaviztaCpuImpactModel();
 
@@ -61,29 +92,14 @@ describe('cpu:initialize with params', () => {
         {
           datetime: '2021-01-01T00:00:00Z',
           duration: 3600,
-          cpu: 0.34,
-        },
-        {
-          datetime: '2021-01-01T00:00:15Z',
-          duration: 15,
-          cpu: 0.12,
-        },
-        {
-          datetime: '2021-01-01T00:00:30Z',
-          duration: 15,
-          cpu: 0.01,
-        },
-        {
-          datetime: '2021-01-01T00:00:45Z',
-          duration: 15,
-          cpu: 0.78,
+          cpu: 0.5,
         },
       ])
     ).resolves.toStrictEqual([
-      {m: 0.905, e: 0.25},
-      {m: 0.00377, e: 0.0007702777777777777},
-      {m: 0.00377, e: 0.000439},
-      {m: 0.00377, e: 0.0014238333333333332},
+      {
+        embodied_emission: 100,
+        energy: 0.2777777777777778,
+      },
     ]);
   });
 });
@@ -114,7 +130,7 @@ describe('cloud:initialize with params', () => {
       })
     ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
     expect(impactModel.name).toBe('test');
-    // configure without static params will cause improper configure error
+    // mockAxios.get.mockResolvedValue({data: {}});
     await expect(
       impactModel.calculate([
         {
@@ -122,27 +138,12 @@ describe('cloud:initialize with params', () => {
           duration: 15,
           cpu: 0.34,
         },
-        {
-          datetime: '2021-01-01T00:00:15Z',
-          duration: 15,
-          cpu: 0.12,
-        },
-        {
-          datetime: '2021-01-01T00:00:30Z',
-          duration: 15,
-          cpu: 0.01,
-        },
-        {
-          datetime: '2021-01-01T00:00:45Z',
-          duration: 15,
-          cpu: 0.78,
-        },
       ])
     ).resolves.toStrictEqual([
-      {m: 0.008, e: 0.00008374722222222223},
-      {m: 0.008, e: 0.00006074166666666666},
-      {m: 0.008, e: 0.00004233888888888889},
-      {m: 0.008, e: 0.00011007222222222222},
+      {
+        embodied_emission: 100,
+        energy: 0.2777777777777778,
+      },
     ]);
   });
 

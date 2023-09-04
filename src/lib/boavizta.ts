@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import {IImpactModelInterface} from './interfaces';
-export {IImpactModelInterface} from './interfaces';
 import {CONFIG} from '../config';
 
 import {
@@ -9,6 +8,9 @@ import {
   IBoaviztaUsageSCI,
   KeyValuePair,
 } from '../types/boavizta';
+
+export {IImpactModelInterface} from './interfaces';
+
 export {
   BoaviztaInstanceTypes,
   IBoaviztaUsageSCI,
@@ -23,6 +25,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   name: string | undefined;
   sharedParams: object | undefined = undefined;
   metricType: 'cpu' | 'gpu' | 'ram' = 'cpu';
+  expectedLifespan = 4;
 
   authenticate(authParams: object) {
     this.authCredentials = authParams;
@@ -55,27 +58,27 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   }
 
   // extracts information from Boavizta API response to return the impact in the format required by IMPL
-  protected formatResponse(response: any): {[p: string]: any} {
+  protected formatResponse(data: any): KeyValuePair {
     let m = 0;
     let e = 0;
 
-    if ('impacts' in response.data) {
+    if ('impacts' in data) {
       // manufacture impact is in kgCO2eq, convert to gCO2eq
-      m = response.data['impacts']['gwp']['manufacture'] * 1000;
+      m = data['impacts']['gwp']['manufacture'] * 1000;
       // use impact is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
-      e = response.data['impacts']['pe']['use'] / 3.6;
-    } else if ('gwp' in response.data && 'pe' in response.data) {
+      e = data['impacts']['pe']['use'] / 3.6;
+    } else if ('gwp' in data && 'pe' in data) {
       // manufacture impact is in kgCO2eq, convert to gCO2eq
-      m = response.data['gwp']['manufacture'] * 1000;
+      m = data['gwp']['manufacture'] * 1000;
       // use impact is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
-      e = response.data['pe']['use'] / 3.6;
+      e = data['pe']['use'] / 3.6;
     }
 
-    return {m, e};
+    return {embodied_emission: m, energy: e};
   }
 
   // converts the usage from IMPL input to the format required by Boavizta API.
@@ -86,6 +89,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
       hours_use_time: duration / 3600.0,
       time_workload: metric * 100.0,
     };
+    usageInput['years_life_time'] = this.expectedLifespan;
     usageInput = this.addLocationToUsage(usageInput);
 
     return usageInput;
@@ -98,8 +102,9 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     if (Array.isArray(observations)) {
       const results = [];
       for (const observation of observations) {
-        const usageResult =
-          await this.calculateUsageForObservation(observation);
+        const usageResult = await this.calculateUsageForObservation(
+          observation
+        );
         results.push(usageResult);
       }
       return results;
@@ -111,7 +116,9 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   }
 
   // converts the usage to the format required by Boavizta API.
-  protected async calculateUsageForObservation(observation: KeyValuePair) {
+  protected async calculateUsageForObservation(
+    observation: KeyValuePair
+  ): Promise<KeyValuePair> {
     if (
       'datetime' in observation &&
       'duration' in observation &&
@@ -121,7 +128,9 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         observation['duration'],
         observation[this.metricType]
       );
-      return (await this.fetchData(usageInput)) as IBoaviztaUsageSCI;
+      const usage = (await this.fetchData(usageInput)) as IBoaviztaUsageSCI;
+      const result = {...usage};
+      return result;
     } else {
       throw new Error('Invalid Input: Invalid observations parameter');
     }
@@ -171,6 +180,9 @@ export class BoaviztaCpuImpactModel
       throw new Error('Improper configure: Missing core_units parameter');
     }
 
+    if ('expected_lifespan' in staticParams) {
+      this.expectedLifespan = staticParams.expected_lifespan as number;
+    }
     this.sharedParams = Object.assign({}, staticParams);
 
     return this.sharedParams;
@@ -183,12 +195,13 @@ export class BoaviztaCpuImpactModel
 
     const dataCast = this.sharedParams as KeyValuePair;
     dataCast['usage'] = usageData;
+
     const response = await axios.post(
       `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`,
       dataCast
     );
 
-    return this.formatResponse(response);
+    return this.formatResponse(response.data);
   }
 }
 
@@ -217,6 +230,10 @@ export class BoaviztaCloudImpactModel
     await this.validateInstanceType(staticParams);
     // if no valid location found, throw error
     await this.validateLocation(staticParams);
+    if ('expected_lifespan' in staticParams) {
+      this.expectedLifespan = staticParams.expected_lifespan as number;
+    }
+
     this.sharedParams = Object.assign({}, staticParams);
 
     return this.sharedParams;
@@ -252,8 +269,9 @@ export class BoaviztaCloudImpactModel
       this.instanceTypes[provider] === undefined ||
       this.instanceTypes[provider].length === 0
     ) {
-      this.instanceTypes[provider] =
-        await this.supportedInstancesList(provider);
+      this.instanceTypes[provider] = await this.supportedInstancesList(
+        provider
+      );
     }
 
     if ('instance_type' in staticParamsCast) {
@@ -319,6 +337,6 @@ export class BoaviztaCloudImpactModel
       dataCast
     );
 
-    return this.formatResponse(response);
+    return this.formatResponse(response.data);
   }
 }
