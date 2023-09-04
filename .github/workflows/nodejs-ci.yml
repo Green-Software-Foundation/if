@@ -25,7 +25,7 @@ jobs:
         run: yarn install
 
       - name: Copy Sample CLI Mocker to bin folder
-        run: pip3 install pyyaml && cp src/lib/shell-imp/sampler /bin/sampler
+        run: pip3 install pyyaml && cp src/lib/shell-imp/sampler /usr/local/bin/sampler
 
       - name: Run lint
         run: yarn lint
