@@ -1,6 +1,7 @@
 import { IImpactModelInterface } from '../interfaces';
 import * as cp from 'child_process';
 import { KeyValuePair } from '../../types/boavizta';
+import * as yaml from 'js-yaml';
 
 export class ShellModel implements IImpactModelInterface {
   // Defined for compatibility. Not used in TEADS.
