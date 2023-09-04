@@ -24,7 +24,7 @@ duration:
   aggregation: sum
 timestamp:
   description: refers to the time of occurrence of the observation
-  unit: ISO8601 / RFC3339 compatible timestamp
+  unit: RFC3339 compatible timestamp
   aggregation: None
 carbon:
   description: an amount of carbon emitted into the atmosphere
