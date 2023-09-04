@@ -1,6 +1,6 @@
-import {IImpactModelInterface} from '../interfaces';
+import { IImpactModelInterface } from '../interfaces';
 import Spline from 'typescript-cubic-spline';
-import {KeyValuePair} from '../../types/boavizta';
+import { KeyValuePair } from '../../types/boavizta';
 
 export enum Interpolation {
   SPLINE = 'spline',
@@ -90,7 +90,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
     } else if (!Array.isArray(observations)) {
       throw new Error('Observations must be an array');
     }
-    return observations.map(observation => {
+    return observations.map((observation: KeyValuePair) => {
       observation['energy'] = this.calculateEnergy(observation);
       return observation;
     });
