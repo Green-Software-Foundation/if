@@ -169,7 +169,7 @@ export class TeadsAWS implements IImpactModelInterface {
     const duration = observation['duration'];
 
     //    convert cpu usage to percentage
-    const cpu = observation['cpu'] * 100.0;
+    const cpu = observation['cpu'];
 
     //  get the wattage for the instance type
 
@@ -188,17 +188,29 @@ export class TeadsAWS implements IImpactModelInterface {
     if (this.interpolation === Interpolation.SPLINE) {
       wattage = spline.at(cpu);
     } else if (this.interpolation === Interpolation.LINEAR) {
-      let min = 0;
-      let max = 1;
-      if (cpu > 10 && cpu <= 50) {
-        min = 1;
-        max = 2;
+      // base rate is from which level of cpu linear interpolation is applied at
+      let base_rate = 0;
+      let base_cpu = 0;
+      let ratio = 0;
+      // find the base rate and ratio
+      for (let i = 0; i < x.length; i++) {
+        if (cpu === x[i]) {
+          base_rate = y[i];
+          base_cpu = x[i];
+          break;
+        } else if (cpu > x[i] && cpu < x[i + 1]) {
+          base_rate = y[i];
+          base_cpu = x[i];
+          ratio = (y[i + 1] - y[i]) / (x[i + 1] - x[i]);
+          break;
+        }
       }
-      if (cpu > 50 && cpu <= 100) {
-        min = 2;
-        max = 3;
-      }
-      wattage = y[0] + ((y[max] - y[min]) / (x[max] - x[min])) * cpu;
+      console.log('base_rate', base_rate);
+      console.log('base_cpu', base_cpu);
+      console.log('ratio', ratio);
+      console.log('cpu', cpu);
+      // sum of base_rate + (cpu - base_cpu) * ratio = total rate of cpu usage
+      wattage = base_rate + (cpu - base_cpu) * ratio;
     }
     //  duration is in seconds
     //  wattage is in watts
