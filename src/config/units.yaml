@@ -38,6 +38,10 @@ embodied:
   description: Embodied Emissions of the component
   unit: gCO2e
   aggregation: sum
+operational-emissions:
+  description: Operational Emissions of the component
+  unit: gCO2e
+  aggregation: sum
 expected-lifespan:
   description: Total Expected Lifespan of the Component in Seconds
   unit: Seconds
