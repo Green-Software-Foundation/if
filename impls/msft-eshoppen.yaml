@@ -5,9 +5,6 @@ tags:
   complexity: moderate
   category: cloud
 config:
-  funit:
-    - name: requests
-      scale-factor: 500 # divide SCi per hour by this to get SCI per request
   models:
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
       path: builtin  
@@ -38,7 +35,7 @@ graph:
         tdp: 28 # W
       sci:
         time: hour # signal to convert /s -> /hr
-        factor: 1 # factor to convert per time to per f.unit ()
+        factor: 500 # factor to convert per time to per f.unit ()
     observations:
       - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
         duration: 3600 # Secs
@@ -62,7 +59,7 @@ graph:
         tdp: 205
       sci:
         time: hour # signal to convert /s -> /hr
-        factor: 1 # factor to convert per time to per f.unit ()
+        factor: 500 # factor to convert per time to per f.unit ()
     observations:
       - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
         duration: 3600
@@ -86,7 +83,7 @@ graph:
         tdp: 150 # W
       sci:
         time: hour # signal to convert /s -> /hr
-        factor: 1 # factor to convert per time to per f.unit ()
+        factor: 500 # factor to convert per time to per f.unit ()
     observations:
       - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
         duration: 3600
