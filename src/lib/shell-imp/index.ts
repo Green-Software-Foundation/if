@@ -1,6 +1,6 @@
-import {IImpactModelInterface} from '../interfaces';
+import { IImpactModelInterface } from '../interfaces';
 import * as cp from 'child_process';
-import {KeyValuePair} from '../../types/boavizta';
+import { KeyValuePair } from '../../types/boavizta';
 import * as yaml from 'js-yaml';
 
 export class ShellModel implements IImpactModelInterface {
@@ -45,9 +45,9 @@ export class ShellModel implements IImpactModelInterface {
       input['config'] = this.staticParams;
     }
 
-    const inputAsString = yaml.dump(input);
+    const inputAsString: string = yaml.dump(input);
 
-    const results = this.runModelInShell(inputAsString, '/usr/bin/pimpl');
+    const results: string = this.runModelInShell(inputAsString, '/usr/bin/pimpl');
 
     return results['impacts'];
   }
@@ -81,7 +81,7 @@ export class ShellModel implements IImpactModelInterface {
    * @param omplName
    * @private
    */
-  private runModelInShell(input: object[], execPath: string) {
+  private runModelInShell(input: string, execPath: string): any {
     try {
       const result = cp
         .spawnSync(execPath, ['--calculate', '--impl=' + input])
