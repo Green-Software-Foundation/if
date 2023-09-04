@@ -31,7 +31,7 @@ At the end a processed graph is serialized back out to the end user for them to 
 
 Every `Rimpl` execution goes through a lifecycle, a set of distinct steps which process the graph in stages.
 
-Curranty the lifecycle is fixed but in the future this maybe be configurable via plugins.
+Currenty the lifecycle is fixed but in the future this maybe be configurable via plugins.
 
 ```mermaid
 flowchart TB
