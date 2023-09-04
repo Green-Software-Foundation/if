@@ -2,8 +2,16 @@ cpu-util:
   description: refers to CPU utilization.
   unit: percentage
   aggregation: avg
+cpu-alloc:
+  description: refers to CPU allocation.
+  unit: percentage
+  aggregation: avg
 ram-util:
   description: refers to GB of memory utilized.
+  unit: GB
+  aggregation: avg
+ram-alloc:
+  description: refers to GB of memory allocated.
   unit: GB
   aggregation: avg
 disk-io:
@@ -30,7 +38,7 @@ embodied:
   description: Embodied Emissions of the component
   unit: gCO2e
   aggregation: sum
-expected_life_span:
-  description: Total Expected Lifespan of the Component in Years
-  unit: Years
+expected-lifespan:
+  description: Total Expected Lifespan of the Component in Seconds
+  unit: Seconds
   aggregation: None
