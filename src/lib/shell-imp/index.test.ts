@@ -9,7 +9,7 @@ describe('ccf:configure test', () => {
     await impactModel.configure('test', {
       provider: 'aws',
       instance_type: 't2.micro',
-      executable: 'sampler',
+      executable: '/usr/local/bin/sampler',
     });
     await expect(
       impactModel.calculate([
