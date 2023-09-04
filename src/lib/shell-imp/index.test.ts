@@ -3,7 +3,7 @@ import {ShellModel} from './index';
 
 jest.setTimeout(30000);
 
-describe('ccf:configure test', () => {
+describe('shell:configure test', () => {
   test('initialize with params', async () => {
     const impactModel = new ShellModel();
     await impactModel.configure('test', {
