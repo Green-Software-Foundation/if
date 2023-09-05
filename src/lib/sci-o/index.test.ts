@@ -34,5 +34,13 @@ describe('ccf:configure test', () => {
         'operational-emissions': 100.0 * 212.1,
       },
     ]);
+    await expect(
+      model.calculate([
+        {
+          'grid-cid': 212.1,
+          energy: 100.0,
+        },
+      ])
+    ).rejects.toThrowError();
   });
 });
