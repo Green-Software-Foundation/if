@@ -11,3 +11,6 @@ ccf-data:
 	cat third-party/ccf-coefficients/data/azure-instances.csv | python -c 'import csv, json, sys; print(json.dumps([dict(r) for r in csv.DictReader(sys.stdin)]))' > lib/ccf/azure-instances.json
 	cat third-party/ccf-coefficients/output/coefficients-azure-use.csv | python -c 'import csv, json, sys; print(json.dumps([dict(r) for r in csv.DictReader(sys.stdin)]))' > lib/ccf/azure-use.json
 	cat third-party/ccf-coefficients/output/coefficients-azure-embodied.csv | python -c 'import csv, json, sys; print(json.dumps([dict(r) for r in csv.DictReader(sys.stdin)]))' > lib/ccf/azure-embodied.json
+
+install-shell-imp:
+  cp src/lib/shell-imp/sampler /usr/local/bin/sampler

@@ -42,15 +42,17 @@ But they can also be stored in CSV files like so:
 
 #### Default Units and Names
 
-Each type of observation has a **default unit** and **default name**. For example, if you observe a CPU utilization, the name of the observation dimension is `CPU`, and the unit is as a `percentage`. The data passed in is expected to be in that format.
+Each type of observation has a **default unit** and **default name**. For example, if you observe a CPU utilization, the name of the observation dimension is `cpu`, and the unit is as a `percentage`. Aggregation method is `avg`. The data passed in is expected to be in that format.
 
-| Dimension | Unit                |
-| --------- | ------------------- |
-| CPU       | Percentage Utilized |
-| MEM       | Percentage Full     |
-| Disk      | ????                |
-| Duration  | Seconds             |
-| Timestamp | ISO Time            |
+
+| Dimension | Unit                      |
+| --------- |---------------------------|
+| CPU       | Percentage Utilized       |
+| MEM       | Percentage Full           |
+| Disk      | Total Read/Writes         |
+| Duration  | Seconds                   |
+| Timestamp | ISO8601/RFC3339 Timestamp |
+
 
 
 ## Observation synchronization
