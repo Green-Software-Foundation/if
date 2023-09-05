@@ -4,10 +4,7 @@ tags:
   kind: web
   complexity: moderate
   category: on-premise
-config:
-  funit:
-    - name: requests
-      scale-factor: 500 # divide SCi per hour by this to get SCI per request
+initialize:
   models:
     - name: sci-aveva # a model that takes in power observations and returns e.
       kind: plugin

@@ -4,7 +4,7 @@ tags:
   kind: web
   complexity: moderate
   category: cloud
-config:
+initialize:
   models:
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
       kind: builtin  

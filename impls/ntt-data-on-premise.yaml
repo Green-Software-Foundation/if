@@ -4,7 +4,7 @@ tags:
   kind: web
   complexity: moderate
   category: on-premise
-config:
+initialize:
   models:
     - name: switch # a model that returns an embodied value given the sci embodied attribution equation.
       kind: plugin  

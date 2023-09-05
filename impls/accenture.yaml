@@ -1,7 +1,7 @@
 name:  accenture
 description: sci calculation for accenture model (note need to add app gateway SCI to final calculation)
 tags: 
-config:
+initialize:
   models:
     - name: add-obs # a model that just copies some values into every observation.
       kind: builtin

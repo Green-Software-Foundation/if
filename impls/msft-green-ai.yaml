@@ -4,7 +4,7 @@ tags:
   kind: ml
   complexity: simple
   category: cloud
-config:
+initialize:
   models:
     - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
       kind: builtin
