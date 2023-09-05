@@ -10,7 +10,11 @@ This model implements linear interpolation by default for estimating energy cons
 
 The power curve provided for `IDLE`, `10%`, `50%`, `100%` in the Teads Curve are used by default.
 
-The algorithm in linear interpolation will take the lowest possible base value + linear interpolated value. ie. 75% usage will be calculated by taking (50% as base + (100%-50%) _ (75%-50%)) _ `TDP`.
+The algorithm in linear interpolation will take the lowest possible base value + linear interpolated value. ie. 75% usage will be calculated as follows.
+`100%` and `50%` are the known values hence we are interpolating linearly between them.
+(`50%` + `(100%-50%)` `x` `(75%-50%))` `x` `TDP`. 
+
+
 
 #### Example
 
@@ -19,12 +23,12 @@ import {TeadsCurveModel} from 'ief';
 
 const teads = new TeadsCurveModel();
 teads.configure({
-  instance_type: 'c6i.large',
+  tdp: 100, // TDP of the CPU
 });
 const results = teads.calculate([
   {
     duration: 3600, // duration institute
-    cpu: 0.1, // CPU usage as a value between 0 and 1 in floating point number
+    cpu: 100, // CPU usage as a value between 0 to 100 in percentage
     datetime: '2021-01-01T00:00:00Z', // ISO8601 / RFC3339 timestamp
   },
 ]);
@@ -46,13 +50,13 @@ import {TeadsCurveModel, TeadsInterpolation} from '@gsf/ief';
 
 const teads = new TeadsCurveModel();
 teads.configure({
-  instance_type: 'c6i.large',
+  tdp: 100, // TDP of the CPU
   interpolation: Interpolation.SPLINE,
 });
 const results = teads.calculate([
   {
     duration: 3600, // duration institute
-    cpu: 0.1, // CPU usage as a value between 0 and 1 in floating point number
+    cpu: 100, // CPU usage as a value between 0 to 100 in percentage
     datetime: '2021-01-01T00:00:00Z', // ISO8601 / RFC3339 timestamp
   },
 ]);
