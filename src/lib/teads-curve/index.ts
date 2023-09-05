@@ -55,16 +55,16 @@ export class TeadsCurveModel implements IImpactModelInterface {
       );
     }
 
-    if ('curve' in staticParams && 'points' in staticParams) {
-      this.curve = staticParams?.curve as number[];
-      this.points = staticParams?.points as number[];
-      if (this.curve.length !== this.points.length) {
-        throw new Error(
-          'Number of points and curve values must be the same length'
-        );
-      }
-      this.spline = new Spline(this.points, this.curve);
-    }
+    // if ('curve' in staticParams && 'points' in staticParams) {
+    //   this.curve = staticParams?.curve as number[];
+    //   this.points = staticParams?.points as number[];
+    //   if (this.curve.length !== this.points.length) {
+    //     throw new Error(
+    //       'Number of points and curve values must be the same length'
+    //     );
+    //   }
+    //   this.spline = new Spline(this.points, this.curve);
+    // }
 
     if ('interpolation' in staticParams) {
       this.interpolation = staticParams?.interpolation as Interpolation;
