@@ -10,7 +10,9 @@ export class SciOModel implements IImpactModelInterface {
     this.authParams = authParams;
   }
 
-  calculate(observations: object | object[] | undefined): Promise<object[]> {
+  async calculate(
+    observations: object | object[] | undefined
+  ): Promise<object[]> {
     if (!Array.isArray(observations)) {
       throw new Error('observations should be an array');
     }
