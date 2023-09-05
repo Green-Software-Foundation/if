@@ -13,7 +13,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
   // name of the data source
   name: string | undefined;
   // tdp of the chip being measured
-  tdp = 100;
+  tdp = 0;
   // default power curve provided by the Teads Team
   curve: number[] = [0.12, 0.32, 0.75, 1.02];
   // default percentage points
@@ -49,7 +49,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
 
     if ('tdp' in staticParams) {
       this.tdp = staticParams?.tdp as number;
-    } else {
+    } else if (this.tdp === 0) {
       throw new Error(
         '`tdp` Thermal Design Power not provided. Can not compute energy.'
       );
@@ -91,6 +91,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
       throw new Error('Observations must be an array');
     }
     return observations.map((observation: KeyValuePair) => {
+      this.configure(this.name!, observation);
       observation['energy'] = this.calculateEnergy(observation);
       return observation;
     });
