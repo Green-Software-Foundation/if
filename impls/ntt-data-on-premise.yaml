@@ -7,17 +7,23 @@ tags:
 config:
   models:
     - name: switch # a model that returns an embodied value given the sci embodied attribution equation.
-      path: plugin  
+      kind: plugin  
+      path: ''
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
-      path: builtin
+      kind: builtin
+      path: ''
     - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
-      path: builtin             
+      kind: builtin       
+      path: ''      
     - name: teads-curve # a model that returns energy based on the generalised teads power curve and tdp
-      path: builtin
+      kind: builtin
+      path: ''
     - name: server-energy # average power -> energy in kwh
-      path: plugin
+      kind: plugin
+      path: ''
     - name: sci
-      path: builtin
+      kind: builtin
+      path: ''
 graph:
   layer-3-switch: # an advanced grouping node
     pipeline:

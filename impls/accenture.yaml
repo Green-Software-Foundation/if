@@ -4,19 +4,25 @@ tags:
 config:
   models:
     - name: add-obs # a model that just copies some values into every observation.
-      path: builtin
+      kind: builtin
+      path: ''
     - name: teads-curve
-      path: builtin  
+      kind: builtin
+      path: ''  
     - name: pue
-      path: builtin
+      kind: builtin
+      path: ''
       config:
         pue: 1.125
     - name: sci-m
-      path: builtin
+      kind: builtin
+      path: ''
     - name: sci-c
-      path: builtin
+      kind: builtin
+      path: ''
     - name: sci
-      path: builtin
+      kind: builtin
+      path: ''
 graph: 
   vm:
     pipeline:

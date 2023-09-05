@@ -7,11 +7,14 @@ tags:
 config:
   models:
     - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
-      path: builtin
+      kind: builtin
+      path: ''
     - name: wattime
-      path: builtin
+      kind: builtin
+      path: ''
     - name: sci
-      path: builtin
+      kind: builtin
+      path: ''
 graph:
   DenseNet: # an advanced grouping node
     pipeline: 

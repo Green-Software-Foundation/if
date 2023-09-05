@@ -7,17 +7,23 @@ tags:
 config:
   models:
     - name: tdp-curve # a model that returns an embodied value given the sci embodied attribution equation.
-      path: builtin
+      kind: builtin
+      path: ''
     - name: sci-mem # a model that calculates a carbon value for memory
-      path: plugin  
+      kind: plugin  
+      path: ''
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
-      path: builtin
+      kind: builtin
+      path: ''
     - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
-      path: builtin     
+      kind: builtin
+      path: ''     
     - name: sci-sum
-      path: builtin # a model that knows to sum the carbon values for cpu and memory before calculating total SCI
+      kind: builtin # a model that knows to sum the carbon values for cpu and memory before calculating total SCI
+      path: ''
     - name: functional-unit
-      path: builtin # builtin model that normalizes all metrics from the default /s to /hr
+      kind: builtin # builtin model that normalizes all metrics from the default /s to /hr
+      path: ''
 # Single observation
 graph:
   backend: # an advanced grouping node
