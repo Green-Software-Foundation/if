@@ -1,2 +1,12 @@
+src/**/*.js
+src/**/*.d.ts
+lib/**/*.js
+lib/**/*.d.ts
 node_modules
-node_modules
+.idea
+*.tsbuildinfo
+dist
+tsconfig.json
+.jsii
+yarn-error.log
+build

@@ -1,0 +1,44 @@
+cpu-util:
+  description: refers to CPU utilization.
+  unit: percentage
+  aggregation: avg
+ram-util:
+  description: refers to percentage of memory utilized.
+  unit: percentage
+  aggregation: avg
+ram-alloc:
+  description: refers to GB of memory allocated.
+  unit: GB
+  aggregation: avg
+disk-io:
+  description: refers to GB of data written/read from disk
+  unit: GB
+  aggregation: sum
+duration:
+  description: refers to the duration of the observation
+  unit: seconds
+  aggregation: sum
+timestamp:
+  description: refers to the time of occurrence of the observation
+  unit: RFC3339
+  aggregation: None
+carbon:
+  description: an amount of carbon emitted into the atmosphere
+  unit: gCO2e
+  aggregation: sum
+energy:
+  description: amount of energy utilised by the component
+  unit: kWh
+  aggregation: sum
+embodied-carbon:
+  description: Embodied Emissions of the component
+  unit: gCO2e
+  aggregation: sum
+operational-carbon:
+  description: Operational Emissions of the component
+  unit: gCO2e
+  aggregation: sum
+expected-lifespan:
+  description: Total Expected Lifespan of the Component in Seconds
+  unit: seconds
+  aggregation: None
