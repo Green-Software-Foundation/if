@@ -60,7 +60,7 @@ export class TeadsAWS implements IImpactModelInterface {
       } else {
         throw new Error('Instance Type not supported');
       }
-    } else {
+    } else if (this.instanceType === '') {
       throw new Error('Instance Type not provided');
     }
 
@@ -99,6 +99,7 @@ export class TeadsAWS implements IImpactModelInterface {
     }
 
     return observations.map((observation: KeyValuePair) => {
+      this.configure(this.name!, observation);
       const e = this.calculateEnergy(observation);
       const m = this.embodiedEmissions(observation);
       observation['energy'] = e;
