@@ -13,18 +13,18 @@ config:
       kind: builtin
       verbose: false
       path: ''
-    - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
+    - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
       kind: builtin
       verbose: false       
       path: ''      
-    - name: teads-curve # a model that returns energy based on the generalised teads power curve and tdp
+    - name: teads-cpu # a model that returns energy based on the generalised teads power curve and tdp
       kind: builtin
       verbose: false
       path: ''
-    - name: server-energy # average power -> energy in kwh
+    - name: server # average power -> energy in kwh
       kind: plugin
       path: ''
-    - name: sci
+    - name: sci # sums sci-o and sci-m
       kind: builtin
       verbose: false
       path: ''
@@ -33,9 +33,9 @@ graph:
     pipeline:
       - switch
       - pue
-      - teads-curve
+      - teads-cpu
       - sci-m
-      - sci-c
+      - sci-o
       - sci
     config:
       switch:
@@ -49,7 +49,7 @@ graph:
         el: 126144000 # 4 years in seconds    
         rr: 1 
         tor: 1 
-      sci-c:
+      sci-o:
         i: 457 # gCO2/kwh
       sci:
         time: hour
@@ -62,11 +62,11 @@ graph:
           five-min-output-rate: 100
   layer-2-switch:
     pipeline: 
-      - switch-model
-      - pue-model
-      - teads-curve # tdp & cpu -> energy
+      - switch
+      - pue
+      - teads-cpu # tdp & cpu -> energy
       - sci-m # duration & config -> embodied
-      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon
       - sci
     config:
       switch:
@@ -80,7 +80,7 @@ graph:
         el: 126144000 # 4 years in seconds    
         rr: 1 
         tor: 1 
-      sci-c:
+      sci-o:
         i: 457 # gCO2/kwh
       sci:
         time: hour
@@ -122,9 +122,9 @@ graph:
               five-min-output-rate: 100
   db-servers:
     pipeline: 
-      - server-energy # average power -> energy in kwh
+      - server # average power -> energy in kwh
       - sci-m # duration & config -> embodied
-      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon
       - sci
     config:
       sci-m:
@@ -133,7 +133,7 @@ graph:
         el: 126144000 # 4 years in seconds    
         rr: 1 
         tor: 1 
-      sci-c:
+      sci-o:
         i: 457 # gCO2/kwh
       sci:
         time: hour
@@ -149,9 +149,9 @@ graph:
           sampling_period: 0.0000001 #seconds
   app-servers:
     pipeline: 
-      - server-energy # average power -> energy in kwh
+      - server # average power -> energy in kwh
       - sci-m # duration & config -> embodied
-      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon
       - sci
     config:
       sci-m:
@@ -160,7 +160,7 @@ graph:
         el: 126144000 # 4 years in seconds    
         rr: 1 
         tor: 1 
-      sci-c:
+      sci-o:
         i: 457 # gCO2/kwh   
       sci:
         time: hour
@@ -176,9 +176,9 @@ graph:
           sampling_period: 0.0000001 #seconds
   web-servers:
     pipeline: 
-      - server-energy # average power -> energy in kwh
+      - server # average power -> energy in kwh
       - sci-m # duration & config -> embodied
-      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon
       - sci
     config:
       sci-m:
@@ -187,7 +187,7 @@ graph:
         el: 126144000 # 4 years in seconds    
         rr: 1 
         tor: 1 
-      sci-c:
+      sci-o:
         i: 457 # gCO2/kwh  
       sci:
         time: hour

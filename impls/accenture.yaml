@@ -6,31 +6,41 @@ config:
     - name: add-obs # a model that just copies some values into every observation.
       kind: builtin
       path: ''
-    - name: teads-curve
+    - name: teads-cpu
       kind: builtin
+      verbose: false
+      path: ''  
+    - name: teads-mem
+      kind: builtin
+      verbose: false
       path: ''  
     - name: pue
       kind: builtin
+      verbose: false
       path: ''
       config:
         pue: 1.125
-    - name: sci-m
+    - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
       kind: builtin
+      verbose: false
       path: ''
-    - name: sci-c
+    - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
       kind: builtin
+      verbose: false
       path: ''
-    - name: sci
+    - name: sci # a model that sums sci-o + sci-m
       kind: builtin
-      path: ''
+      verbose: false
+      path: '' 
 graph: 
   vm:
     pipeline:
       - add-obs     # add common values to every observertion
-      - teads-curve # converts cpu-util to energy based on a tdp and a built in set of coeff.
+      - teads-cpu # converts cpu-util to energy based on a tdp and a built in set of coeff.
+      - teads-mem # converts ram-util to energy based on a tdp and a built in set of coeff.
       - pue         # multiplies every energy by a pue coeff.
-      - sci-m       # adds embodied to the observeation.
-      - sci-c       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+      - sci-m       # adds embodied to the observation.
+      - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
       - sci         # calculates sci by dividing carbon by `r`
     config:
       sci-m:
@@ -39,7 +49,7 @@ graph:
         el: 126144000
         rr: 1
         tor: 1
-      teads-curve:
+      teads-cpu:
         tdp: ??? # what's the TDP for this server
       add-obs: 
         grid-ci: 350.861 # Just copies any values under here to the observation as is.
@@ -98,10 +108,11 @@ graph:
   db:
     pipeline:
       - add-obs     # add common values to every observertion
-      - teads-curve # converts cpu-util to energy based on a tdp and a built in set of coeff.
+      - teads-cpu # converts cpu-util to energy based on a tdp and a built in set of coeff.
+      - teads-mem # converts ram-util to energy
       - pue         # multiplies every energy by a pue coeff.
       - sci-m       # adds embodied to the observeation.
-      - sci-c       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+      - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
       - sci         # calculates sci by dividing carbon by `r`
     config:
       sci-m:
@@ -110,7 +121,7 @@ graph:
         el: 126144000
         rr: 1
         tor: 1 
-      teads-curve:
+      teads-cpu:
         tdp: ??? # what's the TDP for this server
       add-obs: 
         grid-ci: 350.861 # Just copies any values under here to the observation as is.
@@ -125,10 +136,11 @@ graph:
   monitoring:
     pipeline:
       - add-obs     # add common values to every observertion
-      - teads-curve # converts cpu-util to energy based on a tdp and a built in set of coeff.
+      - teads-cpu # converts cpu-util to energy
+      - teads-mem # conmverts ram-util to energy
       - pue         # multiplies every energy by a pue coeff.
       - sci-m       # adds embodied to the observeation.
-      - sci-c       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+      - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
       - sci         # calculates sci by dividing carbon by `r`
     config:
       sci-m:
@@ -137,7 +149,7 @@ graph:
         el: 126144000
         rr: 1
         tor: 1
-      teads-curve:
+      teads-cpu:
         tdp: ??? # what's the TDP for this server
       add-obs: 
         grid-ci: 350.861 # Just copies any values under here to the observation as is.
@@ -150,6 +162,9 @@ graph:
         cpu-util: 20
         ram-util: 0
   app-gateway: # note that the app gateway does not have observations, its SCI is assumed equal to 5% of the total emissions
-    # NOTE - There is currently no way to model this in the current infra (this is part of the total, but needs the total to know it's value :/)
+    pipeline:
+     - add-obs
     config:
-      sci: 1053.94 
+      add-obs:
+        parameter: sci  # parameter to add value to
+        value: 1053.94 # value to add

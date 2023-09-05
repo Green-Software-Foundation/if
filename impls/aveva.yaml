@@ -9,10 +9,10 @@ config:
     - name: requests
       scale-factor: 500 # divide SCi per hour by this to get SCI per request
   models:
-    - name: sci-aveva # a model that takes in power observations and returns the necessary inputs to sci-m.
+    - name: sci-aveva # a model that takes in power observations and returns e.
       kind: plugin
       path: ''
-    - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
+    - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
       kind: builtin
       verbose: false 
       path: ''
@@ -31,13 +31,13 @@ config:
 graph:
   pc: 
     config:
-      sci-c:
+      sci-m:
         te: 350 # kgCO2eq
         tir: 31536000 # 1 year in seconds
         el: 157680000 # 5 years in seconds        
         rr: 1
         tor: 1
-      sci-m:
+      sci-o:
         i: 474.8 #gCo2/kWh 
       observations: 
         series:

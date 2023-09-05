@@ -6,37 +6,33 @@ tags:
   category: cloud
 config:
   models:
-    - name: tdp-curve # a model that returns an embodied value given the sci embodied attribution equation.
+    - name: teads-cpu # a model that returns an embodied value given the sci embodied attribution equation.
       kind: builtin
       verbose: false
       path: ''
-    - name: sci-mem # a model that calculates a carbon value for memory
+    - name: teads-mem # a model that calculates a carbon value for memory
       kind: plugin  
       path: ''
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
       kind: builtin
       verbose: false
       path: ''
-    - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
+    - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
       kind: builtin
       verbose: false
-      path: ''     
-    - name: sci-sum
-      kind: builtin
-      verbose: false # a model that knows to sum the carbon values for cpu and memory before calculating total SCI
       path: ''
-    - name: functional-unit
+    - name: sci # a model that sums sci-o + sci-m
       kind: builtin
-      verbose: false # builtin model that normalizes all metrics from the default /s to /hr
-      path: ''
+      verbose: false
+      path: '' 
 # Single observation
 graph:
   backend: # an advanced grouping node
     pipeline: 
-      - teads-curve # tdp & cpu -> energy
-      - sci-mem # calculates energy used by memory as component of sci-m
+      - teads-cpu # tdp & cpu -> energy
+      - teads-mem # calculates energy used by memory as component of sci-m
       - sci-m # duration & config -> embodied
-      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci-e # energy & grid-carbon-intensity & embodied -> carbon
       - sci # add cpu and memory components and convert to f.unit
     config: 
       vendor: azure
@@ -44,10 +40,10 @@ graph:
     children: 
       tiger-database: # a leaf component
         config:
-          teads-curve:
+          teads-cpu:
             processor: Intel-xeon-platinum-8380
             tdp: 270
-          sci-mem:
+          teads-mem:
             mem_allocation: 32 # GB
             mem-energy: 0.38 # kwh/GB
           sci-m:
@@ -56,7 +52,7 @@ graph:
             el: 94608000 # 3 years in seconds        
             rr: 1
             tor: 8
-          sci-c:
+          sci-e:
             i: 554 # gCO2e/kWh
           sci:
             time: hour # signal to convert /s -> /hr
@@ -64,14 +60,14 @@ graph:
         observations: 
           series:
             timestamp: 2023-07-06T00:00
-            cpu: 17.12
+            cpu_util: 17.12
             ram: 19.375 # % of available
       tiger-api: # a leaf component
         config:
-          teads-curve:
+          teads-cpu:
             processor: Intel-xeon-platinum-8270
             tdp: 205
-          sci-mem:
+          teads-mem:
             mem_allocation: 1.75 # GB
             mem-energy: 0.38 # kwh/GB
           sci-m:
@@ -80,7 +76,7 @@ graph:
             el: 94608000 # 3 years in seconds        
             rr: 1
             tor: 8
-          sci-c:
+          sci-e:
             i: 554 # gCO2e/kWh
           sci:
             time: hour # signal to convert /s -> /hr
@@ -93,10 +89,10 @@ graph:
             memory_util: 70 # % of total
       neo4j-database: # a leaf component
         config:
-          teads-curve:
+          teads-cpu:
             processor: Intel-xeon-platinum-8270
             tdp: 270
-          sci-mem:
+          teads-mem:
             mem_allocation: 32 # GB
             mem-energy: 0.38 # kwh/GB
           sci-m:
@@ -105,7 +101,7 @@ graph:
             el: 94608000 # 3 years in seconds        
             rr: 2
             tor: 64
-          sci-c:
+          sci-e:
             i: 554 # gCO2e/kWh
           sci:
             time: hour # signal to convert /s -> /hr
@@ -118,10 +114,10 @@ graph:
             memory_util: 19.375
       neo4j-api: # a leaf component
         config:
-          teads-curve:
+          teads-cpu:
             processor: Intel-xeon-platinum-8270
             tdp: 205
-          sci-mem:
+          teads-mem:
             mem_allocation: 1.75 # GB
             mem-energy: 0.38 # kwh/GB
           sci-m:
@@ -130,7 +126,7 @@ graph:
             el: 94608000 # 3 years in seconds        
             rr: 2
             tor: 64
-          sci-c:
+          sci-e:
             i: 554 # gCO2e/kWh
           sci:
             time: hour # signal to convert /s -> /hr
