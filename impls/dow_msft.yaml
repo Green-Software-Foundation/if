@@ -10,7 +10,7 @@ initialize:
       kind: builtin
       verbose: false
       path: ''
-    - name: teads-mem # a model that calculates a carbon value for memory
+    - name: e-mem # a model that calculates a carbon value for memory
       kind: plugin  
       path: ''
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
@@ -30,7 +30,7 @@ graph:
   backend: # an advanced grouping node
     pipeline: 
       - teads-cpu # tdp & cpu -> energy
-      - teads-mem # calculates energy used by memory as component of sci-m
+      - e-mem # calculates energy used by memory as component of sci-m
       - sci-m # duration & config -> embodied
       - sci-e # energy & grid-carbon-intensity & embodied -> carbon
       - sci # add cpu and memory components and convert to f.unit
@@ -43,7 +43,7 @@ graph:
           teads-cpu:
             processor: Intel-xeon-platinum-8380
             tdp: 270
-          teads-mem:
+          e-mem:
             mem_allocation: 32 # GB
             mem-energy: 0.38 # kwh/GB
           sci-m:
@@ -67,7 +67,7 @@ graph:
           teads-cpu:
             processor: Intel-xeon-platinum-8270
             tdp: 205
-          teads-mem:
+          e-mem:
             mem_allocation: 1.75 # GB
             mem-energy: 0.38 # kwh/GB
           sci-m:
@@ -92,7 +92,7 @@ graph:
           teads-cpu:
             processor: Intel-xeon-platinum-8270
             tdp: 270
-          teads-mem:
+          e-mem:
             mem_allocation: 32 # GB
             mem-energy: 0.38 # kwh/GB
           sci-m:
@@ -117,7 +117,7 @@ graph:
           teads-cpu:
             processor: Intel-xeon-platinum-8270
             tdp: 205
-          teads-mem:
+          e-mem:
             mem_allocation: 1.75 # GB
             mem-energy: 0.38 # kwh/GB
           sci-m:

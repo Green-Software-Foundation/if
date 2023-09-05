@@ -17,7 +17,7 @@ initialize:
       kind: builtin
       verbose: false
       path: ''
-    - name: teads-curve # a model that returns energy based on the generalised teads power curve and tdp
+    - name: teads-cpu # a model that returns energy based on the generalised teads power curve and tdp
       kind: builtin
       verbose: false
       path: ''

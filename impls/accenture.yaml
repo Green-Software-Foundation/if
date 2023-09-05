@@ -10,7 +10,7 @@ initialize:
       kind: builtin
       verbose: false
       path: ''  
-    - name: teads-mem
+    - name: e-mem # model that calculates e for ram memory usage
       kind: builtin
       verbose: false
       path: ''  
@@ -37,7 +37,7 @@ graph:
     pipeline:
       - add-obs     # add common values to every observertion
       - teads-cpu # converts cpu-util to energy based on a tdp and a built in set of coeff.
-      - teads-mem # converts ram-util to energy based on a tdp and a built in set of coeff.
+      - e-mem # converts ram-util to energy based on a tdp and a built in set of coeff.
       - pue         # multiplies every energy by a pue coeff.
       - sci-m       # adds embodied to the observation.
       - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
@@ -109,7 +109,7 @@ graph:
     pipeline:
       - add-obs     # add common values to every observertion
       - teads-cpu # converts cpu-util to energy based on a tdp and a built in set of coeff.
-      - teads-mem # converts ram-util to energy
+      - e-mem # converts ram-util to energy
       - pue         # multiplies every energy by a pue coeff.
       - sci-m       # adds embodied to the observeation.
       - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
@@ -137,7 +137,7 @@ graph:
     pipeline:
       - add-obs     # add common values to every observertion
       - teads-cpu # converts cpu-util to energy
-      - teads-mem # conmverts ram-util to energy
+      - e-mem # conmverts ram-util to energy
       - pue         # multiplies every energy by a pue coeff.
       - sci-m       # adds embodied to the observeation.
       - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
