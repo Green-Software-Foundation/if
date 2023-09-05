@@ -8,6 +8,7 @@ config:
   models:
     - name: sci-coefficient # a model that returns an embodied value given the sci embodied attribution equation.
       kind: builtin
+      verbose: false
       path: ''
 graph:
   rasp-pi: 

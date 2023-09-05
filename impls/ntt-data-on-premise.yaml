@@ -11,18 +11,22 @@ config:
       path: ''
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
       kind: builtin
+      verbose: false
       path: ''
     - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
-      kind: builtin       
+      kind: builtin
+      verbose: false       
       path: ''      
     - name: teads-curve # a model that returns energy based on the generalised teads power curve and tdp
       kind: builtin
+      verbose: false
       path: ''
     - name: server-energy # average power -> energy in kwh
       kind: plugin
       path: ''
     - name: sci
       kind: builtin
+      verbose: false
       path: ''
 graph:
   layer-3-switch: # an advanced grouping node

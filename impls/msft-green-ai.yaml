@@ -8,12 +8,15 @@ config:
   models:
     - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
       kind: builtin
+      verbose: false
       path: ''
     - name: wattime
       kind: builtin
+      verbose: false
       path: ''
     - name: sci
       kind: builtin
+      verbose: false
       path: ''
 graph:
   DenseNet: # an advanced grouping node
