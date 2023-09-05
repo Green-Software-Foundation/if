@@ -122,7 +122,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     observation: KeyValuePair
   ): Promise<KeyValuePair> {
     if (
-      'datetime' in observation &&
+      'timestamp' in observation &&
       'duration' in observation &&
       this.metricType in observation
     ) {
@@ -131,8 +131,8 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         observation[this.metricType]
       );
       const usage = (await this.fetchData(usageInput)) as IBoaviztaUsageSCI;
-      const result = {...usage};
-      return result;
+
+      return usage;
     } else {
       throw new Error('Invalid Input: Invalid observations parameter');
     }
