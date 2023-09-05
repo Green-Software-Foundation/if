@@ -5,6 +5,7 @@ import {BoaviztaCpuImpactModel} from '../lib';
  */
 export class Observatory {
   private observations: any;
+  private impact: any;
 
   /**
    * Init observations object.
@@ -14,30 +15,19 @@ export class Observatory {
   }
 
   /**
-   * Apply `boavizta` model computation to observations.
+   * Calculates impact based on observation and model.
    */
-  private async boaviztaHandler(params: any) {
-    const modelInstance = await new BoaviztaCpuImpactModel().configure(
-      'test',
-      params
-    );
+  private async monitorAndCalculateImpact(Model: any, params: any) {
+    const modelInstance = await new Model().configure('test', params);
 
-    const preparedObservations = this.observations.map((observation: any) => ({
-      cpu: observation.cpu,
-      duration: `${observation.duration}s`,
-      datetime: observation.timestamp,
-    }));
-
-    const calculatedImpacts = await modelInstance.calculate(
-      preparedObservations
-    );
+    const calculatedImpacts = await modelInstance.calculate(this.observations);
 
     const result = this.observations.map((observation: any, index: number) => ({
       ...observation,
       ...calculatedImpacts[index],
     }));
 
-    this.observations = result;
+    this.impact = result;
 
     return this;
   }
@@ -48,9 +38,9 @@ export class Observatory {
   public doInvestigationsWith(modelType: string, params: any) {
     switch (modelType) {
       case 'boavizta':
-        return this.boaviztaHandler(params);
+        return this.monitorAndCalculateImpact(BoaviztaCpuImpactModel, params);
       // case 'ccf':
-      // return this.ccfHandler(params)
+      //   return this.monitorAndCalculateImpact(CloudCarbonFootprint, params);
     }
   }
 
@@ -59,5 +49,12 @@ export class Observatory {
    */
   public getObservationsData() {
     return this.observations;
+  }
+
+  /**
+   * Getter for impact data.
+   */
+  public getObservedImpact() {
+    return this.impact;
   }
 }
