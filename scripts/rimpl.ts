@@ -64,16 +64,12 @@ const rimplPOCScript = async () => {
       throw new Error('No graph data found.');
     }
 
-    const graph = impl.graph;
-
     // calculate for single graph
-    const services = Object.keys(graph);
+    const services = Object.keys(impl.graph);
 
-    const graphsWithImpacts = await Promise.all(
-      services.map(calculateImpactsBasedOnGraph(graph))
-    );
+    await Promise.all(services.map(calculateImpactsBasedOnGraph(impl.graph)));
 
-    console.log(graphsWithImpacts);
+    console.log(impl);
 
     if (!outputPath) {
       console.log(JSON.stringify(impl));
