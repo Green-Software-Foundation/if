@@ -6,7 +6,7 @@ tags:
   category: cloud
 config:
   models:
-    - name: sci-c # a model that given e, i and m calculates a carbon value (e * i) + m
+    - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
       kind: builtin
       verbose: false
       path: ''
@@ -21,12 +21,12 @@ config:
 graph:
   DenseNet: # an advanced grouping node
     pipeline: 
-      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon
       - watttime
       - add-obs
       - sci
     config: 
-      sci-c:
+      sci-o:
         processor: nvidia-t4-nc16as-v3
         i: 1 # data not provided in case study
         m: 0
@@ -40,12 +40,12 @@ graph:
           energy: 17.97
   InceptionV3: # an advanced grouping node
     pipeline: 
-      - sci-c # energy & grid-carbon-intensity & embodied -> carbon
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon
       - watttime
       - add-obs
       - sci
     config: 
-      sci-c:
+      sci-o:
         processor: nvidia-t4-nc16as-v3
         i: 1 # data not provided in case study
         m: 0
