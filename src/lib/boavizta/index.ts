@@ -55,7 +55,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   }
 
   // converts the usage from IMPL input to the format required by Boavizta API.
-  transformToBoaviztaUsage(duration: any, metric: any) {
+  transformToBoaviztaUsage(duration: number, metric: number) {
     // duration is in seconds, convert to hours
     // metric is between 0 and 1, convert to percentage
     let usageInput: KeyValuePair = {
@@ -98,10 +98,10 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   }
 
   //abstract subs to make compatibility with base interface. allows configure to be defined in base class
-  protected abstract captureStaticParams(staticParams: object): any;
+  protected abstract captureStaticParams(staticParams: object): object;
 
   // extracts information from Boavizta API response to return the impact in the format required by IMPL
-  protected formatResponse(data: any): KeyValuePair {
+  protected formatResponse(data: KeyValuePair): KeyValuePair {
     let m = 0;
     let e = 0;
 
