@@ -1,7 +1,7 @@
 import {IImpactModelInterface} from '../interfaces';
 import {KeyValuePair} from '../../types/boavizta';
 
-export class SciOModel implements IImpactModelInterface {
+export class SciMModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
   staticParams: object | undefined;
   name: string | undefined;
@@ -87,7 +87,7 @@ export class SciOModel implements IImpactModelInterface {
           tor = parseFloat(observation['tor']);
         }
         // M = TE * (TiR/EL) * (RR/ToR)
-        observation['embodied'] = te * (tir / el) * (rr / tor);
+        observation['embodied-carbon'] = te * (tir / el) * (rr / tor);
       }
       return observation;
     });
