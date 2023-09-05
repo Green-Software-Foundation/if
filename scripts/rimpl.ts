@@ -15,10 +15,11 @@ const runPipelineComputer = async (
   const observatory = new Observatory(observations);
 
   for (const model of pipeline) {
+    // better to init model instance here, and pass to observatory
     await observatory.doInvestigationsWith(model, params);
   }
 
-  return observatory.getObservationsData();
+  return observatory.getObservedImpact();
 };
 
 /**
@@ -40,10 +41,11 @@ const calculateImpactsBasedOnGraph =
       core_units: 24,
     };
 
-    const result = await runPipelineComputer(observations, params, pipeline);
-    graphs[service].observations = result;
+    const impact = await runPipelineComputer(observations, params, pipeline);
 
-    return graphs;
+    graphs[service].impact = impact;
+
+    return graphs[service];
   };
 
 /**
@@ -51,7 +53,7 @@ const calculateImpactsBasedOnGraph =
  * 2. Opens yaml file as an object.
  * 3. Saves processed object as an yaml file.
  * @todo Apply logic here.
- * @example run following command `npx ts-node scripts/rimpl-poc.ts --impl ./test.yml --ompl ./result.yml`
+ * @example run following command `npx ts-node scripts/rimpl.ts --impl ./test.yml --ompl ./result.yml`
  */
 const rimplPOCScript = async () => {
   try {
@@ -62,18 +64,16 @@ const rimplPOCScript = async () => {
       throw new Error('No graph data found.');
     }
 
-    const graphs = impl.graph;
+    const graph = impl.graph;
 
     // calculate for single graph
-    const services = Object.keys(graphs).splice(0);
+    const services = Object.keys(graph);
 
-    const graphsUpdated = await Promise.all(
-      services.map(calculateImpactsBasedOnGraph(graphs))
+    const graphsWithImpacts = await Promise.all(
+      services.map(calculateImpactsBasedOnGraph(graph))
     );
 
-    impl.graph = graphsUpdated[0];
-
-    console.log(impl.graph);
+    console.log(graphsWithImpacts);
 
     if (!outputPath) {
       console.log(JSON.stringify(impl));
