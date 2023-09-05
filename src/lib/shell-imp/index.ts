@@ -4,7 +4,7 @@ import {KeyValuePair} from '../../types/boavizta';
 import * as yaml from 'js-yaml';
 
 export class ShellModel implements IImpactModelInterface {
-  // Defined for compatibility. Not used in TEADS.
+  // Defined for compatibility. Not used.
   authParams: object | undefined;
   // name of the data source
   name: string | undefined;
@@ -12,14 +12,14 @@ export class ShellModel implements IImpactModelInterface {
   executable = '';
 
   /**
-   * Defined for compatibility. Not used in TEADS.
+   * Defined for compatibility. Not used.
    */
   authenticate(authParams: object): void {
     this.authParams = authParams;
   }
 
   /**
-   *  Configures the TEADS Plugin for IEF
+   *  Configures the Plugin for IEF
    *  @param {string} name name of the resource
    *  @param {Object} staticParams static parameters for the resource
    *  @param {number} staticParams.tdp Thermal Design Power in Watts
