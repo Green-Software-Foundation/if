@@ -84,7 +84,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
    */
   async calculate(
     observations: object | object[] | undefined
-  ): Promise<object> {
+  ): Promise<object[]> {
     if (observations === undefined) {
       throw new Error('Required Parameters not provided');
     } else if (!Array.isArray(observations)) {
