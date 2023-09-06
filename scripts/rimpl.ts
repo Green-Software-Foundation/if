@@ -33,7 +33,6 @@ const calculateImpactsBasedOnGraph =
  * 3. Initializes models.
  * 4. Initializes graph, does computing.
  * 5. Saves processed object as a yaml file.
- * @todo Apply logic here.
  * @example run following command `npx ts-node scripts/rimpl.ts --impl ./test.yml --ompl ./result.yml`
  */
 const rimplPOCScript = async () => {
