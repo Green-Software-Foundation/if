@@ -1,9 +1,11 @@
+import {IImpactModelInterface} from '../lib';
+
 /**
  * Observatory calculates impacts based on `observations` and `model`.
  */
 export class Observatory {
-  private observations: any;
-  private impact: any;
+  private observations: any[];
+  private impact: any[];
 
   /**
    * Init observations object.
@@ -15,7 +17,7 @@ export class Observatory {
   /**
    * Calculates impact based on observations.
    */
-  public async doInvestigationsWith(modelInstance: any) {
+  public async doInvestigationsWith(modelInstance: IImpactModelInterface) {
     const calculatedImpacts = await modelInstance.calculate(this.observations);
 
     const result = this.observations.map((observation: any, index: number) => ({
