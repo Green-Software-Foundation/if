@@ -1,57 +1,38 @@
 import {parseProcessArgument} from '../src/util/args';
 import {openYamlFileAsObject, saveYamlFileAs} from '../src/util/yaml';
-
 import {Observatory} from '../src/util/observatory';
-import {KeyValuePair} from '../src';
-
-/**
- * Computes impact based on given `observations` and `params`.
- */
-const runPipelineComputer = async (
-  observations: any[],
-  params: any,
-  pipeline: string[]
-) => {
-  const observatory = new Observatory(observations);
-
-  for (const model of pipeline) {
-    // better to init model instance here, and pass to observatory
-    await observatory.doInvestigationsWith(model, params);
-  }
-
-  return observatory.getObservedImpact();
-};
+import {ModelsUniverse} from '../src/util/models-universe';
 
 /**
  * For each graph builds params, then passes it to computing fn.
  */
 const calculateImpactsBasedOnGraph =
-  (graphs: any) => async (service: string) => {
-    const serviceData = graphs[service];
-    const {observations, pipeline} = serviceData;
+  (impl: any, modelsHandbook: ModelsUniverse) => async (service: string) => {
+    const serviceData = impl.graph.children[service];
+    const {pipeline, observations, config} = serviceData;
 
-    /**
-     * Building params should be optimized to support any model.
-     * Mock params for boavizta model.
-     */
-    const params: KeyValuePair = {
-      allocation: 'TOTAL',
-      verbose: true,
-      name: observations[0].processor,
-      core_units: 24,
-    };
+    const observatory = new Observatory(observations);
 
-    const impact = await runPipelineComputer(observations, params, pipeline);
+    for (const model of pipeline) {
+      const instance: any = await modelsHandbook.initalizedModels[model](
+        config[model]
+      );
 
-    graphs[service].impact = impact;
+      await observatory.doInvestigationsWith(instance);
+    }
 
-    return graphs[service];
+    const impact = observatory.getObservedImpact();
+    impl.graph.children[service].impact = impact;
+
+    return impl;
   };
 
 /**
  * 1. Parses yml input/output process arguments.
  * 2. Opens yaml file as an object.
- * 3. Saves processed object as an yaml file.
+ * 3. Initializes models.
+ * 4. Initializes graph, does computing.
+ * 5. Saves processed object as a yaml file.
  * @todo Apply logic here.
  * @example run following command `npx ts-node scripts/rimpl.ts --impl ./test.yml --ompl ./result.yml`
  */
@@ -64,12 +45,19 @@ const rimplPOCScript = async () => {
       throw new Error('No graph data found.');
     }
 
-    // calculate for single graph
-    const services = Object.keys(impl.graph);
+    // Lifecycle Initialize Models
+    const modelsHandbook = new ModelsUniverse();
 
-    await Promise.all(services.map(calculateImpactsBasedOnGraph(impl.graph)));
+    impl.initialize.models.forEach((model: any) =>
+      modelsHandbook.writeDown(model)
+    );
 
-    console.log(impl);
+    // Initialize impact graph/computing
+    const services = Object.keys(impl.graph.children);
+
+    await Promise.all(
+      services.map(calculateImpactsBasedOnGraph(impl, modelsHandbook))
+    );
 
     if (!outputPath) {
       console.log(JSON.stringify(impl));
