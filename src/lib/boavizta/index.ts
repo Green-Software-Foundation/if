@@ -23,7 +23,7 @@ const {CPU_IMPACT_MODEL_ID, CLOUD_IMPACT_MODEL_ID} = Index;
 abstract class BoaviztaImpactModel implements IImpactModelInterface {
   name: string | undefined;
   sharedParams: object | undefined = undefined;
-  metricType: 'cpu' | 'gpu' | 'ram' = 'cpu';
+  metricType: 'cpu-util' | 'gpu' | 'ram' = 'cpu-util';
   expectedLifespan = 4;
   protected authCredentials: object | undefined;
 
@@ -160,7 +160,7 @@ export class BoaviztaCpuImpactModel
 
   constructor() {
     super();
-    this.metricType = 'cpu';
+    this.metricType = 'cpu-util';
     this.componentType = 'cpu';
   }
 
@@ -190,11 +190,11 @@ export class BoaviztaCpuImpactModel
       staticParams.verbose = undefined;
     }
 
-    if (!('name' in staticParams)) {
+    if (!('processor' in staticParams)) {
       throw new Error('Improper configure: Missing name parameter');
     }
 
-    if (!('core_units' in staticParams)) {
+    if (!('core-units' in staticParams)) {
       throw new Error('Improper configure: Missing core_units parameter');
     }
 
