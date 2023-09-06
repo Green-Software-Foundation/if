@@ -39,8 +39,8 @@ export class TeadsAWS implements IImpactModelInterface {
    *  Configures the TEADS Plugin for IEF
    *  @param {string} name name of the resource
    *  @param {Object} staticParams static parameters for the resource
-   *  @param {string} staticParams.instance_type instance type from the list of supported instances
-   *  @param {number} staticParams.expected_lifespan expected lifespan of the instance in years
+   *  @param {string} staticParams.instance-type instance type from the list of supported instances
+   *  @param {number} staticParams.expected-lifespan expected lifespan of the instance in years
    *  @param {Interpolation} staticParams.interpolation expected lifespan of the instance in years
    */
   async configure(
@@ -53,8 +53,8 @@ export class TeadsAWS implements IImpactModelInterface {
       throw new Error('Required Parameters not provided');
     }
 
-    if ('instance_type' in staticParams) {
-      const instanceType = staticParams?.instance_type as string;
+    if ('instance-type' in staticParams) {
+      const instanceType = staticParams['instance-type'] as string;
       if (instanceType in this.computeInstances) {
         this.instanceType = instanceType;
       } else {
@@ -64,8 +64,8 @@ export class TeadsAWS implements IImpactModelInterface {
       throw new Error('Instance Type not provided');
     }
 
-    if ('expected_lifespan' in staticParams) {
-      this.expectedLifespan = staticParams?.expected_lifespan as number;
+    if ('expected-lifespan' in staticParams) {
+      this.expectedLifespan = staticParams['expected-lifespan'] as number;
     }
 
     if ('interpolation' in staticParams) {
@@ -79,10 +79,10 @@ export class TeadsAWS implements IImpactModelInterface {
    * Calculate the total emissions for a list of observations
    *
    * Each Observation require:
-   *  @param {Object[]} observations  ISO 8601 datetime string
-   *  @param {string} observations[].datetime ISO 8601 datetime string
+   *  @param {Object[]} observations  ISO 8601 timestamp string
+   *  @param {string} observations[].timestamp ISO 8601 timestamp string
    *  @param {number} observations[].duration observation duration in seconds
-   *  @param {number} observations[].cpu percentage cpu usage
+   *  @param {number} observations[].cpu-util percentage cpu usage
    */
   async calculate(
     observations: object | object[] | undefined
@@ -103,7 +103,7 @@ export class TeadsAWS implements IImpactModelInterface {
       const e = this.calculateEnergy(observation);
       const m = this.embodiedEmissions(observation);
       observation['energy'] = e;
-      observation['embodied'] = m;
+      observation['embodied-carbon'] = m;
       return observation;
     });
   }
@@ -150,19 +150,19 @@ export class TeadsAWS implements IImpactModelInterface {
    * requires
    *
    * duration: duration of the observation in seconds
-   * cpu: cpu usage in percentage
-   * datetime: ISO 8601 datetime string
+   * cpu-util: cpu usage in percentage
+   * timestamp: RFC3339 timestamp string
    *
    * Uses a spline method for AWS and linear interpolation for GCP and Azure
    */
   private calculateEnergy(observation: KeyValuePair) {
     if (
       !('duration' in observation) ||
-      !('cpu' in observation) ||
-      !('datetime' in observation)
+      !('cpu-util' in observation) ||
+      !('timestamp' in observation)
     ) {
       throw new Error(
-        'Required Parameters duration,cpu,datetime not provided for observation'
+        'Required Parameters duration,cpu-util,timestamp not provided for observation'
       );
     }
 
@@ -170,7 +170,7 @@ export class TeadsAWS implements IImpactModelInterface {
     const duration = observation['duration'];
 
     //    convert cpu usage to percentage
-    const cpu = observation['cpu'];
+    const cpu = observation['cpu-util'];
 
     //  get the wattage for the instance type
 
