@@ -1,7 +1,5 @@
-import {BoaviztaCpuImpactModel} from '../lib';
-
 /**
- * Pipeline for computing impacts based on observation.
+ * Observatory calculates impacts based on `observations` and `model`.
  */
 export class Observatory {
   private observations: any;
@@ -15,11 +13,9 @@ export class Observatory {
   }
 
   /**
-   * Calculates impact based on observation and model.
+   * Calculates impact based on observations.
    */
-  private async monitorAndCalculateImpact(Model: any, params: any) {
-    const modelInstance = await new Model().configure('test', params);
-
+  public async doInvestigationsWith(modelInstance: any) {
     const calculatedImpacts = await modelInstance.calculate(this.observations);
 
     const result = this.observations.map((observation: any, index: number) => ({
@@ -30,18 +26,6 @@ export class Observatory {
     this.impact = result;
 
     return this;
-  }
-
-  /**
-   * Apply appropriate observation.
-   */
-  public doInvestigationsWith(modelType: string, params: any) {
-    switch (modelType) {
-      case 'boavizta':
-        return this.monitorAndCalculateImpact(BoaviztaCpuImpactModel, params);
-      // case 'ccf':
-      //   return this.monitorAndCalculateImpact(CloudCarbonFootprint, params);
-    }
   }
 
   /**
