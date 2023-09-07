@@ -31,7 +31,7 @@ const calculateImpactsBasedOnGraph =
 
     const extendedObservations = observations.map((observation: any) => ({
       ...observation,
-      ...flattenConfigValues,
+      ...flattenConfigValues(config),
     }));
 
     const observatory = new Observatory(extendedObservations);
