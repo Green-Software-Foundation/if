@@ -10,12 +10,17 @@ describe('watt-time:configure test', () => {
       password: 'ENV_PASSWORD',
     });
     expect(model).toBeInstanceOf(WattTimeGridEmissions);
-    // await expect(
-    //   model.calculate([
-    //     {
-    //       sa,
-    //     },
-    //   ])
-    // ).resolves.toStrictEqual([{}]);
+    await expect(
+      model.calculate([
+        {
+          location: {
+            latitude: 37.7749,
+            longitude: -122.4194,
+          },
+          timestamp: '2021-01-01T00:00:00Z',
+          duration: 3600,
+        },
+      ])
+    ).resolves.toStrictEqual([{}]);
   });
 });

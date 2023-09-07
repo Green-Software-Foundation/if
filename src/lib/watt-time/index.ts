@@ -2,6 +2,7 @@ import {IImpactModelInterface} from '../interfaces';
 import {KeyValuePair} from '../../types/boavizta';
 import axios from 'axios';
 import * as dayjs from 'dayjs';
+
 export class WattTimeGridEmissions implements IImpactModelInterface {
   authParams: object | undefined = undefined;
   token = '';
@@ -40,13 +41,17 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
 
   async calculate(
     observations: object | object[] | undefined
-  ): Promise<object[]> {
+  ): Promise<object | object[]> {
     if (!Array.isArray(observations)) {
       throw new Error('observations should be an array');
     }
-    observations.map((observation: KeyValuePair) => {
-      return observation;
-    });
+    observations = await Promise.all(
+      observations.map(async (observation: KeyValuePair) => {
+        const result = await this.fetchData(observation);
+        console.log(result);
+        return result;
+      })
+    );
 
     return Promise.resolve(observations);
   }
@@ -67,18 +72,20 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
     if (!('duration' in observation)) {
       throw new Error('duration is missing');
     }
-
-    axios.get(this.baseUrl + '/data', {
-      params: {
-        latitude: observation.location.latitude,
-        longitude: observation.location.longitude,
-        starttime: dayjs(observation.timestamp).format('YYYY-MM-DDTHH:mm:ssZ'),
-        endtime: dayjs(observation.timestamp).add(
-          observation.duration,
-          'seconds'
-        ),
-      },
+    const params = {
+      latitude: observation.location.latitude,
+      longitude: observation.location.longitude,
+      starttime: dayjs(observation.timestamp).format('YYYY-MM-DDTHH:mm:ssZ'),
+      endtime: dayjs(observation.timestamp).add(
+        observation.duration,
+        'seconds'
+      ),
+    };
+    const result = await axios.get(this.baseUrl + '/data', {
+      params,
     });
+    console.log(result);
+    return observation;
   }
 
   async configure(
