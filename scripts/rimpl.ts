@@ -4,25 +4,48 @@ import {Observatory} from '../src/util/observatory';
 import {ModelsUniverse} from '../src/util/models-universe';
 
 /**
+ * Flattens config entries.
+ */
+const flattenConfigValues = (config: any) => {
+  const configModelNames = Object.keys(config);
+  const values = configModelNames.reduce((acc: any, name: string) => {
+    acc = {
+      ...acc,
+      ...config[name],
+    };
+
+    return acc;
+  }, {});
+
+  return values;
+};
+
+/**
  * For each graph builds params, then passes it to computing fn.
  */
 const calculateImpactsBasedOnGraph =
-  (impl: any, modelsHandbook: ModelsUniverse) => async (service: string) => {
-    const serviceData = impl.graph.children[service];
-    const {pipeline, observations, config} = serviceData;
+  (impl: any, modelsHandbook: ModelsUniverse) =>
+  async (childrenName: string) => {
+    const child = impl.graph.children[childrenName];
+    const {pipeline, observations, config} = child;
 
-    const observatory = new Observatory(observations);
+    const extendedObservations = observations.map((observation: any) => ({
+      ...observation,
+      ...flattenConfigValues,
+    }));
 
-    for (const model of pipeline) {
-      const instance: any = await modelsHandbook.initalizedModels[model](
-        config[model]
-      );
+    const observatory = new Observatory(extendedObservations);
 
-      await observatory.doInvestigationsWith(instance);
+    for (const modelName of pipeline) {
+      const modelInstance: any = await modelsHandbook.initalizedModels[
+        modelName
+      ](config && config[modelName]);
+
+      await observatory.doInvestigationsWith(modelInstance);
     }
 
-    const impact = observatory.getObservedImpact();
-    impl.graph.children[service].impact = impact;
+    const impacts = observatory.getImpacts();
+    impl.graph.children[childrenName].impacts = impacts;
 
     return impl;
   };
@@ -35,7 +58,7 @@ const calculateImpactsBasedOnGraph =
  * 5. Saves processed object as a yaml file.
  * @example run following command `npx ts-node scripts/rimpl.ts --impl ./test.yml --ompl ./result.yml`
  */
-const rimplPOCScript = async () => {
+const rimplScript = async () => {
   try {
     const {inputPath, outputPath} = parseProcessArgument();
     const impl = await openYamlFileAsObject(inputPath);
@@ -52,10 +75,10 @@ const rimplPOCScript = async () => {
     );
 
     // Initialize impact graph/computing
-    const services = Object.keys(impl.graph.children);
+    const childrenNames = Object.keys(impl.graph.children);
 
     await Promise.all(
-      services.map(calculateImpactsBasedOnGraph(impl, modelsHandbook))
+      childrenNames.map(calculateImpactsBasedOnGraph(impl, modelsHandbook))
     );
 
     if (!outputPath) {
@@ -69,4 +92,4 @@ const rimplPOCScript = async () => {
   }
 };
 
-rimplPOCScript();
+rimplScript();
