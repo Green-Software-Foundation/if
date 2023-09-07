@@ -16,6 +16,7 @@
     "typescript-cubic-spline",
     "js-yaml",
     "@types/node",
+    "dayjs",
     "ts-command-line-args"
   ],
   "dependencies": {
@@ -23,6 +24,7 @@
     "@cloud-carbon-footprint/core": "*",
     "@types/node": "^20.4.5",
     "axios": "^1.4.0",
+    "dayjs": "^1.11.9",
     "js-yaml": "^4.1.0",
     "node-fetch": "^3.3.1",
     "ts-command-line-args": "^2.5.1",

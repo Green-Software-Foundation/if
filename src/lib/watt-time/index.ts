@@ -1,7 +1,7 @@
 import {IImpactModelInterface} from '../interfaces';
 import {KeyValuePair} from '../../types/boavizta';
 import axios from 'axios';
-
+import * as dayjs from 'dayjs';
 export class WattTimeGridEmissions implements IImpactModelInterface {
   authParams: object | undefined = undefined;
   token = '';
@@ -49,6 +49,36 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
     });
 
     return Promise.resolve(observations);
+  }
+
+  async fetchData(observation: KeyValuePair) {
+    if (!('location' in observation)) {
+      throw new Error('location is missing');
+    }
+    if (
+      !('latitude' in observation.location) ||
+      !('longitude' in observation.location)
+    ) {
+      throw new Error('latitude or longitude is missing');
+    }
+    if (!('timestamp' in observation)) {
+      throw new Error('timestamp is missing');
+    }
+    if (!('duration' in observation)) {
+      throw new Error('duration is missing');
+    }
+
+    axios.get(this.baseUrl + '/data', {
+      params: {
+        latitude: observation.location.latitude,
+        longitude: observation.location.longitude,
+        starttime: dayjs(observation.timestamp).format('YYYY-MM-DDTHH:mm:ssZ'),
+        endtime: dayjs(observation.timestamp).add(
+          observation.duration,
+          'seconds'
+        ),
+      },
+    });
   }
 
   async configure(
