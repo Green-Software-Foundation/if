@@ -13,16 +13,16 @@ describe('teads:configure test', () => {
       impactModel.calculate([
         {
           duration: 3600,
-          cpu: 50.0,
-          datetime: '2021-01-01T00:00:00Z',
+          'cpu-util': 50.0,
+          timestamp: '2021-01-01T00:00:00Z',
         },
       ])
     ).resolves.toStrictEqual([
       {
         energy: 0.15,
         duration: 3600,
-        cpu: 50.0,
-        datetime: '2021-01-01T00:00:00Z',
+        'cpu-util': 50.0,
+        timestamp: '2021-01-01T00:00:00Z',
       },
     ]);
   });
@@ -35,37 +35,37 @@ describe('teads:configure test', () => {
       impactModel.calculate([
         {
           duration: 3600,
-          cpu: 10.0,
-          datetime: '2021-01-01T00:00:00Z',
+          'cpu-util': 10.0,
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 50.0,
-          datetime: '2021-01-01T00:00:00Z',
+          'cpu-util': 50.0,
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 100.0,
-          datetime: '2021-01-01T00:00:00Z',
+          'cpu-util': 100.0,
+          timestamp: '2021-01-01T00:00:00Z',
         },
       ])
     ).resolves.toStrictEqual([
       {
         duration: 3600,
-        cpu: 10.0,
-        datetime: '2021-01-01T00:00:00Z',
+        'cpu-util': 10.0,
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.096,
       },
       {
         duration: 3600,
-        cpu: 50.0,
-        datetime: '2021-01-01T00:00:00Z',
+        'cpu-util': 50.0,
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.225,
       },
       {
         duration: 3600,
-        cpu: 100.0,
-        datetime: '2021-01-01T00:00:00Z',
+        'cpu-util': 100.0,
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.306,
       },
     ]);
@@ -80,71 +80,71 @@ describe('teads:configure test', () => {
       impactModel.calculate([
         {
           duration: 3600,
-          cpu: 10.0,
-          datetime: '2021-01-01T00:00:00Z',
+          'cpu-util': 10.0,
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 50.0,
-          datetime: '2021-01-01T00:00:00Z',
+          'cpu-util': 50.0,
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 100.0,
-          datetime: '2021-01-01T00:00:00Z',
+          'cpu-util': 100.0,
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 15.0,
-          datetime: '2021-01-01T00:00:00Z',
+          'cpu-util': 15.0,
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 55.0,
-          datetime: '2021-01-01T00:00:00Z',
+          'cpu-util': 55.0,
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 75.0,
-          datetime: '2021-01-01T00:00:00Z',
+          'cpu-util': 75.0,
+          timestamp: '2021-01-01T00:00:00Z',
         },
       ])
     ).resolves.toStrictEqual([
       {
         duration: 3600,
-        cpu: 10.0,
-        datetime: '2021-01-01T00:00:00Z',
+        'cpu-util': 10.0,
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.096,
       },
       {
         duration: 3600,
-        cpu: 50.0,
-        datetime: '2021-01-01T00:00:00Z',
+        'cpu-util': 50.0,
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.225,
       },
       {
         duration: 3600,
-        cpu: 100.0,
-        datetime: '2021-01-01T00:00:00Z',
+        'cpu-util': 100.0,
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.306,
       },
 
       {
         duration: 3600,
-        cpu: 15.0,
-        datetime: '2021-01-01T00:00:00Z',
+        'cpu-util': 15.0,
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.11212500000000002,
       },
       {
         duration: 3600,
-        cpu: 55.0,
-        datetime: '2021-01-01T00:00:00Z',
+        'cpu-util': 55.0,
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.2331,
       },
       {
         duration: 3600,
-        cpu: 75.0,
-        datetime: '2021-01-01T00:00:00Z',
+        'cpu-util': 75.0,
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.2655,
       },
     ]);
