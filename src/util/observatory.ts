@@ -5,7 +5,7 @@ import {IImpactModelInterface} from '../lib';
  */
 export class Observatory {
   private observations: any[];
-  private impact: any[];
+  private impact: any[] = [];
 
   /**
    * Init observations object.
@@ -33,14 +33,14 @@ export class Observatory {
   /**
    * Getter for observation data.
    */
-  public getObservationsData() {
+  public getObservations() {
     return this.observations;
   }
 
   /**
    * Getter for impact data.
    */
-  public getObservedImpact() {
+  public getImpacts() {
     return this.impact;
   }
 }
