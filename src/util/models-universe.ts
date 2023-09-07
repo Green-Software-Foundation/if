@@ -60,9 +60,9 @@ export class ModelsUniverse {
   }
 
   /**
-   * Gets model based on `kind` and `name` params.
+   * Gets model based on `name` and `kind` params.
    */
-  private handModelByCriteria(kind: string, name: string) {
+  private handModelByCriteria(name: string, kind: string) {
     switch (kind) {
       case 'builtin':
         return this.handBuiltinModel(name);
@@ -82,11 +82,13 @@ export class ModelsUniverse {
     const {name, kind, config} = model;
 
     const Model = this.handModelByCriteria(name, kind);
+
     const callback = async (graphOptions: GraphOptions) => {
       const params = {
         ...config,
         ...graphOptions,
       };
+
       const initalizedModel = await new Model().configure('test', params);
 
       return initalizedModel;
