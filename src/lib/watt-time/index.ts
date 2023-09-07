@@ -48,7 +48,6 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
     observations = await Promise.all(
       observations.map(async (observation: KeyValuePair) => {
         const result = await this.fetchData(observation);
-        console.log(result);
         return result;
       })
     );
@@ -72,19 +71,46 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
     if (!('duration' in observation)) {
       throw new Error('duration is missing');
     }
+    let duration = observation.duration;
+    // WattTime API only supports up to 32 days
+    if (duration > 32 * 24 * 60 * 60) {
+      throw new Error('duration is too long');
+    }
     const params = {
       latitude: observation.location.latitude,
       longitude: observation.location.longitude,
       starttime: dayjs(observation.timestamp).format('YYYY-MM-DDTHH:mm:ssZ'),
-      endtime: dayjs(observation.timestamp).add(
-        observation.duration,
-        'seconds'
-      ),
+      endtime: dayjs(observation.timestamp).add(duration, 'seconds'),
     };
     const result = await axios.get(this.baseUrl + '/data', {
       params,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
     });
-    console.log(result);
+    result.data.sort((a: any, b: any) => {
+      return dayjs(a.point_time).unix() > dayjs(b.point_time).unix() ? 1 : -1;
+    });
+    // console.log(result.data.length);
+    let datapoints = 0;
+    let cumulative_emission = 0;
+    for (const row of result.data) {
+      if (row) {
+        // console.log(row);
+        duration -= row.frequency;
+        // lbs/MWh to kg/MWh to g/kWh (kg/MWh == g/kWh as a ratio)
+        const grid_emission = row.value / 0.45359237;
+        // console.log('emissions raw:', row.value);
+        // convert to kg/kWh by dividing by 1000. (1MWh = 1000kWh)
+        // convert to g/kWh by multiplying by 1000. (1kg = 1000g)
+        // hence each other cancel out and g/kWh is the same as kg/MWh
+        cumulative_emission += grid_emission;
+        datapoints++;
+      }
+    }
+    // observation['grid-emission'] = cumulative_emission;
+    // observation['grid-points'] = datapoints;
+    observation['grid-ci'] = cumulative_emission / datapoints;
     return observation;
   }
 

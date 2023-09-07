@@ -21,6 +21,16 @@ describe('watt-time:configure test', () => {
           duration: 3600,
         },
       ])
-    ).resolves.toStrictEqual([{}]);
+    ).resolves.toStrictEqual([
+      {
+        location: {
+          latitude: 37.7749,
+          longitude: -122.4194,
+        },
+        timestamp: '2021-01-01T00:00:00Z',
+        duration: 3600,
+        'grid-ci': 2096.256940667132,
+      },
+    ]);
   });
 });
