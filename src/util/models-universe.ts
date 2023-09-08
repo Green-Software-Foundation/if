@@ -1,7 +1,7 @@
 import {
   BoaviztaCpuImpactModel,
   BoaviztaCloudImpactModel,
-  // CloudCarbonFootprint,
+  CloudCarbonFootprint,
   ShellModel,
   SciMModel,
   SciOModel,
@@ -32,8 +32,8 @@ export class ModelsUniverse {
         return BoaviztaCpuImpactModel;
       case 'boavizta-cloud':
         return BoaviztaCloudImpactModel;
-      // case 'ccf':
-      //   return CloudCarbonFootprint;
+      case 'ccf':
+        return CloudCarbonFootprint;
       case 'teads-curve':
         return TeadsCurveModel;
       case 'sci-m':
@@ -47,6 +47,7 @@ export class ModelsUniverse {
 
   /**
    * Returns plugin model.
+   * @todo Update function when plugin model will ready.
    */
   private handPluginModel() {
     return ShellModel;
