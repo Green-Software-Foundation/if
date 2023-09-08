@@ -19,7 +19,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
   // default percentage points
   points: number[] = [0, 10, 50, 100];
   // spline interpolation of the power curve
-  spline: Spline = new Spline(this.points, this.curve);
+  spline: any = new Spline(this.points, this.curve);
   // interpolation method
   interpolation: Interpolation = Interpolation.SPLINE;
 
@@ -80,7 +80,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
    */
   async calculate(
     observations: object | object[] | undefined
-  ): Promise<object[]> {
+  ): Promise<any[]> {
     if (observations === undefined) {
       throw new Error('Required Parameters not provided');
     } else if (!Array.isArray(observations)) {

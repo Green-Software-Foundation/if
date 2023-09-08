@@ -12,7 +12,7 @@ export class SciMModel implements IImpactModelInterface {
 
   async calculate(
     observations: object | object[] | undefined
-  ): Promise<object[]> {
+  ): Promise<any[]> {
     if (!Array.isArray(observations)) {
       throw new Error('observations should be an array');
     }
