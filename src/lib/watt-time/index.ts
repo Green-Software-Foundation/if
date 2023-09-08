@@ -88,6 +88,7 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
         Authorization: `Bearer ${this.token}`,
       },
     });
+    // console.log(JSON.stringify(result.data, null, 2));
     result.data.sort((a: any, b: any) => {
       return dayjs(a.point_time).unix() > dayjs(b.point_time).unix() ? 1 : -1;
     });
