@@ -25,8 +25,8 @@ mockAxios.get.mockImplementation(url => {
 describe('watt-time:configure test', () => {
   test('initialize and test', async () => {
     const model = await new WattTimeGridEmissions().configure('watt-time', {
-      username: 'ENV_USERNAME',
-      password: 'ENV_PASSWORD',
+      username: 'test1',
+      password: 'test2',
     });
     expect(model).toBeInstanceOf(WattTimeGridEmissions);
     await expect(
