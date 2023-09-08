@@ -10,9 +10,7 @@ export class SciMModel implements IImpactModelInterface {
     this.authParams = authParams;
   }
 
-  async calculate(
-    observations: object | object[] | undefined
-  ): Promise<any[]> {
+  async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (!Array.isArray(observations)) {
       throw new Error('observations should be an array');
     }

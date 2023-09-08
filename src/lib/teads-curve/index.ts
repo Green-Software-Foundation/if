@@ -78,9 +78,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
    *  @param {number} observations[].duration observation duration in seconds
    *  @param {number} observations[].cpu-util percentage cpu usage
    */
-  async calculate(
-    observations: object | object[] | undefined
-  ): Promise<any[]> {
+  async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (observations === undefined) {
       throw new Error('Required Parameters not provided');
     } else if (!Array.isArray(observations)) {

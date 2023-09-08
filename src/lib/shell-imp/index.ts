@@ -40,9 +40,7 @@ export class ShellModel implements IImpactModelInterface {
     return this;
   }
 
-  async calculate(
-    observations: object | object[] | undefined
-  ): Promise<any[]> {
+  async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (observations === undefined) {
       throw new Error('Required Parameters not provided');
     }
