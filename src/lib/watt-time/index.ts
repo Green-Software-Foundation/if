@@ -120,6 +120,10 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
   ): Promise<IImpactModelInterface> {
     this.staticParams = staticParams;
     this.name = name;
+    if (!staticParams) {
+      throw new Error('Missing staticParams');
+    }
+    await this.authenticate(staticParams);
     return this;
   }
 
