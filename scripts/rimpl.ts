@@ -1,54 +1,7 @@
 import {parseProcessArgument} from '../src/util/args';
-import {openYamlFileAsObject, saveYamlFileAs} from '../src/util/yaml';
-import {Observatory} from '../src/util/observatory';
 import {ModelsUniverse} from '../src/util/models-universe';
-
-/**
- * Flattens config entries.
- */
-const flattenConfigValues = (config: any) => {
-  const configModelNames = Object.keys(config);
-  const values = configModelNames.reduce((acc: any, name: string) => {
-    acc = {
-      ...acc,
-      ...config[name],
-    };
-
-    return acc;
-  }, {});
-
-  return values;
-};
-
-/**
- * For each graph builds params, then passes it to computing fn.
- */
-const calculateImpactsBasedOnGraph =
-  (impl: any, modelsHandbook: ModelsUniverse) =>
-  async (childrenName: string) => {
-    const child = impl.graph.children[childrenName];
-    const {pipeline, observations, config} = child;
-
-    const extendedObservations = observations.map((observation: any) => ({
-      ...observation,
-      ...flattenConfigValues(config),
-    }));
-
-    const observatory = new Observatory(extendedObservations);
-
-    for (const modelName of pipeline) {
-      const modelInstance: any = await modelsHandbook.initalizedModels[
-        modelName
-      ](config && config[modelName]);
-
-      await observatory.doInvestigationsWith(modelInstance);
-    }
-
-    const impacts = observatory.getImpacts();
-    impl.graph.children[childrenName].impacts = impacts;
-
-    return impl;
-  };
+import {calculateImpactsBasedOnGraph} from '../src/util/rimpl-helpers';
+import {openYamlFileAsObject, saveYamlFileAs} from '../src/util/yaml';
 
 /**
  * 1. Parses yml input/output process arguments.
