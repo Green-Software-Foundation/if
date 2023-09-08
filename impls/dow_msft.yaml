@@ -10,18 +10,21 @@ initialize:
       kind: builtin
       verbose: false
       path: ''
-    - name: e-mem # a model that calculates a carbon value for memory
-      kind: plugin  
+    - name: e-mem # a model that calculates e for memory utilization (0.38 * mem_util)
+      kind: builtin  
+      path: ''
+    - name: sci-e # sums e components (can be e_cpu, e_gpu, e_mem, e_network) - in this case e-mem and e_cpu from teads
+      kind: builtin  
       path: ''
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
       kind: builtin
       verbose: false
       path: ''
-    - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
+    - name: sci-o # takes in total e and outputs operational emissions
       kind: builtin
       verbose: false
       path: ''
-    - name: sci # a model that sums sci-o + sci-m
+    - name: sci # a model that sums sci-o + sci-m and applies functional unit
       kind: builtin
       verbose: false
       path: '' 
@@ -33,6 +36,7 @@ graph:
       - e-mem # calculates energy used by memory as component of sci-m
       - sci-m # duration & config -> embodied
       - sci-e # energy & grid-carbon-intensity & embodied -> carbon
+      - sci-o # takes in total e and outputs operational emissions
       - sci # add cpu and memory components and convert to f.unit
     config: 
       vendor: azure
@@ -52,7 +56,7 @@ graph:
             el: 94608000 # 3 years in seconds        
             rr: 1
             tor: 8
-          sci-e:
+          sci-o:
             i: 554 # gCO2e/kWh
           sci:
             time: hour # signal to convert /s -> /hr
@@ -76,7 +80,7 @@ graph:
             el: 94608000 # 3 years in seconds        
             rr: 1
             tor: 8
-          sci-e:
+          sci-o:
             i: 554 # gCO2e/kWh
           sci:
             time: hour # signal to convert /s -> /hr
@@ -101,7 +105,7 @@ graph:
             el: 94608000 # 3 years in seconds        
             rr: 2
             tor: 64
-          sci-e:
+          sci-o:
             i: 554 # gCO2e/kWh
           sci:
             time: hour # signal to convert /s -> /hr
@@ -126,7 +130,7 @@ graph:
             el: 94608000 # 3 years in seconds        
             rr: 2
             tor: 64
-          sci-e:
+          sci-o:
             i: 554 # gCO2e/kWh
           sci:
             time: hour # signal to convert /s -> /hr
