@@ -114,4 +114,19 @@ graph:
       - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
         duration: 3600
         cpu-util: 10
+    network:
+      pipeline: 
+        - e-net
+        - sci
+      config:
+        e-net:
+          net-energy: 0.001 #kwh/GB
+        sci:
+          time: hour
+          factor: 500
+      observations:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
+          data-in: 1.16
+          data-out: 14.3
 
