@@ -10,7 +10,7 @@ initialize:
       kind: builtin
       verbose: false
       path: ''
-    - name: e-mem # a model that calculates e for memory utilization (0.38 * mem_util)
+    - name: e-mem # a model that calculates e for memory utilization (0.38 * mem_util = e_mem in kwH)
       kind: builtin  
       path: ''
     - name: sci-e # sums e components (can be e_cpu, e_gpu, e_mem, e_network) - in this case e-mem and e_cpu from teads
@@ -44,15 +44,15 @@ graph:
     children: 
       tiger-database: # a leaf component
         config:
-          teads-cpu:
+          teads-cpu: # use tdp to derive e-cpu (kwh)
             processor: Intel-xeon-platinum-8380
             tdp: 270
-          e-mem:
-            mem_allocation: 32 # GB
-            mem-energy: 0.38 # kwh/GB
+          e-mem: # mem-util * mem-allocation * mem-energy = e-mem (kwh)
+            mem-allocation: 32 # GB
+            mem-energy: 0.38 # wh/GB
           sci-m:
             te: 1533.12 # kgCO2eq
-            tir: 3600 # get this value from the duration field
+            tir: 3600 # s per hour
             el: 94608000 # 3 years in seconds        
             rr: 1
             tor: 8
@@ -64,15 +64,15 @@ graph:
         observations: 
           series:
             timestamp: 2023-07-06T00:00
-            cpu_util: 17.12
-            ram: 19.375 # % of available
+            cpu-util: 17.12
+            mem-util: 19.375 # % of available
       tiger-api: # a leaf component
         config:
           teads-cpu:
             processor: Intel-xeon-platinum-8270
             tdp: 205
           e-mem:
-            mem_allocation: 1.75 # GB
+            mem-allocation: 1.75 # GB
             mem-energy: 0.38 # kwh/GB
           sci-m:
             te: 1216.62 # kgCO2eq
@@ -89,15 +89,15 @@ graph:
           series:      
             timestamp: 2023-08-06T00:00
             duration: 1
-            cpu_util: 25
-            memory_util: 70 # % of total
+            cpu-util: 25
+            mem-util: 70 # % of total
       neo4j-database: # a leaf component
         config:
           teads-cpu:
             processor: Intel-xeon-platinum-8270
             tdp: 270
           e-mem:
-            mem_allocation: 32 # GB
+            mem-allocation: 32 # GB
             mem-energy: 0.38 # kwh/GB
           sci-m:
             te: 1216.62 # kgCO2eq
@@ -114,15 +114,15 @@ graph:
           series:
             timestamp: 2023-07-06T00:00
             duration: 1 # this data is using span, but the model expects duration
-            cpu_util: 28.05
-            memory_util: 19.375
+            cpu-util: 28.05
+            mem-util: 19.375
       neo4j-api: # a leaf component
         config:
           teads-cpu:
             processor: Intel-xeon-platinum-8270
             tdp: 205
           e-mem:
-            mem_allocation: 1.75 # GB
+            mem-allocation: 1.75 # GB
             mem-energy: 0.38 # kwh/GB
           sci-m:
             te: 1216.62 # kgCO2eq
@@ -139,6 +139,6 @@ graph:
           series:      
             timestamp: 2023-08-06T00:00
             duration: 1
-            cpu_util: 14
-            memory_util: 65 
+            cpu-util: 14
+            mem-util: 65 
 
