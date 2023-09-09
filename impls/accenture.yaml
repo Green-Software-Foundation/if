@@ -35,13 +35,13 @@ initialize:
 graph: 
   vm:
     pipeline:
-      - add-obs     # add common values to every observertion
       - teads-cpu # converts cpu-util to energy based on a tdp and a built in set of coeff.
       - e-mem # converts ram-util to energy based on a tdp and a built in set of coeff.
       - pue         # multiplies every energy by a pue coeff.
       - sci-m       # adds embodied to the observation.
       - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
       - sci         # calculates sci by dividing carbon by `r`
+      - sci-accenture # multiplies sci value by 1.05  to account for the "app-gateway"
     config:
       sci-m:
         te: 458 #kgCo2 @ 4yr lifespan
@@ -173,8 +173,7 @@ graph:
         e: 4.62 # kwh/month
   app-gateway: # note that the app gateway does not have observations, its SCI is assumed equal to 5% of the total emissions
     pipeline:
-     - add-obs
+     - sci-accenture
     config:
-      add-obs:
-        parameter: sci  # parameter to add value to
-        value: 1053.94 # value to add (in this case in g/co2)
+      sci_accenture:
+        factor: 1.05 # multiply sum of other sci components by this value to get overall total SCI in gCO2
