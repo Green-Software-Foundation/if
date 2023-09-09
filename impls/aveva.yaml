@@ -17,10 +17,6 @@ initialize:
       kind: builtin
       verbose: false
       path: ''
-    - name: teads-cpu # a model that returns energy based on the generalised teads power curve and tdp
-      kind: builtin
-      verbose: false
-      path: ''
     - name: sci # sums SCI components and converts to f.unit
       kind: builtin
       verbose: false
@@ -35,7 +31,10 @@ graph:
         rr: 1
         tor: 1
       sci-o:
-        i: 474.8 #gCo2/kWh 
+        i: 474.8 #gCo2/kWh
+      sci:
+        time: year
+        factor: 1 
       observations: 
         series:
           timestamp: 2023-07-06T00:00 
