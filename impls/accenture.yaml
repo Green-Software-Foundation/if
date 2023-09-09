@@ -63,48 +63,56 @@ graph:
             duration: 2419200 # seconds in a month (7 days * 4 weeks)
             cpu-util: 15
             ram-util: 75
+            e: 4.26 #kwh/month
       vm2: 
         observations: 
           - timestamp: 2023-07-06T00:00
             duration: 2419200 # seconds in a month (7 days * 4 weeks)
             cpu-util: 12
-            ram-util: 72         
+            ram-util: 72
+            e: 4.26 # kwh/month   
       vm3: 
         observations: 
           - timestamp: 2023-07-06T00:00
             duration: 2419200 # seconds in a month (7 days * 4 weeks)
             cpu-util: 10
-            ram-util: 65         
+            ram-util: 65
+            e: 4.21 # kwh/month         
       vm4: 
         observations: 
           - timestamp: 2023-07-06T00:00
             duration: 2419200 # seconds in a month (7 days * 4 weeks)
             cpu-util: 9
-            ram-util: 70           
+            ram-util: 70
+            e: 4.21 # kwh/month           
       vm5: 
         observations: 
           - timestamp: 2023-07-06T00:00
             duration: 2419200 # seconds in a month (7 days * 4 weeks)
             cpu-util: 9
             ram-util: 70
+            e: 4.21 # kwh/month
       vm6: 
         observations: 
           - timestamp: 2023-07-06T00:00 
             duration: 2419200 # seconds in a month (7 days * 4 weeks)
             cpu-util: 8
-            ram-util: 65   
+            ram-util: 65
+            e: 3.29 # kwh/month   
       vm7: 
         observations:
           - timestamp: 2023-07-06T00:00
             duration: 2419200 # seconds in a month (7 days * 4 weeks)
             cpu-util: 7
             ram-util: 72 
+            e: 3.29 # kwh/month
       vm8: 
         observations: 
           - timestamp: 2023-07-06T00:00
             duration: 2419200 # seconds in a month (7 days * 4 weeks)
             cpu-util: 6
-            ram-util: 70       
+            ram-util: 70
+            e: 3.29 # kwh/month       
   db:
     pipeline:
       - add-obs     # add common values to every observertion
@@ -133,6 +141,7 @@ graph:
         duration: 2419200 # seconds in a month (7 days * 4 weeks)
         cpu-util: 4
         ram-util: 40
+        e: 2.68 # kwh/month
   monitoring:
     pipeline:
       - add-obs     # add common values to every observertion
@@ -161,10 +170,11 @@ graph:
         duration: 2419200 # seconds in a month (7 days * 4 weeks)
         cpu-util: 20
         ram-util: 0
+        e: 4.62 # kwh/month
   app-gateway: # note that the app gateway does not have observations, its SCI is assumed equal to 5% of the total emissions
     pipeline:
      - add-obs
     config:
       add-obs:
         parameter: sci  # parameter to add value to
-        value: 1053.94 # value to add
+        value: 1053.94 # value to add (in this case in g/co2)
