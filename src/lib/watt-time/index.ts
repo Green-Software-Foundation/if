@@ -29,7 +29,7 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
       if (username === '' || password === '') {
         throw new Error('Missing username or password & token');
       }
-      const tokenResponse = await axios.get(this.baseUrl + '/login', {
+      const tokenResponse = await axios.get(`${this.baseUrl}/login`, {
         auth: {
           username,
           password,
@@ -82,7 +82,7 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
       starttime: dayjs(observation.timestamp).format('YYYY-MM-DDTHH:mm:ssZ'),
       endtime: dayjs(observation.timestamp).add(duration, 'seconds'),
     };
-    const result = await axios.get(this.baseUrl + '/data', {
+    const result = await axios.get(`${this.baseUrl}/data`, {
       params,
       headers: {
         Authorization: `Bearer ${this.token}`,
