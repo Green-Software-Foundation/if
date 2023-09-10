@@ -1,5 +1,6 @@
 # Implementations
 
-[CCF](./ccf.md) - Cloud Carbon Footprint Impact Plugin Documentation
-
+* [SCI-M](./sci-m.md) - SCI-M Plugin Documentation
+* [SCI-O](./sci-o.md) - SCI-O Plugin Documentatio
+* [CCF](./ccf.md) - Cloud Carbon Footprint Impact Plugin Documentation
 [WattTime](./watttime.md) - WattTime Impact Plugin Documentation
