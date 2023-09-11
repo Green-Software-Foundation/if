@@ -91,7 +91,8 @@ export class ShellModel implements IImpactModelInterface {
     try {
       console.log('input', input);
       const execs = execPath.split(' ');
-      const executable = execs.pop() ?? '';
+      const executable = execs.shift() ?? '';
+
       const result = cp
         .spawnSync(executable, [...execs, '--calculate'], {
           input: input,
