@@ -58,11 +58,9 @@ graph:
         time: hour
         factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction
     observations: 
-      series:
-        - timestamp: 2023-07-06T00:00
-          duration: 3600
-          five-min-input-rate: 100
-          five-min-output-rate: 100
+      - timestamp: 2023-07-06T00:00
+        duration: 3600
+        e: 3.31e-3 # kwh per port
   layer-2-switch:
     pipeline: 
       - switch # gives e 
@@ -93,34 +91,30 @@ graph:
     children: 
       switch-1:
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 1
-              e: 5.41e-4 #kwh
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 5.41e-4 #kwh
       switch-2:
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 1
-              e: 0 # no traffic at all
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 0 # no traffic at all
       switch-3:
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 1
-              e: 6.37e-4 #kwh
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 6.37e-4 #kwh
       switch-4:
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 1
-              e: 7.60e-9 #kwh
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 7.60e-9 #kwh
   db-servers:
     pipeline: 
       - server # average power -> energy in kwh (actually provides e directly)
       - pue # multiplies e by coefficient
       - sci-m # duration & config -> embodied
-      - sci-o # energy & grid-carbon-intensity & embodied -> carbon
+      - sci-o # e -> carbon
       - sci
     config:
       server:
@@ -141,16 +135,14 @@ graph:
     children:
       db-server1:
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              e: 0.258
-              duration: 1 #s
+          - timestamp: 2023-07-06T00:00
+            e: 0.258
+            duration: 1 #s
       db-server2:
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              e: 0.193
-              duration: 1 #s
+          - timestamp: 2023-07-06T00:00
+            e: 0.193
+            duration: 1 #s
   app-servers:
     pipeline: 
       - server # average power -> energy in kwh (actually provides e directly)
@@ -176,19 +168,16 @@ graph:
     children:
       app-server1:
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 1
-              e: 0.149
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 0.149
       app-server2:
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 1
-              e: 0.147
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 0.147
   web-servers:
     pipeline: 
-      - server # average power -> energy in kwh (actually provides e directly)
       - sci-m # duration & config -> embodied
       - sci-o # energy & grid-carbon-intensity & embodied -> carbon
       - sci
@@ -207,13 +196,11 @@ graph:
     children:
       web-server1:
         observations: 
-          series:
             - timestamp: 2023-07-06T00:00
               duration: 1
               e: 0.139
       web-server2:
         observations: 
-          series:
-            - timestamp: 2023-07-06T00:00
-              duration: 1
-              e: 0.116
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 0.116

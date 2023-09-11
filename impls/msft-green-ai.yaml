@@ -34,10 +34,9 @@ graph:
         time: s # no time normalization
         factor: 1 # no unit normalization
     observations: 
-      series:
-        - timestamp: 2023-07-06T00:00
-          duration: 1336 # 22.27 min runtime in seconds
-          energy: 17.97
+      - timestamp: 2023-07-06T00:00
+        duration: 1336 # 22.27 min runtime in seconds
+        energy: 17.97
   InceptionV3: # an advanced grouping node
     pipeline: 
       - sci-o # energy & grid-carbon-intensity & embodied -> carbon
@@ -53,7 +52,6 @@ graph:
         time: s # no time normalization
         factor: 1 # no unit normalization
     observations: 
-      series:
-        - timestamp: 2023-07-06T00:00
-          duration: 1205 # 22.27 min runtime in seconds
-          energy: 14.37
+      - timestamp: 2023-07-06T00:00
+        duration: 1205 # 22.27 min runtime in seconds
+        energy: 14.37

@@ -28,9 +28,8 @@ graph:
           time: month
           factor: 67 # n builds per month
         observations:
-          series:
-            - timestamp: 2023-07-06T00:00 
-              c: 9.92063492063492e-07 #  2.4 g/month in g/s
+          - timestamp: 2023-07-06T00:00 
+            c: 9.92063492063492e-07 #  2.4 g/month in g/s
     gh-pages:
       pipeline:
         - sci-coefficient 
@@ -39,9 +38,8 @@ graph:
           time: month
           factor: 67 # n builds per month
         observations:
-          series:
-            - timestamp: 2023-07-06T00:00 
-              c: 9.92063492063492e-07 #  2.4 g/month in g/s
+          - timestamp: 2023-07-06T00:00 
+            c: 9.92063492063492e-07 #  2.4 g/month in g/s
   serving: 
     netlify:
       pipeline:
@@ -50,11 +48,10 @@ graph:
         sci-serve:
           time: month
         observations:
-          series:
-            - timestamp: 2023-07-06T00:00 
-              c: 9.92063492063492e-07 #  2.4 g/month in g/s
-              views-per-user: 2.1
-              users: 2000 # unique users in most recent month
+          - timestamp: 2023-07-06T00:00 
+            c: 9.92063492063492e-07 #  2.4 g/month in g/s
+            views-per-user: 2.1
+            users: 2000 # unique users in most recent month
     gh-pages:
       pipeline:
         - sci-serve 
@@ -62,11 +59,10 @@ graph:
         sci-serve:
           time: month
         observations:
-          series:
-            - timestamp: 2023-07-06T00:00 
-              c: 9.92063492063492e-07 #  2.4 g/month in g/s
-              views-per-user: 2.1
-              users: 0.0008267195767195768 # 2000 unique users in most recent month, converted to users/s
+          - timestamp: 2023-07-06T00:00 
+            c: 9.92063492063492e-07 #  2.4 g/month in g/s
+            views-per-user: 2.1
+            users: 0.0008267195767195768 # 2000 unique users in most recent month, converted to users/s
   traffic:
     pipeline:
       - co2js
@@ -78,10 +74,9 @@ graph:
       sci:
         time: month
     observations:
-      series:
-        - timestamp: 2023-07-06T00:00 
-          data: 8.267195767195768e-06 # 20 GB data transferred in most recent month, converted to GB/s
-          users: 0.0008267195767195768 # 2000 unique users in most recent month, converted to users/s           
+      - timestamp: 2023-07-06T00:00 
+        data: 8.267195767195768e-06 # 20 GB data transferred in most recent month, converted to GB/s
+        users: 0.0008267195767195768 # 2000 unique users in most recent month, converted to users/s           
   browser:
     pipeline:
       - co2js
@@ -93,7 +88,6 @@ graph:
       sci:
         time: month
     observations:
-      series:
-        - timestamp: 2023-07-06T00:00 
-          data: 8.267195767195768e-06 # 20 GB data transferred in most recent month, converted to GB/s
-          users: 2000 0.0008267195767195768 # 2000 unique users in most recent month, converted to users/s 
+      - timestamp: 2023-07-06T00:00 
+        data: 8.267195767195768e-06 # 20 GB data transferred in most recent month, converted to GB/s
+        users: 2000 0.0008267195767195768 # 2000 unique users in most recent month, converted to users/s 

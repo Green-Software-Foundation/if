@@ -36,10 +36,9 @@ graph:
         time: year
         factor: 1 
       observations: 
-        series:
-          timestamp: 2023-07-06T00:00 
-          pl: 16.009 # average over timespan
-          pb: 11.335 # average over timespan
-          t: 8322 # (hours in year * average uptime e.g. 95%)
+        timestamp: 2023-07-06T00:00 
+        pl: 16.009 # average over timespan
+        pb: 11.335 # average over timespan
+        t: 8322 # (hours in year * average uptime e.g. 95%)
 
 

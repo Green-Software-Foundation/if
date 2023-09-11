@@ -62,10 +62,9 @@ graph:
             time: hour # signal to convert /s -> /hr
             factor: 32000 # factor to convert per time to per f.unit
         observations: 
-          series:
-            timestamp: 2023-07-06T00:00
-            cpu-util: 17.12
-            mem-util: 19.375 # % of available
+          timestamp: 2023-07-06T00:00
+          cpu-util: 17.12
+          mem-util: 19.375 # % of available
       tiger-api: # a leaf component
         config:
           teads-cpu:
@@ -85,12 +84,11 @@ graph:
           sci:
             time: hour # signal to convert /s -> /hr
             factor: 32000 # factor to convert per time to per f.unit
-        observations: 
-          series:      
-            timestamp: 2023-08-06T00:00
-            duration: 1
-            cpu-util: 25
-            mem-util: 70 # % of total
+        observations:     
+          timestamp: 2023-08-06T00:00
+          duration: 1
+          cpu-util: 25
+          mem-util: 70 # % of total
       neo4j-database: # a leaf component
         config:
           teads-cpu:
@@ -111,11 +109,10 @@ graph:
             time: hour # signal to convert /s -> /hr
             factor: 32000 # factor to convert per time to per f.unit
         observations:
-          series:
-            timestamp: 2023-07-06T00:00
-            duration: 1 # this data is using span, but the model expects duration
-            cpu-util: 28.05
-            mem-util: 19.375
+          timestamp: 2023-07-06T00:00
+          duration: 1 # this data is using span, but the model expects duration
+          cpu-util: 28.05
+          mem-util: 19.375
       neo4j-api: # a leaf component
         config:
           teads-cpu:
@@ -135,10 +132,9 @@ graph:
           sci:
             time: hour # signal to convert /s -> /hr
             factor: 32000 # factor to convert per time to per f.unit
-        observations:
-          series:      
-            timestamp: 2023-08-06T00:00
-            duration: 1
-            cpu-util: 14
-            mem-util: 65 
+        observations:    
+          timestamp: 2023-08-06T00:00
+          duration: 1
+          cpu-util: 14
+          mem-util: 65 
 
