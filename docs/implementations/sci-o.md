@@ -14,7 +14,7 @@ To calculate the operational emissions O for a software application, use the fol
 
 O = (E * I)
 
-[Operational Emissions...](https://github.com/Green-Software-Foundation/sci/blob/main/Software_Carbon_Intensity/Software_Carbon_Intensity_Specification.md#operational-emissions)
+[Operational Emissions...](https://github.com/Green-Software-Foundation/sci/blob/main/Software_Carbon_Intensity/Software_Carbon_Intensity_Specification.md#operational-carbon)
 
 ## Implementation
 
