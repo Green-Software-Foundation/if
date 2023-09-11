@@ -1,5 +1,5 @@
 name: gsf-demo-pipeline
-description: 
+description:
   More complex pipeline example
 tags:
   kind: web
@@ -13,15 +13,21 @@ initialize:
       kind: builtin
     - name: sci-o
       kind: builtin
+    - name: sampler
+      kind: shell
+      path: python3 /usr/local/bin/sampler
 graph:
   children:
     front-end:
-      pipeline: 
+      pipeline:
         - teads-curve
+        - sampler
         - sci-o
       config:
         teads-curve:
           tdp: 1
+        sampler:
+          executable: python3 /usr/local/bin/sampler
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           processor: Intel® Core™ i7-1185G7
@@ -36,15 +42,15 @@ graph:
           cpu-util: 16
           grid-ci: 800 # gCO2e/kWh
     back-end:
-      pipeline: 
+      pipeline:
         - teads-curve
         - sci-o
-        - sci-m      
+        - sci-m
       config:
         sci-m:
           te: 350 # kgCO2eq
           tir: "duration" # get this value from the duration field
-          el: 126144000 # 4 years in seconds        
+          el: 126144000 # 4 years in seconds
           rr: 1
           tor: 1
         teads-curve:
