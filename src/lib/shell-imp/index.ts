@@ -90,8 +90,13 @@ export class ShellModel implements IImpactModelInterface {
   private runModelInShell(input: string, execPath: string): KeyValuePair {
     try {
       console.log('input', input);
+      const execs = execPath.split(' ');
+      const executable = execs.pop() ?? '';
       const result = cp
-        .spawnSync(execPath, ['--calculate'], {input: input, encoding: 'utf8'})
+        .spawnSync(executable, [...execs, '--calculate'], {
+          input: input,
+          encoding: 'utf8',
+        })
         .stdout.toString();
       console.log('result', result);
       return yaml.load(result) as KeyValuePair;
