@@ -18,7 +18,11 @@ export class Observatory {
    * Calculates impact based on observations.
    */
   public async doInvestigationsWith(modelInstance: IImpactModelInterface) {
-    const calculatedImpacts = await modelInstance.calculate(this.observations);
+    const reuseCalculation = this.impact.length
+      ? this.impact
+      : this.observations;
+
+    const calculatedImpacts = await modelInstance.calculate(reuseCalculation);
 
     const result = this.observations.map((observation: any, index: number) => ({
       ...observation,
