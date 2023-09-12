@@ -1,8 +1,8 @@
-import {IImpactModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/boavizta';
+import { IImpactModelInterface } from '../interfaces';
+import { KeyValuePair } from '../../types/boavizta';
 
 export class ENetModel implements IImpactModelInterface {
-  // Defined for compatibility. Not used in thi smodel.
+  // Defined for compatibility. Not used in this model.
   authParams: object | undefined;
   // name of the data source
   name: string | undefined;
@@ -11,18 +11,16 @@ export class ENetModel implements IImpactModelInterface {
   net_energy = 0;
 
   /**
-   * Defined for compatibility. Not used in TEADS.
+   * Defined for compatibility. Not used in this model.
    */
   authenticate(authParams: object): void {
     this.authParams = authParams;
   }
 
   /**
-   *  Configures the TEADS Plugin for IEF
+   *  Configures the e-net Plugin for IEF
    *  @param {string} name name of the resource
    *  @param {Object} staticParams static parameters for the resource
-   *  @param {number} staticParams.tdp Thermal Design Power in Watts
-   *  @param {Interpolation} staticParams.interpolation Interpolation method
    */
   async configure(
     name: string,
