@@ -19,8 +19,8 @@
     "ts-command-line-args"
   ],
   "dependencies": {
-    "@cloud-carbon-footprint/aws": "^0.14.5",
     "@cloud-carbon-footprint/core": "*",
+    "@cloud-carbon-footprint/aws": "*",
     "@types/node": "^20.4.5",
     "axios": "^1.4.0",
     "js-yaml": "^4.1.0",
