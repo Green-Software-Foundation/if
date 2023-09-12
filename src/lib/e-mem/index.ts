@@ -2,7 +2,6 @@ import { IImpactModelInterface } from '../interfaces';
 import { KeyValuePair } from '../../types/boavizta';
 
 
-
 export class EMemModel implements IImpactModelInterface {
     // Defined for compatibility. Not used in TEADS.
     authParams: object | undefined;
@@ -63,7 +62,7 @@ export class EMemModel implements IImpactModelInterface {
         }
         return observations.map((observation: KeyValuePair) => {
             this.configure(this.name!, observation);
-            observation['e-mem'] = this.calculateEnergy(observation);
+            observation['e_mem'] = this.calculateEnergy(observation);
             return observation;
         });
     }
