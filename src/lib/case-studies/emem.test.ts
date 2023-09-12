@@ -1,5 +1,5 @@
-import { describe, expect, jest, test } from '@jest/globals';
-import { EMemModel } from './index';
+import {describe, expect, jest, test} from '@jest/globals';
+import {EMemModel} from './emem';
 
 jest.setTimeout(30000);
 
@@ -7,8 +7,8 @@ describe('teads:configure test', () => {
   test('initialize with params', async () => {
     const impactModel = new EMemModel();
     await impactModel.configure('test', {
-      mem_alloc: 32,
-      mem_energy: 0.38
+      'mem-alloc': 32,
+      'mem-energy': 0.38,
     });
     await expect(
       impactModel.calculate([
@@ -20,7 +20,7 @@ describe('teads:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        e_mem: 0.00608,
+        'e-mem': 0.00608,
         duration: 3600,
         'mem-util': 50.0,
         timestamp: '2021-01-01T00:00:00Z',
@@ -30,8 +30,8 @@ describe('teads:configure test', () => {
   test('initialize with params', async () => {
     const impactModel = new EMemModel();
     await impactModel.configure('test', {
-      mem_alloc: 32,
-      mem_energy: 0.38
+      'mem-alloc': 32,
+      'mem-energy': 0.38,
     });
     await expect(
       impactModel.calculate([
@@ -53,24 +53,23 @@ describe('teads:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        e_mem: 0.0012160000000000003,
+        'e-mem': 0.0012160000000000003,
         duration: 3600,
         'mem-util': 10.0,
         timestamp: '2021-01-01T00:00:00Z',
       },
       {
-        e_mem: 0.00608,
+        'e-mem': 0.00608,
         duration: 3600,
         'mem-util': 50.0,
         timestamp: '2021-01-01T00:00:00Z',
       },
       {
-        e_mem: 0.010944,
+        'e-mem': 0.010944,
         duration: 3600,
         'mem-util': 90.0,
         timestamp: '2021-01-01T00:00:00Z',
       },
     ]);
-  })
-
+  });
 });
