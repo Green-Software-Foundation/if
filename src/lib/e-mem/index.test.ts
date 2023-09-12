@@ -20,7 +20,7 @@ describe('teads:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        energy: 0.00608,
+        e_mem: 0.00608,
         duration: 3600,
         'mem-util': 50.0,
         timestamp: '2021-01-01T00:00:00Z',
@@ -53,19 +53,19 @@ describe('teads:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        energy: 0.0012160000000000003,
+        e_mem: 0.0012160000000000003,
         duration: 3600,
         'mem-util': 10.0,
         timestamp: '2021-01-01T00:00:00Z',
       },
       {
-        energy: 0.00608,
+        e_mem: 0.00608,
         duration: 3600,
         'mem-util': 50.0,
         timestamp: '2021-01-01T00:00:00Z',
       },
       {
-        energy: 0.010944,
+        e_mem: 0.010944,
         duration: 3600,
         'mem-util': 90.0,
         timestamp: '2021-01-01T00:00:00Z',
