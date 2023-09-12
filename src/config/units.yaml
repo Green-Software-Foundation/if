@@ -42,3 +42,7 @@ expected-lifespan:
   description: Total Expected Lifespan of the Component in Seconds
   unit: seconds
   aggregation: None
+instance-type:
+  description: Type of Cloud Instance name used in the cloud provider APIs
+  unit: None
+  aggregation: None
