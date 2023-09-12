@@ -1,4 +1,5 @@
-import {readFile, writeFile} from 'fs/promises';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 
 import * as YAML from 'js-yaml';
 
@@ -6,7 +7,7 @@ import * as YAML from 'js-yaml';
  * Reads and parses `yaml` file to object.
  */
 export const openYamlFileAsObject = async (filePath: string): Promise<any> => {
-  const yamlFileBuffer = await readFile(filePath, 'utf8');
+  const yamlFileBuffer = await fs.readFile(filePath, 'utf8');
 
   return YAML.load(yamlFileBuffer);
 };
@@ -14,10 +15,16 @@ export const openYamlFileAsObject = async (filePath: string): Promise<any> => {
 /**
  * Saves given `yaml` dump as a file.
  */
-export const saveYamlFileAs = (object: any, name: string) => {
-  const yamlString = YAML.dump(object);
+export const saveYamlFileAs = async (object: any, pathToFile: string) => {
+  try {
+    const dirPath = path.dirname(pathToFile);
+    await fs.mkdir(dirPath, {recursive: true});
+    const yamlString = YAML.dump(object, {noRefs: true});
 
-  return writeFile(name, yamlString);
+    return fs.writeFile(pathToFile, yamlString);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 /**

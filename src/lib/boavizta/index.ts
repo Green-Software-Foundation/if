@@ -72,15 +72,17 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   // Calculates the impact of the given usage
   async calculate(
     observations: object | object[] | undefined = undefined
-  ): Promise<object> {
+  ): Promise<any[]> {
     if (Array.isArray(observations)) {
-      const results = [];
+      const results: KeyValuePair[] = [];
+
       for (const observation of observations) {
         const usageResult = await this.calculateUsageForObservation(
           observation
         );
         results.push(usageResult);
       }
+
       return results;
     } else {
       throw new Error(
@@ -139,8 +141,8 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         observation[this.metricType]
       );
       const usage = (await this.fetchData(usageInput)) as IBoaviztaUsageSCI;
-      const result = {...usage};
-      return result;
+
+      return usage;
     } else {
       throw new Error('Invalid Input: Invalid observations parameter');
     }
