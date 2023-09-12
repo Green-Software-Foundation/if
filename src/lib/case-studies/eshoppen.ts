@@ -26,6 +26,9 @@ export class Eshoppen implements IImpactModelInterface {
             observation['n-chips'] *
             observation['tdp'] *
             observation['tdp-coeff'];
+          if (isNaN(observation['e-cpu'])) {
+            throw new Error('e-cpu not computable');
+          }
           break;
         }
         case 'e-mem': {
@@ -35,6 +38,9 @@ export class Eshoppen implements IImpactModelInterface {
             observation['n-chip'] *
             observation['tdp-mem'] *
             observation['tdp-coeff'];
+          if (isNaN(observation['e-mem'])) {
+            throw new Error('e-mem not computable');
+          }
           break;
         }
         case 'e-net': {
@@ -42,12 +48,18 @@ export class Eshoppen implements IImpactModelInterface {
           observation['e-net'] =
             (observation['data-in'] + observation['data-out']) *
             observation['net-energy'];
+          if (isNaN(observation['e-net'])) {
+            throw new Error('e-net not computable');
+          }
           break;
         }
         case 'e-sum': {
           // e-sum = e-cpu + e-mem + e-net
           observation['energy'] =
             observation['e-cpu'] + observation['e-mem'] + observation['e-net'];
+          if (isNaN(observation['energy'])) {
+            throw new Error('energy not computable');
+          }
           break;
         }
         default: {
