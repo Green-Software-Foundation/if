@@ -63,7 +63,7 @@ export class EMemModel implements IImpactModelInterface {
         }
         return observations.map((observation: KeyValuePair) => {
             this.configure(this.name!, observation);
-            observation['energy'] = this.calculateEnergy(observation);
+            observation['e-mem'] = this.calculateEnergy(observation);
             return observation;
         });
     }
@@ -102,6 +102,7 @@ export class EMemModel implements IImpactModelInterface {
         }
 
         let mem_energy = this.mem_energy;
+
         return (mem_alloc * (mem_util / 100) * mem_energy) / 1000;
     }
 }
