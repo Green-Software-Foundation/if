@@ -1,8 +1,8 @@
-import {IImpactModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/boavizta';
+import { IImpactModelInterface } from '../interfaces';
+import { KeyValuePair } from '../../types/boavizta';
 
 export class EAvevaModel implements IImpactModelInterface {
-  // Defined for compatibility. Not used in TEADS.
+  // Defined for compatibility. Not used in Aveva.
   authParams: object | undefined;
   // name of the data source
   name: string | undefined;
@@ -14,7 +14,7 @@ export class EAvevaModel implements IImpactModelInterface {
   }
 
   /**
-   *  Configures the TEADS Plugin for IEF
+   *  Configures the Aveva Plugin for IEF
    *  @param {string} name name of the resource
    *  @param {Object} staticParams static parameters for the resource
    */
