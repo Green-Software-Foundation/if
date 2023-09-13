@@ -23,7 +23,7 @@ export class SciOModel implements IImpactModelInterface {
       }
       const grid_ci = parseFloat(observation['grid-ci']);
       const energy = parseFloat(observation['energy']);
-      observation['operational-emissions'] = grid_ci * energy;
+      observation['operational-carbon'] = grid_ci * energy;
       return observation;
     });
 

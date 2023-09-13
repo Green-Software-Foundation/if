@@ -17,7 +17,7 @@ describe('ccf:configure test', () => {
       {
         'grid-ci': 200.0,
         energy: 100.0,
-        'operational-emissions': 100.0 * 200.0,
+        'operational-carbon': 100.0 * 200.0,
       },
     ]);
     await expect(
@@ -31,7 +31,7 @@ describe('ccf:configure test', () => {
       {
         'grid-ci': 212.1,
         energy: 100.0,
-        'operational-emissions': 100.0 * 212.1,
+        'operational-carbon': 100.0 * 212.1,
       },
     ]);
     await expect(

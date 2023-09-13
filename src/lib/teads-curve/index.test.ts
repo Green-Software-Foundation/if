@@ -19,7 +19,7 @@ describe('teads:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        energy: 0.15,
+        'e-cpu': 0.15,
         duration: 3600,
         'cpu-util': 50.0,
         timestamp: '2021-01-01T00:00:00Z',
@@ -54,19 +54,19 @@ describe('teads:configure test', () => {
         duration: 3600,
         'cpu-util': 10.0,
         timestamp: '2021-01-01T00:00:00Z',
-        energy: 0.096,
+        'e-cpu': 0.096,
       },
       {
         duration: 3600,
         'cpu-util': 50.0,
         timestamp: '2021-01-01T00:00:00Z',
-        energy: 0.225,
+        'e-cpu': 0.225,
       },
       {
         duration: 3600,
         'cpu-util': 100.0,
         timestamp: '2021-01-01T00:00:00Z',
-        energy: 0.306,
+        'e-cpu': 0.306,
       },
     ]);
   });
@@ -114,38 +114,38 @@ describe('teads:configure test', () => {
         duration: 3600,
         'cpu-util': 10.0,
         timestamp: '2021-01-01T00:00:00Z',
-        energy: 0.096,
+        'e-cpu': 0.096,
       },
       {
         duration: 3600,
         'cpu-util': 50.0,
         timestamp: '2021-01-01T00:00:00Z',
-        energy: 0.225,
+        'e-cpu': 0.225,
       },
       {
         duration: 3600,
         'cpu-util': 100.0,
         timestamp: '2021-01-01T00:00:00Z',
-        energy: 0.306,
+        'e-cpu': 0.306,
       },
 
       {
         duration: 3600,
         'cpu-util': 15.0,
         timestamp: '2021-01-01T00:00:00Z',
-        energy: 0.11212500000000002,
+        'e-cpu': 0.11212500000000002,
       },
       {
         duration: 3600,
         'cpu-util': 55.0,
         timestamp: '2021-01-01T00:00:00Z',
-        energy: 0.2331,
+        'e-cpu': 0.2331,
       },
       {
         duration: 3600,
         'cpu-util': 75.0,
         timestamp: '2021-01-01T00:00:00Z',
-        energy: 0.2655,
+        'e-cpu': 0.2655,
       },
     ]);
   });

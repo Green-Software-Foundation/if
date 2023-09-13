@@ -86,7 +86,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
     }
     return observations.map((observation: KeyValuePair) => {
       this.configure(this.name!, observation);
-      observation['energy'] = this.calculateEnergy(observation);
+      observation['e-cpu'] = this.calculateEnergy(observation);
       return observation;
     });
   }

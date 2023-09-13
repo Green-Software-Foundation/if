@@ -1,0 +1,206 @@
+name: ntt-data-on-premise
+description: https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/nttdatta-On-Premise-Web-system.md
+tags:
+  kind: web
+  complexity: moderate
+  category: on-premise
+initialize:
+  models:
+    - name: switch # returns e in kwh based on a switch model.
+      kind: plugin  
+      path: ''
+      verbose: false
+    - name: pue # multiplies e by a coefficient (here 1.5)
+      kind: builtin
+      path: ''
+      verbose: false
+    - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
+      kind: builtin
+      verbose: false       
+      path: ''      
+    - name: server # returns e in kwh based on a server model
+      kind: plugin
+      path: ''
+    - name: sci # sums sci-o and sci-m
+      kind: builtin
+      verbose: false
+      path: ''
+graph:
+  layer-3-switch: # an advanced grouping node
+    pipeline:
+      - switch
+      - pue
+      - sci-m
+      - sci-o
+      - sci
+    config:
+      switch:
+        p_baseline: 92.5 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
+        n_ports: 24
+        duplex: 2
+        n-hour: 1
+        link speed: 1000000000
+      pue:
+        pue: 1.5
+      sci-m:
+        te: 0.251 # kgCO2eq
+        tir: 3600 # 1 hour in s
+        el: 126144000 # 4 years in seconds    
+        rr: 1 
+        tor: 1 
+      sci-o:
+        i: 457 # gCO2/kwh
+      sci:
+        time: hour
+        factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction
+    observations: 
+      - timestamp: 2023-07-06T00:00
+        duration: 3600
+        e: 3.31e-3 # kwh per port
+  layer-2-switch:
+    pipeline: 
+      - switch # gives e 
+      - pue # multiplies e by coefficient
+      - sci-m # duration & config -> embodied
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon
+      - sci
+    config:
+      switch:
+        p_baseline: 22.8 # W Baseline power based on full port 100% traffic for Cisco Catalyst 9300
+        n_ports: 24
+        duplex: 2
+        n-hour: 1
+        link speed: 1000000000
+      pue:
+        pue: 1.5
+      sci-m:
+        te: 0.251 # kgCO2eq
+        tir: 3600 # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 1 
+        tor: 1 
+      sci-o:
+        i: 457 # gCO2/kwh
+      sci:
+        time: hour
+        factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction
+    children: 
+      switch-1:
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 5.41e-4 #kwh
+      switch-2:
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 0 # no traffic at all
+      switch-3:
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 6.37e-4 #kwh
+      switch-4:
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 7.60e-9 #kwh
+  db-servers:
+    pipeline: 
+      - server # average power -> energy in kwh (actually provides e directly)
+      - pue # multiplies e by coefficient
+      - sci-m # duration & config -> embodied
+      - sci-o # e -> carbon
+      - sci
+    config:
+      server:
+        n-hour: 1
+      pue:
+        pue: 1.5
+      sci-m:
+        te: 6270 # kgCO2eq
+        tir: duration # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 1 
+        tor: 1 
+      sci-o:
+        i: 457 # gCO2/kwh
+      sci:
+        time: hour
+        factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction
+    children:
+      db-server1:
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            e: 0.258
+            duration: 1 #s
+      db-server2:
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            e: 0.193
+            duration: 1 #s
+  app-servers:
+    pipeline: 
+      - server # average power -> energy in kwh (actually provides e directly)
+      - sci-m # duration & config -> embodied
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon
+      - sci
+    config:
+      server:
+        n-hour: 1
+      pue:
+        pue: 1.5
+      sci-m:
+        te: 6270 # kgCO2eq
+        tir: duration # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 1 
+        tor: 1 
+      sci-o:
+        i: 457 # gCO2/kwh   
+      sci:
+        time: hour
+        factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction     
+    children:
+      app-server1:
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 0.149
+      app-server2:
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 0.147
+  web-servers:
+    pipeline: 
+      - sci-m # duration & config -> embodied
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon
+      - sci
+    config:
+      sci-m:
+        te: 6270 # kgCO2eq
+        tir: duration # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 1 
+        tor: 1 
+      sci-o:
+        i: 457 # gCO2/kwh  
+      sci:
+        time: hour
+        factor: 38032740 # divide SCI (per hour) by this value to get SCI per web interaction
+    children:
+      web-server1:
+        observations: 
+            - timestamp: 2023-07-06T00:00
+              duration: 1
+              e: 0.139
+      web-server2:
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 1
+            e: 0.116

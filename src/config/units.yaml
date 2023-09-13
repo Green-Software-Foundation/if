@@ -30,6 +30,18 @@ energy:
   description: amount of energy utilised by the component
   unit: kWh
   aggregation: sum
+e-cpu:
+  description: Energy consumed by the CPU of the component
+  unit: kWh
+  aggregation: sum
+e-mem:
+  description: Energy consumed by the Memory of the component
+  unit: kWh
+  aggregation: sum
+e-net:
+  description: Energy consumed by the Network of the component
+  unit: kWh
+  aggregation: sum
 embodied-carbon:
   description: Embodied Emissions of the component
   unit: gCO2e

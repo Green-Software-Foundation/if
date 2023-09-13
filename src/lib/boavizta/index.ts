@@ -62,6 +62,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
       hours_use_time: duration / 3600.0,
       time_workload: metric * 100.0,
     };
+    // convert expected lifespan from seconds to years
     usageInput['years_life_time'] =
       this.expectedLifespan / (365.0 * 24.0 * 60.0 * 60.0);
     usageInput = this.addLocationToUsage(usageInput);
