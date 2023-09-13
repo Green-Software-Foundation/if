@@ -29,25 +29,29 @@ export class SciModel implements IImpactModelInterface {
       const sci_secs = emissions + embodied; // sci in time units of /s
       let sci_timed: number = sci_secs;
 
-      if (this.time == 'second' || this.time == 'seconds' || this.time == '') {
+      if (
+        this.time === 'second' ||
+        this.time === 'seconds' ||
+        this.time === ''
+      ) {
         sci_timed = sci_secs;
       }
-      if (this.time == 'minute' || this.time == 'minutes') {
+      if (this.time === 'minute' || this.time === 'minutes') {
         sci_timed = sci_secs * 60;
       }
-      if (this.time == 'hour' || this.time == 'hours') {
+      if (this.time === 'hour' || this.time === 'hours') {
         sci_timed = sci_secs * 60 * 60;
       }
-      if (this.time == 'day' || this.time == 'days') {
+      if (this.time === 'day' || this.time === 'days') {
         sci_timed = sci_secs * 60 * 60 * 24;
       }
-      if (this.time == 'week' || this.time == 'weeks') {
+      if (this.time === 'week' || this.time === 'weeks') {
         sci_timed = sci_secs * 60 * 60 * 24 * 7;
       }
-      if (this.time == 'month' || this.time == 'months') {
+      if (this.time === 'month' || this.time === 'months') {
         sci_timed = sci_secs * 60 * 60 * 24 * 7 * 4;
       }
-      if (this.time == 'year' || this.time == 'years') {
+      if (this.time === 'year' || this.time === 'years') {
         sci_timed = sci_secs * 60 * 60 * 24 * 365;
       }
 
