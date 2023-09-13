@@ -30,18 +30,13 @@ Limitations:
 
 
 ```typescript
-// inline configuration
-const model = await new WattTimeGridEmissions().configure('watt-time', {
-  username: 'test1',
-  password: 'test2',
-});
-// environment configuration
+// environment variable configuration
 // export WATT_TIME_USERNAME=test1
 // export WATT_TIME_PASSWORD=test2
-// prefix the environment variables with "ENV" to load them inside the model. 
+// use environment variables to configure the model
 const env_model = await new WattTimeGridEmissions().configure('watt-time', {
-  username: 'ENV_WATT_TIME_USERNAME',
-  password: 'ENV_WATT_TIME_PASSWORD',
+  username: process.env.WATT_TIME_USERNAME,
+  password: process.env.WATT_TIME_PASSWORD,
 });
 ```
 
