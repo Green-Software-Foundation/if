@@ -121,19 +121,19 @@ component:
         location: west-us
         energy: 43 mWh
         grid-intensity: 500 gCO2e / kWh
-        operational-emissions: 4.7g gCO2e
+        operational-carbon: 4.7g gCO2e
       - timestamp: 2023-07-06T15:00
         duration: 5 mins
         location: west-us
         energy: 20 mWh
         grid-intensity: 490 gCO2e / kWh
-        operational-emissions: 2.9 gCO2e       
+        operational-carbon: 2.9 gCO2e       
       - timestamp: 2023-07-06T25:00
         duration: 5 mins
         location: west-us
         energy: 18 mWh  
         grid-intensity: 470 gCO2e / kWh
-        operational-emissions: 2.8g gCO2e         
+        operational-carbon: 2.8g gCO2e         
 ```
 
 ## Normalization
@@ -184,31 +184,31 @@ component:
         location: west-us
         energy: 14.3 mWh
         grid-intensity: 500 gCO2e / kWh
-        operational-emissions: 1.57g gCO2e
+        operational-carbon: 1.57g gCO2e
       - timestamp: 2023-07-06T05:00
         duration: 5 mins
         location: west-us
         energy: 14.3 mWh
         grid-intensity: 500 gCO2e / kWh
-        operational-emissions: 1.57g gCO2e
+        operational-carbon: 1.57g gCO2e
       - timestamp: 2023-07-06T10:00
         duration: 5 mins
         location: west-us
         energy: 14.3 mWh
         grid-intensity: 500 gCO2e / kWh
-        operational-emissions: 1.57g gCO2e                
+        operational-carbon: 1.57g gCO2e                
       - timestamp: 2023-07-06T15:00
         duration: 5 mins
         location: west-us
         energy: 20 mWh
         grid-intensity: 490 gCO2e / kWh
-        operational-emissions: 2.9 gCO2e       
+        operational-carbon: 2.9 gCO2e       
       - timestamp: 2023-07-06T25:00
         duration: 5 mins
         location: west-us
         energy: 18 mWh  
         grid-intensity: 470 gCO2e / kWh
-        operational-emissions: 2.8g gCO2e         
+        operational-carbon: 2.8g gCO2e         
   observations: 
       - timestamp: 2023-07-06T00:00
         duration: 15 mins
