@@ -1,13 +1,13 @@
-'use strict';
-Object.defineProperty(exports, '__esModule', {value: true});
-const globals_1 = require('@jest/globals');
-const e_aveva = require('./aveva');
-globals_1.jest.setTimeout(30000);
-(0, globals_1.describe)('e-aveva:configure test', () => {
-  (0, globals_1.test)('initialize with params', async () => {
-    const impactModel = new e_aveva.EAvevaModel();
+import { describe, expect, jest, test } from '@jest/globals';
+import { EAvevaModel } from './aveva-model';
+
+jest.setTimeout(30000);
+
+describe('emem:configure test', () => {
+  test('initialize with params', async () => {
+    const impactModel = new EAvevaModel();
     await impactModel.configure('test', {});
-    await (0, globals_1.expect)(
+    await expect(
       impactModel.calculate([
         {
           pl: 16.009,
