@@ -11,19 +11,19 @@ describe('teads:configure test', () => {
       impactModel.calculate([
         {
           duration: 3600,
-          energy: 1,
-          e_net: 1,
-          e_mem: 1,
+          'e-cpu': 1,
+          'e-net': 1,
+          'e-mem': 1,
           timestamp: '2021-01-01T00:00:00Z',
         },
       ])
     ).resolves.toStrictEqual([
       {
-        total_energy: 3,
         duration: 3600,
-        energy: 1,
-        e_net: 1,
-        e_mem: 1,
+        'e-cpu': 1,
+        'e-net': 1,
+        'e-mem': 1,
+        'energy': 3,
         timestamp: '2021-01-01T00:00:00Z',
       },
     ]);

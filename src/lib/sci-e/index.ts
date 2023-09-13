@@ -48,7 +48,7 @@ export class SciEModel implements IImpactModelInterface {
     }
     return observations.map((observation: KeyValuePair) => {
       this.configure(this.name!, observation);
-      observation['total_energy'] = this.calculateEnergy(observation);
+      observation['energy'] = this.calculateEnergy(observation);
       return observation;
     });
   }
@@ -63,9 +63,9 @@ export class SciEModel implements IImpactModelInterface {
   /**
    * Calculates the sum of the energy components
    *
-   * energy: cpu energy in kwh
-   * e_mem: energy due to memory usage in kwh
-   * e_net: energy due to network data in kwh
+   * e-cpu: cpu energy in kwh
+   * e-mem: energy due to memory usage in kwh
+   * e-net: energy due to network data in kwh
    * timestamp: RFC3339 timestamp string
    *
    * adds energy + e_net + e_mum
@@ -76,9 +76,9 @@ export class SciEModel implements IImpactModelInterface {
     let e_cpu = 0;
 
     if (
-      !('energy' in observation) &&
-      !('e_mem' in observation) &&
-      !('e_net' in observation)
+      !('e-cpu' in observation) &&
+      !('e-mem' in observation) &&
+      !('e-net' in observation)
     ) {
       throw new Error(
         'Required Parameters not provided: at least one of e-mem, e-net or energy must be present in observation'
@@ -86,14 +86,14 @@ export class SciEModel implements IImpactModelInterface {
     }
 
     // if the user gives a negative value it will default to zero
-    if ('energy' in observation && observation['energy'] > 0) {
-      e_cpu = observation['energy'];
+    if ('e-cpu' in observation && observation['e-cpu'] > 0) {
+      e_cpu = observation['e-cpu'];
     }
-    if ('e_mem' in observation && observation['energy'] > 0) {
-      e_mem = observation['energy'];
+    if ('e-mem' in observation && observation['e-mem'] > 0) {
+      e_mem = observation['e-mem'];
     }
-    if ('e_net' in observation && observation['energy'] > 0) {
-      e_net = observation['energy'];
+    if ('e-net' in observation && observation['e-net'] > 0) {
+      e_net = observation['e-net'];
     }
 
     return e_cpu + e_net + e_mem;
