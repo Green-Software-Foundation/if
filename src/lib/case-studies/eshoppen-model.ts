@@ -35,7 +35,7 @@ export class EshoppenModel implements IImpactModelInterface {
           // e-mem-tdp  =  n-hours * n-chip * tdp-mem * tdp-coeff
           observation['e-mem'] =
             observation['n-hours'] *
-            observation['n-chip'] *
+            observation['n-chips'] *
             observation['tdp-mem'] *
             observation['tdp-coeff'];
           if (isNaN(observation['e-mem'])) {
@@ -97,6 +97,39 @@ export class EshoppenModel implements IImpactModelInterface {
   }
 
   modelIdentifier(): string {
-    return 'org.gsf.sci-o';
+    return 'org.gsf.eshoppen';
+  }
+}
+
+export class EshoppenCpuModel extends EshoppenModel {
+  constructor() {
+    super();
+    this.modelType = 'e-cpu';
+  }
+
+  modelIdentifier(): string {
+    return 'org.gsf.eshoppen-cpu';
+  }
+}
+
+export class EshoppenMemModel extends EshoppenModel {
+  constructor() {
+    super();
+    this.modelType = 'e-mem';
+  }
+
+  static modelIdentifier(): string {
+    return 'org.gsf.eshoppen-mem';
+  }
+}
+
+export class EshoppenNetModel extends EshoppenModel {
+  constructor() {
+    super();
+    this.modelType = 'e-net';
+  }
+
+  modelIdentifier(): string {
+    return 'org.gsf.eshoppen-net';
   }
 }

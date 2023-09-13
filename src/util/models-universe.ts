@@ -14,9 +14,14 @@ import {
   InitalizedModels,
 } from '../types/models-universe';
 import {SciModel} from '../lib/sci';
-import {EshoppenModel} from '../lib/case-studies/eshoppen-model';
+import {
+  EshoppenCpuModel,
+  EshoppenMemModel,
+  EshoppenNetModel,
+} from '../lib/case-studies/eshoppen-model';
 import {EMemModel} from '../lib/case-studies/emem-model';
 import {SciAccentureModel} from '../lib/case-studies/sci-accenture-model';
+import {SciEModel} from "../lib/sci-e";
 
 /**
  * Models Initialization Lifecycle.
@@ -40,14 +45,20 @@ export class ModelsUniverse {
         return CloudCarbonFootprint;
       case 'teads-curve':
         return TeadsCurveModel;
+      case 'sci-e':
+        return SciEModel;
       case 'sci-m':
         return SciMModel;
       case 'sci-o':
         return SciOModel;
       case 'sci':
         return SciModel;
-      case 'eshoppen':
-        return EshoppenModel;
+      case 'eshoppen-net':
+        return EshoppenNetModel;
+      case 'eshoppen-cpu':
+        return EshoppenCpuModel;
+      case 'eshoppen-mem':
+        return EshoppenMemModel;
       case 'sci-accenture':
         return SciAccentureModel;
 
