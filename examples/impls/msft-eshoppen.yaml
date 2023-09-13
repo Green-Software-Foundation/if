@@ -133,23 +133,23 @@ graph:
       pipeline:
         - eshoppen-net
         - sci-e # sums e components
-        - sci-o
         - sci-m
+        - sci-o
         - sci
       config:
         sci-m:
-          te: 1433120 # kgCO2eq
-          tir: 3600 # == duration field
-          el: 126144000 # 4 years in seconds
-          rr: 2 # using cores
-          tor: 24 # total cores
+          te: 0 # kgCO2eq
+          tir: 1 # == duration field
+          el: 35040 # 4 years in seconds
+          rr: 1 # using cores
+          tor: 1 # total cores
         e-net:
           net-energy: 0.001 #kwh/GB
         sci:
           time: ''
           factor: 1
         sci-o:
-          grid-ci: 1000
+          grid-ci: 951
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 3600
