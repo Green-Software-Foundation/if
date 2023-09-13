@@ -1,7 +1,7 @@
 import {IImpactModelInterface} from '../interfaces';
 import {KeyValuePair} from '../../types/boavizta';
 
-export class SciAccenture implements IImpactModelInterface {
+export class SciAccentureModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
   staticParams: object | undefined;
   name: string | undefined;
