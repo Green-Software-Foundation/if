@@ -1,26 +1,36 @@
-'use strict';
-Object.defineProperty(exports, '__esModule', {value: true});
-exports.EAvevaModel = void 0;
-class EAvevaModel {
-  constructor() {}
+import { IImpactModelInterface } from '../interfaces';
+import { KeyValuePair } from '../../types/boavizta';
+
+export class EAvevaModel implements IImpactModelInterface {
+  // Defined for compatibility. Not used in TEADS.
+  authParams: object | undefined;
+  // name of the data source
+  name: string | undefined;
   /**
    * Defined for compatibility. Not used here.
    */
-  authenticate(authParams) {
+  authenticate(authParams: object): void {
     this.authParams = authParams;
   }
+
   /**
-   *  Configures the TEADS Plugin for IEF
-   *  @param {string} name name of the resource
-   *  @param {Object} staticParams static parameters for the resource
-   */
-  async configure(name, staticParams = undefined) {
+    *  Configures the TEADS Plugin for IEF
+    *  @param {string} name name of the resource
+    *  @param {Object} staticParams static parameters for the resource
+    */
+  async configure(
+    name: string,
+    staticParams: object | undefined = undefined
+  ): Promise<IImpactModelInterface> {
     this.name = name;
+
     if (staticParams === undefined) {
       throw new Error('Required Parameters not provided');
     }
     return this;
   }
+
+
   /**
    * Calculate the total emissions for a list of observations
    *
@@ -30,14 +40,14 @@ class EAvevaModel {
    *  @param {number} observations[].pb percentage mem usage
    *  @param {number} observations[].pl percentage mem usage
    */
-  async calculate(observations) {
+  async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (observations === undefined) {
       throw new Error('Required Parameters not provided');
     } else if (!Array.isArray(observations)) {
       throw new Error('Observations must be an array');
     }
     return observations.map(observation => {
-      this.configure(this.name, observation);
+      this.configure(this.name!, observation);
       observation['e-cpu'] = this.calculateEnergy(observation);
       return observation;
     });
@@ -57,7 +67,7 @@ class EAvevaModel {
    *
    * multiplies memory used (GB) by a coefficient (wh/GB) and converts to kwh
    */
-  calculateEnergy(observation) {
+  calculateEnergy(observation: KeyValuePair) {
     if (
       !('pl' in observation) ||
       !('pb' in observation) ||
