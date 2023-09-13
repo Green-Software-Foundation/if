@@ -6,12 +6,16 @@ tags:
   category: cloud
 initialize:
   models:
-    - name: e-cpu
-      kind: builtin
-      path: ''
+   - name: eshoppen-cpu # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = e-mem)
+      kind: e-cpu
+      path: false
       verbose: false
-    - name: e-mem-tdp # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = e-mem)
-      kind: builtin
+    - name: eshoppen-mem # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = e-mem)
+      kind: e-mem
+      path: false
+      verbose: false
+    - name: eshoppen-net # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = e-mem)
+      kind: e-net
       path: false
       verbose: false
     - name: sci-e # sums e-cpu and e-mem
@@ -31,8 +35,8 @@ initialize:
 graph:
   front-end:
     pipeline: 
-      - e-cpu # tdp & cpu -> energy
-      - e-mem-tdp # n-hour * n-chip * tdp-mem * tdp-coeff
+      - eshoppen-cpu # tdp & cpu -> energy
+      - eshoppen-mem # n-hour * n-chip * tdp-mem * tdp-coeff
       - sci-m # duration & config -> embodied
       - sci-e # energy & grid-carbon-intensity & embodied -> carbon
       - sci-o # e -> c
@@ -66,7 +70,7 @@ graph:
         cpu-util: 0
   app-server:
     pipeline: # note: no e-mem calc applied here 
-      - e-cpu # tdp & cpu -> energy
+      - eshoppen-cpu # tdp & cpu -> energy
       - sci-m # duration & config -> embodied
       - sci-o # energy & grid-carbon-intensity & embodied -> carbon  
     config:
@@ -93,7 +97,7 @@ graph:
         cpu-util: 18.392
   db-server:
     pipeline: # no e-mem calc applied here
-      - e-cpu # tdp & cpu & duration-> energy
+      - eshoppen-cpu # tdp & cpu & duration-> energy
       - sci-m # duration & config -> embodied
       - sci-o # energy & grid-carbon-intensity & embodied -> carbon  
     config:
@@ -120,7 +124,7 @@ graph:
         cpu-util: 10
     network:
       pipeline: 
-        - e-net
+        - eshoppen-net
         - sci
       config:
         e-net:
