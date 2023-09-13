@@ -3,7 +3,7 @@ import {EAvevaModel} from './aveva-model';
 
 jest.setTimeout(30000);
 
-describe('emem:configure test', () => {
+describe('aveva:configure test', () => {
   test('initialize with params', async () => {
     const impactModel = new EAvevaModel();
     await impactModel.configure('test', {});
