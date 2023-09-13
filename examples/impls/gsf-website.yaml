@@ -90,4 +90,4 @@ graph:
     observations:
       - timestamp: 2023-07-06T00:00 
         data: 8.267195767195768e-06 # 20 GB data transferred in most recent month, converted to GB/s
-        users: 2000 0.0008267195767195768 # 2000 unique users in most recent month, converted to users/s 
+        users: 2000 0.0008267195767195768 # 2000 unique users in most recent month, converted to users/s
