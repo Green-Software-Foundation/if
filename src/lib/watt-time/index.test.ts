@@ -37,7 +37,7 @@ describe('watt-time:configure test', () => {
             longitude: -122.4194,
           },
           timestamp: '2021-01-01T00:00:00Z',
-          duration: 3600,
+          duration: 1200,
         },
       ])
     ).resolves.toStrictEqual([
@@ -47,9 +47,30 @@ describe('watt-time:configure test', () => {
           longitude: -122.4194,
         },
         timestamp: '2021-01-01T00:00:00Z',
-        duration: 3600,
-        'grid-ci': 2096.256940667132,
+        duration: 1200,
+        'grid-ci': 2185.332173907599,
       },
     ]);
+
+    await expect(
+      model.calculate([
+        {
+          location: {
+            latitude: 37.7749,
+            longitude: -122.4194,
+          },
+          timestamp: '2021-01-01T00:00:00Z',
+          duration: 3600,
+        },
+        {
+          location: {
+            latitude: 37.7749,
+            longitude: -122.4194,
+          },
+          timestamp: '2021-01-02T01:00:00Z',
+          duration: 3600,
+        },
+      ])
+    ).rejects.toThrowError();
   });
 });

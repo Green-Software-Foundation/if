@@ -46,6 +46,16 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
           password,
         },
       });
+      console.log('TOKEN RESP', tokenResponse);
+      if (
+        tokenResponse === undefined ||
+        tokenResponse.data === undefined ||
+        !('token' in tokenResponse.data)
+      ) {
+        throw new Error(
+          'Missing token in response. Invalid credentials provided.'
+        );
+      }
       this.token = tokenResponse.data.token;
     }
   }
@@ -54,35 +64,105 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
     if (!Array.isArray(observations)) {
       throw new Error('observations should be an array');
     }
+    let starttime = dayjs('9999-12-31');
+    let endtime = dayjs('1970-01-01');
+    const blockpairs = [];
+    const times = [];
+    observations.map((observation: KeyValuePair) => {
+      if (!('location' in observation)) {
+        throw new Error('location is missing');
+      }
+      if (
+        !('latitude' in observation.location) ||
+        !('longitude' in observation.location)
+      ) {
+        throw new Error('latitude or longitude is missing');
+      }
+      if (!('timestamp' in observation)) {
+        throw new Error('timestamp is missing');
+      }
+      if (!('duration' in observation)) {
+        throw new Error('duration is missing');
+      }
+      const duration = observation.duration;
+      times.push(dayjs(observation.timestamp));
 
-    const tunedObservations = await Promise.all(
-      observations.map(async (observation: KeyValuePair) => {
-        const result = await this.fetchData(observation);
+      starttime = dayjs(observation.timestamp).isBefore(starttime)
+        ? dayjs(observation.timestamp)
+        : starttime;
+      endtime = dayjs(observation.timestamp)
+        .add(duration, 'seconds')
+        .isAfter(endtime)
+        ? dayjs(observation.timestamp).add(duration, 'seconds')
+        : endtime;
+      blockpairs.push({
+        start: dayjs(observation.timestamp),
+        end: dayjs(observation.timestamp).add(duration, 'seconds'),
+      });
+      console.log('starttime', starttime.format());
+      console.log('endtime', endtime.format());
+    });
+    const fetchDuration = endtime.diff(starttime, 'seconds');
+    console.log('fetchDuration', fetchDuration);
+    if (fetchDuration > 32 * 24 * 60 * 60) {
+      throw new Error(
+        'duration is too long.WattTime API only supports up to 32 days. All observations must be within 32 days of each other. Duration of ' +
+          fetchDuration +
+          ' seconds is too long.'
+      );
+    }
+    const wattimedata = await this.fetchData({
+      location: observations[0].location,
+      timestamp: starttime.format(),
+      duration: fetchDuration,
+    });
+    console.log('wattime data:', wattimedata);
+    observations.map((observation: KeyValuePair) => {
+      const observationStart = dayjs(observation.timestamp);
+      const observationDuration = observation.duration;
+      const observationEnd = observationStart.add(
+        observationDuration,
+        'seconds'
+      );
+      console.log(observationStart.format());
+      console.log(observationEnd.format());
+      let datapoints = 0;
+      const data = wattimedata.map((data: KeyValuePair) => {
+        if (dayjs(data.point_time).isBefore(observationStart)) {
+          return 0;
+        }
+        if (
+          dayjs(data.point_time).isAfter(observationEnd) ||
+          dayjs(data.point_time).format() === dayjs(observationEnd).format()
+        ) {
+          return 0;
+        }
+        console.log('measuring for', observation.timestamp);
+        console.log('data', data);
+        // lbs/MWh to kg/MWh to g/kWh (kg/MWh == g/kWh as a ratio)
+        const grid_emission = data.value / 0.45359237;
+        console.log('emissions raw:', data.value);
+        // convert to kg/kWh by dividing by 1000. (1MWh = 1000kWh)
+        // convert to g/kWh by multiplying by 1000. (1kg = 1000g)
+        // hence each other cancel out and g/kWh is the same as kg/MWh
+        datapoints += 1;
+        return grid_emission;
+      });
+      const emissionSum = data.reduce((a: number, b: number) => a + b, 0);
+      console.log('data', data);
+      if (datapoints === 0) {
+        throw new Error('Did not receive data from WattTime API');
+      }
+      console.log('datapoints', datapoints, data.length);
+      console.log('emissionAvg', emissionSum / datapoints);
+      observation['grid-ci'] = emissionSum / datapoints;
+    });
 
-        return result;
-      })
-    );
-
-    return tunedObservations;
+    return Promise.resolve(observations as any[]);
   }
 
-  async fetchData(observation: KeyValuePair) {
-    if (!('location' in observation)) {
-      throw new Error('location is missing');
-    }
-    if (
-      !('latitude' in observation.location) ||
-      !('longitude' in observation.location)
-    ) {
-      throw new Error('latitude or longitude is missing');
-    }
-    if (!('timestamp' in observation)) {
-      throw new Error('timestamp is missing');
-    }
-    if (!('duration' in observation)) {
-      throw new Error('duration is missing');
-    }
-    let duration = observation.duration;
+  async fetchData(observation: KeyValuePair): Promise<KeyValuePair[]> {
+    const duration = observation.duration;
     // WattTime API only supports up to 32 days
     if (duration > 32 * 24 * 60 * 60) {
       throw new Error('duration is too long');
@@ -100,31 +180,9 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
         Authorization: `Bearer ${this.token}`,
       },
     });
-    // console.log(JSON.stringify(result.data, null, 2));
-    result.data.sort((a: any, b: any) => {
+    return result.data.sort((a: any, b: any) => {
       return dayjs(a.point_time).unix() > dayjs(b.point_time).unix() ? 1 : -1;
     });
-    // console.log(result.data.length);
-    let datapoints = 0;
-    let cumulative_emission = 0;
-    for (const row of result.data) {
-      if (row) {
-        // console.log(row);
-        duration -= row.frequency;
-        // lbs/MWh to kg/MWh to g/kWh (kg/MWh == g/kWh as a ratio)
-        const grid_emission = row.value / 0.45359237;
-        // console.log('emissions raw:', row.value);
-        // convert to kg/kWh by dividing by 1000. (1MWh = 1000kWh)
-        // convert to g/kWh by multiplying by 1000. (1kg = 1000g)
-        // hence each other cancel out and g/kWh is the same as kg/MWh
-        cumulative_emission += grid_emission;
-        datapoints++;
-      }
-    }
-    // observation['grid-emission'] = cumulative_emission;
-    // observation['grid-points'] = datapoints;
-    observation['grid-ci'] = cumulative_emission / datapoints;
-    return observation;
   }
 
   async configure(
