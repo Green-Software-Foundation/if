@@ -19,7 +19,7 @@ import {
   EshoppenMemModel,
   EshoppenNetModel,
   EMemModel,
-  SciAccentureModel
+  SciAccentureModel,
 } from '../lib/case-studies';
 import {SciEModel} from '../lib/sci-e';
 
