@@ -1,5 +1,5 @@
 'use strict';
-Object.defineProperty(exports, '__esModule', { value: true });
+Object.defineProperty(exports, '__esModule', {value: true});
 const globals_1 = require('@jest/globals');
 const e_aveva = require('./aveva');
 globals_1.jest.setTimeout(30000);
