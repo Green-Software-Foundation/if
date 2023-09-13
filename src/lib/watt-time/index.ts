@@ -39,9 +39,7 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
     }
   }
 
-  async calculate(
-    observations: object | object[] | undefined
-  ): Promise<object | object[]> {
+  async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (!Array.isArray(observations)) {
       throw new Error('observations should be an array');
     }
@@ -52,7 +50,7 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
       })
     );
 
-    return Promise.resolve(observations);
+    return Promise.resolve(observations as any[]);
   }
 
   async fetchData(observation: KeyValuePair) {
