@@ -158,7 +158,7 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
       observation['grid-ci'] = emissionSum / datapoints;
     });
 
-    return Promise.resolve(observations as any[]);
+    return observations;
   }
 
   async fetchData(observation: KeyValuePair): Promise<KeyValuePair[]> {
