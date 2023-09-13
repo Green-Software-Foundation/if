@@ -1,5 +1,5 @@
-import {IImpactModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/boavizta';
+import { IImpactModelInterface } from '../interfaces';
+import { KeyValuePair } from '../../types/boavizta';
 
 export class EshoppenModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
@@ -21,11 +21,11 @@ export class EshoppenModel implements IImpactModelInterface {
       switch (this.modelType) {
         case 'e-cpu': {
           //     e-cpu = n-hours * n-chips * tdp * tdp-coeff
-          observation['e-cpu'] =
+          observation['e-cpu'] = (
             observation['n-hours'] *
             observation['n-chips'] *
             observation['tdp'] *
-            observation['tdp-coeff'];
+            observation['tdp-coeff']) / 1000;
           if (isNaN(observation['e-cpu'])) {
             throw new Error('e-cpu not computable');
           }
@@ -34,10 +34,10 @@ export class EshoppenModel implements IImpactModelInterface {
         case 'e-mem': {
           // e-mem-tdp  =  n-hours * n-chip * tdp-mem * tdp-coeff
           observation['e-mem'] =
-            observation['n-hours'] *
-            observation['n-chips'] *
-            observation['tdp-mem'] *
-            observation['tdp-coeff'];
+            (observation['n-hours'] *
+              observation['n-chips'] *
+              observation['tdp-mem'] *
+              observation['tdp-coeff']) / 1000;
           if (isNaN(observation['e-mem'])) {
             throw new Error('e-mem not computable');
           }
@@ -46,8 +46,8 @@ export class EshoppenModel implements IImpactModelInterface {
         case 'e-net': {
           // e-net = data-in + data-out * net-energy
           observation['e-net'] =
-            (observation['data-in'] + observation['data-out']) *
-            observation['net-energy'];
+            ((observation['data-in'] + observation['data-out']) *
+              observation['net-energy']) / 1000;
           if (isNaN(observation['e-net'])) {
             throw new Error('e-net not computable');
           }
@@ -56,7 +56,7 @@ export class EshoppenModel implements IImpactModelInterface {
         case 'e-sum': {
           // e-sum = e-cpu + e-mem + e-net
           observation['energy'] =
-            observation['e-cpu'] + observation['e-mem'] + observation['e-net'];
+            (observation['e-cpu'] + observation['e-mem'] + observation['e-net']);
           if (isNaN(observation['energy'])) {
             throw new Error('energy not computable');
           }
