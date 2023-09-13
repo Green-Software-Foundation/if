@@ -20,7 +20,7 @@ describe('eshoppen:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        'e-cpu': 122.4,
+        'e-cpu': 0.12240000000000001,
         'n-hours': 1,
         'n-chips': 1,
         tdp: 120,
