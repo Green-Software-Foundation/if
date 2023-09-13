@@ -3,7 +3,7 @@ import {EMemModel} from './emem-model';
 
 jest.setTimeout(30000);
 
-describe('teads:configure test', () => {
+describe('emem:configure test', () => {
   test('initialize with params', async () => {
     const impactModel = new EMemModel();
     await impactModel.configure('test', {

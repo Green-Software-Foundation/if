@@ -13,6 +13,14 @@ initialize:
       kind: builtin
     - name: sci-o
       kind: builtin
+    - name: sci-e
+      kind: builtin
+    - name: eshoppen-net
+      kind: builtin
+    - name: eshoppen-mem
+      kind: builtin
+    - name: eshoppen-cpu
+      kind: builtin
     - name: sampler
       kind: shell
       path: python3 /usr/local/bin/sampler
@@ -20,8 +28,10 @@ graph:
   children:
     front-end:
       pipeline:
-        - teads-curve
-        - sampler
+        - eshoppen-mem
+        - eshoppen-cpu
+        - eshoppen-net
+        - sci-e
         - sci-o
       config:
         teads-curve:
@@ -31,39 +41,26 @@ graph:
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           processor: Intel® Core™ i7-1185G7
+          data-in: 1
+          data-out: 1
+          net-energy: 1
+          n-hours: 1
+          n-chips: 1
+          tdp-mem: 1
+          tdp-coeff: 1
           duration: 3600 # Secs
           tdp: 28 # W
           cpu-util: 18.392
           grid-ci: 951 # gCO2e/kWh
         - timestamp: 2023-08-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           processor: Intel® Core™ i7-1185G7
-          duration: 3600 # Secs
-          tdp: 20 # W
-          cpu-util: 16
-          grid-ci: 800 # gCO2e/kWh
-    back-end:
-      pipeline:
-        - teads-curve
-        - sci-o
-        - sci-m
-      config:
-        sci-m:
-          te: 350 # kgCO2eq
-          tir: "duration" # get this value from the duration field
-          el: 126144000 # 4 years in seconds
-          rr: 1
-          tor: 1
-        teads-curve:
-          tdp: 1
-      observations:
-        - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-          processor: Intel® Core™ i7-1185G7
-          duration: 3600 # Secs
-          tdp: 28 # W
-          cpu-util: 18.392
-          grid-ci: 951 # gCO2e/kWh
-        - timestamp: 2023-08-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-          processor: Intel® Core™ i7-1185G7
+          data-in: 1
+          data-out: 1
+          net-energy: 1
+          n-hours: 1
+          n-chips: 1
+          tdp-mem: 1
+          tdp-coeff: 1
           duration: 3600 # Secs
           tdp: 20 # W
           cpu-util: 16
