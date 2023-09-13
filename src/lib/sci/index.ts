@@ -17,16 +17,16 @@ export class SciModel implements IImpactModelInterface {
       throw new Error('observations should be an array');
     }
     observations.map((observation: KeyValuePair) => {
-      if (!('operational-emissions' in observation)) {
-        throw new Error('observation missing `operational-emissions`');
+      if (!('operational-carbon' in observation)) {
+        throw new Error('observation missing `operational-carbon`');
       }
       if (!('embodied-carbon' in observation)) {
         throw new Error('observation missing `embodied-carbon`');
       }
 
-      const emissions = parseFloat(observation['operational-emissions']);
+      const operational = parseFloat(observation['operational-carbon']);
       const embodied = parseFloat(observation['embodied-carbon']);
-      const sci_secs = emissions + embodied; // sci in time units of /s
+      const sci_secs = operational + embodied; // sci in time units of /s
       let sci_timed: number = sci_secs;
 
       if (
