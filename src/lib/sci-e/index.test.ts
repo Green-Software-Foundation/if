@@ -3,7 +3,7 @@ import {SciEModel} from './index';
 
 jest.setTimeout(30000);
 
-describe('teads:configure test', () => {
+describe('sci-e:configure test', () => {
   test('initialize with params', async () => {
     const impactModel = new SciEModel();
     await impactModel.configure('test', {});
