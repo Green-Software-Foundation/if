@@ -61,7 +61,6 @@ export class ModelsUniverse {
         return EshoppenMemModel;
       case 'sci-accenture':
         return SciAccentureModel;
-
       case 'emem':
         return EMemModel;
       default: // cover default
