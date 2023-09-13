@@ -1,7 +1,7 @@
 import {IImpactModelInterface} from '../interfaces';
 import {KeyValuePair} from '../../types/boavizta';
 
-export class Eshoppen implements IImpactModelInterface {
+export class EshoppenModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
   modelType: 'e-cpu' | 'e-mem' | 'e-net' | 'e-sum' = 'e-cpu';
   staticParams: object | undefined;

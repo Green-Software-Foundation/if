@@ -1,12 +1,12 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {SciAccenture} from './sci-accenture';
+import {SciAccentureModel} from './sci-accenture-model';
 
 jest.setTimeout(30000);
 
 describe('eshoppen:configure test', () => {
   test('initialize and test', async () => {
-    const model = await new SciAccenture().configure('sci-accenture', {});
-    expect(model).toBeInstanceOf(SciAccenture);
+    const model = await new SciAccentureModel().configure('sci-accenture', {});
+    expect(model).toBeInstanceOf(SciAccentureModel);
     await expect(
       model.calculate([
         {

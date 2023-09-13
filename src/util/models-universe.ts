@@ -13,6 +13,10 @@ import {
   ImplInitializeModel,
   InitalizedModels,
 } from '../types/models-universe';
+import {SciModel} from '../lib/sci';
+import {EshoppenModel} from '../lib/case-studies/eshoppen-model';
+import {EMemModel} from '../lib/case-studies/emem-model';
+import {SciAccentureModel} from '../lib/case-studies/sci-accenture-model';
 
 /**
  * Models Initialization Lifecycle.
@@ -40,6 +44,15 @@ export class ModelsUniverse {
         return SciMModel;
       case 'sci-o':
         return SciOModel;
+      case 'sci':
+        return SciModel;
+      case 'eshoppen':
+        return EshoppenModel;
+      case 'sci-accenture':
+        return SciAccentureModel;
+
+      case 'emem':
+        return EMemModel;
       default: // cover default
         return BoaviztaCpuImpactModel;
     }
