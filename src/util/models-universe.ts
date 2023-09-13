@@ -18,9 +18,9 @@ import {
   EshoppenCpuModel,
   EshoppenMemModel,
   EshoppenNetModel,
-} from '../lib/case-studies/eshoppen-model';
-import {EMemModel} from '../lib/case-studies/emem-model';
-import {SciAccentureModel} from '../lib/case-studies/sci-accenture-model';
+  EMemModel,
+  SciAccentureModel
+} from '../lib/case-studies';
 import {SciEModel} from '../lib/sci-e';
 
 /**
