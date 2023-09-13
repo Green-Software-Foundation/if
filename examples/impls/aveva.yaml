@@ -6,9 +6,10 @@ tags:
   category: on-premise
 initialize:
   models:
-    - name: sci-aveva # a model that takes in power observations and returns e.
+    - name: e-aveva # a model that takes in power observations and returns e.
       kind: plugin
       path: ''
+      verbose: false
     - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
       kind: builtin
       verbose: false 
@@ -22,23 +23,27 @@ initialize:
       verbose: false
       path: ''
 graph:
-  pc: 
-    config:
-      sci-m:
-        te: 350 # kgCO2eq
-        tir: 31536000 # 1 year in seconds
-        el: 157680000 # 5 years in seconds        
-        rr: 1
-        tor: 1
-      sci-o:
-        i: 474.8 #gCo2/kWh
-      sci:
-        time: year
-        factor: 1 
-      observations: 
-        timestamp: 2023-07-06T00:00 
-        pl: 16.009 # average over timespan
-        pb: 11.335 # average over timespan
-        t: 8322 # (hours in year * average uptime e.g. 95%)
+  children:
+    pc: 
+      pipeline:
+        sci-m:
+          config:
+            te: 350 # kgCO2eq
+            tir: 31536000 # 1 year in seconds
+            el: 157680000 # 5 years in seconds        
+            rr: 1
+            tor: 1
+        sci-o:
+          config:
+            i: 474.8 #gCo2/kWh
+        sci:
+          config:
+            time: '' # don't do any time norm
+            factor: 1 
+        observations: 
+          timestamp: 2023-07-06T00:00 
+          pl: 16.009 # average over timespan
+          pb: 11.335 # average over timespan
+          t: 8322 # (hours in year * average uptime e.g. 95%)
 
 
