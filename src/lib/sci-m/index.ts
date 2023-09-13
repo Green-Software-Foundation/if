@@ -51,9 +51,12 @@ export class SciMModel implements IImpactModelInterface {
       ) {
         observation['te'] = observation['te'] ?? observation['total-embodied'];
         observation['tir'] = observation['tir'] ?? observation['time-reserved'];
-        observation['el'] = observation['el'] ?? observation['expected-lifespan'];
-        observation['rr'] = observation['rr'] ?? observation['resources-reserved'];
-        observation['tor'] = observation['tor'] ?? observation['total-resources'];
+        observation['el'] =
+          observation['el'] ?? observation['expected-lifespan'];
+        observation['rr'] =
+          observation['rr'] ?? observation['resources-reserved'];
+        observation['tor'] =
+          observation['tor'] ?? observation['total-resources'];
         if (typeof observation['te'] === 'string') {
           te = parseFloat(observation[observation['te']]);
         } else if (typeof observation['te'] === 'number') {

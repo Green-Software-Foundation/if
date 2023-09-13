@@ -1,5 +1,4 @@
 import {IImpactModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/boavizta';
 
 export class EAvevaModel implements IImpactModelInterface {
   // Defined for compatibility. Not used in Aveva.
@@ -36,8 +35,8 @@ export class EAvevaModel implements IImpactModelInterface {
    * Each Observation require:
    *  @param {Object[]} observations
    *  @param {number} observations[].time time to normalize to in hours
-   *  @param {number} observations[].pb percentage mem usage
-   *  @param {number} observations[].pl percentage mem usage
+   *  @param {number} observations[].pb baseline power
+   *  @param {number} observations[].pl measured power
    */
   async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (observations === undefined) {
@@ -45,41 +44,19 @@ export class EAvevaModel implements IImpactModelInterface {
     } else if (!Array.isArray(observations)) {
       throw new Error('Observations must be an array');
     }
-    return observations.map(observation => {
+    observations.map(observation => {
       this.configure(this.name!, observation);
-      observation['e-cpu'] = this.calculateEnergy(observation);
+      observation['e-cpu'] =
+        ((observation['pl'] - observation['pb']) * observation['time']) / 1000;
       return observation;
     });
+
+    return Promise.resolve(observations);
   }
   /**
    * Returns model identifier
    */
   modelIdentifier() {
-    return 'e-aveva';
-  }
-  /**
-   * Calculates the energy consumption for a single observation
-   * requires
-   *
-   * mem-util: ram usage in percentage
-   * timestamp: RFC3339 timestamp string
-   *
-   * multiplies memory used (GB) by a coefficient (wh/GB) and converts to kwh
-   */
-  calculateEnergy(observation: KeyValuePair) {
-    if (
-      !('pl' in observation) ||
-      !('pb' in observation) ||
-      !('time' in observation)
-    ) {
-      throw new Error(
-        'Required Parameters pl, pb, time not provided for observation'
-      );
-    }
-    const pl = observation['pl'];
-    const pb = observation['pb'];
-    const time = observation['time'];
-
-    return ((pl - pb) * time) / 1000;
+    return 'aveva';
   }
 }
