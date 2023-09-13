@@ -34,7 +34,7 @@ graph:
           rr: 1
           tor: 1
         sci-o:
-          grid-ci: 475 #gCo2/kWh
+          grid-ci: 474.8 #gCo2/kWh
       observations: 
         - timestamp: 2023-07-06T00:00 
           pl: 16.009 # average over timespan
