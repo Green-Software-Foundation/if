@@ -1,6 +1,6 @@
 import {parseProcessArgument} from '../src/util/args';
 import {ModelsUniverse} from '../src/util/models-universe';
-import {calculateImpactsBasedOnGraph} from '../src/util/rimpl-helpers';
+import {Supercomputer} from '../src/util/supercomputer';
 import {openYamlFileAsObject, saveYamlFileAs} from '../src/util/yaml';
 
 /**
@@ -22,24 +22,20 @@ const rimplScript = async () => {
 
     // Lifecycle Initialize Models
     const modelsHandbook = new ModelsUniverse();
-
     impl.initialize.models.forEach((model: any) =>
       modelsHandbook.writeDown(model)
     );
 
-    // Initialize impact graph/computing
-    const childrenNames = Object.keys(impl.graph.children);
-
-    await Promise.all(
-      childrenNames.map(calculateImpactsBasedOnGraph(impl, modelsHandbook))
-    );
+    // Lifecycle Computing
+    const ateruiComputer = new Supercomputer(impl, modelsHandbook);
+    const ompl = await ateruiComputer.compute();
 
     if (!outputPath) {
-      console.log(JSON.stringify(impl));
+      console.log(JSON.stringify(ompl));
       return;
     }
 
-    saveYamlFileAs(impl, outputPath);
+    await saveYamlFileAs(ompl, outputPath);
   } catch (error) {
     console.error(error);
   }
