@@ -21,7 +21,7 @@ import {
 } from '../lib/case-studies/eshoppen-model';
 import {EMemModel} from '../lib/case-studies/emem-model';
 import {SciAccentureModel} from '../lib/case-studies/sci-accenture-model';
-import {SciEModel} from "../lib/sci-e";
+import {SciEModel} from '../lib/sci-e';
 
 /**
  * Models Initialization Lifecycle.
