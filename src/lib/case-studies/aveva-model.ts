@@ -1,5 +1,5 @@
-import { IImpactModelInterface } from '../interfaces';
-import { KeyValuePair } from '../../types/boavizta';
+import {IImpactModelInterface} from '../interfaces';
+import {KeyValuePair} from '../../types/boavizta';
 
 export class EAvevaModel implements IImpactModelInterface {
   // Defined for compatibility. Not used in Aveva.
