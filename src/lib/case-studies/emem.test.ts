@@ -1,5 +1,5 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {EMemModel} from './emem';
+import {EMemModel} from './emem-model';
 
 jest.setTimeout(30000);
 

@@ -1,14 +1,14 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {Eshoppen} from './eshoppen';
+import {EshoppenModel} from './eshoppen-model';
 
 jest.setTimeout(30000);
 
 describe('eshoppen:configure test', () => {
   test('initialize and test', async () => {
-    const model = await new Eshoppen().configure('eshoppen', {
+    const model = await new EshoppenModel().configure('eshoppen', {
       type: 'e-cpu',
     });
-    expect(model).toBeInstanceOf(Eshoppen);
+    expect(model).toBeInstanceOf(EshoppenModel);
     await expect(
       model.calculate([
         {
