@@ -6,7 +6,7 @@ tags:
   category: cloud
 initialize:
   models:
-    - name: teads-cpu
+    - name: e-cpu
       kind: builtin
       path: ''
       verbose: false
@@ -31,7 +31,7 @@ initialize:
 graph:
   front-end:
     pipeline: 
-      - teads-cpu # tdp & cpu -> energy
+      - e-cpu # tdp & cpu -> energy
       - e-mem-tdp # n-hour * n-chip * tdp-mem * tdp-coeff
       - sci-m # duration & config -> embodied
       - sci-e # energy & grid-carbon-intensity & embodied -> carbon
@@ -51,10 +51,12 @@ graph:
         tor: 1
       sci-o:
         i: 951 # gCO2e/kWh
-      teads-cpu:
+      e-cpu:
         processor: Intel® Core™ i7-1185G7
         tdp: 28 # W
         tdp-coeff: 0.12
+        n-hour: 1
+        n-chip: 1
       sci:
         time: hour # signal to convert /s -> /hr
         factor: 500 # factor to convert per time to per f.unit ()
@@ -64,7 +66,7 @@ graph:
         cpu-util: 0
   app-server:
     pipeline: # note: no e-mem calc applied here 
-      - teads-cpu # tdp & cpu -> energy
+      - e-cpu # tdp & cpu -> energy
       - sci-m # duration & config -> embodied
       - sci-o # energy & grid-carbon-intensity & embodied -> carbon  
     config:
@@ -76,7 +78,7 @@ graph:
         tor: 26 # the original report has a typo, says 16 but actually has 26 cores.
       sci-c:
         i: 951 # gCO2e/kWh
-      teads-cpu:
+      e-cpu:
         processor: Intel® Xeon® Platinum 8272CL
         tdp: 205
         tdp-coeff: 0.32
@@ -91,7 +93,7 @@ graph:
         cpu-util: 18.392
   db-server:
     pipeline: # no e-mem calc applied here
-      - teads-cpu # tdp & cpu & duration-> energy
+      - e-cpu # tdp & cpu & duration-> energy
       - sci-m # duration & config -> embodied
       - sci-o # energy & grid-carbon-intensity & embodied -> carbon  
     config:
@@ -103,7 +105,9 @@ graph:
         tor: 24 # total cores  
       sci-c:
         i: 951
-      teads-cpu:
+      e-cpu:
+        n-hour: 1
+        n-chip: 1
         processor:  Intel® Xeon® Platinum 8160
         tdp: 150 # W
         tdp-coeff: 0.32
