@@ -25,30 +25,35 @@ export class SciMModel implements IImpactModelInterface {
       let el = 0.0;
       let rr = 0.0;
       let tor = 0.0;
-      if (!('te' in observation)) {
+      if (!('te' in observation || 'total-embodied' in observation)) {
         throw new Error('te: total-embodied is missing. Provide in gCO2e');
       }
-      if (!('tir' in observation)) {
+      if (!('tir' in observation || 'time-reserved' in observation)) {
         throw new Error('tir: time-reserved is missing. Provide in seconds');
       }
-      if (!('el' in observation)) {
+      if (!('el' in observation || 'expected-lifespan' in observation)) {
         throw new Error('el: expected-lifespan is missing. Provide in seconds');
       }
-      if (!('rr' in observation)) {
+      if (!('rr' in observation || 'resources-reserved' in observation)) {
         throw new Error(
           'rr: resources-reserved is missing. Provide as a count'
         );
       }
-      if (!('tor' in observation)) {
+      if (!('tor' in observation || 'total-resources' in observation)) {
         throw new Error('tor: total-resources is missing. Provide as a count');
       }
       if (
-        'te' in observation &&
-        'tir' in observation &&
-        'el' in observation &&
-        'rr' in observation &&
-        'tor' in observation
+        ('te' in observation || 'total-embodied' in observation) &&
+        ('tir' in observation || 'time-reserved' in observation) &&
+        ('el' in observation || 'expected-lifespan') &&
+        ('rr' in observation || 'resources-reserved') &&
+        ('tor' in observation || 'total-resources' in observation)
       ) {
+        observation['te'] = observation['te'] ?? observation['total-embodied'];
+        observation['tir'] = observation['tir'] ?? observation['time-reserved'];
+        observation['el'] = observation['el'] ?? observation['expected-lifespan'];
+        observation['rr'] = observation['rr'] ?? observation['resources-reserved'];
+        observation['tor'] = observation['tor'] ?? observation['total-resources'];
         if (typeof observation['te'] === 'string') {
           te = parseFloat(observation[observation['te']]);
         } else if (typeof observation['te'] === 'number') {
