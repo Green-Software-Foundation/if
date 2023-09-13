@@ -2,23 +2,21 @@ import {IImpactModelInterface} from '../interfaces';
 import {KeyValuePair} from '../../types/boavizta';
 
 export class EMemModel implements IImpactModelInterface {
-  // Defined for compatibility. Not used in TEADS.
+  // Defined for compatibility. Not used in this.
   authParams: object | undefined;
   // name of the data source
   name: string | undefined;
-  // tdp of the chip being measured
   memoryAllocation = 0;
-  // default power curve provided by the Teads Team
   memoryEnergy = 0;
   /**
-   * Defined for compatibility. Not used in TEADS.
+   * Defined for compatibility. Not used.
    */
   authenticate(authParams: object): void {
     this.authParams = authParams;
   }
 
   /**
-   *  Configures the TEADS Plugin for IEF
+   *  Configures the Plugin for IEF
    *  @param {string} name name of the resource
    *  @param {Object} staticParams static parameters for the resource
    *  @param {number} staticParams.tdp Thermal Design Power in Watts
