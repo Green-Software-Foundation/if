@@ -57,7 +57,7 @@ describe('cpu:configure test', () => {
     const impactModel = new BoaviztaCpuImpactModel();
 
     await expect(impactModel.configure('test')).rejects.toThrow(
-      Error('Improper configure: Missing name parameter')
+      Error('Improper configure: Missing processor parameter')
     );
     expect(impactModel.name).toBe('test');
     // not providing observations will throw a missing observations error
@@ -80,8 +80,8 @@ describe('cpu:initialize with params', () => {
     const impactModel = new BoaviztaCpuImpactModel();
     await expect(
       impactModel.configure('test', {
-        name: 'Intel Xeon Gold 6138f',
-        core_units: 24,
+        processor: 'Intel Xeon Gold 6138f',
+        'core-units': 24,
         location: 'USA',
       })
     ).resolves.toBeInstanceOf(BoaviztaCpuImpactModel);
@@ -90,9 +90,9 @@ describe('cpu:initialize with params', () => {
     await expect(
       impactModel.calculate([
         {
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
           duration: 3600,
-          cpu: 0.5,
+          'cpu-util': 0.5,
         },
       ])
     ).resolves.toStrictEqual([
@@ -134,9 +134,9 @@ describe('cloud:initialize with params', () => {
     await expect(
       impactModel.calculate([
         {
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
           duration: 15,
-          cpu: 0.34,
+          'cpu-util': 0.34,
         },
       ])
     ).resolves.toStrictEqual([
@@ -162,24 +162,24 @@ describe('cloud:initialize with params', () => {
     await expect(
       impactModel.calculate([
         {
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
           duration: 15,
-          cpu: 0.34,
+          'cpu-util': 0.34,
         },
         {
-          datetime: '2021-01-01T00:00:15Z',
+          timestamp: '2021-01-01T00:00:15Z',
           duration: 15,
-          cpu: 0.12,
+          'cpu-util': 0.12,
         },
         {
-          datetime: '2021-01-01T00:00:30Z',
+          timestamp: '2021-01-01T00:00:30Z',
           duration: 15,
-          cpu: 0.01,
+          'cpu-util': 0.01,
         },
         {
-          datetime: '2021-01-01T00:00:45Z',
+          timestamp: '2021-01-01T00:00:45Z',
           duration: 15,
-          cpu: 0.78,
+          'cpu-util': 0.78,
         },
       ])
     ).rejects.toThrowError();
@@ -201,24 +201,24 @@ describe('cloud:initialize with params', () => {
     await expect(
       impactModel.calculate([
         {
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
           duration: 15,
-          cpu: 0.34,
+          'cpu-util': 0.34,
         },
         {
-          datetime: '2021-01-01T00:00:15Z',
+          timestamp: '2021-01-01T00:00:15Z',
           duration: 15,
-          cpu: 0.12,
+          'cpu-util': 0.12,
         },
         {
-          datetime: '2021-01-01T00:00:30Z',
+          timestamp: '2021-01-01T00:00:30Z',
           duration: 15,
-          cpu: 0.01,
+          'cpu-util': 0.01,
         },
         {
-          datetime: '2021-01-01T00:00:45Z',
+          timestamp: '2021-01-01T00:00:45Z',
           duration: 15,
-          cpu: 0.78,
+          'cpu-util': 0.78,
         },
       ])
     ).rejects.toStrictEqual(

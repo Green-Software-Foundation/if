@@ -23,8 +23,8 @@ const {CPU_IMPACT_MODEL_ID, CLOUD_IMPACT_MODEL_ID} = Index;
 abstract class BoaviztaImpactModel implements IImpactModelInterface {
   name: string | undefined;
   sharedParams: object | undefined = undefined;
-  metricType: 'cpu' | 'gpu' | 'ram' = 'cpu';
-  expectedLifespan = 4;
+  metricType: 'cpu-util' | 'gpu-util' | 'ram-util' = 'cpu-util';
+  expectedLifespan = 4 * 365 * 24 * 60 * 60;
   protected authCredentials: object | undefined;
 
   authenticate(authParams: object) {
@@ -62,7 +62,8 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
       hours_use_time: duration / 3600.0,
       time_workload: metric * 100.0,
     };
-    usageInput['years_life_time'] = this.expectedLifespan;
+    usageInput['years_life_time'] =
+      this.expectedLifespan / (365.0 * 24.0 * 60.0 * 60.0);
     usageInput = this.addLocationToUsage(usageInput);
 
     return usageInput;
@@ -71,15 +72,17 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   // Calculates the impact of the given usage
   async calculate(
     observations: object | object[] | undefined = undefined
-  ): Promise<object> {
+  ): Promise<any[]> {
     if (Array.isArray(observations)) {
-      const results = [];
+      const results: KeyValuePair[] = [];
+
       for (const observation of observations) {
         const usageResult = await this.calculateUsageForObservation(
           observation
         );
         results.push(usageResult);
       }
+
       return results;
     } else {
       throw new Error(
@@ -129,7 +132,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     observation: KeyValuePair
   ): Promise<KeyValuePair> {
     if (
-      'datetime' in observation &&
+      'timestamp' in observation &&
       'duration' in observation &&
       this.metricType in observation
     ) {
@@ -138,8 +141,8 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         observation[this.metricType]
       );
       const usage = (await this.fetchData(usageInput)) as IBoaviztaUsageSCI;
-      const result = {...usage};
-      return result;
+
+      return usage;
     } else {
       throw new Error('Invalid Input: Invalid observations parameter');
     }
@@ -158,7 +161,7 @@ export class BoaviztaCpuImpactModel
 
   constructor() {
     super();
-    this.metricType = 'cpu';
+    this.metricType = 'cpu-util';
     this.componentType = 'cpu';
   }
 
@@ -188,16 +191,16 @@ export class BoaviztaCpuImpactModel
       staticParams.verbose = undefined;
     }
 
-    if (!('name' in staticParams)) {
-      throw new Error('Improper configure: Missing name parameter');
+    if (!('processor' in staticParams)) {
+      throw new Error('Improper configure: Missing processor parameter');
     }
 
-    if (!('core_units' in staticParams)) {
-      throw new Error('Improper configure: Missing core_units parameter');
+    if (!('core-units' in staticParams)) {
+      throw new Error('Improper configure: Missing core-units parameter');
     }
 
-    if ('expected_lifespan' in staticParams) {
-      this.expectedLifespan = staticParams.expected_lifespan as number;
+    if ('expected-lifespan' in staticParams) {
+      this.expectedLifespan = staticParams['expected-lifespan'] as number;
     }
     this.sharedParams = Object.assign({}, staticParams);
 
@@ -311,6 +314,14 @@ export class BoaviztaCloudImpactModel
     }
 
     const dataCast = this.sharedParams as KeyValuePair;
+    for (const key in dataCast) {
+      //   replace - with _ in keys
+      if (key.includes('-')) {
+        const newKey = key.replace(/-/g, '_');
+        dataCast[newKey] = dataCast[key];
+        delete dataCast[key];
+      }
+    }
     dataCast['usage'] = usageData;
     const response = await axios.post(
       `https://api.boavizta.org/v1/cloud/?verbose=${this.verbose}&allocation=${this.allocation}`,
@@ -331,8 +342,8 @@ export class BoaviztaCloudImpactModel
     await this.validateInstanceType(staticParams);
     // if no valid location found, throw error
     await this.validateLocation(staticParams);
-    if ('expected_lifespan' in staticParams) {
-      this.expectedLifespan = staticParams.expected_lifespan as number;
+    if ('expected-lifespan' in staticParams) {
+      this.expectedLifespan = staticParams['expected-lifespan'] as number;
     }
 
     this.sharedParams = Object.assign({}, staticParams);

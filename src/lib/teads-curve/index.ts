@@ -19,7 +19,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
   // default percentage points
   points: number[] = [0, 10, 50, 100];
   // spline interpolation of the power curve
-  spline: Spline = new Spline(this.points, this.curve);
+  spline: any = new Spline(this.points, this.curve);
   // interpolation method
   interpolation: Interpolation = Interpolation.SPLINE;
 
@@ -49,10 +49,6 @@ export class TeadsCurveModel implements IImpactModelInterface {
 
     if ('tdp' in staticParams) {
       this.tdp = staticParams?.tdp as number;
-    } else if (this.tdp === 0) {
-      throw new Error(
-        '`tdp` Thermal Design Power not provided. Can not compute energy.'
-      );
     }
 
     // if ('curve' in staticParams && 'points' in staticParams) {
@@ -77,14 +73,12 @@ export class TeadsCurveModel implements IImpactModelInterface {
    * Calculate the total emissions for a list of observations
    *
    * Each Observation require:
-   *  @param {Object[]} observations  RFC3339 datetime string
-   *  @param {string} observations[].datetime RFC3339 datetime string
+   *  @param {Object[]} observations
+   *  @param {string} observations[].timestamp RFC3339 timestamp string
    *  @param {number} observations[].duration observation duration in seconds
-   *  @param {number} observations[].cpu percentage cpu usage
+   *  @param {number} observations[].cpu-util percentage cpu usage
    */
-  async calculate(
-    observations: object | object[] | undefined
-  ): Promise<object> {
+  async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (observations === undefined) {
       throw new Error('Required Parameters not provided');
     } else if (!Array.isArray(observations)) {
@@ -109,19 +103,19 @@ export class TeadsCurveModel implements IImpactModelInterface {
    * requires
    *
    * duration: duration of the observation in seconds
-   * cpu: cpu usage in percentage
-   * datetime: RFC3339 datetime string
+   * cpu-util: cpu usage in percentage
+   * timestamp: RFC3339 timestamp string
    *
    * Uses a spline method on the teads cpu wattage data
    */
   private calculateEnergy(observation: KeyValuePair) {
     if (
       !('duration' in observation) ||
-      !('cpu' in observation) ||
-      !('datetime' in observation)
+      !('cpu-util' in observation) ||
+      !('timestamp' in observation)
     ) {
       throw new Error(
-        'Required Parameters duration,cpu,datetime not provided for observation'
+        'Required Parameters duration,cpu-util,timestamp not provided for observation'
       );
     }
 
@@ -129,7 +123,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
     const duration = observation['duration'];
 
     //    convert cpu usage to percentage
-    const cpu = observation['cpu'];
+    const cpu = observation['cpu-util'];
     if (cpu < 0 || cpu > 100) {
       throw new Error('cpu usage must be between 0 and 100');
     }
@@ -138,6 +132,11 @@ export class TeadsCurveModel implements IImpactModelInterface {
 
     if ('tdp' in observation) {
       tdp = observation['tdp'] as number;
+    }
+    if (tdp === 0) {
+      throw new Error(
+        '`tdp` Thermal Design Power not provided. Can not compute energy.'
+      );
     }
 
     let wattage = 0.0;
