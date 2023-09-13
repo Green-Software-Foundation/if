@@ -1,5 +1,5 @@
-import { IImpactModelInterface } from '../interfaces';
-import { KeyValuePair } from '../../types/boavizta';
+import {IImpactModelInterface} from '../interfaces';
+import {KeyValuePair} from '../../types/boavizta';
 
 export class ENetModel implements IImpactModelInterface {
   // Defined for compatibility. Not used in this model.

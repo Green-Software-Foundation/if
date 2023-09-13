@@ -23,7 +23,7 @@ describe('teads:configure test', () => {
         'e-cpu': 1,
         'e-net': 1,
         'e-mem': 1,
-        'energy': 3,
+        energy: 3,
         timestamp: '2021-01-01T00:00:00Z',
       },
     ]);
