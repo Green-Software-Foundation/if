@@ -1,5 +1,5 @@
-import { IImpactModelInterface } from '../interfaces';
-import { KeyValuePair } from '../../types/boavizta';
+import {IImpactModelInterface} from '../interfaces';
+import {KeyValuePair} from '../../types/boavizta';
 
 export class EAvevaModel implements IImpactModelInterface {
   // Defined for compatibility. Not used in TEADS.
@@ -14,10 +14,10 @@ export class EAvevaModel implements IImpactModelInterface {
   }
 
   /**
-    *  Configures the TEADS Plugin for IEF
-    *  @param {string} name name of the resource
-    *  @param {Object} staticParams static parameters for the resource
-    */
+   *  Configures the TEADS Plugin for IEF
+   *  @param {string} name name of the resource
+   *  @param {Object} staticParams static parameters for the resource
+   */
   async configure(
     name: string,
     staticParams: object | undefined = undefined
@@ -29,7 +29,6 @@ export class EAvevaModel implements IImpactModelInterface {
     }
     return this;
   }
-
 
   /**
    * Calculate the total emissions for a list of observations
