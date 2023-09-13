@@ -3,7 +3,7 @@ import {SciAccentureModel} from './sci-accenture-model';
 
 jest.setTimeout(30000);
 
-describe('eshoppen:configure test', () => {
+describe('accenture:configure test', () => {
   test('initialize and test', async () => {
     const model = await new SciAccentureModel().configure('sci-accenture', {});
     expect(model).toBeInstanceOf(SciAccentureModel);
