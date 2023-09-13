@@ -1,0 +1,140 @@
+name: msft-eshoppen
+description: https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/msft-eShoppen.md
+tags:
+  kind: web
+  complexity: moderate
+  category: cloud
+initialize:
+  models:
+   - name: eshoppen-cpu # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = e-mem)
+      kind: e-cpu
+      path: false
+      verbose: false
+    - name: eshoppen-mem # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = e-mem)
+      kind: e-mem
+      path: false
+      verbose: false
+    - name: eshoppen-net # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = e-mem)
+      kind: e-net
+      path: false
+      verbose: false
+    - name: sci-e # sums e-cpu and e-mem
+      kind: builtin
+      path: ''
+      verbose: false  
+    - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
+      kind: builtin  
+      path: ''
+      verbose: false
+    - name: sci-o # takes in total e and outputs operational emissions
+      kind: builtin      
+      path: ''       
+    - name: sci # sums SCI components and converts to f.unit
+      kind: builtin
+      path: ''
+graph:
+  front-end:
+    pipeline: 
+      - eshoppen-cpu # tdp & cpu -> energy
+      - eshoppen-mem # n-hour * n-chip * tdp-mem * tdp-coeff
+      - sci-m # duration & config -> embodied
+      - sci-e # energy & grid-carbon-intensity & embodied -> carbon
+      - sci-o # e -> c
+      - sci # -> f.unit
+    config:
+      e-mem-tdp:
+        n-hour: 1
+        n-chip: 1
+        tdp-mem: 12.16
+        tdp-coeff: 0.12
+      sci-m:
+        te: 350 # kgCO2eq
+        tir: "duration" # get this value from the duration field
+        el: 126144000 # 4 years in seconds        
+        rr: 1
+        tor: 1
+      sci-o:
+        i: 951 # gCO2e/kWh
+      e-cpu:
+        processor: Intel® Core™ i7-1185G7
+        tdp: 28 # W
+        tdp-coeff: 0.12
+        n-hour: 1
+        n-chip: 1
+      sci:
+        time: hour # signal to convert /s -> /hr
+        factor: 500 # factor to convert per time to per f.unit ()
+    observations:
+      - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+        duration: 3600 # Secs
+        cpu-util: 0
+  app-server:
+    pipeline: # note: no e-mem calc applied here 
+      - eshoppen-cpu # tdp & cpu -> energy
+      - sci-m # duration & config -> embodied
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon  
+    config:
+      sci-m:
+        te: 1205.52 # kgCO2eq
+        tir: duration # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 2 # using cores
+        tor: 26 # the original report has a typo, says 16 but actually has 26 cores.
+      sci-c:
+        i: 951 # gCO2e/kWh
+      e-cpu:
+        processor: Intel® Xeon® Platinum 8272CL
+        tdp: 205
+        tdp-coeff: 0.32
+        n-hour: 1
+        n-chip: 1
+      sci:
+        time: hour # signal to convert /s -> /hr
+        factor: 500 # factor to convert per time to per f.unit ()
+    observations:
+      - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+        duration: 3600
+        cpu-util: 18.392
+  db-server:
+    pipeline: # no e-mem calc applied here
+      - eshoppen-cpu # tdp & cpu & duration-> energy
+      - sci-m # duration & config -> embodied
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon  
+    config:
+      sci-m:
+        te: 1433.12 # kgCO2eq
+        tir: duration # get from the duration field
+        el: 126144000 # 4 years in seconds    
+        rr: 2 # using cores
+        tor: 24 # total cores  
+      sci-c:
+        i: 951
+      e-cpu:
+        n-hour: 1
+        n-chip: 1
+        processor:  Intel® Xeon® Platinum 8160
+        tdp: 150 # W
+        tdp-coeff: 0.32
+      sci:
+        time: hour # signal to convert /s -> /hr
+        factor: 500 # factor to convert per time to per f.unit ()
+    observations:
+      - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+        duration: 3600
+        cpu-util: 10
+    network:
+      pipeline: 
+        - eshoppen-net
+        - sci
+      config:
+        e-net:
+          net-energy: 0.001 #kwh/GB
+        sci:
+          time: hour
+          factor: 500
+      observations:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
+          data-in: 1.16
+          data-out: 14.3
+
