@@ -1,31 +1,31 @@
 import axios from 'axios';
 
-import {IImpactModelInterface} from './interfaces';
-import {CONFIG} from '../config';
+import {IImpactModelInterface} from '../interfaces';
+import {CONFIG} from '../../config';
 
 import {
   BoaviztaInstanceTypes,
   IBoaviztaUsageSCI,
   KeyValuePair,
-} from '../types/boavizta';
+} from '../../types/boavizta';
 
-export {IImpactModelInterface} from './interfaces';
+export {IImpactModelInterface} from '../interfaces';
 
 export {
   BoaviztaInstanceTypes,
   IBoaviztaUsageSCI,
   KeyValuePair,
-} from '../types/boavizta';
+} from '../../types/boavizta';
 
-const {BOAVIZTA} = CONFIG;
-const {CPU_IMPACT_MODEL_ID, CLOUD_IMPACT_MODEL_ID} = BOAVIZTA;
+const {BOAVIZTA: Index} = CONFIG;
+const {CPU_IMPACT_MODEL_ID, CLOUD_IMPACT_MODEL_ID} = Index;
 
 abstract class BoaviztaImpactModel implements IImpactModelInterface {
-  protected authCredentials: object | undefined;
   name: string | undefined;
   sharedParams: object | undefined = undefined;
-  metricType: 'cpu' | 'gpu' | 'ram' = 'cpu';
-  expectedLifespan = 4;
+  metricType: 'cpu-util' | 'gpu-util' | 'ram-util' = 'cpu-util';
+  expectedLifespan = 4 * 365 * 24 * 60 * 60;
+  protected authCredentials: object | undefined;
 
   authenticate(authParams: object) {
     this.authCredentials = authParams;
@@ -39,9 +39,6 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     this.sharedParams = await this.captureStaticParams(staticParams ?? {});
     return this;
   }
-
-  //abstract subs to make compatibility with base interface. allows configure to be defined in base class
-  protected abstract captureStaticParams(staticParams: object): any;
 
   //defines the model identifier
   abstract modelIdentifier(): string;
@@ -57,8 +54,58 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     return Object.values(countries.data);
   }
 
+  // converts the usage from IMPL input to the format required by Boavizta API.
+  transformToBoaviztaUsage(duration: number, metric: number) {
+    // duration is in seconds, convert to hours
+    // metric is between 0 and 1, convert to percentage
+    let usageInput: KeyValuePair = {
+      hours_use_time: duration / 3600.0,
+      time_workload: metric * 100.0,
+    };
+    // convert expected lifespan from seconds to years
+    usageInput['years_life_time'] =
+      this.expectedLifespan / (365.0 * 24.0 * 60.0 * 60.0);
+    usageInput = this.addLocationToUsage(usageInput);
+
+    return usageInput;
+  }
+
+  // Calculates the impact of the given usage
+  async calculate(
+    observations: object | object[] | undefined = undefined
+  ): Promise<any[]> {
+    if (Array.isArray(observations)) {
+      const results: KeyValuePair[] = [];
+
+      for (const observation of observations) {
+        const usageResult = await this.calculateUsageForObservation(
+          observation
+        );
+        results.push(usageResult);
+      }
+
+      return results;
+    } else {
+      throw new Error(
+        'Parameter Not Given: invalid observations parameter. Expecting an array of observations'
+      );
+    }
+  }
+
+  // Adds location to usage if location is defined in sharedParams
+  addLocationToUsage(usageRaw: KeyValuePair) {
+    if (this.sharedParams !== undefined && 'location' in this.sharedParams) {
+      usageRaw['usage_location'] = this.sharedParams['location'];
+    }
+
+    return usageRaw;
+  }
+
+  //abstract subs to make compatibility with base interface. allows configure to be defined in base class
+  protected abstract captureStaticParams(staticParams: object): object;
+
   // extracts information from Boavizta API response to return the impact in the format required by IMPL
-  protected formatResponse(data: any): KeyValuePair {
+  protected formatResponse(data: KeyValuePair): KeyValuePair {
     let m = 0;
     let e = 0;
 
@@ -81,46 +128,12 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     return {embodied_emission: m, energy: e};
   }
 
-  // converts the usage from IMPL input to the format required by Boavizta API.
-  transformToBoaviztaUsage(duration: any, metric: any) {
-    // duration is in seconds, convert to hours
-    // metric is between 0 and 1, convert to percentage
-    let usageInput: KeyValuePair = {
-      hours_use_time: duration / 3600.0,
-      time_workload: metric * 100.0,
-    };
-    usageInput['years_life_time'] = this.expectedLifespan;
-    usageInput = this.addLocationToUsage(usageInput);
-
-    return usageInput;
-  }
-
-  // Calculates the impact of the given usage
-  async calculate(
-    observations: object | object[] | undefined = undefined
-  ): Promise<object> {
-    if (Array.isArray(observations)) {
-      const results = [];
-      for (const observation of observations) {
-        const usageResult = await this.calculateUsageForObservation(
-          observation
-        );
-        results.push(usageResult);
-      }
-      return results;
-    } else {
-      throw new Error(
-        'Parameter Not Given: invalid observations parameter. Expecting an array of observations'
-      );
-    }
-  }
-
   // converts the usage to the format required by Boavizta API.
   protected async calculateUsageForObservation(
     observation: KeyValuePair
   ): Promise<KeyValuePair> {
     if (
-      'datetime' in observation &&
+      'timestamp' in observation &&
       'duration' in observation &&
       this.metricType in observation
     ) {
@@ -129,20 +142,11 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
         observation[this.metricType]
       );
       const usage = (await this.fetchData(usageInput)) as IBoaviztaUsageSCI;
-      const result = {...usage};
-      return result;
+
+      return usage;
     } else {
       throw new Error('Invalid Input: Invalid observations parameter');
     }
-  }
-
-  // Adds location to usage if location is defined in sharedParams
-  addLocationToUsage(usageRaw: KeyValuePair) {
-    if (this.sharedParams !== undefined && 'location' in this.sharedParams) {
-      usageRaw['usage_location'] = this.sharedParams['location'];
-    }
-
-    return usageRaw;
   }
 }
 
@@ -150,42 +154,20 @@ export class BoaviztaCpuImpactModel
   extends BoaviztaImpactModel
   implements IImpactModelInterface
 {
-  private readonly componentType = 'cpu';
   sharedParams: object | undefined = undefined;
   public name: string | undefined;
   public verbose = false;
   public allocation = 'LINEAR';
+  private readonly componentType = 'cpu';
 
   constructor() {
     super();
-    this.metricType = 'cpu';
+    this.metricType = 'cpu-util';
     this.componentType = 'cpu';
   }
 
   modelIdentifier(): string {
     return CPU_IMPACT_MODEL_ID;
-  }
-
-  protected async captureStaticParams(staticParams: object): Promise<object> {
-    if ('verbose' in staticParams) {
-      this.verbose = (staticParams.verbose as boolean) ?? false;
-      staticParams.verbose = undefined;
-    }
-
-    if (!('name' in staticParams)) {
-      throw new Error('Improper configure: Missing name parameter');
-    }
-
-    if (!('core_units' in staticParams)) {
-      throw new Error('Improper configure: Missing core_units parameter');
-    }
-
-    if ('expected_lifespan' in staticParams) {
-      this.expectedLifespan = staticParams.expected_lifespan as number;
-    }
-    this.sharedParams = Object.assign({}, staticParams);
-
-    return this.sharedParams;
   }
 
   async fetchData(usageData: object | undefined): Promise<object> {
@@ -203,6 +185,28 @@ export class BoaviztaCpuImpactModel
 
     return this.formatResponse(response.data);
   }
+
+  protected async captureStaticParams(staticParams: object): Promise<object> {
+    if ('verbose' in staticParams) {
+      this.verbose = (staticParams.verbose as boolean) ?? false;
+      staticParams.verbose = undefined;
+    }
+
+    if (!('processor' in staticParams)) {
+      throw new Error('Improper configure: Missing processor parameter');
+    }
+
+    if (!('core-units' in staticParams)) {
+      throw new Error('Improper configure: Missing core-units parameter');
+    }
+
+    if ('expected-lifespan' in staticParams) {
+      this.expectedLifespan = staticParams['expected-lifespan'] as number;
+    }
+    this.sharedParams = Object.assign({}, staticParams);
+
+    return this.sharedParams;
+  }
 }
 
 export class BoaviztaCloudImpactModel
@@ -217,26 +221,6 @@ export class BoaviztaCloudImpactModel
 
   modelIdentifier(): string {
     return CLOUD_IMPACT_MODEL_ID;
-  }
-
-  protected async captureStaticParams(staticParams: object) {
-    if ('verbose' in staticParams) {
-      this.verbose = (staticParams.verbose as boolean) ?? false;
-      staticParams.verbose = undefined;
-    }
-    // if no valid provider found, throw error
-    await this.validateProvider(staticParams);
-    // if no valid instance_type found, throw error
-    await this.validateInstanceType(staticParams);
-    // if no valid location found, throw error
-    await this.validateLocation(staticParams);
-    if ('expected_lifespan' in staticParams) {
-      this.expectedLifespan = staticParams.expected_lifespan as number;
-    }
-
-    this.sharedParams = Object.assign({}, staticParams);
-
-    return this.sharedParams;
   }
 
   async validateLocation(staticParamsCast: object) {
@@ -331,6 +315,14 @@ export class BoaviztaCloudImpactModel
     }
 
     const dataCast = this.sharedParams as KeyValuePair;
+    for (const key in dataCast) {
+      //   replace - with _ in keys
+      if (key.includes('-')) {
+        const newKey = key.replace(/-/g, '_');
+        dataCast[newKey] = dataCast[key];
+        delete dataCast[key];
+      }
+    }
     dataCast['usage'] = usageData;
     const response = await axios.post(
       `https://api.boavizta.org/v1/cloud/?verbose=${this.verbose}&allocation=${this.allocation}`,
@@ -338,5 +330,25 @@ export class BoaviztaCloudImpactModel
     );
 
     return this.formatResponse(response.data);
+  }
+
+  protected async captureStaticParams(staticParams: object) {
+    if ('verbose' in staticParams) {
+      this.verbose = (staticParams.verbose as boolean) ?? false;
+      staticParams.verbose = undefined;
+    }
+    // if no valid provider found, throw error
+    await this.validateProvider(staticParams);
+    // if no valid instance_type found, throw error
+    await this.validateInstanceType(staticParams);
+    // if no valid location found, throw error
+    await this.validateLocation(staticParams);
+    if ('expected-lifespan' in staticParams) {
+      this.expectedLifespan = staticParams['expected-lifespan'] as number;
+    }
+
+    this.sharedParams = Object.assign({}, staticParams);
+
+    return this.sharedParams;
   }
 }

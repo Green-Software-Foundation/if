@@ -16,19 +16,21 @@
     "typescript-cubic-spline",
     "js-yaml",
     "@types/node",
+    "dayjs",
     "ts-command-line-args"
   ],
   "dependencies": {
-    "@cloud-carbon-footprint/aws": "^0.14.5",
     "@cloud-carbon-footprint/core": "*",
+    "@cloud-carbon-footprint/aws": "*",
     "@types/node": "^20.4.5",
     "axios": "^1.4.0",
+    "dayjs": "^1.11.9",
     "js-yaml": "^4.1.0",
     "node-fetch": "^3.3.1",
     "ts-command-line-args": "^2.5.1",
     "ts-sync-request": "^1.4.1",
     "typescript": "^5.1.6",
-    "typescript-cubic-spline": "*"
+    "typescript-cubic-spline": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "7.22.10",

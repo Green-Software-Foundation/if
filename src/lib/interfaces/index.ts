@@ -9,6 +9,6 @@ export interface IImpactModelInterface {
 
   authenticate(authParams: object): void;
 
-  calculate(observations: object | object[] | undefined): Promise<object>;
+  calculate(observations: object | object[] | undefined): Promise<any[]>;
 }
 export * from './ccf';

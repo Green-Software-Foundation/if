@@ -29,7 +29,8 @@ A Framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environm
 - ✅ [Impl (Impact YAML)](Impl%20(Impact%20YAML).md)
 - 👷🏽‍♂️[Impact Model](Impact%20Model.md)
 - ✅ [Impact Model Plugin](Impact%20Model%20Plugin.md)
-- 🦖 ~~[Computation Pipeline](Computation%20Pipeline.md)~~
+- ✅ [Model Pipeline](Model%20Pipeline.md)
+- 👷🏽‍♂️ [Computation Pipeline](Computation%20Pipeline.md)
 - 👷🏽‍♂️ Computation Pipeline Plugin 🔥
 - 👷🏽‍♂️ [Impact Metric](Impact%20Metric) 🔥
 - ✍🏽 [Rimpl](Rimpl.md) 
