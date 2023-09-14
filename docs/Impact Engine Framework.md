@@ -5,8 +5,9 @@ A Framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environm
 > [!note] Key
 > - ✅ Done
 > - ✍🏽 Draft
-> - 👷🏽‍♂️Todo
-> - 🔥Priority
+> - 👷🏽‍♂️ Todo
+> - 🔥 Priority
+> - 🦖 Outdated
 ## Concepts
 - ✅ [Background](Background.md)
 - ✅ [Motivation](Motivation.md)
