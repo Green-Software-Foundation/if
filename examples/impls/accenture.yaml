@@ -1,0 +1,179 @@
+name:  accenture
+description: sci calculation for accenture model (note need to add app gateway SCI to final calculation)
+tags: 
+initialize:
+  models:
+    - name: add-obs # a model that just copies some values into every observation.
+      kind: builtin
+      path: ''
+    - name: teads-cpu
+      kind: builtin
+      verbose: false
+      path: ''  
+    - name: e-mem # model that calculates e for ram memory usage
+      kind: builtin
+      verbose: false
+      path: ''  
+    - name: pue
+      kind: builtin
+      verbose: false
+      path: ''
+      config:
+        pue: 1.125
+    - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci # a model that sums sci-o + sci-m
+      kind: builtin
+      verbose: false
+      path: '' 
+graph: 
+  vm:
+    pipeline:
+      - teads-cpu # converts cpu-util to energy based on a tdp and a built in set of coeff.
+      - e-mem # converts ram-util to energy based on a tdp and a built in set of coeff.
+      - pue         # multiplies every energy by a pue coeff.
+      - sci-m       # adds embodied to the observation.
+      - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+      - sci         # calculates sci by dividing carbon by `r`
+      - sci-accenture # multiplies sci value by 1.05  to account for the "app-gateway"
+    config:
+      sci-m:
+        te: 458 #kgCo2 @ 4yr lifespan
+        tir: "duration"
+        el: 126144000
+        rr: 1
+        tor: 1
+      teads-cpu:
+        tdp: ??? # what's the TDP for this server
+      add-obs: 
+        grid-ci: 350.861 # Just copies any values under here to the observation as is.
+      sci:
+        time: hour # signal to convert /s -> /hr
+        factor: 89000 # factor to convert per time to per f.unit
+    children:
+      vm1: 
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 15
+            ram-util: 75
+            e: 4.26 #kwh/month
+      vm2: 
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 12
+            ram-util: 72
+            e: 4.26 # kwh/month   
+      vm3: 
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 10
+            ram-util: 65
+            e: 4.21 # kwh/month         
+      vm4: 
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 9
+            ram-util: 70
+            e: 4.21 # kwh/month           
+      vm5: 
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 9
+            ram-util: 70
+            e: 4.21 # kwh/month
+      vm6: 
+        observations: 
+          - timestamp: 2023-07-06T00:00 
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 8
+            ram-util: 65
+            e: 3.29 # kwh/month   
+      vm7: 
+        observations:
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 7
+            ram-util: 72 
+            e: 3.29 # kwh/month
+      vm8: 
+        observations: 
+          - timestamp: 2023-07-06T00:00
+            duration: 2419200 # seconds in a month (7 days * 4 weeks)
+            cpu-util: 6
+            ram-util: 70
+            e: 3.29 # kwh/month       
+  db:
+    pipeline:
+      - add-obs     # add common values to every observertion
+      - teads-cpu # converts cpu-util to energy based on a tdp and a built in set of coeff.
+      - e-mem # converts ram-util to energy
+      - pue         # multiplies every energy by a pue coeff.
+      - sci-m       # adds embodied to the observeation.
+      - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+      - sci         # calculates sci by dividing carbon by `r`
+    config:
+      sci-m:
+        te: 458 #kgCo2 @ 4yr lifespan
+        tir: "duration"
+        el: 126144000
+        rr: 1
+        tor: 1 
+      teads-cpu:
+        tdp: ??? # what's the TDP for this server
+      add-obs: 
+        grid-ci: 350.861 # Just copies any values under here to the observation as is.
+      sci:
+        time: hour # signal to convert /s -> /hr
+        factor: 89000 # factor to convert per time to per f.unit
+    observations:
+      - timestamp: 2023-07-06T00:00
+        duration: 2419200 # seconds in a month (7 days * 4 weeks)
+        cpu-util: 4
+        ram-util: 40
+        e: 2.68 # kwh/month
+  monitoring:
+    pipeline:
+      - add-obs     # add common values to every observertion
+      - teads-cpu # converts cpu-util to energy
+      - e-mem # conmverts ram-util to energy
+      - pue         # multiplies every energy by a pue coeff.
+      - sci-m       # adds embodied to the observeation.
+      - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+      - sci         # calculates sci by dividing carbon by `r`
+    config:
+      sci-m:
+        te: 458 #kgCo2 @ 4yr lifespan
+        tir: "duration"
+        el: 126144000
+        rr: 1
+        tor: 1
+      teads-cpu:
+        tdp: ??? # what's the TDP for this server
+      add-obs: 
+        grid-ci: 350.861 # Just copies any values under here to the observation as is.
+      sci:
+        time: hour # signal to convert /s -> /hr
+        factor: 89000 # factor to convert per time to per f.unit
+    observations: 
+      - timestamp: 2023-07-06T00:00
+        duration: 2419200 # seconds in a month (7 days * 4 weeks)
+        cpu-util: 20
+        ram-util: 0
+        e: 4.62 # kwh/month
+  app-gateway: # note that the app gateway does not have observations, its SCI is assumed equal to 5% of the total emissions
+    pipeline:
+     - sci-accenture
+    config:
+      sci_accenture:
+        factor: 1.05 # multiply sum of other sci components by this value to get overall total SCI in gCO2

@@ -1,4 +1,3 @@
-
 src/**/*.js
 src/**/*.d.ts
 lib/**/*.js
@@ -11,3 +10,4 @@ tsconfig.json
 .jsii
 yarn-error.log
 build
+examples/ompls

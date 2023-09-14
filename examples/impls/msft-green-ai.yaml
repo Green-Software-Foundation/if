@@ -1,0 +1,57 @@
+name: mft-green-ai
+description: "https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/msft-green-ai.md"
+tags:
+  kind: ml
+  complexity: simple
+  category: cloud
+initialize:
+  models:
+    - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: wattime
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci
+      kind: builtin
+      verbose: false
+      path: ''
+graph:
+  DenseNet: # an advanced grouping node
+    pipeline: 
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon
+      - watttime
+      - add-obs
+      - sci
+    config: 
+      sci-o:
+        processor: nvidia-t4-nc16as-v3
+        i: 1 # data not provided in case study
+        m: 0
+      sci:
+        time: s # no time normalization
+        factor: 1 # no unit normalization
+    observations: 
+      - timestamp: 2023-07-06T00:00
+        duration: 1336 # 22.27 min runtime in seconds
+        energy: 17.97
+  InceptionV3: # an advanced grouping node
+    pipeline: 
+      - sci-o # energy & grid-carbon-intensity & embodied -> carbon
+      - watttime
+      - add-obs
+      - sci
+    config: 
+      sci-o:
+        processor: nvidia-t4-nc16as-v3
+        i: 1 # data not provided in case study
+        m: 0
+      sci:
+        time: s # no time normalization
+        factor: 1 # no unit normalization
+    observations: 
+      - timestamp: 2023-07-06T00:00
+        duration: 1205 # 22.27 min runtime in seconds
+        energy: 14.37

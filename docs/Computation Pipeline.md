@@ -4,6 +4,9 @@ abstract: How to process the outputs of an impact graph calculation, enriching i
 ---
 # Computation Pipeline
 
+> [!note] Outdated
+> This document is now outdated and has been superceded by other aspects of this spec esp. the spec around [Rimpl](Rimpl.md). Parts of this doc are still in the processes of being migrated over to other parts of the spec so it's still here for now.
+
 ## Introduction
 
 The execution of a  graph involves 4 phases:
@@ -121,19 +124,19 @@ component:
         location: west-us
         energy: 43 mWh
         grid-intensity: 500 gCO2e / kWh
-        operational-emissions: 4.7g gCO2e
+        operational-carbon: 4.7g gCO2e
       - timestamp: 2023-07-06T15:00
         duration: 5 mins
         location: west-us
         energy: 20 mWh
         grid-intensity: 490 gCO2e / kWh
-        operational-emissions: 2.9 gCO2e       
+        operational-carbon: 2.9 gCO2e       
       - timestamp: 2023-07-06T25:00
         duration: 5 mins
         location: west-us
         energy: 18 mWh  
         grid-intensity: 470 gCO2e / kWh
-        operational-emissions: 2.8g gCO2e         
+        operational-carbon: 2.8g gCO2e         
 ```
 
 ## Normalization
@@ -184,31 +187,31 @@ component:
         location: west-us
         energy: 14.3 mWh
         grid-intensity: 500 gCO2e / kWh
-        operational-emissions: 1.57g gCO2e
+        operational-carbon: 1.57g gCO2e
       - timestamp: 2023-07-06T05:00
         duration: 5 mins
         location: west-us
         energy: 14.3 mWh
         grid-intensity: 500 gCO2e / kWh
-        operational-emissions: 1.57g gCO2e
+        operational-carbon: 1.57g gCO2e
       - timestamp: 2023-07-06T10:00
         duration: 5 mins
         location: west-us
         energy: 14.3 mWh
         grid-intensity: 500 gCO2e / kWh
-        operational-emissions: 1.57g gCO2e                
+        operational-carbon: 1.57g gCO2e                
       - timestamp: 2023-07-06T15:00
         duration: 5 mins
         location: west-us
         energy: 20 mWh
         grid-intensity: 490 gCO2e / kWh
-        operational-emissions: 2.9 gCO2e       
+        operational-carbon: 2.9 gCO2e       
       - timestamp: 2023-07-06T25:00
         duration: 5 mins
         location: west-us
         energy: 18 mWh  
         grid-intensity: 470 gCO2e / kWh
-        operational-emissions: 2.8g gCO2e         
+        operational-carbon: 2.8g gCO2e         
   observations: 
       - timestamp: 2023-07-06T00:00
         duration: 15 mins

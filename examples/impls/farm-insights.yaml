@@ -1,0 +1,29 @@
+name: farm-insights
+description: https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/farm-insights-Raspberry-Pi.md
+tags:
+  kind: iot
+  complexity: simple
+  category: device
+initialize:
+  models:
+    - name: sci-o # takes in total e and outputs operational emissions
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci # a model that sums sci-o + sci-m and applies functional unit
+      kind: builtin
+      verbose: false
+      path: '' 
+graph:
+  rasp-pi: 
+    pipeline: 
+     - sci-o # take e and return e * i (carbon)
+     - sci # take in carbon from sci-o and embodied carbon (m) and return sum in correct time unit (here /yr)
+    config:
+      sci:
+        time: year
+        factor: 1
+    observations:
+      e: 3.47222222222e-07 # 0.03 kwh/day in kwh/s
+      i: 713 # g/kwh
+      m: 1.744038559107052e-03 # they give 55kg/year - here in g/second
