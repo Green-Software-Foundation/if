@@ -20,6 +20,7 @@ import {
   EshoppenNetModel,
   EMemModel,
   SciAccentureModel,
+  EAvevaModel,
 } from '../lib/case-studies';
 import {SciEModel} from '../lib/sci-e';
 
@@ -63,6 +64,8 @@ export class ModelsUniverse {
         return SciAccentureModel;
       case 'emem':
         return EMemModel;
+      case 'aveva':
+        return EAvevaModel;
       default: // cover default
         return BoaviztaCpuImpactModel;
     }
