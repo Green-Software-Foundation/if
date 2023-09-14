@@ -49,7 +49,7 @@ graph:
           tdp-mem: 12.16
           tdp-coeff: 0.12
         sci-m:
-          te: 350 # kgCO2eq
+          te: 350000 # kgCO2eq
           tir: 3600 # == the duration field
           el: 126144000 # 4 years in seconds
           rr: 1
@@ -63,8 +63,8 @@ graph:
           n-hours: 1
           n-chips: 1
         sci:
-          time: hour # signal to convert /s -> /hr
-          factor: 500 # factor to convert per time to per f.unit ()
+          time: '' # signal to convert /s -> /hr
+          factor: 1 # factor to convert per time to per f.unit ()
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 3600 # Secs
@@ -75,13 +75,14 @@ graph:
         - sci-e # sums e components
         - sci-m # duration & config -> embodied
         - sci-o # energy & grid-carbon-intensity & embodied -> carbon
+        - sci
       config:
         sci-m:
-          te: 1205.52 # kgCO2eq
-          tir: 3600 # == duration field
-          el: 126144000 # 4 years in seconds
+          te: 1205520 # kgCO2eq
+          tir: 1 # == duration field
+          el: 35040 # 4 years in seconds
           rr: 2 # using cores
-          tor: 26 # the original report has a typo, says 16 but actually has 26 cores.
+          tor: 16 # the original report has a typo, says 16 but actually has 26 cores.
         sci-o:
           grid-ci: 951 # gCO2e/kWh
         e-cpu:
@@ -91,8 +92,8 @@ graph:
           n-hours: 1
           n-chips: 1
         sci:
-          time: hour # signal to convert /s -> /hr
-          factor: 500 # factor to convert per time to per f.unit ()
+          time: '' # signal to convert /s -> /hr
+          factor: 1 # factor to convert per time to per f.unit ()
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 3600
@@ -107,13 +108,13 @@ graph:
         sci-o:
           grid-ci: 1000 # gCO2e/kWh
         sci-m:
-          te: 1433.12 # kgCO2eq
-          tir: 3600 # == duration field
-          el: 126144000 # 4 years in seconds
+          te: 1433120 # kgCO2eq
+          tir: 1 # == duration field
+          el: 35040 # 4 years in hours
           rr: 2 # using cores
-          tor: 24 # total cores
+          tor: 16 # total cores
         sci-c:
-          i: 951
+          grid-ci: 951
         e-cpu:
           n-hours: 1
           n-chips: 1
@@ -121,8 +122,8 @@ graph:
           tdp: 150 # W
           tdp-coeff: 0.32
         sci:
-          time: hour # signal to convert /s -> /hr
-          factor: 500 # factor to convert per time to per f.unit ()
+          time: '' # signal to convert /s -> /hr
+          factor: 1 # factor to convert per time to per f.unit ()
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 3600
@@ -132,23 +133,23 @@ graph:
       pipeline:
         - eshoppen-net
         - sci-e # sums e components
-        - sci-o
         - sci-m
+        - sci-o
         - sci
       config:
         sci-m:
-          te: 1433.12 # kgCO2eq
-          tir: 3600 # == duration field
-          el: 126144000 # 4 years in seconds
-          rr: 2 # using cores
-          tor: 24 # total cores
+          te: 0 # kgCO2eq
+          tir: 1 # == duration field
+          el: 35040 # 4 years in seconds
+          rr: 1 # using cores
+          tor: 1 # total cores
         e-net:
           net-energy: 0.001 #kwh/GB
         sci:
-          time: hour
-          factor: 500
+          time: ''
+          factor: 1
         sci-o:
-          grid-ci: 1000
+          grid-ci: 951
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 3600
