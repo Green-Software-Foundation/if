@@ -102,4 +102,11 @@ export class ModelsUniverse {
 
     return this.initalizedModels;
   }
+
+  /**
+   * Returns existing model by `name`.
+   */
+  public async getInitializedModel(modelName: string, config: any) {
+    return await this.initalizedModels[modelName](config);
+  }
 }
