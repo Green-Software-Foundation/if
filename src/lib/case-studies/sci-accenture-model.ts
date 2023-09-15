@@ -1,5 +1,11 @@
 import {IImpactModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/boavizta';
+
+import {CONFIG} from '../../config';
+
+import {KeyValuePair} from '../../types/common';
+
+const {MODEL_IDS} = CONFIG;
+const {SCI_ACCENTURE} = MODEL_IDS;
 
 export class SciAccentureModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
@@ -10,21 +16,22 @@ export class SciAccentureModel implements IImpactModelInterface {
     this.authParams = authParams;
   }
 
-  async calculate(
-    observations: object | object[] | undefined
-  ): Promise<object[]> {
+  async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (!Array.isArray(observations)) {
       throw new Error('observations should be an array');
     }
-    observations.map((observation: KeyValuePair) => {
+
+    const tunedObservations = observations.map((observation: KeyValuePair) => {
       observation['sci_total'] = observation['sci'] * 1.05;
+
       if (isNaN(observation['sci'])) {
         throw new Error('sci not computable');
       }
+
       return observation;
     });
 
-    return Promise.resolve(observations);
+    return tunedObservations;
   }
 
   async configure(
@@ -37,6 +44,6 @@ export class SciAccentureModel implements IImpactModelInterface {
   }
 
   modelIdentifier(): string {
-    return 'org.gsf.sci-o';
+    return SCI_ACCENTURE;
   }
 }

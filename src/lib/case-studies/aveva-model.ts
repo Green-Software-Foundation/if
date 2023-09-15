@@ -1,10 +1,14 @@
 import {IImpactModelInterface} from '../interfaces';
 
+import {CONFIG} from '../../config';
+
+const {MODEL_IDS} = CONFIG;
+const {AVEVA} = MODEL_IDS;
+
 export class EAvevaModel implements IImpactModelInterface {
-  // Defined for compatibility. Not used in Aveva.
-  authParams: object | undefined;
-  // name of the data source
-  name: string | undefined;
+  authParams: object | undefined; // Defined for compatibility. Not used in Aveva.
+  name: string | undefined; // name of the data source
+
   /**
    * Defined for compatibility. Not used here.
    */
@@ -13,9 +17,9 @@ export class EAvevaModel implements IImpactModelInterface {
   }
 
   /**
-   *  Configures the Aveva Plugin for IEF
-   *  @param {string} name name of the resource
-   *  @param {Object} staticParams static parameters for the resource
+   * Configures the Aveva Plugin for IEF
+   * @param {string} name name of the resource
+   * @param {Object} staticParams static parameters for the resource
    */
   async configure(
     name: string,
@@ -26,17 +30,17 @@ export class EAvevaModel implements IImpactModelInterface {
     if (staticParams === undefined) {
       throw new Error('Required Parameters not provided');
     }
+
     return this;
   }
 
   /**
-   * Calculate the total emissions for a list of observations
-   *
+   * Calculate the total emissions for a list of observations.
    * Each Observation require:
-   *  @param {Object[]} observations
-   *  @param {number} observations[].time time to normalize to in hours
-   *  @param {number} observations[].pb baseline power
-   *  @param {number} observations[].pl measured power
+   * @param {Object[]} observations
+   * @param {number} observations[].time time to normalize to in hours
+   * @param {number} observations[].pb baseline power
+   * @param {number} observations[].pl measured power
    */
   async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (observations === undefined) {
@@ -44,19 +48,20 @@ export class EAvevaModel implements IImpactModelInterface {
     } else if (!Array.isArray(observations)) {
       throw new Error('Observations must be an array');
     }
-    observations.map(observation => {
+
+    return observations.map(observation => {
       this.configure(this.name!, observation);
       observation['e-cpu'] =
         ((observation['pl'] - observation['pb']) * observation['time']) / 1000;
+
       return observation;
     });
-
-    return Promise.resolve(observations);
   }
+
   /**
    * Returns model identifier
    */
   modelIdentifier() {
-    return 'aveva';
+    return AVEVA;
   }
 }
