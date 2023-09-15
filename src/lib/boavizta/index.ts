@@ -141,7 +141,8 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
 
 export class BoaviztaCpuImpactModel
   extends BoaviztaImpactModel
-  implements IImpactModelInterface {
+  implements IImpactModelInterface
+{
   sharedParams: object | undefined = undefined;
   public name: string | undefined;
   public verbose = false;
@@ -203,7 +204,8 @@ export class BoaviztaCpuImpactModel
 
 export class BoaviztaCloudImpactModel
   extends BoaviztaImpactModel
-  implements IImpactModelInterface {
+  implements IImpactModelInterface
+{
   public sharedParams: object | undefined = undefined;
   public instanceTypes: BoaviztaInstanceTypes = {};
   public name: string | undefined;
@@ -221,9 +223,9 @@ export class BoaviztaCloudImpactModel
       if (!countries.includes(location)) {
         throw new Error(
           "Improper configure: Invalid location parameter: '" +
-          location +
-          "'. Valid values are : " +
-          countries.join(', ')
+            location +
+            "'. Valid values are : " +
+            countries.join(', ')
         );
       }
     }
@@ -257,9 +259,9 @@ export class BoaviztaCloudImpactModel
       ) {
         throw new Error(
           "Improper configure: Invalid instance_type parameter: '" +
-          staticParamsCast.instance_type +
-          "'. Valid values are : " +
-          this.instanceTypes[provider].join(', ')
+            staticParamsCast.instance_type +
+            "'. Valid values are : " +
+            this.instanceTypes[provider].join(', ')
         );
       }
     } else {
@@ -276,9 +278,9 @@ export class BoaviztaCloudImpactModel
       if (!supportedProviders.includes(staticParamsCast.provider as string)) {
         throw new Error(
           "Improper configure: Invalid provider parameter: '" +
-          staticParamsCast.provider +
-          "'. Valid values are : " +
-          supportedProviders.join(', ')
+            staticParamsCast.provider +
+            "'. Valid values are : " +
+            supportedProviders.join(', ')
         );
       }
     }
