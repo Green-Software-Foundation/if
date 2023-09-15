@@ -1,5 +1,5 @@
-import {IImpactModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/boavizta';
+import { IImpactModelInterface } from '../interfaces';
+import { KeyValuePair } from '../../types/boavizta';
 
 export class SciAccentureModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
@@ -17,7 +17,7 @@ export class SciAccentureModel implements IImpactModelInterface {
       throw new Error('observations should be an array');
     }
     observations.map((observation: KeyValuePair) => {
-      observation['sci'] = observation['sci-total'] * 1.05;
+      observation['sci_total'] = observation['sci'] * 1.05;
       if (isNaN(observation['sci'])) {
         throw new Error('sci not computable');
       }
