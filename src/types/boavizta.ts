@@ -3,10 +3,6 @@ export interface IBoaviztaUsageSCI {
   m: number;
 }
 
-export type KeyValuePair = {
-  [key: string]: any;
-};
-
 export type BoaviztaInstanceTypes = {
   [key: string]: string[];
 };

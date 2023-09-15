@@ -17,11 +17,6 @@ export interface IComputeInstance {
   maxVCPUs?: number;
 }
 
-export enum Interpolation {
-  LINEAR = 'linear',
-  SPLINE = 'spline',
-}
-
 export interface ICcfResult {
   energy: number;
   embodied_emissions: number;
