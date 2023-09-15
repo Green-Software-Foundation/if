@@ -1,5 +1,11 @@
 import {IImpactModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/boavizta';
+
+import {CONFIG} from '../../config';
+
+import {KeyValuePair} from '../../types/common';
+
+const {MODEL_IDS} = CONFIG;
+const {SCI_M} = MODEL_IDS;
 
 export class SciMModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
@@ -14,7 +20,8 @@ export class SciMModel implements IImpactModelInterface {
     if (!Array.isArray(observations)) {
       throw new Error('observations should be an array');
     }
-    observations.map((observation: KeyValuePair) => {
+
+    const tunedObservations = observations.map((observation: KeyValuePair) => {
       // te or total-embodied: Total embodied emissions of some underlying hardware.
       // tir or time-reserved: The length of time the hardware is reserved for use by the software.
       // el or expected-lifespan: The anticipated time that the equipment will be installed.
@@ -25,30 +32,38 @@ export class SciMModel implements IImpactModelInterface {
       let el = 0.0;
       let rr = 0.0;
       let tor = 0.0;
-      if (!('te' in observation)) {
+      if (!('te' in observation || 'total-embodied' in observation)) {
         throw new Error('te: total-embodied is missing. Provide in gCO2e');
       }
-      if (!('tir' in observation)) {
+      if (!('tir' in observation || 'time-reserved' in observation)) {
         throw new Error('tir: time-reserved is missing. Provide in seconds');
       }
-      if (!('el' in observation)) {
+      if (!('el' in observation || 'expected-lifespan' in observation)) {
         throw new Error('el: expected-lifespan is missing. Provide in seconds');
       }
-      if (!('rr' in observation)) {
+      if (!('rr' in observation || 'resources-reserved' in observation)) {
         throw new Error(
           'rr: resources-reserved is missing. Provide as a count'
         );
       }
-      if (!('tor' in observation)) {
+      if (!('tor' in observation || 'total-resources' in observation)) {
         throw new Error('tor: total-resources is missing. Provide as a count');
       }
       if (
-        'te' in observation &&
-        'tir' in observation &&
-        'el' in observation &&
-        'rr' in observation &&
-        'tor' in observation
+        ('te' in observation || 'total-embodied' in observation) &&
+        ('tir' in observation || 'time-reserved' in observation) &&
+        ('el' in observation || 'expected-lifespan') &&
+        ('rr' in observation || 'resources-reserved') &&
+        ('tor' in observation || 'total-resources' in observation)
       ) {
+        observation['te'] = observation['te'] ?? observation['total-embodied'];
+        observation['tir'] = observation['tir'] ?? observation['time-reserved'];
+        observation['el'] =
+          observation['el'] ?? observation['expected-lifespan'];
+        observation['rr'] =
+          observation['rr'] ?? observation['resources-reserved'];
+        observation['tor'] =
+          observation['tor'] ?? observation['total-resources'];
         if (typeof observation['te'] === 'string') {
           te = parseFloat(observation[observation['te']]);
         } else if (typeof observation['te'] === 'number') {
@@ -90,7 +105,7 @@ export class SciMModel implements IImpactModelInterface {
       return observation;
     });
 
-    return Promise.resolve(observations);
+    return tunedObservations;
   }
 
   async configure(
@@ -103,6 +118,6 @@ export class SciMModel implements IImpactModelInterface {
   }
 
   modelIdentifier(): string {
-    return 'org.gsf.sci-m';
+    return SCI_M;
   }
 }

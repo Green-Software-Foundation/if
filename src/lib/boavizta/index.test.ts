@@ -97,8 +97,8 @@ describe('cpu:initialize with params', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        embodied_emission: 100,
-        energy: 0.2777777777777778,
+        'embodied-carbon': 100,
+        'e-cpu': 0.2777777777777778,
       },
     ]);
   });
@@ -141,7 +141,7 @@ describe('cloud:initialize with params', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        embodied_emission: 100,
+        'embodied-carbon': 100,
         energy: 0.2777777777777778,
       },
     ]);

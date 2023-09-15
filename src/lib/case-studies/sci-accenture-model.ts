@@ -5,9 +5,9 @@ import {CONFIG} from '../../config';
 import {KeyValuePair} from '../../types/common';
 
 const {MODEL_IDS} = CONFIG;
-const {SCI_O} = MODEL_IDS;
+const {SCI_ACCENTURE} = MODEL_IDS;
 
-export class SciOModel implements IImpactModelInterface {
+export class SciAccentureModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
   staticParams: object | undefined;
   name: string | undefined;
@@ -22,15 +22,12 @@ export class SciOModel implements IImpactModelInterface {
     }
 
     const tunedObservations = observations.map((observation: KeyValuePair) => {
-      if (!('grid-ci' in observation)) {
-        throw new Error('observation missing `grid-ci`');
+      observation['sci_total'] = observation['sci'] * 1.05;
+
+      if (isNaN(observation['sci'])) {
+        throw new Error('sci not computable');
       }
-      if (!('energy' in observation)) {
-        throw new Error('observation missing `energy`');
-      }
-      const grid_ci = parseFloat(observation['grid-ci']);
-      const energy = parseFloat(observation['energy']);
-      observation['operational-carbon'] = grid_ci * energy;
+
       return observation;
     });
 
@@ -47,6 +44,6 @@ export class SciOModel implements IImpactModelInterface {
   }
 
   modelIdentifier(): string {
-    return SCI_O;
+    return SCI_ACCENTURE;
   }
 }

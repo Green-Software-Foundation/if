@@ -5,7 +5,17 @@ import {
   ShellModel,
   SciMModel,
   SciOModel,
+  TeadsAWS,
   TeadsCurveModel,
+  SciModel,
+  EshoppenModel,
+  EshoppenCpuModel,
+  EshoppenMemModel,
+  EshoppenNetModel,
+  EMemModel,
+  SciAccentureModel,
+  EAvevaModel,
+  SciEModel,
 } from '../lib';
 
 import {
@@ -34,12 +44,32 @@ export class ModelsUniverse {
         return BoaviztaCloudImpactModel;
       case 'ccf':
         return CloudCarbonFootprint;
+      case 'teads-aws':
+        return TeadsAWS;
       case 'teads-curve':
         return TeadsCurveModel;
+      case 'sci-e':
+        return SciEModel;
       case 'sci-m':
         return SciMModel;
       case 'sci-o':
         return SciOModel;
+      case 'sci':
+        return SciModel;
+      case 'eshoppen':
+        return EshoppenModel;
+      case 'eshoppen-net':
+        return EshoppenNetModel;
+      case 'eshoppen-cpu':
+        return EshoppenCpuModel;
+      case 'eshoppen-mem':
+        return EshoppenMemModel;
+      case 'sci-accenture':
+        return SciAccentureModel;
+      case 'emem':
+        return EMemModel;
+      case 'aveva':
+        return EAvevaModel;
       default: // cover default
         return BoaviztaCpuImpactModel;
     }

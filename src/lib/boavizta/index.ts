@@ -3,22 +3,11 @@ import axios from 'axios';
 import {IImpactModelInterface} from '../interfaces';
 import {CONFIG} from '../../config';
 
-import {
-  BoaviztaInstanceTypes,
-  IBoaviztaUsageSCI,
-  KeyValuePair,
-} from '../../types/boavizta';
+import {BoaviztaInstanceTypes, IBoaviztaUsageSCI} from '../../types/boavizta';
+import {KeyValuePair} from '../../types/common';
 
-export {IImpactModelInterface} from '../interfaces';
-
-export {
-  BoaviztaInstanceTypes,
-  IBoaviztaUsageSCI,
-  KeyValuePair,
-} from '../../types/boavizta';
-
-const {BOAVIZTA: Index} = CONFIG;
-const {CPU_IMPACT_MODEL_ID, CLOUD_IMPACT_MODEL_ID} = Index;
+const {MODEL_IDS} = CONFIG;
+const {BOAVIZTA_CPU, BOAVIZTA_CLOUD} = MODEL_IDS;
 
 abstract class BoaviztaImpactModel implements IImpactModelInterface {
   name: string | undefined;
@@ -125,7 +114,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
       e = data['pe']['use'] / 3.6;
     }
 
-    return {embodied_emission: m, energy: e};
+    return {'embodied-carbon': m, energy: e};
   }
 
   // converts the usage to the format required by Boavizta API.
@@ -167,7 +156,7 @@ export class BoaviztaCpuImpactModel
   }
 
   modelIdentifier(): string {
-    return CPU_IMPACT_MODEL_ID;
+    return BOAVIZTA_CPU;
   }
 
   async fetchData(usageData: object | undefined): Promise<object> {
@@ -183,7 +172,11 @@ export class BoaviztaCpuImpactModel
       dataCast
     );
 
-    return this.formatResponse(response.data);
+    const result = this.formatResponse(response.data);
+    return {
+      'e-cpu': result.energy,
+      'embodied-carbon': result['embodied-carbon'],
+    };
   }
 
   protected async captureStaticParams(staticParams: object): Promise<object> {
@@ -220,7 +213,7 @@ export class BoaviztaCloudImpactModel
   public allocation = 'LINEAR';
 
   modelIdentifier(): string {
-    return CLOUD_IMPACT_MODEL_ID;
+    return BOAVIZTA_CLOUD;
   }
 
   async validateLocation(staticParamsCast: object) {
@@ -352,3 +345,10 @@ export class BoaviztaCloudImpactModel
     return this.sharedParams;
   }
 }
+
+/**
+ * For JSII.
+ */
+export {IImpactModelInterface} from '../interfaces';
+export {BoaviztaInstanceTypes, IBoaviztaUsageSCI} from '../../types/boavizta';
+export {KeyValuePair} from '../../types/common';

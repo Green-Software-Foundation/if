@@ -1,19 +1,20 @@
-import {IImpactModelInterface} from '../interfaces';
 import Spline from 'typescript-cubic-spline';
+
 import * as AWS_INSTANCES from './aws-instances.json';
 import * as AWS_EMBODIED from './aws-embodied.json';
-import {KeyValuePair} from '../../types/boavizta';
 
-export enum Interpolation {
-  SPLINE = 'spline',
-  LINEAR = 'linear',
-}
+import {IImpactModelInterface} from '../interfaces';
+
+import {CONFIG} from '../../config';
+
+import {KeyValuePair, Interpolation} from '../../types/common';
+
+const {MODEL_IDS} = CONFIG;
+const {TEADS_AWS} = MODEL_IDS;
 
 export class TeadsAWS implements IImpactModelInterface {
-  // Defined for compatibility. Not used in TEADS.
-  authParams: object | undefined;
-  // name of the data source
-  name: string | undefined;
+  authParams: object | undefined; // Defined for compatibility. Not used in TEADS.
+  name: string | undefined; // name of the data source
   // compute instances grouped by the provider with usage data
   private computeInstances: {
     [key: string]: KeyValuePair;
@@ -110,7 +111,7 @@ export class TeadsAWS implements IImpactModelInterface {
    * Returns model identifier
    */
   modelIdentifier(): string {
-    return 'teads.cloud.sci';
+    return TEADS_AWS;
   }
 
   /**
@@ -164,16 +165,10 @@ export class TeadsAWS implements IImpactModelInterface {
       );
     }
 
-    //    duration is in seconds
-    const duration = observation['duration'];
+    const duration = observation['duration']; // Duration is in seconds.
+    const cpu = observation['cpu-util']; // Convert cpu usage to percentage.
 
-    //    convert cpu usage to percentage
-    const cpu = observation['cpu-util'];
-
-    //  get the wattage for the instance type
-
-    const x = [0, 10, 50, 100];
-
+    const x = [0, 10, 50, 100]; // Get the wattage for the instance type.
     const y: number[] = [
       this.computeInstances[this.instanceType].consumption.idle ?? 0,
       this.computeInstances[this.instanceType].consumption.tenPercent ?? 0,
