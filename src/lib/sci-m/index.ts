@@ -1,5 +1,11 @@
 import {IImpactModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/boavizta';
+
+import {CONFIG} from '../../config';
+
+import {KeyValuePair} from '../../types/common';
+
+const {MODEL_IDS} = CONFIG;
+const {SCI_M} = MODEL_IDS;
 
 export class SciMModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
@@ -14,7 +20,8 @@ export class SciMModel implements IImpactModelInterface {
     if (!Array.isArray(observations)) {
       throw new Error('observations should be an array');
     }
-    observations.map((observation: KeyValuePair) => {
+
+    const tunedObservations = observations.map((observation: KeyValuePair) => {
       // te or total-embodied: Total embodied emissions of some underlying hardware.
       // tir or time-reserved: The length of time the hardware is reserved for use by the software.
       // el or expected-lifespan: The anticipated time that the equipment will be installed.
@@ -98,7 +105,7 @@ export class SciMModel implements IImpactModelInterface {
       return observation;
     });
 
-    return Promise.resolve(observations);
+    return tunedObservations;
   }
 
   async configure(
@@ -111,6 +118,6 @@ export class SciMModel implements IImpactModelInterface {
   }
 
   modelIdentifier(): string {
-    return 'org.gsf.sci-m';
+    return SCI_M;
   }
 }

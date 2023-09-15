@@ -1,12 +1,15 @@
 import {IImpactModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/boavizta';
+
+import {CONFIG} from '../../config';
+
+import {KeyValuePair} from '../../types/common';
+
+const {MODEL_IDS} = CONFIG;
+const {SCI_E} = MODEL_IDS;
 
 export class SciEModel implements IImpactModelInterface {
-  // Defined for compatibility. Not used in thi smodel.
-  authParams: object | undefined;
-  // name of the data source
-  name: string | undefined;
-  // tdp of the chip being measured
+  authParams: object | undefined; // Defined for compatibility. Not used in thi smodel.
+  name: string | undefined; // name of the data source
 
   /**
    * Defined for compatibility. Not used in e-net.
@@ -16,9 +19,9 @@ export class SciEModel implements IImpactModelInterface {
   }
 
   /**
-   *  Configures the sci-e Plugin for IEF
-   *  @param {string} name name of the resource
-   *  @param {Object} staticParams static parameters for the resource
+   * Configures the sci-e Plugin for IEF
+   * @param {string} name name of the resource
+   * @param {Object} staticParams static parameters for the resource
    */
   async configure(
     name: string,
@@ -34,11 +37,11 @@ export class SciEModel implements IImpactModelInterface {
   }
 
   /**
-   * Calculate the total emissions for a list of observations
+   * Calculate the total emissions for a list of observations.
    *
    * Each Observation require:
-   *  @param {Object[]} observations
-   *  @param {string} observations[].timestamp RFC3339 timestamp string
+   * @param {Object[]} observations
+   * @param {string} observations[].timestamp RFC3339 timestamp string
    */
   async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (observations === undefined) {
@@ -46,9 +49,11 @@ export class SciEModel implements IImpactModelInterface {
     } else if (!Array.isArray(observations)) {
       throw new Error('Observations must be an array');
     }
+
     return observations.map((observation: KeyValuePair) => {
       this.configure(this.name!, observation);
       observation['energy'] = this.calculateEnergy(observation);
+
       return observation;
     });
   }
@@ -57,7 +62,7 @@ export class SciEModel implements IImpactModelInterface {
    * Returns model identifier
    */
   modelIdentifier(): string {
-    return 'sci-e';
+    return SCI_E;
   }
 
   /**
@@ -85,7 +90,7 @@ export class SciEModel implements IImpactModelInterface {
       );
     }
 
-    // if the user gives a negative value it will default to zero
+    // If the user gives a negative value it will default to zero.
     if ('e-cpu' in observation && observation['e-cpu'] > 0) {
       e_cpu = observation['e-cpu'];
     }
