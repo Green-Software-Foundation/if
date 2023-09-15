@@ -1,7 +1,14 @@
-import {IImpactModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/boavizta';
 import axios from 'axios';
 import * as dayjs from 'dayjs';
+
+import {IImpactModelInterface} from '../interfaces';
+
+import {CONFIG} from '../../config';
+
+import {KeyValuePair} from '../../types/common';
+
+const {MODEL_IDS} = CONFIG;
+const {WATT_TIME} = MODEL_IDS;
 
 export class WattTimeGridEmissions implements IImpactModelInterface {
   authParams: object | undefined = undefined;
@@ -20,15 +27,19 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
         'username' in authParams ? (authParams['username'] as string) : '';
       let password =
         'password' in authParams ? (authParams['password'] as string) : '';
+
       if (username.startsWith('ENV_')) {
         username = process.env[username.slice(4)] ?? '';
       }
+
       if (password.startsWith('ENV_')) {
         password = process.env[password.slice(4)] ?? '';
       }
+
       if (username === '' || password === '') {
         throw new Error('Missing username or password & token');
       }
+
       const tokenResponse = await axios.get(`${this.baseUrl}/login`, {
         auth: {
           username,
@@ -43,14 +54,16 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
     if (!Array.isArray(observations)) {
       throw new Error('observations should be an array');
     }
-    observations = await Promise.all(
+
+    const tunedObservations = await Promise.all(
       observations.map(async (observation: KeyValuePair) => {
         const result = await this.fetchData(observation);
+
         return result;
       })
     );
 
-    return Promise.resolve(observations as any[]);
+    return tunedObservations;
   }
 
   async fetchData(observation: KeyValuePair) {
@@ -74,6 +87,7 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
     if (duration > 32 * 24 * 60 * 60) {
       throw new Error('duration is too long');
     }
+
     const params = {
       latitude: observation.location.latitude,
       longitude: observation.location.longitude,
@@ -127,6 +141,6 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
   }
 
   modelIdentifier(): string {
-    return 'org.wattime.grid';
+    return WATT_TIME;
   }
 }
