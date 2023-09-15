@@ -1,5 +1,5 @@
-import { IImpactModelInterface } from '../interfaces';
-import { KeyValuePair } from '../../types/boavizta';
+import {IImpactModelInterface} from '../interfaces';
+import {KeyValuePair} from '../../types/boavizta';
 
 export class SciAccentureModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
