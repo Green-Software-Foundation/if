@@ -5,8 +5,10 @@ import {
   ShellModel,
   SciMModel,
   SciOModel,
+  TeadsAWS,
   TeadsCurveModel,
   SciModel,
+  EshoppenModel,
   EshoppenCpuModel,
   EshoppenMemModel,
   EshoppenNetModel,
@@ -42,6 +44,8 @@ export class ModelsUniverse {
         return BoaviztaCloudImpactModel;
       case 'ccf':
         return CloudCarbonFootprint;
+      case 'teads-aws':
+        return TeadsAWS;
       case 'teads-curve':
         return TeadsCurveModel;
       case 'sci-e':
@@ -52,6 +56,8 @@ export class ModelsUniverse {
         return SciOModel;
       case 'sci':
         return SciModel;
+      case 'eshoppen':
+        return EshoppenModel;
       case 'eshoppen-net':
         return EshoppenNetModel;
       case 'eshoppen-cpu':
