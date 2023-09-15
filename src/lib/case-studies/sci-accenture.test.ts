@@ -10,13 +10,13 @@ describe('accenture:configure test', () => {
     await expect(
       model.calculate([
         {
-          'sci-total': 1,
+          sci: 1,
         },
       ])
     ).resolves.toStrictEqual([
       {
-        'sci-total': 1,
-        sci: 1.05,
+        sci: 1,
+        sci_total: 1.05,
       },
     ]);
     await expect(model.calculate([{}])).rejects.toThrowError();
