@@ -1,11 +1,14 @@
 import {INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING} from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
+import Spline from 'typescript-cubic-spline';
+
 import {
   ICcfResult,
   IComputeInstance,
   IImpactModelInterface,
-  Interpolation,
 } from '../interfaces';
-import Spline from 'typescript-cubic-spline';
+
+import {CONFIG} from '../../config';
+
 import * as AWS_INSTANCES from './aws-instances.json';
 import * as GCP_INSTANCES from './gcp-instances.json';
 import * as AZURE_INSTANCES from './azure-instances.json';
@@ -15,7 +18,11 @@ import * as AZURE_USE from './azure-use.json';
 import * as GCP_EMBODIED from './gcp-embodied.json';
 import * as AWS_EMBODIED from './aws-embodied.json';
 import * as AZURE_EMBODIED from './azure-embodied.json';
-import {KeyValuePair} from '../../types/boavizta';
+
+import {KeyValuePair, Interpolation} from '../../types/common';
+
+const {MODEL_IDS} = CONFIG;
+const {CCF} = MODEL_IDS;
 
 export class CloudCarbonFootprint implements IImpactModelInterface {
   // Defined for compatibility. Not used in CCF.
@@ -219,7 +226,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
    * Returns model identifier
    */
   modelIdentifier(): string {
-    return 'ccf.cloud.sci';
+    return CCF;
   }
 
   /**
