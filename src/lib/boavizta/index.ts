@@ -125,7 +125,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
       e = data['pe']['use'] / 3.6;
     }
 
-    return {embodied_emission: m, energy: e};
+    return {'embodied-carbon': m, energy: e};
   }
 
   // converts the usage to the format required by Boavizta API.
@@ -152,8 +152,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
 
 export class BoaviztaCpuImpactModel
   extends BoaviztaImpactModel
-  implements IImpactModelInterface
-{
+  implements IImpactModelInterface {
   sharedParams: object | undefined = undefined;
   public name: string | undefined;
   public verbose = false;
@@ -183,7 +182,11 @@ export class BoaviztaCpuImpactModel
       dataCast
     );
 
-    return this.formatResponse(response.data);
+    const result = this.formatResponse(response.data);
+    return {
+      'e-cpu': result.energy,
+      'embodied-carbon': result['embodied-carbon'],
+    };
   }
 
   protected async captureStaticParams(staticParams: object): Promise<object> {
@@ -211,8 +214,7 @@ export class BoaviztaCpuImpactModel
 
 export class BoaviztaCloudImpactModel
   extends BoaviztaImpactModel
-  implements IImpactModelInterface
-{
+  implements IImpactModelInterface {
   public sharedParams: object | undefined = undefined;
   public instanceTypes: BoaviztaInstanceTypes = {};
   public name: string | undefined;
@@ -230,9 +232,9 @@ export class BoaviztaCloudImpactModel
       if (!countries.includes(location)) {
         throw new Error(
           "Improper configure: Invalid location parameter: '" +
-            location +
-            "'. Valid values are : " +
-            countries.join(', ')
+          location +
+          "'. Valid values are : " +
+          countries.join(', ')
         );
       }
     }
@@ -266,9 +268,9 @@ export class BoaviztaCloudImpactModel
       ) {
         throw new Error(
           "Improper configure: Invalid instance_type parameter: '" +
-            staticParamsCast.instance_type +
-            "'. Valid values are : " +
-            this.instanceTypes[provider].join(', ')
+          staticParamsCast.instance_type +
+          "'. Valid values are : " +
+          this.instanceTypes[provider].join(', ')
         );
       }
     } else {
@@ -285,9 +287,9 @@ export class BoaviztaCloudImpactModel
       if (!supportedProviders.includes(staticParamsCast.provider as string)) {
         throw new Error(
           "Improper configure: Invalid provider parameter: '" +
-            staticParamsCast.provider +
-            "'. Valid values are : " +
-            supportedProviders.join(', ')
+          staticParamsCast.provider +
+          "'. Valid values are : " +
+          supportedProviders.join(', ')
         );
       }
     }
