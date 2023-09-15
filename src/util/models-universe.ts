@@ -6,6 +6,14 @@ import {
   SciMModel,
   SciOModel,
   TeadsCurveModel,
+  SciModel,
+  EshoppenCpuModel,
+  EshoppenMemModel,
+  EshoppenNetModel,
+  EMemModel,
+  SciAccentureModel,
+  EAvevaModel,
+  SciEModel,
 } from '../lib';
 
 import {
@@ -13,16 +21,6 @@ import {
   ImplInitializeModel,
   InitalizedModels,
 } from '../types/models-universe';
-import {SciModel} from '../lib/sci';
-import {
-  EshoppenCpuModel,
-  EshoppenMemModel,
-  EshoppenNetModel,
-  EMemModel,
-  SciAccentureModel,
-  EAvevaModel,
-} from '../lib/case-studies';
-import {SciEModel} from '../lib/sci-e';
 
 /**
  * Models Initialization Lifecycle.
