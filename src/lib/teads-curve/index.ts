@@ -1,27 +1,22 @@
-import {IImpactModelInterface} from '../interfaces';
 import Spline from 'typescript-cubic-spline';
-import {KeyValuePair} from '../../types/boavizta';
 
-export enum Interpolation {
-  SPLINE = 'spline',
-  LINEAR = 'linear',
-}
+import {IImpactModelInterface} from '../interfaces';
+
+import {CONFIG} from '../../config';
+
+import {KeyValuePair, Interpolation} from '../../types/common';
+
+const {MODEL_IDS} = CONFIG;
+const {TEADS_CURVE} = MODEL_IDS;
 
 export class TeadsCurveModel implements IImpactModelInterface {
-  // Defined for compatibility. Not used in TEADS.
-  authParams: object | undefined;
-  // name of the data source
-  name: string | undefined;
-  // tdp of the chip being measured
-  tdp = 0;
-  // default power curve provided by the Teads Team
-  curve: number[] = [0.12, 0.32, 0.75, 1.02];
-  // default percentage points
-  points: number[] = [0, 10, 50, 100];
-  // spline interpolation of the power curve
-  spline: any = new Spline(this.points, this.curve);
-  // interpolation method
-  interpolation: Interpolation = Interpolation.SPLINE;
+  authParams: object | undefined; // Defined for compatibility. Not used in TEADS.
+  name: string | undefined; // Name of the data source.
+  tdp = 0; // `tdp` of the chip being measured.
+  curve: number[] = [0.12, 0.32, 0.75, 1.02]; // Default power curve provided by the Teads Team.
+  points: number[] = [0, 10, 50, 100]; // Default percentage points.
+  spline: any = new Spline(this.points, this.curve); // Spline interpolation of the power curve.
+  interpolation: Interpolation = Interpolation.SPLINE; // Interpolation method.
 
   /**
    * Defined for compatibility. Not used in TEADS.
@@ -31,11 +26,11 @@ export class TeadsCurveModel implements IImpactModelInterface {
   }
 
   /**
-   *  Configures the TEADS Plugin for IEF
-   *  @param {string} name name of the resource
-   *  @param {Object} staticParams static parameters for the resource
-   *  @param {number} staticParams.tdp Thermal Design Power in Watts
-   *  @param {Interpolation} staticParams.interpolation Interpolation method
+   * Configures the TEADS Plugin for IEF
+   * @param {string} name name of the resource
+   * @param {Object} staticParams static parameters for the resource
+   * @param {number} staticParams.tdp Thermal Design Power in Watts
+   * @param {Interpolation} staticParams.interpolation Interpolation method
    */
   async configure(
     name: string,
@@ -73,10 +68,10 @@ export class TeadsCurveModel implements IImpactModelInterface {
    * Calculate the total emissions for a list of observations
    *
    * Each Observation require:
-   *  @param {Object[]} observations
-   *  @param {string} observations[].timestamp RFC3339 timestamp string
-   *  @param {number} observations[].duration observation duration in seconds
-   *  @param {number} observations[].cpu-util percentage cpu usage
+   * @param {Object[]} observations
+   * @param {string} observations[].timestamp RFC3339 timestamp string
+   * @param {number} observations[].duration observation duration in seconds
+   * @param {number} observations[].cpu-util percentage cpu usage
    */
   async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (observations === undefined) {
@@ -95,7 +90,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
    * Returns model identifier
    */
   modelIdentifier(): string {
-    return 'teads.curve';
+    return TEADS_CURVE;
   }
 
   /**
@@ -178,3 +173,8 @@ export class TeadsCurveModel implements IImpactModelInterface {
     return (wattage * duration) / 3600 / 1000;
   }
 }
+
+/**
+ * For JSII.
+ */
+export {KeyValuePair, Interpolation} from '../../types/common';

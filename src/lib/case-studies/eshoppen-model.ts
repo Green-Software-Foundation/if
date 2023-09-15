@@ -1,5 +1,13 @@
 import {IImpactModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/boavizta';
+
+import {CONFIG} from '../../config';
+
+import {KeyValuePair} from '../../types/common';
+
+export {KeyValuePair} from '../../types/common';
+
+const {MODEL_IDS} = CONFIG;
+const {ESHOPPEN, ESHOPPEN_CPU, ESHOPPEN_MEM, ESHOPPEN_NET} = MODEL_IDS;
 
 export class EshoppenModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
@@ -11,13 +19,12 @@ export class EshoppenModel implements IImpactModelInterface {
     this.authParams = authParams;
   }
 
-  async calculate(
-    observations: object | object[] | undefined
-  ): Promise<object[]> {
+  async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (!Array.isArray(observations)) {
       throw new Error('observations should be an array');
     }
-    observations.map((observation: KeyValuePair) => {
+
+    const tunedObservations = observations.map((observation: KeyValuePair) => {
       switch (this.modelType) {
         case 'e-cpu': {
           //     e-cpu = n-hours * n-chips * tdp * tdp-coeff
@@ -30,6 +37,7 @@ export class EshoppenModel implements IImpactModelInterface {
           if (isNaN(observation['e-cpu'])) {
             throw new Error('e-cpu not computable');
           }
+
           break;
         }
         case 'e-mem': {
@@ -40,9 +48,11 @@ export class EshoppenModel implements IImpactModelInterface {
               observation['tdp-mem'] *
               observation['tdp-coeff']) /
             1000;
+
           if (isNaN(observation['e-mem'])) {
             throw new Error('e-mem not computable');
           }
+
           break;
         }
         case 'e-net': {
@@ -51,28 +61,33 @@ export class EshoppenModel implements IImpactModelInterface {
             ((observation['data-in'] + observation['data-out']) *
               observation['net-energy']) /
             1000;
+
           if (isNaN(observation['e-net'])) {
             throw new Error('e-net not computable');
           }
+
           break;
         }
         case 'e-sum': {
           // e-sum = e-cpu + e-mem + e-net
           observation['energy'] =
             observation['e-cpu'] + observation['e-mem'] + observation['e-net'];
+
           if (isNaN(observation['energy'])) {
             throw new Error('energy not computable');
           }
+
           break;
         }
         default: {
           throw new Error('Unknown msft-eshoppen model type');
         }
       }
+
       return observation;
     });
 
-    return Promise.resolve(observations);
+    return tunedObservations;
   }
 
   async configure(
@@ -100,7 +115,7 @@ export class EshoppenModel implements IImpactModelInterface {
   }
 
   modelIdentifier(): string {
-    return 'org.gsf.eshoppen';
+    return ESHOPPEN;
   }
 }
 
@@ -111,7 +126,7 @@ export class EshoppenCpuModel extends EshoppenModel {
   }
 
   modelIdentifier(): string {
-    return 'org.gsf.eshoppen-cpu';
+    return ESHOPPEN_CPU;
   }
 }
 
@@ -121,8 +136,8 @@ export class EshoppenMemModel extends EshoppenModel {
     this.modelType = 'e-mem';
   }
 
-  static modelIdentifier(): string {
-    return 'org.gsf.eshoppen-mem';
+  modelIdentifier(): string {
+    return ESHOPPEN_MEM;
   }
 }
 
@@ -133,6 +148,6 @@ export class EshoppenNetModel extends EshoppenModel {
   }
 
   modelIdentifier(): string {
-    return 'org.gsf.eshoppen-net';
+    return ESHOPPEN_NET;
   }
 }

@@ -1,5 +1,11 @@
 import {IImpactModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/boavizta';
+
+import {CONFIG} from '../../config';
+
+import {KeyValuePair} from '../../types/common';
+
+const {MODEL_IDS} = CONFIG;
+const {SCI_O} = MODEL_IDS;
 
 export class SciOModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
@@ -14,7 +20,8 @@ export class SciOModel implements IImpactModelInterface {
     if (!Array.isArray(observations)) {
       throw new Error('observations should be an array');
     }
-    observations.map((observation: KeyValuePair) => {
+
+    const tunedObservations = observations.map((observation: KeyValuePair) => {
       if (!('grid-ci' in observation)) {
         throw new Error('observation missing `grid-ci`');
       }
@@ -27,7 +34,7 @@ export class SciOModel implements IImpactModelInterface {
       return observation;
     });
 
-    return Promise.resolve(observations);
+    return tunedObservations;
   }
 
   async configure(
@@ -40,6 +47,6 @@ export class SciOModel implements IImpactModelInterface {
   }
 
   modelIdentifier(): string {
-    return 'org.gsf.sci-o';
+    return SCI_O;
   }
 }
