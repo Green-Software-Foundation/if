@@ -22,7 +22,7 @@ graph:
         - sci-o
       config:
         sci-m:
-          te: 0.251 # kgCO2eq
+          te: 251 # gCO2eq
           tir: 3600 # 1 hour in s
           el: 126144000 # 4 years in seconds    
           rr: 1 
@@ -42,7 +42,7 @@ graph:
         - sci-o # energy & grid-carbon-intensity & embodied -> carbon
       config:
         sci-m:
-          te: 0.251 # kgCO2eq
+          te: 251 # gCO2eq
           tir: 3600 # get from the duration field
           el: 126144000 # 4 years in seconds    
           rr: 1
@@ -54,28 +54,28 @@ graph:
           observations:
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e: 5.41e-4 #kwh     
+              e-net: 5.41e-4 #kwh     
               grid-ci: 951 # gCO2e/kWh
               energy: 0.0004554559930455524
         switch-2:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e: 0 # no traffic at all
+              e-net: 0 # no traffic at all
               grid-ci: 951 # gCO2e/kWh
               energy: 0.0004554559930455524
         switch-3:
           observations:
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e: 6.37e-4 #kwh
+              e-net: 6.37e-4 #kwh
               grid-ci: 951 # gCO2e/kWh
               energy: 0.0004554559930455524
         switch-4:
           observations:
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e: 7.60e-9 #kwh
+              e-net: 7.60e-9 #kwh
               grid-ci: 951 # gCO2e/kWh
               energy: 0.0004554559930455524
     db-servers:
@@ -84,7 +84,7 @@ graph:
         - sci-o # energy & grid-carbon-intensity & embodied -> carbon
       config:
         sci-m:
-          te: 6270 # kgCO2eq
+          te: 6270000 # gCO2eq
           tir: duration # get from the duration field
           el: 126144000 # 4 years in seconds
           rr: 1
@@ -95,14 +95,14 @@ graph:
         db-server1:
           observations:
             - timestamp: 2023-07-06T00:00
-              e: 0.258
+              e-cpu: 0.258
               duration: 1 #s
               grid-ci: 951 # gCO2e/kWh
               energy: 0.0004554559930455524
         db-server2:
           observations:
             - timestamp: 2023-07-06T00:00
-              e: 0.193
+              e-cpu: 0.193
               duration: 1 #s
               grid-ci: 951 # gCO2e/kWh
               energy: 0.0004554559930455524
@@ -112,7 +112,7 @@ graph:
         - sci-o # energy & grid-carbon-intensity & embodied -> carbon
       config:
         sci-m:
-          te: 6270 # kgCO2eq
+          te: 6270000 # gCO2eq
           tir: duration # get from the duration field
           el: 126144000 # 4 years in seconds    
           rr: 1 
@@ -124,14 +124,14 @@ graph:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e: 0.149
+              e-cpu: 0.149
               grid-ci: 951 # gCO2e/kWh
               energy: 0.0004554559930455524
         app-server2:
           observations:  
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e: 0.147
+              e-cpu: 0.147
               grid-ci: 951 # gCO2e/kWh
               energy: 0.0004554559930455524
     web-servers:
@@ -140,7 +140,7 @@ graph:
         - sci-o # energy & grid-carbon-intensity & embodied -> carbon 
       config:
         sci-m:
-          te: 6270 # kgCO2eq
+          te: 6270000 # gCO2eq
           tir: duration # get from the duration field
           el: 126144000 # 4 years in seconds    
           rr: 1 
@@ -152,13 +152,13 @@ graph:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e: 0.139
+              e-cpu: 0.139
               grid-ci: 951 # gCO2e/kWh
               energy: 0.0004554559930455524
         web-server2:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e: 0.116
+              e-cpu: 0.116
               grid-ci: 951 # gCO2e/kWh
               energy: 0.0004554559930455524
