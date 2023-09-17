@@ -5,10 +5,10 @@ import {checkIfFileIsYaml} from './yaml';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {ImplProcessArgs} from '../types/process-args';
+import {RimplProcessArgs} from '../types/process-args';
 
-const {VALIDATION} = CONFIG;
-const {IMPL_CLI} = VALIDATION;
+const {RIMPL} = CONFIG;
+const {ARGS, HELP} = RIMPL;
 
 const {WRONG_CLI_ARGUMENT} = STRINGS;
 
@@ -16,7 +16,7 @@ const {WRONG_CLI_ARGUMENT} = STRINGS;
  * Validates process arguments
  * @private
  */
-const validateAndParseProcessArgs = () => parse<ImplProcessArgs>(IMPL_CLI);
+const validateAndParseProcessArgs = () => parse<RimplProcessArgs>(ARGS);
 
 /**
  * Prepends process path to fiven `filePath`.
@@ -33,13 +33,20 @@ const prependFullFilePath = (filePath: string) => {
  * Otherwise throws error.
  */
 export const parseProcessArgument = () => {
-  const {impl, ompl} = validateAndParseProcessArgs();
+  const {impl, ompl, help} = validateAndParseProcessArgs();
 
-  if (checkIfFileIsYaml(impl)) {
-    return {
-      inputPath: prependFullFilePath(impl),
-      ...(ompl && {outputPath: prependFullFilePath(ompl)}),
-    };
+  if (help) {
+    console.log(HELP);
+    return;
+  }
+
+  if (impl) {
+    if (checkIfFileIsYaml(impl)) {
+      return {
+        inputPath: prependFullFilePath(impl),
+        ...(ompl && {outputPath: prependFullFilePath(ompl)}),
+      };
+    }
   }
 
   throw Error(WRONG_CLI_ARGUMENT);
