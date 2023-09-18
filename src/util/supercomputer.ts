@@ -36,12 +36,19 @@ export class Supercomputer {
   /**
    * Adds config entries to each obsercation object passed.
    */
-  private enrichObservations(observations: any[], config: any[]) {
+  private enrichObservations(
+    observations: any[],
+    config: any[],
+    nestedConfig: any[]
+  ) {
     const configValues = this.flattenConfigValues(config);
+    const nestedConfigValues =
+      nestedConfig && this.flattenConfigValues(nestedConfig);
 
     return observations.map((observation: any) => ({
       ...observation,
       ...configValues,
+      ...nestedConfigValues,
     }));
   }
 
@@ -64,9 +71,7 @@ export class Supercomputer {
     const {pipeline, observations, config} = this.olderChild.info;
 
     if ('children' in childrenObject[childName]) {
-      return this.compute(childrenObject[childName].children, {
-        config,
-      });
+      return this.compute(childrenObject[childName].children);
     }
 
     const specificObservations = areChildrenNested
@@ -75,7 +80,8 @@ export class Supercomputer {
 
     const enrichedObservations = this.enrichObservations(
       specificObservations,
-      config
+      config,
+      childrenObject[childName].config
     );
 
     const observatory = new Observatory(enrichedObservations);
@@ -105,7 +111,7 @@ export class Supercomputer {
   /**
    * Checks if object is top level children or nested, then runs through all children and calculates impacts.
    */
-  public async compute(childrenObject?: any, params?: any) {
+  public async compute(childrenObject?: any) {
     const implOrChildren = childrenObject || this.impl;
     const areChildrenNested = !!childrenObject;
     const children = areChildrenNested
@@ -117,7 +123,6 @@ export class Supercomputer {
       await this.calculateImpactsForChild(children, {
         childName,
         areChildrenNested,
-        ...params,
       });
     }
 
