@@ -1,47 +1,51 @@
 import {describe, expect, jest, test} from '@jest/globals';
 import {BoaviztaCloudImpactModel, BoaviztaCpuImpactModel} from './index';
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import * as PROVIDERS from '../../__mocks__/boavizta/providers.json';
 import * as COUNTRIES from '../../__mocks__/boavizta/countries.json';
 import * as INSTANCE_TYPES from '../../__mocks__/boavizta/instance_types.json';
 
-jest.mock('axios');
-const mockAxios = axios as jest.Mocked<typeof axios>;
-// Mock out all top level functions, such as get, put, delete and post:
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-mockAxios.get.mockImplementation(url => {
+async function axiosGet<T = any, R = AxiosResponse<T, any>>(
+  url: string
+): Promise<R> {
   switch (url) {
     case 'https://api.boavizta.org/v1/cloud/all_providers':
-      return Promise.resolve({data: PROVIDERS});
+      return {data: PROVIDERS} as R;
     case 'https://api.boavizta.org/v1/utils/country_code':
-      return Promise.resolve({data: COUNTRIES});
+      return Promise.resolve({data: COUNTRIES} as R);
     case 'https://api.boavizta.org/v1/cloud/all_instances?provider=aws':
       return Promise.resolve({
         data: INSTANCE_TYPES['aws'],
-      });
+      } as R);
   }
-});
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-mockAxios.post.mockImplementation(url => {
-  switch (url) {
-    case 'https://api.boavizta.org/v1/component/cpu?verbose=false&allocation=LINEAR':
-      return Promise.resolve({
-        data: {
-          gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
-          pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
-        },
-      });
-    case 'https://api.boavizta.org/v1/cloud/?verbose=false&allocation=LINEAR':
-      return Promise.resolve({
-        data: {
-          gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
-          pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
-        },
-      });
+  return Promise.resolve({} as R);
+}
+
+jest.mock('axios');
+const mockAxios = axios as jest.Mocked<typeof axios>;
+// Mock out all top level functions, such as get, put, delete and post:
+mockAxios.get.mockImplementation(axiosGet);
+mockAxios.post.mockImplementation(
+  <T = any, R = AxiosResponse<T, any>>(url: string): Promise<R> => {
+    switch (url) {
+      case 'https://api.boavizta.org/v1/component/cpu?verbose=false&allocation=LINEAR':
+        return Promise.resolve({
+          data: {
+            gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
+            pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+          },
+        } as R);
+      case 'https://api.boavizta.org/v1/cloud/?verbose=false&allocation=LINEAR':
+        return Promise.resolve({
+          data: {
+            gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
+            pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+          },
+        } as R);
+    }
+    return Promise.resolve({} as R);
   }
-});
+);
 jest.setTimeout(30000);
 describe('cpu:configure test', () => {
   test('initialize wrong params should throw error', async () => {
