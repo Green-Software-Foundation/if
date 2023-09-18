@@ -88,14 +88,14 @@ export class Supercomputer {
       );
 
       await observatory.doInvestigationsWith(modelInstance);
+    }
 
-      if (areChildrenNested) {
-        this.impl.graph.children[this.olderChild.name].children[
-          childName
-        ].impacts = observatory.getImpacts();
+    if (areChildrenNested) {
+      this.impl.graph.children[this.olderChild.name].children[
+        childName
+      ].impacts = observatory.getImpacts();
 
-        return;
-      }
+      return;
     }
 
     this.impl.graph.children[this.olderChild.name].impacts =
