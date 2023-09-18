@@ -35,6 +35,15 @@ mockAxios.post.mockImplementation(
             pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
           },
         } as R);
+      case 'https://api.boavizta.org/v1/component/cpu?verbose=true&allocation=LINEAR':
+        return Promise.resolve({
+          data: {
+            impacts: {
+              gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
+              pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+            },
+          },
+        } as R);
       case 'https://api.boavizta.org/v1/cloud/?verbose=false&allocation=LINEAR':
         return Promise.resolve({
           data: {
@@ -50,7 +59,6 @@ jest.setTimeout(30000);
 describe('cpu:configure test', () => {
   test('initialize wrong params should throw error', async () => {
     const impactModel = new BoaviztaCpuImpactModel();
-
     await expect(
       impactModel.configure('test', {allocation: 'wrong'})
     ).rejects.toThrowError();
@@ -59,10 +67,36 @@ describe('cpu:configure test', () => {
 
   test('initialize without params throws error for parameter and call calculate without params throws error for observation', async () => {
     const impactModel = new BoaviztaCpuImpactModel();
+    const impactModelConfigFail = new BoaviztaCpuImpactModel();
+    expect(impactModel.modelIdentifier()).toBe('org.boavizta.cpu.sci');
+    await expect(impactModel.authenticate({})).resolves.toBe(undefined);
+    await expect(
+      impactModelConfigFail.calculate([
+        {
+          timestamp: '2021-01-01T00:00:00Z',
+          duration: 3600,
+          'cpu-util': 0.5,
+        },
+      ])
+    ).rejects.toThrowError();
 
     await expect(impactModel.configure('test')).rejects.toThrow(
       Error('Improper configure: Missing processor parameter')
     );
+    await expect(
+      impactModel.configure('test', {
+        processor: 'Intel Xeon Gold 6138f',
+      })
+    ).rejects.toThrow(
+      Error('Improper configure: Missing core-units parameter')
+    );
+    await expect(
+      impactModel.configure('test', {
+        processor: 'Intel Xeon Gold 6138f',
+        'core-units': 24,
+        'expected-lifespan': 4 * 365 * 24 * 60 * 60,
+      })
+    ).resolves.toBeInstanceOf(BoaviztaCpuImpactModel);
     expect(impactModel.name).toBe('test');
     // not providing observations will throw a missing observations error
     await expect(impactModel.calculate()).rejects.toStrictEqual(
@@ -70,7 +104,7 @@ describe('cpu:configure test', () => {
         'Parameter Not Given: invalid observations parameter. Expecting an array of observations'
       )
     );
-    // improper observations will throw a invalid observations error
+    // improper observations will throw an invalid observations error
     await expect(
       impactModel.calculate([{invalid: 'observation'}])
     ).rejects.toStrictEqual(
@@ -106,29 +140,97 @@ describe('cpu:initialize with params', () => {
       },
     ]);
   });
+  test('initialize with params and call multiple usages in IMPL format:verbose', async () => {
+    const impactModel = new BoaviztaCpuImpactModel();
+    await expect(
+      impactModel.configure('test', {
+        processor: 'Intel Xeon Gold 6138f',
+        'core-units': 24,
+        location: 'USA',
+        verbose: true,
+      })
+    ).resolves.toBeInstanceOf(BoaviztaCpuImpactModel);
+    expect(impactModel.name).toBe('test');
+    // configure without static params will cause improper configure error
+    await expect(
+      impactModel.calculate([
+        {
+          timestamp: '2021-01-01T00:00:00Z',
+          duration: 3600,
+          'cpu-util': 0.5,
+        },
+      ])
+    ).resolves.toStrictEqual([
+      {
+        'embodied-carbon': 100,
+        'e-cpu': 0.2777777777777778,
+      },
+    ]);
+  });
 });
 
 describe('cloud:initialize with params', () => {
   test('initialize with params and call usage in RAW Format', async () => {
     const impactModel = new BoaviztaCloudImpactModel();
-
+    expect(impactModel.modelIdentifier()).toBe('org.boavizta.cloud.sci');
+    await expect(
+      impactModel.validateLocation({location: 'SomethingFail'})
+    ).rejects.toThrowError();
+    await expect(
+      impactModel.validateInstanceType({'instance-type': 'SomethingFail'})
+    ).rejects.toThrowError();
+    await expect(
+      impactModel.validateProvider({provider: 'SomethingFail'})
+    ).rejects.toThrowError();
     await expect(
       impactModel.configure('test', {
-        instance_type: 't2.micro',
+        'instance-type': 't2.micro',
         location: 'USA',
+        'expected-lifespan': 4 * 365 * 24 * 60 * 60,
         provider: 'aws',
+        verbose: false,
+      })
+    ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
+    await expect(
+      impactModel.configure('test', {
+        'instance-type': 't2.micro',
+        location: 'USA',
+        'expected-lifespan': 4 * 365 * 24 * 60 * 60,
+        provider: 'aws',
+        verbose: 'false',
+      })
+    ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
+    await expect(
+      impactModel.configure('test', {
+        'instance-type': 't2.micro',
+        location: 'USA',
+        'expected-lifespan': 4 * 365 * 24 * 60 * 60,
+        provider: 'aws',
+        verbose: 0,
       })
     ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
     expect(impactModel.name).toBe('test');
     // configure without static params will cause improper configure error
   });
 
-  test('correct instance_type: initialize with params and call usage in IMPL Format', async () => {
+  test("correct 'instance-type': initialize with params and call usage in IMPL Format", async () => {
     const impactModel = new BoaviztaCloudImpactModel();
 
     await expect(
       impactModel.configure('test', {
-        instance_type: 't2.micro',
+        'instance-type': 't2.micro',
+        location: 'USA',
+      })
+    ).rejects.toThrowError();
+    await expect(
+      impactModel.configure('test', {
+        provider: 'aws',
+        location: 'USA',
+      })
+    ).rejects.toThrowError();
+    await expect(
+      impactModel.configure('test', {
+        'instance-type': 't2.micro',
         location: 'USA',
         provider: 'aws',
       })
@@ -151,12 +253,12 @@ describe('cloud:initialize with params', () => {
     ]);
   });
 
-  test('wrong instance_type: initialize with params and call usage in IMPL Format throws error', async () => {
+  test('wrong "instance-type": initialize with params and call usage in IMPL Format throws error', async () => {
     const impactModel = new BoaviztaCloudImpactModel();
 
     await expect(
       impactModel.configure('test', {
-        instance_type: 't5.micro',
+        'instance-type': 't5.micro',
         location: 'USA',
         provider: 'aws',
       })
@@ -189,7 +291,7 @@ describe('cloud:initialize with params', () => {
     ).rejects.toThrowError();
   });
 
-  test('without instance_type: initialize with params and call usage in IMPL Format throws error', async () => {
+  test('without "instance-type": initialize with params and call usage in IMPL Format throws error', async () => {
     const impactModel = new BoaviztaCloudImpactModel();
 
     await expect(
@@ -198,8 +300,15 @@ describe('cloud:initialize with params', () => {
         provider: 'aws',
       })
     ).rejects.toStrictEqual(
-      Error('Improper configure: Missing instance_type parameter')
+      Error("Improper configure: Missing 'instance-type' parameter")
     );
+    await expect(
+      impactModel.configure('test', {
+        location: 'USAF',
+        provider: 'aws',
+        'instance-type': 't2.micro',
+      })
+    ).rejects.toThrowError();
     expect(impactModel.name).toBe('test');
     // configure without static params will cause improper configure error
     await expect(
