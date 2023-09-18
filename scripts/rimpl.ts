@@ -13,29 +13,33 @@ import {openYamlFileAsObject, saveYamlFileAs} from '../src/util/yaml';
  */
 const rimplScript = async () => {
   try {
-    const {inputPath, outputPath} = parseProcessArgument();
-    const impl = await openYamlFileAsObject(inputPath);
+    const processParams = parseProcessArgument();
 
-    if (!('graph' in impl)) {
-      throw new Error('No graph data found.');
+    if (processParams) {
+      const {inputPath, outputPath} = processParams;
+      const impl = await openYamlFileAsObject(inputPath);
+
+      if (!('graph' in impl)) {
+        throw new Error('No graph data found.');
+      }
+
+      // Lifecycle Initialize Models
+      const modelsHandbook = new ModelsUniverse();
+      impl.initialize.models.forEach((model: any) =>
+        modelsHandbook.writeDown(model)
+      );
+
+      // Lifecycle Computing
+      const ateruiComputer = new Supercomputer(impl, modelsHandbook);
+      const ompl = await ateruiComputer.compute();
+
+      if (!outputPath) {
+        console.log(JSON.stringify(ompl));
+        return;
+      }
+
+      await saveYamlFileAs(ompl, outputPath);
     }
-
-    // Lifecycle Initialize Models
-    const modelsHandbook = new ModelsUniverse();
-    impl.initialize.models.forEach((model: any) =>
-      modelsHandbook.writeDown(model)
-    );
-
-    // Lifecycle Computing
-    const ateruiComputer = new Supercomputer(impl, modelsHandbook);
-    const ompl = await ateruiComputer.compute();
-
-    if (!outputPath) {
-      console.log(JSON.stringify(ompl));
-      return;
-    }
-
-    await saveYamlFileAs(ompl, outputPath);
   } catch (error) {
     console.error(error);
   }
