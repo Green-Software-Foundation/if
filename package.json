@@ -90,6 +90,7 @@
     "fix:package": "fixpack",
     "lint": "gts lint",
     "package": "jsii-pacmak",
+    "coverage": "jest --coverage",
     "test": "jest"
   },
   "stability": "stable",

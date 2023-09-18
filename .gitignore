@@ -11,3 +11,4 @@ tsconfig.json
 yarn-error.log
 build
 examples/ompls
+coverage
