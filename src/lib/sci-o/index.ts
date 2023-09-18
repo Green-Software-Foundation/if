@@ -16,25 +16,33 @@ export class SciOModel implements IImpactModelInterface {
     this.authParams = authParams;
   }
 
+  /**
+   * Calculate the total emissions for a list of observations.
+   *
+   * Each Observation require:
+   * @param {Object[]} observations
+   * @param {string} observations[].timestamp RFC3339 timestamp string
+   */
   async calculate(observations: object | object[] | undefined): Promise<any[]> {
-    if (!Array.isArray(observations)) {
-      throw new Error('observations should be an array');
+    if (observations === undefined) {
+      throw new Error('Required Parameters not provided');
+    } else if (!Array.isArray(observations)) {
+      throw new Error('Observations must be an array');
     }
 
-    const tunedObservations = observations.map((observation: KeyValuePair) => {
+    return observations.map((observation: KeyValuePair) => {
       if (!('grid-ci' in observation)) {
         throw new Error('observation missing `grid-ci`');
       }
       if (!('energy' in observation)) {
         throw new Error('observation missing `energy`');
       }
+      this.configure(this.name!, observation);
       const grid_ci = parseFloat(observation['grid-ci']);
       const energy = parseFloat(observation['energy']);
       observation['operational-carbon'] = grid_ci * energy;
       return observation;
     });
-
-    return tunedObservations;
   }
 
   async configure(
