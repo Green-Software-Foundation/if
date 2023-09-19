@@ -47,9 +47,9 @@ graph:
           mem-alloc: 32 # GB
           mem-energy: 0.38 # wh/GB
         sci-m:
-          te: 1533.12 # kgCO2eq
-          tir: 3600 # s per hour
-          el: 94608000 # 3 years in seconds        
+          te: 1533.120 # gCO2eq
+          tir: 1 # s per hour
+          el: 3 # 3 years in seconds        
           rr: 1
           tor: 8
         sci-o:
@@ -58,13 +58,33 @@ graph:
           time: '' # signal to convert /s -> /hr
           factor: 32000 # factor to convert per time to per f.unit
       children:
-        tiger-database:
+        tiger-database-cpu:
+          config:
+            sci-m:
+              te: 1533.120 # gCO2eq
+              tir: 1 # s per hour
+              el: 35040 # 3 years in seconds        
+              rr: 2
+              tor: 64
+          observations: 
+            - timestamp: 2023-07-06T00:00
+              duration: 3600
+              cpu-util: 17
+              mem-util: 19 # % of available
+        tiger-database-mem:
+          config:
+            sci-m:
+              te: 1216.620 # gCO2eq
+              tir: 1 # s per hour
+              el: 35040 # 3 years in seconds        
+              rr: 1
+              tor: 8
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
-              cpu-util: 17.12
-              mem-util: 19.375 # % of available
-        tiger-api: # a leaf component
+              cpu-util: 0
+              mem-util: 0 # % of available
+        tiger-api-cpu: # a leaf component
           config:
             teads-curve:
               processor: Intel-xeon-platinum-8270
@@ -72,26 +92,48 @@ graph:
             emem:
               mem_alloc: 1.75
             sci-m:
-              te: 1216.62
+              te: 1216.620
           observations:     
             - timestamp: 2023-08-06T00:00
-              duration: 1
+              duration: 3600
               cpu-util: 25
               mem-util: 70 # % of total
-        neo4j-database: # a leaf component
+        tiger-api-mem:
           config:
             sci-m:
-              te: 1216.62 # kgCO2eq
-              rr: 2
-              tor: 64
+              te: 1216.620
+          observations:     
+            - timestamp: 2023-08-06T00:00
+              duration: 3600
+              cpu-util: 0
+              mem-util: 0 # % of total        
+        neo4j-database-cpu: # a leaf component
+          config:
+            sci-m:
+              te: 1216.620 # gCO2eq
+              tir: 1 # s per hour
+              el: 35040 # 3 years in seconds        
+              rr: 1
+              tor: 8
             sci-o:
               grid-ci: 554 # gCO2e/kWh
           observations:
             - timestamp: 2023-07-06T00:00
-              duration: 1 # this data is using span, but the model expects duration
+              duration: 3600 # this data is using span, but the model expects duration
               cpu-util: 28.05
               mem-util: 19.375
-        neo4j-api: # a leaf component
+        neo4j-database-mem: # a leaf component
+          config:
+            sci-m:
+              te: 1216.62 # gCO2eq
+              rr: 2
+              tor: 64
+          observations:
+            - timestamp: 2023-07-06T00:00
+              duration: 1 # this data is using span, but the model expects duration
+              cpu-util: 0
+              mem-util: 0
+        neo4j-api-cpu: # a leaf component
           config:
             teads-curve:
               processor: Intel-xeon-platinum-8270
@@ -99,12 +141,24 @@ graph:
             emem:
               mem-alloc: 1.75 # GB
             sci-m:
-              te: 1216.62 # kgCO2eq     
+              te: 1216.620 # gCO2eq
+              tir: 1 # s per hour
+              el: 35040 # 3 years in seconds        
               rr: 2
               tor: 64
           observations:    
             - timestamp: 2023-08-06T00:00
-              duration: 1
+              duration: 3600
               cpu-util: 14
               mem-util: 65 
-
+        neo4j-api-mem: # a leaf component
+          config:
+            sci-m:
+              te: 1216.620 # gCO2eq     
+              rr: 1
+              tor: 8
+          observations:    
+            - timestamp: 2023-08-06T00:00
+              duration: 3600
+              cpu-util: 0
+              mem-util: 0 
