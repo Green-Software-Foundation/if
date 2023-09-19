@@ -70,8 +70,8 @@ export class ModelsUniverse {
         return EMemModel;
       case 'aveva':
         return EAvevaModel;
-      default: // cover default
-        return BoaviztaCpuImpactModel;
+      default:
+        throw new Error(`Missing or wrong model: ${name}.`);
     }
   }
 
