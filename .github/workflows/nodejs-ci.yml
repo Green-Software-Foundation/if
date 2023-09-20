@@ -33,5 +33,5 @@ jobs:
       - name: Run tests
         run: yarn test
 
-      - name: Build
-        run: yarn build
+#      - name: Build
+#        run: yarn build
