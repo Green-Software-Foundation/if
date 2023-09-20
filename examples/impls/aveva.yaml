@@ -35,6 +35,9 @@ graph:
           tor: 1
         sci-o:
           grid-ci: 474.8 #gCo2/kWh
+        sci:
+          functional_unit_duration: ''
+          functional_unit: ''
       observations: 
         - timestamp: 2023-07-06T00:00 
           pl: 16.009 # average over timespan

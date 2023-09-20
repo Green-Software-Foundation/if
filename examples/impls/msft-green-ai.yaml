@@ -31,7 +31,7 @@ graph:
         grid-ci: 1 # data not provided in case study
         embodied-carbon: 0
         sci:
-          time: '' # signal to convert /s -> /hr
+          functional_unit_duration: '' # signal to convert /s -> /hr
           functional_unit: '' # factor to convert per time to per f.unit ()
     observations: 
       - timestamp: 2023-07-06T00:00
@@ -49,7 +49,7 @@ graph:
         grid-ci: 1 # data not provided in case study
         embodied-carbon: 0
       sci:
-        time: '' # signal to convert /s -> /hr
+        functional_unit_duration: '' # signal to convert /s -> /hr
         functional_unit: '' # factor to convert per time to per f.unit ()
     observations: 
       - timestamp: 2023-07-06T00:00

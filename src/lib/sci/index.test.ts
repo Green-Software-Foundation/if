@@ -5,7 +5,7 @@ jest.setTimeout(30000);
 describe('sci:configure test', () => {
   test('initialize and test', async () => {
     const model = await new SciModel().configure('name', {
-      time: 'minutes',
+      functional_unit_duration: 'minutes',
       functional_unit: 'users',
     });
     expect(model).toBeInstanceOf(SciModel);
@@ -44,7 +44,7 @@ describe('sci:configure test', () => {
   }),
     test('initialize and test', async () => {
       const model = await new SciModel().configure('name', {
-        time: 'days',
+        functional_unit_duration: 'days',
         functionalUnit: '',
       });
       expect(model).toBeInstanceOf(SciModel);

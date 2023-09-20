@@ -33,7 +33,14 @@ export class SciModel implements IImpactModelInterface {
 
       const operational = parseFloat(observation['operational-carbon']);
       const embodied = parseFloat(observation['embodied-carbon']);
-      const sci_secs = operational + embodied; // sci in time units of /s
+
+      let sci_secs = 0;
+      if ('carbon' in observation) {
+        sci_secs = observation['carbon'];
+      } else {
+        sci_secs = operational + embodied; // sci in time units of /s
+      }
+
       let sci_timed: number = sci_secs;
 
       if (
@@ -107,8 +114,8 @@ export class SciModel implements IImpactModelInterface {
     this.staticParams = staticParams;
     this.name = name;
 
-    if ('time' in staticParams) {
-      this.time = staticParams?.time;
+    if ('functional_unit_duration' in staticParams) {
+      this.time = staticParams?.functional_unit_duration;
     }
     if (
       'functional_unit' in staticParams &&
