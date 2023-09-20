@@ -1,4 +1,8 @@
-# Contributing to ief <!-- omit from toc -->
+# Contributing to IEF <!-- omit from toc -->
+
+First off, thanks for taking the time to contribute! 🎉
+
+The following document is a rule set of guidelines for contributing.
 
 ## Table of Contents <!-- omit from toc -->
 
@@ -48,7 +52,7 @@ Make sure git knows your name and email address:
    $ git config --global user.email "user@example.com"
    ```
 
-Commiting multiple files with changes on multiple resources is strongly restricted.
+Commiting multiple files with changes on multiple resources is not allowed.
 Commit message should clearly describe on which resource changes are made.
 
 Add and commit:
@@ -58,7 +62,9 @@ Add and commit:
    $ git commit
    ```  
     
-Commit your changes in logical chunks. Do not push all changes in one commit!! 
+Commit your changes in logical chunks. Please do not push all changes in one commit.
+
+> Run `yarn fix` before commiting for not having conflict with CI linter.
 
 Please adhere to these [Commit message guidelines](#commit-message-guidelines)
    or your code is unlikely be merged into the main project.
@@ -81,11 +87,11 @@ Push your topic branch:
 
 #### Step 6: Pull Request
 
-Open a Pull Request with a clear title and description.
+Open a Pull Request with a clear title and description according to [template](.github/PULL_REQUEST_TEMPLATE.md).
 
-Pull request should pass all CI which are defined, should have at least one approve.
+Pull request should pass all CI which are defined, should have at least one approve. It should adher to the specification for getting approved.
 
-CI can include lint checks, running tests,  and etc.
+CI included lint checks, running tests, and etc.
 
 ## Commit message guidelines
 
@@ -136,7 +142,7 @@ When designing module of the application in `Functional Programming` paradigm, t
 
 #### Naming patterns
 
-Make sure your class/function/variable describes exactly what it does. Avoid using shortened words like txt, arr while doing naming decision.
+Make sure your `class/function/variable` describes exactly what it does. Avoid using shortened words like txt, arr while doing naming decision. As a naming pattern `camel case` should be used.
 
 ```ts
 ❌ const a = "<MOCK_VALUE_HERE>"
