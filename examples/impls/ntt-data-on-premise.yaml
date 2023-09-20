@@ -40,7 +40,7 @@ graph:
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
-          time: ''
+          functional_unit_duration: ''
           functional_unit: requests
       observations: 
         - timestamp: 2023-07-06T00:00
@@ -66,7 +66,7 @@ graph:
         sci-o:
           grid_ci: 457 # gCO2/kwh 
         sci:
-          time: ''
+          functional_unit_duration: ''
           functional_unit: requests
       children:
         switch-1:
@@ -113,7 +113,7 @@ graph:
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
-          time: ''
+          functional_unit_duration: ''
           functional_unit: requests
       children:
         db-server1:
@@ -146,7 +146,7 @@ graph:
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
-          time: ''
+          functional_unit_duration: ''
           functional_unit: requests      
       children:
         app-server1:
@@ -178,7 +178,7 @@ graph:
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
-          time: ''
+          functional_unit_duration: ''
           functional_unit: requests
       children:
         web-server1:

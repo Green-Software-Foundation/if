@@ -63,7 +63,7 @@ graph:
           n-hours: 1
           n-chips: 1
         sci:
-          time: '' # signal to convert /s -> /hr
+          functional_unit_duration: '' # signal to convert /s -> /hr
           functional_unit: '' # factor to convert per time to per f.unit ()
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
@@ -92,7 +92,7 @@ graph:
           n-hours: 1
           n-chips: 1
         sci:
-          time: '' # signal to convert /s -> /hr
+          functional_unit_duration: '' # signal to convert /s -> /hr
           functional_unit: '' # factor to convert per time to per f.unit ()
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
@@ -122,7 +122,7 @@ graph:
           tdp: 150 # W
           tdp-coeff: 0.32
         sci:
-          time: '' # signal to convert /s -> /hr
+          functional_unit_duration: '' # signal to convert /s -> /hr
           functional_unit: '' # factor to convert per time to per f.unit ()
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
@@ -146,7 +146,7 @@ graph:
         e-net:
           net-energy: 0.001 #kwh/GB
         sci:
-          time: '' # signal to convert /s -> /hr
+          functional_unit_duration: '' # signal to convert /s -> /hr
           functional_unit: '' # factor to convert per time to per f.unit ()
         sci-o:
           grid-ci: 951
