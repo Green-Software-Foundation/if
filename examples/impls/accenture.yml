@@ -1,0 +1,139 @@
+name: accenture
+description: https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/nttdatta-On-Premise-Web-system.md
+tags:
+  kind: web
+  complexity: moderate
+  category: on-premise
+initialize:
+  models:
+    - name: sci-e # a model that sums e components
+      kind: builtin
+      verbose: false
+      path: ''      
+    - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci # a model that sums sci-o + sci-m
+      kind: builtin
+      verbose: false
+      path: '' 
+    - name: sci-accenture # a model that sums sci-o + sci-m
+      kind: builtin
+      verbose: false
+      path: '' 
+graph:
+  children:
+    vms:
+      pipeline:
+        - sci-e
+        - sci-o
+        - sci
+        - sci-accenture
+      config:
+        sci-o:
+          grid-ci: 350.861
+      children:
+        vm1:
+          observations: 
+            - timestamp: 2023-07-06T00:00
+              grid-ci: 350.861
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu-util: 15
+              ram-util: 75
+              e-cpu: 4.26 #kwh/month
+              embodied-carbon: 763.33 #gCO2e
+        vm2: 
+          observations: 
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu-util: 12
+              ram-util: 72
+              e-cpu: 4.26 # kwh/month   
+              embodied-carbon: 763.33 #gCO2e
+        vm3: 
+          observations: 
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu-util: 10
+              ram-util: 65
+              e-cpu: 4.21 # kwh/month
+              embodied-carbon: 763.33 #gCO2e         
+        vm4: 
+          observations: 
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu-util: 9
+              ram-util: 70
+              e-cpu: 4.21 # kwh/month    
+              embodied-carbon: 763.33 #gCO2e       
+        vm5: 
+          observations: 
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu-util: 9
+              ram-util: 70
+              e-cpu: 4.21 # kwh/month
+              embodied-carbon: 763.33 #gCO2e
+        vm6: 
+          observations: 
+            - timestamp: 2023-07-06T00:00 
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu-util: 8
+              ram-util: 65
+              e-cpu: 3.29 # kwh/month   
+              embodied-carbon: 763.33 #gCO2e
+        vm7: 
+          observations:
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu-util: 7
+              ram-util: 72 
+              e-cpu: 3.29 # kwh/month
+              embodied-carbon: 763.33 #gCO2e
+        vm8: 
+          observations: 
+            - timestamp: 2023-07-06T00:00
+              duration: 2419200 # seconds in a month (7 days * 4 weeks)
+              cpu-util: 6
+              ram-util: 70
+              e-cpu: 3.29 # kwh/month       
+              embodied-carbon: 763.33 #gCO2e
+    db:
+      pipeline:
+        - sci-e       # sums e components
+        - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+        - sci         # calculates sci by dividing carbon by `r`
+        - sci-accenture # multiplies sci value by 1.05  to account for the "app-gateway"
+      config:
+        sci-o:
+          grid-ci: 350.861
+        sci:
+          time: '' # signal to convert /s -> /hr
+          factor: 89000 # factor to convert per time to per f.unit
+      observations:
+        - timestamp: 2023-07-06T00:00
+          duration: 2419200 # seconds in a month (7 days * 4 weeks)
+          cpu-util: 4
+          ram-util: 40
+          e-cpu: 2.68 # kwh/month
+          embodied-carbon: 763.33 #gCO2e
+    monitoring:
+      pipeline:
+        - sci-e       # sums e components
+        - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+        - sci         # calculates sci by dividing carbon by `r`
+        - sci-accenture # multiplies sci value by 1.05  to account for the "app-gateway"
+      config:
+        sci-o:
+          grid-ci: 350.861
+        sci:
+          time: '' # signal to convert /s -> /hr
+          factor: 89000 # factor to convert per time to per f.unit
+      observations:
+        - timestamp: 2023-07-06T00:00
+          duration: 2419200 # seconds in a month (7 days * 4 weeks)
+          cpu-util: 4
+          ram-util: 40
+          e-cpu: 4.62 # kwh/month
+          embodied-carbon: 763.33 #gCO2e
