@@ -161,4 +161,4 @@ graph:
             - timestamp: 2023-08-06T00:00
               duration: 3600
               cpu-util: 0
-              mem-util: 0 
+              mem-util: 0
