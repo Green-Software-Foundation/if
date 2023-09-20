@@ -1,11 +1,11 @@
-import { IImpactModelInterface } from '../interfaces';
+import {IImpactModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair } from '../../types/common';
+import {KeyValuePair} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { SCI } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {SCI} = MODEL_IDS;
 
 export class SciModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
@@ -43,59 +43,54 @@ export class SciModel implements IImpactModelInterface {
         this.time === 'secs' ||
         this.time === '' ||
         this.time === null ||
-        this.time === "none"
-
+        this.time === 'none'
       ) {
         sci_timed = sci_secs;
       }
-      if (this.time === 'minute' ||
+      if (
+        this.time === 'minute' ||
         this.time === 'minutes' ||
         this.time === 'mins' ||
         this.time === 'm'
       ) {
         sci_timed = sci_secs * 60;
       }
-      if (this.time === 'hour' ||
+      if (
+        this.time === 'hour' ||
         this.time === 'hours' ||
         this.time === 'hr' ||
         this.time === 'h'
       ) {
         sci_timed = sci_secs * 60 * 60;
       }
-      if (this.time === 'day' ||
-        this.time === 'days' ||
-        this.time === 'd'
-
-      ) {
+      if (this.time === 'day' || this.time === 'days' || this.time === 'd') {
         sci_timed = sci_secs * 60 * 60 * 24;
       }
-      if (this.time === 'week' ||
-        this.time === 'weeks' ||
-        this.time === 'd'
-      ) {
+      if (this.time === 'week' || this.time === 'weeks' || this.time === 'd') {
         sci_timed = sci_secs * 60 * 60 * 24 * 7;
       }
       if (this.time === 'month' || this.time === 'months') {
         sci_timed = sci_secs * 60 * 60 * 24 * 7 * 4;
       }
-      if (this.time === 'year' ||
+      if (
+        this.time === 'year' ||
         this.time === 'years' ||
         this.time === 'yr' ||
-        this.time === 'y') {
+        this.time === 'y'
+      ) {
         sci_timed = sci_secs * 60 * 60 * 24 * 365;
       }
 
       const functionalUnit = this.functionalUnit;
 
-      if (this.functionalUnit != 'none') {
+      if (this.functionalUnit !== 'none') {
         const factor = observation[functionalUnit];
         observation['sci'] = sci_timed / factor;
-        return observation
+        return observation;
       } else {
         observation['sci'] = sci_timed;
-        return observation
+        return observation;
       }
-
     });
 
     return tunedObservations;
@@ -115,10 +110,13 @@ export class SciModel implements IImpactModelInterface {
     if ('time' in staticParams) {
       this.time = staticParams?.time;
     }
-    if ('functional_unit' in staticParams && typeof staticParams.functional_unit === 'string') {
+    if (
+      'functional_unit' in staticParams &&
+      typeof staticParams.functional_unit === 'string'
+    ) {
       this.functionalUnit = staticParams?.functional_unit;
     } else {
-      this.functionalUnit = 'none'
+      this.functionalUnit = 'none';
     }
 
     return this;
