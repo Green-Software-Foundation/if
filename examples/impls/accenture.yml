@@ -33,6 +33,9 @@ graph:
       config:
         sci-o:
           grid-ci: 350.861
+        sci:
+          time: ''
+          functional_unit: requests
       children:
         vm1:
           observations: 
@@ -43,6 +46,7 @@ graph:
               ram-util: 75
               e-cpu: 4.26 #kwh/month
               embodied-carbon: 763.33 #gCO2e
+              requests: 89000
         vm2: 
           observations: 
             - timestamp: 2023-07-06T00:00
@@ -51,6 +55,7 @@ graph:
               ram-util: 72
               e-cpu: 4.26 # kwh/month   
               embodied-carbon: 763.33 #gCO2e
+              requests: 89000
         vm3: 
           observations: 
             - timestamp: 2023-07-06T00:00
@@ -58,7 +63,8 @@ graph:
               cpu-util: 10
               ram-util: 65
               e-cpu: 4.21 # kwh/month
-              embodied-carbon: 763.33 #gCO2e         
+              embodied-carbon: 763.33 #gCO2e
+              requests: 89000       
         vm4: 
           observations: 
             - timestamp: 2023-07-06T00:00
@@ -66,7 +72,8 @@ graph:
               cpu-util: 9
               ram-util: 70
               e-cpu: 4.21 # kwh/month    
-              embodied-carbon: 763.33 #gCO2e       
+              embodied-carbon: 763.33 #gCO2e   
+              requests: 89000    
         vm5: 
           observations: 
             - timestamp: 2023-07-06T00:00
@@ -75,6 +82,7 @@ graph:
               ram-util: 70
               e-cpu: 4.21 # kwh/month
               embodied-carbon: 763.33 #gCO2e
+              requests: 89000
         vm6: 
           observations: 
             - timestamp: 2023-07-06T00:00 
@@ -83,6 +91,7 @@ graph:
               ram-util: 65
               e-cpu: 3.29 # kwh/month   
               embodied-carbon: 763.33 #gCO2e
+              requests: 89000
         vm7: 
           observations:
             - timestamp: 2023-07-06T00:00
@@ -91,6 +100,7 @@ graph:
               ram-util: 72 
               e-cpu: 3.29 # kwh/month
               embodied-carbon: 763.33 #gCO2e
+              requests: 89000
         vm8: 
           observations: 
             - timestamp: 2023-07-06T00:00
@@ -99,6 +109,7 @@ graph:
               ram-util: 70
               e-cpu: 3.29 # kwh/month       
               embodied-carbon: 763.33 #gCO2e
+              requests: 89000
     db:
       pipeline:
         - sci-e       # sums e components
@@ -110,7 +121,7 @@ graph:
           grid-ci: 350.861
         sci:
           time: '' # signal to convert /s -> /hr
-          factor: 89000 # factor to convert per time to per f.unit
+          functional_unit: requests # functional_unit to convert per time to per f.unit
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 2419200 # seconds in a month (7 days * 4 weeks)
@@ -118,6 +129,7 @@ graph:
           ram-util: 40
           e-cpu: 2.68 # kwh/month
           embodied-carbon: 763.33 #gCO2e
+          requests: 89000
     monitoring:
       pipeline:
         - sci-e       # sums e components
@@ -129,7 +141,7 @@ graph:
           grid-ci: 350.861
         sci:
           time: '' # signal to convert /s -> /hr
-          factor: 89000 # factor to convert per time to per f.unit
+          functional_unit: requests # functional_unit to convert per time to per f.unit
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 2419200 # seconds in a month (7 days * 4 weeks)
@@ -137,3 +149,4 @@ graph:
           ram-util: 40
           e-cpu: 4.62 # kwh/month
           embodied-carbon: 763.33 #gCO2e
+          requests: 89000
