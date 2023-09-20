@@ -1,0 +1,164 @@
+name: dow-msft
+description: "https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/dow-msft-Graph-DB.md"
+tags:
+  kind: db-api
+  complexity: simple
+  category: cloud
+initialize:
+  models:
+    - name: teads-curve # a model that returns an embodied value given the sci embodied attribution equation.
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: emem # a model that calculates e for memory utilization (0.38 * mem_util = e_mem in kwH)
+      kind: builtin  
+      path: ''
+    - name: sci-e # sums e components (can be e_cpu, e_gpu, e_mem, e_network) - in this case emem and e_cpu from teads
+      kind: builtin  
+      path: ''
+    - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci-o # takes in total e and outputs operational emissions
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci # a model that sums sci-o + sci-m and applies functional unit
+      kind: builtin
+      verbose: false
+      path: '' 
+# Single observation
+graph:
+  children:
+    backend:
+      pipeline: 
+        - teads-curve # tdp & cpu -> energy
+        - emem # calculates energy used by memory as component of sci-m
+        - sci-m # duration & config -> embodied
+        - sci-e # energy & grid-carbon-intensity & embodied -> carbon
+        - sci-o # takes in total e and outputs operational emissions
+        - sci # add cpu and memory components and convert to f.unit
+      config:
+        teads-curve: # use tdp to derive e-cpu (kwh)
+          processor: Intel-xeon-platinum-8380
+          tdp: 270
+        emem: # mem-util * mem-alloc * mem-energy = emem (kwh)
+          mem-alloc: 32 # GB
+          mem-energy: 0.38 # wh/GB
+        sci-m:
+          te: 1533.120 # gCO2eq
+          tir: 1 # s per hour
+          el: 3 # 3 years in seconds        
+          rr: 1
+          tor: 8
+        sci-o:
+          grid-ci: 554 # gCO2e/kWh
+        sci:
+          time: '' # signal to convert /s -> /hr
+          factor: 32000 # factor to convert per time to per f.unit
+      children:
+        tiger-database-cpu:
+          config:
+            sci-m:
+              te: 1533.120 # gCO2eq
+              tir: 1 # s per hour
+              el: 35040 # 3 years in seconds        
+              rr: 2
+              tor: 64
+          observations: 
+            - timestamp: 2023-07-06T00:00
+              duration: 3600
+              cpu-util: 17
+              mem-util: 19 # % of available
+        tiger-database-mem:
+          config:
+            sci-m:
+              te: 1216.620 # gCO2eq
+              tir: 1 # s per hour
+              el: 35040 # 3 years in seconds        
+              rr: 1
+              tor: 8
+          observations: 
+            - timestamp: 2023-07-06T00:00
+              duration: 1
+              cpu-util: 0
+              mem-util: 0 # % of available
+        tiger-api-cpu: # a leaf component
+          config:
+            teads-curve:
+              processor: Intel-xeon-platinum-8270
+              tdp: 205
+            emem:
+              mem_alloc: 1.75
+            sci-m:
+              te: 1216.620
+          observations:     
+            - timestamp: 2023-08-06T00:00
+              duration: 3600
+              cpu-util: 25
+              mem-util: 70 # % of total
+        tiger-api-mem:
+          config:
+            sci-m:
+              te: 1216.620
+          observations:     
+            - timestamp: 2023-08-06T00:00
+              duration: 3600
+              cpu-util: 0
+              mem-util: 0 # % of total        
+        neo4j-database-cpu: # a leaf component
+          config:
+            sci-m:
+              te: 1216.620 # gCO2eq
+              tir: 1 # s per hour
+              el: 35040 # 3 years in seconds        
+              rr: 1
+              tor: 8
+            sci-o:
+              grid-ci: 554 # gCO2e/kWh
+          observations:
+            - timestamp: 2023-07-06T00:00
+              duration: 3600 # this data is using span, but the model expects duration
+              cpu-util: 28.05
+              mem-util: 19.375
+        neo4j-database-mem: # a leaf component
+          config:
+            sci-m:
+              te: 1216.62 # gCO2eq
+              rr: 2
+              tor: 64
+          observations:
+            - timestamp: 2023-07-06T00:00
+              duration: 1 # this data is using span, but the model expects duration
+              cpu-util: 0
+              mem-util: 0
+        neo4j-api-cpu: # a leaf component
+          config:
+            teads-curve:
+              processor: Intel-xeon-platinum-8270
+              tdp: 205
+            emem:
+              mem-alloc: 1.75 # GB
+            sci-m:
+              te: 1216.620 # gCO2eq
+              tir: 1 # s per hour
+              el: 35040 # 3 years in seconds        
+              rr: 2
+              tor: 64
+          observations:    
+            - timestamp: 2023-08-06T00:00
+              duration: 3600
+              cpu-util: 14
+              mem-util: 65 
+        neo4j-api-mem: # a leaf component
+          config:
+            sci-m:
+              te: 1216.620 # gCO2eq     
+              rr: 1
+              tor: 8
+          observations:    
+            - timestamp: 2023-08-06T00:00
+              duration: 3600
+              cpu-util: 0
+              mem-util: 0
