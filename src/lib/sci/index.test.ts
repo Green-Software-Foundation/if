@@ -5,8 +5,9 @@ jest.setTimeout(30000);
 describe('sci:configure test', () => {
   test('initialize and test', async () => {
     const model = await new SciModel().configure('name', {
-      functional_unit_duration: 'minutes',
+      functional_unit_time: 'minutes',
       functional_unit: 'users',
+      functional_unit_duration: 1,
     });
     expect(model).toBeInstanceOf(SciModel);
     await expect(
@@ -41,40 +42,41 @@ describe('sci:configure test', () => {
         sci: 1.2003,
       },
     ]);
-  }),
-    test('initialize and test', async () => {
-      const model = await new SciModel().configure('name', {
-        functional_unit_duration: 'days',
-        functionalUnit: '',
-      });
-      expect(model).toBeInstanceOf(SciModel);
-      await expect(
-        model.calculate([
-          {
-            'operational-carbon': 0.02,
-            'embodied-carbon': 5,
-          },
-        ])
-      ).resolves.toStrictEqual([
+  });
+  test('initialize and test', async () => {
+    const model = await new SciModel().configure('name', {
+      functional_unit_time: 'days',
+      functional_unit: '',
+      functional_unit_duration: 3600,
+    });
+    expect(model).toBeInstanceOf(SciModel);
+    await expect(
+      model.calculate([
         {
           'operational-carbon': 0.02,
           'embodied-carbon': 5,
-          sci: 433728,
         },
-      ]);
-      await expect(
-        model.calculate([
-          {
-            'operational-carbon': 20,
-            'embodied-carbon': 0.005,
-          },
-        ])
-      ).resolves.toStrictEqual([
+      ])
+    ).resolves.toStrictEqual([
+      {
+        'operational-carbon': 0.02,
+        'embodied-carbon': 5,
+        sci: 120.47999999999999,
+      },
+    ]);
+    await expect(
+      model.calculate([
         {
           'operational-carbon': 20,
           'embodied-carbon': 0.005,
-          sci: 1728432,
         },
-      ]);
-    });
+      ])
+    ).resolves.toStrictEqual([
+      {
+        'operational-carbon': 20,
+        'embodied-carbon': 0.005,
+        sci: 480.12,
+      },
+    ]);
+  });
 });

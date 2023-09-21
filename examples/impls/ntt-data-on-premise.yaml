@@ -40,8 +40,9 @@ graph:
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
-          functional_unit_duration: ''
-          functional_unit: requests
+          functional_unit_duration: 1 
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit
       observations: 
         - timestamp: 2023-07-06T00:00
           duration: 3600
@@ -66,8 +67,9 @@ graph:
         sci-o:
           grid_ci: 457 # gCO2/kwh 
         sci:
-          functional_unit_duration: ''
-          functional_unit: requests
+          functional_unit_duration: 1 
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit
       children:
         switch-1:
           observations:
@@ -146,8 +148,9 @@ graph:
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
-          functional_unit_duration: ''
-          functional_unit: requests      
+          functional_unit_duration: 1 
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit 
       children:
         app-server1:
           observations: 
@@ -178,8 +181,9 @@ graph:
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
-          functional_unit_duration: ''
-          functional_unit: requests
+          functional_unit_duration: 1 
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit
       children:
         web-server1:
           observations: 

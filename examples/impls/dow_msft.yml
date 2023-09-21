@@ -55,7 +55,8 @@ graph:
         sci-o:
           grid-ci: 554 # gCO2e/kWh
         sci:
-          functional_unit_duration: '' # signal to convert /s -> /hr
+          functional_unit_duration: 1 
+          functional_duration_time: ''
           functional_unit: requests # factor to convert per time to per f.unit
       children:
         tiger-database-cpu:

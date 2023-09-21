@@ -34,8 +34,9 @@ graph:
         sci-o:
           grid-ci: 350.861
         sci:
-          functional_unit_duration: ''
-          functional_unit: requests
+          functional_unit_duration: 1 
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit
       children:
         vm1:
           observations: 
@@ -120,8 +121,9 @@ graph:
         sci-o:
           grid-ci: 350.861
         sci:
-          functional_unit_duration: '' # signal to convert /s -> /hr
-          functional_unit: requests # functional_unit to convert per time to per f.unit
+          functional_unit_duration: 1 
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 2419200 # seconds in a month (7 days * 4 weeks)
@@ -140,8 +142,9 @@ graph:
         sci-o:
           grid-ci: 350.861
         sci:
-          functional_unit_duration: '' # signal to convert /s -> /hr
-          functional_unit: requests # functional_unit to convert per time to per f.unit
+          functional_unit_duration: 1 
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 2419200 # seconds in a month (7 days * 4 weeks)
