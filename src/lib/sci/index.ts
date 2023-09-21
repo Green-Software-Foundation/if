@@ -13,6 +13,7 @@ export class SciModel implements IImpactModelInterface {
   name: string | undefined;
   time: string | unknown;
   functionalUnit = 'none';
+  functionalUnitDuration = 1;
 
   authenticate(authParams: object): void {
     this.authParams = authParams;
@@ -36,9 +37,9 @@ export class SciModel implements IImpactModelInterface {
 
       let sci_secs = 0;
       if ('carbon' in observation) {
-        sci_secs = observation['carbon'];
+        sci_secs = observation['carbon'] / this.functionalUnitDuration;
       } else {
-        sci_secs = operational + embodied; // sci in time units of /s
+        sci_secs = (operational + embodied) / this.functionalUnitDuration; // sci in time units of /s
       }
 
       let sci_timed: number = sci_secs;
@@ -114,12 +115,23 @@ export class SciModel implements IImpactModelInterface {
     this.staticParams = staticParams;
     this.name = name;
 
-    if ('functional_unit_duration' in staticParams) {
-      this.time = staticParams?.functional_unit_duration;
+    if ('functional_unit_time' in staticParams) {
+      this.time = staticParams?.functional_unit_time;
+    }
+    if (
+      'functional_unit_duration' in staticParams &&
+      typeof staticParams.functional_unit_duration === 'number'
+    ) {
+      this.functionalUnitDuration = staticParams?.functional_unit_duration;
+    } else {
+      throw new Error(
+        'Functional unit duration is not a valid number: provide number of seconds represented by observation'
+      );
     }
     if (
       'functional_unit' in staticParams &&
-      typeof staticParams.functional_unit === 'string'
+      typeof staticParams.functional_unit === 'string' &&
+      staticParams.functional_unit !== ''
     ) {
       this.functionalUnit = staticParams?.functional_unit;
     } else {
