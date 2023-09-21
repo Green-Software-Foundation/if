@@ -372,8 +372,6 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     if (architecture.includes('Graviton')) {
       if (architecture.includes('2')) {
         architecture = 'Graviton2';
-      } else if (architecture.includes('3')) {
-        architecture = 'Graviton3';
       } else {
         architecture = 'Graviton';
       }
