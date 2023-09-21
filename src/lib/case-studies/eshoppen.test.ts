@@ -1,5 +1,5 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {EshoppenModel} from './eshoppen-model';
+import {EshoppenMemModel, EshoppenModel} from './eshoppen-model';
 
 jest.setTimeout(30000);
 
@@ -28,5 +28,30 @@ describe('eshoppen:configure test', () => {
       },
     ]);
     await expect(model.calculate([{}])).rejects.toThrowError();
+    await expect(model.calculate({})).rejects.toThrowError();
+    expect(model.authenticate({test: 'test'})).toBe(undefined);
+
+    const model2 = await new EshoppenMemModel().configure('eshoppen', {
+      type: 'e-mem',
+    });
+    expect(model2).toBeInstanceOf(EshoppenMemModel);
+    await expect(
+      model2.calculate([
+        {
+          'n-hours': 1,
+          'n-chips': 1,
+          'tdp-mem': 1,
+          'tdp-coeff': 1,
+        },
+      ])
+    ).resolves.toStrictEqual([
+      {
+        'e-mem': 0.001,
+        'n-chips': 1,
+        'n-hours': 1,
+        'tdp-coeff': 1,
+        'tdp-mem': 1,
+      },
+    ]);
   });
 });
