@@ -10,8 +10,7 @@ WattTime technology—based on real-time grid data, cutting-edge algorithms, and
 WattTime Model provides a way to calculate emissions for a given time in a specific location. 
 
 The model is based on the WattTime API. The model uses the following inputs:
-* latitude: Location of the software system (latitude in decimal degrees).
-* longitude: Location of the software system (longitude in decimal degrees).
+* location: Location of the software system (latitude in decimal degrees, longitude in decimal degrees). "latitude,longitude"
 * timestamp: Timestamp of the recorded event (2021-01-01T00:00:00Z) RFC3339
 * duration: Duration of the recorded event in seconds (3600)
 
@@ -26,12 +25,26 @@ Limitations:
 
 
 WattTime API requires activation of subscription before usage. Please refer to WattTime website for more information.
+https://www.watttime.org/get-the-data/data-plans/
 
 **Required Parameters:**
-
+```
+# example environment variable config , prefix the environment variables with "ENV" to load them inside the model.
+# export WATT_TIME_USERNAME=test1
+# export WATT_TIME_PASSWORD=test2
+```
 * username: Username for the WattTime API
+  * ENV_WATT_TIME_USERNAME - specifying this value enables the RIMPL to load the value from the environment variable
 * password: Password for the WattTime API
+  * ENV_WATT_TIME_PASSWORD - specifying this value enables the RIMPL to load the value from the environment variable
 
+
+### Observations 
+
+**Required Parameters:**
+* timestamp: Timestamp of the recorded event (2021-01-01T00:00:00Z) RFC3339
+* location: Location of the software system (latitude in decimal degrees, longitude in decimal degrees). "latitude,longitude"
+* duration: Duration of the recorded event in seconds (3600)
 
 ### Typescript Usage
 ```typescript
@@ -46,8 +59,7 @@ const env_model = await new WattTimeGridEmissions().configure('watt-time', {
 const observations = [
   {
     timestamp: '2021-01-01T00:00:00Z',
-    latitude: 43.22,
-    longitude: -80.22,
+    latitude: "43.22,-80.22",
     duration: 3600,
   },
 ];
@@ -65,8 +77,7 @@ config:
   password: ENV_WATT_TIME_PASSWORD
 observations:
   - timestamp: 2021-01-01T00:00:00Z
-    latitude: 43.22
-    longitude: -80.22
+    latitude: "43.22,-80.22"
     duration: 3600
 ```
 #### Static configuration for IMPL
@@ -76,7 +87,6 @@ config:
   password: password
 observations:
   - timestamp: 2021-01-01T00:00:00Z
-    latitude: 43.22
-    longitude: -80.22
+    latitude: "43.22,-80.22"
     duration: 3600
 ```

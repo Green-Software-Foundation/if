@@ -136,8 +136,12 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
 
   private validateObservations(observations: object[]) {
     observations.forEach((observation: KeyValuePair) => {
-      if (!('latitude' in observation) || !('longitude' in observation)) {
-        throw new Error('latitude or longitude is missing');
+      if (!('location' in observation)) {
+        const {latitude, longitude} =
+          this.getLatitudeLongitudeFromObservation(observation);
+        if (isNaN(latitude) || isNaN(longitude)) {
+          throw new Error('latitude or longitude is not a number');
+        }
       }
       if (!('timestamp' in observation)) {
         throw new Error('timestamp is missing');
@@ -146,6 +150,24 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
         throw new Error('duration is missing');
       }
     });
+  }
+
+  private getLatitudeLongitudeFromObservation(observation: KeyValuePair) {
+    const location = observation['location'].split(','); //split location into latitude and longitude
+    if (location.length !== 2) {
+      throw new Error(
+        'location should be a comma separated string of latitude and longitude'
+      );
+    }
+    if (location[0] === '' || location[1] === '') {
+      throw new Error('latitude or longitude is missing');
+    }
+    if (location[0] === '0' || location[1] === '0') {
+      throw new Error('latitude or longitude is missing');
+    }
+    const latitude = parseFloat(location[0]); //convert latitude to float
+    const longitude = parseFloat(location[1]); //convert longitude to float
+    return {latitude, longitude};
   }
 
   private determineObservationStartEnd(observations: object[]) {
@@ -185,10 +207,12 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
     if (duration > 32 * 24 * 60 * 60) {
       throw new Error('duration is too long');
     }
+    const {latitude, longitude} =
+      this.getLatitudeLongitudeFromObservation(observation);
 
     const params = {
-      latitude: observation.latitude,
-      longitude: observation.longitude,
+      latitude: latitude,
+      longitude: longitude,
       starttime: dayjs(observation.timestamp).format('YYYY-MM-DDTHH:mm:ssZ'),
       endtime: dayjs(observation.timestamp).add(duration, 'seconds'),
     };
