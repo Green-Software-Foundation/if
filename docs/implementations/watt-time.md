@@ -34,9 +34,9 @@ https://www.watttime.org/get-the-data/data-plans/
 # export WATT_TIME_PASSWORD=test2
 ```
 * username: Username for the WattTime API
-  * ENV_WATT_TIME_USERNAME - specifying this value enables the RIMPL to load the value from the environment variable
+  * ENV_WATT_TIME_USERNAME - specifying this value enables the RIMPL to load the value from the environment variable `WATT_TIME_USERNAME`
 * password: Password for the WattTime API
-  * ENV_WATT_TIME_PASSWORD - specifying this value enables the RIMPL to load the value from the environment variable
+  * ENV_WATT_TIME_PASSWORD - specifying this value enables the RIMPL to load the value from the environment variable `WATT_TIME_PASSWORD`
 
 
 ### Observations 
