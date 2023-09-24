@@ -36,16 +36,14 @@ describe('watt-time:configure test', () => {
     await expect(
       model.calculate([
         {
-          latitude: 37.7749,
-          longitude: -122.4194,
+          location: '37.7749,-122.4194',
           timestamp: '2021-01-01T00:00:00Z',
           duration: 1200,
         },
       ])
     ).resolves.toStrictEqual([
       {
-        latitude: 37.7749,
-        longitude: -122.4194,
+        location: '37.7749,-122.4194',
         timestamp: '2021-01-01T00:00:00Z',
         duration: 1200,
         'grid-ci': 2185.332173907599,
@@ -54,16 +52,14 @@ describe('watt-time:configure test', () => {
     await expect(
       model.calculate([
         {
-          latitude: 37.7749,
-          longitude: -122.4194,
+          location: '37.7749,-122.4194',
           timestamp: '2021-01-01T00:00:00Z',
           duration: 120,
         },
       ])
     ).resolves.toStrictEqual([
       {
-        latitude: 37.7749,
-        longitude: -122.4194,
+        location: '37.7749,-122.4194',
         timestamp: '2021-01-01T00:00:00Z',
         duration: 120,
         'grid-ci': 2198.0087539832293,
@@ -72,16 +68,14 @@ describe('watt-time:configure test', () => {
     await expect(
       model.calculate([
         {
-          latitude: 37.7749,
-          longitude: -122.4194,
+          location: '37.7749,-122.4194',
           timestamp: '2021-01-01T00:00:00Z',
           duration: 300,
         },
       ])
     ).resolves.toStrictEqual([
       {
-        latitude: 37.7749,
-        longitude: -122.4194,
+        location: '37.7749,-122.4194',
         timestamp: '2021-01-01T00:00:00Z',
         duration: 300,
         'grid-ci': 2198.0087539832293,
@@ -90,16 +84,14 @@ describe('watt-time:configure test', () => {
     await expect(
       model.calculate([
         {
-          latitude: 37.7749,
-          longitude: -122.4194,
+          location: '37.7749,-122.4194',
           timestamp: '2021-01-01T00:00:00Z',
           duration: 360,
         },
       ])
     ).resolves.toStrictEqual([
       {
-        latitude: 37.7749,
-        longitude: -122.4194,
+        location: '37.7749,-122.4194',
         timestamp: '2021-01-01T00:00:00Z',
         duration: 360,
         'grid-ci': 2193.5995087395318,
@@ -109,14 +101,12 @@ describe('watt-time:configure test', () => {
     await expect(
       model.calculate([
         {
-          latitude: 37.7749,
-          longitude: -122.4194,
+          location: '37.7749,-122.4194',
           timestamp: '2021-01-01T00:00:00Z',
           duration: 3600,
         },
         {
-          latitude: 37.7749,
-          longitude: -122.4194,
+          location: '37.7749,-122.4194',
           timestamp: '2021-01-02T01:00:00Z',
           duration: 3600,
         },
