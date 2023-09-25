@@ -65,7 +65,8 @@ export class TdpFinderModel implements IImpactModelInterface {
     // read data.csv and read lines into memory
     const result = fs.readFileSync(path.join(__dirname, 'data.csv'), 'utf8');
     for (const line of result.split('\n')) {
-      const [name, tdp_r] = line.split(',');
+      const [name_w_at, tdp_r] = line.split(',');
+      const name = name_w_at.split('@')[0];
       const tdp = parseFloat(tdp_r.replace('\r', ''));
       data[name] = tdp;
     }
