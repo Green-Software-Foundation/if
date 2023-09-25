@@ -19,6 +19,7 @@ export const CONFIG = {
     SCI_M: 'org.gsf.sci-m',
     SCI_O: 'org.gsf.sci-o',
     SHELL_MODEL: 'shellModel',
+    TDP: 'tdp',
     TEADS_AWS: 'teads.cloud.sci',
     TEADS_CURVE: 'teads.curve',
     WATT_TIME: 'org.wattime.grid',
