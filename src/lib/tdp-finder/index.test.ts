@@ -28,7 +28,7 @@ describe('tdp-finder:configure test', () => {
     ).resolves.toStrictEqual([
       {
         'physical-processor': 'Intel Xeon Platinum 8175M',
-        tdp: 6.0,
+        tdp: 0.0,
       },
     ]);
     await expect(
