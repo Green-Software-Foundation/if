@@ -6,19 +6,6 @@
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
   },
-  "bundledDependencies": [
-    "node-fetch",
-    "axios",
-    "typescript",
-    "ts-sync-request",
-    "@cloud-carbon-footprint/core",
-    "@cloud-carbon-footprint/aws",
-    "typescript-cubic-spline",
-    "js-yaml",
-    "@types/node",
-    "dayjs",
-    "ts-command-line-args"
-  ],
   "dependencies": {
     "@cloud-carbon-footprint/core": "*",
     "@cloud-carbon-footprint/aws": "*",
@@ -49,34 +36,6 @@
     "node": "18.17.1",
     "yarn": "1.22.19"
   },
-  "jsii": {
-    "versionFormat": "full",
-    "tsc": {
-      "rootDir": "./src"
-    },
-    "targets": {
-      "java": {
-        "package": "org.greensoftware.carbonql",
-        "maven": {
-          "groupId": "org.greensoftware",
-          "artifactId": "carbonql"
-        }
-      },
-      "python": {
-        "distName": "carbon-ql.core",
-        "module": "carbon_ql"
-      },
-      "go": {
-        "moduleName": "github.com/Green-Software-Foundation",
-        "packageName": "carbonql",
-        "versionSuffix": "-devprefix"
-      },
-      "dotnet": {
-        "namespace": "GreenSoftwareFoundation.CarbonQL",
-        "packageId": "GreenSoftwareFoundation.CarbonQL"
-      }
-    }
-  },
   "keywords": [],
   "license": "ISC",
   "main": "src/index.ts",
@@ -84,12 +43,9 @@
     "url": "https://github.com/Green-Software-Foundation/carbon-ql.git"
   },
   "scripts": {
-    "build": "jsii",
-    "build:watch": "jsii --watch",
     "fix": "gts fix",
     "fix:package": "fixpack",
     "lint": "gts lint",
-    "package": "jsii-pacmak",
     "test": "jest"
   },
   "stability": "stable",
