@@ -6,8 +6,6 @@ node_modules
 .idea
 *.tsbuildinfo
 dist
-tsconfig.json
-.jsii
 yarn-error.log
 build
 examples/ompls
