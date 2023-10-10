@@ -22,6 +22,18 @@ describe('tdp-finder:configure test', () => {
     await expect(
       model.calculate([
         {
+          'physical-processor': 'Intel Xeon E5-2676 v3',
+        },
+      ])
+    ).resolves.toStrictEqual([
+      {
+        'physical-processor': 'Intel Xeon E5-2676 v3',
+        tdp: 120.0,
+      },
+    ]);
+    await expect(
+      model.calculate([
+        {
           'physical-processor': 'Intel Xeon Platinum 8175M',
         },
       ])
