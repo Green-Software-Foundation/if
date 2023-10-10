@@ -49,6 +49,28 @@ export class CloudInstanceMetadataModel implements IImpactModelInterface {
           'Each observation must contain a cloud-instance-type key'
         );
       }
+
+      const instance = AWS_INSTANCES.find(
+        instance => instance['Instance type'] === instance_type
+      );
+      if (instance) {
+        console.log(instance);
+        console.log(vendor);
+        observation['vcpus-allocated'] = instance['Instance vCPU'];
+        observation['vcpus-total'] = instance['Platform Total Number of vCPU'];
+        const cpuType = instance['Platform CPU Name'];
+        let platform = '';
+        if (cpuType.startsWith('EPYC')) {
+          platform = 'AMD';
+        } else if (cpuType.startsWith('Xeon')) {
+          platform = 'Intel';
+        } else if (cpuType.startsWith('Graviton')) {
+          platform = 'AWS';
+        } else if (cpuType.startsWith('Core')) {
+          platform = 'Intel';
+        }
+        observation['physical-processor'] = `${platform} ${cpuType}`;
+      }
       return observation;
     });
   }
