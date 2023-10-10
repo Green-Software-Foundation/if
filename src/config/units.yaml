@@ -1,14 +1,14 @@
+carbon:
+  description: an amount of carbon emitted into the atmosphere
+  unit: gCO2e
+  aggregation: sum
+core-units:
+  description: number of cores available
+  unit: cores
+  aggregation: none
 cpu-util:
   description: refers to CPU utilization.
   unit: percentage
-  aggregation: avg
-ram-util:
-  description: refers to percentage of memory utilized.
-  unit: percentage
-  aggregation: avg
-ram-alloc:
-  description: refers to GB of memory allocated.
-  unit: GB
   aggregation: avg
 disk-io:
   description: refers to GB of data written/read from disk
@@ -18,43 +18,116 @@ duration:
   description: refers to the duration of the observation
   unit: seconds
   aggregation: sum
-timestamp:
-  description: refers to the time of occurrence of the observation
-  unit: RFC3339
-  aggregation: None
-carbon:
-  description: an amount of carbon emitted into the atmosphere
-  unit: gCO2e
-  aggregation: sum
-energy:
-  description: amount of energy utilised by the component
-  unit: kWh
-  aggregation: sum
 e-cpu:
   description: Energy consumed by the CPU of the component
   unit: kWh
   aggregation: sum
+el:
+  description: expected lifespan for some component
+  unit: seconds
+  aggregation: none
 e-mem:
   description: Energy consumed by the Memory of the component
-  unit: kWh
-  aggregation: sum
-e-net:
-  description: Energy consumed by the Network of the component
   unit: kWh
   aggregation: sum
 embodied-carbon:
   description: Embodied Emissions of the component
   unit: gCO2e
   aggregation: sum
-operational-carbon:
-  description: Operational Emissions of the component
-  unit: gCO2e
+energy:
+  description: amount of energy utilised by the component
+  unit: kWh
+  aggregation: sum
+e-net:
+  description: Energy consumed by the Network of the component
+  unit: kWh
   aggregation: sum
 expected-lifespan:
   description: Total Expected Lifespan of the Component in Seconds
   unit: seconds
   aggregation: None
+functional_unit:
+  description: the name of the functional unit in which the final SCI value should be expressed, e.g. requests, users
+  unit: none
+  aggregation: none
+functional_unit_duration:
+  description: how many units of functional_unit_time the final SCI value should be expressed in.
+  unit: functional_unit_time
+  aggregation: none
+functional_unit_time:
+  description: string describing the unit of time in which the final SCI calculation should be expressed
+  unit: none
+  aggregation: none
+gpu-util:
+  description: refers to CPU utilization.
+  unit: percentage
+  aggregation: avg
+grid-ci:
+  description: Carbon intensity for the grid
+  unit: gCO2eq/kWh
+  aggregation: avg
 instance-type:
   description: Type of Cloud Instance name used in the cloud provider APIs
   unit: None
   aggregation: None
+interpolation:
+  description: Name of the interpolation method to apply to TDP curve in Teads model. 
+  unit: None
+  aggregation: None
+location:
+  description: Geographic location of provider as string (for watt-time model it is provided as latitude and longitude, comma separated, in decimal degrees)
+  unit: None (decimal degrees for watt-time model)
+  aggregation: None
+manufacture:
+  description: Carbon emitted from component manufacture (returned from Boavizta)
+  unit: gCO2eq
+  aggregation: sum
+operational-carbon:
+  description: Operational Emissions of the component
+  unit: gCO2e
+  aggregation: sum
+pe.use:
+  description: Primary energy associated with component use (returned from Boavizta)
+  unit: kWh
+  aggregation: sum
+processor:
+  description: Name of the physical processor 
+  unit: None
+  aggregation: None
+provider:
+  description: Name of the cloud service provider in the ccf model. Can be aws, gcp or azure
+  unit: None
+  aggregation: None
+ram-alloc:
+  description: refers to GB of memory allocated.
+  unit: GB
+  aggregation: avg
+ram-util:
+  description: refers to percentage of memory utilized.
+  unit: percentage
+  aggregation: avg
+rr:
+  description: resources reserved for an application
+  unit: count
+  aggregation: none
+tdp:
+  description: thermal design power for a processor
+  unit: kwh
+  aggregation: avg
+te:
+  description: total embodied emissions of some component
+  unit: gCO2e
+  aggregation: sum
+timestamp:
+  description: refers to the time of occurrence of the observation
+  unit: RFC3339
+  aggregation: None
+tir:
+  description: time reserved for a component
+  unit: seconds
+  aggregation: none
+tor:
+  description: total resources available
+  unit: count
+  aggregation: none
+
