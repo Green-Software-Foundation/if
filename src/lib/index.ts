@@ -10,3 +10,4 @@ export * from './shell-imp';
 export * from './teads-aws';
 export * from './teads-curve';
 export * from './watt-time';
+export * from './tdp-finder';
