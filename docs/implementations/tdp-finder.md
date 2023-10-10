@@ -2,7 +2,7 @@
 
 ## Scope
 
-The TDP Finder model enables finding the TDP of a known processor in the mode. The TDP is then used by other models to calculate the e-cpu value. 
+The TDP Finder model enables finding the TDP of a known processor in the model dataset. The TDP is then used by other models to calculate the e-cpu value. 
 
 ## Implementation
 
