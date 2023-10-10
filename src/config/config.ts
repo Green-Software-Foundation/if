@@ -22,6 +22,7 @@ export const CONFIG = {
     TEADS_AWS: 'teads.cloud.sci',
     TEADS_CURVE: 'teads.curve',
     WATT_TIME: 'org.wattime.grid',
+    CLOUD_INSTANCE_METADATA: 'org.gsf.cloud-instance-metadata',
   },
   RIMPL: {
     ARGS: {
