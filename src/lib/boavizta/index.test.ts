@@ -1,5 +1,5 @@
-import {describe, expect, jest, test} from '@jest/globals';
-import {BoaviztaCloudImpactModel, BoaviztaCpuImpactModel} from './index';
+import { describe, expect, jest, test } from '@jest/globals';
+import { BoaviztaCloudImpactModel, BoaviztaCpuImpactModel } from './index';
 import axios from 'axios';
 import * as PROVIDERS from '../../__mocks__/boavizta/providers.json';
 import * as COUNTRIES from '../../__mocks__/boavizta/countries.json';
@@ -13,9 +13,9 @@ const mockAxios = axios as jest.Mocked<typeof axios>;
 mockAxios.get.mockImplementation(url => {
   switch (url) {
     case 'https://api.boavizta.org/v1/cloud/all_providers':
-      return Promise.resolve({data: PROVIDERS});
+      return Promise.resolve({ data: PROVIDERS });
     case 'https://api.boavizta.org/v1/utils/country_code':
-      return Promise.resolve({data: COUNTRIES});
+      return Promise.resolve({ data: COUNTRIES });
     case 'https://api.boavizta.org/v1/cloud/all_instances?provider=aws':
       return Promise.resolve({
         data: INSTANCE_TYPES['aws'],
@@ -29,15 +29,15 @@ mockAxios.post.mockImplementation(url => {
     case 'https://api.boavizta.org/v1/component/cpu?verbose=false&allocation=LINEAR':
       return Promise.resolve({
         data: {
-          gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
-          pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+          gwp: { manufacture: 0.1, use: 1.0, unit: 'kgCO2eq' },
+          pe: { manufacture: 0.1, use: 1.0, unit: 'MJ' },
         },
       });
     case 'https://api.boavizta.org/v1/cloud/?verbose=false&allocation=LINEAR':
       return Promise.resolve({
         data: {
-          gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
-          pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+          gwp: { manufacture: 0.1, use: 1.0, unit: 'kgCO2eq' },
+          pe: { manufacture: 0.1, use: 1.0, unit: 'MJ' },
         },
       });
   }
@@ -48,7 +48,7 @@ describe('cpu:configure test', () => {
     const impactModel = new BoaviztaCpuImpactModel();
 
     await expect(
-      impactModel.configure('test', {allocation: 'wrong'})
+      impactModel.configure('test', { allocation: 'wrong' })
     ).rejects.toThrowError();
     expect(impactModel.name).toBe('test');
   });
@@ -68,7 +68,7 @@ describe('cpu:configure test', () => {
     );
     // improper observations will throw a invalid observations error
     await expect(
-      impactModel.calculate([{invalid: 'observation'}])
+      impactModel.calculate([{ invalid: 'observation' }])
     ).rejects.toStrictEqual(
       Error('Invalid Input: Invalid observations parameter')
     );
@@ -92,7 +92,7 @@ describe('cpu:initialize with params', () => {
         {
           timestamp: '2021-01-01T00:00:00Z',
           duration: 3600,
-          'cpu-util': 0.5,
+          'cpu-util': 50,
         },
       ])
     ).resolves.toStrictEqual([
@@ -136,7 +136,7 @@ describe('cloud:initialize with params', () => {
         {
           timestamp: '2021-01-01T00:00:00Z',
           duration: 15,
-          'cpu-util': 0.34,
+          'cpu-util': 34,
         },
       ])
     ).resolves.toStrictEqual([
@@ -164,22 +164,22 @@ describe('cloud:initialize with params', () => {
         {
           timestamp: '2021-01-01T00:00:00Z',
           duration: 15,
-          'cpu-util': 0.34,
+          'cpu-util': 34,
         },
         {
           timestamp: '2021-01-01T00:00:15Z',
           duration: 15,
-          'cpu-util': 0.12,
+          'cpu-util': 12,
         },
         {
           timestamp: '2021-01-01T00:00:30Z',
           duration: 15,
-          'cpu-util': 0.01,
+          'cpu-util': 1,
         },
         {
           timestamp: '2021-01-01T00:00:45Z',
           duration: 15,
-          'cpu-util': 0.78,
+          'cpu-util': 78,
         },
       ])
     ).rejects.toThrowError();
@@ -203,22 +203,22 @@ describe('cloud:initialize with params', () => {
         {
           timestamp: '2021-01-01T00:00:00Z',
           duration: 15,
-          'cpu-util': 0.34,
+          'cpu-util': 34,
         },
         {
           timestamp: '2021-01-01T00:00:15Z',
           duration: 15,
-          'cpu-util': 0.12,
+          'cpu-util': 12,
         },
         {
           timestamp: '2021-01-01T00:00:30Z',
           duration: 15,
-          'cpu-util': 0.01,
+          'cpu-util': 1,
         },
         {
           timestamp: '2021-01-01T00:00:45Z',
           duration: 15,
-          'cpu-util': 0.78,
+          'cpu-util': 78,
         },
       ])
     ).rejects.toStrictEqual(
