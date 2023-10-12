@@ -10,7 +10,7 @@ initialize:
         verbose: true
 graph:
   children:
-    front-end:
+    child:
       pipeline: 
         - boavizta-cpu
       config:
