@@ -55,8 +55,9 @@ graph:
         sci-o:
           grid-ci: 554 # gCO2e/kWh
         sci:
-          time: '' # signal to convert /s -> /hr
-          factor: 32000 # factor to convert per time to per f.unit
+          functional_unit_duration: 1 
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit
       children:
         tiger-database-cpu:
           config:
@@ -71,6 +72,7 @@ graph:
               duration: 3600
               cpu-util: 17
               mem-util: 19 # % of available
+              requests: 32000
         tiger-database-mem:
           config:
             sci-m:
@@ -84,6 +86,7 @@ graph:
               duration: 1
               cpu-util: 0
               mem-util: 0 # % of available
+              requests: 32000
         tiger-api-cpu: # a leaf component
           config:
             teads-curve:
@@ -98,6 +101,7 @@ graph:
               duration: 3600
               cpu-util: 25
               mem-util: 70 # % of total
+              requests: 32000
         tiger-api-mem:
           config:
             sci-m:
@@ -106,7 +110,8 @@ graph:
             - timestamp: 2023-08-06T00:00
               duration: 3600
               cpu-util: 0
-              mem-util: 0 # % of total        
+              mem-util: 0 # % of total
+              requests: 32000        
         neo4j-database-cpu: # a leaf component
           config:
             sci-m:
@@ -122,6 +127,7 @@ graph:
               duration: 3600 # this data is using span, but the model expects duration
               cpu-util: 28.05
               mem-util: 19.375
+              requests: 32000
         neo4j-database-mem: # a leaf component
           config:
             sci-m:
@@ -133,6 +139,7 @@ graph:
               duration: 1 # this data is using span, but the model expects duration
               cpu-util: 0
               mem-util: 0
+              requests: 32000
         neo4j-api-cpu: # a leaf component
           config:
             teads-curve:
@@ -150,7 +157,8 @@ graph:
             - timestamp: 2023-08-06T00:00
               duration: 3600
               cpu-util: 14
-              mem-util: 65 
+              mem-util: 65
+              requests: 32000
         neo4j-api-mem: # a leaf component
           config:
             sci-m:
@@ -162,3 +170,4 @@ graph:
               duration: 3600
               cpu-util: 0
               mem-util: 0
+              requests: 32000

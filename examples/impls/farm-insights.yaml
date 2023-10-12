@@ -21,8 +21,9 @@ graph:
      - sci # take in carbon from sci-o and embodied carbon (m) and return sum in correct time unit (here /yr)
     config:
       sci:
-        time: year
-        factor: 1
+          functional_unit_duration: 1 # in secs
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit
     observations:
       e: 3.47222222222e-07 # 0.03 kwh/day in kwh/s
       i: 713 # g/kwh

@@ -130,7 +130,7 @@ describe('cpu:initialize with params', () => {
         {
           timestamp: '2021-01-01T00:00:00Z',
           duration: 3600,
-          'cpu-util': 0.5,
+          'cpu-util': 50,
         },
       ])
     ).resolves.toStrictEqual([
@@ -242,7 +242,7 @@ describe('cloud:initialize with params', () => {
         {
           timestamp: '2021-01-01T00:00:00Z',
           duration: 15,
-          'cpu-util': 0.34,
+          'cpu-util': 34,
         },
       ])
     ).resolves.toStrictEqual([
@@ -270,22 +270,22 @@ describe('cloud:initialize with params', () => {
         {
           timestamp: '2021-01-01T00:00:00Z',
           duration: 15,
-          'cpu-util': 0.34,
+          'cpu-util': 34,
         },
         {
           timestamp: '2021-01-01T00:00:15Z',
           duration: 15,
-          'cpu-util': 0.12,
+          'cpu-util': 12,
         },
         {
           timestamp: '2021-01-01T00:00:30Z',
           duration: 15,
-          'cpu-util': 0.01,
+          'cpu-util': 1,
         },
         {
           timestamp: '2021-01-01T00:00:45Z',
           duration: 15,
-          'cpu-util': 0.78,
+          'cpu-util': 78,
         },
       ])
     ).rejects.toThrowError();
@@ -316,22 +316,22 @@ describe('cloud:initialize with params', () => {
         {
           timestamp: '2021-01-01T00:00:00Z',
           duration: 15,
-          'cpu-util': 0.34,
+          'cpu-util': 34,
         },
         {
           timestamp: '2021-01-01T00:00:15Z',
           duration: 15,
-          'cpu-util': 0.12,
+          'cpu-util': 12,
         },
         {
           timestamp: '2021-01-01T00:00:30Z',
           duration: 15,
-          'cpu-util': 0.01,
+          'cpu-util': 1,
         },
         {
           timestamp: '2021-01-01T00:00:45Z',
           duration: 15,
-          'cpu-util': 0.78,
+          'cpu-util': 78,
         },
       ])
     ).rejects.toStrictEqual(

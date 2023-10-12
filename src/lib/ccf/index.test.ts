@@ -27,7 +27,7 @@ describe('ccf:configure test', () => {
     });
     await expect(
       impactModel.calculate([
-        {duration: 3600, cpu: 0.5, datetime: '2021-01-01T00:00:00Z'},
+        {duration: 3600, 'cpu-util': 50, datetime: '2021-01-01T00:00:00Z'},
       ])
     ).resolves.toStrictEqual([
       {
@@ -69,17 +69,17 @@ describe('ccf:configure test', () => {
       impactModel.calculate([
         {
           duration: 3600,
-          cpu: 0.1,
+          'cpu-util': 10,
           datetime: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 0.5,
+          'cpu-util': 50,
           datetime: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 1,
+          'cpu-util': 100,
           datetime: '2021-01-01T00:00:00Z',
         },
       ])
@@ -117,17 +117,17 @@ describe('ccf:configure test', () => {
       impactModel.calculate([
         {
           duration: 3600,
-          cpu: 0.1,
+          'cpu-util': 10,
           datetime: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 0.5,
+          'cpu-util': 50,
           datetime: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 1,
+          'cpu-util': 100,
           datetime: '2021-01-01T00:00:00Z',
         },
       ])
@@ -165,17 +165,17 @@ describe('ccf:configure test', () => {
       impactModel.calculate([
         {
           duration: 3600,
-          cpu: 0.1,
+          'cpu-util': 10,
           datetime: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 0.5,
+          'cpu-util': 50,
           datetime: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
-          cpu: 1,
+          'cpu-util': 100,
           datetime: '2021-01-01T00:00:00Z',
         },
       ])
@@ -214,7 +214,7 @@ describe('ccf:configure test', () => {
     ).rejects.toThrowError();
     await expect(
       impactModel.calculate([
-        {duration: 3600, cpu: 0.5, datetime: '2021-01-01T00:00:00Z'},
+        {duration: 3600, 'cpu-util': 50, datetime: '2021-01-01T00:00:00Z'},
       ])
     ).rejects.toThrowError();
   });
@@ -228,7 +228,7 @@ describe('ccf:configure test', () => {
     ).rejects.toThrowError();
     await expect(
       impactModel.calculate([
-        {duration: 3600, cpu: 0.5, datetime: '2021-01-01T00:00:00Z'},
+        {duration: 3600, 'cpu-util': 50, datetime: '2021-01-01T00:00:00Z'},
       ])
     ).rejects.toThrowError();
   });
