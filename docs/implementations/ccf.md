@@ -136,7 +136,7 @@ graph:
           provider: aws
           instance_type: m5n.large
       observations:
-        - datetime: 2023-07-06T00:00
+        - timestamp: 2023-07-06T00:00
           duration: 1
           cpu: 10
       impacts:
