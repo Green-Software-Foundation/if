@@ -49,7 +49,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     // metric is between 0 and 1, convert to percentage
     let usageInput: KeyValuePair = {
       hours_use_time: duration / 3600.0,
-      time_workload: metric * 100.0,
+      time_workload: metric,
     };
     // convert expected lifespan from seconds to years
     usageInput['years_life_time'] =

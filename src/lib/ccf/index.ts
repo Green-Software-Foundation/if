@@ -126,7 +126,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
    *  @param {Object[]} observations  ISO 8601 datetime string
    *  @param {string} observations[].datetime ISO 8601 datetime string
    *  @param {number} observations[].duration observation duration in seconds
-   *  @param {number} observations[].cpu percentage cpu usage
+   *  @param {number} observations[].cpu-util percentage cpu usage
    */
   async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (observations === undefined) {
@@ -158,7 +158,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
    * requires
    *
    * duration: duration of the observation in seconds
-   * cpu: cpu usage in percentage
+   * cpu-util: cpu usage in percentage
    * datetime: ISO 8601 datetime string
    *
    * Uses a spline method for AWS and linear interpolation for GCP and Azure
@@ -166,7 +166,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
   private calculateEnergy(observation: KeyValuePair) {
     if (
       !('duration' in observation) ||
-      !('cpu' in observation) ||
+      !('cpu-util' in observation) ||
       !('datetime' in observation)
     ) {
       throw new Error(
@@ -174,11 +174,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       );
     }
 
-    //    duration is in seconds
     const duration = observation['duration'];
-
-    //    convert cpu usage to percentage
-    const cpu = observation['cpu'] * 100.0;
+    const cpu = observation['cpu-util'];
 
     //  get the wattage for the instance type
     let wattage;
