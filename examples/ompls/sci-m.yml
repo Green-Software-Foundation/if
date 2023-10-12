@@ -1,0 +1,33 @@
+name: sci-m
+description: simple demo invoking sci-m
+tags: null
+initialize:
+  models:
+    - name: sci-m
+      kind: builtin
+      verbose: false
+      path: ''
+graph:
+  children:
+    child:
+      pipeline:
+        - sci-m
+      config:
+        sci-m:
+          te: 1533.12
+          tir: 1
+          el: 3
+          rr: 1
+          tor: 8
+      observations:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
+      impacts:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
+          te: 1533.12
+          tir: 1
+          el: 3
+          rr: 1
+          tor: 8
+          embodied-carbon: 63.879999999999995
