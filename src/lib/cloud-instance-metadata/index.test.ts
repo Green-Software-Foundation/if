@@ -10,18 +10,18 @@ describe('ccf:configure test', () => {
     await expect(
       model.calculate([
         {
-          'cloud-instance-type': 't2.micro',
+          'cloud-instance-type': 'm5n.large',
           'cloud-vendor': 'aws',
         },
       ])
     ).resolves.toStrictEqual(
       expect.arrayContaining([
         {
-          'cloud-instance-type': 't2.micro',
+          'cloud-instance-type': 'm5n.large',
           'cloud-vendor': 'aws',
-          'physical-processor': 'Intel Xeon E5-2676 v3',
-          'vcpus-allocated': '1',
-          'vcpus-total': '48',
+          'physical-processor': 'Intel Xeon Platinum 8259CL',
+          'vcpus-allocated': '2',
+          'vcpus-total': '96',
         },
       ])
     );
