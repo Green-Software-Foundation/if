@@ -8,7 +8,7 @@ const files = fs.readdirSync(path);
 /*
 If there are no files in examples/ompls, prompt user to run ompl-test bash script
 */
-if (files.length == 0) {
+if (files.length === 0) {
   throw 'no ompl files available. Please run scripts/rimpl-test.sh before running these tests.';
 }
 
