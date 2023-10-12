@@ -25,5 +25,23 @@ describe('ccf:configure test', () => {
         },
       ])
     );
+    await expect(
+      model.calculate([
+        {
+          'cloud-instance-type': 't2.micro',
+          'cloud-vendor': 'aws2',
+        },
+      ])
+    ).rejects.toThrowError('cloud-vendor: Only `aws` is currently supported');
+    await expect(
+      model.calculate([
+        {
+          'cloud-instance-type': 't2.micro2',
+          'cloud-vendor': 'aws',
+        },
+      ])
+    ).rejects.toThrowError(
+      'cloud-instance-type: t2.micro2 is not supported in vendor: aws'
+    );
   });
 });

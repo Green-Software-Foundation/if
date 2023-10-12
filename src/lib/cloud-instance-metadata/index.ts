@@ -49,6 +49,9 @@ export class CloudInstanceMetadataModel implements IImpactModelInterface {
           'Each observation must contain a cloud-instance-type key'
         );
       }
+      if (vendor !== 'aws') {
+        throw new Error('cloud-vendor: Only `aws` is currently supported');
+      }
 
       const instance = AWS_INSTANCES.find(
         instance => instance['Instance type'] === instance_type
@@ -70,6 +73,10 @@ export class CloudInstanceMetadataModel implements IImpactModelInterface {
           platform = 'Intel';
         }
         observation['physical-processor'] = `${platform} ${cpuType}`;
+      } else {
+        throw new Error(
+          `cloud-instance-type: ${instance_type} is not supported in vendor: ${vendor}`
+        );
       }
       return observation;
     });
