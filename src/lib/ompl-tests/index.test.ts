@@ -5,11 +5,16 @@ jest.setTimeout(30000);
 
 const path = "examples/ompls"
 var files = fs.readdirSync(path)
-
+/*
+If there are no files in examples/ompls, prompt user to run ompl-test bash script
+*/
 if (files.length == 0) {
     throw ("no ompl files available. Please run scripts/rimpl-test.sh before running these tests.")
 }
 
+/*
+For each file in examples/ompls, load it and run test
+*/
 files.forEach(function (file) {
     test('check ompls have impacts field', async () => {
         openYamlFileAsObject(path + "/" + file).then(ompl =>
