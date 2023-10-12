@@ -90,7 +90,7 @@ pe.use:
   description: Primary energy associated with component use (returned from Boavizta)
   unit: kWh
   aggregation: sum
-processor:
+physical-processor:
   description: Name of the physical processor 
   unit: None
   aggregation: None

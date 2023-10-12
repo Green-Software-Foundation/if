@@ -57,7 +57,7 @@ graph:
         sci-o:
           grid-ci: 951 # gCO2e/kWh
         e-cpu:
-          processor: Intel® Core™ i7-1185G7
+          physical-processor: Intel® Core™ i7-1185G7
           tdp: 28 # W
           tdp-coeff: 0.12
           n-hours: 1
@@ -87,7 +87,7 @@ graph:
         sci-o:
           grid-ci: 951 # gCO2e/kWh
         e-cpu:
-          processor: Intel® Xeon® Platinum 8272CL
+          physical-processor: Intel® Xeon® Platinum 8272CL
           tdp: 205
           tdp-coeff: 0.32
           n-hours: 1
@@ -120,7 +120,7 @@ graph:
         e-cpu:
           n-hours: 1
           n-chips: 1
-          processor: Intel® Xeon® Platinum 8160
+          physical-processor: Intel® Xeon® Platinum 8160
           tdp: 150 # W
           tdp-coeff: 0.32
         sci:

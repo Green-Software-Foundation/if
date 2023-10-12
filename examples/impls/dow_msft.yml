@@ -41,7 +41,7 @@ graph:
         - sci # add cpu and memory components and convert to f.unit
       config:
         teads-curve: # use tdp to derive e-cpu (kwh)
-          processor: Intel-xeon-platinum-8380
+          physical-processor: Intel-xeon-platinum-8380
           tdp: 270
         emem: # mem-util * mem-alloc * mem-energy = emem (kwh)
           mem-alloc: 32 # GB
@@ -90,7 +90,7 @@ graph:
         tiger-api-cpu: # a leaf component
           config:
             teads-curve:
-              processor: Intel-xeon-platinum-8270
+              physical-processor: Intel-xeon-platinum-8270
               tdp: 205
             emem:
               mem_alloc: 1.75
@@ -143,7 +143,7 @@ graph:
         neo4j-api-cpu: # a leaf component
           config:
             teads-curve:
-              processor: Intel-xeon-platinum-8270
+              physical-processor: Intel-xeon-platinum-8270
               tdp: 205
             emem:
               mem-alloc: 1.75 # GB

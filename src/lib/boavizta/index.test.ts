@@ -80,7 +80,7 @@ describe('cpu:initialize with params', () => {
     const impactModel = new BoaviztaCpuImpactModel();
     await expect(
       impactModel.configure('test', {
-        processor: 'Intel Xeon Gold 6138f',
+        'physical-processor': 'Intel Xeon Gold 6138f',
         'core-units': 24,
         location: 'USA',
       })

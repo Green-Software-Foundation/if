@@ -27,7 +27,7 @@ graph:
       - sci
     config: 
       sci-o:
-        processor: nvidia-t4-nc16as-v3
+        physical-processor: nvidia-t4-nc16as-v3
         grid-ci: 1 # data not provided in case study
         embodied-carbon: 0
         sci:
@@ -45,7 +45,7 @@ graph:
       - sci
     config: 
       sci-o:
-        processor: nvidia-t4-nc16as-v3
+        physical-processor: nvidia-t4-nc16as-v3
         grid-ci: 1 # data not provided in case study
         embodied-carbon: 0
       sci:

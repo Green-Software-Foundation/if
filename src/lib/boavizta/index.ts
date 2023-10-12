@@ -185,7 +185,7 @@ export class BoaviztaCpuImpactModel
       staticParams.verbose = undefined;
     }
 
-    if (!('processor' in staticParams)) {
+    if (!('physical-processor' in staticParams)) {
       throw new Error('Improper configure: Missing processor parameter');
     }
 
