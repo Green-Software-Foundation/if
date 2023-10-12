@@ -158,8 +158,8 @@ Take, for example, the enriched data points from the example above, they each ha
 | Timestamp        | Duration | Energy | Location | Grid | Operational |
 | ---------------- | -------- | ------ | -------- | ---- | ----------- |
 | 2023-07-06T00:00 | 15       | 43     | west-us  | 500  | 4.7         |
-| 2023-07-06T05:00 | 5        | 20     | west-us  | 490  | 2.9         |
-| 2023-07-06T10:00 | 5        | 18     | west-us  | 470  | 2.8         |
+| 2023-07-06T15:00 | 5        | 20     | west-us  | 490  | 2.9         |
+| 2023-07-06T25:00 | 5        | 18     | west-us  | 470  | 2.8         |
 
 If we had decided to bucket the output impacts in 5 mins increments, we would specify an impact duration of 5 mins. This phase determines how to normalize the buckets to 5 min durations.
 
@@ -175,6 +175,7 @@ This effectively boils down to a choice of what weighting to use. The simplest w
 | 2023-07-06T05:00 | 5        | 14.3   | west-us  | 500  | 1.57        |
 | 2023-07-06T10:00 | 5        | 14.3   | west-us  | 500  | 1.57        |
 | 2023-07-06T15:00 | 5        | 20     | west-us  | 490  | 2.9         |
+| 2023-07-06T20:00 | 5        | 0      | west-us  | 0    | 0           |
 | 2023-07-06T25:00 | 5        | 18     | west-us  | 470  | 2.8         |
 
 This would translate to YAML like so:

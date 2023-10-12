@@ -14,12 +14,16 @@ mockAxios.get.mockImplementation(url => {
   switch (url) {
     case 'https://api2.watttime.org/v2/login':
       return Promise.resolve({
+        status: 200,
         data: {
           token: 'test_token',
         },
       });
     case 'https://api2.watttime.org/v2/data':
-      return Promise.resolve({data: DATA});
+      return Promise.resolve({
+        data: DATA,
+        status: 200,
+      });
   }
 });
 describe('watt-time:configure test', () => {
@@ -32,24 +36,81 @@ describe('watt-time:configure test', () => {
     await expect(
       model.calculate([
         {
-          location: {
-            latitude: 37.7749,
-            longitude: -122.4194,
-          },
+          location: '37.7749,-122.4194',
           timestamp: '2021-01-01T00:00:00Z',
-          duration: 3600,
+          duration: 1200,
         },
       ])
     ).resolves.toStrictEqual([
       {
-        location: {
-          latitude: 37.7749,
-          longitude: -122.4194,
-        },
+        location: '37.7749,-122.4194',
         timestamp: '2021-01-01T00:00:00Z',
-        duration: 3600,
-        'grid-ci': 2096.256940667132,
+        duration: 1200,
+        'grid-ci': 2185.332173907599,
       },
     ]);
+    await expect(
+      model.calculate([
+        {
+          location: '37.7749,-122.4194',
+          timestamp: '2021-01-01T00:00:00Z',
+          duration: 120,
+        },
+      ])
+    ).resolves.toStrictEqual([
+      {
+        location: '37.7749,-122.4194',
+        timestamp: '2021-01-01T00:00:00Z',
+        duration: 120,
+        'grid-ci': 2198.0087539832293,
+      },
+    ]);
+    await expect(
+      model.calculate([
+        {
+          location: '37.7749,-122.4194',
+          timestamp: '2021-01-01T00:00:00Z',
+          duration: 300,
+        },
+      ])
+    ).resolves.toStrictEqual([
+      {
+        location: '37.7749,-122.4194',
+        timestamp: '2021-01-01T00:00:00Z',
+        duration: 300,
+        'grid-ci': 2198.0087539832293,
+      },
+    ]);
+    await expect(
+      model.calculate([
+        {
+          location: '37.7749,-122.4194',
+          timestamp: '2021-01-01T00:00:00Z',
+          duration: 360,
+        },
+      ])
+    ).resolves.toStrictEqual([
+      {
+        location: '37.7749,-122.4194',
+        timestamp: '2021-01-01T00:00:00Z',
+        duration: 360,
+        'grid-ci': 2193.5995087395318,
+      },
+    ]);
+
+    await expect(
+      model.calculate([
+        {
+          location: '37.7749,-122.4194',
+          timestamp: '2021-01-01T00:00:00Z',
+          duration: 3600,
+        },
+        {
+          location: '37.7749,-122.4194',
+          timestamp: '2021-01-02T01:00:00Z',
+          duration: 3600,
+        },
+      ])
+    ).rejects.toThrowError();
   });
 });

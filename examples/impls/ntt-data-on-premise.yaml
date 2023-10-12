@@ -40,8 +40,9 @@ graph:
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
-          time: ''
-          factor: 38032740
+          functional_unit_duration: 1 
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit
       observations: 
         - timestamp: 2023-07-06T00:00
           duration: 3600
@@ -49,6 +50,7 @@ graph:
           five-min-output-rate: 100
           grid-ci: 457 # gCO2e/kWh
           e-net: 0.00496 # 3.85e-3 * 24 ports * 1.5 (pue)
+          requests: 38032740
     layer-2-switch:
       pipeline:
         - sci-e
@@ -63,10 +65,11 @@ graph:
           rr: 1
           tor: 1
         sci-o:
-          i: 457 # gCO2/kwh 
+          grid_ci: 457 # gCO2/kwh 
         sci:
-          time: ''
-          factor: 38032740
+          functional_unit_duration: 1 
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit
       children:
         switch-1:
           observations:
@@ -74,24 +77,28 @@ graph:
               duration: 1
               e-net: 0.000811 #kwh     
               grid-ci: 457 # gCO2e/kWh
+              requests: 38032740
         switch-2:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
               e-net: 0 # no traffic at all
               grid-ci: 457 # gCO2e/kWh
+              requests: 38032740
         switch-3:
           observations:
             - timestamp: 2023-07-06T00:00
               duration: 1
               e-net: 0.000955 #kwh
               grid-ci: 457 # gCO2e/kWh
+              requests: 38032740
         switch-4:
           observations:
             - timestamp: 2023-07-06T00:00
               duration: 1
               e-net: 1.14e-8 #kwh
               grid-ci: 457 # gCO2e/kWh
+              requests: 38032740
     db-servers:
       pipeline:
         - sci-e
@@ -108,8 +115,8 @@ graph:
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
-          time: ''
-          factor: 38032740
+          functional_unit_duration: ''
+          functional_unit: requests
       children:
         db-server1:
           observations:
@@ -117,12 +124,14 @@ graph:
               e-cpu: 0.258
               duration: 1 #s
               grid-ci: 457 # gCO2e/kWh
+              requests: 38032740
         db-server2:
           observations:
             - timestamp: 2023-07-06T00:00
               e-cpu: 0.193
               duration: 1 #s
               grid-ci: 457 # gCO2e/kWh
+              requests: 38032740
     app-servers:
       pipeline:
         - sci-e
@@ -139,8 +148,9 @@ graph:
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
-          time: ''
-          factor: 38032740      
+          functional_unit_duration: 1 
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit 
       children:
         app-server1:
           observations: 
@@ -154,6 +164,7 @@ graph:
               duration: 1
               e-cpu: 0.147
               grid-ci: 457 # gCO2e/kWh
+              requests: 38032740
     web-servers:
       pipeline: 
         - sci-e
@@ -170,8 +181,9 @@ graph:
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
-          time: ''
-          factor: 38032740
+          functional_unit_duration: 1 
+          functional_duration_time: ''
+          functional_unit: requests # factor to convert per time to per f.unit
       children:
         web-server1:
           observations: 
@@ -179,9 +191,11 @@ graph:
               duration: 1
               e-cpu: 0.139
               grid-ci: 951 # gCO2e/kWh
+              requests: 38032740
         web-server2:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
               e-cpu: 0.116
               grid-ci: 951 # gCO2e/kWh
+              requests: 38032740

@@ -12,7 +12,8 @@ export class SciModel implements IImpactModelInterface {
   staticParams: object | undefined;
   name: string | undefined;
   time: string | unknown;
-  factor = 1;
+  functionalUnit = 'none';
+  functionalUnitDuration = 1;
 
   authenticate(authParams: object): void {
     this.authParams = authParams;
@@ -33,38 +34,71 @@ export class SciModel implements IImpactModelInterface {
 
       const operational = parseFloat(observation['operational-carbon']);
       const embodied = parseFloat(observation['embodied-carbon']);
-      const sci_secs = operational + embodied; // sci in time units of /s
+
+      let sci_secs = 0;
+      if ('carbon' in observation) {
+        sci_secs = observation['carbon'] / this.functionalUnitDuration;
+      } else {
+        sci_secs = (operational + embodied) / this.functionalUnitDuration; // sci in time units of /s
+      }
+
       let sci_timed: number = sci_secs;
 
       if (
+        this.time === 's' ||
         this.time === 'second' ||
         this.time === 'seconds' ||
-        this.time === ''
+        this.time === 'secs' ||
+        this.time === '' ||
+        this.time === null ||
+        this.time === 'none'
       ) {
         sci_timed = sci_secs;
       }
-      if (this.time === 'minute' || this.time === 'minutes') {
+      if (
+        this.time === 'minute' ||
+        this.time === 'minutes' ||
+        this.time === 'mins' ||
+        this.time === 'm'
+      ) {
         sci_timed = sci_secs * 60;
       }
-      if (this.time === 'hour' || this.time === 'hours') {
+      if (
+        this.time === 'hour' ||
+        this.time === 'hours' ||
+        this.time === 'hr' ||
+        this.time === 'h'
+      ) {
         sci_timed = sci_secs * 60 * 60;
       }
-      if (this.time === 'day' || this.time === 'days') {
+      if (this.time === 'day' || this.time === 'days' || this.time === 'd') {
         sci_timed = sci_secs * 60 * 60 * 24;
       }
-      if (this.time === 'week' || this.time === 'weeks') {
+      if (this.time === 'week' || this.time === 'weeks' || this.time === 'd') {
         sci_timed = sci_secs * 60 * 60 * 24 * 7;
       }
       if (this.time === 'month' || this.time === 'months') {
         sci_timed = sci_secs * 60 * 60 * 24 * 7 * 4;
       }
-      if (this.time === 'year' || this.time === 'years') {
+      if (
+        this.time === 'year' ||
+        this.time === 'years' ||
+        this.time === 'yr' ||
+        this.time === 'y'
+      ) {
         sci_timed = sci_secs * 60 * 60 * 24 * 365;
       }
 
-      const factor = this.factor;
-      observation['sci'] = sci_timed / factor;
-      return observation;
+      const functionalUnit = this.functionalUnit;
+
+      if (this.functionalUnit !== 'none') {
+        const factor = observation[functionalUnit];
+        observation['sci'] = sci_timed / factor;
+        return observation;
+      } else {
+        observation['sci'] = sci_timed;
+        return observation;
+      }
     });
 
     return tunedObservations;
@@ -81,11 +115,27 @@ export class SciModel implements IImpactModelInterface {
     this.staticParams = staticParams;
     this.name = name;
 
-    if ('time' in staticParams) {
-      this.time = staticParams?.time;
+    if ('functional_unit_time' in staticParams) {
+      this.time = staticParams?.functional_unit_time;
     }
-    if ('factor' in staticParams && typeof staticParams.factor === 'number') {
-      this.factor = staticParams?.factor;
+    if (
+      'functional_unit_duration' in staticParams &&
+      typeof staticParams.functional_unit_duration === 'number'
+    ) {
+      this.functionalUnitDuration = staticParams?.functional_unit_duration;
+    } else {
+      throw new Error(
+        'Functional unit duration is not a valid number: provide number of seconds represented by observation'
+      );
+    }
+    if (
+      'functional_unit' in staticParams &&
+      typeof staticParams.functional_unit === 'string' &&
+      staticParams.functional_unit !== ''
+    ) {
+      this.functionalUnit = staticParams?.functional_unit;
+    } else {
+      this.functionalUnit = 'none';
     }
 
     return this;
