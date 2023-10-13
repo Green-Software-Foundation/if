@@ -121,7 +121,7 @@ describe('util/models-universe: ', () => {
       const modelName = 'mock-modelName';
       const config = {};
 
-      const expectedMessage = `Model: ${modelName} is not initalized yet.`;
+      const expectedMessage = `Model ${modelName} is not initalized yet.`;
 
       try {
         await modelsHandbook.getInitializedModel(modelName, config);

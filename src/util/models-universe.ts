@@ -140,6 +140,6 @@ export class ModelsUniverse {
       return await this.initalizedModels[modelName](config);
     }
 
-    throw new Error(`Model: ${modelName} is not initalized yet.`);
+    throw new Error(`Model ${modelName} is not initalized yet.`);
   }
 }
