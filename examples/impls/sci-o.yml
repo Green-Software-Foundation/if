@@ -20,3 +20,4 @@ graph:
           duration: 3600
           e-cpu: 0.001
           grid-ci: 800
+          
