@@ -36,7 +36,7 @@ Example:
 operational-carbon: 0.02  // operational-carbon per s
 embodied-carbon: 5   // embodied-carbon per s
 functional-unit: requests  // indicate the functional unit is requests
-functional-unit-time: minute  // time unit is days
+functional-unit-time: minute  // time unit is minutes
 functional-unit-duration: 1  // observation duration is 1 second
 requests: 100   // requests per minute
 
