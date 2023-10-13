@@ -1,0 +1,19 @@
+name: ccf-demo
+description: example impl invoking CCF model
+initialize:
+  models:
+    - name: ccf
+      kind: builtin
+graph:
+  children:
+    child:
+      pipeline:
+        - ccf
+      config:
+        ccf:
+          provider: aws
+          instance_type: m5n.large
+      observations:
+        - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+          duration: 1
+          cpu-util: 10
