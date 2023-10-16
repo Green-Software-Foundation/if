@@ -1,4 +1,11 @@
-import {describe, expect, it} from '@jest/globals';
+import {ModelsUniverse as MockModelUniverse} from '../__mocks__/model-universe';
+
+jest.mock('./models-universe', () => ({
+  __esModule: true,
+  ModelsUniverse: MockModelUniverse,
+}));
+
+import {describe, expect, it, jest} from '@jest/globals';
 
 import {Supercomputer} from './supercomputer';
 import {ModelsUniverse} from './models-universe';
