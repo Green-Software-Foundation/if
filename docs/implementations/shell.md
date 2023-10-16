@@ -16,6 +16,14 @@ const result = await impactModel.calculate([
     ])
 ```
 
+## Considerations
+
+The `shell-imp` is designed to run arbitrary external models. This means IEF does not necessarily know what calculations are being executed in the external model. there is no struct requirement on the return type, as this depends upon the calculations and the position of the external model ina  model pipeline. For example, one external model might carry out the entire end-to-end SCI calculation, taking in usage observations and returning `sci`. In this case, the model is expected to return `sci` and it would be the only model invoked in the `impl`. 
+
+However, it is also entirely possible to have external models that only deliver some small part of the overall SCI calculation, and rely on IEF builtin models to do the rest. For example, perhaps there is a proprietary model that a user wishes to use as a drop-in replacement for the Teads TDP model. In this case, the model would take usage observations as inputs and would need to return some or all of `e_cpu`, `e-net`, `e-mem` and `e-gpu`. These would then be passed to the `sci-e` model to return `energy`, then `sci-o` to return `embodied-carbon`.
+
+Since the design space for external models is so large, it is up to external model developers to ensure compatibility wioth IEF built-ins.
+
 ## Example impl
 
 IEF users will typically call the shell model as part of a pipeline defined in an `impl` file. In this case, instantiating and configuring the model is handled by `rimpl` and does not have to be done explicitly by the user. The following is an example `impl` that calls an external model via `shell-imp`:
