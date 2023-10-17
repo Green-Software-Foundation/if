@@ -1,13 +1,13 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {SciModel} from '../../../../lib/sci/index';
+import {SciModel} from './index';
 jest.setTimeout(30000);
 
 describe('sci:configure test', () => {
   test('initialize and test', async () => {
     const model = await new SciModel().configure('name', {
-      'functional-unit-time': 'minutes',
-      'functional-unit': 'users',
-      'functional-unit-duration': 1,
+      functional_unit_time: 'minutes',
+      functional_unit: 'users',
+      functional_unit_duration: 1,
     });
     expect(model).toBeInstanceOf(SciModel);
     await expect(
@@ -49,9 +49,9 @@ describe('sci:configure test', () => {
   });
   test('initialize and test: vary observation duration ', async () => {
     const model = await new SciModel().configure('name', {
-      'functional-unit-time': 'days',
-      'functional-unit': '',
-      'functional-unit-duration': 3600,
+      functional_unit_time: 'days',
+      functional_unit: '',
+      functional_unit_duration: 1,
     });
     expect(model).toBeInstanceOf(SciModel);
     await expect(
