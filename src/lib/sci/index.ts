@@ -1,11 +1,11 @@
-import { IImpactModelInterface } from '../interfaces';
+import {IImpactModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair } from '../../types/common';
+import {KeyValuePair} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { SCI } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {SCI} = MODEL_IDS;
 
 export class SciModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
@@ -36,7 +36,7 @@ export class SciModel implements IImpactModelInterface {
       const embodied = parseFloat(observation['embodied-carbon']);
 
       /*
-      If `carbon` is in observations, use it. 
+      If `carbon` is in observations, use it.
       If not, calculate it from operational and embodied carbon.
       Divide by observation[duration] to ensure time unit is /s
       */
@@ -98,7 +98,7 @@ export class SciModel implements IImpactModelInterface {
         sci_timed = sci_secs * 60 * 60 * 24 * 365;
       }
 
-      /* 
+      /*
       sci currently in whole single units of time - multiply by duration to
       convert to user-defined span of time.
       */
