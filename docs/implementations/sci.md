@@ -22,11 +22,11 @@ SCI is the sum of the `operational-carbon` (calculated using the `sci-o` model) 
 
 ## IEF Implementation
 
-`sci` takes `operatonal-carbon` and `embodied-carbon` as inputs along with three parameters related to the functional unit: 
+`sci` takes `operational-carbon` and `embodied-carbon` as inputs along with three parameters related to the functional unit: 
 
 - `functional-unit`: a string describing the functional unit to normalize the SCI to. This must match a field provided in the `observations` with an associated value. For example, if `functional-unit` is `"requests"` then there should be a `requests` field in `obserations` with an associated value for the number of requests per `functional-unit-duration`.
 - `functional-unit-time`: a time unit for `functional-unit-duration` as a string. E.g. `s`, `seconds`, `days`, `months`, `y`.
-- `functional-unit-duration`: The length of time, in seconds, that the observation covers. For example, if if the observation period is one day, then `functional-unit-duration` should be `86400` (seconds per day). This is used to ensure that `carbon` is represented in units of C/s at the start of the SCI calculation.
+- `functional-unit-duration`: The length of time, in units of `functional-unit-time` that the `sci` value should be normalized to. We expect this to nearly always be `1`, but for example if you want your `sci` value expressed as gC/user/2yr you could set `functional-unit-duration` to `2`, `functional-unit-time` to `years`, and `functional-unit` to `y`.
 
 In a model pipeline, time is always denominated in `seconds`. It is only in `sci` that other units of time are considered. Therefore, if `functional_unit_time` is `month`, then the sum of `operational-carbon` and `embodied-carbon` is multiplied by the number of seconds in one month.
 
@@ -37,10 +37,10 @@ operational-carbon: 0.02  // operational-carbon per s
 embodied-carbon: 5   // embodied-carbon per s
 functional-unit: requests  // indicate the functional unit is requests
 functional-unit-time: minute  // time unit is minutes
-functional-unit-duration: 1  // observation duration is 1 second
+functional-unit-duration: 1  // time span is 1 functional-unit-time (1 minute)
 requests: 100   // requests per minute
 
-sci-per-s = operational-carbon + embodied-carbon / functional-unit-duration  // (= 5.02)
+sci-per-s = operational-carbon + embodied-carbon / duration  // (= 5.02)
 sci-per-minute = sci-per-s * 60  // (= 301.2)
 sci-per-f-unit = sci-per-duration / 100  // (= 3.012 gC/request)
 ```
@@ -59,6 +59,7 @@ const results = sciModel.calculate([
   {
     operational-carbon: 0.02
     embodied-carbon: 5,
+    duration: 1
     requests: 100,
   }
 ])
@@ -91,5 +92,6 @@ graph:
         - timestamp: 2023-07-06T00:00
           operational-carbon: 0.02
           embodied-carbon: 5
+          duration: 1
           requests: 100
 ```
