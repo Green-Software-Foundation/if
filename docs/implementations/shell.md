@@ -26,7 +26,7 @@ Since the design space for external models is so large, it is up to external mod
 
 ## Example impl
 
-IEF users will typically call the shell model as part of a pipeline defined in an `impl` file. In this case, instantiating and configuring the model is handled by `rimpl` and does not have to be done explicitly by the user. The following is an example `impl` that calls an external model via `shell-imp`:
+IEF users will typically call the shell model as part of a pipeline defined in an `impl` file. In this case, instantiating and configuring the model is handled by `rimpl` and does not have to be done explicitly by the user. The following is an example `impl` that calls an external model via `shell-imp`. It asumes the model takes `e-cpu` and `e-mem` as inputs and returns `energy`:
 
 ```yaml
 name: shell-demo
@@ -36,7 +36,7 @@ initialize:
   models:
     - name: sampler
       kind: shell
-      path: python3 /usr/local/bin/sampler
+      path: python3 /usr/local/bin/energy-calculator
 graph:
   children:
     child:
@@ -48,7 +48,40 @@ graph:
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 1 # Secs
+          e-cpu: 0.002
+          e-mem: 0.000005
 
 ```
 
-In this example, the model invoked by executing `python3 /usr/local/bin/sampler` in a shell.
+In this hypothetical example, the model is written in Python and invoked by executing `python3 /usr/local/bin/energy-calculator` in a shell.
+The model should return an `ompl` looking as follows:
+
+```yaml
+name: shell-demo
+description:
+tags:
+initialize:
+  models:
+    - name: sampler
+      kind: shell
+      path: python3 /usr/local/bin/energy-calculator
+graph:
+  children:
+    child:
+      pipeline:
+        - sampler
+      config:
+        sampler:
+          executable: python3 /usr/local/bin/sampler
+      observations:
+        - timestamp: 2023-07-06T00:00
+          duration: 1 # Secs
+          e-cpu: 0.002
+          e-mem: 0.000005
+      impacts:
+        - timestamp: 2023-07-06T00:00
+          duration: 1 # Secs
+          e-cpu: 0.002
+          e-mem: 0.000005
+          energy: 0.02 # added by model
+```
