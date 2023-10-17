@@ -1,5 +1,5 @@
-import { describe, expect, jest, test } from '@jest/globals';
-import { SciModel } from './index';
+import {describe, expect, jest, test} from '@jest/globals';
+import {SciModel} from './index';
 jest.setTimeout(30000);
 
 describe('sci:configure test', () => {
@@ -16,7 +16,7 @@ describe('sci:configure test', () => {
           'operational-carbon': 0.02,
           'embodied-carbon': 5,
           users: 100,
-          duration: 1
+          duration: 1,
         },
       ])
     ).resolves.toStrictEqual([
@@ -34,7 +34,7 @@ describe('sci:configure test', () => {
           'operational-carbon': 20,
           'embodied-carbon': 0.005,
           users: 1000,
-          duration: 1
+          duration: 1,
         },
       ])
     ).resolves.toStrictEqual([
@@ -59,7 +59,7 @@ describe('sci:configure test', () => {
         {
           'operational-carbon': 0.002,
           'embodied-carbon': 0.0005,
-          duration: 1
+          duration: 1,
         },
       ])
     ).resolves.toStrictEqual([
@@ -75,7 +75,7 @@ describe('sci:configure test', () => {
         {
           'operational-carbon': 0.002,
           'embodied-carbon': 0.0005,
-          duration: 2
+          duration: 2,
         },
       ])
     ).resolves.toStrictEqual([
@@ -85,9 +85,8 @@ describe('sci:configure test', () => {
         duration: 2,
         sci: 108,
       },
-    ])
-  }
-  )
+    ]);
+  });
   test('initialize and test: vary fuinctional-unit-duration', async () => {
     const model = await new SciModel().configure('name', {
       functional_unit_time: 'days',
@@ -100,7 +99,7 @@ describe('sci:configure test', () => {
         {
           'operational-carbon': 0.002,
           'embodied-carbon': 0.0005,
-          duration: 1
+          duration: 1,
         },
       ])
     ).resolves.toStrictEqual([
@@ -112,5 +111,4 @@ describe('sci:configure test', () => {
       },
     ]);
   });
-}
-)
+});
