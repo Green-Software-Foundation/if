@@ -1,5 +1,5 @@
-import {describe, expect, jest, test} from '@jest/globals';
-import {SciModel} from '../../../../lib/sci/index';
+import { describe, expect, jest, test } from '@jest/globals';
+import { SciModel } from '../../../../lib/sci/index';
 jest.setTimeout(30000);
 
 describe('sci:configure test', () => {
@@ -16,6 +16,7 @@ describe('sci:configure test', () => {
           'operational-carbon': 0.02,
           'embodied-carbon': 5,
           users: 100,
+          duration: 1
         },
       ])
     ).resolves.toStrictEqual([
@@ -23,6 +24,7 @@ describe('sci:configure test', () => {
         'operational-carbon': 0.02,
         'embodied-carbon': 5,
         users: 100,
+        duration: 1,
         sci: 3.012,
       },
     ]);
@@ -32,6 +34,7 @@ describe('sci:configure test', () => {
           'operational-carbon': 20,
           'embodied-carbon': 0.005,
           users: 1000,
+          duration: 1
         },
       ])
     ).resolves.toStrictEqual([
@@ -39,11 +42,12 @@ describe('sci:configure test', () => {
         'operational-carbon': 20,
         'embodied-carbon': 0.005,
         users: 1000,
+        duration: 1,
         sci: 1.2003,
       },
     ]);
   });
-  test('initialize and test', async () => {
+  test('initialize and test: vary observation duration ', async () => {
     const model = await new SciModel().configure('name', {
       'functional-unit-time': 'days',
       'functional-unit': '',
@@ -53,30 +57,60 @@ describe('sci:configure test', () => {
     await expect(
       model.calculate([
         {
-          'operational-carbon': 0.02,
-          'embodied-carbon': 5,
+          'operational-carbon': 0.002,
+          'embodied-carbon': 0.0005,
+          duration: 1
         },
       ])
     ).resolves.toStrictEqual([
       {
-        'operational-carbon': 0.02,
-        'embodied-carbon': 5,
-        sci: 120.47999999999999,
+        'operational-carbon': 0.002,
+        'embodied-carbon': 0.0005,
+        duration: 1,
+        sci: 216,
       },
     ]);
     await expect(
       model.calculate([
         {
-          'operational-carbon': 20,
-          'embodied-carbon': 0.005,
+          'operational-carbon': 0.002,
+          'embodied-carbon': 0.0005,
+          duration: 2
         },
       ])
     ).resolves.toStrictEqual([
       {
-        'operational-carbon': 20,
-        'embodied-carbon': 0.005,
-        sci: 480.12,
+        'operational-carbon': 0.002,
+        'embodied-carbon': 0.0005,
+        duration: 2,
+        sci: 108,
+      },
+    ])
+  }
+  )
+  test('initialize and test: vary fuinctional-unit-duration', async () => {
+    const model = await new SciModel().configure('name', {
+      functional_unit_time: 'days',
+      functional_unit: '',
+      functional_unit_duration: 2,
+    });
+    expect(model).toBeInstanceOf(SciModel);
+    await expect(
+      model.calculate([
+        {
+          'operational-carbon': 0.002,
+          'embodied-carbon': 0.0005,
+          duration: 1
+        },
+      ])
+    ).resolves.toStrictEqual([
+      {
+        'operational-carbon': 0.002,
+        'embodied-carbon': 0.0005,
+        duration: 1,
+        sci: 432,
       },
     ]);
   });
-});
+}
+)

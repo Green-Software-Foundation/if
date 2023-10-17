@@ -1,11 +1,11 @@
-import {IImpactModelInterface} from '../interfaces';
+import { IImpactModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-import {KeyValuePair} from '../../types/common';
+import { KeyValuePair } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {SCI} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { SCI } = MODEL_IDS;
 
 export class SciModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
@@ -35,15 +35,24 @@ export class SciModel implements IImpactModelInterface {
       const operational = parseFloat(observation['operational-carbon']);
       const embodied = parseFloat(observation['embodied-carbon']);
 
+      /*
+      If `carbon` is in observations, use it. 
+      If not, calculate it from operational and embodied carbon.
+      Divide by observation[duration] to ensure time unit is /s
+      */
       let sci_secs = 0;
       if ('carbon' in observation) {
-        sci_secs = observation['carbon'] / this.functionalUnitDuration;
+        sci_secs = observation['carbon'] / observation['duration'];
       } else {
-        sci_secs = (operational + embodied) / this.functionalUnitDuration; // sci in time units of /s
+        sci_secs = (operational + embodied) / observation['duration']; // sci in time units of /s
       }
 
       let sci_timed: number = sci_secs;
+      let sci_timed_duration = sci_secs;
 
+      /*
+      Convert C to desired time unit
+      */
       if (
         this.time === 's' ||
         this.time === 'second' ||
@@ -89,14 +98,20 @@ export class SciModel implements IImpactModelInterface {
         sci_timed = sci_secs * 60 * 60 * 24 * 365;
       }
 
+      /* 
+      sci currently in whole single units of time - multiply by duration to
+      convert to user-defined span of time.
+      */
+      sci_timed_duration = sci_timed * this.functionalUnitDuration;
+
       const functionalUnit = this.functionalUnit;
 
       if (this.functionalUnit !== 'none') {
         const factor = observation[functionalUnit];
-        observation['sci'] = sci_timed / factor;
+        observation['sci'] = sci_timed_duration / factor;
         return observation;
       } else {
-        observation['sci'] = sci_timed;
+        observation['sci'] = sci_timed_duration;
         return observation;
       }
     });
