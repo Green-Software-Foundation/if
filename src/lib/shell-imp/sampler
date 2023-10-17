@@ -21,7 +21,7 @@ try:
     data['impacts'] = []
     for impact in data['observations']:
       imp = copy.deepcopy(impact)
-      imp['e'] = 1
+      imp['energy'] = 1
       data['impacts'].append(imp)
     print(yaml.dump(data, default_flow_style=False))
   else:

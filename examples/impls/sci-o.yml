@@ -1,0 +1,23 @@
+name: sci-o-demo
+description:
+tags:
+initialize:
+  models:
+    - name: sci-e
+      kind: builtin
+    - name: sci-o
+      kind: builtin
+graph:
+  children:
+    child:
+      pipeline:
+        - sci-e
+        - sci-o
+      config:
+        sci-e:
+      observations:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          e-cpu: 0.001
+          grid-ci: 800
+          
