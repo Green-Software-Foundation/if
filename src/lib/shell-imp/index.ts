@@ -82,7 +82,6 @@ export class ShellModel implements IImpactModelInterface {
    */
   private runModelInShell(input: string, execPath: string): KeyValuePair {
     try {
-      console.log('input', input);
       const execs = execPath.split(' ');
       const executable = execs.shift() ?? '';
 
@@ -92,7 +91,6 @@ export class ShellModel implements IImpactModelInterface {
           encoding: 'utf8',
         })
         .stdout.toString();
-      console.log('result', result);
       return yaml.load(result) as KeyValuePair;
     } catch (e: any) {
       throw new Error(e.message);

@@ -34,7 +34,7 @@
     "ts-jest": "^29.1.1"
   },
   "engines": {
-    "node": "18.17.1",
+    "node": "18",
     "yarn": "1.22.19"
   },
   "keywords": [],
@@ -46,7 +46,8 @@
     "fix": "gts fix",
     "fix:package": "fixpack",
     "lint": "gts lint",
-    "test": "jest"
+    "coverage": "jest --verbose --coverage",
+    "test": "jest --verbose"
   },
   "stability": "stable",
   "types": "src/index.d.ts"

@@ -16,15 +16,11 @@ export const openYamlFileAsObject = async (filePath: string): Promise<any> => {
  * Saves given `yaml` dump as a file.
  */
 export const saveYamlFileAs = async (object: any, pathToFile: string) => {
-  try {
-    const dirPath = path.dirname(pathToFile);
-    await fs.mkdir(dirPath, {recursive: true});
-    const yamlString = YAML.dump(object, {noRefs: true});
+  const dirPath = path.dirname(pathToFile);
+  await fs.mkdir(dirPath, {recursive: true});
+  const yamlString = YAML.dump(object, {noRefs: true});
 
-    return fs.writeFile(pathToFile, yamlString);
-  } catch (error) {
-    console.error(error);
-  }
+  return fs.writeFile(pathToFile, yamlString);
 };
 
 /**

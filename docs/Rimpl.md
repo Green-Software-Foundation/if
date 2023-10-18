@@ -1,17 +1,18 @@
 # Rimpl
 
-# Introduction
+## Introduction
 
 Rimpl is a command line tool that computes [Impl (Impact YAML)](Impl%20(Impact%20YAML).md) files. 
-# Help
+
+## Quickstart
 
 ```
 rimpl 
 -impl [path to the input impl file]
 -ompl [path to the output impl file]
--format [yaml|csv] 
--verbose
--help 
+-format [yaml|csv] (not yet implemented)
+-verbose (not yet implemented)
+-help  (not yet implemented)
 ```
 
 - `impl`: path to an input IMPL file
@@ -20,14 +21,22 @@ rimpl
 - `verbose`: how much information to output about the calculation to aid investigation and debugging.
 - `help`: prints out the above help file.
 
-# Design Ideology
+
+To use Rimpl, you must first configure an impl. Then, you can simply pass the path to the impl to rimpl on the command line. You can also pass a path where you would like to save the output file to. For example, the following command, run from the project root, loads the `mst-eshoppen.yml` impl file from the examples directory, executes all the models defined in the impl, and saves the output to `examples/ompls/e-shoppen.yml`:
+
+```sh
+npx ts-node scripts/rimpl.ts --impl ./examples/impls/msft-eshoppen.yaml --ompl ./examples/ompls/e-shoppen.yml
+```
+
+
+## Design Ideology
 
 The state of an impact computation is stored in a `graph` object.
 
 There are a series of functions defined in a [Lifecycle](#Lifecycle) section which the `graph` object as input and mutate it somehow.
 
 At the end a processed graph is serialized back out to the end user for them to use the data.
-# Lifecycle
+## Lifecycle
 
 Every `Rimpl` execution goes through a lifecycle, a set of distinct steps which process the graph in stages.
 
@@ -38,7 +47,7 @@ flowchart TB
 ExpandShorthand --> NamespaceConfig --> InitializeModels --> Compute --> Aggregate --> Export
 ```
 
-## Expand Shorthand
+### Expand Shorthand
 
 - There is a short-hand way of defining an IMPL file and a long-hand way of defining it.
 - The first stage of the lifecycle is to expand out the shorthand format to make the graph object easier to parse for future stages in the lifecycle of a computation.
@@ -268,7 +277,7 @@ component:
         cpu-util: 11
 ```
 
-## Aggregate (TBD)
+## Aggregate (Not yet implemented)
 
 Once all the component nodes have been computed the next step is to aggregate all the values up.
 
@@ -276,6 +285,8 @@ Once all the component nodes have been computed the next step is to aggregate al
 > This step only makes sense if the nodes have been time synced. That is to say, every impact timestamp and duration snaps to a globally defined grid. If that's true then aggregation is a simple matter, if it's not true then aggregation might not make a lot of sense. 
 
 ## Export (TBD)
+
+> It is curently only possible to export data as an `ompl` (output yaml). Other export options will be implemnted soon.
 
 The final step is to export the graph into a format that has been requested by the end user.
 
@@ -286,7 +297,8 @@ If a file param has been provided via `-ompl` then we export as a YAML file form
 
 If `-format csv` was specified then instead of outputting a YAML file we output a CSV file with each row being an impact metric for a node in the tree and each column being a specific timestamp and duration.
 
-# Verbose
+
+## Verbosity (not yet implemented)
 
 The `-verbose` settings in rimpl exports a version of the graph after each step in the lifecycle process, so we can see how the lifecycle adjusts the graph and help debug any issues.
 
