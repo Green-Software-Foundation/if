@@ -46,8 +46,8 @@
     "fix": "gts fix",
     "fix:package": "fixpack",
     "lint": "gts lint",
-    "coverage": "jest --coverage",
-    "test": "jest"
+    "coverage": "jest --verbose --coverage",
+    "test": "jest --verbose"
   },
   "stability": "stable",
   "types": "src/index.d.ts"
