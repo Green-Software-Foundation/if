@@ -22,7 +22,7 @@ export class TeadsAWS implements IImpactModelInterface {
 
   // list of all the by Architecture
   private instanceType = '';
-  private expectedLifespan = 4;
+  private expectedLifespan = 4 * 365 * 24 * 3600;
   private interpolation = Interpolation.LINEAR;
 
   constructor() {
@@ -230,7 +230,7 @@ export class TeadsAWS implements IImpactModelInterface {
     const totalEmissions =
       this.computeInstances[this.instanceType].embodiedEmission ?? 0;
     const timeReserved = durationInHours;
-    const expectedLifespan = 8760 * this.expectedLifespan;
+    const expectedLifespan = this.expectedLifespan / 3600;
     const reservedResources =
       this.computeInstances[this.instanceType].vCPUs ?? 1.0;
     const totalResources =

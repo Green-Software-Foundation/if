@@ -16,7 +16,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   expectedLifespan = 4 * 365 * 24 * 60 * 60;
   protected authCredentials: object | undefined;
 
-  authenticate(authParams: object) {
+  async authenticate(authParams: object) {
     this.authCredentials = authParams;
   }
 
@@ -49,7 +49,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     // metric is between 0 and 1, convert to percentage
     let usageInput: KeyValuePair = {
       hours_use_time: duration / 3600.0,
-      time_workload: metric * 100.0,
+      time_workload: metric,
     };
     // convert expected lifespan from seconds to years
     usageInput['years_life_time'] =
@@ -216,7 +216,7 @@ export class BoaviztaCloudImpactModel
     return BOAVIZTA_CLOUD;
   }
 
-  async validateLocation(staticParamsCast: object) {
+  async validateLocation(staticParamsCast: object): Promise<string | void> {
     if ('location' in staticParamsCast) {
       const location = (staticParamsCast.location as string) ?? 'USA';
       const countries = await this.supportedLocations();
@@ -228,16 +228,17 @@ export class BoaviztaCloudImpactModel
             countries.join(', ')
         );
       }
+      return staticParamsCast.location as string;
     }
   }
 
   async validateInstanceType(staticParamsCast: object) {
-    if (!('instance_type' in staticParamsCast)) {
-      throw new Error('Improper configure: Missing instance_type parameter');
-    }
-
     if (!('provider' in staticParamsCast)) {
       throw new Error('Improper configure: Missing provider parameter');
+    }
+
+    if (!('instance-type' in staticParamsCast)) {
+      throw new Error("Improper configure: Missing 'instance-type' parameter");
     }
 
     const provider = staticParamsCast.provider as string;
@@ -251,21 +252,18 @@ export class BoaviztaCloudImpactModel
       );
     }
 
-    if ('instance_type' in staticParamsCast) {
+    if ('instance-type' in staticParamsCast) {
       if (
         !this.instanceTypes[provider].includes(
-          staticParamsCast.instance_type as string
+          staticParamsCast['instance-type'] as string
         )
       ) {
         throw new Error(
-          "Improper configure: Invalid instance_type parameter: '" +
-            staticParamsCast.instance_type +
-            "'. Valid values are : " +
-            this.instanceTypes[provider].join(', ')
+          `Improper configure: Invalid 'instance-type' parameter: '${
+            staticParamsCast['instance-type']
+          }'. Valid values are : ${this.instanceTypes[provider].join(', ')}`
         );
       }
-    } else {
-      throw new Error('Improper configure: Missing instance_type parameter');
     }
   }
 
@@ -332,10 +330,11 @@ export class BoaviztaCloudImpactModel
     }
     // if no valid provider found, throw error
     await this.validateProvider(staticParams);
-    // if no valid instance_type found, throw error
+    // if no valid 'instance-type' found, throw error
     await this.validateInstanceType(staticParams);
     // if no valid location found, throw error
     await this.validateLocation(staticParams);
+
     if ('expected-lifespan' in staticParams) {
       this.expectedLifespan = staticParams['expected-lifespan'] as number;
     }

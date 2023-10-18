@@ -1,11 +1,7 @@
-import {INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING} from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
 import Spline from 'typescript-cubic-spline';
 
-import {
-  ICcfResult,
-  IComputeInstance,
-  IImpactModelInterface,
-} from '../interfaces';
+import {IComputeInstance, IImpactModelInterface} from '../interfaces';
+import {INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING} from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
 
 import {CONFIG} from '../../config';
 
@@ -64,8 +60,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
    *  @param {string} name name of the resource
    *  @param {Object} staticParams static parameters for the resource
    *  @param {("aws"|"gcp"|"azure")} staticParams.provider aws, gcp, azure
-   *  @param {string} staticParams.instance_type instance type from the list of supported instances
-   *  @param {number} staticParams.expected_lifespan expected lifespan of the instance in years
+   *  @param {string} staticParams.'instance-type' instance type from the list of supported instances
+   *  @param {number} staticParams.'expected-lifespan' expected lifespan of the instance in years
    *  @param {Interpolation} staticParams.interpolation linear(All Clouds), spline (only for AWS)
    */
   async configure(
@@ -89,8 +85,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       throw new Error('Provider not provided');
     }
 
-    if ('instance_type' in staticParams) {
-      const instanceType = staticParams?.instance_type as string;
+    if ('instance-type' in staticParams) {
+      const instanceType = staticParams['instance-type'] as string;
       if (instanceType in this.computeInstances[this.provider]) {
         this.instanceType = instanceType;
       } else {
@@ -100,8 +96,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       throw new Error('Instance Type not provided');
     }
 
-    if ('expected_lifespan' in staticParams) {
-      this.expectedLifespan = staticParams?.expected_lifespan as number;
+    if ('expected-lifespan' in staticParams) {
+      this.expectedLifespan = staticParams['expected-lifespan'] as number;
     }
 
     if ('interpolation' in staticParams) {
@@ -123,34 +119,29 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
    * Calculate the total emissions for a list of observations
    *
    * Each Observation require:
-   *  @param {Object[]} observations  ISO 8601 datetime string
-   *  @param {string} observations[].datetime ISO 8601 datetime string
+   *  @param {Object[]} observations  ISO 8601 timestamp string
+   *  @param {string} observations[].timestamp ISO 8601 timestamp string
    *  @param {number} observations[].duration observation duration in seconds
-   *  @param {number} observations[].cpu percentage cpu usage
+   *  @param {number} observations[].cpu-util percentage cpu usage
    */
   async calculate(observations: object | object[] | undefined): Promise<any[]> {
     if (observations === undefined) {
       throw new Error('Required Parameters not provided');
     }
+    if (!Array.isArray(observations)) {
+      throw new Error('observations should be an array');
+    }
 
     if (this.instanceType === '' || this.provider === '') {
       throw new Error('Configuration is incomplete');
     }
+    observations.map((observation: KeyValuePair) => {
+      observation['energy'] = this.calculateEnergy(observation);
+      observation['embodied-carbon'] = this.embodiedEmissions(observation);
+      return observation;
+    });
 
-    const results: ICcfResult[] = [];
-    if (Array.isArray(observations)) {
-      observations.forEach((observation: KeyValuePair) => {
-        const energy = this.calculateEnergy(observation);
-        const embodiedEmissions = this.embodiedEmissions(observation);
-
-        results.push({
-          energy: energy,
-          embodied_emissions: embodiedEmissions,
-        });
-      });
-    }
-
-    return results;
+    return observations;
   }
 
   /**
@@ -158,27 +149,24 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
    * requires
    *
    * duration: duration of the observation in seconds
-   * cpu: cpu usage in percentage
-   * datetime: ISO 8601 datetime string
+   * cpu-util: cpu usage in percentage
+   * timestamp: ISO 8601 timestamp string
    *
    * Uses a spline method for AWS and linear interpolation for GCP and Azure
    */
   private calculateEnergy(observation: KeyValuePair) {
     if (
       !('duration' in observation) ||
-      !('cpu' in observation) ||
-      !('datetime' in observation)
+      !('cpu-util' in observation) ||
+      !('timestamp' in observation)
     ) {
       throw new Error(
-        'Required Parameters duration,cpu,datetime not provided for observation'
+        'Required Parameters duration,cpu,timestamp not provided for observation'
       );
     }
 
-    //    duration is in seconds
     const duration = observation['duration'];
-
-    //    convert cpu usage to percentage
-    const cpu = observation['cpu'] * 100.0;
+    const cpu = observation['cpu-util'];
 
     //  get the wattage for the instance type
     let wattage;
@@ -369,7 +357,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
 
   // Architecture strings are different between Instances-Use.JSON and the bundled Typescript from CCF.
   // This function resolves the differences.
-  private resolveAwsArchitecture(architecture: string) {
+  resolveAwsArchitecture(architecture: string) {
     if (architecture.includes('AMD ')) {
       architecture = architecture.substring(4);
     }
@@ -381,8 +369,6 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     if (architecture.includes('Graviton')) {
       if (architecture.includes('2')) {
         architecture = 'Graviton2';
-      } else if (architecture.includes('3')) {
-        architecture = 'Graviton3';
       } else {
         architecture = 'Graviton';
       }
@@ -393,7 +379,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     }
 
     if (!(architecture in this.computeInstanceUsageByArchitecture['aws'])) {
-      console.log('ARCHITECTURE:', architecture);
+      throw new Error(`${architecture} not supported`);
     }
 
     return architecture;
