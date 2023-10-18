@@ -1,5 +1,5 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {TeadsCurveModel} from './index';
+import {TeadsCurveModel} from '../../../../lib/teads-curve/index';
 
 jest.setTimeout(30000);
 

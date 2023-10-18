@@ -1,7 +1,7 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {TeadsAWS} from './index';
+import {TeadsAWS} from '../../../../lib/teads-aws/index';
 
-import {Interpolation} from '../../types/common';
+import {Interpolation} from '../../../../types/common';
 
 jest.setTimeout(30000);
 

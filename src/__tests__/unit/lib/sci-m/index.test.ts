@@ -1,5 +1,5 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {SciMModel} from './index';
+import {SciMModel} from '../../../../lib/sci-m/index';
 jest.setTimeout(30000);
 
 describe('sci-o:configure test', () => {

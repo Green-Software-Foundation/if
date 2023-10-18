@@ -1,5 +1,8 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {EshoppenMemModel, EshoppenModel} from './eshoppen-model';
+import {
+  EshoppenMemModel,
+  EshoppenModel,
+} from '../../../../lib/case-studies/eshoppen-model';
 
 jest.setTimeout(30000);
 

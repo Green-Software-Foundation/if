@@ -1,5 +1,5 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {EAvevaModel} from './aveva-model';
+import {EAvevaModel} from '../../../../lib/case-studies/aveva-model';
 
 jest.setTimeout(30000);
 

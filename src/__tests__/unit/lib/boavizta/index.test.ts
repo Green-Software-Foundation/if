@@ -1,9 +1,12 @@
 import {describe, expect, jest, test} from '@jest/globals';
-import {BoaviztaCloudImpactModel, BoaviztaCpuImpactModel} from './index';
+import {
+  BoaviztaCloudImpactModel,
+  BoaviztaCpuImpactModel,
+} from '../../../../lib/boavizta/index';
 import axios, {AxiosResponse} from 'axios';
-import * as PROVIDERS from '../../__mocks__/boavizta/providers.json';
-import * as COUNTRIES from '../../__mocks__/boavizta/countries.json';
-import * as INSTANCE_TYPES from '../../__mocks__/boavizta/instance_types.json';
+import * as PROVIDERS from '../../../../__mocks__/boavizta/providers.json';
+import * as COUNTRIES from '../../../../__mocks__/boavizta/countries.json';
+import * as INSTANCE_TYPES from '../../../../__mocks__/boavizta/instance_types.json';
 
 async function axiosGet<T = any, R = AxiosResponse<T, any>>(
   url: string
