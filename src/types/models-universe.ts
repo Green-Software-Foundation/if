@@ -10,10 +10,12 @@ export type GraphOptions = {
   processor: string;
 };
 
+export type ModelKind = 'builtin' | 'plugin' | 'shell';
+
 export type ImplInitializeModel = {
   config: InitializeOptions;
   name: string;
-  kind: 'builtin' | 'plugin' | 'shell';
+  kind: ModelKind;
 };
 
 export type InitalizedModels = {

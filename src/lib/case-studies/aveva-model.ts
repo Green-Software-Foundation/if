@@ -8,6 +8,7 @@ const {AVEVA} = MODEL_IDS;
 export class EAvevaModel implements IImpactModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in Aveva.
   name: string | undefined; // name of the data source
+  staticParams: object | undefined; // Defined for compatibility. Not used in Aveva.
 
   /**
    * Defined for compatibility. Not used here.
@@ -26,10 +27,7 @@ export class EAvevaModel implements IImpactModelInterface {
     staticParams: object | undefined = undefined
   ): Promise<IImpactModelInterface> {
     this.name = name;
-
-    if (staticParams === undefined) {
-      throw new Error('Required Parameters not provided');
-    }
+    this.staticParams = staticParams;
 
     return this;
   }
@@ -50,7 +48,6 @@ export class EAvevaModel implements IImpactModelInterface {
     }
 
     return observations.map(observation => {
-      this.configure(this.name!, observation);
       observation['e-cpu'] =
         ((observation['pl'] - observation['pb']) * observation['time']) / 1000;
 

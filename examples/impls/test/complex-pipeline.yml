@@ -1,0 +1,67 @@
+name: gsf-demo-pipeline
+description:
+  More complex pipeline example
+tags:
+  kind: web
+  complexity: moderate
+  category: cloud
+initialize:
+  models:
+    - name: teads-curve
+      kind: builtin
+    - name: sci-m
+      kind: builtin
+    - name: sci-o
+      kind: builtin
+    - name: sci-e
+      kind: builtin
+    - name: eshoppen-net
+      kind: builtin
+    - name: eshoppen-mem
+      kind: builtin
+    - name: eshoppen-cpu
+      kind: builtin
+    - name: sampler
+      kind: shell
+      path: python3 /usr/local/bin/sampler
+graph:
+  children:
+    child:
+      pipeline:
+        - eshoppen-mem
+        - eshoppen-cpu
+        - eshoppen-net
+        - sci-e
+        - sci-o
+      config:
+        teads-curve:
+          tdp: 1
+        sampler:
+          executable: python3 /usr/local/bin/sampler
+      observations:
+        - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+          processor: Intel® Core™ i7-1185G7
+          data-in: 1
+          data-out: 1
+          net-energy: 1
+          n-hours: 1
+          n-chips: 1
+          tdp-mem: 1
+          tdp-coeff: 1
+          duration: 3600 # Secs
+          tdp: 28 # W
+          cpu-util: 18.392
+          grid-ci: 951 # gCO2e/kWh
+        - timestamp: 2023-08-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+          processor: Intel® Core™ i7-1185G7
+          data-in: 1
+          data-out: 1
+          net-energy: 1
+          n-hours: 1
+          n-chips: 1
+          tdp-mem: 1
+          tdp-coeff: 1
+          duration: 3600 # Secs
+          tdp: 20 # W
+          cpu-util: 16
+          grid-ci: 800 # gCO2e/kWh

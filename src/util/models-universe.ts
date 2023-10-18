@@ -22,6 +22,7 @@ import {
   GraphOptions,
   ImplInitializeModel,
   InitalizedModels,
+  ModelKind,
 } from '../types/models-universe';
 
 /**
@@ -93,7 +94,7 @@ export class ModelsUniverse {
   /**
    * Gets model based on `name` and `kind` params.
    */
-  private handModelByCriteria(name: string, kind: string) {
+  private handModelByCriteria(name: string, kind: ModelKind) {
     switch (kind) {
       case 'builtin':
         return this.handBuiltinModel(name);
@@ -101,8 +102,6 @@ export class ModelsUniverse {
         return this.handPluginModel();
       case 'shell':
         return this.handShellModel();
-      default: // cover default
-        return this.handBuiltinModel(name);
     }
   }
 
@@ -137,6 +136,10 @@ export class ModelsUniverse {
    * Returns existing model by `name`.
    */
   public async getInitializedModel(modelName: string, config: any) {
-    return await this.initalizedModels[modelName](config);
+    if (this.initalizedModels[modelName]) {
+      return await this.initalizedModels[modelName](config);
+    }
+
+    throw new Error(`Model ${modelName} is not initalized yet.`);
   }
 }
