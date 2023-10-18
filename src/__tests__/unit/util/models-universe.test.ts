@@ -1,8 +1,8 @@
 import {describe, expect, it} from '@jest/globals';
 
-import {ModelsUniverse} from './models-universe';
-import {ImplInitializeModel} from '../types/models-universe';
-import {BoaviztaCpuImpactModel} from '../lib';
+import {ModelsUniverse} from '../../../util/models-universe';
+import {ImplInitializeModel} from '../../../types/models-universe';
+import {BoaviztaCpuImpactModel} from '../../../lib';
 
 describe('util/models-universe: ', () => {
   describe('init ModelsUniverse', () => {

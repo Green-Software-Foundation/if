@@ -1,8 +1,12 @@
+jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
+
 import {describe, expect, it, jest} from '@jest/globals';
 
-import {checkIfFileIsYaml, openYamlFileAsObject, saveYamlFileAs} from './yaml';
-
-jest.mock('fs/promises', () => require('../__mocks__/fs'));
+import {
+  checkIfFileIsYaml,
+  openYamlFileAsObject,
+  saveYamlFileAs,
+} from '../../../util/yaml';
 
 describe('util/yaml: ', () => {
   describe('checkIfFileIsYaml(): ', () => {

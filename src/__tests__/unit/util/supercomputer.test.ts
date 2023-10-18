@@ -1,14 +1,14 @@
-import {ModelsUniverse as MockModelUniverse} from '../__mocks__/model-universe';
+import {ModelsUniverse as MockModelUniverse} from '../../../__mocks__/model-universe';
 
-jest.mock('./models-universe', () => ({
+jest.mock('../../../util/models-universe', () => ({
   __esModule: true,
   ModelsUniverse: MockModelUniverse,
 }));
 
 import {describe, expect, it, jest} from '@jest/globals';
 
-import {Supercomputer} from './supercomputer';
-import {ModelsUniverse} from './models-universe';
+import {Supercomputer} from '../../../util/supercomputer';
+import {ModelsUniverse} from '../../../util/models-universe';
 
 describe('util/supercomputer: ', () => {
   const impl = {
