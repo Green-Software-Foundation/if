@@ -47,7 +47,7 @@ describe('util/observatory: ', () => {
 
     const params = {
       'core-units': 24,
-      processor: 'Intel® Core™ i7-1185G7',
+      'physical-processor': 'Intel® Core™ i7-1185G7',
       allocation: 'LINEAR',
       verbose: true,
     };
@@ -119,7 +119,7 @@ describe('util/observatory: ', () => {
 
     const params = {
       'core-units': 24,
-      processor: 'Intel® Core™ i7-1185G7',
+      'physical-processor': 'Intel® Core™ i7-1185G7',
       allocation: 'LINEAR',
       verbose: true,
     };

@@ -88,14 +88,14 @@ describe('cpu:configure test', () => {
     );
     await expect(
       impactModel.configure('test', {
-        processor: 'Intel Xeon Gold 6138f',
+        'physical-processor': 'Intel Xeon Gold 6138f',
       })
     ).rejects.toThrow(
       Error('Improper configure: Missing core-units parameter')
     );
     await expect(
       impactModel.configure('test', {
-        processor: 'Intel Xeon Gold 6138f',
+        'physical-processor': 'Intel Xeon Gold 6138f',
         'core-units': 24,
         'expected-lifespan': 4 * 365 * 24 * 60 * 60,
       })
@@ -121,7 +121,7 @@ describe('cpu:initialize with params', () => {
     const impactModel = new BoaviztaCpuImpactModel();
     await expect(
       impactModel.configure('test', {
-        processor: 'Intel Xeon Gold 6138f',
+        'physical-processor': 'Intel Xeon Gold 6138f',
         'core-units': 24,
         location: 'USA',
       })
@@ -147,7 +147,7 @@ describe('cpu:initialize with params', () => {
     const impactModel = new BoaviztaCpuImpactModel();
     await expect(
       impactModel.configure('test', {
-        processor: 'Intel Xeon Gold 6138f',
+        'physical-processor': 'Intel Xeon Gold 6138f',
         'core-units': 24,
         location: 'USA',
         verbose: true,

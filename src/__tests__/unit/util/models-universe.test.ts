@@ -146,7 +146,7 @@ describe('util/models-universe: ', () => {
       modelsHandbook.writeDown(modelInfo);
 
       const config = {
-        processor: 'intel',
+        'physical-processor': 'intel',
         'core-units': 1,
       };
 
