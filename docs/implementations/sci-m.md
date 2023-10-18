@@ -1,52 +1,48 @@
-# Software Carbon Intensity - Embodied Carbon (SCI-O)
+# SCI-M: embodied carbon
 
-Software systems cause emissions through the hardware that they operate on, both through the energy that the physical
-hardware consumes and the emissions associated with manufacturing the hardware. This specification defines a methodology
-for calculating the rate of carbon emissions for a software system. The purpose is to help users and developers make
-informed choices about which tools, approaches, architectures, and services they use in the future. It is a score rather
-than a total; lower numbers are better than higher numbers, and reaching 0 is impossible. This specification is focused
-on helping users and developers understand how to improve software to reduce or avoid the creation of
-emissions. [Read more...](https://github.com/Green-Software-Foundation/sci/blob/main/Software_Carbon_Intensity/Software_Carbon_Intensity_Specification.md)
+Software systems cause emissions through the hardware that they operate on, both through the energy that the physical hardware consumes and the emissions associated with manufacturing the hardware. Embodied carbon refers to the carbon emitted during the manufacture and eventual disposal of a component. It is added to the operational carbon (carbon emitted when a component is used) to give an overall SCI score.
 
-## Scope
+Read more on [embodied carbon](https://github.com/Green-Software-Foundation/sci/blob/main/Software_Carbon_Intensity/Software_Carbon_Intensity_Specification.md#embodied-emissions)
 
-Embodied carbon (otherwise referred to as “embedded carbon”) is the amount of carbon emitted during the creation and disposal of a hardware device.
+## Calculation
 
-To calculate the share of M for a software application, use the equation:
+To calculate the embodied carbon, `m` for a software application, use the equation:
+
 ```
-M = TE * TS * RS
+m = te * ts * rs
 ```
 Where:
 
-TE = Total Embodied Emissions; the sum of Life Cycle Assessment (LCA) emissions for all hardware components.
+- `te` = Total embodied emissions; the sum of Life Cycle Assessment (LCA) emissions for the component.
 
-TS = Time-share; the share of the total life span of the hardware reserved for use by the software.
+- `ts` = Time-share; the share of the total life span of the hardware reserved for use by an application. 
+  - `ts` is calculated as `tir/el`, where:
+    - `tir` = Time Reserved; the length of time the hardware is reserved for use by the software.
+    - `el` = Expected lifespan: the length of time, in seconds, between a component's manufacture and its disposal
 
-RS = Resource-share; the share of the total available resources of the hardware reserved for use by the software.
-The equation can be expanded further:
+- `rs` = Resource-share; the share of the total available resources of the hardware reserved for use by an application. 
+  - `rs` is calculated as `rr/tor`, where:
+    - `rr` = Resources reserved; the number of resources reserved for use by the software.
+    - `tor` = Total Resources; the total number of resources available.
 
-```M = TE * (TiR/EL) * (RR/ToR)```
-
-Where:
-
-TiR = Time Reserved; the length of time the hardware is reserved for use by the software.
-
-EL = Expected Lifespan; the anticipated time that the equipment will be installed.
-
-RR = Resources Reserved; the number of resources reserved for use by the software.
-
-ToR = Total Resources; the total number of resources available.
-
-
-[Embodied Emissions...](https://github.com/Green-Software-Foundation/sci/blob/main/Software_Carbon_Intensity/Software_Carbon_Intensity_Specification.md#embodied-emissions)
 
 ## Implementation
 
-IEF implements the plugin based on the logic described above.
+IEF implements the plugin based on the logic described above. To run the model, you must first create an instance of `SciMModel` and call its `configure()` method. Then, you can call `calculate()` to return `m`.
 
-It expects all five values to be provided as input to determine the ```m``` value.
+It expects all of the following parameters to be provided in order to calculate `m`:
+
+```
+te
+tir
+el
+rr
+tor
+```
 
 ## Usage
+
+The following snippet demonstrates how to call the `sci-m` model from Typescript.
 
 ```typescript
 import { SciMModel } from '@gsf/ief';
@@ -60,14 +56,45 @@ const results = sciMModel.calculate([
     el: 60 * 60 * 24 * 365 * 4, // lifespan in seconds (4 years)
     rr: 1, // resource units reserved / used
     tor: 1, // total resource units available
-  },
-  {
-    te: 200, // in gCO2e
-    tir: "duration", //point to another field "duration"
-    el: 60 * 60 * 24 * 365 * 4, // lifespan in seconds (4 years)
-    rr: 1, // resource units reserved / used
-    tor: 1, // total resource units available
-    duration: 60 * 60 * 24 * 30,
-  },
+  }
 ])
 ```
+
+## Example impl
+
+IEF users will typically call the model as part of a pipeline defined in an `impl` file. In this case, instantiating and configuring the model is handled by `rimpl` and does not have to be done explicitly by the user. The following is an example `impl` that calls `sci-m`:
+
+```yaml
+name: sci-m
+description: simple demo invoking sci-m
+tags:
+initialize:
+  models:
+    - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
+      kind: builtin
+      verbose: false
+      path: ''
+graph:
+  children:
+    child:
+      pipeline: 
+        - sci-m # duration & config -> embodied
+      config:
+        sci-m:
+          te: 1533.120 # gCO2eq
+          tir: 1 # s per hour
+          el: 3 # 3 years in seconds        
+          rr: 1
+          tor: 8
+      observations: 
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
+```
+
+You can run this example `impl` by executing the following command from the project root:
+
+```sh
+npx ts-node scripts/rimpl.ts --impl ./examples/impls/sci-m.yml --ompl ./examples/ompls/sci-m-test.yml
+```
+
+The results will be saved to a new `yaml` file in `/ompls`.

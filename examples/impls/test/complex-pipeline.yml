@@ -26,7 +26,7 @@ initialize:
       path: python3 /usr/local/bin/sampler
 graph:
   children:
-    front-end:
+    child:
       pipeline:
         - eshoppen-mem
         - eshoppen-cpu

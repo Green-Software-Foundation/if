@@ -1,10 +1,6 @@
-name: gsf-demo
-description: 
-  Hello
+name: boavizta-demo
+description: calls boavizta api
 tags:
-  kind: web
-  complexity: moderate
-  category: cloud
 initialize:
   models:
     - name: boavizta-cpu

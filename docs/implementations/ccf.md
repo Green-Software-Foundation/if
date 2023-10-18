@@ -1,27 +1,32 @@
 # Cloud Carbon Footprint
 
-Cloud Carbon Footprint is an open source tool that provides visibility and tooling to measure, monitor and reduce your cloud carbon emissions. We use best practice methodologies to convert cloud utilization into estimated energy usage and carbon emissions, producing metrics and carbon savings estimates that can be shared with employees, investors, and other stakeholders.
+"Cloud Carbon Footprint is an open source tool that provides visibility and tooling to measure, monitor and reduce your cloud carbon emissions. We use best practice methodologies to convert cloud utilization into estimated energy usage and carbon emissions, producing metrics and carbon savings estimates that can be shared with employees, investors, and other stakeholders." - [CCF](https://www.cloudcarbonfootprint.org/)
 
-## Implementation
+## IEF Implementation
 
-IEF implements this plugin to the IEF Specification based on the computational methodology used by the Cloud Carbon Footprint.
+IEF reimplements the Cloud Carbon Footprint methodology fro scratch conforming to the IEF specification. This means the CCF models can be run inside IEF without any external API calls and can be invoked as part of a model pipeline defined in an `impl`.
 
-Cloud Carbon Footprint includes calculations for three cloud providers namely AWS, Azure and GCP. 
+Cloud Carbon Footprint includes calculations for three cloud providers: AWS, Azure and GCP. 
 
-By default, Linear interpolation is used to estimate the energy. Interpolation is performed using the CPU Design Cycle, for example in Intel Chips, **CoffeeLake** and for example in AMD Chips, **EPYC 2nd Gen**.
+The general methodology is as follows:
 
-Additionally, **TEADS model curve for AWS** available in the CCF dataset can be used for spline curve interpolation for instances in AWS infrastructure.
+`Total CO2e = operational emissions + embodied Emissions`
 
-Resulting values are generally approximation and should be revalidated across different models as there can be significant difference between values.
+Where:
 
-New instances across all cloud providers might not be recognized by CCF. Earliest possible instances recognized are released before 2021 December.
+`Operational emissions = (Cloud provider service usage) x (Cloud energy conversion factors [kWh]) x (Cloud provider Power Usage Effectiveness (PUE)) x (grid emissions factors [metric tons CO2e])`
+
+And:
+
+`Embodied Emissions = estimated metric tons CO2e emissions from the manufacturing of datacenter servers, for compute usage`
+
+You can read a detailed explanation ofn the calculations in the [CCF docs](https://www.cloudcarbonfootprint.org/docs/methodology/) and see the code for our implementation in [this repository](../../src/lib/ccf/).
 
 ## Usage
 
-Configure method has to be called on the instantiated object before any other calls are done. 
+In IEF, the model is called from an `impl`. An `impl` is a `.yaml` file that contains configuration metadata and usage observations. This is interpreted by the command line tool, `rimpl`. There, the model's `configure` method is called first. The model config should define a `provider` and `instance-type`. Each observation is expected to contain `duration`,`cpu-util` and `timestamp` fields.
 
-Calculate method expects an array of observations. Each observation should feature `duration`,`cpu`,`datetime` in the formats specified below.
-
+You can see example Typescript invocations for each provider below:
 
 ### AWS
 
@@ -31,13 +36,13 @@ import {CloudCarbonFootprint} from 'ief';
 const ccf = new CloudCarbonFootprint();
 ccf.configure({
   provider: 'aws',
-  instance_type: 'c6i.large'
+  instance_type: 'm5n.large'
 })
 const results = ccf.calculate([
   {
     duration: 3600, // duration institute
-    cpu: 0.1, // CPU usage as a value between 0 and 1 in floating point number
-    datetime: '2021-01-01T00:00:00Z', // ISO8601 / RFC3339 timestamp
+    cpu-util: 10, // CPU usage as a percentage
+    timestamp: '2021-01-01T00:00:00Z', // ISO8601 / RFC3339 timestamp
   }
 ])
 ```
@@ -55,8 +60,8 @@ ccf.configure({
 const results = ccf.calculate([
   {
     duration: 3600, // duration institute
-    cpu: 0.1, // CPU usage as a value between 0 and 1 in floating point number
-    datetime: '2021-01-01T00:00:00Z', // ISO8601 / RFC3339 timestamp
+    cpu-util: 10, // CPU usage as a percentage
+    timestamp: '2021-01-01T00:00:00Z', // ISO8601 / RFC3339 timestamp
   }
 ])
 ```
@@ -68,16 +73,78 @@ import {CloudCarbonFootprint} from 'ief';
 
 const ccf = new CloudCarbonFootprint();
 ccf.configure({
-  provider: 'aws',
+  provider: 'gcp',
   instance_type: 'n2-standard-2'
 })
 const results = ccf.calculate([
   {
     duration: 3600, // duration institute
-    cpu: 0.1, // CPU usage as a value between 0 and 1 in floating point number
-    datetime: '2021-01-01T00:00:00Z', // ISO8601 / RFC3339 timestamp
+    cpu-util: 10, // CPU usage as a percentage
+    timestamp: '2021-01-01T00:00:00Z', // ISO8601 / RFC3339 timestamp
   }
 ]) 
 ```
 
+## Example Impl
 
+The following is an example of how CCF can be invoked using an `impl`.
+
+```yaml
+name: ccf-demo
+description: example impl invoking CCF model
+initialize:
+  models:
+    - name: ccf
+      kind: builtin
+graph:
+  children:
+    child:
+      pipeline:
+        - ccf
+      config:
+        ccf:
+          provider: aws
+          instance_type: m5n.large
+      observations:
+        - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+          duration: 1
+          cpu-util: 10
+```
+
+This impl is run using `rimpl` using the following command, run from the project root:
+
+```sh
+npx ts-node scripts/rimpl.ts --impl ./examples/impls/ccf-test.yml --ompl ./examples/ompls/ccf-test.yml
+```
+
+This yields a result that looks like the following (saved to `/ompls/ccf-test.yml`):
+
+```yaml
+name: ccf-demo
+description: example impl invoking CCF model
+initialize:
+  models:
+    - name: ccf
+      kind: builtin
+graph:
+  children:
+    front-end:
+      pipeline:
+        - ccf
+      config:
+        ccf:
+          provider: aws
+          instance_type: m5n.large
+      observations:
+        - timestamp: 2023-07-06T00:00
+          duration: 1
+          cpu: 10
+      impacts:
+        - timestamp: 2023-07-06T00:00
+          duration: 1
+          cpu-util: 10
+          provider: aws
+          instance_type: m5n.large
+          energy: 0.000018845835066981333
+          embodied_emissions: 0.02553890791476408
+```

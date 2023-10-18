@@ -13,4 +13,31 @@ The friction to measuring software emissions isn't that we need to know how, it'
 Read the [specification and design docs](docs/Impact%20Engine%20Framework.md) to begin.
 
 
+## Get started
 
+Run `rimpl` using the following command:
+
+```sh
+npx ts-node scripts/rimpl.ts --impl <path-to-your-impl-file> --ompl <path-to-output-file>
+```
+The `rimpl` CLI tool will condifure and run the models defined in your input `yaml` ()`impl`) and return the results as an output `yaml` (`ompl`).
+
+## Run tests
+
+To run the complete set of tests simply run
+
+```sh
+yarn test
+```
+
+To refresh the set of ompls used for validating the output files, run the `scripts/rimpl-test.sh` bash script (for unix only) as follows:
+
+```sh
+./scripts/rimpl-test.sh
+```
+
+Then run
+
+```sh
+yarn test
+```
