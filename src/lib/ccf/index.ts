@@ -1,9 +1,9 @@
 import Spline from 'typescript-cubic-spline';
 
-import {IComputeInstance, IImpactModelInterface} from '../interfaces';
-import {INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING} from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
+import { IComputeInstance, IImpactModelInterface } from '../interfaces';
+import { INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING } from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
 import * as AWS_INSTANCES from './aws-instances.json';
 import * as GCP_INSTANCES from './gcp-instances.json';
@@ -15,10 +15,10 @@ import * as GCP_EMBODIED from './gcp-embodied.json';
 import * as AWS_EMBODIED from './aws-embodied.json';
 import * as AZURE_EMBODIED from './azure-embodied.json';
 
-import {KeyValuePair, Interpolation} from '../../types/common';
+import { KeyValuePair, Interpolation } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {CCF} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { CCF } = MODEL_IDS;
 
 export class CloudCarbonFootprint implements IImpactModelInterface {
   // Defined for compatibility. Not used in CCF.
@@ -119,8 +119,8 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
    * Calculate the total emissions for a list of observations
    *
    * Each Observation require:
-   *  @param {Object[]} observations  ISO 8601 datetime string
-   *  @param {string} observations[].datetime ISO 8601 datetime string
+   *  @param {Object[]} observations  ISO 8601 timestamp string
+   *  @param {string} observations[].timestamp ISO 8601 timestamp string
    *  @param {number} observations[].duration observation duration in seconds
    *  @param {number} observations[].cpu-util percentage cpu usage
    */
@@ -150,7 +150,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
    *
    * duration: duration of the observation in seconds
    * cpu-util: cpu usage in percentage
-   * datetime: ISO 8601 datetime string
+   * timestamp: ISO 8601 timestamp string
    *
    * Uses a spline method for AWS and linear interpolation for GCP and Azure
    */
@@ -158,10 +158,10 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     if (
       !('duration' in observation) ||
       !('cpu-util' in observation) ||
-      !('datetime' in observation)
+      !('timestamp' in observation)
     ) {
       throw new Error(
-        'Required Parameters duration,cpu,datetime not provided for observation'
+        'Required Parameters duration,cpu,timestamp not provided for observation'
       );
     }
 
@@ -241,11 +241,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         architecture = this.resolveAwsArchitecture(architecture);
         minWatts +=
           this.computeInstanceUsageByArchitecture['aws'][architecture][
-            'Min Watts'
+          'Min Watts'
           ] ?? 0;
         maxWatts +=
           this.computeInstanceUsageByArchitecture['aws'][architecture][
-            'Max Watts'
+          'Max Watts'
           ] ?? 0;
         count += 1;
       });
@@ -282,11 +282,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         consumption: {
           minWatts:
             this.computeInstanceUsageByArchitecture['gcp'][architecture][
-              'Min Watts'
+            'Min Watts'
             ] * cpus,
           maxWatts:
             this.computeInstanceUsageByArchitecture['gcp'][architecture][
-              'Max Watts'
+            'Max Watts'
             ] * cpus,
         },
         maxvCPUs: parseInt(
@@ -305,11 +305,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         consumption: {
           minWatts:
             this.computeInstanceUsageByArchitecture['azure'][architecture][
-              'Min Watts'
+            'Min Watts'
             ] * cpus,
           maxWatts:
             this.computeInstanceUsageByArchitecture['azure'][architecture][
-              'Max Watts'
+            'Max Watts'
             ] * cpus,
         },
         name: instance['Virtual Machine'],

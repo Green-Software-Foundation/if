@@ -1,5 +1,5 @@
-import {describe, expect, jest, test} from '@jest/globals';
-import {CloudCarbonFootprint} from '../../../../lib/ccf/index';
+import { describe, expect, jest, test } from '@jest/globals';
+import { CloudCarbonFootprint } from '../../../../lib/ccf/index';
 
 jest.setTimeout(30000);
 
@@ -27,13 +27,13 @@ describe('ccf:configure test', () => {
     });
     await expect(
       impactModel.calculate([
-        {duration: 3600, 'cpu-util': 50, datetime: '2021-01-01T00:00:00Z'},
+        { duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z' },
       ])
     ).resolves.toStrictEqual([
       {
         duration: 3600,
         'cpu-util': 50,
-        datetime: '2021-01-01T00:00:00Z',
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.0023031270462730543,
         'embodied-carbon': 0.04216723744292237 * 1000,
       },
@@ -45,12 +45,12 @@ describe('ccf:configure test', () => {
     });
     await expect(
       impactModel.calculate([
-        {duration: 3600, 'cpu-util': 50, datetime: '2021-01-01T00:00:00Z'},
+        { duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z' },
       ])
     ).resolves.toStrictEqual([
       {
         'cpu-util': 50,
-        datetime: '2021-01-01T00:00:00Z',
+        timestamp: '2021-01-01T00:00:00Z',
         duration: 3600,
         'embodied-carbon': 42.16723744292237,
         energy: 0.004900000000000001,
@@ -70,38 +70,38 @@ describe('ccf:configure test', () => {
         {
           duration: 3600,
           'cpu-util': 10,
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
           'cpu-util': 50,
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
           'cpu-util': 100,
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
         },
       ])
     ).resolves.toStrictEqual([
       {
         duration: 3600,
         'cpu-util': 10,
-        datetime: '2021-01-01T00:00:00Z',
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.0019435697915529846,
         'embodied-carbon': 91.94006849315068,
       },
       {
         duration: 3600,
         'cpu-util': 50,
-        datetime: '2021-01-01T00:00:00Z',
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.0046062540925461085,
         'embodied-carbon': 91.94006849315068,
       },
       {
         duration: 3600,
         'cpu-util': 100,
-        datetime: '2021-01-01T00:00:00Z',
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.007934609468787513,
         'embodied-carbon': 91.94006849315068,
       },
@@ -118,38 +118,38 @@ describe('ccf:configure test', () => {
         {
           duration: 3600,
           'cpu-util': 10,
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
           'cpu-util': 50,
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
           'cpu-util': 100,
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
         },
       ])
     ).resolves.toStrictEqual([
       {
         duration: 3600,
         'cpu-util': 10,
-        datetime: '2021-01-01T00:00:00Z',
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.0019435697915529846,
         'embodied-carbon': 0.08179908675799086 * 1000,
       },
       {
         duration: 3600,
         'cpu-util': 50,
-        datetime: '2021-01-01T00:00:00Z',
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.0046062540925461085,
         'embodied-carbon': 0.08179908675799086 * 1000,
       },
       {
         duration: 3600,
         'cpu-util': 100,
-        datetime: '2021-01-01T00:00:00Z',
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.007934609468787513,
         'embodied-carbon': 0.08179908675799086 * 1000,
       },
@@ -166,38 +166,38 @@ describe('ccf:configure test', () => {
         {
           duration: 3600,
           'cpu-util': 10,
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
           'cpu-util': 50,
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
         },
         {
           duration: 3600,
           'cpu-util': 100,
-          datetime: '2021-01-01T00:00:00Z',
+          timestamp: '2021-01-01T00:00:00Z',
         },
       ])
     ).resolves.toStrictEqual([
       {
         duration: 3600,
         'cpu-util': 10,
-        datetime: '2021-01-01T00:00:00Z',
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.0018785992503765141,
         'embodied-carbon': 0.10778881278538813 * 1000,
       },
       {
         duration: 3600,
         'cpu-util': 50,
-        datetime: '2021-01-01T00:00:00Z',
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.004281401386663755,
         'embodied-carbon': 0.10778881278538813 * 1000,
       },
       {
         duration: 3600,
         'cpu-util': 100,
-        datetime: '2021-01-01T00:00:00Z',
+        timestamp: '2021-01-01T00:00:00Z',
         energy: 0.0072849040570228075,
         'embodied-carbon': 0.10778881278538813 * 1000,
       },
@@ -214,7 +214,7 @@ describe('ccf:configure test', () => {
     ).rejects.toThrowError();
     await expect(
       impactModel.calculate([
-        {duration: 3600, 'cpu-util': 50, datetime: '2021-01-01T00:00:00Z'},
+        { duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z' },
       ])
     ).rejects.toThrowError();
   });
@@ -228,7 +228,7 @@ describe('ccf:configure test', () => {
     ).rejects.toThrowError();
     await expect(
       impactModel.calculate([
-        {duration: 3600, 'cpu-util': 50, datetime: '2021-01-01T00:00:00Z'},
+        { duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z' },
       ])
     ).rejects.toThrowError();
   });
@@ -243,7 +243,7 @@ describe('ccf:configure test', () => {
     ).resolves.toBeInstanceOf(CloudCarbonFootprint);
     await expect(
       impactModel.calculate([
-        {duration: 3600, cpus: 1, datetime: '2021-01-01T00:00:00Z'},
+        { duration: 3600, cpus: 1, timestamp: '2021-01-01T00:00:00Z' },
       ])
     ).rejects.toThrowError();
   });
