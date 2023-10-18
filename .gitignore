@@ -8,5 +8,4 @@ node_modules
 dist
 yarn-error.log
 build
-examples/ompls
 coverage
