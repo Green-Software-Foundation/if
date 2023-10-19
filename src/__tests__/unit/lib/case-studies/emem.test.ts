@@ -50,7 +50,7 @@ describe('emem:configure test', () => {
     await expect(impactModel.configure('test')).rejects.toThrow();
     await expect(impactModel.calculate(undefined)).rejects.toThrow();
     await expect(impactModel.calculate({})).rejects.toThrow();
-    expect(impactModel.modelIdentifier()).toBe('e-mem');
+    expect(impactModel.modelIdentifier()).toBe('energy-memory');
     await expect(
       impactModel.calculate([{timestamp: 'test'}])
     ).rejects.toThrow();
@@ -64,7 +64,7 @@ describe('emem:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        'e-mem': 0.00608,
+        'energy-memory': 0.00608,
         duration: 3600,
         'mem-util': 50.0,
         timestamp: '2021-01-01T00:00:00Z',
@@ -97,19 +97,19 @@ describe('emem:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        'e-mem': 0.0012160000000000003,
+        'energy-memory': 0.0012160000000000003,
         duration: 3600,
         'mem-util': 10.0,
         timestamp: '2021-01-01T00:00:00Z',
       },
       {
-        'e-mem': 0.00608,
+        'energy-memory': 0.00608,
         duration: 3600,
         'mem-util': 50.0,
         timestamp: '2021-01-01T00:00:00Z',
       },
       {
-        'e-mem': 0.010944,
+        'energy-memory': 0.010944,
         duration: 3600,
         'mem-util': 90.0,
         timestamp: '2021-01-01T00:00:00Z',

@@ -15,16 +15,16 @@ where `O` = operational emissions, `E` = energy in kWh, and `I `= grid carbon in
 In the IEF implementation the calculation is expressed using the following terms:
 
 ```
-o = (energy * grid-ci)
+o = (energy * grid-carbon-intensity)
 ```
 
 Read more on [operational emissions](https://github.com/Green-Software-Foundation/sci/blob/main/Software_Carbon_Intensity/Software_Carbon_Intensity_Specification.md#operational-carbon).
 
 ## Implementation
 
-IEF implements the plugin based on the simple multiplication of the energy and intensity values as inputs. The `sci-o` model expects `energy` and `grid-ci` to be provided as `observations`.
+IEF implements the plugin based on the simple multiplication of the energy and intensity values as inputs. The `sci-o` model expects `energy` and `grid-carbon-intensity` to be provided as `observations`.
 
-> Note that the `energy` field is added to the `impl` by the `sci-e` model only. This means `sci-o` must always be preceded by `sci-e` in a model pipeline. This is always true, even if there is only a single component of `energy` such as `e-cpu` from `teads-curve`. `sci-e` sums all the available components and adds the sum to the `impl` as `energy`.
+> Note that the `energy` field is added to the `impl` by the `sci-e` model only. This means `sci-o` must always be preceded by `sci-e` in a model pipeline. This is always true, even if there is only a single component of `energy` such as `energy-cpu` from `teads-curve`. `sci-e` sums all the available components and adds the sum to the `impl` as `energy`.
 
 To run the model, you must first create an instance of `SciOModel` and call its `configure()` method. Then, you can call `calculate()` to return `operational-carbon`.
 
@@ -40,7 +40,7 @@ sciOModel.configure()
 const results = sciOModel.calculate([
   {
     energy: 0.5, // energy value in kWh 
-    'grid-ci': 0.5, // intensity value gCO2e/kWh
+    'grid-carbon-intensity': 0.5, // intensity value gCO2e/kWh
   }
 ])
 ```
@@ -69,7 +69,7 @@ graph:
       observations:
         - timestamp: 2023-08-06T00:00
           duration: 3600
-          e-cpu: 0.001
-          grid-ci: 800
+          energy-cpu: 0.001
+          grid-carbon-intensity: 800
 
 ```

@@ -24,7 +24,7 @@ export class EMemModel implements IImpactModelInterface {
    * Configures the Plugin for IEF
    * @param {string} name name of the resource
    * @param {Object} staticParams static parameters for the resource
-   * @param {number} staticParams.tdp Thermal Design Power in Watts
+   * @param {number} staticParams.thermal-design-power Thermal Design Power in Watts
    * @param {Interpolation} staticParams.interpolation Interpolation method
    */
   async configure(
@@ -65,7 +65,7 @@ export class EMemModel implements IImpactModelInterface {
 
     return observations.map((observation: KeyValuePair) => {
       this.configure(this.name!, observation);
-      observation['e-mem'] = this.calculateEnergy(observation);
+      observation['energy-memory'] = this.calculateEnergy(observation);
 
       return observation;
     });

@@ -42,8 +42,8 @@ export class TeadsCurveModel implements IImpactModelInterface {
       throw new Error('Required Parameters not provided');
     }
 
-    if ('tdp' in staticParams) {
-      this.tdp = staticParams?.tdp as number;
+    if ('thermal-design-power' in staticParams) {
+      this.tdp = staticParams['thermal-design-power'] as number;
     }
 
     // if ('curve' in staticParams && 'points' in staticParams) {
@@ -81,7 +81,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
     }
     return observations.map((observation: KeyValuePair) => {
       this.configure(this.name!, observation);
-      observation['e-cpu'] = this.calculateEnergy(observation);
+      observation['energy-cpu'] = this.calculateEnergy(observation);
       return observation;
     });
   }
@@ -125,12 +125,12 @@ export class TeadsCurveModel implements IImpactModelInterface {
 
     let tdp = this.tdp;
 
-    if ('tdp' in observation) {
-      tdp = observation['tdp'] as number;
+    if ('thermal-design-power' in observation) {
+      tdp = observation['thermal-design-power'] as number;
     }
     if (tdp === 0) {
       throw new Error(
-        '`tdp` Thermal Design Power not provided. Can not compute energy.'
+        '`thermal-design-power` not provided. Can not compute energy.'
       );
     }
 

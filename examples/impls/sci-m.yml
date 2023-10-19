@@ -14,11 +14,11 @@ graph:
         - sci-m # duration & config -> embodied
       config:
         sci-m:
-          te: 1533.120 # gCO2eq
-          tir: 3600 # 1hr in seconds
-          el: 94608000 # 3 years in seconds        
-          rr: 1
-          tor: 8
+          total-embodied: 1533.120 # gCO2eq
+          time-reserved: 3600 # 1hr in seconds
+          expected-lifespan: 94608000 # 3 years in seconds        
+          resources-reserved: 1
+          total-resources: 8
       observations: 
         - timestamp: 2023-07-06T00:00
           duration: 3600

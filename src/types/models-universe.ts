@@ -7,7 +7,7 @@ type InitializeOptions = {
 
 export type GraphOptions = {
   'core-units': number;
-  processor: string;
+  'physical-processor': string;
 };
 
 export type ModelKind = 'builtin' | 'plugin' | 'shell';

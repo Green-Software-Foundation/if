@@ -12,7 +12,7 @@ The power curve provided for `IDLE`, `10%`, `50%`, `100%` in the Teads Curve are
 
 The algorithm in linear interpolation will take the lowest possible base value + linear interpolated value. ie. 75% usage will be calculated as follows.
 `100%` and `50%` are the known values hence we are interpolating linearly between them.
-(`50%` + `(100%-50%)` `x` `(75%-50%))` `x` `TDP`. 
+(`50%` + `(100%-50%)` `x` `(75%-50%))` `x` `thermal-design-power`. 
 
 
 
@@ -23,7 +23,7 @@ import {TeadsCurveModel} from 'ief';
 
 const teads = new TeadsCurveModel();
 teads.configure({
-  tdp: 100, // TDP of the CPU
+  thermal-design-power: 100, // thermal-design-power of the CPU
 });
 const results = teads.calculate([
   {

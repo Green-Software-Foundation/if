@@ -113,7 +113,7 @@ describe('util/supercomputer: ', () => {
                 tor: 1,
               },
               'sci-o': {
-                'grid-ci': 457,
+                'grid-carbon-intensity': 457,
               },
             },
             observations: [
@@ -122,8 +122,8 @@ describe('util/supercomputer: ', () => {
                 duration: 3600,
                 'five-min-input-rate': 100,
                 'five-min-output-rate': 100,
-                'grid-ci': 457,
-                'e-net': 0.00496,
+                'grid-carbon-intensity': 457,
+                'energy-network': 0.00496,
                 requests: 38032740,
               },
             ],
@@ -148,8 +148,8 @@ describe('util/supercomputer: ', () => {
                   {
                     timestamp: '2023-07-06T00:00',
                     duration: 1,
-                    'e-net': 0.000811,
-                    'grid-ci': 457,
+                    'energy-network': 0.000811,
+                    'grid-carbon-intensity': 457,
                     requests: 38032740,
                   },
                 ],
@@ -159,8 +159,8 @@ describe('util/supercomputer: ', () => {
                   {
                     timestamp: '2023-07-06T00:00',
                     duration: 1,
-                    'e-net': 0,
-                    'grid-ci': 457,
+                    'energy-network': 0,
+                    'grid-carbon-intensity': 457,
                     requests: 38032740,
                   },
                 ],
@@ -170,8 +170,8 @@ describe('util/supercomputer: ', () => {
                   {
                     timestamp: '2023-07-06T00:00',
                     duration: 1,
-                    'e-net': 0.000955,
-                    'grid-ci': 457,
+                    'energy-network': 0.000955,
+                    'grid-carbon-intensity': 457,
                     requests: 38032740,
                   },
                 ],
@@ -181,8 +181,8 @@ describe('util/supercomputer: ', () => {
                   {
                     timestamp: '2023-07-06T00:00',
                     duration: 1,
-                    'e-net': 1.14e-8,
-                    'grid-ci': 457,
+                    'energy-network': 1.14e-8,
+                    'grid-carbon-intensity': 457,
                     requests: 38032740,
                   },
                 ],

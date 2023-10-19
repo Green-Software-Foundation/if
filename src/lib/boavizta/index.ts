@@ -99,15 +99,15 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     let e = 0;
 
     if ('impacts' in data) {
-      // manufacture impact is in kgCO2eq, convert to gCO2eq
-      m = data['impacts']['gwp']['manufacture'] * 1000;
+      // embodied-carbon impact is in kgCO2eq, convert to gCO2eq
+      m = data['impacts']['gwp']['embodied-carbon'] * 1000;
       // use impact is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
       e = data['impacts']['pe']['use'] / 3.6;
     } else if ('gwp' in data && 'pe' in data) {
-      // manufacture impact is in kgCO2eq, convert to gCO2eq
-      m = data['gwp']['manufacture'] * 1000;
+      // embodied-carbon impact is in kgCO2eq, convert to gCO2eq
+      m = data['gwp']['embodied-carbon'] * 1000;
       // use impact is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
@@ -185,7 +185,7 @@ export class BoaviztaCpuImpactModel
       staticParams.verbose = undefined;
     }
 
-    if (!('processor' in staticParams)) {
+    if (!('physical-processor' in staticParams)) {
       throw new Error('Improper configure: Missing processor parameter');
     }
 
@@ -233,71 +233,69 @@ export class BoaviztaCloudImpactModel
   }
 
   async validateInstanceType(staticParamsCast: object) {
-    if (!('provider' in staticParamsCast)) {
-      throw new Error('Improper configure: Missing provider parameter');
+    if (!('vendor' in staticParamsCast)) {
+      throw new Error('Improper configure: Missing vendor parameter');
     }
 
     if (!('instance-type' in staticParamsCast)) {
       throw new Error("Improper configure: Missing 'instance-type' parameter");
     }
 
-    const provider = staticParamsCast.provider as string;
+    const vendor = staticParamsCast.vendor as string;
 
     if (
-      this.instanceTypes[provider] === undefined ||
-      this.instanceTypes[provider].length === 0
+      this.instanceTypes[vendor] === undefined ||
+      this.instanceTypes[vendor].length === 0
     ) {
-      this.instanceTypes[provider] = await this.supportedInstancesList(
-        provider
-      );
+      this.instanceTypes[vendor] = await this.supportedInstancesList(vendor);
     }
 
     if ('instance-type' in staticParamsCast) {
       if (
-        !this.instanceTypes[provider].includes(
+        !this.instanceTypes[vendor].includes(
           staticParamsCast['instance-type'] as string
         )
       ) {
         throw new Error(
           `Improper configure: Invalid 'instance-type' parameter: '${
             staticParamsCast['instance-type']
-          }'. Valid values are : ${this.instanceTypes[provider].join(', ')}`
+          }'. Valid values are : ${this.instanceTypes[vendor].join(', ')}`
         );
       }
     }
   }
 
-  async validateProvider(staticParamsCast: object) {
-    if (!('provider' in staticParamsCast)) {
-      throw new Error('Improper configure: Missing provider parameter');
+  async validateVendor(staticParamsCast: object) {
+    if (!('vendor' in staticParamsCast)) {
+      throw new Error('Improper configure: Missing vendor parameter');
     } else {
-      const supportedProviders = await this.supportedProvidersList();
+      const supportedVendors = await this.supportedVendorsList();
 
-      if (!supportedProviders.includes(staticParamsCast.provider as string)) {
+      if (!supportedVendors.includes(staticParamsCast.vendor as string)) {
         throw new Error(
-          "Improper configure: Invalid provider parameter: '" +
-            staticParamsCast.provider +
+          "Improper configure: Invalid vendor parameter: '" +
+            staticParamsCast.vendor +
             "'. Valid values are : " +
-            supportedProviders.join(', ')
+            supportedVendors.join(', ')
         );
       }
     }
   }
 
-  async supportedInstancesList(provider: string) {
+  async supportedInstancesList(vendor: string) {
     const instances = await axios.get(
-      `https://api.boavizta.org/v1/cloud/all_instances?provider=${provider}`
+      `https://api.boavizta.org/v1/cloud/all_instances?provider=${vendor}`
     );
 
     return instances.data;
   }
 
-  async supportedProvidersList(): Promise<string[]> {
-    const providers = await axios.get(
+  async supportedVendorsList(): Promise<string[]> {
+    const vendors = await axios.get(
       'https://api.boavizta.org/v1/cloud/all_providers'
     );
 
-    return Object.values(providers.data);
+    return Object.values(vendors.data);
   }
 
   async fetchData(usageData: object | undefined): Promise<object> {
@@ -328,8 +326,8 @@ export class BoaviztaCloudImpactModel
       this.verbose = (staticParams.verbose as boolean) ?? false;
       staticParams.verbose = undefined;
     }
-    // if no valid provider found, throw error
-    await this.validateProvider(staticParams);
+    // if no valid vendor found, throw error
+    await this.validateVendor(staticParams);
     // if no valid 'instance-type' found, throw error
     await this.validateInstanceType(staticParams);
     // if no valid location found, throw error

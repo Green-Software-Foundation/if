@@ -6,19 +6,19 @@ tags:
   category: cloud
 initialize:
   models:
-    - name: eshoppen-cpu # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = e-mem)
-      kind: e-cpu
+    - name: eshoppen-cpu # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = energy-memory)
+      kind: energy-cpu
       path: false
       verbose: false
-    - name: eshoppen-mem # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = e-mem)
-      kind: e-mem
+    - name: eshoppen-mem # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = energy-memory)
+      kind: energy-memory
       path: false
       verbose: false
-    - name: eshoppen-net # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = e-mem)
-      kind: e-net
+    - name: eshoppen-net # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = energy-memory)
+      kind: energy-network
       path: false
       verbose: false
-    - name: sci-e # sums e-cpu and e-mem
+    - name: sci-e # sums energy-cpu and energy-memory
       kind: builtin
       path: ''
       verbose: false
@@ -36,102 +36,102 @@ graph:
   children:
     front-end:
       pipeline:
-        - eshoppen-cpu # tdp & cpu -> energy
-        - eshoppen-mem # n-hours * n-chips * tdp-mem * tdp-coeff
+        - eshoppen-cpu # thermal-design-power & cpu -> energy
+        - eshoppen-mem # n-hours * n-chips * thermal-design-power-mem * thermal-design-power-coeff
         - sci-m # duration & config -> embodied
         - sci-e # energy & grid-carbon-intensity & embodied -> carbon
         - sci-o # e -> c
         - sci # -> f.unit
       config:
-        e-mem-tdp:
+        energy-memory-thermal-design-power:
           n-hours: 1
           n-chips: 1
-          tdp-mem: 12.16
-          tdp-coeff: 0.12
+          thermal-design-power-mem: 12.16
+          thermal-design-power-coeff: 0.12
         sci-m:
-          te: 350000 # kgCO2eq
-          tir: 3600 # == the duration field
-          el: 126144000 # 4 years in seconds
-          rr: 1
-          tor: 1
+          total-embodied-emissions: 350000 # kgCO2eq
+          time-reserved: 3600 # == the duration field
+          expected-lifespan: 126144000 # 4 years in seconds
+          resources-reserved: 1
+          total-resources: 1
         sci-o:
-          grid-ci: 951 # gCO2e/kWh
-        e-cpu:
-          processor: Intel® Core™ i7-1185G7
-          tdp: 28 # W
-          tdp-coeff: 0.12
+          grid-carbon-intensity: 951 # gCO2e/kWh
+        energy-cpu:
+          physical-processor: Intel® Core™ i7-1185G7
+          thermal-design-power: 28 # W
+          thermal-design-power-coeff: 0.12
           n-hours: 1
           n-chips: 1
         sci:
-          functional_unit_duration: 1 
-          functional_duration_time: ''
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 3600 # Secs
           cpu-util: 0
     app-server:
-      pipeline: # note: no e-mem calc applied here
-        - eshoppen-cpu # tdp & cpu -> energy
+      pipeline: # note: no energy-memory calc applied here
+        - eshoppen-cpu # thermal-design-power & cpu -> energy
         - sci-e # sums e components
         - sci-m # duration & config -> embodied
         - sci-o # energy & grid-carbon-intensity & embodied -> carbon
         - sci
       config:
         sci-m:
-          te: 1205520 # kgCO2eq
-          tir: 1 # == duration field
-          el: 35040 # 4 years in seconds
-          rr: 2 # using cores
-          tor: 16 # the original report has a typo, says 16 but actually has 26 cores.
+          total-embodied-emissions: 1205520 # kgCO2eq
+          time-reserved: 1 # == duration field
+          expected-lifespan: 35040 # 4 years in seconds
+          resources-reserved: 2 # using cores
+          total-resources: 16 # the original report has a typo, says 16 but actually has 26 cores.
         sci-o:
-          grid-ci: 951 # gCO2e/kWh
-        e-cpu:
-          processor: Intel® Xeon® Platinum 8272CL
-          tdp: 205
-          tdp-coeff: 0.32
+          grid-carbon-intensity: 951 # gCO2e/kWh
+        energy-cpu:
+          physical-processor: Intel® Xeon® Platinum 8272CL
+          thermal-design-power: 205
+          thermal-design-power-coeff: 0.32
           n-hours: 1
           n-chips: 1
         sci:
-          functional_unit_duration: 1 
-          functional_duration_time: ''
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 3600
           cpu-util: 18.392
     db-server:
-      pipeline: # no e-mem calc applied here
-        - eshoppen-cpu # tdp & cpu & duration-> energy
+      pipeline: # no energy-memory calc applied here
+        - eshoppen-cpu # thermal-design-power & cpu & duration-> energy
         - sci-e # sums e-components
         - sci-m # duration & config -> embodied
         - sci-o # energy & grid-carbon-intensity & embodied -> carbon
       config:
         sci-o:
-          grid-ci: 1000 # gCO2e/kWh
+          grid-carbon-intensity: 1000 # gCO2e/kWh
         sci-m:
-          te: 1433120 # kgCO2eq
-          tir: 1 # == duration field
-          el: 35040 # 4 years in hours
-          rr: 2 # using cores
-          tor: 16 # total cores
+          total-embodied-emissions: 1433120 # kgCO2eq
+          time-reserved: 1 # == duration field
+          expected-lifespan: 35040 # 4 years in hours
+          resources-reserved: 2 # using cores
+          total-resources: 16 # total cores
         sci-c:
-          grid-ci: 951
-        e-cpu:
+          grid-carbon-intensity: 951
+        energy-cpu:
           n-hours: 1
           n-chips: 1
-          processor: Intel® Xeon® Platinum 8160
-          tdp: 150 # W
-          tdp-coeff: 0.32
+          physical-processor: Intel® Xeon® Platinum 8160
+          thermal-design-power: 150 # W
+          thermal-design-power-coeff: 0.32
         sci:
-          functional_unit_duration: 1 
-          functional_duration_time: ''
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 3600
           cpu-util: 10
-          grid-ci: 1000
+          grid-carbon-intensity: 1000
     network:
       pipeline:
         - eshoppen-net
@@ -141,19 +141,19 @@ graph:
         - sci
       config:
         sci-m:
-          te: 0 # kgCO2eq
-          tir: 1 # == duration field
-          el: 35040 # 4 years in seconds
-          rr: 1 # using cores
-          tor: 1 # total cores
-        e-net:
+          total-embodied-emissions: 0 # kgCO2eq
+          time-reserved: 1 # == duration field
+          expected-lifespan: 35040 # 4 years in seconds
+          resources-reserved: 1 # using cores
+          total-resources: 1 # total cores
+        energy-network:
           net-energy: 0.001 #kwh/GB
         sci:
-          functional_unit_duration: 1 
-          functional_duration_time: ''
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
         sci-o:
-          grid-ci: 951
+          grid-carbon-intensity: 951
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 3600

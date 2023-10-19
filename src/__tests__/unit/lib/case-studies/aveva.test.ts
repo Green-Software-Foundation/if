@@ -26,7 +26,7 @@ describe('aveva:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        'e-cpu': 38.897028,
+        'energy-cpu': 38.897028,
         pl: 16.009,
         pb: 11.335,
         time: 8322,
