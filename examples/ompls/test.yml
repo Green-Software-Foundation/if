@@ -1,0 +1,107 @@
+name: nesting-demo
+description: null
+tags:
+  kind: web
+  complexity: moderate
+  category: on-premise
+initialize:
+  models:
+    - name: teads-curve
+      kind: builtin
+    - name: sci-e
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci-m
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci-o
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci
+      kind: builtin
+      verbose: false
+      path: ''
+graph:
+  children:
+    server:
+      pipeline:
+        - teads-curve
+        - sci-e
+        - sci-m
+        - sci-o
+        - sci
+      config:
+        teads-curve:
+          tdp: 65
+        sci-m:
+          te: 251000
+          tir: 3600
+          el: 126144000
+          rr: 1
+          tor: 1
+        sci-o:
+          grid-ci: 457
+        sci:
+          functional_unit_duration: 1
+          functional_duration_time: ''
+          functional_unit: requests
+      children:
+        nested-1:
+          observations:
+            - timestamp: 2023-07-06T00:00
+              duration: 10
+              cpu-util: 50
+              e-net: 0.000811
+              requests: 380
+          impacts:
+            - timestamp: 2023-07-06T00:00
+              duration: 10
+              cpu-util: 50
+              e-net: 0.000811
+              requests: 380
+              tdp: 65
+              te: 251000
+              tir: 3600
+              el: 126144000
+              rr: 1
+              tor: 1
+              grid-ci: 457
+              functional_unit_duration: 1
+              functional_duration_time: ''
+              functional_unit: requests
+              e-cpu: 0.00013541666666666666
+              energy: 0.0009464166666666666
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.4325124166666666
+              sci: 0.019988827436313385
+        nested-2:
+          observations:
+            - timestamp: 2023-07-06T00:00
+              duration: 10
+              cpu-util: 33
+              e-net: 0.000811
+              requests: 380
+          impacts:
+            - timestamp: 2023-07-06T00:00
+              duration: 10
+              cpu-util: 33
+              e-net: 0.000811
+              requests: 380
+              tdp: 65
+              te: 251000
+              tir: 3600
+              el: 126144000
+              rr: 1
+              tor: 1
+              grid-ci: 457
+              functional_unit_duration: 1
+              functional_duration_time: ''
+              functional_unit: requests
+              e-cpu: 0.00011243956355860435
+              energy: 0.0009234395635586044
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.4220118805462822
+              sci: 0.0199611944465229
