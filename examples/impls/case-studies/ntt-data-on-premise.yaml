@@ -32,11 +32,11 @@ graph:
         - sci
       config:
         sci-m:
-          te: 251000 # gCO2eq
-          tir: 3600 # 1 hour in s
-          el: 126144000 # 4 years in seconds    
-          rr: 1 
-          tor: 1 
+          total-embodied-emissions: 251000 # gCO2eq
+          time-reserved: 3600 # 1 hour in s
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1 
+          total-resources: 1 
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
@@ -46,8 +46,8 @@ graph:
       observations: 
         - timestamp: 2023-07-06T00:00
           duration: 3600
-          five-min-input-rate: 100
-          five-min-output-rate: 100
+          five-min-input-ratotal-embodied-emissions: 100
+          five-min-output-ratotal-embodied-emissions: 100
           grid-ci: 457 # gCO2e/kWh
           e-net: 0.00496 # 3.85e-3 * 24 ports * 1.5 (pue)
           requests: 38032740
@@ -59,11 +59,11 @@ graph:
         - sci
       config:
         sci-m:
-          te: 251000 # gCO2eq
-          tir: 3600 # get from the duration field
-          el: 126144000 # 4 years in seconds    
-          rr: 1
-          tor: 1
+          total-embodied-emissions: 251000 # gCO2eq
+          time-reserved: 3600 # get from the duration field
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1
+          total-resources: 1
         sci-o:
           grid_ci: 457 # gCO2/kwh 
         sci:
@@ -107,11 +107,11 @@ graph:
         - sci
       config:
         sci-m:
-          te: 6270000 # gCO2eq
-          tir: duration # get from the duration field
-          el: 126144000 # 4 years in seconds
-          rr: 1
-          tor: 1
+          total-embodied-emissions: 6270000 # gCO2eq
+          time-reserved: duration # get from the duration field
+          expected-lifespan: 126144000 # 4 years in seconds
+          resources-reserved: 1
+          total-resources: 1
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
@@ -140,11 +140,11 @@ graph:
         - sci
       config:
         sci-m:
-          te: 6270000 # gCO2eq
-          tir: duration # get from the duration field
-          el: 126144000 # 4 years in seconds    
-          rr: 1 
-          tor: 1 
+          total-embodied-emissions: 6270000 # gCO2eq
+          time-reserved: duration # get from the duration field
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1 
+          total-resources: 1 
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:
@@ -173,11 +173,11 @@ graph:
         - sci
       config:
         sci-m:
-          te: 6270000 # gCO2eq
-          tir: duration # get from the duration field
-          el: 126144000 # 4 years in seconds    
-          rr: 1 
-          tor: 1 
+          total-embodied-emissions: 6270000 # gCO2eq
+          time-reserved: duration # get from the duration field
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1 
+          total-resources: 1 
         sci-o:
           grid-ci: 457 # gCO2/kwh
         sci:

@@ -47,11 +47,11 @@ graph:
           mem-alloc: 32 # GB
           mem-energy: 0.38 # wh/GB
         sci-m:
-          te: 1533.120 # gCO2eq
-          tir: 1 # s per hour
-          el: 3 # 3 years in seconds        
-          rr: 1
-          tor: 8
+          total-embodied-emissions: 1533.120 # gCO2eq
+          time-reserved: 1 # s per hour
+          expected-lifespan: 3 # 3 years in seconds        
+          resources-reserved: 1
+          total-resources: 8
         sci-o:
           grid-ci: 554 # gCO2e/kWh
         sci:
@@ -62,11 +62,11 @@ graph:
         tiger-databasenergy-cpu:
           config:
             sci-m:
-              te: 1533.120 # gCO2eq
-              tir: 1 # s per hour
-              el: 35040 # 3 years in seconds        
-              rr: 2
-              tor: 64
+              total-embodied-emissions: 1533.120 # gCO2eq
+              time-reserved: 1 # s per hour
+              expected-lifespan: 35040 # 3 years in seconds        
+              resources-reserved: 2
+              total-resources: 64
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 3600
@@ -76,11 +76,11 @@ graph:
         tiger-database-mem:
           config:
             sci-m:
-              te: 1216.620 # gCO2eq
-              tir: 1 # s per hour
-              el: 35040 # 3 years in seconds        
-              rr: 1
-              tor: 8
+              total-embodied-emissions: 1216.620 # gCO2eq
+              time-reserved: 1 # s per hour
+              expected-lifespan: 35040 # 3 years in seconds        
+              resources-reserved: 1
+              total-resources: 8
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
@@ -95,7 +95,7 @@ graph:
             emem:
               mem_alloc: 1.75
             sci-m:
-              te: 1216.620
+              total-embodied-emissions: 1216.620
           observations:     
             - timestamp: 2023-08-06T00:00
               duration: 3600
@@ -105,7 +105,7 @@ graph:
         tiger-api-mem:
           config:
             sci-m:
-              te: 1216.620
+              total-embodied-emissions: 1216.620
           observations:     
             - timestamp: 2023-08-06T00:00
               duration: 3600
@@ -115,11 +115,11 @@ graph:
         neo4j-databasenergy-cpu: # a leaf component
           config:
             sci-m:
-              te: 1216.620 # gCO2eq
-              tir: 1 # s per hour
-              el: 35040 # 3 years in seconds        
-              rr: 1
-              tor: 8
+              total-embodied-emissions: 1216.620 # gCO2eq
+              time-reserved: 1 # s per hour
+              expected-lifespan: 35040 # 3 years in seconds        
+              resources-reserved: 1
+              total-resources: 8
             sci-o:
               grid-ci: 554 # gCO2e/kWh
           observations:
@@ -131,9 +131,9 @@ graph:
         neo4j-database-mem: # a leaf component
           config:
             sci-m:
-              te: 1216.62 # gCO2eq
-              rr: 2
-              tor: 64
+              total-embodied-emissions: 1216.62 # gCO2eq
+              resources-reserved: 2
+              total-resources: 64
           observations:
             - timestamp: 2023-07-06T00:00
               duration: 1 # this data is using span, but the model expects duration
@@ -148,11 +148,11 @@ graph:
             emem:
               mem-alloc: 1.75 # GB
             sci-m:
-              te: 1216.620 # gCO2eq
-              tir: 1 # s per hour
-              el: 35040 # 3 years in seconds        
-              rr: 2
-              tor: 64
+              total-embodied-emissions: 1216.620 # gCO2eq
+              time-reserved: 1 # s per hour
+              expected-lifespan: 35040 # 3 years in seconds        
+              resources-reserved: 2
+              total-resources: 64
           observations:    
             - timestamp: 2023-08-06T00:00
               duration: 3600
@@ -162,9 +162,9 @@ graph:
         neo4j-api-mem: # a leaf component
           config:
             sci-m:
-              te: 1216.620 # gCO2eq     
-              rr: 1
-              tor: 8
+              total-embodied-emissions: 1216.620 # gCO2eq     
+              resources-reserved: 1
+              total-resources: 8
           observations:    
             - timestamp: 2023-08-06T00:00
               duration: 3600

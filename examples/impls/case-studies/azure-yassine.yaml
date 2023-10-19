@@ -47,16 +47,16 @@ graph:
         mem_allocation: 32 # GB
         mem-energy: 0.38 # kwh/GB
       sci-m:
-        te: 1200 # kgCO2eq
+        total-embodied-emissions: 1200 # kgCO2eq
         tr: 3600 # 1hr in s
-        el: 126144000 # 4 years in seconds        
-        rr: 2
-        tor: 16
+        expected-lifespan: 126144000 # 4 years in seconds        
+        resources-reserved: 2
+        total-resources: 16
       sci-e:
         i: 100 # gCO2e/kWh
       sci:
         time: hour # signal to convert /s -> /hr
-        factor: 32000
+        factotal-resources: 32000
     observations: 
       - timestamp: 2023-07-06T00:00
         duration: 86400 # 1 day

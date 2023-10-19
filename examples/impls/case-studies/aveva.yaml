@@ -28,11 +28,11 @@ graph:
         aveva:
         sci-e:
         sci-m:
-          te: 350000 # kgCO2eq
-          tir: 1 # 1 year in seconds
-          el: 5 # 5 years in seconds        
-          rr: 1
-          tor: 1
+          total-embodied-emissions: 350000 # kgCO2eq
+          time-reserved: 1 # 1 year in seconds
+          expected-lifespan: 5 # 5 years in seconds        
+          resources-reserved: 1
+          total-resources: 1
         sci-o:
           grid-ci: 474.8 #gCo2/kWh
         sci:

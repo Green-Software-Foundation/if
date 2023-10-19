@@ -49,11 +49,11 @@ graph:
           tdp-mem: 12.16
           tdp-coeff: 0.12
         sci-m:
-          te: 350000 # kgCO2eq
-          tir: 3600 # == the duration field
-          el: 126144000 # 4 years in seconds
-          rr: 1
-          tor: 1
+          total-embodied-emissions: 350000 # kgCO2eq
+          time-reserved: 3600 # == the duration field
+          expected-lifespan: 126144000 # 4 years in seconds
+          resources-reserved: 1
+          total-resources: 1
         sci-o:
           grid-ci: 951 # gCO2e/kWh
         energy-cpu:
@@ -79,11 +79,11 @@ graph:
         - sci
       config:
         sci-m:
-          te: 1205520 # kgCO2eq
-          tir: 1 # == duration field
-          el: 35040 # 4 years in seconds
-          rr: 2 # using cores
-          tor: 16 # the original report has a typo, says 16 but actually has 26 cores.
+          total-embodied-emissions: 1205520 # kgCO2eq
+          time-reserved: 1 # == duration field
+          expected-lifespan: 35040 # 4 years in seconds
+          resources-reserved: 2 # using cores
+          total-resources: 16 # the original report has a typo, says 16 but actually has 26 cores.
         sci-o:
           grid-ci: 951 # gCO2e/kWh
         energy-cpu:
@@ -110,11 +110,11 @@ graph:
         sci-o:
           grid-ci: 1000 # gCO2e/kWh
         sci-m:
-          te: 1433120 # kgCO2eq
-          tir: 1 # == duration field
-          el: 35040 # 4 years in hours
-          rr: 2 # using cores
-          tor: 16 # total cores
+          total-embodied-emissions: 1433120 # kgCO2eq
+          time-reserved: 1 # == duration field
+          expected-lifespan: 35040 # 4 years in hours
+          resources-reserved: 2 # using cores
+          total-resources: 16 # total cores
         sci-c:
           grid-ci: 951
         energy-cpu:
@@ -141,11 +141,11 @@ graph:
         - sci
       config:
         sci-m:
-          te: 0 # kgCO2eq
-          tir: 1 # == duration field
-          el: 35040 # 4 years in seconds
-          rr: 1 # using cores
-          tor: 1 # total cores
+          total-embodied-emissions: 0 # kgCO2eq
+          time-reserved: 1 # == duration field
+          expected-lifespan: 35040 # 4 years in seconds
+          resources-reserved: 1 # using cores
+          total-resources: 1 # total cores
         e-net:
           net-energy: 0.001 #kwh/GB
         sci:
