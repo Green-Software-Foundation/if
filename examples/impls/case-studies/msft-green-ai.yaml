@@ -28,11 +28,11 @@ graph:
     config: 
       sci-o:
         physical-processor: nvidia-t4-nc16as-v3
-        grid-ci: 1 # data not provided in case study
+        grid-carbon-intensity: 1 # data not provided in case study
         embodied-carbon: 0
         sci:
-          functional_unit_duration: '' # signal to convert /s -> /hr
-          functional_unit: '' # factor to convert per time to per f.unit ()
+          functional-unit-duration: '' # signal to convert /s -> /hr
+          functional-unit: '' # factor to convert per time to per f.unit ()
     observations: 
       - timestamp: 2023-07-06T00:00
         duration: 1336 # 22.27 min runtime in seconds
@@ -46,12 +46,12 @@ graph:
     config: 
       sci-o:
         physical-processor: nvidia-t4-nc16as-v3
-        grid-ci: 1 # data not provided in case study
+        grid-carbon-intensity: 1 # data not provided in case study
         embodied-carbon: 0
       sci:
-          functional_unit_duration: 1 
-          functional_duration_time: ''
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
     observations: 
       - timestamp: 2023-07-06T00:00
         duration: 1205 # 22.27 min runtime in seconds

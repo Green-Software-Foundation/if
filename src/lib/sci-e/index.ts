@@ -1,18 +1,18 @@
-import { IImpactModelInterface } from '../interfaces';
+import {IImpactModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair } from '../../types/common';
+import {KeyValuePair} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { SCI_E } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {SCI_E} = MODEL_IDS;
 
 export class SciEModel implements IImpactModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in thi smodel.
   name: string | undefined; // name of the data source
 
   /**
-   * Defined for compatibility. Not used in e-net.
+   * Defined for compatibility. Not used in energy-network.
    */
   authenticate(authParams: object): void {
     this.authParams = authParams;
@@ -69,8 +69,8 @@ export class SciEModel implements IImpactModelInterface {
    * Calculates the sum of the energy components
    *
    * energy-cpu: cpu energy in kwh
-   * e-mem: energy due to memory usage in kwh
-   * e-net: energy due to network data in kwh
+   * energy-memory: energy due to memory usage in kwh
+   * energy-network: energy due to network data in kwh
    * timestamp: RFC3339 timestamp string
    *
    * adds energy + e_net + e_mum
@@ -82,11 +82,11 @@ export class SciEModel implements IImpactModelInterface {
 
     if (
       !('energy-cpu' in observation) &&
-      !('e-mem' in observation) &&
-      !('e-net' in observation)
+      !('energy-memory' in observation) &&
+      !('energy-network' in observation)
     ) {
       throw new Error(
-        'Required Parameters not provided: at least one of e-mem, e-net or energy must be present in observation'
+        'Required Parameters not provided: at least one of energy-memory, energy-network or energy must be present in observation'
       );
     }
 
@@ -94,11 +94,11 @@ export class SciEModel implements IImpactModelInterface {
     if ('energy-cpu' in observation && observation['energy-cpu'] > 0) {
       e_cpu = observation['energy-cpu'];
     }
-    if ('e-mem' in observation && observation['e-mem'] > 0) {
-      e_mem = observation['e-mem'];
+    if ('energy-memory' in observation && observation['energy-memory'] > 0) {
+      e_mem = observation['energy-memory'];
     }
-    if ('e-net' in observation && observation['e-net'] > 0) {
-      e_net = observation['e-net'];
+    if ('energy-network' in observation && observation['energy-network'] > 0) {
+      e_net = observation['energy-network'];
     }
 
     return e_cpu + e_net + e_mem;

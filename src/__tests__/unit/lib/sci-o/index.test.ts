@@ -9,13 +9,13 @@ describe('ccf:configure test', () => {
     await expect(
       model.calculate([
         {
-          'grid-ci': 200.0,
+          'grid-carbon-intensity': 200.0,
           energy: 100.0,
         },
       ])
     ).resolves.toStrictEqual([
       {
-        'grid-ci': 200.0,
+        'grid-carbon-intensity': 200.0,
         energy: 100.0,
         'operational-carbon': 100.0 * 200.0,
       },
@@ -23,13 +23,13 @@ describe('ccf:configure test', () => {
     await expect(
       model.calculate([
         {
-          'grid-ci': 212.1,
+          'grid-carbon-intensity': 212.1,
           energy: 100.0,
         },
       ])
     ).resolves.toStrictEqual([
       {
-        'grid-ci': 212.1,
+        'grid-carbon-intensity': 212.1,
         energy: 100.0,
         'operational-carbon': 100.0 * 212.1,
       },
@@ -37,7 +37,7 @@ describe('ccf:configure test', () => {
     await expect(
       model.calculate([
         {
-          'grid-cid': 212.1,
+          'grid-carbon-intensityd': 212.1,
           energy: 100.0,
         },
       ])

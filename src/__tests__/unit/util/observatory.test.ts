@@ -1,6 +1,6 @@
-import { describe, expect, it, jest } from '@jest/globals';
-import { Observatory } from '../../../util/observatory';
-import { BoaviztaCpuImpactModel } from '../../../lib';
+import {describe, expect, it, jest} from '@jest/globals';
+import {Observatory} from '../../../util/observatory';
+import {BoaviztaCpuImpactModel} from '../../../lib';
 
 describe('util/observatory: ', () => {
   const expectedValue = [

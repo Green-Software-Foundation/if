@@ -1,17 +1,18 @@
-import { IImpactModelInterface } from '../interfaces';
+import {IImpactModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair } from '../../types/common';
+import {KeyValuePair} from '../../types/common';
 
-export { KeyValuePair } from '../../types/common';
+export {KeyValuePair} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { ESHOPPEN, ESHOPPEN_CPU, ESHOPPEN_MEM, ESHOPPEN_NET } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {ESHOPPEN, ESHOPPEN_CPU, ESHOPPEN_MEM, ESHOPPEN_NET} = MODEL_IDS;
 
 export class EshoppenModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
-  modelType: 'energy-cpu' | 'e-mem' | 'e-net' | 'e-sum' = 'energy-cpu';
+  modelType: 'energy-cpu' | 'energy-memory' | 'energy-network' | 'e-sum' =
+    'energy-cpu';
   staticParams: object | undefined;
   name: string | undefined;
 
@@ -27,11 +28,11 @@ export class EshoppenModel implements IImpactModelInterface {
     const tunedObservations = observations.map((observation: KeyValuePair) => {
       switch (this.modelType) {
         case 'energy-cpu': {
-          //     energy-cpu = n-hours * n-chips * tdp * tdp-coeff
+          //     energy-cpu = n-hours * n-chips * thermal-design-power * thermal-design-power-coeff
           observation['energy-cpu'] =
             (observation['n-hours'] *
               observation['n-chips'] *
-              observation['tdp'] *
+              observation['thermal-design-power'] *
               observation['tdp-coeff']) /
             1000;
           if (isNaN(observation['energy-cpu'])) {
@@ -40,38 +41,40 @@ export class EshoppenModel implements IImpactModelInterface {
 
           break;
         }
-        case 'e-mem': {
-          // e-mem-tdp  =  n-hours * n-chip * tdp-mem * tdp-coeff
-          observation['e-mem'] =
+        case 'energy-memory': {
+          // energy-memory-tdp  =  n-hours * n-chip * tdp-mem * tdp-coeff
+          observation['energy-memory'] =
             (observation['n-hours'] *
               observation['n-chips'] *
               observation['tdp-mem'] *
               observation['tdp-coeff']) /
             1000;
 
-          if (isNaN(observation['e-mem'])) {
-            throw new Error('e-mem not computable');
+          if (isNaN(observation['energy-memory'])) {
+            throw new Error('energy-memory not computable');
           }
 
           break;
         }
-        case 'e-net': {
-          // e-net = data-in + data-out * net-energy
-          observation['e-net'] =
+        case 'energy-network': {
+          // energy-network = data-in + data-out * net-energy
+          observation['energy-network'] =
             ((observation['data-in'] + observation['data-out']) *
               observation['net-energy']) /
             1000;
 
-          if (isNaN(observation['e-net'])) {
-            throw new Error('e-net not computable');
+          if (isNaN(observation['energy-network'])) {
+            throw new Error('energy-network not computable');
           }
 
           break;
         }
         case 'e-sum': {
-          // e-sum = energy-cpu + e-mem + e-net
+          // e-sum = energy-cpu + energy-memory + energy-network
           observation['energy'] =
-            observation['energy-cpu'] + observation['e-mem'] + observation['e-net'];
+            observation['energy-cpu'] +
+            observation['energy-memory'] +
+            observation['energy-network'];
 
           if (isNaN(observation['energy'])) {
             throw new Error('energy not computable');
@@ -100,14 +103,14 @@ export class EshoppenModel implements IImpactModelInterface {
       staticParams !== undefined &&
       'type' in staticParams &&
       // check that the type is one of the allowed values
-      ['e-mem', 'energy-cpu', 'e-net', 'e-sum'].includes(
+      ['energy-memory', 'energy-cpu', 'energy-network', 'e-sum'].includes(
         staticParams['type'] as string
       )
     ) {
       this.modelType = staticParams['type'] as
         | 'energy-cpu'
-        | 'e-mem'
-        | 'e-net'
+        | 'energy-memory'
+        | 'energy-network'
         | 'e-sum';
       delete staticParams['type'];
     }
@@ -133,7 +136,7 @@ export class EshoppenCpuModel extends EshoppenModel {
 export class EshoppenMemModel extends EshoppenModel {
   constructor() {
     super();
-    this.modelType = 'e-mem';
+    this.modelType = 'energy-memory';
   }
 
   modelIdentifier(): string {
@@ -144,7 +147,7 @@ export class EshoppenMemModel extends EshoppenModel {
 export class EshoppenNetModel extends EshoppenModel {
   constructor() {
     super();
-    this.modelType = 'e-net';
+    this.modelType = 'energy-network';
   }
 
   modelIdentifier(): string {

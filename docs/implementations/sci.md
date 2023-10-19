@@ -28,7 +28,7 @@ SCI is the sum of the `operational-carbon` (calculated using the `sci-o` model) 
 - `functional-unit-time`: a time unit for `functional-unit-duration` as a string. E.g. `s`, `seconds`, `days`, `months`, `y`.
 - `functional-unit-duration`: The length of time, in seconds, that the observation covers. For example, if if the observation period is one day, then `functional-unit-duration` should be `86400` (seconds per day). This is used to ensure that `carbon` is represented in units of C/s at the start of the SCI calculation.
 
-In a model pipeline, time is always denominated in `seconds`. It is only in `sci` that other units of time are considered. Therefore, if `functional_unit_time` is `month`, then the sum of `operational-carbon` and `embodied-carbon` is multiplied by the number of seconds in one month.
+In a model pipeline, time is always denominated in `seconds`. It is only in `sci` that other units of time are considered. Therefore, if `functional-unit-time` is `month`, then the sum of `operational-carbon` and `embodied-carbon` is multiplied by the number of seconds in one month.
 
 Example:
 
@@ -52,9 +52,9 @@ import { SciModel } from '@gsf/ief';
 
 const sciModel = new SciModel();
 sciModel.configure('name', {
-      functional_unit_time: 'day',
-      functional_unit: 'requests',
-      functional_unit_duration: 1,)
+      functional-unit-time: 'day',
+      functional-unit: 'requests',
+      functional-unit-duration: 1,)
 const results = sciModel.calculate([
   {
     operational-carbon: 0.02
@@ -84,9 +84,9 @@ graph:
         - sci
       config:
         sci:
-          functional_unit_duration: 1 
-          functional_unit_time: 'minutes'
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-unit-time: 'minutes'
+          functional-unit: requests # factor to convert per time to per f.unit
       observations:
         - timestamp: 2023-07-06T00:00
           operational-carbon: 0.02

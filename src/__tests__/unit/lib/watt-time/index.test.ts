@@ -46,7 +46,7 @@ describe('watt-time:configure test', () => {
         location: '37.7749,-122.4194',
         timestamp: '2021-01-01T00:00:00Z',
         duration: 1200,
-        'grid-ci': 2185.332173907599,
+        'grid-carbon-intensity': 2185.332173907599,
       },
     ]);
     await expect(
@@ -62,7 +62,7 @@ describe('watt-time:configure test', () => {
         location: '37.7749,-122.4194',
         timestamp: '2021-01-01T00:00:00Z',
         duration: 120,
-        'grid-ci': 2198.0087539832293,
+        'grid-carbon-intensity': 2198.0087539832293,
       },
     ]);
     await expect(
@@ -78,7 +78,7 @@ describe('watt-time:configure test', () => {
         location: '37.7749,-122.4194',
         timestamp: '2021-01-01T00:00:00Z',
         duration: 300,
-        'grid-ci': 2198.0087539832293,
+        'grid-carbon-intensity': 2198.0087539832293,
       },
     ]);
     await expect(
@@ -94,7 +94,7 @@ describe('watt-time:configure test', () => {
         location: '37.7749,-122.4194',
         timestamp: '2021-01-01T00:00:00Z',
         duration: 360,
-        'grid-ci': 2193.5995087395318,
+        'grid-carbon-intensity': 2193.5995087395318,
       },
     ]);
 

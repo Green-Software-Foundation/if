@@ -1,13 +1,13 @@
 import Spline from 'typescript-cubic-spline';
 
-import { IImpactModelInterface } from '../interfaces';
+import {IImpactModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair, Interpolation } from '../../types/common';
+import {KeyValuePair, Interpolation} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { TEADS_CURVE } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {TEADS_CURVE} = MODEL_IDS;
 
 export class TeadsCurveModel implements IImpactModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in TEADS.
@@ -42,8 +42,8 @@ export class TeadsCurveModel implements IImpactModelInterface {
       throw new Error('Required Parameters not provided');
     }
 
-    if ('tdp' in staticParams) {
-      this.tdp = staticParams?.tdp as number;
+    if ('thermal-design-power' in staticParams) {
+      this.tdp = staticParams['thermal-design-power'] as number;
     }
 
     // if ('curve' in staticParams && 'points' in staticParams) {
@@ -125,12 +125,12 @@ export class TeadsCurveModel implements IImpactModelInterface {
 
     let tdp = this.tdp;
 
-    if ('tdp' in observation) {
-      tdp = observation['tdp'] as number;
+    if ('thermal-design-power' in observation) {
+      tdp = observation['thermal-design-power'] as number;
     }
     if (tdp === 0) {
       throw new Error(
-        '`tdp` Thermal Design Power not provided. Can not compute energy.'
+        '`thermal-design-power` not provided. Can not compute energy.'
       );
     }
 
@@ -177,4 +177,4 @@ export class TeadsCurveModel implements IImpactModelInterface {
 /**
  * For JSII.
  */
-export { KeyValuePair, Interpolation } from '../../types/common';
+export {KeyValuePair, Interpolation} from '../../types/common';

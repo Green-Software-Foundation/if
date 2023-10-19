@@ -7,10 +7,10 @@
 `energy` is calculated as the sum of the energy due to CPU usage, energy due to network trafic, energy due to memory and energy due to GPU usage.
 
 ```
-energy = energy-cpu + e-net + e-mem + e-gpu
+energy = energy-cpu + energy-network + energy-memory + e-gpu
 ```
 
-In any model pipeline that includes `sci-o`, `sci-o` must be preceded by `sci-e`. This is because `sci-o` does not recognize the individual contributions, `energy-cpu`, `e-net`, etc, but expects to find `energy`. Only `sci-e` takes individual contributions and returns `energy`.
+In any model pipeline that includes `sci-o`, `sci-o` must be preceded by `sci-e`. This is because `sci-o` does not recognize the individual contributions, `energy-cpu`, `energy-network`, etc, but expects to find `energy`. Only `sci-e` takes individual contributions and returns `energy`.
 
 ## Implementation
 
@@ -24,8 +24,8 @@ sciEModel.configure()
 const results = sciEModel.calculate([
   {
     energy-cpu: 0.001,
-    e-mem: 0.0005,
-    e-net: 0.0005,
+    energy-memory: 0.0005,
+    energy-network: 0.0005,
   }
 ])
 ```

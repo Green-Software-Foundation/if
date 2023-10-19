@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-import { IImpactModelInterface } from '../interfaces';
-import { CONFIG } from '../../config';
+import {IImpactModelInterface} from '../interfaces';
+import {CONFIG} from '../../config';
 
-import { BoaviztaInstanceTypes, IBoaviztaUsageSCI } from '../../types/boavizta';
-import { KeyValuePair } from '../../types/common';
+import {BoaviztaInstanceTypes, IBoaviztaUsageSCI} from '../../types/boavizta';
+import {KeyValuePair} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { BOAVIZTA_CPU, BOAVIZTA_CLOUD } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {BOAVIZTA_CPU, BOAVIZTA_CLOUD} = MODEL_IDS;
 
 abstract class BoaviztaImpactModel implements IImpactModelInterface {
   name: string | undefined;
@@ -99,22 +99,22 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     let e = 0;
 
     if ('impacts' in data) {
-      // manufacture impact is in kgCO2eq, convert to gCO2eq
-      m = data['impacts']['gwp']['manufacture'] * 1000;
+      // embodied-carbon impact is in kgCO2eq, convert to gCO2eq
+      m = data['impacts']['gwp']['embodied-carbon'] * 1000;
       // use impact is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
       e = data['impacts']['pe']['use'] / 3.6;
     } else if ('gwp' in data && 'pe' in data) {
-      // manufacture impact is in kgCO2eq, convert to gCO2eq
-      m = data['gwp']['manufacture'] * 1000;
+      // embodied-carbon impact is in kgCO2eq, convert to gCO2eq
+      m = data['gwp']['embodied-carbon'] * 1000;
       // use impact is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
       e = data['pe']['use'] / 3.6;
     }
 
-    return { 'embodied-carbon': m, energy: e };
+    return {'embodied-carbon': m, energy: e};
   }
 
   // converts the usage to the format required by Boavizta API.
@@ -141,7 +141,8 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
 
 export class BoaviztaCpuImpactModel
   extends BoaviztaImpactModel
-  implements IImpactModelInterface {
+  implements IImpactModelInterface
+{
   sharedParams: object | undefined = undefined;
   public name: string | undefined;
   public verbose = false;
@@ -203,7 +204,8 @@ export class BoaviztaCpuImpactModel
 
 export class BoaviztaCloudImpactModel
   extends BoaviztaImpactModel
-  implements IImpactModelInterface {
+  implements IImpactModelInterface
+{
   public sharedParams: object | undefined = undefined;
   public instanceTypes: BoaviztaInstanceTypes = {};
   public name: string | undefined;
@@ -221,9 +223,9 @@ export class BoaviztaCloudImpactModel
       if (!countries.includes(location)) {
         throw new Error(
           "Improper configure: Invalid location parameter: '" +
-          location +
-          "'. Valid values are : " +
-          countries.join(', ')
+            location +
+            "'. Valid values are : " +
+            countries.join(', ')
         );
       }
       return staticParamsCast.location as string;
@@ -245,9 +247,7 @@ export class BoaviztaCloudImpactModel
       this.instanceTypes[vendor] === undefined ||
       this.instanceTypes[vendor].length === 0
     ) {
-      this.instanceTypes[vendor] = await this.supportedInstancesList(
-        vendor
-      );
+      this.instanceTypes[vendor] = await this.supportedInstancesList(vendor);
     }
 
     if ('instance-type' in staticParamsCast) {
@@ -257,7 +257,8 @@ export class BoaviztaCloudImpactModel
         )
       ) {
         throw new Error(
-          `Improper configure: Invalid 'instance-type' parameter: '${staticParamsCast['instance-type']
+          `Improper configure: Invalid 'instance-type' parameter: '${
+            staticParamsCast['instance-type']
           }'. Valid values are : ${this.instanceTypes[vendor].join(', ')}`
         );
       }
@@ -273,9 +274,9 @@ export class BoaviztaCloudImpactModel
       if (!supportedVendors.includes(staticParamsCast.vendor as string)) {
         throw new Error(
           "Improper configure: Invalid vendor parameter: '" +
-          staticParamsCast.vendor +
-          "'. Valid values are : " +
-          supportedVendors.join(', ')
+            staticParamsCast.vendor +
+            "'. Valid values are : " +
+            supportedVendors.join(', ')
         );
       }
     }
@@ -345,6 +346,6 @@ export class BoaviztaCloudImpactModel
 /**
  * For JSII.
  */
-export { IImpactModelInterface } from '../interfaces';
-export { BoaviztaInstanceTypes, IBoaviztaUsageSCI } from '../../types/boavizta';
-export { KeyValuePair } from '../../types/common';
+export {IImpactModelInterface} from '../interfaces';
+export {BoaviztaInstanceTypes, IBoaviztaUsageSCI} from '../../types/boavizta';
+export {KeyValuePair} from '../../types/common';

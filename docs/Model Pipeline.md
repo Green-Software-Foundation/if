@@ -93,7 +93,7 @@ Let's look at a simple pseudo example, to begin with a pipeline like so:
 ```yaml
 pipeline:
   - instance-metadata
-  - tdp
+  - thermal-design-power
   - teads-curve
 ```
 
@@ -136,9 +136,9 @@ observations:
 ```
 
 
-### `tdp`
+### `thermal-design-power`
 
-Takes as input details about a physical processor, does a lookup against a [database](https://www.intel.com/content/www/us/en/products/sku/120506/intel-xeon-platinum-8170-processor-35-75m-cache-2-10-ghz/specifications.html) to obtain the TDP value (a measure of max power consumption), like so:
+Takes as input details about a physical processor, does a lookup against a [database](https://www.intel.com/content/www/us/en/products/sku/120506/intel-xeon-platinum-8170-processor-35-75m-cache-2-10-ghz/specifications.html) to obtain the thermal-design-power value (a measure of max power consumption), like so:
 
 ```yaml
 observations: 
@@ -164,7 +164,7 @@ observations:
     physical-processor: Intel Xeon Platinum 8175
     used-cores: 1
     total-cores: 26
-    tdp: 165 # <-- output
+    thermal-design-power: 165 # <-- output
 ```
 
 
@@ -179,7 +179,7 @@ TEADs is a now very well-known set of [generalized power curve coefficients](htt
 | 50   | 0.75  |
 | 100  | 1.02  |
 
-So if the TDP is 100W and the utilization is 50%, then according to the TEADs curve, the power would be 0.75 * 100 = 75W. The curve is generalized, so it is of limited usefulness in deciding which arch is better. Still, it is generalized enough to be used in many contexts where the data is limited.
+So if the thermal-design-power is 100W and the utilization is 50%, then according to the TEADs curve, the power would be 0.75 * 100 = 75W. The curve is generalized, so it is of limited usefulness in deciding which arch is better. Still, it is generalized enough to be used in many contexts where the data is limited.
 
 Using a `teads-curve` model, we'd be able to estimate energy like so:
 
@@ -193,7 +193,7 @@ observations:
     physical-processor: Intel Xeon Platinum 8175
     used-cores: 1 # <-- input
     total-cores: 26 # <-- input
-    tdp: 165 # <-- input
+    thermal-design-power: 165 # <-- input
 ```
 
 to
@@ -208,7 +208,7 @@ observations:
     physical-processor: Intel Xeon Platinum 8175
     used-cores: 1
     total-cores: 26
-    tdp: 165 
+    thermal-design-power: 165 
     energy: 0.004 # <-- output
 ```
 
@@ -258,7 +258,7 @@ component:
   pipeline:
     - change-instance-type 
     - instance-metadata
-    - tdp
+    - thermal-design-power
     - teads  
   config: 
     change-instance-type:
@@ -278,7 +278,7 @@ component:
   pipeline:
     - change-instance-type 
     - instance-metadata
-    - tdp
+    - thermal-design-power
     - teads  
   config: 
     change-instance-type:
@@ -319,7 +319,7 @@ component:
   pipeline:
     - aws-lambda-to-instance 
     - instance-metadata
-    - tdp
+    - thermal-design-power
     - teads       
   observations: 
     - timestamp: 2023-07-06T00:00
@@ -334,7 +334,7 @@ component:
   pipeline:
     - aws-lambda-to-instance 
     - instance-metadata
-    - tdp
+    - thermal-design-power
     - teads      
   observations: 
     - timestamp: 2023-07-06T00:00

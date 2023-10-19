@@ -1,5 +1,5 @@
-import { describe, expect, jest, test } from '@jest/globals';
-import { TeadsCurveModel } from '../../../../lib/teads-curve/index';
+import {describe, expect, jest, test} from '@jest/globals';
+import {TeadsCurveModel} from '../../../../lib/teads-curve/index';
 
 jest.setTimeout(30000);
 
@@ -7,7 +7,7 @@ describe('teads:configure test', () => {
   test('initialize with params', async () => {
     const impactModel = new TeadsCurveModel();
     await impactModel.configure('test', {
-      tdp: 200,
+      'thermal-design-power': 200,
     });
     await expect(
       impactModel.calculate([
@@ -29,7 +29,7 @@ describe('teads:configure test', () => {
   test('teads:initialize with params:spline', async () => {
     const impactModel = new TeadsCurveModel();
     await impactModel.configure('test', {
-      tdp: 300,
+      'thermal-design-power': 300,
     });
     await expect(
       impactModel.calculate([
@@ -73,7 +73,7 @@ describe('teads:configure test', () => {
   test('teads:initialize with params:linear', async () => {
     const impactModel = new TeadsCurveModel();
     await impactModel.configure('test', {
-      tdp: 300,
+      'thermal-design-power': 300,
       interpolation: 'linear',
     });
     await expect(

@@ -32,16 +32,16 @@ graph:
         - sci-accenture
       config:
         sci-o:
-          grid-ci: 350.861
+          grid-carbon-intensity: 350.861
         sci:
-          functional_unit_duration: 1 
-          functional_duration_time: ''
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
       children:
         vm1:
           observations: 
             - timestamp: 2023-07-06T00:00
-              grid-ci: 350.861
+              grid-carbon-intensity: 350.861
               duration: 2419200 # seconds in a month (7 days * 4 weeks)
               cpu-util: 15
               ram-util: 75
@@ -114,16 +114,16 @@ graph:
     db:
       pipeline:
         - sci-e       # sums e components
-        - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+        - sci-o       # calculates carbon for this obervation (energy * grid-carbon-intensity) + embodied.
         - sci         # calculates sci by dividing carbon by `r`
         - sci-accenture # multiplies sci value by 1.05  to account for the "app-gateway"
       config:
         sci-o:
-          grid-ci: 350.861
+          grid-carbon-intensity: 350.861
         sci:
-          functional_unit_duration: 1 
-          functional_duration_time: ''
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 2419200 # seconds in a month (7 days * 4 weeks)
@@ -135,16 +135,16 @@ graph:
     monitoring:
       pipeline:
         - sci-e       # sums e components
-        - sci-o       # calculates carbon for this obervation (energy * grid-ci) + embodied.
+        - sci-o       # calculates carbon for this obervation (energy * grid-carbon-intensity) + embodied.
         - sci         # calculates sci by dividing carbon by `r`
         - sci-accenture # multiplies sci value by 1.05  to account for the "app-gateway"
       config:
         sci-o:
-          grid-ci: 350.861
+          grid-carbon-intensity: 350.861
         sci:
-          functional_unit_duration: 1 
-          functional_duration_time: ''
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 2419200 # seconds in a month (7 days * 4 weeks)

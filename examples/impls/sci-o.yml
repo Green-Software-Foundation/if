@@ -19,4 +19,4 @@ graph:
         - timestamp: 2023-08-06T00:00
           duration: 3600
           energy-cpu: 0.001
-          grid-ci: 800
+          grid-carbon-intensity: 800

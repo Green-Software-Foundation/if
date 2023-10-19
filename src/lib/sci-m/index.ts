@@ -1,11 +1,11 @@
-import { IImpactModelInterface } from '../interfaces';
+import {IImpactModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair } from '../../types/common';
+import {KeyValuePair} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { SCI_M } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {SCI_M} = MODEL_IDS;
 
 export class SciMModel implements IImpactModelInterface {
   authParams: object | undefined = undefined;
@@ -32,41 +32,67 @@ export class SciMModel implements IImpactModelInterface {
       let el = 0.0;
       let rr = 0.0;
       let tor = 0.0;
-      if (!('total-embodied-emissions' in observation || 'total-embodied-emissions' in observation)) {
-        throw new Error('total-embodied-emissions is missing. Provide in gCO2e');
+      if (
+        !(
+          'total-embodied-emissions' in observation ||
+          'total-embodied-emissions' in observation
+        )
+      ) {
+        throw new Error(
+          'total-embodied-emissions is missing. Provide in gCO2e'
+        );
       }
       if (!('time-reserved' in observation || 'time-reserved' in observation)) {
         throw new Error('time-reserved is missing. Provide in seconds');
       }
-      if (!('expected-lifespan' in observation || 'expected-lifespan' in observation)) {
+      if (
+        !(
+          'expected-lifespan' in observation ||
+          'expected-lifespan' in observation
+        )
+      ) {
         throw new Error('expected-lifespan is missing. Provide in seconds');
       }
-      if (!('resources-reserved' in observation || 'resources-reserved' in observation)) {
-        throw new Error(
-          'resources-reserved is missing. Provide as a count'
-        );
-      }
-      if (!('total-resources' in observation || 'total-resources' in observation)) {
-        throw new Error('total-resources: total-resources is missing. Provide as a count');
+      if (
+        !(
+          'resources-reserved' in observation ||
+          'resources-reserved' in observation
+        )
+      ) {
+        throw new Error('resources-reserved is missing. Provide as a count');
       }
       if (
-        ('total-embodied-emissions' in observation || 'total-embodied-emissions' in observation) &&
+        !('total-resources' in observation || 'total-resources' in observation)
+      ) {
+        throw new Error(
+          'total-resources: total-resources is missing. Provide as a count'
+        );
+      }
+      if (
+        ('total-embodied-emissions' in observation ||
+          'total-embodied-emissions' in observation) &&
         ('time-reserved' in observation || 'time-reserved' in observation) &&
         ('expected-lifespan' in observation || 'expected-lifespan') &&
         ('resources-reserved' in observation || 'resources-reserved') &&
         ('total-resources' in observation || 'total-resources' in observation)
       ) {
-        observation['total-embodied-emissions'] = observation['total-embodied-emissions'] ?? observation['total-embodied-emissions'];
-        observation['time-reserved'] = observation['time-reserved'] ?? observation['time-reserved'];
+        observation['total-embodied-emissions'] =
+          observation['total-embodied-emissions'] ??
+          observation['total-embodied-emissions'];
+        observation['time-reserved'] =
+          observation['time-reserved'] ?? observation['time-reserved'];
         observation['expected-lifespan'] =
           observation['expected-lifespan'] ?? observation['expected-lifespan'];
         observation['resources-reserved'] =
-          observation['resources-reserved'] ?? observation['resources-reserved'];
+          observation['resources-reserved'] ??
+          observation['resources-reserved'];
         observation['total-resources'] =
           observation['total-resources'] ?? observation['total-resources'];
         if (typeof observation['total-embodied-emissions'] === 'string') {
           te = parseFloat(observation[observation['total-embodied-emissions']]);
-        } else if (typeof observation['total-embodied-emissions'] === 'number') {
+        } else if (
+          typeof observation['total-embodied-emissions'] === 'number'
+        ) {
           te = observation['total-embodied-emissions'];
         } else {
           te = parseFloat(observation['total-embodied-emissions']);

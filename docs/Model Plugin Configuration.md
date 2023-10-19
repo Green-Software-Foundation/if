@@ -82,7 +82,7 @@ graph:
       config: 
         model-1:
           physical-processor: Intel Xeon Platinum 8175
-          tdp: 200
+          thermal-design-power: 200
       observations: 
         - timestamp: 2023-07-06T00:00
           duration: 5
@@ -100,13 +100,13 @@ graph:
       config: 
         model-1:
           physical-processor: Intel Xeon Platinum 8175
-          tdp: 200
+          thermal-design-power: 200
       observations: 
         - timestamp: 2023-07-06T00:00
           duration: 5
           cpu: 33
           physical-processor: Intel Xeon Platinum 8175
-          tdp: 200          
+          thermal-design-power: 200          
 ```
 
 Ultimately, the observation must contain all the data required for its calculation with the model, so the config for model-1 is copied into every observation. 
