@@ -18,7 +18,7 @@ duration:
   description: refers to the duration of the observation
   unit: seconds
   aggregation: sum
-e-cpu:
+energy-cpu:
   description: Energy consumed by the CPU of the component
   unit: kWh
   aggregation: sum

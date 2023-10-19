@@ -7,7 +7,7 @@ tags:
 initialize:
   models:
     - name: eshoppen-cpu # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = e-mem)
-      kind: e-cpu
+      kind: energy-cpu
       path: false
       verbose: false
     - name: eshoppen-mem # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = e-mem)
@@ -18,7 +18,7 @@ initialize:
       kind: e-net
       path: false
       verbose: false
-    - name: sci-e # sums e-cpu and e-mem
+    - name: sci-e # sums energy-cpu and e-mem
       kind: builtin
       path: ''
       verbose: false
@@ -56,7 +56,7 @@ graph:
           tor: 1
         sci-o:
           grid-ci: 951 # gCO2e/kWh
-        e-cpu:
+        energy-cpu:
           physical-processor: Intel® Core™ i7-1185G7
           tdp: 28 # W
           tdp-coeff: 0.12
@@ -86,7 +86,7 @@ graph:
           tor: 16 # the original report has a typo, says 16 but actually has 26 cores.
         sci-o:
           grid-ci: 951 # gCO2e/kWh
-        e-cpu:
+        energy-cpu:
           physical-processor: Intel® Xeon® Platinum 8272CL
           tdp: 205
           tdp-coeff: 0.32
@@ -117,7 +117,7 @@ graph:
           tor: 16 # total cores
         sci-c:
           grid-ci: 951
-        e-cpu:
+        energy-cpu:
           n-hours: 1
           n-chips: 1
           physical-processor: Intel® Xeon® Platinum 8160

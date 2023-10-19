@@ -1,11 +1,11 @@
-import {IImpactModelInterface} from '../interfaces';
+import { IImpactModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-import {KeyValuePair} from '../../types/common';
+import { KeyValuePair } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {SCI_E} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { SCI_E } = MODEL_IDS;
 
 export class SciEModel implements IImpactModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in thi smodel.
@@ -68,7 +68,7 @@ export class SciEModel implements IImpactModelInterface {
   /**
    * Calculates the sum of the energy components
    *
-   * e-cpu: cpu energy in kwh
+   * energy-cpu: cpu energy in kwh
    * e-mem: energy due to memory usage in kwh
    * e-net: energy due to network data in kwh
    * timestamp: RFC3339 timestamp string
@@ -81,7 +81,7 @@ export class SciEModel implements IImpactModelInterface {
     let e_cpu = 0;
 
     if (
-      !('e-cpu' in observation) &&
+      !('energy-cpu' in observation) &&
       !('e-mem' in observation) &&
       !('e-net' in observation)
     ) {
@@ -91,8 +91,8 @@ export class SciEModel implements IImpactModelInterface {
     }
 
     // If the user gives a negative value it will default to zero.
-    if ('e-cpu' in observation && observation['e-cpu'] > 0) {
-      e_cpu = observation['e-cpu'];
+    if ('energy-cpu' in observation && observation['energy-cpu'] > 0) {
+      e_cpu = observation['energy-cpu'];
     }
     if ('e-mem' in observation && observation['e-mem'] > 0) {
       e_mem = observation['e-mem'];

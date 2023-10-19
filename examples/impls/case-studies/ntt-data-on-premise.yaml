@@ -121,14 +121,14 @@ graph:
         db-server1:
           observations:
             - timestamp: 2023-07-06T00:00
-              e-cpu: 0.258
+              energy-cpu: 0.258
               duration: 1 #s
               grid-ci: 457 # gCO2e/kWh
               requests: 38032740
         db-server2:
           observations:
             - timestamp: 2023-07-06T00:00
-              e-cpu: 0.193
+              energy-cpu: 0.193
               duration: 1 #s
               grid-ci: 457 # gCO2e/kWh
               requests: 38032740
@@ -156,13 +156,13 @@ graph:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e-cpu: 0.149
+              energy-cpu: 0.149
               grid-ci: 457 # gCO2e/kWh
         app-server2:
           observations:  
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e-cpu: 0.147
+              energy-cpu: 0.147
               grid-ci: 457 # gCO2e/kWh
               requests: 38032740
     web-servers:
@@ -189,13 +189,13 @@ graph:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e-cpu: 0.139
+              energy-cpu: 0.139
               grid-ci: 951 # gCO2e/kWh
               requests: 38032740
         web-server2:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e-cpu: 0.116
+              energy-cpu: 0.116
               grid-ci: 951 # gCO2e/kWh
               requests: 38032740

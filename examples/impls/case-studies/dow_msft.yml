@@ -40,7 +40,7 @@ graph:
         - sci-o # takes in total e and outputs operational emissions
         - sci # add cpu and memory components and convert to f.unit
       config:
-        teads-curve: # use tdp to derive e-cpu (kwh)
+        teads-curve: # use tdp to derive energy-cpu (kwh)
           physical-processor: Intel-xeon-platinum-8380
           tdp: 270
         emem: # mem-util * mem-alloc * mem-energy = emem (kwh)
@@ -59,7 +59,7 @@ graph:
           functional_duration_time: ''
           functional_unit: requests # factor to convert per time to per f.unit
       children:
-        tiger-database-cpu:
+        tiger-databasenergy-cpu:
           config:
             sci-m:
               te: 1533.120 # gCO2eq
@@ -112,7 +112,7 @@ graph:
               cpu-util: 0
               mem-util: 0 # % of total
               requests: 32000        
-        neo4j-database-cpu: # a leaf component
+        neo4j-databasenergy-cpu: # a leaf component
           config:
             sci-m:
               te: 1216.620 # gCO2eq

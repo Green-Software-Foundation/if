@@ -1,8 +1,8 @@
 import * as fs from 'fs';
-import {expect, jest, it} from '@jest/globals';
+import { expect, jest, it } from '@jest/globals';
 
-import {openYamlFileAsObject} from '../../../util/yaml';
-import {describe} from 'node:test';
+import { openYamlFileAsObject } from '../../../util/yaml';
+import { describe } from 'node:test';
 
 jest.setTimeout(30000);
 
@@ -46,7 +46,7 @@ describe('ompls: ', () => {
       }
 
       if (file.includes('complex-pipeline')) {
-        it('checks `complex-pipeline` to have `e-mem`, `e-cpu`, etc. properties in impact.', async () => {
+        it('checks `complex-pipeline` to have `e-mem`, `energy-cpu`, etc. properties in impact.', async () => {
           const ompl = await openYamlFileAsObject(`${path}/${file}`);
           const res: string = JSON.stringify(
             ompl['graph']['children']['child']['impacts'][0]
@@ -54,10 +54,10 @@ describe('ompls: ', () => {
 
           expect(
             res.includes('e-mem') &&
-              res.includes('e-cpu') &&
-              res.includes('e-net') &&
-              res.includes('energy') &&
-              res.includes('operational-carbon')
+            res.includes('energy-cpu') &&
+            res.includes('e-net') &&
+            res.includes('energy') &&
+            res.includes('operational-carbon')
           ).toBeTruthy();
         });
       }

@@ -1,13 +1,13 @@
 import Spline from 'typescript-cubic-spline';
 
-import {IImpactModelInterface} from '../interfaces';
+import { IImpactModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-import {KeyValuePair, Interpolation} from '../../types/common';
+import { KeyValuePair, Interpolation } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {TEADS_CURVE} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { TEADS_CURVE } = MODEL_IDS;
 
 export class TeadsCurveModel implements IImpactModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in TEADS.
@@ -81,7 +81,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
     }
     return observations.map((observation: KeyValuePair) => {
       this.configure(this.name!, observation);
-      observation['e-cpu'] = this.calculateEnergy(observation);
+      observation['energy-cpu'] = this.calculateEnergy(observation);
       return observation;
     });
   }
@@ -177,4 +177,4 @@ export class TeadsCurveModel implements IImpactModelInterface {
 /**
  * For JSII.
  */
-export {KeyValuePair, Interpolation} from '../../types/common';
+export { KeyValuePair, Interpolation } from '../../types/common';

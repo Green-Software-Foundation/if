@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-import {IImpactModelInterface} from '../interfaces';
-import {CONFIG} from '../../config';
+import { IImpactModelInterface } from '../interfaces';
+import { CONFIG } from '../../config';
 
-import {BoaviztaInstanceTypes, IBoaviztaUsageSCI} from '../../types/boavizta';
-import {KeyValuePair} from '../../types/common';
+import { BoaviztaInstanceTypes, IBoaviztaUsageSCI } from '../../types/boavizta';
+import { KeyValuePair } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {BOAVIZTA_CPU, BOAVIZTA_CLOUD} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { BOAVIZTA_CPU, BOAVIZTA_CLOUD } = MODEL_IDS;
 
 abstract class BoaviztaImpactModel implements IImpactModelInterface {
   name: string | undefined;
@@ -114,7 +114,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
       e = data['pe']['use'] / 3.6;
     }
 
-    return {'embodied-carbon': m, energy: e};
+    return { 'embodied-carbon': m, energy: e };
   }
 
   // converts the usage to the format required by Boavizta API.
@@ -141,8 +141,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
 
 export class BoaviztaCpuImpactModel
   extends BoaviztaImpactModel
-  implements IImpactModelInterface
-{
+  implements IImpactModelInterface {
   sharedParams: object | undefined = undefined;
   public name: string | undefined;
   public verbose = false;
@@ -174,7 +173,7 @@ export class BoaviztaCpuImpactModel
 
     const result = this.formatResponse(response.data);
     return {
-      'e-cpu': result.energy,
+      'energy-cpu': result.energy,
       'embodied-carbon': result['embodied-carbon'],
     };
   }
@@ -204,8 +203,7 @@ export class BoaviztaCpuImpactModel
 
 export class BoaviztaCloudImpactModel
   extends BoaviztaImpactModel
-  implements IImpactModelInterface
-{
+  implements IImpactModelInterface {
   public sharedParams: object | undefined = undefined;
   public instanceTypes: BoaviztaInstanceTypes = {};
   public name: string | undefined;
@@ -223,9 +221,9 @@ export class BoaviztaCloudImpactModel
       if (!countries.includes(location)) {
         throw new Error(
           "Improper configure: Invalid location parameter: '" +
-            location +
-            "'. Valid values are : " +
-            countries.join(', ')
+          location +
+          "'. Valid values are : " +
+          countries.join(', ')
         );
       }
       return staticParamsCast.location as string;
@@ -259,8 +257,7 @@ export class BoaviztaCloudImpactModel
         )
       ) {
         throw new Error(
-          `Improper configure: Invalid 'instance-type' parameter: '${
-            staticParamsCast['instance-type']
+          `Improper configure: Invalid 'instance-type' parameter: '${staticParamsCast['instance-type']
           }'. Valid values are : ${this.instanceTypes[provider].join(', ')}`
         );
       }
@@ -276,9 +273,9 @@ export class BoaviztaCloudImpactModel
       if (!supportedProviders.includes(staticParamsCast.provider as string)) {
         throw new Error(
           "Improper configure: Invalid provider parameter: '" +
-            staticParamsCast.provider +
-            "'. Valid values are : " +
-            supportedProviders.join(', ')
+          staticParamsCast.provider +
+          "'. Valid values are : " +
+          supportedProviders.join(', ')
         );
       }
     }
@@ -348,6 +345,6 @@ export class BoaviztaCloudImpactModel
 /**
  * For JSII.
  */
-export {IImpactModelInterface} from '../interfaces';
-export {BoaviztaInstanceTypes, IBoaviztaUsageSCI} from '../../types/boavizta';
-export {KeyValuePair} from '../../types/common';
+export { IImpactModelInterface } from '../interfaces';
+export { BoaviztaInstanceTypes, IBoaviztaUsageSCI } from '../../types/boavizta';
+export { KeyValuePair } from '../../types/common';

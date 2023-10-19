@@ -80,7 +80,7 @@ graph:
           grid-ci: 951
           executable: python3 /usr/local/bin/sampler
           e-mem: 0.001
-          e-cpu: 0.001
+          energy-cpu: 0.001
           e-net: 0.002
           energy: 0.004
           operational-carbon: 3.8040000000000003
@@ -99,7 +99,7 @@ graph:
           grid-ci: 800
           executable: python3 /usr/local/bin/sampler
           e-mem: 0.001
-          e-cpu: 0.001
+          energy-cpu: 0.001
           e-net: 0.002
           energy: 0.004
           operational-carbon: 3.2

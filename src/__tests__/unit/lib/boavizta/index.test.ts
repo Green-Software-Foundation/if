@@ -1,9 +1,9 @@
-import {describe, expect, jest, test} from '@jest/globals';
+import { describe, expect, jest, test } from '@jest/globals';
 import {
   BoaviztaCloudImpactModel,
   BoaviztaCpuImpactModel,
 } from '../../../../lib/boavizta/index';
-import axios, {AxiosResponse} from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import * as PROVIDERS from '../../../../__mocks__/boavizta/providers.json';
 import * as COUNTRIES from '../../../../__mocks__/boavizta/countries.json';
 import * as INSTANCE_TYPES from '../../../../__mocks__/boavizta/instance_types.json';
@@ -13,9 +13,9 @@ async function axiosGet<T = any, R = AxiosResponse<T, any>>(
 ): Promise<R> {
   switch (url) {
     case 'https://api.boavizta.org/v1/cloud/all_providers':
-      return {data: PROVIDERS} as R;
+      return { data: PROVIDERS } as R;
     case 'https://api.boavizta.org/v1/utils/country_code':
-      return Promise.resolve({data: COUNTRIES} as R);
+      return Promise.resolve({ data: COUNTRIES } as R);
     case 'https://api.boavizta.org/v1/cloud/all_instances?provider=aws':
       return Promise.resolve({
         data: INSTANCE_TYPES['aws'],
@@ -34,24 +34,24 @@ mockAxios.post.mockImplementation(
       case 'https://api.boavizta.org/v1/component/cpu?verbose=false&allocation=LINEAR':
         return Promise.resolve({
           data: {
-            gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
-            pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+            gwp: { manufacture: 0.1, use: 1.0, unit: 'kgCO2eq' },
+            pe: { manufacture: 0.1, use: 1.0, unit: 'MJ' },
           },
         } as R);
       case 'https://api.boavizta.org/v1/component/cpu?verbose=true&allocation=LINEAR':
         return Promise.resolve({
           data: {
             impacts: {
-              gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
-              pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+              gwp: { manufacture: 0.1, use: 1.0, unit: 'kgCO2eq' },
+              pe: { manufacture: 0.1, use: 1.0, unit: 'MJ' },
             },
           },
         } as R);
       case 'https://api.boavizta.org/v1/cloud/?verbose=false&allocation=LINEAR':
         return Promise.resolve({
           data: {
-            gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
-            pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+            gwp: { manufacture: 0.1, use: 1.0, unit: 'kgCO2eq' },
+            pe: { manufacture: 0.1, use: 1.0, unit: 'MJ' },
           },
         } as R);
     }
@@ -63,7 +63,7 @@ describe('cpu:configure test', () => {
   test('initialize wrong params should throw error', async () => {
     const impactModel = new BoaviztaCpuImpactModel();
     await expect(
-      impactModel.configure('test', {allocation: 'wrong'})
+      impactModel.configure('test', { allocation: 'wrong' })
     ).rejects.toThrowError();
     expect(impactModel.name).toBe('test');
   });
@@ -109,7 +109,7 @@ describe('cpu:configure test', () => {
     );
     // improper observations will throw an invalid observations error
     await expect(
-      impactModel.calculate([{invalid: 'observation'}])
+      impactModel.calculate([{ invalid: 'observation' }])
     ).rejects.toStrictEqual(
       Error('Invalid Input: Invalid observations parameter')
     );
@@ -139,7 +139,7 @@ describe('cpu:initialize with params', () => {
     ).resolves.toStrictEqual([
       {
         'embodied-carbon': 100,
-        'e-cpu': 0.2777777777777778,
+        'energy-cpu': 0.2777777777777778,
       },
     ]);
   });
@@ -166,7 +166,7 @@ describe('cpu:initialize with params', () => {
     ).resolves.toStrictEqual([
       {
         'embodied-carbon': 100,
-        'e-cpu': 0.2777777777777778,
+        'energy-cpu': 0.2777777777777778,
       },
     ]);
   });
@@ -177,13 +177,13 @@ describe('cloud:initialize with params', () => {
     const impactModel = new BoaviztaCloudImpactModel();
     expect(impactModel.modelIdentifier()).toBe('org.boavizta.cloud.sci');
     await expect(
-      impactModel.validateLocation({location: 'SomethingFail'})
+      impactModel.validateLocation({ location: 'SomethingFail' })
     ).rejects.toThrowError();
     await expect(
-      impactModel.validateInstanceType({'instance-type': 'SomethingFail'})
+      impactModel.validateInstanceType({ 'instance-type': 'SomethingFail' })
     ).rejects.toThrowError();
     await expect(
-      impactModel.validateProvider({provider: 'SomethingFail'})
+      impactModel.validateProvider({ provider: 'SomethingFail' })
     ).rejects.toThrowError();
     await expect(
       impactModel.configure('test', {

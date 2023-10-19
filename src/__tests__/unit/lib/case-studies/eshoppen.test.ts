@@ -1,4 +1,4 @@
-import {describe, expect, jest, test} from '@jest/globals';
+import { describe, expect, jest, test } from '@jest/globals';
 import {
   EshoppenMemModel,
   EshoppenModel,
@@ -9,7 +9,7 @@ jest.setTimeout(30000);
 describe('eshoppen:configure test', () => {
   test('initialize and test', async () => {
     const model = await new EshoppenModel().configure('eshoppen', {
-      type: 'e-cpu',
+      type: 'energy-cpu',
     });
     expect(model).toBeInstanceOf(EshoppenModel);
     await expect(
@@ -23,7 +23,7 @@ describe('eshoppen:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        'e-cpu': 0.12240000000000001,
+        'energy-cpu': 0.12240000000000001,
         'n-hours': 1,
         'n-chips': 1,
         tdp: 120,
@@ -32,7 +32,7 @@ describe('eshoppen:configure test', () => {
     ]);
     await expect(model.calculate([{}])).rejects.toThrowError();
     await expect(model.calculate({})).rejects.toThrowError();
-    expect(model.authenticate({test: 'test'})).toBe(undefined);
+    expect(model.authenticate({ test: 'test' })).toBe(undefined);
 
     const model2 = await new EshoppenMemModel().configure('eshoppen', {
       type: 'e-mem',

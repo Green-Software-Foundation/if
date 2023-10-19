@@ -30,12 +30,12 @@ graph:
           cpu-util: 18.392
           core-units: 24
           processor: Intel® Core™ i7-1185G7
-          e-cpu: .nan
+          energy-cpu: .nan
           embodied-carbon: .nan
         - timestamp: 2023-08-06T00:00
           duration: 3600
           cpu-util: 16
           core-units: 24
           processor: Intel® Core™ i7-1185G7
-          e-cpu: .nan
+          energy-cpu: .nan
           embodied-carbon: .nan
