@@ -70,10 +70,6 @@ instance-type:
   description: Type of Cloud Instance name used in the cloud provider APIs
   unit: None
   aggregation: None
-interpolation:
-  description: Name of the interpolation method to apply to TDP curve in Teads model. 
-  unit: None
-  aggregation: None
 location:
   description: Geographic location of provider as string (for watt-time model it is provided as latitude and longitude, comma separated, in decimal degrees)
   unit: None (decimal degrees for watt-time model)
