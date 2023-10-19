@@ -1,9 +1,9 @@
 import Spline from 'typescript-cubic-spline';
 
-import {IComputeInstance, IImpactModelInterface} from '../interfaces';
-import {INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING} from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
+import { IComputeInstance, IImpactModelInterface } from '../interfaces';
+import { INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING } from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
 import * as AWS_INSTANCES from './aws-instances.json';
 import * as GCP_INSTANCES from './gcp-instances.json';
@@ -15,17 +15,17 @@ import * as GCP_EMBODIED from './gcp-embodied.json';
 import * as AWS_EMBODIED from './aws-embodied.json';
 import * as AZURE_EMBODIED from './azure-embodied.json';
 
-import {KeyValuePair, Interpolation} from '../../types/common';
+import { KeyValuePair, Interpolation } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {CCF} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { CCF } = MODEL_IDS;
 
 export class CloudCarbonFootprint implements IImpactModelInterface {
   // Defined for compatibility. Not used in CCF.
   authParams: object | undefined;
   // name of the data source
   name: string | undefined;
-  // compute instances grouped by the provider with usage data
+  // compute instances grouped by the vendor with usage data
   private computeInstances: {
     [key: string]: {
       [key: string]: IComputeInstance;
@@ -38,7 +38,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     aws: {},
     azure: {},
   };
-  private provider = '';
+  private vendor = '';
   private instanceType = '';
   private expectedLifespan = 4;
 
@@ -59,7 +59,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
    *  Configures the CCF Plugin for IEF
    *  @param {string} name name of the resource
    *  @param {Object} staticParams static parameters for the resource
-   *  @param {("aws"|"gcp"|"azure")} staticParams.provider aws, gcp, azure
+   *  @param {("aws"|"gcp"|"azure")} staticParams.vendor aws, gcp, azure
    *  @param {string} staticParams.'instance-type' instance type from the list of supported instances
    *  @param {number} staticParams.'expected-lifespan' expected lifespan of the instance in years
    *  @param {Interpolation} staticParams.interpolation linear(All Clouds), spline (only for AWS)
@@ -74,20 +74,20 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       throw new Error('Required Parameters not provided');
     }
 
-    if ('provider' in staticParams) {
-      const provider = staticParams?.provider as string;
-      if (['aws', 'gcp', 'azure'].includes(provider)) {
-        this.provider = provider;
+    if ('vendor' in staticParams) {
+      const vendor = staticParams?.vendor as string;
+      if (['aws', 'gcp', 'azure'].includes(vendor)) {
+        this.vendor = vendor;
       } else {
-        throw new Error('Provider not supported');
+        throw new Error('vendor not supported');
       }
     } else {
-      throw new Error('Provider not provided');
+      throw new Error('vendor not provided');
     }
 
     if ('instance-type' in staticParams) {
       const instanceType = staticParams['instance-type'] as string;
-      if (instanceType in this.computeInstances[this.provider]) {
+      if (instanceType in this.computeInstances[this.vendor]) {
         this.instanceType = instanceType;
       } else {
         throw new Error('Instance Type not supported');
@@ -101,7 +101,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     }
 
     if ('interpolation' in staticParams) {
-      if (this.provider !== 'aws') {
+      if (this.vendor !== 'aws') {
         throw new Error('Interpolation method not supported');
       }
       const interpolation = staticParams?.interpolation as Interpolation;
@@ -132,7 +132,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       throw new Error('observations should be an array');
     }
 
-    if (this.instanceType === '' || this.provider === '') {
+    if (this.instanceType === '' || this.vendor === '') {
       throw new Error('Configuration is incomplete');
     }
     observations.map((observation: KeyValuePair) => {
@@ -171,7 +171,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     //  get the wattage for the instance type
     let wattage;
 
-    if (this.provider === 'aws' && this.interpolation === 'spline') {
+    if (this.vendor === 'aws' && this.interpolation === 'spline') {
       const x = [0, 10, 50, 100];
 
       const y: number[] = [
@@ -189,10 +189,10 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
       wattage = spline.at(cpu);
     } else {
       const idle =
-        this.computeInstances[this.provider][this.instanceType].consumption
+        this.computeInstances[this.vendor][this.instanceType].consumption
           .minWatts ?? 0;
       const max =
-        this.computeInstances[this.provider][this.instanceType].consumption
+        this.computeInstances[this.vendor][this.instanceType].consumption
           .maxWatts ?? 0;
 
       // linear interpolation
@@ -218,9 +218,9 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
   }
 
   /**
-   * Standardize the instance metrics for all the providers
+   * Standardize the instance metrics for all the vendors
    *
-   * Maps the instance metrics to a standard format (min, max, idle, 10%, 50%, 100%) for all the providers
+   * Maps the instance metrics to a standard format (min, max, idle, 10%, 50%, 100%) for all the vendors
    */
   standardizeInstanceMetrics() {
     this.computeInstances['aws'] = {};
@@ -241,11 +241,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         architecture = this.resolveAwsArchitecture(architecture);
         minWatts +=
           this.computeInstanceUsageByArchitecture['aws'][architecture][
-            'Min Watts'
+          'Min Watts'
           ] ?? 0;
         maxWatts +=
           this.computeInstanceUsageByArchitecture['aws'][architecture][
-            'Max Watts'
+          'Max Watts'
           ] ?? 0;
         count += 1;
       });
@@ -282,11 +282,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         consumption: {
           minWatts:
             this.computeInstanceUsageByArchitecture['gcp'][architecture][
-              'Min Watts'
+            'Min Watts'
             ] * cpus,
           maxWatts:
             this.computeInstanceUsageByArchitecture['gcp'][architecture][
-              'Max Watts'
+            'Max Watts'
             ] * cpus,
         },
         maxvCPUs: parseInt(
@@ -305,11 +305,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         consumption: {
           minWatts:
             this.computeInstanceUsageByArchitecture['azure'][architecture][
-              'Min Watts'
+            'Min Watts'
             ] * cpus,
           maxWatts:
             this.computeInstanceUsageByArchitecture['azure'][architecture][
-              'Max Watts'
+            'Max Watts'
             ] * cpus,
         },
         name: instance['Virtual Machine'],
@@ -334,12 +334,12 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     });
   }
 
-  private calculateAverage(provider: string, instanceList: KeyValuePair[]) {
+  private calculateAverage(vendor: string, instanceList: KeyValuePair[]) {
     let min = 0.0;
     let max = 0.0;
     let count = 0.0;
     instanceList.forEach((instance: KeyValuePair) => {
-      this.computeInstanceUsageByArchitecture[provider][
+      this.computeInstanceUsageByArchitecture[vendor][
         instance['Architecture']
       ] = instance;
       min += parseFloat(instance['Min Watts']);
@@ -348,7 +348,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     });
     const avgMin = min / count;
     const avgMax = max / count;
-    this.computeInstanceUsageByArchitecture[provider]['Average'] = {
+    this.computeInstanceUsageByArchitecture[vendor]['Average'] = {
       'Min Watts': avgMin,
       'Max Watts': avgMax,
       Architecture: 'Average',
@@ -399,14 +399,14 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
     // RR = Resources Reserved, the number of resources reserved for use by the software.
     // TR = Total Resources, the total number of resources available.
     const totalEmissions =
-      this.computeInstances[this.provider][this.instanceType]
+      this.computeInstances[this.vendor][this.instanceType]
         .embodiedEmission ?? 0;
     const timeReserved = durationInHours;
     const expectedLifespan = 8760 * this.expectedLifespan;
     const reservedResources =
-      this.computeInstances[this.provider][this.instanceType].vCPUs ?? 1.0;
+      this.computeInstances[this.vendor][this.instanceType].vCPUs ?? 1.0;
     const totalResources =
-      this.computeInstances[this.provider][this.instanceType].maxVCPUs ?? 1.0;
+      this.computeInstances[this.vendor][this.instanceType].maxVCPUs ?? 1.0;
     // Multiply totalEmissions by 1000 to convert from kgCO2e to gCO2e
     return (
       totalEmissions *

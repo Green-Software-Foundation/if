@@ -238,7 +238,7 @@ pipeline:
 
 Any time you upgrade one model plugin, every other plugin that depends on it can take advantage of those changes.
 
-Sticking to the above example of the `instance-metadata` plugin. A new version of the `instance-metadata` plugin can be released if a cloud provider updates its instance types or offerings. If you update your install, every plugin that depends on that data can take advantage of the update.
+Sticking to the above example of the `instance-metadata` plugin. A new version of the `instance-metadata` plugin can be released if a cloud vendor updates its instance types or offerings. If you update your install, every plugin that depends on that data can take advantage of the update.
 ### Consistency
 
 Again, sticking to the  `instance-metadata` plugin example. Breaking out functionality into lots of smaller plugins allows for more consistency. This is especially true regarding plugins that do lookups against data. 

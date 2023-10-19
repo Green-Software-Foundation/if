@@ -139,7 +139,7 @@ describe('cpu:initialize with params', () => {
     ).resolves.toStrictEqual([
       {
         'embodied-carbon': 100,
-        'energy-cpu': 0.2777777777777778,
+        'e-cpu': 0.2777777777777778,
       },
     ]);
   });
@@ -166,7 +166,7 @@ describe('cpu:initialize with params', () => {
     ).resolves.toStrictEqual([
       {
         'embodied-carbon': 100,
-        'energy-cpu': 0.2777777777777778,
+        'e-cpu': 0.2777777777777778,
       },
     ]);
   });
@@ -183,14 +183,14 @@ describe('cloud:initialize with params', () => {
       impactModel.validateInstanceType({ 'instance-type': 'SomethingFail' })
     ).rejects.toThrowError();
     await expect(
-      impactModel.validateProvider({ provider: 'SomethingFail' })
+      impactModel.validateVendor({ provider: 'SomethingFail' })
     ).rejects.toThrowError();
     await expect(
       impactModel.configure('test', {
         'instance-type': 't2.micro',
         location: 'USA',
         'expected-lifespan': 4 * 365 * 24 * 60 * 60,
-        provider: 'aws',
+        vendor: 'aws',
         verbose: false,
       })
     ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
@@ -199,7 +199,7 @@ describe('cloud:initialize with params', () => {
         'instance-type': 't2.micro',
         location: 'USA',
         'expected-lifespan': 4 * 365 * 24 * 60 * 60,
-        provider: 'aws',
+        vendor: 'aws',
         verbose: 'false',
       })
     ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
@@ -208,7 +208,7 @@ describe('cloud:initialize with params', () => {
         'instance-type': 't2.micro',
         location: 'USA',
         'expected-lifespan': 4 * 365 * 24 * 60 * 60,
-        provider: 'aws',
+        vendor: 'aws',
         verbose: 0,
       })
     ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
@@ -227,7 +227,7 @@ describe('cloud:initialize with params', () => {
     ).rejects.toThrowError();
     await expect(
       impactModel.configure('test', {
-        provider: 'aws',
+        vendor: 'aws',
         location: 'USA',
       })
     ).rejects.toThrowError();
@@ -235,7 +235,7 @@ describe('cloud:initialize with params', () => {
       impactModel.configure('test', {
         'instance-type': 't2.micro',
         location: 'USA',
-        provider: 'aws',
+        vendor: 'aws',
       })
     ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
     expect(impactModel.name).toBe('test');
@@ -263,7 +263,7 @@ describe('cloud:initialize with params', () => {
       impactModel.configure('test', {
         'instance-type': 't5.micro',
         location: 'USA',
-        provider: 'aws',
+        vendor: 'aws',
       })
     ).rejects.toThrowError();
     expect(impactModel.name).toBe('test');
@@ -300,7 +300,7 @@ describe('cloud:initialize with params', () => {
     await expect(
       impactModel.configure('test', {
         location: 'USA',
-        provider: 'aws',
+        vendor: 'aws',
       })
     ).rejects.toStrictEqual(
       Error("Improper configure: Missing 'instance-type' parameter")
@@ -308,7 +308,7 @@ describe('cloud:initialize with params', () => {
     await expect(
       impactModel.configure('test', {
         location: 'USAF',
-        provider: 'aws',
+        vendor: 'aws',
         'instance-type': 't2.micro',
       })
     ).rejects.toThrowError();

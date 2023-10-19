@@ -3,19 +3,19 @@ import Spline from 'typescript-cubic-spline';
 import * as AWS_INSTANCES from './aws-instances.json';
 import * as AWS_EMBODIED from './aws-embodied.json';
 
-import {IImpactModelInterface} from '../interfaces';
+import { IImpactModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-import {KeyValuePair, Interpolation} from '../../types/common';
+import { KeyValuePair, Interpolation } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {TEADS_AWS} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { TEADS_AWS } = MODEL_IDS;
 
 export class TeadsAWS implements IImpactModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in TEADS.
   name: string | undefined; // name of the data source
-  // compute instances grouped by the provider with usage data
+  // compute instances grouped by the vendor with usage data
   private computeInstances: {
     [key: string]: KeyValuePair;
   } = {};
@@ -115,9 +115,9 @@ export class TeadsAWS implements IImpactModelInterface {
   }
 
   /**
-   * Standardize the instance metrics for all the providers
+   * Standardize the instance metrics for all the vendors
    *
-   * Maps the instance metrics to a standard format (min, max, idle, 10%, 50%, 100%) for all the providers
+   * Maps the instance metrics to a standard format (min, max, idle, 10%, 50%, 100%) for all the vendors
    */
   standardizeInstanceMetrics() {
     AWS_INSTANCES.forEach((instance: KeyValuePair) => {
