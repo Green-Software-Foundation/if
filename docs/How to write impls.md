@@ -1,3 +1,8 @@
+---
+author: Joseph Cook (@jmcook1186)
+abstract: Guidance for writing valid impls.
+---
+
 # IMPL writing guide
 
 The Impact Framework receives all its configuration and observation data in the form of a `yaml` file known as an `impl` (input-yaml).
