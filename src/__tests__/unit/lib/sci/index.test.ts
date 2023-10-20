@@ -89,9 +89,9 @@ describe('sci:configure test', () => {
   });
   test('initialize and test: vary fuinctional-unit-duration', async () => {
     const model = await new SciModel().configure('name', {
-      functional_unit_time: 'days',
-      functional_unit: '',
-      functional_unit_duration: 2,
+      'functional-unit-time': 'days',
+      'functional-unit': '',
+      'functional-unit-duration': 2,
     });
     expect(model).toBeInstanceOf(SciModel);
     await expect(
