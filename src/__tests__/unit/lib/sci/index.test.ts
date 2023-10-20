@@ -1,5 +1,5 @@
-import { describe, expect, jest, test } from '@jest/globals';
-import { SciModel } from '../../../../lib/sci/index';
+import {describe, expect, jest, test} from '@jest/globals';
+import {SciModel} from '../../../../lib/sci/index';
 jest.setTimeout(30000);
 
 describe('sci:configure test', () => {
