@@ -24,19 +24,19 @@ graph:
         - sci
       config:
         teads-curve:
-          tdp: 55
+          thermal-design-power: 55
         sci-m:
-          te: 1533.12
-          tir: 1
-          el: 3
-          rr: 1
-          tor: 8
+          total-embodied-emissions: 251000 # gCO2eq
+          time-reserved: 3600 # 1 hour in s
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1 
+          total-resources: 1 
         sci-o:
-          grid-ci: 1500     
+          grid-carbon-intensity: 1500     
         sci:
-          functional_unit_duration: 1 
-          functional_unit_time: 'minutes'
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-unit-time: 'minutes'
+          functional-unit: requests # factor to convert per time to per f.unit
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 1

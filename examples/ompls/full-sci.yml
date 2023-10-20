@@ -24,19 +24,19 @@ graph:
         - sci
       config:
         teads-curve:
-          tdp: 55
+          thermal-design-power: 55
         sci-m:
-          te: 1533.12
-          tir: 1
-          el: 3
-          rr: 1
-          tor: 8
+          total-embodied-emissions: 251000
+          time-reserved: 3600
+          expected-lifespan: 126144000
+          resources-reserved: 1
+          total-resources: 1
         sci-o:
-          grid-ci: 1500
+          grid-carbon-intensity: 1500
         sci:
-          functional_unit_duration: 1
-          functional_unit_time: minutes
-          functional_unit: requests
+          functional-unit-duration: 1
+          functional-unit-time: minutes
+          functional-unit: requests
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 1
@@ -47,18 +47,18 @@ graph:
           duration: 1
           cpu-util: 55
           requests: 100
-          tdp: 55
-          te: 1533.12
-          tir: 1
-          el: 3
-          rr: 1
-          tor: 8
-          grid-ci: 1500
-          functional_unit_duration: 1
-          functional_unit_time: minutes
-          functional_unit: requests
-          e-cpu: 0.000011936544080284555
-          embodied-carbon: 63.879999999999995
+          thermal-design-power: 55
+          total-embodied-emissions: 251000
+          time-reserved: 3600
+          expected-lifespan: 126144000
+          resources-reserved: 1
+          total-resources: 1
+          grid-carbon-intensity: 1500
+          functional-unit-duration: 1
+          functional-unit-time: minutes
+          functional-unit: requests
+          energy-cpu: 0.000011936544080284555
+          embodied-carbon: 7.16324200913242
           energy: 0.000011936544080284555
           operational-carbon: 0.017904816120426832
-          sci: 38.338742889672254
+          sci: 4.308688095151708

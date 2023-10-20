@@ -35,19 +35,19 @@ graph:
         - sci
       config:
         teads-curve:
-          tdp: 65
+          thermal-design-power: 65
         sci-m:
-          te: 251000
-          tir: 3600
-          el: 126144000
-          rr: 1
-          tor: 1
+          total-embodied-emissions: 251000
+          time-reserved: 3600
+          expected-lifespan: 126144000
+          resources-reserved: 1
+          total-resources: 1
         sci-o:
-          grid-ci: 457
+          grid-carbon-intensity: 457
         sci:
-          functional_unit_duration: 1
-          functional_duration_time: ''
-          functional_unit: requests
+          functional-unit-duration: 1
+          functional-duration-time: ''
+          functional-unit: requests
       children:
         child-1:
           observations:
@@ -62,21 +62,21 @@ graph:
               cpu-util: 50
               e-net: 0.000811
               requests: 380
-              tdp: 65
-              te: 251000
-              tir: 3600
-              el: 126144000
-              rr: 1
-              tor: 1
-              grid-ci: 457
-              functional_unit_duration: 1
-              functional_duration_time: ''
-              functional_unit: requests
-              e-cpu: 0.00013541666666666666
-              energy: 0.0009464166666666666
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              functional-unit-duration: 1
+              functional-duration-time: ''
+              functional-unit: requests
+              energy-cpu: 0.00013541666666666666
+              energy: 0.00013541666666666666
               embodied-carbon: 7.16324200913242
-              operational-carbon: 0.4325124166666666
-              sci: 0.019988827436313385
+              operational-carbon: 0.061885416666666665
+              sci: 0.01901349322578707
         child-2:
           observations:
             - timestamp: 2023-07-06T00:00
@@ -90,18 +90,18 @@ graph:
               cpu-util: 33
               e-net: 0.000811
               requests: 380
-              tdp: 65
-              te: 251000
-              tir: 3600
-              el: 126144000
-              rr: 1
-              tor: 1
-              grid-ci: 457
-              functional_unit_duration: 1
-              functional_duration_time: ''
-              functional_unit: requests
-              e-cpu: 0.00011243956355860435
-              energy: 0.0009234395635586044
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              functional-unit-duration: 1
+              functional-duration-time: ''
+              functional-unit: requests
+              energy-cpu: 0.00011243956355860435
+              energy: 0.00011243956355860435
               embodied-carbon: 7.16324200913242
-              operational-carbon: 0.4220118805462822
-              sci: 0.0199611944465229
+              operational-carbon: 0.05138488054628219
+              sci: 0.018985860235996584
