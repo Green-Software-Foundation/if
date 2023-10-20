@@ -46,16 +46,16 @@ describe('ompls: ', () => {
       }
 
       if (file.includes('complex-pipeline')) {
-        it('checks `complex-pipeline` to have `e-mem`, `e-cpu`, etc. properties in impact.', async () => {
+        it('checks `complex-pipeline` to have `energy-memory`, `energy-cpu`, etc. properties in impact.', async () => {
           const ompl = await openYamlFileAsObject(`${path}/${file}`);
           const res: string = JSON.stringify(
             ompl['graph']['children']['child']['impacts'][0]
           );
 
           expect(
-            res.includes('e-mem') &&
-              res.includes('e-cpu') &&
-              res.includes('e-net') &&
+            res.includes('energy-memory') &&
+              res.includes('energy-cpu') &&
+              res.includes('energy-network') &&
               res.includes('energy') &&
               res.includes('operational-carbon')
           ).toBeTruthy();

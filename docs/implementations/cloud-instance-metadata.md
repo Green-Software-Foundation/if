@@ -12,7 +12,7 @@ Cloud Instance Metadata currently implements only for 'AWS'.
 
 In IEF, the model is called from an `impl`. An `impl` is a `.yaml` file that contains configuration metadata and usage observations. This is interpreted by the command line tool, `rimpl`. There, the model's `configure` method is called first. The model config shall be empty. Each observation is expected to contain `cloud-vendor` and `cloud-instance-type` fields.
 
-You can see example Typescript invocations for each provider below:
+You can see example Typescript invocations for each vendor below:
 
 ### AWS
 
@@ -47,7 +47,7 @@ graph:
       config:
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-          provider: aws
+          vendor: aws
           instance_type: m5n.large
           duration: 100
           cpu-util: 10

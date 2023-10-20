@@ -96,7 +96,7 @@ export class WattTimeGridEmissions implements IImpactModelInterface {
           'Did not receive data from WattTime API for the observation block.'
         );
       }
-      observation['grid-ci'] = emissionSum / datapoints;
+      observation['grid-carbon-intensity'] = emissionSum / datapoints;
     });
 
     return observations;

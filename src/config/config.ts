@@ -7,7 +7,7 @@ export const CONFIG = {
     BOAVIZTA_CPU: 'org.boavizta.cpu.sci',
     BOAVIZTA_CLOUD: 'org.boavizta.cloud.sci',
     AVEVA: 'aveva',
-    EMEM: 'e-mem',
+    EMEM: 'energy-memory',
     ESHOPPEN: 'org.gsf.eshoppen',
     ESHOPPEN_CPU: 'org.gsf.eshoppen-cpu',
     ESHOPPEN_MEM: 'org.gsf.eshoppen-mem',

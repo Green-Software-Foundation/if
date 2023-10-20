@@ -54,15 +54,15 @@ backend:
     - timestamp: 2023-07-06T00:00
       duration: 5
       cpu-util: 33
-      processor: Intel Xeon Platinum 8175
+      physical-processor: Intel Xeon Platinum 8175
     - timestamp: 2023-07-06T00:05
       duration: 5
       cpu-util: 23
-      processor: Intel Xeon Platinum 8175
+      physical-processor: Intel Xeon Platinum 8175
     - timestamp: 2023-07-06T00:10
       duration: 5
       cpu-util: 11
-      processor: Intel Xeon Platinum 8175
+      physical-processor: Intel Xeon Platinum 8175
 ```
 
 In the above example, the model requires the *processor* to calculate each observation. So, every observation has the processor as one of its parameters.
@@ -81,8 +81,8 @@ graph:
         - model-1
       config: 
         model-1:
-          processor: Intel Xeon Platinum 8175
-          tdp: 200
+          physical-processor: Intel Xeon Platinum 8175
+          thermal-design-power: 200
       observations: 
         - timestamp: 2023-07-06T00:00
           duration: 5
@@ -99,14 +99,14 @@ graph:
         - model-1
       config: 
         model-1:
-          processor: Intel Xeon Platinum 8175
-          tdp: 200
+          physical-processor: Intel Xeon Platinum 8175
+          thermal-design-power: 200
       observations: 
         - timestamp: 2023-07-06T00:00
           duration: 5
           cpu: 33
-          processor: Intel Xeon Platinum 8175
-          tdp: 200          
+          physical-processor: Intel Xeon Platinum 8175
+          thermal-design-power: 200          
 ```
 
 Ultimately, the observation must contain all the data required for its calculation with the model, so the config for model-1 is copied into every observation. 
@@ -179,7 +179,7 @@ graph:
   config:
     model-1:
       verbose: false
-      processor: Intel Xeon Platinum 8175
+      physical-processor: Intel Xeon Platinum 8175
 backend:
   pipeline: 
     - model-1
@@ -200,7 +200,7 @@ graph:
   config:
     model-1:
       verbose: false
-      processor: Intel Xeon Platinum 8175
+      physical-processor: Intel Xeon Platinum 8175
 backend:
   pipeline: 
     - model-1
@@ -214,7 +214,7 @@ backend:
       cpu: 33
       verbose::model-1: true # set on both levels, but only the closest value taken
       region::model-1: west-us # set just on component node
-      processor::model-1: Intel Xeon Platinum 8175 # set on root node
+      physical-processor::model-1: Intel Xeon Platinum 8175 # set on root node
 ```
 
 The verbose param is set on two levels of the graph, but the lower level config overrides the higher level config.
@@ -228,5 +228,5 @@ observations:
     cpu: 33
     verbose: true # set on both levels, but only the closest value taken
     region: west-us # set just on component node
-    processor: Intel Xeon Platinum 8175 # set on the root node
+    physical-processor: Intel Xeon Platinum 8175 # set on the root node
 ```

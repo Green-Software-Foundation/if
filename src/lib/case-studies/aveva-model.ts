@@ -48,7 +48,7 @@ export class EAvevaModel implements IImpactModelInterface {
     }
 
     return observations.map(observation => {
-      observation['e-cpu'] =
+      observation['energy-cpu'] =
         ((observation['pl'] - observation['pb']) * observation['time']) / 1000;
 
       return observation;

@@ -12,7 +12,7 @@ export class SciEModel implements IImpactModelInterface {
   name: string | undefined; // name of the data source
 
   /**
-   * Defined for compatibility. Not used in e-net.
+   * Defined for compatibility. Not used in energy-network.
    */
   authenticate(authParams: object): void {
     this.authParams = authParams;
@@ -68,9 +68,9 @@ export class SciEModel implements IImpactModelInterface {
   /**
    * Calculates the sum of the energy components
    *
-   * e-cpu: cpu energy in kwh
-   * e-mem: energy due to memory usage in kwh
-   * e-net: energy due to network data in kwh
+   * energy-cpu: cpu energy in kwh
+   * energy-memory: energy due to memory usage in kwh
+   * energy-network: energy due to network data in kwh
    * timestamp: RFC3339 timestamp string
    *
    * adds energy + e_net + e_mum
@@ -81,24 +81,24 @@ export class SciEModel implements IImpactModelInterface {
     let e_cpu = 0;
 
     if (
-      !('e-cpu' in observation) &&
-      !('e-mem' in observation) &&
-      !('e-net' in observation)
+      !('energy-cpu' in observation) &&
+      !('energy-memory' in observation) &&
+      !('energy-network' in observation)
     ) {
       throw new Error(
-        'Required Parameters not provided: at least one of e-mem, e-net or energy must be present in observation'
+        'Required Parameters not provided: at least one of energy-memory, energy-network or energy must be present in observation'
       );
     }
 
     // If the user gives a negative value it will default to zero.
-    if ('e-cpu' in observation && observation['e-cpu'] > 0) {
-      e_cpu = observation['e-cpu'];
+    if ('energy-cpu' in observation && observation['energy-cpu'] > 0) {
+      e_cpu = observation['energy-cpu'];
     }
-    if ('e-mem' in observation && observation['e-mem'] > 0) {
-      e_mem = observation['e-mem'];
+    if ('energy-memory' in observation && observation['energy-memory'] > 0) {
+      e_mem = observation['energy-memory'];
     }
-    if ('e-net' in observation && observation['e-net'] > 0) {
-      e_net = observation['e-net'];
+    if ('energy-network' in observation && observation['energy-network'] > 0) {
+      e_net = observation['energy-network'];
     }
 
     return e_cpu + e_net + e_mem;

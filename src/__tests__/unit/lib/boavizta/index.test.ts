@@ -34,24 +34,48 @@ mockAxios.post.mockImplementation(
       case 'https://api.boavizta.org/v1/component/cpu?verbose=false&allocation=LINEAR':
         return Promise.resolve({
           data: {
-            gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
-            pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+            gwp: {
+              'embodied-carbon': 0.1,
+              use: 1.0,
+              unit: 'kgCO2eq',
+            },
+            pe: {
+              'embodied-carbon': 0.1,
+              use: 1.0,
+              unit: 'MJ',
+            },
           },
         } as R);
       case 'https://api.boavizta.org/v1/component/cpu?verbose=true&allocation=LINEAR':
         return Promise.resolve({
           data: {
             impacts: {
-              gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
-              pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+              gwp: {
+                'embodied-carbon': 0.1,
+                use: 1.0,
+                unit: 'kgCO2eq',
+              },
+              pe: {
+                'embodied-carbon': 0.1,
+                use: 1.0,
+                unit: 'MJ',
+              },
             },
           },
         } as R);
       case 'https://api.boavizta.org/v1/cloud/?verbose=false&allocation=LINEAR':
         return Promise.resolve({
           data: {
-            gwp: {manufacture: 0.1, use: 1.0, unit: 'kgCO2eq'},
-            pe: {manufacture: 0.1, use: 1.0, unit: 'MJ'},
+            gwp: {
+              'embodied-carbon': 0.1,
+              use: 1.0,
+              unit: 'kgCO2eq',
+            },
+            pe: {
+              'embodied-carbon': 0.1,
+              use: 1.0,
+              unit: 'MJ',
+            },
           },
         } as R);
     }
@@ -88,14 +112,14 @@ describe('cpu:configure test', () => {
     );
     await expect(
       impactModel.configure('test', {
-        processor: 'Intel Xeon Gold 6138f',
+        'physical-processor': 'Intel Xeon Gold 6138f',
       })
     ).rejects.toThrow(
       Error('Improper configure: Missing core-units parameter')
     );
     await expect(
       impactModel.configure('test', {
-        processor: 'Intel Xeon Gold 6138f',
+        'physical-processor': 'Intel Xeon Gold 6138f',
         'core-units': 24,
         'expected-lifespan': 4 * 365 * 24 * 60 * 60,
       })
@@ -121,7 +145,7 @@ describe('cpu:initialize with params', () => {
     const impactModel = new BoaviztaCpuImpactModel();
     await expect(
       impactModel.configure('test', {
-        processor: 'Intel Xeon Gold 6138f',
+        'physical-processor': 'Intel Xeon Gold 6138f',
         'core-units': 24,
         location: 'USA',
       })
@@ -147,7 +171,7 @@ describe('cpu:initialize with params', () => {
     const impactModel = new BoaviztaCpuImpactModel();
     await expect(
       impactModel.configure('test', {
-        processor: 'Intel Xeon Gold 6138f',
+        'physical-processor': 'Intel Xeon Gold 6138f',
         'core-units': 24,
         location: 'USA',
         verbose: true,
@@ -183,14 +207,14 @@ describe('cloud:initialize with params', () => {
       impactModel.validateInstanceType({'instance-type': 'SomethingFail'})
     ).rejects.toThrowError();
     await expect(
-      impactModel.validateProvider({provider: 'SomethingFail'})
+      impactModel.validateVendor({provider: 'SomethingFail'})
     ).rejects.toThrowError();
     await expect(
       impactModel.configure('test', {
         'instance-type': 't2.micro',
         location: 'USA',
         'expected-lifespan': 4 * 365 * 24 * 60 * 60,
-        provider: 'aws',
+        vendor: 'aws',
         verbose: false,
       })
     ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
@@ -199,7 +223,7 @@ describe('cloud:initialize with params', () => {
         'instance-type': 't2.micro',
         location: 'USA',
         'expected-lifespan': 4 * 365 * 24 * 60 * 60,
-        provider: 'aws',
+        vendor: 'aws',
         verbose: 'false',
       })
     ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
@@ -208,7 +232,7 @@ describe('cloud:initialize with params', () => {
         'instance-type': 't2.micro',
         location: 'USA',
         'expected-lifespan': 4 * 365 * 24 * 60 * 60,
-        provider: 'aws',
+        vendor: 'aws',
         verbose: 0,
       })
     ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
@@ -227,7 +251,7 @@ describe('cloud:initialize with params', () => {
     ).rejects.toThrowError();
     await expect(
       impactModel.configure('test', {
-        provider: 'aws',
+        vendor: 'aws',
         location: 'USA',
       })
     ).rejects.toThrowError();
@@ -235,7 +259,7 @@ describe('cloud:initialize with params', () => {
       impactModel.configure('test', {
         'instance-type': 't2.micro',
         location: 'USA',
-        provider: 'aws',
+        vendor: 'aws',
       })
     ).resolves.toBeInstanceOf(BoaviztaCloudImpactModel);
     expect(impactModel.name).toBe('test');
@@ -263,7 +287,7 @@ describe('cloud:initialize with params', () => {
       impactModel.configure('test', {
         'instance-type': 't5.micro',
         location: 'USA',
-        provider: 'aws',
+        vendor: 'aws',
       })
     ).rejects.toThrowError();
     expect(impactModel.name).toBe('test');
@@ -300,7 +324,7 @@ describe('cloud:initialize with params', () => {
     await expect(
       impactModel.configure('test', {
         location: 'USA',
-        provider: 'aws',
+        vendor: 'aws',
       })
     ).rejects.toStrictEqual(
       Error("Improper configure: Missing 'instance-type' parameter")
@@ -308,7 +332,7 @@ describe('cloud:initialize with params', () => {
     await expect(
       impactModel.configure('test', {
         location: 'USAF',
-        provider: 'aws',
+        vendor: 'aws',
         'instance-type': 't2.micro',
       })
     ).rejects.toThrowError();

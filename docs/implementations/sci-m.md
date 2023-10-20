@@ -51,11 +51,11 @@ const sciMModel = new SciMModel();
 sciMModel.configure()
 const results = sciMModel.calculate([
   {
-    te: 200, // in gCO2e for total resource units
-    tir: 60 * 60 * 24 * 30, // time reserved in seconds, can point to another field "duration"
-    el: 60 * 60 * 24 * 365 * 4, // lifespan in seconds (4 years)
-    rr: 1, // resource units reserved / used
-    tor: 1, // total resource units available
+    total-embodied-emissions: 200, // in gCO2e for total resource units
+    time-reserved 60 * 60 * 24 * 30, // time reserved in seconds, can point to another field "duration"
+    expected-lifespan: 60 * 60 * 24 * 365 * 4, // lifespan in seconds (4 years)
+    resources-reserved: 1, // resource units reserved / used
+    total-resources: 1, // total resource units available
   }
 ])
 ```
@@ -81,11 +81,11 @@ graph:
         - sci-m # duration & config -> embodied
       config:
         sci-m:
-          te: 1533.120 # gCO2eq
-          tir: 1 # s per hour
-          el: 3 # 3 years in seconds        
-          rr: 1
-          tor: 8
+          total-embodied-emissions: 1533.120 # gCO2eq
+          time-reserved: 1 # s per hour
+          expected-lifespan: 3 # 3 years in seconds        
+          resources-reserved: 1
+          total-resources: 8
       observations: 
         - timestamp: 2023-07-06T00:00
           duration: 3600
