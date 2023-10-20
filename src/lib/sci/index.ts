@@ -131,7 +131,7 @@ export class SciModel implements IImpactModelInterface {
     this.name = name;
 
     if ('functional-unit-time' in staticParams) {
-      this.time = staticParams['functional-unit-time'];
+      this.time = staticParams['functional-unit-time'] as number;
     }
     if (
       'functional-unit-duration' in staticParams &&

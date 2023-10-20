@@ -51,22 +51,22 @@ describe('sci:configure test', () => {
     const model = await new SciModel().configure('name', {
       'functional-unit-time': 'days',
       'functional-unit': '',
-      'functional-unit-duration': 3600,
+      'functional-unit-duration': 1,
     });
     expect(model).toBeInstanceOf(SciModel);
     await expect(
       model.calculate([
         {
-          'operational-carbon': 0.002,
-          'embodied-carbon': 0.0005,
-          duration: 1,
+          'operational-carbon': 0.2,
+          'embodied-carbon': 0.05,
+          duration: 100,
         },
       ])
     ).resolves.toStrictEqual([
       {
-        'operational-carbon': 0.002,
-        'embodied-carbon': 0.0005,
-        duration: 1,
+        'operational-carbon': 0.2,
+        'embodied-carbon': 0.05,
+        duration: 100,
         sci: 216,
       },
     ]);
@@ -87,7 +87,7 @@ describe('sci:configure test', () => {
       },
     ]);
   });
-  test('initialize and test: vary fuinctional-unit-duration', async () => {
+  test('initialize and test: vary functional-unit-duration', async () => {
     const model = await new SciModel().configure('name', {
       'functional-unit-time': 'days',
       'functional-unit': '',
