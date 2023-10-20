@@ -227,3 +227,11 @@ it is also possible to leapfrog some models if you have access to high-level dat
 
 We have deliberately made the models modular and composable so that you can be creative in developing new plugins to replace those provided as part of IEF.
 
+## Running an `impl`
+
+You run an impl by providing its path to our command line tool, along with a path to save the results file to. You can run an `impl` named `my-impl.yml` as follows:
+
+```sh
+npx ts-node scripts/rimpl.ts --impl ./examples/impls/my-impl.yml --ompl ./examples/ompls/my-ompl.yml
+```
+

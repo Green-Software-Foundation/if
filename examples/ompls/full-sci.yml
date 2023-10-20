@@ -1,0 +1,64 @@
+name: full-sci
+description: example executing a full pipeline from teads --> sci
+tags: null
+initialize:
+  models:
+    - name: teads-curve
+      kind: builtin
+    - name: sci-m
+      kind: builtin
+    - name: sci-o
+      kind: builtin
+    - name: sci-e
+      kind: builtin
+    - name: sci
+      kind: builtin
+graph:
+  children:
+    child:
+      pipeline:
+        - teads-curve
+        - sci-m
+        - sci-e
+        - sci-o
+        - sci
+      config:
+        teads-curve:
+          tdp: 55
+        sci-m:
+          te: 1533.12
+          tir: 1
+          el: 3
+          rr: 1
+          tor: 8
+        sci-o:
+          grid-ci: 1500
+        sci:
+          functional_unit_duration: 1
+          functional_unit_time: minutes
+          functional_unit: requests
+      observations:
+        - timestamp: 2023-07-06T00:00
+          duration: 1
+          cpu-util: 55
+          requests: 100
+      impacts:
+        - timestamp: 2023-07-06T00:00
+          duration: 1
+          cpu-util: 55
+          requests: 100
+          tdp: 55
+          te: 1533.12
+          tir: 1
+          el: 3
+          rr: 1
+          tor: 8
+          grid-ci: 1500
+          functional_unit_duration: 1
+          functional_unit_time: minutes
+          functional_unit: requests
+          e-cpu: 0.000011936544080284555
+          embodied-carbon: 63.879999999999995
+          energy: 0.000011936544080284555
+          operational-carbon: 0.017904816120426832
+          sci: 38.338742889672254

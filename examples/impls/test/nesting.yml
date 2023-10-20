@@ -26,7 +26,7 @@ initialize:
       path: ''
 graph:
   children:
-    server: # an advanced grouping node
+    child: # an advanced grouping node
       pipeline:
         - teads-curve
         - sci-e
@@ -49,14 +49,14 @@ graph:
           functional_duration_time: ''
           functional_unit: requests # factor to convert per time to per f.unit
       children:
-        nested-1:
+        child-1:
           observations:
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 50
               e-net: 0.000811 #kwh     
               requests: 380
-        nested-2:
+        child-2:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 10
