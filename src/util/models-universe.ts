@@ -1,4 +1,5 @@
 import {
+  AzureImporterModel,
   BoaviztaCpuImpactModel,
   BoaviztaCloudImpactModel,
   CloudCarbonFootprint,
@@ -39,6 +40,8 @@ export class ModelsUniverse {
    */
   private handBuiltinModel(name: string) {
     switch (name) {
+      case 'azure-importer':
+        return AzureImporterModel;
       case 'boavizta-cpu':
         return BoaviztaCpuImpactModel;
       case 'boavizta-cloud':
@@ -109,7 +112,7 @@ export class ModelsUniverse {
    * Initializes and registers model.
    */
   public writeDown(model: ImplInitializeModel) {
-    const {name, kind, config} = model;
+    const { name, kind, config } = model;
 
     const Model = this.handModelByCriteria(name, kind);
 
