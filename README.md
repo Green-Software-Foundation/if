@@ -24,9 +24,9 @@ The `rimpl` CLI tool will condifure and run the models defined in your input `ya
 
 ## Video walk-through
 
-Watch this video to learn how toi create and run an `impl`.
+Watch this video to learn how to create and run an `impl`.
 
-[![Watch the walk throughvideo](https://www.youtube.com/watch?v=cGWgt15Xklk/default.jpg)](https://www.youtube.com/watch?v=cGWgt15Xklk)
+[![Watch the walk through video](https://www.youtube.com/watch?v=cGWgt15Xklk/default.jpg)](https://www.youtube.com/watch?v=cGWgt15Xklk)
 
 
 ## Run tests
