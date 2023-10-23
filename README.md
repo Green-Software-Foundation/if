@@ -22,6 +22,13 @@ npx ts-node scripts/rimpl.ts --impl <path-to-your-impl-file> --ompl <path-to-out
 ```
 The `rimpl` CLI tool will condifure and run the models defined in your input `yaml` ()`impl`) and return the results as an output `yaml` (`ompl`).
 
+## Video walk-through
+
+Watch this video to learn how toi create and run an `impl`.
+
+[![Watch the walk throughvideo](https://www.youtube.com/watch?v=cGWgt15Xklk/default.jpg)](https://www.youtube.com/watch?v=cGWgt15Xklk)
+
+
 ## Run tests
 
 To run the complete set of tests simply run
