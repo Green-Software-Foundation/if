@@ -1,0 +1,19 @@
+name: ccf-demo
+description: example impl invoking CCF model
+initialize:
+  models:
+    - name: azure-importer
+      kind: builtin
+graph:
+  children:
+    child:
+      pipeline:
+        - azure-importer
+      config:
+        azure-importer:
+          metric: 'Percentage CPU'
+          interval: 'PT1M'
+          aggregation: 'avg'
+      observations:
+        - 
+

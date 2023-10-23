@@ -4,6 +4,7 @@ import {impactProcessArgs} from '../types/process-args';
 
 export const CONFIG = {
   MODEL_IDS: {
+    AZURE_IMPORTER: 'org.gsf.azure-importer',
     BOAVIZTA_CPU: 'org.boavizta.cpu.sci',
     BOAVIZTA_CLOUD: 'org.boavizta.cloud.sci',
     AVEVA: 'aveva',

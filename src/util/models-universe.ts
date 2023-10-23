@@ -39,6 +39,8 @@ export class ModelsUniverse {
    */
   private handBuiltinModel(name: string) {
     switch (name) {
+      case 'azure-importer':
+        return AzureImporterModel;
       case 'boavizta-cpu':
         return BoaviztaCpuOutputModel;
       case 'boavizta-cloud':
