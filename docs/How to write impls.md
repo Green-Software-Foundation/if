@@ -6,7 +6,7 @@ abstract: Guidance for writing valid impls.
 # IMPL writing guide
 
 The Impact Framework receives all its configuration and observation data in the form of a `yaml` file known as an `impl` (input-yaml).
-To use the framework, a user only has to write an `impl` file and pass its path to the command line tool. This guide will help you to understand how to construct an `impl` you can use to measure the energy and carbon usage of your app.
+To use the framework, a user only has to write an `impl` file and pass its path to the command line tool. This guide will help you to understand how to construct an `impl` and use it to measure the energy and carbon usage of your app.
 
 ## Structure of an `impl`
 
@@ -222,13 +222,13 @@ graph:
 
 ```
 
-You can combine complex model pipelines and compelx application architectures to calculate the energy and carbon impacts of complicated systems!
+You can combine complex model pipelines and complex application architectures to calculate the energy and carbon impacts of complicated systems!
 
 ## Choosing which models to run
 
 The models are designed to be composable, but they each have specific input requirements that must be met in order for the models to run correctly. For example, teh `teads-curve` model requires `tdp` to be available in the `impl`. If it is not there, the model cannot use it to calculate `e-cpu`. You can refer to the [individual model documentation](../docs/implementations/Readme.md) to see the parameters and return values for each model. 
 
-it is also possible to leapfrog some models if you have access to high-level data. For exampel, perhaps you already know the energy being used by your CPU. In this case, there is no need to run `teads-curve`, you can simply provide `e-cpu` as an `observation` and omit `teads-curve` from the model pipeline.
+it is also possible to leapfrog some models if you have access to high-level data. For example, perhaps you already know the energy being used by your CPU. In this case, there is no need to run `teads-curve`, you can simply provide `e-cpu` as an `observation` and omit `teads-curve` from the model pipeline.
 
 We have deliberately made the models modular and composable so that you can be creative in developing new plugins to replace those provided as part of IEF.
 

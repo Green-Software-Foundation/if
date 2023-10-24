@@ -22,7 +22,6 @@ describe('ompls: ', () => {
      */
     files.forEach(file => {
       if (file.includes('nesting')) {
-        console.log(file);
         it('check nested ompls have impacts field', async () => {
           expect.assertions(2);
           const ompl = await openYamlFileAsObject(path + '/' + file);
