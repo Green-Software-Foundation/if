@@ -4,6 +4,30 @@ Teads Engineering Team built a model for estimating AWS Instances energy usage. 
 
 The main benefit of this model is that it accounts for all the components involved in an instance's compute capacity. 
 
+
+## Model name
+
+IF recognizes the Teads AWS mdoel as `teads-aws`
+
+## Parameters
+
+### Model config
+
+- `interpolation`: the interpolation method to apply to the TDP curve
+- `instance-type`: the name of the instance type, e.g. `t2.micro`
+
+### Observations
+
+- `cpu-util`: percentage CPU usage for the given time period
+- `timestamp`: a timestamp for the observation
+- `duration`: the amount of time, in seconds, that the observation covers.
+
+## Returns
+
+- `energy`: The energy used in operating the application, in kWh
+- `embodied-carbon`: The carbon used in manufacturing and disposing of the device
+
+
 ## Implementation
 
 IEF implements this plugin based off the data embedded from the CCF (Cloud Carbon Footprint) dataset.
