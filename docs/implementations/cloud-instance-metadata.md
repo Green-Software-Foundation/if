@@ -2,6 +2,28 @@
 
 This plugin allows you to determine an instance's CPU based on its instance name.
 
+## Model name
+
+IEF recognizes the Cloud Carbon Footprint model as `ccf`.
+
+## Parameters
+
+### model config
+
+- `vendor`: the cloud platform provider, e.g. `aws`
+- `instance-type`: the name of the specific instance being used, e.g. `m5n.large`
+
+## Returns
+
+An array containing:
+
+- `cloud-instance-type`: echo input `instance-type`
+- `cloud-vendor`: echo input `vendor`
+- `physical-processor`: physical processor used in the given instance
+- `vcpus-allocated`: number of vCPUs allocated to this instance
+- `vcpus-total`: total number of vCPUs available to this instance
+  
+
 ## IEF Implementation
 
 IEF implements this plugin using data from Cloud Carbon Footprint. This allows determination of cpu for type of instance in a cloud and can be invoked as part of a model pipeline defined in an `impl`.
