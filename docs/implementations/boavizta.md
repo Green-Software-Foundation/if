@@ -6,6 +6,32 @@
 
 Boavizta exposes a [REST API](https://doc.api.boavizta.org/). If the `boavizta` model is included in an IEF pipeline, IEF sends API requests to Boavizta. The request payload is generated from input data provided to IEF in an `impl` file.
 
+## Model name
+
+IEF recognizes the Boavizta model as `boavizta-cpu`.
+
+## Parameters
+
+### model config
+
+- `allocation`: manufacturing impacts can be reported with two allocation strategies: `TOTAL` is the total impct without adjusting for usage. `LINEAR` distrbutes the impact linearly over the lifespan of a device. See [Boavizta docs](https://doc.api.boavizta.org/Explanations/manufacture_methodology/#hover-a-specific-duration-allocation-linear) for more info.
+- `physical-processor`: the name of the physical processor being used
+- `core-units`: Number of physical cores on a CPU
+- `verbose`: determines how much information the API response contains
+- `location`: define the grid carbon intensity as a string
+- `expected-lifespan`: the lifespan of the component, in seconds
+- `instance-type`: the name of the VM instance being used, e.g. `t2.micro`
+- `vendor`: the platform provider, e.g. `gcp`, `aws`, `azure`.
+
+### observations
+
+- `cpu-util`: percentage CPU utilization for a given observation
+ 
+## Returns
+
+- `embodied-carbon`: carbon emitted in manufacturing the device, in gCO2eq
+- `energy`: energy used by CPU in kWh
+  
 ## Usage
 
 To run the `boavista-cpu` model an instance of `BoaviztaCpuImpactModel` must be created and its `configure()` method called. Then, the model's `calculate()` method can be called, passing `duration`,`cpu-util`,`timestamp` arguments.
@@ -19,29 +45,29 @@ async function runBoavizta() {
   const params: KeyValuePair = {};
   params.allocation = 'TOTAL';
   params.verbose = true;
-  params.name = 'Intel Xeon Platinum 8160 Processor';
+  params.physical-processor = 'Intel Xeon Platinum 8160';
   params.core_units = 24;
 
   const newModel = await new BoaviztaCpuImpactModel().configure('test', params);
   const usage = await newModel.calculate([
     {
       timestamp: '2021-01-01T00:00:00Z',
-      duration: '15s',
+      duration: 1,
       cpu-util: 34,
     },
     {
       timestamp: '2021-01-01T00:00:15Z',
-      duration: '15s',
+      duration: 1,
       cpu-util: 12,
     },
     {
       timestamp: '2021-01-01T00:00:30Z',
-      duration: '15s',
+      duration: 1,
       cpu-util: 1,
     },
     {
       timestamp: '2021-01-01T00:00:45Z',
-      duration: '15s',
+      duration: 1,
       cpu-util: 78,
     },
   ]);
