@@ -173,12 +173,12 @@ export class BoaviztaCpuImpactModel
 
     const result = this.formatResponse(response.data);
 
-    console.log(
-      'hitting ',
-      `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
-      dataCast,
-      JSON.stringify(response.data)
-    );
+    // console.log(
+    //   'hitting ',
+    //   `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
+    //   dataCast,
+    //   JSON.stringify(response.data)
+    // );
     return {
       'e-cpu': result.energy,
       'embodied-carbon': result['embodied-carbon'],
@@ -325,11 +325,11 @@ export class BoaviztaCloudImpactModel
       `https://api.boavizta.org/v1/cloud/instance?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
       dataCast
     );
-    console.log(
-      `https://api.boavizta.org/v1/cloud/instance?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
-      JSON.stringify(response.data),
-      dataCast
-    );
+    // console.log(
+    //   `https://api.boavizta.org/v1/cloud/instance?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
+    //   JSON.stringify(response.data),
+    //   dataCast
+    // );
 
     return this.formatResponse(response.data);
   }
