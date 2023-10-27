@@ -42,4 +42,3 @@ graph:
           duration: 1
           cpu-util: 55
           requests: 100
-          
