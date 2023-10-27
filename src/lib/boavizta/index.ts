@@ -97,14 +97,13 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   protected formatResponse(data: KeyValuePair): KeyValuePair {
     let m = 0;
     let e = 0;
-
     if ('impacts' in data) {
       // embodied-carbon impact is in kgCO2eq, convert to gCO2eq
-      m = data['impacts']['gwp']['embodied-carbon'] * 1000;
+      m = data['impacts']['gwp']['embedded']['value'] * 1000;
       // use impact is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
-      e = data['impacts']['pe']['use'] / 3.6;
+      e = data['impacts']['pe']['use']['value'] / 3.6;
     } else if ('gwp' in data && 'pe' in data) {
       // embodied-carbon impact is in kgCO2eq, convert to gCO2eq
       m = data['gwp']['embodied-carbon'] * 1000;
@@ -168,11 +167,18 @@ export class BoaviztaCpuImpactModel
     dataCast['usage'] = usageData;
 
     const response = await axios.post(
-      `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`,
+      `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
       dataCast
     );
 
     const result = this.formatResponse(response.data);
+
+    console.log(
+      'hitting ',
+      `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
+      dataCast,
+      JSON.stringify(response.data)
+    );
     return {
       'e-cpu': result.energy,
       'embodied-carbon': result['embodied-carbon'],
@@ -233,69 +239,71 @@ export class BoaviztaCloudImpactModel
   }
 
   async validateInstanceType(staticParamsCast: object) {
-    if (!('vendor' in staticParamsCast)) {
-      throw new Error('Improper configure: Missing vendor parameter');
+    if (!('provider' in staticParamsCast)) {
+      throw new Error('Improper configure: Missing provider parameter');
     }
 
     if (!('instance-type' in staticParamsCast)) {
       throw new Error("Improper configure: Missing 'instance-type' parameter");
     }
 
-    const vendor = staticParamsCast.vendor as string;
+    const provider = staticParamsCast.provider as string;
 
     if (
-      this.instanceTypes[vendor] === undefined ||
-      this.instanceTypes[vendor].length === 0
+      this.instanceTypes[provider] === undefined ||
+      this.instanceTypes[provider].length === 0
     ) {
-      this.instanceTypes[vendor] = await this.supportedInstancesList(vendor);
+      this.instanceTypes[provider] = await this.supportedInstancesList(
+        provider
+      );
     }
 
     if ('instance-type' in staticParamsCast) {
       if (
-        !this.instanceTypes[vendor].includes(
+        !this.instanceTypes[provider].includes(
           staticParamsCast['instance-type'] as string
         )
       ) {
         throw new Error(
           `Improper configure: Invalid 'instance-type' parameter: '${
             staticParamsCast['instance-type']
-          }'. Valid values are : ${this.instanceTypes[vendor].join(', ')}`
+          }'. Valid values are : ${this.instanceTypes[provider].join(', ')}`
         );
       }
     }
   }
 
-  async validateVendor(staticParamsCast: object) {
-    if (!('vendor' in staticParamsCast)) {
-      throw new Error('Improper configure: Missing vendor parameter');
+  async validateProvider(staticParamsCast: object) {
+    if (!('provider' in staticParamsCast)) {
+      throw new Error('Improper configure: Missing provider parameter');
     } else {
-      const supportedVendors = await this.supportedVendorsList();
+      const supportedProviders = await this.supportedProvidersList();
 
-      if (!supportedVendors.includes(staticParamsCast.vendor as string)) {
+      if (!supportedProviders.includes(staticParamsCast.provider as string)) {
         throw new Error(
-          "Improper configure: Invalid vendor parameter: '" +
-            staticParamsCast.vendor +
+          "Improper configure: Invalid provider parameter: '" +
+            staticParamsCast.provider +
             "'. Valid values are : " +
-            supportedVendors.join(', ')
+            supportedProviders.join(', ')
         );
       }
     }
   }
 
-  async supportedInstancesList(vendor: string) {
+  async supportedInstancesList(provider: string) {
     const instances = await axios.get(
-      `https://api.boavizta.org/v1/cloud/all_instances?provider=${vendor}`
+      `https://api.boavizta.org/v1/cloud/instance/all_instances?provider=${provider}`
     );
 
     return instances.data;
   }
 
-  async supportedVendorsList(): Promise<string[]> {
-    const vendors = await axios.get(
-      'https://api.boavizta.org/v1/cloud/all_providers'
+  async supportedProvidersList(): Promise<string[]> {
+    const providers = await axios.get(
+      'https://api.boavizta.org/v1/cloud/instance/all_providers'
     );
 
-    return Object.values(vendors.data);
+    return Object.values(providers.data);
   }
 
   async fetchData(usageData: object | undefined): Promise<object> {
@@ -314,7 +322,12 @@ export class BoaviztaCloudImpactModel
     }
     dataCast['usage'] = usageData;
     const response = await axios.post(
-      `https://api.boavizta.org/v1/cloud/?verbose=${this.verbose}&allocation=${this.allocation}`,
+      `https://api.boavizta.org/v1/cloud/instance?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
+      dataCast
+    );
+    console.log(
+      `https://api.boavizta.org/v1/cloud/instance?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
+      JSON.stringify(response.data),
       dataCast
     );
 
@@ -326,8 +339,8 @@ export class BoaviztaCloudImpactModel
       this.verbose = (staticParams.verbose as boolean) ?? false;
       staticParams.verbose = undefined;
     }
-    // if no valid vendor found, throw error
-    await this.validateVendor(staticParams);
+    // if no valid provider found, throw error
+    await this.validateProvider(staticParams);
     // if no valid 'instance-type' found, throw error
     await this.validateInstanceType(staticParams);
     // if no valid location found, throw error
