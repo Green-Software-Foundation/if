@@ -77,11 +77,29 @@ export class ModelsUniverse {
   }
 
   /**
-   * Returns plugin model.
-   * @todo Update function when plugin model will ready.
+   * Checks if model is instance of `IImpactModelInterface`.
    */
-  private handPluginModel() {
-    return ShellModel;
+  // private instanceOfModel(object: any): object is IImpactModelInterface {
+  //   const boolable =
+  //     'modelIdentifier' in object &&
+  //     'configure' in object &&
+  //     'authenticate' in object &&
+  //     'calculate' in object;
+
+  //   return boolable;
+  // }
+
+  /**
+   * Returns plugin model.
+   */
+  private async handPluginModel(name: string, classToRequire?: string) {
+    const pluginModule = await import(name);
+
+    if (!classToRequire) {
+      throw new Error('Model classname is missing.');
+    }
+
+    return new pluginModule[classToRequire]();
   }
 
   /**
@@ -94,12 +112,16 @@ export class ModelsUniverse {
   /**
    * Gets model based on `name` and `kind` params.
    */
-  private handModelByCriteria(name: string, kind: ModelKind) {
+  private async handModelByCriteria(
+    name: string,
+    kind: ModelKind,
+    className?: string
+  ) {
     switch (kind) {
       case 'builtin':
         return this.handBuiltinModel(name);
       case 'plugin':
-        return this.handPluginModel();
+        return this.handPluginModel(name, className);
       case 'shell':
         return this.handShellModel();
     }
@@ -111,9 +133,9 @@ export class ModelsUniverse {
   public writeDown(model: ImplInitializeModel) {
     const {name, kind, config} = model;
 
-    const Model = this.handModelByCriteria(name, kind);
-
     const callback = async (graphOptions: GraphOptions) => {
+      const Model = await this.handModelByCriteria(name, kind);
+
       const params = {
         ...config,
         ...graphOptions,
