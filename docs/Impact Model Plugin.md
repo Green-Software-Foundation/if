@@ -4,7 +4,7 @@ abstract: Standardising the interface to measurement models.
 ---
 # Impact Model Plugin
 
-Calculating [Impact Metric](Impact%20Metric) 's (impacts) for every component in an [Impact Graph](Impact%20Graph.md) (graph) requires the use of an **Impact Model** (model) called through an [Impact Model Plugin](Impact%20Model%20Plugin.md) (model plugin).
+Calculating [Impact Metric](Impact%20Metric) 's (outputs) for every component in an [Impact Graph](Impact%20Graph.md) (graph) requires the use of an **Impact Model** (model) called through an [Impact Model Plugin](Impact%20Model%20Plugin.md) (model plugin).
 
 ## What are Impact Models?
 
@@ -169,8 +169,8 @@ class ConcreteVM extends ImpactModelInterface { ... }
 let model = new ConcreteVM().configure("backend-server", {vendor: "GCP"});
 try {
     let input = {“date-time”: xxxx, “duration”: xxx, “cpu-util”: 0.5};
-    let impacts = model.calculate([input]);
-    console.log(impacts);
+    let outputs = model.calculate([input]);
+    console.log(outputs);
 } catch {
     ...
 }

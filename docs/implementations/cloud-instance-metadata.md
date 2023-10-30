@@ -10,7 +10,7 @@ Cloud Instance Metadata currently implements only for 'AWS'.
 
 ## Usage
 
-In IEF, the model is called from an `impl`. An `impl` is a `.yaml` file that contains configuration metadata and usage inputs. This is interpreted by the command line tool, `rimpl`. There, the model's `configure` method is called first. The model config shall be empty. Each input is expected to contain `cloud-vendor` and `cloud-instance-type` fields.
+In IEF, the model is called from an `impl`. An `impl` is a `.yaml` file that contains configuration metadata and usage inputs. This is interpreted by the command line tool, `impact`. There, the model's `configure` method is called first. The model config shall be empty. Each input is expected to contain `cloud-vendor` and `cloud-instance-type` fields.
 
 You can see example Typescript invocations for each vendor below:
 
@@ -53,10 +53,10 @@ graph:
           cpu-util: 10
 ```
 
-This impl is run using `rimpl` using the following command, run from the project root:
+This impl is run using `impact` using the following command, run from the project root:
 
 ```sh
-npx ts-node scripts/rimpl.ts --impl ./examples/impls/cimd-test.yml --ompl ./examples/ompls/cimd-test.yml
+npx ts-node scripts/impact.ts --impl ./examples/impls/cimd-test.yml --ompl ./examples/ompls/cimd-test.yml
 ```
 
 This yields a result that looks like the following (saved to `/ompls/cimd-test.yml`):
@@ -79,7 +79,7 @@ graph:
           cloud-instance-type: m5n.large
           duration: 100
           cpu: 10
-      impacts:
+      outputs:
         - timestamp: 2023-07-06T00:00
           cloud-vendor: aws
           cloud-instance-type: m5n.large

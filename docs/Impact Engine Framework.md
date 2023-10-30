@@ -33,7 +33,7 @@ A Framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environm
 - ✅ [Computation Pipeline](Computation%20Pipeline.md)
 - 👷🏽‍♂️ Computation Pipeline Plugin 🔥
 - 👷🏽‍♂️ [Impact Metric](Impact%20Metric) 🔥
-- ✍🏽 [Rimpl](Rimpl.md) 
+- ✍🏽 [Impact](Impact.md) 
 
 ## Use Cases 
 

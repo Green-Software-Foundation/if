@@ -24,7 +24,7 @@ You can read a detailed explanation ofn the calculations in the [CCF docs](https
 
 ## Usage
 
-In IEF, the model is called from an `impl`. An `impl` is a `.yaml` file that contains configuration metadata and usage inputs. This is interpreted by the command line tool, `rimpl`. There, the model's `configure` method is called first. The model config should define a `vendor` and `instance-type`. Each input is expected to contain `duration`,`cpu-util` and `timestamp` fields.
+In IEF, the model is called from an `impl`. An `impl` is a `.yaml` file that contains configuration metadata and usage inputs. This is interpreted by the command line tool, `impact`. There, the model's `configure` method is called first. The model config should define a `vendor` and `instance-type`. Each input is expected to contain `duration`,`cpu-util` and `timestamp` fields.
 
 You can see example Typescript invocations for each vendor below:
 
@@ -111,10 +111,10 @@ graph:
           cpu-util: 10
 ```
 
-This impl is run using `rimpl` using the following command, run from the project root:
+This impl is run using `impact` using the following command, run from the project root:
 
 ```sh
-npx ts-node scripts/rimpl.ts --impl ./examples/impls/ccf-test.yml --ompl ./examples/ompls/ccf-test.yml
+npx ts-node scripts/impact.ts --impl ./examples/impls/ccf-test.yml --ompl ./examples/ompls/ccf-test.yml
 ```
 
 This yields a result that looks like the following (saved to `/ompls/ccf-test.yml`):
@@ -139,7 +139,7 @@ graph:
         - timestamp: 2023-07-06T00:00
           duration: 1
           cpu: 10
-      impacts:
+      outputs:
         - timestamp: 2023-07-06T00:00
           duration: 1
           cpu-util: 10

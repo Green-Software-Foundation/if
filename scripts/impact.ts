@@ -9,9 +9,9 @@ import { openYamlFileAsObject, saveYamlFileAs } from '../src/util/yaml';
  * 3. Initializes models.
  * 4. Initializes graph, does computing.
  * 5. Saves processed object as a yaml file.
- * @example run following command `npx ts-node scripts/rimpl.ts --impl ./test.yml --ompl ./result.yml`
+ * @example run following command `npx ts-node scripts/impact.ts --impl ./test.yml --ompl ./result.yml`
  */
-const impactScript = async () => {
+const outputScript = async () => {
   try {
     const processParams = parseProcessArgument();
 

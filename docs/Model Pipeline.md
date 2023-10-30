@@ -20,7 +20,7 @@ Calculating a component's impacts often requires using multiple models in sequen
 
 ```mermaid 
 flowchart LR
-inputs --> Model1 --> Model2 --> Model3 --> Impacts
+inputs --> Model1 --> Model2 --> Model3 --> outputs
 ```
 
 At the start of the chain, we input source inputs. Each model in the chain takes as input the inputs and modifies them somehow before passing them along to the next model in the chain.

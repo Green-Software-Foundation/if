@@ -56,7 +56,7 @@ initialize:
 
 ## `graph`
 
-`graph` is where you define the various components of your application. `graph` is organized into `children`. Each `child` is a component whose impacts should be summed to give the overall impact of your `graph`. `children` can be nested with arbitrary depth. Each `child` can have its own model pipeline and its own config. When no config is provided, it is inherited from the `graph` level config.
+`graph` is where you define the various components of your application. `graph` is organized into `children`. Each `child` is a component whose outputs should be summed to give the overall impact of your `graph`. `children` can be nested with arbitrary depth. Each `child` can have its own model pipeline and its own config. When no config is provided, it is inherited from the `graph` level config.
 
 In the following example, there is only one component. The model pipeline contains two models, `teads-curve` and `sci-m`. `teads-curve` requires the `tdp` to be defined in `config` and `sci-m` requires five pieces of `config` data: `total-embodied-emissions`, `time-reserved`, `expected-lifespan`, `resources-reserved` and `total-resources`.
 
@@ -90,7 +90,7 @@ inputs:
     cpu-util: 45
 ```
 
-That's it! You now have a simple `impl` file that will use the model config and input data to run the `teads-curve` and `sci-m` models! The output data will be appended to the `impl` under a new `impacts` field and saved as an `ompl` file.
+That's it! You now have a simple `impl` file that will use the model config and input data to run the `teads-curve` and `sci-m` models! The output data will be appended to the `impl` under a new `outputs` field and saved as an `ompl` file.
 
 ## More complex `impls`
 
@@ -222,7 +222,7 @@ graph:
 
 ```
 
-You can combine complex model pipelines and complex application architectures to calculate the energy and carbon impacts of complicated systems!
+You can combine complex model pipelines and complex application architectures to calculate the energy and carbon outputs of complicated systems!
 
 ## Choosing which models to run
 
@@ -237,6 +237,6 @@ We have deliberately made the models modular and composable so that you can be c
 You run an impl by providing its path to our command line tool, along with a path to save the results file to. You can run an `impl` named `my-impl.yml` as follows:
 
 ```sh
-npx ts-node scripts/rimpl.ts --impl ./examples/impls/my-impl.yml --ompl ./examples/ompls/my-ompl.yml
+npx ts-node scripts/impact.ts --impl ./examples/impls/my-impl.yml --ompl ./examples/ompls/my-ompl.yml
 ```
 

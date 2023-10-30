@@ -57,7 +57,7 @@ Each type of input has a **default unit** and **default name**. For example, if 
 
 ## input synchronization
 
-Each component in your graph needs inputs; we need inputs to compute impacts.
+Each component in your graph needs inputs; we need inputs to compute outputs.
 
 A helpful feature of the engine is that you don't need to synchronize all your input inputs for all your components with each other. You can provide inputs at different intervals for every component in the graph. 
 
@@ -80,4 +80,4 @@ You can provide one single input for a long duration for every component in an [
 
 This is why inputs are a time series; the more inputs you can provide about components over time, the more the engine can surface impacts over time.
 
-Another reason to provide multiple inputs is to gain a much more accurate emissions estimate. Many of the models used to translate inputs into impacts are non-linear. This means just providing an average value over time will give you a less accurate value than providing more data points over time.
+Another reason to provide multiple inputs is to gain a much more accurate emissions estimate. Many of the models used to translate inputs into outputs are non-linear. This means just providing an average value over time will give you a less accurate value than providing more data points over time.

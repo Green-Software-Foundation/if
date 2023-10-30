@@ -1,7 +1,7 @@
 # Terminology
 
 > [!tip] 
-> Since the term **Impact** is used in many places in the framework, its often a practice in the documentation to leave it out of the name, e.g. Impact Graph is often just called a Graph. This is true for everything except Impact Metric, the short form of Impact Metric is usually just Impact or Impacts.
+> Since the term **Impact** is used in many places in the framework, its often a practice in the documentation to leave it out of the name, e.g. Impact Graph is often just called a Graph. This is true for everything except Impact Metric, the short form of Impact Metric is usually just Impact or outputs.
 
 ### Impact Metric
 **aka:** *impact*
@@ -38,7 +38,7 @@ An [Impact Graph](spec/Impact%20Graph.md) is made up of nodes, each node represe
 A component is something that creates environmental impacts, for example a server, network traffic. If it creates and environmental impact it's called a component. They effectively form the leaf nodes of an [Impact Graph](spec/Impact%20Graph.md). Each component has an [Impact Model Plugin](spec/Impact%20Model%20Plugin.md) configured as well as some [input](input.md). We pass the inputs to the model plugin which interacts with a model to calculate the [Impact Metric](Impact%20Metric) for this component.
 ### Grouping
 **aka**: *component grouping*, *grouping node*
-This is a node in the graph used to group multiple components and/or other groupings together. It doesn't generates it's own impacts however it's child node impacts are aggregated up to itself. It's used to define useful structure to the graph for analysis.
+This is a node in the graph used to group multiple components and/or other groupings together. It doesn't generates it's own outputs however it's child node outputs are aggregated up to itself. It's used to define useful structure to the graph for analysis.
 ### input
 **aka**: *inputs*
 An **input** is something you measure regarding a component in your subject at a particular time and for a particular duration. For example, an input about a server might be CPU utilization.
@@ -53,7 +53,7 @@ Every [Impact Metric](Impact%20Metric) is for a particular time and duration. Th
 Every [input](input.md) is for a particular time and duration, this is called the input duration. There are usually multiple inputs provided as a time series, the input duration does not need to equal the impact duration which does not need to equal the graph duration.
 ### Computation
 **aka**: ~
-Is the act of calculating the impacts of an [Impact Graph](spec/Impact%20Graph.md).
+Is the act of calculating the outputs of an [Impact Graph](spec/Impact%20Graph.md).
 
 ### Computation Pipeline
 **aka**: *computation pipeline*

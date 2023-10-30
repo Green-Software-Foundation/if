@@ -8,7 +8,7 @@ abstract: An impact graph is the core construct in an Impact Engine Framework th
 
 An Impact Graph is a manifest that defines everything you need to calculate the environmental impact of a piece of software. 
 
-You can describe it in YAML format ([impl](Impl%20(Impact%20YAML).md)) and execute using a command line tool ([rimpl](Rimpl.md)) using static input data ([input](input.md)). It can output a single value or a time series of impacts so you can narrow down the moments of peak environmental impacts. It can also be constructed in code using the IEF SDK for use cases where real-time streaming or monitoring of impacts is required.
+You can describe it in YAML format ([impl](Impl%20(Impact%20YAML).md)) and execute using a command line tool ([Impact](Impact.md)) using static input data ([input](input.md)). It can output a single value or a time series of outputs so you can narrow down the moments of peak environmental impacts. It can also be constructed in code using the IEF SDK for use cases where real-time streaming or monitoring of impacts is required.
 
 It allows you to evolve, start course grained for a fast high-level impact calculation, and then add granularity (structural and temporal) over time to dig deeper and identify the areas that drive the most impacts.
 
@@ -50,17 +50,17 @@ During graph computation, we first calculate the Component nodes to generate Imp
 ![](images/bcb0066204a750f6b18a43a627c66b90.png)
 %%[[Impact Graph - Computation.excalidraw|🖋 Edit in Excalidraw]], and the [[Impact Graph - Computation.excalidraw.dark.png|dark exported image]]%%
 
-A computation of an Impact Graph can create one Impact Metric. It can also be configured to return a **time series of impacts**, so you can identify the moments when impact is higher or lower. Importantly a time series is computed for every node (grouping or component) in the graph so that you can analyze the source of impact structurally and temporally.
+A computation of an Impact Graph can create one Impact Metric. It can also be configured to return a **time series of outputs**, so you can identify the moments when impact is higher or lower. Importantly a time series is computed for every node (grouping or component) in the graph so that you can analyze the source of impact structurally and temporally.
 
 ### Pipeline
 
 See [[Computation Pipeline]] for details regarding the phases of an Impact Graph Computation. 
 
 In summary, there are 4 phases:
-- **Calculation**: Calculating the impacts of every component leaf node.
-- **Enrichment**: Enriching the impacts, e.g. calculating the carbon from energy using grid emissions data.
-- **Normalization**: Bucketing the impacts into a time series of impact durations.
-- **Aggregation**: Aggregating the impacts by each impact duration, up the graph, to the parent nodes and finally, the root node 
+- **Calculation**: Calculating the outputs of every component leaf node.
+- **Enrichment**: Enriching the outputs, e.g. calculating the carbon from energy using grid emissions data.
+- **Normalization**: Bucketing the outputs into a time series of impact durations.
+- **Aggregation**: Aggregating the outputs by each impact duration, up the graph, to the parent nodes and finally, the root node 
 
 Through the above pipeline process, we can handle multiple types of calculations. To see how we can calculate an SCI score, see [[Computing SCI Scores]].
 

@@ -46,7 +46,7 @@ const results = sciOModel.calculate([
 ```
 ## Example impl
 
-IEF users will typically call the model as part of a pipeline defined in an `impl` file. In this case, instantiating and configuring the model is handled by `rimpl` and does not have to be done explicitly by the user. The following is an example `impl` that calls `sci-o`:
+IEF users will typically call the model as part of a pipeline defined in an `impl` file. In this case, instantiating and configuring the model is handled by `impact` and does not have to be done explicitly by the user. The following is an example `impl` that calls `sci-o`:
 
 ```yaml
 name: sci-o-demo

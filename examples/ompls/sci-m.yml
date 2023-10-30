@@ -22,15 +22,6 @@ graph:
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600
-      impacts:
-        - timestamp: 2023-07-06T00:00
-          duration: 3600
-          total-embodied-emissions: 1533.12
-          time-reserved: 1
-          expected-lifespan: 3
-          resources-reserved: 1
-          total-resources: 8
-          embodied-carbon: 63.879999999999995
       outputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600

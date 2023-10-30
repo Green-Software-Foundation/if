@@ -85,8 +85,8 @@ graph:
           cpu-util: 16
 ```
 
-You can run this by passing it to `rimpl`. Run rimpl using the following command run from the project root:
+You can run this by passing it to `impact`. Run impact using the following command run from the project root:
 
 ```sh
-npx ts-node scripts/rimpl.ts --impl ./examples/impls/boavizta.yml --ompl ./examples/ompls/boavizta.yml
+npx ts-node scripts/impact.ts --impl ./examples/impls/boavizta.yml --ompl ./examples/ompls/boavizta.yml
 ```

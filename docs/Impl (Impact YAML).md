@@ -8,7 +8,7 @@ abstract: Describes the structure and purpose of Impact YAML, a file format to r
 - Just like an Impact Graph, an IMPL is a calculation manifest containing everything you want to measure and how you want to measure it. 
 - IMPL being YAML means it's more human-readable and can be used as a **formal method of writing use cases**, such as SCI use cases.
 - IMPL files can be named `.yaml` (or `.impl`).
-- IMPLs can be computed on the command line using the [Rimpl](Rimpl.md) tool, printing out the results to file or STDOUT.
+- IMPLs can be computed on the command line using the [Impact](Impact.md) tool, printing out the results to file or STDOUT.
 - You can do much more using the [Impact Graph](Impact%20Graph.md) SDK directly; however, for many use cases, IMPL works fine.
 
 ## Use Cases
@@ -25,7 +25,7 @@ Currently, in the GSF several case studies have been written to calculate an SCI
 
 ### An executable impact calculation manifest
 
-The command line tool [Rimpl](Rimpl.md) can compute an IMPL file and generate impact metrics. 
+The command line tool [Impact](Impact.md) can compute an IMPL file and generate impact metrics. 
 
 ### To bootstrap code
 
@@ -203,35 +203,35 @@ graph:
         cpu: 0.34
 ```
 
-Once it's computed through an application like [Rimpl](Rimpl.md), it might return/print out a YAML like so:
+Once it's computed through an application like [Impact](Impact.md), it might return/print out a YAML like so:
 
 ```yaml
 name: My application
 graph:
-  impacts:
+  outputs:
     e: 63 mWh # sum of all the child node energy 
     m: 61g # sum of all the child node embodied
   children:
     edge:
-      impacts: 
+      outputs: 
         e: 48 mWh
         m: 4g
       children:
         load-balancer:
-          impacts:
+          outputs:
             e: 48 mWh
             m: 4g
   backend:
-    impacts:
+    outputs:
       e: 15 mWh
       m: 57g  q3
     children:
       backend server:
-        impacts:
+        outputs:
           e: 5 mWh
           m: 23g
       caching layer:
-        impacts:    
+        outputs:    
           e: 10 mWh
           m: 34g
 ```
