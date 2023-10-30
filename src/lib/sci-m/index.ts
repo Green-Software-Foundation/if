@@ -1,11 +1,11 @@
-import { IoutputModelInterface } from '../interfaces';
+import {IoutputModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair } from '../../types/common';
+import {KeyValuePair} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { SCI_M } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {SCI_M} = MODEL_IDS;
 
 export class SciMModel implements IoutputModelInterface {
   authParams: object | undefined = undefined;
@@ -45,25 +45,13 @@ export class SciMModel implements IoutputModelInterface {
       if (!('time-reserved' in input || 'time-reserved' in input)) {
         throw new Error('time-reserved is missing. Provide in seconds');
       }
-      if (
-        !(
-          'expected-lifespan' in input ||
-          'expected-lifespan' in input
-        )
-      ) {
+      if (!('expected-lifespan' in input || 'expected-lifespan' in input)) {
         throw new Error('expected-lifespan is missing. Provide in seconds');
       }
-      if (
-        !(
-          'resources-reserved' in input ||
-          'resources-reserved' in input
-        )
-      ) {
+      if (!('resources-reserved' in input || 'resources-reserved' in input)) {
         throw new Error('resources-reserved is missing. Provide as a count');
       }
-      if (
-        !('total-resources' in input || 'total-resources' in input)
-      ) {
+      if (!('total-resources' in input || 'total-resources' in input)) {
         throw new Error(
           'total-resources: total-resources is missing. Provide as a count'
         );
@@ -84,15 +72,12 @@ export class SciMModel implements IoutputModelInterface {
         input['expected-lifespan'] =
           input['expected-lifespan'] ?? input['expected-lifespan'];
         input['resources-reserved'] =
-          input['resources-reserved'] ??
-          input['resources-reserved'];
+          input['resources-reserved'] ?? input['resources-reserved'];
         input['total-resources'] =
           input['total-resources'] ?? input['total-resources'];
         if (typeof input['total-embodied-emissions'] === 'string') {
           te = parseFloat(input[input['total-embodied-emissions']]);
-        } else if (
-          typeof input['total-embodied-emissions'] === 'number'
-        ) {
+        } else if (typeof input['total-embodied-emissions'] === 'number') {
           te = input['total-embodied-emissions'];
         } else {
           te = parseFloat(input['total-embodied-emissions']);

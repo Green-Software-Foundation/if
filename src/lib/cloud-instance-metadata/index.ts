@@ -1,12 +1,12 @@
-import { IoutputModelInterface } from '../interfaces';
+import {IoutputModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair } from '../../types/common';
+import {KeyValuePair} from '../../types/common';
 import * as AWS_INSTANCES from './aws-instances.json';
 
-const { MODEL_IDS } = CONFIG;
-const { CLOUD_INSTANCE_METADATA } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {CLOUD_INSTANCE_METADATA} = MODEL_IDS;
 
 export class CloudInstanceMetadataModel implements IoutputModelInterface {
   authParams: object | undefined = undefined;
@@ -45,9 +45,7 @@ export class CloudInstanceMetadataModel implements IoutputModelInterface {
       if ('cloud-instance-type' in input) {
         instance_type = input['cloud-instance-type'];
       } else {
-        throw new Error(
-          'Each input must contain a cloud-instance-type key'
-        );
+        throw new Error('Each input must contain a cloud-instance-type key');
       }
       if (vendor !== 'aws') {
         throw new Error('cloud-vendor: Only `aws` is currently supported');

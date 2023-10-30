@@ -1,13 +1,13 @@
-import { ModelsUniverse } from './models-universe';
-import { Observatory } from './observatory';
+import {ModelsUniverse} from './models-universe';
+import {Observatory} from './observatory';
 
-import { ChildInformation } from '../types/supercomputer';
+import {ChildInformation} from '../types/supercomputer';
 
 /**
  * Computer for `impl` documents.
  */
 export class Supercomputer {
-  private olderChild: ChildInformation = { name: '', info: {} };
+  private olderChild: ChildInformation = {name: '', info: {}};
   private impl: any;
   private modelsHandbook: ModelsUniverse;
 
@@ -36,11 +36,7 @@ export class Supercomputer {
   /**
    * Adds config entries to each obsercation object passed.
    */
-  private enrichinputs(
-    inputs: any[],
-    config: any[],
-    nestedConfig: any[]
-  ) {
+  private enrichinputs(inputs: any[], config: any[], nestedConfig: any[]) {
     const configValues = this.flattenConfigValues(config);
     const nestedConfigValues =
       nestedConfig && this.flattenConfigValues(nestedConfig);
@@ -59,7 +55,7 @@ export class Supercomputer {
    * For each model from pipeline Observatory gathers inputs. Then results are stored.
    */
   private async calculateoutputsForChild(childrenObject: any, params: any) {
-    const { childName, areChildrenNested } = params;
+    const {childName, areChildrenNested} = params;
 
     if (!areChildrenNested) {
       this.olderChild = {
@@ -68,7 +64,7 @@ export class Supercomputer {
       };
     }
 
-    const { pipeline, inputs, config } = this.olderChild.info;
+    const {pipeline, inputs, config} = this.olderChild.info;
 
     if ('children' in childrenObject[childName]) {
       return this.compute(childrenObject[childName].children);

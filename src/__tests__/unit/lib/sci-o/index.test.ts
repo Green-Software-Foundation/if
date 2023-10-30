@@ -1,5 +1,5 @@
-import { describe, expect, jest, test } from '@jest/globals';
-import { SciOModel } from '../../../../lib/sci-o/index';
+import {describe, expect, jest, test} from '@jest/globals';
+import {SciOModel} from '../../../../lib/sci-o/index';
 jest.setTimeout(30000);
 
 describe('ccf:configure test', () => {

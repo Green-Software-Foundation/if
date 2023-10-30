@@ -1,5 +1,5 @@
-import { describe, expect, jest, test } from '@jest/globals';
-import { CloudCarbonFootprint } from '../../../../lib/ccf/index';
+import {describe, expect, jest, test} from '@jest/globals';
+import {CloudCarbonFootprint} from '../../../../lib/ccf/index';
 
 jest.setTimeout(30000);
 
@@ -27,7 +27,7 @@ describe('ccf:configure test', () => {
     });
     await expect(
       outputModel.execute([
-        { duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z' },
+        {duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z'},
       ])
     ).resolves.toStrictEqual([
       {
@@ -45,7 +45,7 @@ describe('ccf:configure test', () => {
     });
     await expect(
       outputModel.execute([
-        { duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z' },
+        {duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z'},
       ])
     ).resolves.toStrictEqual([
       {
@@ -214,7 +214,7 @@ describe('ccf:configure test', () => {
     ).rejects.toThrowError();
     await expect(
       outputModel.execute([
-        { duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z' },
+        {duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z'},
       ])
     ).rejects.toThrowError();
   });
@@ -228,7 +228,7 @@ describe('ccf:configure test', () => {
     ).rejects.toThrowError();
     await expect(
       outputModel.execute([
-        { duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z' },
+        {duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z'},
       ])
     ).rejects.toThrowError();
   });
@@ -243,7 +243,7 @@ describe('ccf:configure test', () => {
     ).resolves.toBeInstanceOf(CloudCarbonFootprint);
     await expect(
       outputModel.execute([
-        { duration: 3600, cpus: 1, timestamp: '2021-01-01T00:00:00Z' },
+        {duration: 3600, cpus: 1, timestamp: '2021-01-01T00:00:00Z'},
       ])
     ).rejects.toThrowError();
   });

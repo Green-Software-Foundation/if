@@ -1,8 +1,8 @@
 import * as fs from 'fs';
-import { expect, jest, it } from '@jest/globals';
+import {expect, jest, it} from '@jest/globals';
 
-import { openYamlFileAsObject } from '../../../util/yaml';
-import { describe } from 'node:test';
+import {openYamlFileAsObject} from '../../../util/yaml';
+import {describe} from 'node:test';
 
 jest.setTimeout(30000);
 
@@ -70,10 +70,10 @@ describe('ompls: ', () => {
 
           expect(
             res.includes('energy-memory') &&
-            res.includes('energy-cpu') &&
-            res.includes('energy-network') &&
-            res.includes('energy') &&
-            res.includes('operational-carbon')
+              res.includes('energy-cpu') &&
+              res.includes('energy-network') &&
+              res.includes('energy') &&
+              res.includes('operational-carbon')
           ).toBeTruthy();
         });
       }

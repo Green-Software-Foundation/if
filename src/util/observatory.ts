@@ -1,4 +1,4 @@
-import { IoutputModelInterface } from '../lib';
+import {IoutputModelInterface} from '../lib';
 
 /**
  * Observatory calculates outputs based on `inputs` and `model`.
@@ -18,9 +18,7 @@ export class Observatory {
    * Calculates output based on inputs.
    */
   public async doInvestigationsWith(modelInstance: IoutputModelInterface) {
-    const reuseCalculation = this.output.length
-      ? this.output
-      : this.inputs;
+    const reuseCalculation = this.output.length ? this.output : this.inputs;
 
     const calculatedoutputs = await modelInstance.execute(reuseCalculation);
 

@@ -1,14 +1,14 @@
 import axios from 'axios';
 import * as dayjs from 'dayjs';
 
-import { IoutputModelInterface } from '../interfaces';
+import {IoutputModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair } from '../../types/common';
+import {KeyValuePair} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { WATT_TIME } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {WATT_TIME} = MODEL_IDS;
 
 export class WattTimeGridEmissions implements IoutputModelInterface {
   authParams: object | undefined = undefined;
@@ -70,8 +70,7 @@ export class WattTimeGridEmissions implements IoutputModelInterface {
     // validate inputs for location data + timestamp + duration
     this.validateinputs(inputs);
     // determine the earliest start and total duration of all input blocks
-    const { startTime, fetchDuration } =
-      this.determineinputStartEnd(inputs);
+    const {startTime, fetchDuration} = this.determineinputStartEnd(inputs);
     // fetch data from WattTime API for the entire duration
     const wattimedata = await this.fetchData({
       timestamp: startTime.format(),
@@ -81,11 +80,8 @@ export class WattTimeGridEmissions implements IoutputModelInterface {
     // for each input block, calculate the average emission
     inputs.map((input: KeyValuePair) => {
       const inputStart = dayjs(input.timestamp);
-      const inputEnd = inputStart.add(
-        input.duration,
-        'seconds'
-      );
-      const { datapoints, data } = this.getWattTimeDataForDuration(
+      const inputEnd = inputStart.add(input.duration, 'seconds');
+      const {datapoints, data} = this.getWattTimeDataForDuration(
         wattimedata,
         inputStart,
         inputEnd
@@ -106,7 +102,7 @@ export class WattTimeGridEmissions implements IoutputModelInterface {
     wattimedata: KeyValuePair[],
     inputStart: dayjs.Dayjs,
     inputEnd: dayjs.Dayjs
-  ): { datapoints: number; data: number[] } {
+  ): {datapoints: number; data: number[]} {
     let datapoints = 0;
     const data = wattimedata.map((data: KeyValuePair) => {
       // WattTime API returns full data for the entire duration.
@@ -131,14 +127,13 @@ export class WattTimeGridEmissions implements IoutputModelInterface {
       datapoints += 1;
       return grid_emission;
     });
-    return { datapoints, data };
+    return {datapoints, data};
   }
 
   private validateinputs(inputs: object[]) {
     inputs.forEach((input: KeyValuePair) => {
       if (!('location' in input)) {
-        const { latitude, longitude } =
-          this.getLatitudeLongitudeFrominput(input);
+        const {latitude, longitude} = this.getLatitudeLongitudeFrominput(input);
         if (isNaN(latitude) || isNaN(longitude)) {
           throw new Error('latitude or longitude is not a number');
         }
@@ -167,7 +162,7 @@ export class WattTimeGridEmissions implements IoutputModelInterface {
     }
     const latitude = parseFloat(location[0]); //convert latitude to float
     const longitude = parseFloat(location[1]); //convert longitude to float
-    return { latitude, longitude };
+    return {latitude, longitude};
   }
 
   private determineinputStartEnd(inputs: object[]) {
@@ -184,9 +179,7 @@ export class WattTimeGridEmissions implements IoutputModelInterface {
         : starttime;
 
       // if the input timestamp + duration is after the current endtime, set it as the new endtime
-      endtime = dayjs(input.timestamp)
-        .add(duration, 'seconds')
-        .isAfter(endtime)
+      endtime = dayjs(input.timestamp).add(duration, 'seconds').isAfter(endtime)
         ? dayjs(input.timestamp).add(duration, 'seconds')
         : endtime;
     });
@@ -194,11 +187,11 @@ export class WattTimeGridEmissions implements IoutputModelInterface {
     if (fetchDuration > 32 * 24 * 60 * 60) {
       throw new Error(
         'duration is too long.WattTime API only supports up to 32 days. All inputs must be within 32 days of each other. Duration of ' +
-        fetchDuration +
-        ' seconds is too long.'
+          fetchDuration +
+          ' seconds is too long.'
       );
     }
-    return { startTime: starttime, fetchDuration };
+    return {startTime: starttime, fetchDuration};
   }
 
   async fetchData(input: KeyValuePair): Promise<KeyValuePair[]> {
@@ -207,8 +200,7 @@ export class WattTimeGridEmissions implements IoutputModelInterface {
     if (duration > 32 * 24 * 60 * 60) {
       throw new Error('duration is too long');
     }
-    const { latitude, longitude } =
-      this.getLatitudeLongitudeFrominput(input);
+    const {latitude, longitude} = this.getLatitudeLongitudeFrominput(input);
 
     const params = {
       latitude: latitude,

@@ -1,13 +1,13 @@
 import Spline from 'typescript-cubic-spline';
 
-import { IoutputModelInterface } from '../interfaces';
+import {IoutputModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair, Interpolation } from '../../types/common';
+import {KeyValuePair, Interpolation} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { TEADS_CURVE } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {TEADS_CURVE} = MODEL_IDS;
 
 export class TeadsCurveModel implements IoutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in TEADS.
@@ -177,4 +177,4 @@ export class TeadsCurveModel implements IoutputModelInterface {
 /**
  * For JSII.
  */
-export { KeyValuePair, Interpolation } from '../../types/common';
+export {KeyValuePair, Interpolation} from '../../types/common';

@@ -1,5 +1,5 @@
-import { describe, expect, jest, test } from '@jest/globals';
-import { CloudInstanceMetadataModel } from '../../../../lib/cloud-instance-metadata/index';
+import {describe, expect, jest, test} from '@jest/globals';
+import {CloudInstanceMetadataModel} from '../../../../lib/cloud-instance-metadata/index';
 
 jest.setTimeout(30000);
 

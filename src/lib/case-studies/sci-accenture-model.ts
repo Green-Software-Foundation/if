@@ -1,11 +1,11 @@
-import { IoutputModelInterface } from '../interfaces';
+import {IoutputModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair } from '../../types/common';
+import {KeyValuePair} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { SCI_ACCENTURE } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {SCI_ACCENTURE} = MODEL_IDS;
 
 export class SciAccentureModel implements IoutputModelInterface {
   authParams: object | undefined = undefined;

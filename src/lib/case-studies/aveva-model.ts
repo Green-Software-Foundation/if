@@ -1,9 +1,9 @@
-import { IoutputModelInterface } from '../interfaces';
+import {IoutputModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-const { MODEL_IDS } = CONFIG;
-const { AVEVA } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {AVEVA} = MODEL_IDS;
 
 export class EAvevaModel implements IoutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in Aveva.

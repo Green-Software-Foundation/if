@@ -1,11 +1,11 @@
-import { IoutputModelInterface } from '../interfaces';
+import {IoutputModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair } from '../../types/common';
+import {KeyValuePair} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { SCI_E } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {SCI_E} = MODEL_IDS;
 
 export class SciEModel implements IoutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in thi smodel.

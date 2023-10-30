@@ -3,14 +3,14 @@ import Spline from 'typescript-cubic-spline';
 import * as AWS_INSTANCES from './aws-instances.json';
 import * as AWS_EMBODIED from './aws-embodied.json';
 
-import { IoutputModelInterface } from '../interfaces';
+import {IoutputModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair, Interpolation } from '../../types/common';
+import {KeyValuePair, Interpolation} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { TEADS_AWS } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {TEADS_AWS} = MODEL_IDS;
 
 export class TeadsAWS implements IoutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in TEADS.

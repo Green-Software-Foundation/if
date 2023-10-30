@@ -1,13 +1,13 @@
-import { IoutputModelInterface } from '../interfaces';
+import {IoutputModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair } from '../../types/common';
+import {KeyValuePair} from '../../types/common';
 
-export { KeyValuePair } from '../../types/common';
+export {KeyValuePair} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { ESHOPPEN, ESHOPPEN_CPU, ESHOPPEN_MEM, ESHOPPEN_NET } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {ESHOPPEN, ESHOPPEN_CPU, ESHOPPEN_MEM, ESHOPPEN_NET} = MODEL_IDS;
 
 export class EshoppenModel implements IoutputModelInterface {
   authParams: object | undefined = undefined;
@@ -59,8 +59,7 @@ export class EshoppenModel implements IoutputModelInterface {
         case 'energy-network': {
           // energy-network = data-in + data-out * net-energy
           input['energy-network'] =
-            ((input['data-in'] + input['data-out']) *
-              input['net-energy']) /
+            ((input['data-in'] + input['data-out']) * input['net-energy']) /
             1000;
 
           if (isNaN(input['energy-network'])) {

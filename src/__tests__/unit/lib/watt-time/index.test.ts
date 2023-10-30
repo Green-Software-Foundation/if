@@ -1,5 +1,5 @@
-import { describe, expect, jest, test } from '@jest/globals';
-import { WattTimeGridEmissions } from '../../../../lib/watt-time/index';
+import {describe, expect, jest, test} from '@jest/globals';
+import {WattTimeGridEmissions} from '../../../../lib/watt-time/index';
 import * as DATA from '../../../../__mocks__/watt-time/data.json';
 import axios from 'axios';
 

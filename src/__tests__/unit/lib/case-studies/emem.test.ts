@@ -1,5 +1,5 @@
-import { describe, expect, jest, test } from '@jest/globals';
-import { EMemModel } from '../../../../lib/case-studies/emem-model';
+import {describe, expect, jest, test} from '@jest/globals';
+import {EMemModel} from '../../../../lib/case-studies/emem-model';
 
 jest.setTimeout(30000);
 
@@ -51,9 +51,7 @@ describe('emem:configure test', () => {
     await expect(outputModel.execute(undefined)).rejects.toThrow();
     await expect(outputModel.execute({})).rejects.toThrow();
     expect(outputModel.modelIdentifier()).toBe('energy-memory');
-    await expect(
-      outputModel.execute([{ timestamp: 'test' }])
-    ).rejects.toThrow();
+    await expect(outputModel.execute([{timestamp: 'test'}])).rejects.toThrow();
     await expect(
       outputModel.execute([
         {

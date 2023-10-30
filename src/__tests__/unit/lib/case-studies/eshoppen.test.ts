@@ -1,4 +1,4 @@
-import { describe, expect, jest, test } from '@jest/globals';
+import {describe, expect, jest, test} from '@jest/globals';
 import {
   EshoppenMemModel,
   EshoppenModel,
@@ -32,7 +32,7 @@ describe('eshoppen:configure test', () => {
     ]);
     await expect(model.execute([{}])).rejects.toThrowError();
     await expect(model.execute({})).rejects.toThrowError();
-    expect(model.authenticate({ test: 'test' })).toBe(undefined);
+    expect(model.authenticate({test: 'test'})).toBe(undefined);
 
     const model2 = await new EshoppenMemModel().configure('eshoppen', {
       type: 'energy-memory',

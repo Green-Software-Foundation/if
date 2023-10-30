@@ -1,6 +1,6 @@
-import { ArgumentConfig } from 'ts-command-line-args';
+import {ArgumentConfig} from 'ts-command-line-args';
 
-import { impactProcessArgs } from '../types/process-args';
+import {impactProcessArgs} from '../types/process-args';
 
 export const CONFIG = {
   MODEL_IDS: {

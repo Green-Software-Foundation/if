@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { expect } from '@jest/globals';
+import {expect} from '@jest/globals';
 
 import * as YAML from 'js-yaml';
 
@@ -48,7 +48,7 @@ export const writeFile = async (pathToFile: string, content: string) => {
   const mockContent = {
     name: 'mock-name',
   };
-  const mockObject = YAML.dump(mockContent, { noRefs: true });
+  const mockObject = YAML.dump(mockContent, {noRefs: true});
 
   expect(pathToFile).toBe(mockPathToFile);
   expect(content).toBe(mockObject);

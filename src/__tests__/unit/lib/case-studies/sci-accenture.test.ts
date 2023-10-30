@@ -1,5 +1,5 @@
-import { describe, expect, jest, test } from '@jest/globals';
-import { SciAccentureModel } from '../../../../lib/case-studies/sci-accenture-model';
+import {describe, expect, jest, test} from '@jest/globals';
+import {SciAccentureModel} from '../../../../lib/case-studies/sci-accenture-model';
 
 jest.setTimeout(30000);
 
