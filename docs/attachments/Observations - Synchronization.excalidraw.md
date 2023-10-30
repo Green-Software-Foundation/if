@@ -14,13 +14,13 @@ Batch ^QEv7hCXm
 
 Training ^Lx1fie8d
 
-5 observations
+5 inputs
 @ 1hr duration ^CGhfb0pC
 
-2 observations   
+2 inputs   
 @ 3hr duration ^5JxtoPP3
 
-1 observation @ 24 hr duration ^m6k4qLMS
+1 input @ 24 hr duration ^m6k4qLMS
 
 %%
 # Drawing
@@ -303,12 +303,12 @@ Training ^Lx1fie8d
 			"locked": false,
 			"fontSize": 20,
 			"fontFamily": 1,
-			"text": "1 observation @ 24 hr duration",
-			"rawText": "1 observation @ 24 hr duration",
+			"text": "1 input @ 24 hr duration",
+			"rawText": "1 input @ 24 hr duration",
 			"textAlign": "left",
 			"verticalAlign": "top",
 			"containerId": null,
-			"originalText": "1 observation @ 24 hr duration",
+			"originalText": "1 input @ 24 hr duration",
 			"lineHeight": 1.25,
 			"baseline": 18
 		},
@@ -620,12 +620,12 @@ Training ^Lx1fie8d
 			"locked": false,
 			"fontSize": 20,
 			"fontFamily": 1,
-			"text": "5 observations\n@ 1hr duration",
-			"rawText": "5 observations\n@ 1hr duration",
+			"text": "5 inputs\n@ 1hr duration",
+			"rawText": "5 inputs\n@ 1hr duration",
 			"textAlign": "left",
 			"verticalAlign": "top",
 			"containerId": null,
-			"originalText": "5 observations\n@ 1hr duration",
+			"originalText": "5 inputs\n@ 1hr duration",
 			"lineHeight": 1.25,
 			"baseline": 43
 		},
@@ -806,12 +806,12 @@ Training ^Lx1fie8d
 			"locked": false,
 			"fontSize": 20,
 			"fontFamily": 1,
-			"text": "2 observations   \n@ 3hr duration",
-			"rawText": "2 observations   \n@ 3hr duration",
+			"text": "2 inputs   \n@ 3hr duration",
+			"rawText": "2 inputs   \n@ 3hr duration",
 			"textAlign": "left",
 			"verticalAlign": "top",
 			"containerId": null,
-			"originalText": "2 observations   \n@ 3hr duration",
+			"originalText": "2 inputs   \n@ 3hr duration",
 			"lineHeight": 1.25,
 			"baseline": 43
 		},

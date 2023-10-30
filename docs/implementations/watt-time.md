@@ -18,8 +18,8 @@ The model is based on the WattTime API. The model uses the following inputs:
 ## Implementation
 
 Limitations: 
-* Set of observations are to be within 32 days of each other. 
-* Emissions are aggregated for every 5 minutes regardless of the granularity of the observations.
+* Set of inputs are to be within 32 days of each other. 
+* Emissions are aggregated for every 5 minutes regardless of the granularity of the inputs.
 
 ### Authentication
 
@@ -39,7 +39,7 @@ https://www.watttime.org/get-the-data/data-plans/
   * ENV_WATT_TIME_PASSWORD - specifying this value enables the RIMPL to load the value from the environment variable `WATT_TIME_PASSWORD`
 
 
-### Observations 
+### inputs 
 
 **Required Parameters:**
 * timestamp: Timestamp of the recorded event (2021-01-01T00:00:00Z) RFC3339
@@ -56,14 +56,14 @@ const env_model = await new WattTimeGridEmissions().configure('watt-time', {
   username: process.env.WATT_TIME_USERNAME,
   password: process.env.WATT_TIME_PASSWORD,
 });
-const observations = [
+const inputs = [
   {
     timestamp: '2021-01-01T00:00:00Z',
     latitude: "43.22,-80.22",
     duration: 3600,
   },
 ];
-const results = env_model.calculateEmissions(observations);
+const results = env_model.calculateEmissions(inputs);
 ```
 
 ### IMPL Usage
@@ -75,7 +75,7 @@ const results = env_model.calculateEmissions(observations);
 config:
   username: ENV_WATT_TIME_USERNAME
   password: ENV_WATT_TIME_PASSWORD
-observations:
+inputs:
   - timestamp: 2021-01-01T00:00:00Z
     latitude: "43.22,-80.22"
     duration: 3600
@@ -85,7 +85,7 @@ observations:
 config:
   username: username
   password: password
-observations:
+inputs:
   - timestamp: 2021-01-01T00:00:00Z
     latitude: "43.22,-80.22"
     duration: 3600

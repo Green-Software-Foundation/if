@@ -1,50 +1,50 @@
-import {IImpactModelInterface} from '../lib';
+import { IoutputModelInterface } from '../lib';
 
 /**
- * Observatory calculates impacts based on `observations` and `model`.
+ * Observatory calculates outputs based on `inputs` and `model`.
  */
 export class Observatory {
-  private observations: any[];
-  private impact: any[] = [];
+  private inputs: any[];
+  private output: any[] = [];
 
   /**
-   * Init observations object.
+   * Init inputs object.
    */
-  constructor(observations: any) {
-    this.observations = observations;
+  constructor(inputs: any) {
+    this.inputs = inputs;
   }
 
   /**
-   * Calculates impact based on observations.
+   * Calculates output based on inputs.
    */
-  public async doInvestigationsWith(modelInstance: IImpactModelInterface) {
-    const reuseCalculation = this.impact.length
-      ? this.impact
-      : this.observations;
+  public async doInvestigationsWith(modelInstance: IoutputModelInterface) {
+    const reuseCalculation = this.output.length
+      ? this.output
+      : this.inputs;
 
-    const calculatedImpacts = await modelInstance.calculate(reuseCalculation);
+    const calculatedoutputs = await modelInstance.execute(reuseCalculation);
 
-    const result = this.observations.map((observation: any, index: number) => ({
-      ...observation,
-      ...calculatedImpacts[index],
+    const result = this.inputs.map((input: any, index: number) => ({
+      ...input,
+      ...calculatedoutputs[index],
     }));
 
-    this.impact = result;
+    this.output = result;
 
     return this;
   }
 
   /**
-   * Getter for observation data.
+   * Getter for input data.
    */
-  public getObservations() {
-    return this.observations;
+  public getinputs() {
+    return this.inputs;
   }
 
   /**
-   * Getter for impact data.
+   * Getter for output data.
    */
-  public getImpacts() {
-    return this.impact;
+  public getoutputs() {
+    return this.output;
   }
 }

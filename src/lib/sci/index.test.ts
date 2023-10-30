@@ -1,5 +1,5 @@
-import {describe, expect, jest, test} from '@jest/globals';
-import {SciModel} from './index';
+import { describe, expect, jest, test } from '@jest/globals';
+import { SciModel } from './index';
 jest.setTimeout(30000);
 
 describe('sci:configure test', () => {
@@ -11,7 +11,7 @@ describe('sci:configure test', () => {
     });
     expect(model).toBeInstanceOf(SciModel);
     await expect(
-      model.calculate([
+      model.execute([
         {
           'operational-carbon': 0.02,
           'embodied-carbon': 5,
@@ -29,7 +29,7 @@ describe('sci:configure test', () => {
       },
     ]);
     await expect(
-      model.calculate([
+      model.execute([
         {
           'operational-carbon': 20,
           'embodied-carbon': 0.005,
@@ -47,7 +47,7 @@ describe('sci:configure test', () => {
       },
     ]);
   });
-  test('initialize and test: vary observation duration ', async () => {
+  test('initialize and test: vary input duration ', async () => {
     const model = await new SciModel().configure('name', {
       'functional-unit-time': 'days',
       'functional-unit': '',
@@ -55,7 +55,7 @@ describe('sci:configure test', () => {
     });
     expect(model).toBeInstanceOf(SciModel);
     await expect(
-      model.calculate([
+      model.execute([
         {
           'operational-carbon': 0.002,
           'embodied-carbon': 0.0005,
@@ -71,7 +71,7 @@ describe('sci:configure test', () => {
       },
     ]);
     await expect(
-      model.calculate([
+      model.execute([
         {
           'operational-carbon': 0.002,
           'embodied-carbon': 0.0005,
@@ -95,7 +95,7 @@ describe('sci:configure test', () => {
     });
     expect(model).toBeInstanceOf(SciModel);
     await expect(
-      model.calculate([
+      model.execute([
         {
           'operational-carbon': 0.002,
           'embodied-carbon': 0.0005,

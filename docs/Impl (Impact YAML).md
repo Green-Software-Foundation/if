@@ -49,22 +49,22 @@ config:
     aggregation: TBD
 graph: # The nodes under this root node
 
-  # Single observation
+  # Single input
   <component>:
     model: <imp-identifier>
     config: 
       <key>: <value>
-    observation:
+    input:
       timestamp: <timestamp>
       duration: <duration>
       <key>: <value>
 
-  # Multiple observations      
+  # Multiple inputs      
   <component>:
     model: <imp-identifier>
     config: 
       <key>: <value>
-    observations:
+    inputs:
       common:
         <key>: <value>
       series:
@@ -79,12 +79,12 @@ graph: # The nodes under this root node
           to: <to-field>
           units: <units>
 
-  # Multiple observations from CSV 
+  # Multiple inputs from CSV 
   <component>:
     model: <imp-identifier>
     config: 
       <key>: <value>
-    observations:
+    inputs:
       common:
         <key>: <value>
       series:
@@ -100,7 +100,7 @@ graph: # The nodes under this root node
       model: <imp-identifier>
       config: 
         <key>: <value>
-      observation:
+      input:
         timestamp: <timestamp>
         duration: <duration>
         <key>: <value>
@@ -112,12 +112,12 @@ graph: # The nodes under this root node
       <key>: <value>
     children:
       <component-1>:
-        observation:
+        input:
           timestamp: <timestamp>
           duration: <duration>
           <key>: <value>
       <component-2>:
-        observation:
+        input:
           timestamp: <timestamp>
           duration: <duration>
           <key>: <value>
@@ -156,7 +156,7 @@ graph:
       region: east-us  
     children: 
       queue: # a leaf component
-        observations: 
+        inputs: 
           config:
             sku: AC2
           series:
@@ -178,7 +178,7 @@ graph:
         params: 
           vendor: aws
           region: france
-        observations: 
+        inputs: 
           config:
             sku: EC2
           series:      
@@ -197,7 +197,7 @@ graph:
       config: 
         vendor: gcp
         region: west-us
-      observation: # a single observation for the whole duration
+      input: # a single input for the whole duration
         datetime: 2023-07-06T00:00
         duration: 15
         cpu: 0.34

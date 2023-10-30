@@ -1,14 +1,14 @@
-import {IImpactModelInterface} from '../interfaces';
+import { IoutputModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-import {KeyValuePair} from '../../types/common';
+import { KeyValuePair } from '../../types/common';
 import * as AWS_INSTANCES from './aws-instances.json';
 
-const {MODEL_IDS} = CONFIG;
-const {CLOUD_INSTANCE_METADATA} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { CLOUD_INSTANCE_METADATA } = MODEL_IDS;
 
-export class CloudInstanceMetadataModel implements IImpactModelInterface {
+export class CloudInstanceMetadataModel implements IoutputModelInterface {
   authParams: object | undefined = undefined;
   staticParams: object | undefined;
   name: string | undefined;
@@ -18,35 +18,35 @@ export class CloudInstanceMetadataModel implements IImpactModelInterface {
   }
 
   /**
-   * Each Observation require:
-   * @param {Object[]} observations
-   * @param {string} observations[].timestamp RFC3339 timestamp string
+   * Each input require:
+   * @param {Object[]} inputs
+   * @param {string} inputs[].timestamp RFC3339 timestamp string
    */
-  async calculate(observations: object | object[] | undefined): Promise<any[]> {
-    if (observations === undefined) {
+  async execute(inputs: object | object[] | undefined): Promise<any[]> {
+    if (inputs === undefined) {
       throw new Error('Required Parameters not provided');
-    } else if (!Array.isArray(observations)) {
-      throw new Error('Observations must be an array');
+    } else if (!Array.isArray(inputs)) {
+      throw new Error('inputs must be an array');
     }
 
-    return observations.map((observation: KeyValuePair) => {
+    return inputs.map((input: KeyValuePair) => {
       let vendor = '';
       let instance_type = '';
-      if ('cloud-vendor' in observation) {
-        vendor = observation['cloud-vendor'];
+      if ('cloud-vendor' in input) {
+        vendor = input['cloud-vendor'];
       } else {
-        throw new Error('Each observation must contain a cloud-vendor key');
+        throw new Error('Each input must contain a cloud-vendor key');
       }
-      // if ('cloud-region' in observation) {
-      //   region = observation['cloud-region'];
+      // if ('cloud-region' in input) {
+      //   region = input['cloud-region'];
       // } else {
-      //   throw new Error('Each observation must contain a cloud-region key');
+      //   throw new Error('Each input must contain a cloud-region key');
       // }
-      if ('cloud-instance-type' in observation) {
-        instance_type = observation['cloud-instance-type'];
+      if ('cloud-instance-type' in input) {
+        instance_type = input['cloud-instance-type'];
       } else {
         throw new Error(
-          'Each observation must contain a cloud-instance-type key'
+          'Each input must contain a cloud-instance-type key'
         );
       }
       if (vendor !== 'aws') {
@@ -59,8 +59,8 @@ export class CloudInstanceMetadataModel implements IImpactModelInterface {
       if (instance) {
         console.log(instance);
         console.log(vendor);
-        observation['vcpus-allocated'] = instance['Instance vCPU'];
-        observation['vcpus-total'] = instance['Platform Total Number of vCPU'];
+        input['vcpus-allocated'] = instance['Instance vCPU'];
+        input['vcpus-total'] = instance['Platform Total Number of vCPU'];
         const cpuType = instance['Platform CPU Name'];
         let platform = '';
         if (cpuType.startsWith('EPYC')) {
@@ -72,20 +72,20 @@ export class CloudInstanceMetadataModel implements IImpactModelInterface {
         } else if (cpuType.startsWith('Core')) {
           platform = 'Intel';
         }
-        observation['physical-processor'] = `${platform} ${cpuType}`;
+        input['physical-processor'] = `${platform} ${cpuType}`;
       } else {
         throw new Error(
           `cloud-instance-type: ${instance_type} is not supported in vendor: ${vendor}`
         );
       }
-      return observation;
+      return input;
     });
   }
 
   async configure(
     name: string,
     staticParams: object | undefined
-  ): Promise<IImpactModelInterface> {
+  ): Promise<IoutputModelInterface> {
     this.staticParams = staticParams;
     this.name = name;
     return this;

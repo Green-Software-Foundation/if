@@ -49,7 +49,7 @@ graph:
         - sci-e
       config:
         sci-e:
-      observations:
+      inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
           energy-cpu: 0.001

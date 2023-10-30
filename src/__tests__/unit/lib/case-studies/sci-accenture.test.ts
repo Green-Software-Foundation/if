@@ -1,5 +1,5 @@
-import {describe, expect, jest, test} from '@jest/globals';
-import {SciAccentureModel} from '../../../../lib/case-studies/sci-accenture-model';
+import { describe, expect, jest, test } from '@jest/globals';
+import { SciAccentureModel } from '../../../../lib/case-studies/sci-accenture-model';
 
 jest.setTimeout(30000);
 
@@ -8,7 +8,7 @@ describe('accenture:configure test', () => {
     const model = await new SciAccentureModel().configure('sci-accenture', {});
     expect(model).toBeInstanceOf(SciAccentureModel);
     await expect(
-      model.calculate([
+      model.execute([
         {
           sci: 1,
         },
@@ -19,6 +19,6 @@ describe('accenture:configure test', () => {
         sci_total: 1.05,
       },
     ]);
-    await expect(model.calculate([{}])).rejects.toThrowError();
+    await expect(model.execute([{}])).rejects.toThrowError();
   });
 });

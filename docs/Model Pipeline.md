@@ -16,16 +16,16 @@ Our approach to models in the [Impact Engine Framework](Impact%20Engine%20Framew
 - Models work with each other. 
 - The [Impl (Impact YAML)](Impl%20(Impact%20YAML).md) text format is the communication medium between models.
 
-Calculating a component's impacts often requires using multiple models in sequence. Each model takes as input the outputs of the previous model in the chain, all working together to calculate impacts from observations.
+Calculating a component's impacts often requires using multiple models in sequence. Each model takes as input the outputs of the previous model in the chain, all working together to calculate impacts from inputs.
 
 ```mermaid 
 flowchart LR
-Observations --> Model1 --> Model2 --> Model3 --> Impacts
+inputs --> Model1 --> Model2 --> Model3 --> Impacts
 ```
 
-At the start of the chain, we input source observations. Each model in the chain takes as input the observations and modifies them somehow before passing them along to the next model in the chain.
+At the start of the chain, we input source inputs. Each model in the chain takes as input the inputs and modifies them somehow before passing them along to the next model in the chain.
 
-The nature of the modification is flexible and defined by the model. Some model plugins will calculate an impact metric (for example, energy from utilization) and add that to the observation before passing that to the next model. Some models will enrich the observation with meta-data required for other models, for example, adding grid carbon intensity values.
+The nature of the modification is flexible and defined by the model. Some model plugins will calculate an impact metric (for example, energy from utilization) and add that to the input before passing that to the next model. Some models will enrich the input with meta-data required for other models, for example, adding grid carbon intensity values.
 
 ## Initialization
 
@@ -68,7 +68,7 @@ backend:
       <key>: <value>        
     model-3:
       <key>: <value>                
-  observations: 
+  inputs: 
     - timestamp: 2023-07-06T00:00
       duration: 5
       cpu: 33
@@ -83,7 +83,7 @@ backend:
 
 - `pipeline` defines the models we apply and the order in which we use them.
 - `config` in this part of the graph is config for each model in the pipeline (if any is required). Since we have multiple models, we need to define each config independently.
-- `observations` are the source observations, the values we are pumping into the start of this pipeline.
+- `inputs` are the source inputs, the values we are pumping into the start of this pipeline.
 
 
 ## Example
@@ -97,10 +97,10 @@ pipeline:
   - teads-curve
 ```
 
-Using the above, we can combine multiple smaller models together to calculate the energy consumed by this observation:
+Using the above, we can combine multiple smaller models together to calculate the energy consumed by this input:
 
 ```yaml
-observations: 
+inputs: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
     instance-type: m5d.large
@@ -113,7 +113,7 @@ observations:
 This model plugin takes as input an *instance type* and outputs the name of the physical processor of the underlying architecture as well as other valuable metadata, like so:
 
 ```yaml
-observations: 
+inputs: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
     instance-type: m5d.large
@@ -124,7 +124,7 @@ observations:
 to 
 
 ```yaml
-observations: 
+inputs: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
     instance-type: m5d.large
@@ -141,7 +141,7 @@ observations:
 Takes as input details about a physical processor, does a lookup against a [database](https://www.intel.com/content/www/us/en/products/sku/120506/intel-xeon-platinum-8170-processor-35-75m-cache-2-10-ghz/specifications.html) to obtain the thermal-design-power value (a measure of max power consumption), like so:
 
 ```yaml
-observations: 
+inputs: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
     instance-type: m5d.large
@@ -155,7 +155,7 @@ observations:
 to
 
 ```yaml
-observations: 
+inputs: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
     instance-type: m5d.large
@@ -184,7 +184,7 @@ So if the thermal-design-power is 100W and the utilization is 50%, then accordin
 Using a `teads-curve` model, we'd be able to estimate energy like so:
 
 ```yaml
-observations: 
+inputs: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
     instance-type: m5d.large
@@ -199,7 +199,7 @@ observations:
 to
 
 ```yaml
-observations: 
+inputs: 
   - timestamp: 2023-07-06T00:00
     vendor: aws
     instance-type: m5d.large
@@ -243,10 +243,10 @@ Sticking to the above example of the `instance-metadata` plugin. A new version o
 
 Again, sticking to the  `instance-metadata` plugin example. Breaking out functionality into lots of smaller plugins allows for more consistency. This is especially true regarding plugins that do lookups against data. 
 
-Rather than each plugin determining its own meta-data, one plugin can provide the metadata required for several subsequent plugins. From the data it exports to the observations, we can see what data every subsequent plugin is using.
+Rather than each plugin determining its own meta-data, one plugin can provide the metadata required for several subsequent plugins. From the data it exports to the inputs, we can see what data every subsequent plugin is using.
 ### Debuggability
 
-Since each model outputs a copy of its inputs, we can easily debug a calculation through its chain by dumping out the intermediate observations.
+Since each model outputs a copy of its inputs, we can easily debug a calculation through its chain by dumping out the intermediate inputs.
 ### Simulation
 
 You can create models that **simulate** making changes to the system. For example, you could create a model called `change-instance-type`, which adjusts the data being passed through to **simulate** as if it was run on another cloud instance.
@@ -263,7 +263,7 @@ component:
   config: 
     change-instance-type:
       to-instance: m5d.xlarge            
-  observations: 
+  inputs: 
     - timestamp: 2023-07-06T00:00
       duration: 5
       cpu: 33
@@ -283,7 +283,7 @@ component:
   config: 
     change-instance-type:
       to-instance: m5d.xlarge            
-  observations: 
+  inputs: 
     - timestamp: 2023-07-06T00:00
       duration: 5
       cpu: 17.5 # <-- updated
@@ -299,10 +299,10 @@ The rest of the pipeline would then be the same. No other plugin would need to b
 
 We need to be able to measure the energy consumed by a processor since *eventually* everything is executed on a processor. However, these days most services are consumed through higher-level managed services (for example, AWS Lambda). In these managed services, you are abstracted away from the underlying processor, utilization, and instances. How do we measure the impacts of these managed services?
 
-We first have to start with observations. If we take AWS Lambda (or any FaaS), then the observations we might receive are along the time/space dimension, like so:
+We first have to start with inputs. If we take AWS Lambda (or any FaaS), then the inputs we might receive are along the time/space dimension, like so:
 
 ```yaml       
-observations: 
+inputs: 
   - timestamp: 2023-07-06T00:00
     duration: 5
     gb-s: 1005
@@ -312,7 +312,7 @@ Most cloud FaaS measure by gigabyte seconds. So, the number of seconds your func
 
 There are no models *currently* that translate GB-s to energy and embodied carbon. However, by chaining several models together into a pipeline, we can *translate* GB-s to some equivalent utilization on an instance type and then compute using a similar pipeline to what we've used before.
 
-Imagine we had an adaptor model called `aws-lambda-to-instance`, which transformed `gb-s` into an observation that can be computed using an existing set of models, like so:
+Imagine we had an adaptor model called `aws-lambda-to-instance`, which transformed `gb-s` into an input that can be computed using an existing set of models, like so:
 
 ```yaml
 component:
@@ -321,13 +321,13 @@ component:
     - instance-metadata
     - thermal-design-power
     - teads       
-  observations: 
+  inputs: 
     - timestamp: 2023-07-06T00:00
       duration: 5
       gb-s: 1005
 ```
 
-`aws-lambda-to-instance`  might first transform the observation to:
+`aws-lambda-to-instance`  might first transform the input to:
 
 ```yaml
 component:
@@ -336,7 +336,7 @@ component:
     - instance-metadata
     - thermal-design-power
     - teads      
-  observations: 
+  inputs: 
     - timestamp: 2023-07-06T00:00
       duration: 5
       gb-s: 1005
@@ -345,7 +345,7 @@ component:
       cpu: 33   # <-- new
 ```
 
-The observation is now in a format that can be computed using the rest of the pipeline.
+The input is now in a format that can be computed using the rest of the pipeline.
 
 Using **Managed Services Adaptor Models** (MSAM), we can quickly model higher-level managed services.
 
@@ -355,7 +355,7 @@ Another future is one where a model is created that directly translates `gb-s` t
 component:
   pipeline:
     - aws-lambda
-  observations: 
+  inputs: 
     - timestamp: 2023-07-06T00:00
       duration: 5
       gb-s: 1005

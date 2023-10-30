@@ -5,7 +5,7 @@ abstract: Guidance for writing valid impls.
 
 # IMPL writing guide
 
-The Impact Framework receives all its configuration and observation data in the form of a `yaml` file known as an `impl` (input-yaml).
+The Impact Framework receives all its configuration and input data in the form of a `yaml` file known as an `impl` (input-yaml).
 To use the framework, a user only has to write an `impl` file and pass its path to the command line tool. This guide will help you to understand how to construct an `impl` and use it to measure the energy and carbon usage of your app.
 
 ## Structure of an `impl`
@@ -28,7 +28,7 @@ graph:
       pipeline:
         - 
       config:
-      observations:
+      inputs:
 ```
 
 The `impl` starts with some metadata about the project, specifically:
@@ -79,18 +79,18 @@ graph:
 
 ```
 
-## `observations`
+## `inputs`
 
-Each `child` has its own set of `observations`. These are the most granular data, each of which are associated with a specific timestamp. Every `observation` must always include a `timestamp` and a `duration`.
+Each `child` has its own set of `inputs`. These are the most granular data, each of which are associated with a specific timestamp. Every `input` must always include a `timestamp` and a `duration`.
 
 ```yaml
-observations:
+inputs:
   - timestamp: 2023-07-06T00:00
     duration: 3600
     cpu-util: 45
 ```
 
-That's it! You now have a simple `impl` file that will use the model config and observation data to run the `teads-curve` and `sci-m` models! The output data will be appended to the `impl` under a new `impacts` field and saved as an `ompl` file.
+That's it! You now have a simple `impl` file that will use the model config and input data to run the `teads-curve` and `sci-m` models! The output data will be appended to the `impl` under a new `impacts` field and saved as an `ompl` file.
 
 ## More complex `impls`
 
@@ -140,7 +140,7 @@ graph:
           functional_unit_duration: 1 
           functional_unit_time: 'minutes'
           functional_unit: requests # factor to convert per time to per f.unit
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00
           duration: 1
           cpu-util: 55
@@ -206,14 +206,14 @@ graph:
           functional_unit: requests # factor to convert per time to per f.unit
       children:
         nested-1:
-          observations:
+          inputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 50
               e-net: 0.000811 #kwh     
               requests: 380
         nested-2:
-          observations: 
+          inputs: 
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 33
@@ -228,7 +228,7 @@ You can combine complex model pipelines and complex application architectures to
 
 The models are designed to be composable, but they each have specific input requirements that must be met in order for the models to run correctly. For example, teh `teads-curve` model requires `tdp` to be available in the `impl`. If it is not there, the model cannot use it to calculate `e-cpu`. You can refer to the [individual model documentation](../docs/implementations/Readme.md) to see the parameters and return values for each model. 
 
-it is also possible to leapfrog some models if you have access to high-level data. For example, perhaps you already know the energy being used by your CPU. In this case, there is no need to run `teads-curve`, you can simply provide `e-cpu` as an `observation` and omit `teads-curve` from the model pipeline.
+it is also possible to leapfrog some models if you have access to high-level data. For example, perhaps you already know the energy being used by your CPU. In this case, there is no need to run `teads-curve`, you can simply provide `e-cpu` as an `input` and omit `teads-curve` from the model pipeline.
 
 We have deliberately made the models modular and composable so that you can be creative in developing new plugins to replace those provided as part of IEF.
 

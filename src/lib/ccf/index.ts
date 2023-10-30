@@ -1,9 +1,9 @@
 import Spline from 'typescript-cubic-spline';
 
-import {IComputeInstance, IImpactModelInterface} from '../interfaces';
-import {INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING} from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
+import { IComputeInstance, IoutputModelInterface } from '../interfaces';
+import { INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING } from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
 import * as AWS_INSTANCES from './aws-instances.json';
 import * as GCP_INSTANCES from './gcp-instances.json';
@@ -15,12 +15,12 @@ import * as GCP_EMBODIED from './gcp-embodied.json';
 import * as AWS_EMBODIED from './aws-embodied.json';
 import * as AZURE_EMBODIED from './azure-embodied.json';
 
-import {KeyValuePair, Interpolation} from '../../types/common';
+import { KeyValuePair, Interpolation } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {CCF} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { CCF } = MODEL_IDS;
 
-export class CloudCarbonFootprint implements IImpactModelInterface {
+export class CloudCarbonFootprint implements IoutputModelInterface {
   // Defined for compatibility. Not used in CCF.
   authParams: object | undefined;
   // name of the data source
@@ -67,7 +67,7 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
   async configure(
     name: string,
     staticParams: object | undefined = undefined
-  ): Promise<IImpactModelInterface> {
+  ): Promise<IoutputModelInterface> {
     this.name = name;
 
     if (staticParams === undefined) {
@@ -116,57 +116,57 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
   }
 
   /**
-   * Calculate the total emissions for a list of observations
+   * Calculate the total emissions for a list of inputs
    *
-   * Each Observation require:
-   *  @param {Object[]} observations  ISO 8601 timestamp string
-   *  @param {string} observations[].timestamp ISO 8601 timestamp string
-   *  @param {number} observations[].duration observation duration in seconds
-   *  @param {number} observations[].cpu-util percentage cpu usage
+   * Each input require:
+   *  @param {Object[]} inputs  ISO 8601 timestamp string
+   *  @param {string} inputs[].timestamp ISO 8601 timestamp string
+   *  @param {number} inputs[].duration input duration in seconds
+   *  @param {number} inputs[].cpu-util percentage cpu usage
    */
-  async calculate(observations: object | object[] | undefined): Promise<any[]> {
-    if (observations === undefined) {
+  async execute(inputs: object | object[] | undefined): Promise<any[]> {
+    if (inputs === undefined) {
       throw new Error('Required Parameters not provided');
     }
-    if (!Array.isArray(observations)) {
-      throw new Error('observations should be an array');
+    if (!Array.isArray(inputs)) {
+      throw new Error('inputs should be an array');
     }
 
     if (this.instanceType === '' || this.vendor === '') {
       throw new Error('Configuration is incomplete');
     }
-    observations.map((observation: KeyValuePair) => {
-      observation['energy'] = this.calculateEnergy(observation);
-      observation['embodied-carbon'] = this.embodiedEmissions(observation);
-      return observation;
+    inputs.map((input: KeyValuePair) => {
+      input['energy'] = this.calculateEnergy(input);
+      input['embodied-carbon'] = this.embodiedEmissions(input);
+      return input;
     });
 
-    return observations;
+    return inputs;
   }
 
   /**
-   * Calculates the energy consumption for a single observation
+   * Calculates the energy consumption for a single input
    * requires
    *
-   * duration: duration of the observation in seconds
+   * duration: duration of the input in seconds
    * cpu-util: cpu usage in percentage
    * timestamp: ISO 8601 timestamp string
    *
    * Uses a spline method for AWS and linear interpolation for GCP and Azure
    */
-  private calculateEnergy(observation: KeyValuePair) {
+  private calculateEnergy(input: KeyValuePair) {
     if (
-      !('duration' in observation) ||
-      !('cpu-util' in observation) ||
-      !('timestamp' in observation)
+      !('duration' in input) ||
+      !('cpu-util' in input) ||
+      !('timestamp' in input)
     ) {
       throw new Error(
-        'Required Parameters duration,cpu,timestamp not provided for observation'
+        'Required Parameters duration,cpu,timestamp not provided for input'
       );
     }
 
-    const duration = observation['duration'];
-    const cpu = observation['cpu-util'];
+    const duration = input['duration'];
+    const cpu = input['cpu-util'];
 
     //  get the wattage for the instance type
     let wattage;
@@ -241,11 +241,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         architecture = this.resolveAwsArchitecture(architecture);
         minWatts +=
           this.computeInstanceUsageByArchitecture['aws'][architecture][
-            'Min Watts'
+          'Min Watts'
           ] ?? 0;
         maxWatts +=
           this.computeInstanceUsageByArchitecture['aws'][architecture][
-            'Max Watts'
+          'Max Watts'
           ] ?? 0;
         count += 1;
       });
@@ -282,11 +282,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         consumption: {
           minWatts:
             this.computeInstanceUsageByArchitecture['gcp'][architecture][
-              'Min Watts'
+            'Min Watts'
             ] * cpus,
           maxWatts:
             this.computeInstanceUsageByArchitecture['gcp'][architecture][
-              'Max Watts'
+            'Max Watts'
             ] * cpus,
         },
         maxvCPUs: parseInt(
@@ -305,11 +305,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
         consumption: {
           minWatts:
             this.computeInstanceUsageByArchitecture['azure'][architecture][
-              'Min Watts'
+            'Min Watts'
             ] * cpus,
           maxWatts:
             this.computeInstanceUsageByArchitecture['azure'][architecture][
-              'Max Watts'
+            'Max Watts'
             ] * cpus,
         },
         name: instance['Virtual Machine'],
@@ -386,11 +386,11 @@ export class CloudCarbonFootprint implements IImpactModelInterface {
   }
 
   /**
-   * Calculates the embodied emissions for a given observation
+   * Calculates the embodied emissions for a given input
    */
-  private embodiedEmissions(observation: KeyValuePair): number {
+  private embodiedEmissions(input: KeyValuePair): number {
     // duration
-    const durationInHours = observation['duration'] / 3600;
+    const durationInHours = input['duration'] / 3600;
     // M = TE * (TR/EL) * (RR/TR)
     // Where:
     // TE = Total Embodied Emissions, the sum of Life Cycle Assessment(LCA) emissions for all hardware components

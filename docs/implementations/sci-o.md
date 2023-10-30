@@ -22,7 +22,7 @@ Read more on [operational emissions](https://github.com/Green-Software-Foundatio
 
 ## Implementation
 
-IEF implements the plugin based on the simple multiplication of the energy and intensity values as inputs. The `sci-o` model expects `energy` and `grid-carbon-intensity` to be provided as `observations`.
+IEF implements the plugin based on the simple multiplication of the energy and intensity values as inputs. The `sci-o` model expects `energy` and `grid-carbon-intensity` to be provided as `inputs`.
 
 > Note that the `energy` field is added to the `impl` by the `sci-e` model only. This means `sci-o` must always be preceded by `sci-e` in a model pipeline. This is always true, even if there is only a single component of `energy` such as `energy-cpu` from `teads-curve`. `sci-e` sums all the available components and adds the sum to the `impl` as `energy`.
 
@@ -66,7 +66,7 @@ graph:
         - sci-o
       config:
         sci-e:
-      observations:
+      inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
           energy-cpu: 0.001

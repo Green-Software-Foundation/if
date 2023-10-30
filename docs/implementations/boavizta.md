@@ -54,7 +54,7 @@ runBoavizta();
 
 ## Example impl
 
-In IEF models are expected to be invoked from an `impl` file. This is a yaml containing the model configuration and observations. The following `impl` initializes and runs the `boavizta-cpu` model:
+In IEF models are expected to be invoked from an `impl` file. This is a yaml containing the model configuration and inputs. The following `impl` initializes and runs the `boavizta-cpu` model:
 
 ```yaml
 name: boavizta-demo
@@ -76,7 +76,7 @@ graph:
         boavizta-cpu:
           core-units: 24
           processor: Intel® Core™ i7-1185G7
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 3600 # Secs
           cpu-util: 18.392

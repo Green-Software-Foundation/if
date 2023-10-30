@@ -23,7 +23,7 @@ A Framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environm
 ## Design Docs
 - ✅ [Terminology](Terminology.md)
 - ✅ [Impact Graph](Impact%20Graph.md)
-	- ✅ [Observation](Observation.md)
+	- ✅ [input](input.md)
 	- ✅ [Durations](Durations.md)
 	- ✅ [Granularity](Granularity.md)
 - ✅ [Impl (Impact YAML)](Impl%20(Impact%20YAML).md)

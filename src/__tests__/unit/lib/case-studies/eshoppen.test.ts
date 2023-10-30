@@ -1,4 +1,4 @@
-import {describe, expect, jest, test} from '@jest/globals';
+import { describe, expect, jest, test } from '@jest/globals';
 import {
   EshoppenMemModel,
   EshoppenModel,
@@ -13,7 +13,7 @@ describe('eshoppen:configure test', () => {
     });
     expect(model).toBeInstanceOf(EshoppenModel);
     await expect(
-      model.calculate([
+      model.execute([
         {
           'n-hours': 1,
           'n-chips': 1,
@@ -30,16 +30,16 @@ describe('eshoppen:configure test', () => {
         'tdp-coeff': 1.02,
       },
     ]);
-    await expect(model.calculate([{}])).rejects.toThrowError();
-    await expect(model.calculate({})).rejects.toThrowError();
-    expect(model.authenticate({test: 'test'})).toBe(undefined);
+    await expect(model.execute([{}])).rejects.toThrowError();
+    await expect(model.execute({})).rejects.toThrowError();
+    expect(model.authenticate({ test: 'test' })).toBe(undefined);
 
     const model2 = await new EshoppenMemModel().configure('eshoppen', {
       type: 'energy-memory',
     });
     expect(model2).toBeInstanceOf(EshoppenMemModel);
     await expect(
-      model2.calculate([
+      model2.execute([
         {
           'n-hours': 1,
           'n-chips': 1,

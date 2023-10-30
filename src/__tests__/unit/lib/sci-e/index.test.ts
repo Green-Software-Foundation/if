@@ -1,14 +1,14 @@
-import {describe, expect, jest, test} from '@jest/globals';
-import {SciEModel} from '../../../../lib/sci-e/index';
+import { describe, expect, jest, test } from '@jest/globals';
+import { SciEModel } from '../../../../lib/sci-e/index';
 
 jest.setTimeout(30000);
 
 describe('sci-e:configure test', () => {
   test('initialize with params', async () => {
-    const impactModel = new SciEModel();
-    await impactModel.configure('test', {});
+    const outputModel = new SciEModel();
+    await outputModel.configure('test', {});
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {
           duration: 3600,
           'energy-cpu': 1,

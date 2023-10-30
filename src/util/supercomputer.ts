@@ -1,13 +1,13 @@
-import {ModelsUniverse} from './models-universe';
-import {Observatory} from './observatory';
+import { ModelsUniverse } from './models-universe';
+import { Observatory } from './observatory';
 
-import {ChildInformation} from '../types/supercomputer';
+import { ChildInformation } from '../types/supercomputer';
 
 /**
  * Computer for `impl` documents.
  */
 export class Supercomputer {
-  private olderChild: ChildInformation = {name: '', info: {}};
+  private olderChild: ChildInformation = { name: '', info: {} };
   private impl: any;
   private modelsHandbook: ModelsUniverse;
 
@@ -36,8 +36,8 @@ export class Supercomputer {
   /**
    * Adds config entries to each obsercation object passed.
    */
-  private enrichObservations(
-    observations: any[],
+  private enrichinputs(
+    inputs: any[],
     config: any[],
     nestedConfig: any[]
   ) {
@@ -45,8 +45,8 @@ export class Supercomputer {
     const nestedConfigValues =
       nestedConfig && this.flattenConfigValues(nestedConfig);
 
-    return observations.map((observation: any) => ({
-      ...observation,
+    return inputs.map((input: any) => ({
+      ...input,
       ...configValues,
       ...nestedConfigValues,
     }));
@@ -54,12 +54,12 @@ export class Supercomputer {
 
   /**
    * If child is top level, then initializes `this.olderChild`.
-   * If `children` object contains `children` property, it means observations are nested (calls compute again).
-   * Otherwise enriches observations, passes them to Observatory.
-   * For each model from pipeline Observatory gathers observations. Then results are stored.
+   * If `children` object contains `children` property, it means inputs are nested (calls compute again).
+   * Otherwise enriches inputs, passes them to Observatory.
+   * For each model from pipeline Observatory gathers inputs. Then results are stored.
    */
-  private async calculateImpactsForChild(childrenObject: any, params: any) {
-    const {childName, areChildrenNested} = params;
+  private async calculateoutputsForChild(childrenObject: any, params: any) {
+    const { childName, areChildrenNested } = params;
 
     if (!areChildrenNested) {
       this.olderChild = {
@@ -68,23 +68,23 @@ export class Supercomputer {
       };
     }
 
-    const {pipeline, observations, config} = this.olderChild.info;
+    const { pipeline, inputs, config } = this.olderChild.info;
 
     if ('children' in childrenObject[childName]) {
       return this.compute(childrenObject[childName].children);
     }
 
-    const specificObservations = areChildrenNested
-      ? childrenObject[childName].observations
-      : observations;
+    const specificinputs = areChildrenNested
+      ? childrenObject[childName].inputs
+      : inputs;
 
-    const enrichedObservations = this.enrichObservations(
-      specificObservations,
+    const enrichedinputs = this.enrichinputs(
+      specificinputs,
       config,
       childrenObject[childName].config
     );
 
-    const observatory = new Observatory(enrichedObservations);
+    const observatory = new Observatory(enrichedinputs);
 
     for (const modelName of pipeline) {
       const params = config && config[modelName];
@@ -99,17 +99,17 @@ export class Supercomputer {
     if (areChildrenNested) {
       this.impl.graph.children[this.olderChild.name].children[
         childName
-      ].impacts = observatory.getImpacts();
+      ].outputs = observatory.getoutputs();
 
       return;
     }
 
-    this.impl.graph.children[this.olderChild.name].impacts =
-      observatory.getImpacts();
+    this.impl.graph.children[this.olderChild.name].outputs =
+      observatory.getoutputs();
   }
 
   /**
-   * Checks if object is top level children or nested, then runs through all children and calculates impacts.
+   * Checks if object is top level children or nested, then runs through all children and calculates outputs.
    */
   public async compute(childrenObject?: any) {
     const implOrChildren = childrenObject || this.impl;
@@ -120,7 +120,7 @@ export class Supercomputer {
     const childrenNames = Object.keys(children);
 
     for (const childName of childrenNames) {
-      await this.calculateImpactsForChild(children, {
+      await this.calculateoutputsForChild(children, {
         childName,
         areChildrenNested,
       });

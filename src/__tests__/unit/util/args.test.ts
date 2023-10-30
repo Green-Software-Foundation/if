@@ -27,15 +27,15 @@ jest.mock('ts-command-line-args', () => ({
 }));
 
 import path = require('path');
-import {describe, expect, it, jest} from '@jest/globals';
+import { describe, expect, it, jest } from '@jest/globals';
 
-import {parseProcessArgument} from '../../../util/args';
+import { parseProcessArgument } from '../../../util/args';
 
-import {STRINGS, CONFIG} from '../../../config';
+import { STRINGS, CONFIG } from '../../../config';
 
-const {RIMPL} = CONFIG;
-const {HELP} = RIMPL;
-const {WRONG_CLI_ARGUMENT} = STRINGS;
+const { impact } = CONFIG;
+const { HELP } = impact;
+const { WRONG_CLI_ARGUMENT } = STRINGS;
 
 describe('util/args: ', () => {
   const originalEnv = process.env;

@@ -1,15 +1,15 @@
-import {IImpactModelInterface} from '../interfaces';
+import { IoutputModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-import {KeyValuePair} from '../../types/common';
+import { KeyValuePair } from '../../types/common';
 
-export {KeyValuePair} from '../../types/common';
+export { KeyValuePair } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {ESHOPPEN, ESHOPPEN_CPU, ESHOPPEN_MEM, ESHOPPEN_NET} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { ESHOPPEN, ESHOPPEN_CPU, ESHOPPEN_MEM, ESHOPPEN_NET } = MODEL_IDS;
 
-export class EshoppenModel implements IImpactModelInterface {
+export class EshoppenModel implements IoutputModelInterface {
   authParams: object | undefined = undefined;
   modelType: 'energy-cpu' | 'energy-memory' | 'energy-network' | 'e-sum' =
     'energy-cpu';
@@ -20,22 +20,22 @@ export class EshoppenModel implements IImpactModelInterface {
     this.authParams = authParams;
   }
 
-  async calculate(observations: object | object[] | undefined): Promise<any[]> {
-    if (!Array.isArray(observations)) {
-      throw new Error('observations should be an array');
+  async execute(inputs: object | object[] | undefined): Promise<any[]> {
+    if (!Array.isArray(inputs)) {
+      throw new Error('inputs should be an array');
     }
 
-    const tunedObservations = observations.map((observation: KeyValuePair) => {
+    const tunedinputs = inputs.map((input: KeyValuePair) => {
       switch (this.modelType) {
         case 'energy-cpu': {
           //     energy-cpu = n-hours * n-chips * thermal-design-power * thermal-design-power-coeff
-          observation['energy-cpu'] =
-            (observation['n-hours'] *
-              observation['n-chips'] *
-              observation['thermal-design-power'] *
-              observation['tdp-coeff']) /
+          input['energy-cpu'] =
+            (input['n-hours'] *
+              input['n-chips'] *
+              input['thermal-design-power'] *
+              input['tdp-coeff']) /
             1000;
-          if (isNaN(observation['energy-cpu'])) {
+          if (isNaN(input['energy-cpu'])) {
             throw new Error('energy-cpu not computable');
           }
 
@@ -43,14 +43,14 @@ export class EshoppenModel implements IImpactModelInterface {
         }
         case 'energy-memory': {
           // energy-memory-tdp  =  n-hours * n-chip * tdp-mem * tdp-coeff
-          observation['energy-memory'] =
-            (observation['n-hours'] *
-              observation['n-chips'] *
-              observation['tdp-mem'] *
-              observation['tdp-coeff']) /
+          input['energy-memory'] =
+            (input['n-hours'] *
+              input['n-chips'] *
+              input['tdp-mem'] *
+              input['tdp-coeff']) /
             1000;
 
-          if (isNaN(observation['energy-memory'])) {
+          if (isNaN(input['energy-memory'])) {
             throw new Error('energy-memory not computable');
           }
 
@@ -58,12 +58,12 @@ export class EshoppenModel implements IImpactModelInterface {
         }
         case 'energy-network': {
           // energy-network = data-in + data-out * net-energy
-          observation['energy-network'] =
-            ((observation['data-in'] + observation['data-out']) *
-              observation['net-energy']) /
+          input['energy-network'] =
+            ((input['data-in'] + input['data-out']) *
+              input['net-energy']) /
             1000;
 
-          if (isNaN(observation['energy-network'])) {
+          if (isNaN(input['energy-network'])) {
             throw new Error('energy-network not computable');
           }
 
@@ -71,12 +71,12 @@ export class EshoppenModel implements IImpactModelInterface {
         }
         case 'e-sum': {
           // e-sum = energy-cpu + energy-memory + energy-network
-          observation['energy'] =
-            observation['energy-cpu'] +
-            observation['energy-memory'] +
-            observation['energy-network'];
+          input['energy'] =
+            input['energy-cpu'] +
+            input['energy-memory'] +
+            input['energy-network'];
 
-          if (isNaN(observation['energy'])) {
+          if (isNaN(input['energy'])) {
             throw new Error('energy not computable');
           }
 
@@ -87,16 +87,16 @@ export class EshoppenModel implements IImpactModelInterface {
         }
       }
 
-      return observation;
+      return input;
     });
 
-    return tunedObservations;
+    return tunedinputs;
   }
 
   async configure(
     name: string,
     staticParams: object | undefined
-  ): Promise<IImpactModelInterface> {
+  ): Promise<IoutputModelInterface> {
     this.staticParams = staticParams;
     this.name = name;
     if (

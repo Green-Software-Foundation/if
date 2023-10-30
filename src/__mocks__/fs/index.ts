@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {expect} from '@jest/globals';
+import { expect } from '@jest/globals';
 
 import * as YAML from 'js-yaml';
 
@@ -28,7 +28,7 @@ export const readFile = async (_filePath: string, _format: string) => {
           boavizta-cpu:
             core-units: 24
             processor: Intel® Core™ i7-1185G7
-        observations:
+        inputs:
           - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
             duration: 3600 # Secs
             cpu-util: 18.392
@@ -48,7 +48,7 @@ export const writeFile = async (pathToFile: string, content: string) => {
   const mockContent = {
     name: 'mock-name',
   };
-  const mockObject = YAML.dump(mockContent, {noRefs: true});
+  const mockObject = YAML.dump(mockContent, { noRefs: true });
 
   expect(pathToFile).toBe(mockPathToFile);
   expect(content).toBe(mockObject);

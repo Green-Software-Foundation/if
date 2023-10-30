@@ -4,7 +4,7 @@ abstract: Why granularity is important to impact graphing and the two main types
 ---
 # Granularity
 
-An [Impact Graph](Impact%20Graph.md) (graph) can be created that is very coarse-grained, a single top-level component, with a single observation of long duration.
+An [Impact Graph](Impact%20Graph.md) (graph) can be created that is very coarse-grained, a single top-level component, with a single input of long duration.
 
 ```yaml
 name: My application
@@ -58,9 +58,9 @@ graph: # sum = 52
 
 A graph can calculate a single Impact Metric for its whole duration (graph duration) or create a time series of Impact Metrics for smaller durations (impact durations).
 
-The engine will handle normalizing, bucketing, and slicing time to generate any output time series from any sets of input observations. The input observations don't need to be in the same frequency or interval as the output time series. They don't need to be synchronized with the other components or output impacts.
+The engine will handle normalizing, bucketing, and slicing time to generate any output time series from any sets of input inputs. The input inputs don't need to be in the same frequency or interval as the output time series. They don't need to be synchronized with the other components or output impacts.
 
-However, the more granular observations you can provide, the more accurate the output impact metric time series will be. More observations of shorter duration drive temporal granularity.
+However, the more granular inputs you can provide, the more accurate the output impact metric time series will be. More inputs of shorter duration drive temporal granularity.
 
 ```yaml
 name: My application
@@ -78,6 +78,6 @@ graph: # sum = 52,51,...
     email-servers: 5,5,...
 ```
 
-> [!note] Adding temporal granularity surfaces information regarding when your components generate the most impact. This is achieved by adding in more observations of shorter durations. Instead of one observation per hour, can you provide one per minute?
+> [!note] Adding temporal granularity surfaces information regarding when your components generate the most impact. This is achieved by adding in more inputs of shorter durations. Instead of one input per hour, can you provide one per minute?
 
 

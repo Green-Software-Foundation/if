@@ -37,12 +37,12 @@ graph:
           functional-unit-duration: 1
           functional-unit-time: minutes
           functional-unit: requests
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00
           duration: 1
           cpu-util: 55
           requests: 100
-      impacts:
+      outputs:
         - timestamp: 2023-07-06T00:00
           duration: 1
           cpu-util: 55

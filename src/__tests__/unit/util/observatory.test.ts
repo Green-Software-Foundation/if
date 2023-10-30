@@ -1,6 +1,6 @@
-import {describe, expect, it, jest} from '@jest/globals';
-import {Observatory} from '../../../util/observatory';
-import {BoaviztaCpuImpactModel} from '../../../lib';
+import { describe, expect, it, jest } from '@jest/globals';
+import { Observatory } from '../../../util/observatory';
+import { BoaviztaCpuoutputModel } from '../../../lib';
 
 describe('util/observatory: ', () => {
   const expectedValue = [
@@ -18,21 +18,21 @@ describe('util/observatory: ', () => {
       'energy-cpu': 2.5,
       'embodied-carbon': 0.619,
     },
-  ]; // model.calculate method's result (impact mock).
+  ]; // model.execute method's result (output mock).
 
   describe('init Observatory: ', () => {
     it('initializes object with required properties.', () => {
-      const observations: any = [];
-      const lab = new Observatory(observations);
+      const inputs: any = [];
+      const lab = new Observatory(inputs);
 
       expect(lab).toHaveProperty('doInvestigationsWith');
-      expect(lab).toHaveProperty('getImpacts');
-      expect(lab).toHaveProperty('getObservations');
+      expect(lab).toHaveProperty('getoutputs');
+      expect(lab).toHaveProperty('getinputs');
     });
   });
 
   describe('doInvestgationsWith(): ', () => {
-    const observations: any = [
+    const inputs: any = [
       {
         timestamp: '2023-07-06T00:00',
         duration: 3600,
@@ -53,31 +53,31 @@ describe('util/observatory: ', () => {
     };
 
     it('returns Observatory class.', async () => {
-      const lab = new Observatory(observations);
+      const lab = new Observatory(inputs);
 
-      const boaviztaModel = await new BoaviztaCpuImpactModel().configure(
+      const boaviztaModel = await new BoaviztaCpuoutputModel().configure(
         'test',
         params
       );
 
-      boaviztaModel.calculate = jest.fn(() => Promise.resolve(expectedValue));
+      boaviztaModel.execute = jest.fn(() => Promise.resolve(expectedValue));
 
       const result = await lab.doInvestigationsWith(boaviztaModel);
       expect(result).toBeInstanceOf(Observatory);
     });
 
-    it('reuses previous impact value instead of observations.', async () => {
-      const lab = new Observatory(observations);
+    it('reuses previous output value instead of inputs.', async () => {
+      const lab = new Observatory(inputs);
 
-      const boaviztaModel = await new BoaviztaCpuImpactModel().configure(
+      const boaviztaModel = await new BoaviztaCpuoutputModel().configure(
         'test',
         params
       );
 
-      boaviztaModel.calculate = jest.fn(() => Promise.resolve(expectedValue));
+      boaviztaModel.execute = jest.fn(() => Promise.resolve(expectedValue));
       const result1 = await lab.doInvestigationsWith(boaviztaModel);
 
-      const observations1: any = [
+      const inputs1: any = [
         {
           timestamp: '2023-07-06T00:00',
           duration: 3600,
@@ -96,15 +96,15 @@ describe('util/observatory: ', () => {
         },
       ];
 
-      boaviztaModel.calculate = jest.fn(() => Promise.resolve(observations1));
+      boaviztaModel.execute = jest.fn(() => Promise.resolve(inputs1));
       const result2 = await lab.doInvestigationsWith(boaviztaModel);
 
-      expect(result1.getObservations()).toEqual(result2.getObservations());
+      expect(result1.getinputs()).toEqual(result2.getinputs());
     });
   });
 
-  describe('getImpacts(): ', () => {
-    const observations: any = [
+  describe('getoutputs(): ', () => {
+    const inputs: any = [
       {
         timestamp: '2023-07-06T00:00',
         duration: 3600,
@@ -124,32 +124,32 @@ describe('util/observatory: ', () => {
       verbose: true,
     };
 
-    it('returns empty impacts data.', () => {
-      const lab = new Observatory(observations);
+    it('returns empty outputs data.', () => {
+      const lab = new Observatory(inputs);
 
       const expectedValue: any = [];
 
-      expect(lab.getImpacts()).toEqual(expectedValue);
+      expect(lab.getoutputs()).toEqual(expectedValue);
     });
 
-    it('returns calculated impacts data.', async () => {
-      const lab = new Observatory(observations);
-      const boaviztaModel = await new BoaviztaCpuImpactModel().configure(
+    it('returns executed outputs data.', async () => {
+      const lab = new Observatory(inputs);
+      const boaviztaModel = await new BoaviztaCpuoutputModel().configure(
         'test',
         params
       );
 
-      boaviztaModel.calculate = jest.fn(() => Promise.resolve(expectedValue));
+      boaviztaModel.execute = jest.fn(() => Promise.resolve(expectedValue));
       const result = await lab.doInvestigationsWith(boaviztaModel);
 
       expect(result).toBeInstanceOf(Observatory);
-      expect(lab.getImpacts()).toEqual(expectedValue);
+      expect(lab.getoutputs()).toEqual(expectedValue);
     });
   });
 
-  describe('getObservations(): ', () => {
+  describe('getinputs(): ', () => {
     it('initalized given obsercations.', () => {
-      const observations: any = [
+      const inputs: any = [
         {
           timestamp: '2023-07-06T00:00',
           duration: 3600,
@@ -162,9 +162,9 @@ describe('util/observatory: ', () => {
         },
       ];
 
-      const lab = new Observatory(observations);
+      const lab = new Observatory(inputs);
 
-      expect(lab.getObservations()).toEqual(observations);
+      expect(lab.getinputs()).toEqual(inputs);
     });
   });
 });

@@ -23,21 +23,21 @@ Calculation --> Enrichment --> Normalization --> Aggregation
 
 ## Calculation
 
-We loop through the impact graph and component node by component node, pass in the provided observations to the configured model plugins, and capture the outputs as a series of Impact Metrics.
+We loop through the impact graph and component node by component node, pass in the provided inputs to the configured model plugins, and capture the outputs as a series of Impact Metrics.
 
 > [!note] 
 > 
-> If multiple observations have been provided, we provide **multiple** output impact metrics. At this stage 1-1 mapping exists between an Observation and an output Impact Metric.
+> If multiple inputs have been provided, we provide **multiple** output impact metrics. At this stage 1-1 mapping exists between an input and an output Impact Metric.
 
 
 > [!important] 
-> Each input observation is for a time and duration, and each output impact metric is for the same time and duration. We should link an Impact Metric to the exact observation used to generate it.
+> Each input input is for a time and duration, and each output impact metric is for the same time and duration. We should link an Impact Metric to the exact input used to generate it.
 
-Represented as [Impl (Impact YAML)](Impl%20(Impact%20YAML).md), the calculation phase would compute every component node in the tree with **observations** like so:
+Represented as [Impl (Impact YAML)](Impl%20(Impact%20YAML).md), the calculation phase would compute every component node in the tree with **inputs** like so:
 
 ```yaml
 component:
-  observations: 
+  inputs: 
       - timestamp: 2023-07-06T00:00
         duration: 15 
         cpu: 33%
@@ -63,7 +63,7 @@ component:
       - timestamp: 2023-07-06T20:00
         duration: 5
         energy: 18 mWh  
-  observations: 
+  inputs: 
       - timestamp: 2023-07-06T00:00
         duration: 15 
         cpu: 33%
@@ -144,7 +144,7 @@ component:
 The next phase is for each leaf node to normalize the output impact metrics to a time series defined by a global *impact duration*.
 
 > [!warning] 
-> After normalization, we will lose the 1-1 mapping between input observations and output impact metrics, and the impact metrics will snap to a new time series defined by the impact duration.
+> After normalization, we will lose the 1-1 mapping between input inputs and output impact metrics, and the impact metrics will snap to a new time series defined by the impact duration.
 
 >[!note]
 > The output impact metric is effectively zero if no impact metric overlaps a given time and duration. It means nothing was running then, so there could not be any emissions from the component.
@@ -213,7 +213,7 @@ component:
         energy: 18 mWh  
         grid-intensity: 470 gCO2e / kWh
         operational-carbon: 2.8g gCO2e         
-  observations: 
+  inputs: 
       - timestamp: 2023-07-06T00:00
         duration: 15 mins
         cpu: 33%
@@ -356,4 +356,4 @@ component:
 
 > [!tip] 
 > 
-> The same normalization plugin code could provide this time series of functional unit denominators. We pass in a fake component with observations that represent the functional unit denominators, pass through the normalization phase, and generate a series of users for the global time series of impact durations.
+> The same normalization plugin code could provide this time series of functional unit denominators. We pass in a fake component with inputs that represent the functional unit denominators, pass through the normalization phase, and generate a series of users for the global time series of impact durations.

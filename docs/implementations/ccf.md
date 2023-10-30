@@ -24,7 +24,7 @@ You can read a detailed explanation ofn the calculations in the [CCF docs](https
 
 ## Usage
 
-In IEF, the model is called from an `impl`. An `impl` is a `.yaml` file that contains configuration metadata and usage observations. This is interpreted by the command line tool, `rimpl`. There, the model's `configure` method is called first. The model config should define a `vendor` and `instance-type`. Each observation is expected to contain `duration`,`cpu-util` and `timestamp` fields.
+In IEF, the model is called from an `impl`. An `impl` is a `.yaml` file that contains configuration metadata and usage inputs. This is interpreted by the command line tool, `rimpl`. There, the model's `configure` method is called first. The model config should define a `vendor` and `instance-type`. Each input is expected to contain `duration`,`cpu-util` and `timestamp` fields.
 
 You can see example Typescript invocations for each vendor below:
 
@@ -105,7 +105,7 @@ graph:
         ccf:
           vendor: aws
           instance_type: m5n.large
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 1
           cpu-util: 10
@@ -135,7 +135,7 @@ graph:
         ccf:
           vendor: aws
           instance_type: m5n.large
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00
           duration: 1
           cpu: 10

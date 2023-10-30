@@ -50,13 +50,13 @@ graph:
           functional-unit: requests
       children:
         child-1:
-          observations:
+          inputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 50
               e-net: 0.000811
               requests: 380
-          impacts:
+          outputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 50
@@ -76,15 +76,15 @@ graph:
               energy: 0.00013541666666666666
               embodied-carbon: 7.16324200913242
               operational-carbon: 0.061885416666666665
-              sci: 0.01901349322578707
+              sci: 0.001901349322578707
         child-2:
-          observations:
+          inputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 33
               e-net: 0.000811
               requests: 380
-          impacts:
+          outputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 33
@@ -104,4 +104,4 @@ graph:
               energy: 0.00011243956355860435
               embodied-carbon: 7.16324200913242
               operational-carbon: 0.05138488054628219
-              sci: 0.018985860235996584
+              sci: 0.0018985860235996583

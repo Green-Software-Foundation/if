@@ -1,13 +1,13 @@
-import {IImpactModelInterface} from '../interfaces';
+import { IoutputModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-import {KeyValuePair} from '../../types/common';
+import { KeyValuePair } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {SCI_ACCENTURE} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { SCI_ACCENTURE } = MODEL_IDS;
 
-export class SciAccentureModel implements IImpactModelInterface {
+export class SciAccentureModel implements IoutputModelInterface {
   authParams: object | undefined = undefined;
   staticParams: object | undefined;
   name: string | undefined;
@@ -16,28 +16,28 @@ export class SciAccentureModel implements IImpactModelInterface {
     this.authParams = authParams;
   }
 
-  async calculate(observations: object | object[] | undefined): Promise<any[]> {
-    if (!Array.isArray(observations)) {
-      throw new Error('observations should be an array');
+  async execute(inputs: object | object[] | undefined): Promise<any[]> {
+    if (!Array.isArray(inputs)) {
+      throw new Error('inputs should be an array');
     }
 
-    const tunedObservations = observations.map((observation: KeyValuePair) => {
-      observation['sci_total'] = observation['sci'] * 1.05;
+    const tunedinputs = inputs.map((input: KeyValuePair) => {
+      input['sci_total'] = input['sci'] * 1.05;
 
-      if (isNaN(observation['sci'])) {
+      if (isNaN(input['sci'])) {
         throw new Error('sci not computable');
       }
 
-      return observation;
+      return input;
     });
 
-    return tunedObservations;
+    return tunedinputs;
   }
 
   async configure(
     name: string,
     staticParams: object | undefined
-  ): Promise<IImpactModelInterface> {
+  ): Promise<IoutputModelInterface> {
     this.staticParams = staticParams;
     this.name = name;
     return this;
