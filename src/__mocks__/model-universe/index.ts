@@ -1,4 +1,4 @@
-import { IOutputModelInterface } from '../../lib';
+import {IOutputModelInterface} from '../../lib';
 
 import {
   ImplInitializeModel,
@@ -14,9 +14,9 @@ class MockModel implements IOutputModelInterface {
     return Promise.resolve(this);
   }
   execute(): Promise<any[]> {
-    return Promise.resolve([{ data: 'mock-data' }]);
+    return Promise.resolve([{data: 'mock-data'}]);
   }
-  authenticate(): void { }
+  authenticate(): void {}
 }
 
 /**
@@ -46,7 +46,7 @@ export class ModelsUniverse {
    * Initializes and registers model.
    */
   public writeDown(model: ImplInitializeModel) {
-    const { name } = model;
+    const {name} = model;
 
     const Model = this.handModelByCriteria();
 

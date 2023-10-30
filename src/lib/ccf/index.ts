@@ -1,9 +1,9 @@
 import Spline from 'typescript-cubic-spline';
 
-import { IComputeInstance, IOutputModelInterface } from '../interfaces';
-import { INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING } from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
+import {IComputeInstance, IOutputModelInterface} from '../interfaces';
+import {INSTANCE_TYPE_COMPUTE_PROCESSOR_MAPPING} from '@cloud-carbon-footprint/aws/dist/lib/AWSInstanceTypes';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
 import * as AWS_INSTANCES from './aws-instances.json';
 import * as GCP_INSTANCES from './gcp-instances.json';
@@ -15,10 +15,10 @@ import * as GCP_EMBODIED from './gcp-embodied.json';
 import * as AWS_EMBODIED from './aws-embodied.json';
 import * as AZURE_EMBODIED from './azure-embodied.json';
 
-import { KeyValuePair, Interpolation } from '../../types/common';
+import {KeyValuePair, Interpolation} from '../../types/common';
 
-const { MODEL_IDS } = CONFIG;
-const { CCF } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {CCF} = MODEL_IDS;
 
 export class CloudCarbonFootprint implements IOutputModelInterface {
   // Defined for compatibility. Not used in CCF.
@@ -241,11 +241,11 @@ export class CloudCarbonFootprint implements IOutputModelInterface {
         architecture = this.resolveAwsArchitecture(architecture);
         minWatts +=
           this.computeInstanceUsageByArchitecture['aws'][architecture][
-          'Min Watts'
+            'Min Watts'
           ] ?? 0;
         maxWatts +=
           this.computeInstanceUsageByArchitecture['aws'][architecture][
-          'Max Watts'
+            'Max Watts'
           ] ?? 0;
         count += 1;
       });
@@ -282,11 +282,11 @@ export class CloudCarbonFootprint implements IOutputModelInterface {
         consumption: {
           minWatts:
             this.computeInstanceUsageByArchitecture['gcp'][architecture][
-            'Min Watts'
+              'Min Watts'
             ] * cpus,
           maxWatts:
             this.computeInstanceUsageByArchitecture['gcp'][architecture][
-            'Max Watts'
+              'Max Watts'
             ] * cpus,
         },
         maxvCPUs: parseInt(
@@ -305,11 +305,11 @@ export class CloudCarbonFootprint implements IOutputModelInterface {
         consumption: {
           minWatts:
             this.computeInstanceUsageByArchitecture['azure'][architecture][
-            'Min Watts'
+              'Min Watts'
             ] * cpus,
           maxWatts:
             this.computeInstanceUsageByArchitecture['azure'][architecture][
-            'Max Watts'
+              'Max Watts'
             ] * cpus,
         },
         name: instance['Virtual Machine'],

@@ -1,4 +1,4 @@
-import { IOutputModelInterface } from '../lib';
+import {IOutputModelInterface} from '../lib';
 
 /**
  * Observatory calculates outputs based on `inputs` and `model`.

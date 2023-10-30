@@ -1,4 +1,4 @@
-import { IOutputModelInterface } from '../lib';
+import {IOutputModelInterface} from '../lib';
 
 type InitializeOptions = {
   allocation: string;

@@ -1,12 +1,12 @@
-import { IOutputModelInterface } from '../interfaces';
+import {IOutputModelInterface} from '../interfaces';
 
-import { CONFIG } from '../../config';
+import {CONFIG} from '../../config';
 
-import { KeyValuePair } from '../../types/common';
+import {KeyValuePair} from '../../types/common';
 import * as AWS_INSTANCES from './aws-instances.json';
 
-const { MODEL_IDS } = CONFIG;
-const { CLOUD_INSTANCE_METADATA } = MODEL_IDS;
+const {MODEL_IDS} = CONFIG;
+const {CLOUD_INSTANCE_METADATA} = MODEL_IDS;
 
 export class CloudInstanceMetadataModel implements IOutputModelInterface {
   authParams: object | undefined = undefined;
