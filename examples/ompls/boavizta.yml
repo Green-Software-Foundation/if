@@ -17,6 +17,7 @@ graph:
         boavizta-cpu:
           core-units: 24
           physical-processor: Intel® Core™ i7-1185G7
+          location: USA
       observations:
         - timestamp: 2023-07-06T00:00
           duration: 3600
@@ -30,12 +31,14 @@ graph:
           cpu-util: 18.392
           core-units: 24
           physical-processor: Intel® Core™ i7-1185G7
-          e-cpu: .nan
-          embodied-carbon: .nan
+          location: USA
+          e-cpu: 0.33055555555555555
+          embodied-carbon: 0.8
         - timestamp: 2023-08-06T00:00
           duration: 3600
           cpu-util: 16
           core-units: 24
           physical-processor: Intel® Core™ i7-1185G7
-          e-cpu: .nan
-          embodied-carbon: .nan
+          location: USA
+          e-cpu: 0.3066666666666667
+          embodied-carbon: 0.8
