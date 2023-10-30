@@ -2,6 +2,39 @@
 
 [SCI](https://sci-guide.greensoftware.foundation/) is the final value the framework ultimately aims to return for some component or application. It represents the amount of carbon emitted per [functional unit](https://sci-guide.greensoftware.foundation/R/).
 
+## Model name
+
+IF recognizes the SCI model as `sci` 
+
+## Parameters
+
+### Model config
+
+`functional-unit`: the functional unit in which to express the carbon impact
+`functional-unit-time`: the time unit to be used for functional unit conversions, e.g. `mins`
+`functional-unit-duration`: the length of time the functional unit should cover, in units of `functional-time-unit`
+
+### Observations
+
+either:
+
+- `carbon`: total carbon, i.e. sum of embodied and operational, in gCO2eq
+
+or both of
+
+- `operational-carbon`: carbon emitted during an application's operation in gCO2eq
+- `embodied-carbon`: carbon emitted in a component's manufacture and disposal in gCO2eq
+
+plus:
+
+- `timestamp`: a timestamp for the observation
+- `duration`: the amount of time, in seconds, that the observation covers.
+
+## Returns
+
+- `operational-carbon`: the carbon emitted during a applications operation, in gCO2eq
+
+
 ## Calculation
 
 SCI is calculated as:

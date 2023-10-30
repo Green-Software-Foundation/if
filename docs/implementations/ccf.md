@@ -2,6 +2,29 @@
 
 "Cloud Carbon Footprint is an open source tool that provides visibility and tooling to measure, monitor and reduce your cloud carbon emissions. We use best practice methodologies to convert cloud utilization into estimated energy usage and carbon emissions, producing metrics and carbon savings estimates that can be shared with employees, investors, and other stakeholders." - [CCF](https://www.cloudcarbonfootprint.org/)
 
+## Model name
+
+IEF recognizes the Cloud Carbon Footprint model as `ccf`.
+
+## Parameters
+
+### model config
+
+- `vendor`: the cloud platform provider, e.g. `aws`
+- `instance-type`: the name of the specific instance being used, e.g. `m5n.large`
+
+### observations
+
+- `cpu-util`: percentage CPU utilization for a given observation
+- `duration`: the amount of time the observation covers, in seconds
+- `timestamp`: a timestamp for the observation
+ 
+## Returns
+
+- `embodied-carbon`: carbon emitted in manufacturing the device, in gCO2eq
+- `energy`: energy used by CPU in kWh
+  
+
 ## IEF Implementation
 
 IEF reimplements the Cloud Carbon Footprint methodology fro scratch conforming to the IEF specification. This means the CCF models can be run inside IEF without any external API calls and can be invoked as part of a model pipeline defined in an `impl`.
