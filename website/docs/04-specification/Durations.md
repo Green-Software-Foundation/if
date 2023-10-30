@@ -17,7 +17,7 @@ abstract: A core component of impact graphing is the concept of time and specifi
 - Duration and time is a core component of any impact measurement, every observation is for a time and duration and every output impact metric is for a time and duration. 
 - The times and durations of input observations and output impact metrics do not have to match.
 
-![](../static/img/87a9d57e7434b7b59eb30b1b61633cb5.png)
+![](../../static/img/87a9d57e7434b7b59eb30b1b61633cb5.png)
 %%[🖋 Edit in Excalidraw](Durations%2024%20hr.excalidraw.md), and the [dark exported image](Durations%2024%20hr.excalidraw.dark.png)%%
 
 
@@ -25,22 +25,22 @@ abstract: A core component of impact graphing is the concept of time and specifi
 
 An IG can calculate one summary impact metric for the whole duration of the IG. 
 
-![](../static/img/df140bba2035b620ecde3a563c1186c1.png)
+![](../../static/img/df140bba2035b620ecde3a563c1186c1.png)
 %%[🖋 Edit in Excalidraw](Durations%20-%20Single%20Impact%20-%20One%20Obs.excalidraw.md), and the [dark exported image](Durations%20-%20Bucket.excalidraw.dark.png)%%
 
 Or it can compute a **time series** of output metrics for smaller buckets of time, for example when you have multiple components that scale up/down, start/stop at different times during the observation window.
 
-![](../static/img/c911708f4edeb6d3ca7a96c724f64826.png)
+![](../../static/img/c911708f4edeb6d3ca7a96c724f64826.png)
 %%[🖋 Edit in Excalidraw](Durations%20-%20Bucket%20-%20Mult%20Comp%20-%20One%20Obs.excalidraw.md), and the [dark exported image](Durations%20-%20Bucket%20-%20Mult%20Comp%20-%20One%20Obs.excalidraw%201.dark.png)%%
 
 If you just have one observation for one component, or one observation for multiple components that span the observation window, then generating a time series isn't so useful. It will just attribute the total impact equally across every time bucket, like so:
 
-![](../static/img/af9a3bf0c4158e7262be6f38dbd56cc1.png)
+![](../../static/img/af9a3bf0c4158e7262be6f38dbd56cc1.png)
 %%[🖋 Edit in Excalidraw](Durations%20-%20Multi%20Impact%20-%20One%20Obs.excalidraw.md), and the [dark exported image](Durations%20-%20Multi%20Impact%20-%20One%20Obs.excalidraw.dark.png)%%
 
 When it comes to outputting time series it's much more likely to surface useful information if there are multiple fine grained observations about each component in our system. For example in the image below we have one component with a time series of observations (cpu utilization)
 
-![](../static/img/94f54a84d6331d9aa72ee0d8c0386c9f.png)
+![](../../static/img/94f54a84d6331d9aa72ee0d8c0386c9f.png)
 %%[🖋 Edit in Excalidraw](Durations%20-%20Bucket%20-%20Mult%20Impact%20-%20Mult%20Obs.excalidraw.md), and the [dark exported image](Durations%20-%20Bucket%20-%20Mult%20Impact%20-%20Mult%20Obs.excalidraw.dark.png)%%
 
 ### No Synchronization Required

@@ -61,7 +61,7 @@ Each component in your graph needs observations; we need observations to compute
 
 A helpful feature of the engine is that you don't need to synchronize all your input observations for all your components with each other. You can provide observations at different intervals for every component in the graph. 
 
-![](../static/img/72efce519e8c2264406864148a8a3151.png)
+![](../../static/img/72efce519e8c2264406864148a8a3151.png)
 %%[🖋 Edit in Excalidraw](Observations%20-%20Synchronization.excalidraw.md), and the [dark exported image](Observations%20-%20Synchronization.excalidraw.dark.png)%%
 
 In the [](Computation%20Pipeline.md#Normalization|Normalization) phase of the computation of a graph, we do synchronize the output Impact Metrices, but we don't need the input Observations synchronized to do this.

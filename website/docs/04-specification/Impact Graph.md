@@ -30,7 +30,7 @@ The graph's leaf nodes (**Components**) represent the components that need impac
 
 The intermediate nodes (**Groupings**) represent a grouping of leaf nodes for useful aggregation, e.g. **backend** intermediate node might contain all the leaf nodes for the backend components.
 
-![](../static/img/3f18767c1a55cee416e3de70314609e3.png)
+![](../../static/img/3f18767c1a55cee416e3de70314609e3.png)
 %%[[Impact Graph - Graph Summary.excalidraw|🖋 Edit in Excalidraw]], and the [[Impact Graph 2023-07-29 20.53.34.excalidraw.dark.png|dark exported image]]%%
 
 ### Component
@@ -40,14 +40,14 @@ Each component has some configuration, some observations, and a model.
 - **Observations** are a time series of data points used as inputs to the model.
 - **Model** is a plugin ([[Impact Model Plugin]]) which when given some configuration and a series of [[Observation]], can calculate the impact, e.g. carbon impact from an observation of CPU utilization.
 
-![](../static/img/decc58c3420d1e4e3701e5d1ac12883e.png)
+![](../../static/img/decc58c3420d1e4e3701e5d1ac12883e.png)
 %%[[Impact Graph - Component.excalidraw|🖋 Edit in Excalidraw]], and the [[Impact Graph - Component.excalidraw.dark.png|dark exported image]]%%
 
 ### Computation
 
 During graph computation, we first calculate the Component nodes to generate Impact Metrics. Then we aggregate the Impact Metrics up the tree to any Grouping nodes and, finally, a total Impact Metric for the whole graph. Every node in the graph has an impact metric; this means you can analyze a system as a who but also dig into and analyze the impacts of its components.
 
-![](../static/img/bcb0066204a750f6b18a43a627c66b90.png)
+![](../../static/img/bcb0066204a750f6b18a43a627c66b90.png)
 %%[[Impact Graph - Computation.excalidraw|🖋 Edit in Excalidraw]], and the [[Impact Graph - Computation.excalidraw.dark.png|dark exported image]]%%
 
 A computation of an Impact Graph can create one Impact Metric. It can also be configured to return a **time series of impacts**, so you can identify the moments when impact is higher or lower. Importantly a time series is computed for every node (grouping or component) in the graph so that you can analyze the source of impact structurally and temporally.
