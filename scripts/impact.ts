@@ -1,7 +1,7 @@
-import {parseProcessArgument} from '../src/util/args';
-import {ModelsUniverse} from '../src/util/models-universe';
-import {Supercomputer} from '../src/util/supercomputer';
-import {openYamlFileAsObject, saveYamlFileAs} from '../src/util/yaml';
+import { parseProcessArgument } from '../src/util/args';
+import { ModelsUniverse } from '../src/util/models-universe';
+import { Supercomputer } from '../src/util/supercomputer';
+import { openYamlFileAsObject, saveYamlFileAs } from '../src/util/yaml';
 
 /**
  * 1. Parses yml input/output process arguments.
@@ -11,12 +11,12 @@ import {openYamlFileAsObject, saveYamlFileAs} from '../src/util/yaml';
  * 5. Saves processed object as a yaml file.
  * @example run following command `npx ts-node scripts/impact.ts --impl ./test.yml --ompl ./result.yml`
  */
-const outputScript = async () => {
+const impactScript = async () => {
   try {
     const processParams = parseProcessArgument();
 
     if (processParams) {
-      const {inputPath, outputPath} = processParams;
+      const { inputPath, outputPath } = processParams;
       const impl = await openYamlFileAsObject(inputPath);
 
       if (!('graph' in impl)) {

@@ -1,13 +1,13 @@
-import {IoutputModelInterface} from '../interfaces';
+import { IOutputModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-import {KeyValuePair} from '../../types/common';
+import { KeyValuePair } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {EMEM} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { EMEM } = MODEL_IDS;
 
-export class EMemModel implements IoutputModelInterface {
+export class EMemModel implements IOutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in this.
   name: string | undefined; // name of the data source
   memoryAllocation = 0;
@@ -30,7 +30,7 @@ export class EMemModel implements IoutputModelInterface {
   async configure(
     name: string,
     staticParams: object | undefined = undefined
-  ): Promise<IoutputModelInterface> {
+  ): Promise<IOutputModelInterface> {
     this.name = name;
 
     if (staticParams === undefined) {

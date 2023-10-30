@@ -1,11 +1,11 @@
-import {IoutputModelInterface} from '../interfaces';
+import { IOutputModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-const {MODEL_IDS} = CONFIG;
-const {AVEVA} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { AVEVA } = MODEL_IDS;
 
-export class EAvevaModel implements IoutputModelInterface {
+export class EAvevaModel implements IOutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in Aveva.
   name: string | undefined; // name of the data source
   staticParams: object | undefined; // Defined for compatibility. Not used in Aveva.
@@ -25,7 +25,7 @@ export class EAvevaModel implements IoutputModelInterface {
   async configure(
     name: string,
     staticParams: object | undefined = undefined
-  ): Promise<IoutputModelInterface> {
+  ): Promise<IOutputModelInterface> {
     this.name = name;
     this.staticParams = staticParams;
 

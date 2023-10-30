@@ -1,6 +1,6 @@
-import {describe, expect, it, jest} from '@jest/globals';
-import {Observatory} from '../../../util/observatory';
-import {BoaviztaCpuoutputModel} from '../../../lib';
+import { describe, expect, it, jest } from '@jest/globals';
+import { Observatory } from '../../../util/observatory';
+import { BoaviztaCpuoutputModel } from '../../../lib';
 
 describe('util/observatory: ', () => {
   const expectedValue = [
@@ -55,7 +55,7 @@ describe('util/observatory: ', () => {
     it('returns Observatory class.', async () => {
       const lab = new Observatory(inputs);
 
-      const boaviztaModel = await new BoaviztaCpuoutputModel().configure(
+      const boaviztaModel = await new BoaviztaCpuOutputModel().configure(
         'test',
         params
       );
@@ -69,7 +69,7 @@ describe('util/observatory: ', () => {
     it('reuses previous output value instead of inputs.', async () => {
       const lab = new Observatory(inputs);
 
-      const boaviztaModel = await new BoaviztaCpuoutputModel().configure(
+      const boaviztaModel = await new BoaviztaCpuOutputModel().configure(
         'test',
         params
       );
@@ -134,7 +134,7 @@ describe('util/observatory: ', () => {
 
     it('returns executed outputs data.', async () => {
       const lab = new Observatory(inputs);
-      const boaviztaModel = await new BoaviztaCpuoutputModel().configure(
+      const boaviztaModel = await new BoaviztaCpuOutputModel().configure(
         'test',
         params
       );

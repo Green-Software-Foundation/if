@@ -1,4 +1,4 @@
-import {IoutputModelInterface} from '../lib';
+import { IOutputModelInterface } from '../lib';
 
 type InitializeOptions = {
   allocation: string;
@@ -19,5 +19,5 @@ export type ImplInitializeModel = {
 };
 
 export type InitalizedModels = {
-  [key: string]: (graphOptions: GraphOptions) => Promise<IoutputModelInterface>;
+  [key: string]: (graphOptions: GraphOptions) => Promise<IOutputModelInterface>;
 };

@@ -1,11 +1,11 @@
-export interface IoutputModelInterface {
+export interface IOutputModelInterface {
   modelIdentifier(): string;
 
   // params is a reserved keyword in C#. Hence it can not be used.
   configure(
     name: string,
     staticParams: object | undefined
-  ): Promise<IoutputModelInterface>;
+  ): Promise<IOutputModelInterface>;
 
   authenticate(authParams: object): void;
 

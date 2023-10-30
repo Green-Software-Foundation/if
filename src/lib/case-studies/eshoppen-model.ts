@@ -1,15 +1,15 @@
-import {IoutputModelInterface} from '../interfaces';
+import { IOutputModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-import {KeyValuePair} from '../../types/common';
+import { KeyValuePair } from '../../types/common';
 
-export {KeyValuePair} from '../../types/common';
+export { KeyValuePair } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {ESHOPPEN, ESHOPPEN_CPU, ESHOPPEN_MEM, ESHOPPEN_NET} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { ESHOPPEN, ESHOPPEN_CPU, ESHOPPEN_MEM, ESHOPPEN_NET } = MODEL_IDS;
 
-export class EshoppenModel implements IoutputModelInterface {
+export class EshoppenModel implements IOutputModelInterface {
   authParams: object | undefined = undefined;
   modelType: 'energy-cpu' | 'energy-memory' | 'energy-network' | 'e-sum' =
     'energy-cpu';
@@ -95,7 +95,7 @@ export class EshoppenModel implements IoutputModelInterface {
   async configure(
     name: string,
     staticParams: object | undefined
-  ): Promise<IoutputModelInterface> {
+  ): Promise<IOutputModelInterface> {
     this.staticParams = staticParams;
     this.name = name;
     if (

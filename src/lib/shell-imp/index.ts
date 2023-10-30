@@ -1,16 +1,16 @@
 import * as cp from 'child_process';
 import * as yaml from 'js-yaml';
 
-import {IoutputModelInterface} from '../interfaces';
+import { IOutputModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-import {KeyValuePair} from '../../types/common';
+import { KeyValuePair } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {SHELL_MODEL} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { SHELL_MODEL } = MODEL_IDS;
 
-export class ShellModel implements IoutputModelInterface {
+export class ShellModel implements IOutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used.
   name: string | undefined; // The name of the data source.
   staticParams: object | undefined;
@@ -32,7 +32,7 @@ export class ShellModel implements IoutputModelInterface {
   async configure(
     name: string,
     staticParams: object | undefined = undefined
-  ): Promise<IoutputModelInterface> {
+  ): Promise<IOutputModelInterface> {
     this.name = name;
     if (staticParams === undefined) {
       throw new Error('Required staticParams not provided');

@@ -1,15 +1,15 @@
 import Spline from 'typescript-cubic-spline';
 
-import {IoutputModelInterface} from '../interfaces';
+import { IOutputModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-import {KeyValuePair, Interpolation} from '../../types/common';
+import { KeyValuePair, Interpolation } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {TEADS_CURVE} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { TEADS_CURVE } = MODEL_IDS;
 
-export class TeadsCurveModel implements IoutputModelInterface {
+export class TeadsCurveModel implements IOutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in TEADS.
   name: string | undefined; // Name of the data source.
   tdp = 0; // `tdp` of the chip being measured.
@@ -35,7 +35,7 @@ export class TeadsCurveModel implements IoutputModelInterface {
   async configure(
     name: string,
     staticParams: object | undefined = undefined
-  ): Promise<IoutputModelInterface> {
+  ): Promise<IOutputModelInterface> {
     this.name = name;
 
     if (staticParams === undefined) {
@@ -177,4 +177,4 @@ export class TeadsCurveModel implements IoutputModelInterface {
 /**
  * For JSII.
  */
-export {KeyValuePair, Interpolation} from '../../types/common';
+export { KeyValuePair, Interpolation } from '../../types/common';
