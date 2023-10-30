@@ -14,7 +14,7 @@ IEF recognizes the Boavizta model as `boavizta-cpu`.
 
 ### model config
 
-- `allocation`: manufacturing impacts can be reported with two allocation strategies: `TOTAL` is the total impct without adjusting for usage. `LINEAR` distrbutes the impact linearly over the lifespan of a device. See [Boavizta docs](https://doc.api.boavizta.org/Explanations/manufacture_methodology/#hover-a-specific-duration-allocation-linear) for more info.
+- `allocation`: manufacturing impacts can be reported with two allocation strategies: `TOTAL` is the total impact without adjusting for usage. `LINEAR` distrbutes the impact linearly over the lifespan of a device. See [Boavizta docs](https://doc.api.boavizta.org/Explanations/manufacture_methodology/#hover-a-specific-duration-allocation-linear) for more info.
 - `physical-processor`: the name of the physical processor being used
 - `core-units`: Number of physical cores on a CPU
 - `verbose`: determines how much information the API response contains
