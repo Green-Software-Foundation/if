@@ -1,5 +1,5 @@
 import {
-  BoaviztaCpuoutputModel,
+  BoaviztaCpuOutputModel,
   BoaviztaCloudoutputModel,
   CloudCarbonFootprint,
   ShellModel,
@@ -40,7 +40,7 @@ export class ModelsUniverse {
   private handBuiltinModel(name: string) {
     switch (name) {
       case 'boavizta-cpu':
-        return BoaviztaCpuoutputModel;
+        return BoaviztaCpuOutputModel;
       case 'boavizta-cloud':
         return BoaviztaCloudoutputModel;
       case 'ccf':
@@ -109,7 +109,7 @@ export class ModelsUniverse {
    * Initializes and registers model.
    */
   public writeDown(model: ImplInitializeModel) {
-    const {name, kind, config} = model;
+    const { name, kind, config } = model;
 
     const Model = this.handModelByCriteria(name, kind);
 

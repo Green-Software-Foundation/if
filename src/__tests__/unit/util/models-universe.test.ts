@@ -1,8 +1,8 @@
-import {describe, expect, it} from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 
-import {ModelsUniverse} from '../../../util/models-universe';
-import {ImplInitializeModel} from '../../../types/models-universe';
-import {BoaviztaCpuoutputModel} from '../../../lib';
+import { ModelsUniverse } from '../../../util/models-universe';
+import { ImplInitializeModel } from '../../../types/models-universe';
+import { BoaviztaCpuOutputModel } from '../../../lib';
 
 describe('util/models-universe: ', () => {
   describe('init ModelsUniverse', () => {
@@ -155,7 +155,7 @@ describe('util/models-universe: ', () => {
         config
       );
 
-      expect(model).toBeInstanceOf(BoaviztaCpuoutputModel);
+      expect(model).toBeInstanceOf(BoaviztaCpuOutputModel);
     });
   });
 });
