@@ -17,11 +17,9 @@ IEF recognizes the Boavizta model as `boavizta-cpu`.
 - `allocation`: manufacturing impacts can be reported with two allocation strategies: `TOTAL` is the total impact without adjusting for usage. `LINEAR` distrbutes the impact linearly over the lifespan of a device. See [Boavizta docs](https://doc.api.boavizta.org/Explanations/manufacture_methodology/#hover-a-specific-duration-allocation-linear) for more info.
 - `physical-processor`: the name of the physical processor being used
 - `core-units`: Number of physical cores on a CPU
-- `verbose`: determines how much information the API response contains
-- `location`: define the grid carbon intensity as a string
+- `verbose`: determines how much information the API response contains (optional)
 - `expected-lifespan`: the lifespan of the component, in seconds
-- `instance-type`: the name of the VM instance being used, e.g. `t2.micro`
-- `vendor`: the platform provider, e.g. `gcp`, `aws`, `azure`.
+- `location`: geographic location used to lookup grid carbon intensity, e.g. "USA" (optional - falls back to Boavizta default)
 
 ### observations
 
@@ -30,7 +28,7 @@ IEF recognizes the Boavizta model as `boavizta-cpu`.
 ## Returns
 
 - `embodied-carbon`: carbon emitted in manufacturing the device, in gCO2eq
-- `energy`: energy used by CPU in kWh
+- `e-cpu`: energy used by CPU in kWh
   
 ## Usage
 
@@ -45,10 +43,12 @@ async function runBoavizta() {
   const params: KeyValuePair = {};
   params.allocation = 'TOTAL';
   params.verbose = true;
-  params.physical-processor = 'Intel Xeon Platinum 8160';
-  params.core_units = 24;
 
-  const newModel = await new BoaviztaCpuImpactModel().configure('test', params);
+  const newModel = await new BoaviztaCpuImpactModel().configure('test', {
+        'physical-processor': 'Intel Xeon Gold 6138f',
+        'core-units': 24,
+        'expected-lifespan': 4 * 365 * 24 * 60 * 60,
+      })
   const usage = await newModel.calculate([
     {
       timestamp: '2021-01-01T00:00:00Z',
@@ -95,13 +95,14 @@ initialize:
         verbose: true
 graph:
   children:
-    front-end:
+    child:
       pipeline: 
         - boavizta-cpu
       config:
         boavizta-cpu:
           core-units: 24
-          processor: Intel® Core™ i7-1185G7
+          physical-processor: Intel® Core™ i7-1185G7
+          location: "USA"
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 3600 # Secs
@@ -109,6 +110,7 @@ graph:
         - timestamp: 2023-08-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 3600 # Secs
           cpu-util: 16
+          
 ```
 
 You can run this by passing it to `rimpl`. Run rimpl using the following command run from the project root:
