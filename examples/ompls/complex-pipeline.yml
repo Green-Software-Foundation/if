@@ -22,7 +22,6 @@ initialize:
       kind: builtin
     - name: sampler
       kind: shell
-      path: null
 graph:
   children:
     child:
