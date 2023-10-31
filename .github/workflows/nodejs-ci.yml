@@ -21,6 +21,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: install website dependencies
+        run: cd website && yarn install && cd ..
+
       - name: Install dependencies
         run: yarn install
 
