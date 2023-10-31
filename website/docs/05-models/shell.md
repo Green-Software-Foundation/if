@@ -31,7 +31,7 @@ The specific return types depend on the model being invoked. Typically, we would
 
 ## Implementation
 
-To run the model, you must first create an instance of `ShellModel` and call its `configure()` method. The `configure` method takes `executable` as an argument - this is a path to an executable file. Then, you can call `calculate()` to run the external model.
+To run the model, you must first create an instance of `ShellModel` and call its `configure()` method. The `configure` method takes `executable` as an argument - this is a path to an executable file. Then, you can call `execute()` to run the external model.
 
 ```typescript
 const outputModel = new ShellModel();
