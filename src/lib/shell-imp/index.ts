@@ -1,14 +1,14 @@
 import * as cp from 'child_process';
 import * as yaml from 'js-yaml';
 
-import {IImpactModelInterface} from '../interfaces';
+import { IImpactModelInterface } from '../interfaces';
 
-import {CONFIG} from '../../config';
+import { CONFIG } from '../../config';
 
-import {KeyValuePair} from '../../types/common';
+import { KeyValuePair } from '../../types/common';
 
-const {MODEL_IDS} = CONFIG;
-const {SHELL_MODEL} = MODEL_IDS;
+const { MODEL_IDS } = CONFIG;
+const { SHELL_MODEL } = MODEL_IDS;
 
 export class ShellModel implements IImpactModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used.
@@ -25,9 +25,7 @@ export class ShellModel implements IImpactModelInterface {
 
   /**
    * Configures the Plugin for IEF
-   * @param {string} name name of the resource
    * @param {Object} staticParams static parameters for the resource
-   * @param {number} staticParams.tdp Thermal Design Power in Watts
    */
   async configure(
     name: string,
