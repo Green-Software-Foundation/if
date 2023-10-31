@@ -16,10 +16,17 @@ export type ImplInitializeModel = {
   config: InitializeOptions;
   name: string;
   kind: ModelKind;
-  model: string;
-  path: string;
+  model?: string;
+  path?: string;
 };
 
 export type InitalizedModels = {
   [key: string]: (graphOptions: GraphOptions) => Promise<IImpactModelInterface>;
+};
+
+export type HandModelParams = {
+  name: string;
+  kind: ModelKind;
+  model?: string;
+  path?: string;
 };
