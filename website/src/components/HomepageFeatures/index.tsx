@@ -13,18 +13,14 @@ const FeatureList: FeatureItem[] = [
     title: 'Measure',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
-      <>
-        Measure the energy and carbon impacts of your applications.
-      </>
+      <>Measure the energy and carbon impacts of your applications.</>
     ),
   },
   {
     title: 'Monitor',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
-      <>
-        Continuous integration allows you to track your impact over time.
-      </>
+      <>Continuous integration allows you to track your impact over time.</>
     ),
   },
   {
@@ -32,13 +28,14 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Scenario testing can support your mitigation strategy and quantify its effect.
+        Scenario testing can support your mitigation strategy and quantify its
+        effect.
       </>
     ),
   },
 ];
 
-function Feature({ title, Svg, description }: FeatureItem) {
+function Feature({title, Svg, description}: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
