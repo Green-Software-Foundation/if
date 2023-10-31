@@ -25,9 +25,7 @@ export class ShellModel implements IOutputModelInterface {
 
   /**
    * Configures the Plugin for IEF
-   * @param {string} name name of the resource
    * @param {Object} staticParams static parameters for the resource
-   * @param {number} staticParams.tdp Thermal Design Power in Watts
    */
   async configure(
     name: string,
