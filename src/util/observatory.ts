@@ -1,11 +1,11 @@
 import {IOutputModelInterface} from '../lib';
 
 /**
- * Observatory calculates outputs based on `inputs` and `model`.
+ * Observatory is responsible for output calculations based on the `inputs` and the `model`.
  */
 export class Observatory {
   private inputs: any[];
-  private output: any[] = [];
+  private outputs: any[] = [];
 
   /**
    * Init inputs object.
@@ -15,19 +15,19 @@ export class Observatory {
   }
 
   /**
-   * Calculates output based on inputs.
+   * Does investigations by given `output` information
    */
   public async doInvestigationsWith(modelInstance: IOutputModelInterface) {
-    const reuseCalculation = this.output.length ? this.output : this.inputs;
+    const reuseCalculation = this.outputs.length ? this.outputs : this.inputs;
 
-    const calculatedoutputs = await modelInstance.execute(reuseCalculation);
+    const calculatedOutputs = await modelInstance.execute(reuseCalculation);
 
     const result = this.inputs.map((input: any, index: number) => ({
       ...input,
-      ...calculatedoutputs[index],
+      ...calculatedOutputs[index],
     }));
 
-    this.output = result;
+    this.outputs = result;
 
     return this;
   }
@@ -35,14 +35,14 @@ export class Observatory {
   /**
    * Getter for input data.
    */
-  public getinputs() {
+  public getInputs() {
     return this.inputs;
   }
 
   /**
    * Getter for output data.
    */
-  public getoutputs() {
-    return this.output;
+  public getOutputs() {
+    return this.outputs;
   }
 }
