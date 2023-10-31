@@ -26,8 +26,8 @@ describe('util/observatory: ', () => {
       const lab = new Observatory(inputs);
 
       expect(lab).toHaveProperty('doInvestigationsWith');
-      expect(lab).toHaveProperty('getoutputs');
-      expect(lab).toHaveProperty('getinputs');
+      expect(lab).toHaveProperty('getOutputs');
+      expect(lab).toHaveProperty('getInputs');
     });
   });
 
@@ -99,7 +99,7 @@ describe('util/observatory: ', () => {
       boaviztaModel.execute = jest.fn(() => Promise.resolve(inputs1));
       const result2 = await lab.doInvestigationsWith(boaviztaModel);
 
-      expect(result1.getinputs()).toEqual(result2.getinputs());
+      expect(result1.getInputs()).toEqual(result2.getInputs());
     });
   });
 
@@ -129,7 +129,7 @@ describe('util/observatory: ', () => {
 
       const expectedValue: any = [];
 
-      expect(lab.getoutputs()).toEqual(expectedValue);
+      expect(lab.getOutputs()).toEqual(expectedValue);
     });
 
     it('returns executed outputs data.', async () => {
@@ -143,7 +143,7 @@ describe('util/observatory: ', () => {
       const result = await lab.doInvestigationsWith(boaviztaModel);
 
       expect(result).toBeInstanceOf(Observatory);
-      expect(lab.getoutputs()).toEqual(expectedValue);
+      expect(lab.getOutputs()).toEqual(expectedValue);
     });
   });
 
@@ -164,7 +164,7 @@ describe('util/observatory: ', () => {
 
       const lab = new Observatory(inputs);
 
-      expect(lab.getinputs()).toEqual(inputs);
+      expect(lab.getInputs()).toEqual(inputs);
     });
   });
 });
