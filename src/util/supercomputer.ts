@@ -36,7 +36,7 @@ export class Supercomputer {
   /**
    * Adds config entries to each obsercation object passed.
    */
-  private enrichinputs(inputs: any[], config: any[], nestedConfig: any[]) {
+  private enrichInputs(inputs: any[], config: any[], nestedConfig: any[]) {
     const configValues = this.flattenConfigValues(config);
     const nestedConfigValues =
       nestedConfig && this.flattenConfigValues(nestedConfig);
@@ -54,7 +54,7 @@ export class Supercomputer {
    * Otherwise enriches inputs, passes them to Observatory.
    * For each model from pipeline Observatory gathers inputs. Then results are stored.
    */
-  private async calculateoutputsForChild(childrenObject: any, params: any) {
+  private async calculateOutputsForChild(childrenObject: any, params: any) {
     const {childName, areChildrenNested} = params;
 
     if (!areChildrenNested) {
@@ -70,17 +70,17 @@ export class Supercomputer {
       return this.compute(childrenObject[childName].children);
     }
 
-    const specificinputs = areChildrenNested
+    const specificInputs = areChildrenNested
       ? childrenObject[childName].inputs
       : inputs;
 
-    const enrichedinputs = this.enrichinputs(
-      specificinputs,
+    const enrichedInputs = this.enrichInputs(
+      specificInputs,
       config,
       childrenObject[childName].config
     );
 
-    const observatory = new Observatory(enrichedinputs);
+    const observatory = new Observatory(enrichedInputs);
 
     for (const modelName of pipeline) {
       const params = config && config[modelName];
@@ -95,13 +95,13 @@ export class Supercomputer {
     if (areChildrenNested) {
       this.impl.graph.children[this.olderChild.name].children[
         childName
-      ].outputs = observatory.getoutputs();
+      ].outputs = observatory.getOutputs();
 
       return;
     }
 
     this.impl.graph.children[this.olderChild.name].outputs =
-      observatory.getoutputs();
+      observatory.getOutputs();
   }
 
   /**
@@ -116,7 +116,7 @@ export class Supercomputer {
     const childrenNames = Object.keys(children);
 
     for (const childName of childrenNames) {
-      await this.calculateoutputsForChild(children, {
+      await this.calculateOutputsForChild(children, {
         childName,
         areChildrenNested,
       });
