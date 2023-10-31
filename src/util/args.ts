@@ -5,10 +5,10 @@ import {checkIfFileIsYaml} from './yaml';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {RimplProcessArgs} from '../types/process-args';
+import {impactProcessArgs} from '../types/process-args';
 
-const {RIMPL} = CONFIG;
-const {ARGS, HELP} = RIMPL;
+const {impact} = CONFIG;
+const {ARGS, HELP} = impact;
 
 const {WRONG_CLI_ARGUMENT} = STRINGS;
 
@@ -16,7 +16,7 @@ const {WRONG_CLI_ARGUMENT} = STRINGS;
  * Validates process arguments
  * @private
  */
-const validateAndParseProcessArgs = () => parse<RimplProcessArgs>(ARGS);
+const validateAndParseProcessArgs = () => parse<impactProcessArgs>(ARGS);
 
 /**
  * Prepends process path to fiven `filePath`.

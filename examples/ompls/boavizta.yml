@@ -17,14 +17,15 @@ graph:
         boavizta-cpu:
           core-units: 24
           physical-processor: Intel® Core™ i7-1185G7
-      observations:
+          location: USA
+      inputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600
           cpu-util: 18.392
         - timestamp: 2023-08-06T00:00
           duration: 3600
           cpu-util: 16
-      impacts:
+      outputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600
           cpu-util: 18.392

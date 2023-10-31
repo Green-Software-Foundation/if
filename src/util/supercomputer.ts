@@ -36,17 +36,13 @@ export class Supercomputer {
   /**
    * Adds config entries to each obsercation object passed.
    */
-  private enrichObservations(
-    observations: any[],
-    config: any[],
-    nestedConfig: any[]
-  ) {
+  private enrichInputs(inputs: any[], config: any[], nestedConfig: any[]) {
     const configValues = this.flattenConfigValues(config);
     const nestedConfigValues =
       nestedConfig && this.flattenConfigValues(nestedConfig);
 
-    return observations.map((observation: any) => ({
-      ...observation,
+    return inputs.map((input: any) => ({
+      ...input,
       ...configValues,
       ...nestedConfigValues,
     }));
@@ -54,11 +50,11 @@ export class Supercomputer {
 
   /**
    * If child is top level, then initializes `this.olderChild`.
-   * If `children` object contains `children` property, it means observations are nested (calls compute again).
-   * Otherwise enriches observations, passes them to Observatory.
-   * For each model from pipeline Observatory gathers observations. Then results are stored.
+   * If `children` object contains `children` property, it means inputs are nested (calls compute again).
+   * Otherwise enriches inputs, passes them to Observatory.
+   * For each model from pipeline Observatory gathers inputs. Then results are stored.
    */
-  private async calculateImpactsForChild(childrenObject: any, params: any) {
+  private async calculateOutputsForChild(childrenObject: any, params: any) {
     const {childName, areChildrenNested} = params;
 
     if (!areChildrenNested) {
@@ -68,23 +64,23 @@ export class Supercomputer {
       };
     }
 
-    const {pipeline, observations, config} = this.olderChild.info;
+    const {pipeline, inputs, config} = this.olderChild.info;
 
     if ('children' in childrenObject[childName]) {
       return this.compute(childrenObject[childName].children);
     }
 
-    const specificObservations = areChildrenNested
-      ? childrenObject[childName].observations
-      : observations;
+    const specificInputs = areChildrenNested
+      ? childrenObject[childName].inputs
+      : inputs;
 
-    const enrichedObservations = this.enrichObservations(
-      specificObservations,
+    const enrichedInputs = this.enrichInputs(
+      specificInputs,
       config,
       childrenObject[childName].config
     );
 
-    const observatory = new Observatory(enrichedObservations);
+    const observatory = new Observatory(enrichedInputs);
 
     for (const modelName of pipeline) {
       const params = config && config[modelName];
@@ -99,17 +95,17 @@ export class Supercomputer {
     if (areChildrenNested) {
       this.impl.graph.children[this.olderChild.name].children[
         childName
-      ].impacts = observatory.getImpacts();
+      ].outputs = observatory.getOutputs();
 
       return;
     }
 
-    this.impl.graph.children[this.olderChild.name].impacts =
-      observatory.getImpacts();
+    this.impl.graph.children[this.olderChild.name].outputs =
+      observatory.getOutputs();
   }
 
   /**
-   * Checks if object is top level children or nested, then runs through all children and calculates impacts.
+   * Checks if object is top level children or nested, then runs through all children and calculates outputs.
    */
   public async compute(childrenObject?: any) {
     const implOrChildren = childrenObject || this.impl;
@@ -120,7 +116,7 @@ export class Supercomputer {
     const childrenNames = Object.keys(children);
 
     for (const childName of childrenNames) {
-      await this.calculateImpactsForChild(children, {
+      await this.calculateOutputsForChild(children, {
         childName,
         areChildrenNested,
       });

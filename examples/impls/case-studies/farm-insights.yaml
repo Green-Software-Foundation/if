@@ -24,7 +24,7 @@ graph:
           functional-unit-duration: 1 # in secs
           functional-duration-time: ''
           functional-unit: requests # factor to convert per time to per f.unit
-    observations:
+    inputs:
       e: 3.47222222222e-07 # 0.03 kwh/day in kwh/s
       i: 713 # g/kwh
       m: 1.744038559107052e-03 # they give 55kg/year - here in g/second

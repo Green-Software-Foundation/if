@@ -2,7 +2,7 @@ import {describe, expect, it} from '@jest/globals';
 
 import {ModelsUniverse} from '../../../util/models-universe';
 import {ImplInitializeModel} from '../../../types/models-universe';
-import {BoaviztaCpuImpactModel} from '../../../lib';
+import {BoaviztaCpuOutputModel} from '../../../lib';
 
 describe('util/models-universe: ', () => {
   describe('init ModelsUniverse', () => {
@@ -155,7 +155,7 @@ describe('util/models-universe: ', () => {
         config
       );
 
-      expect(model).toBeInstanceOf(BoaviztaCpuImpactModel);
+      expect(model).toBeInstanceOf(BoaviztaCpuOutputModel);
     });
   });
 });

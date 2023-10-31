@@ -2,6 +2,28 @@
 
 This plugin allows you to determine an instance's CPU based on its instance name.
 
+## Model name
+
+IEF recognizes the Cloud Carbon Footprint model as `ccf`.
+
+## Parameters
+
+### model config
+
+- `vendor`: the cloud platform provider, e.g. `aws`
+- `instance-type`: the name of the specific instance being used, e.g. `m5n.large`
+
+## Returns
+
+An array containing:
+
+- `cloud-instance-type`: echo input `instance-type`
+- `cloud-vendor`: echo input `vendor`
+- `physical-processor`: physical processor used in the given instance
+- `vcpus-allocated`: number of vCPUs allocated to this instance
+- `vcpus-total`: total number of vCPUs available to this instance
+  
+
 ## IEF Implementation
 
 IEF implements this plugin using data from Cloud Carbon Footprint. This allows determination of cpu for type of instance in a cloud and can be invoked as part of a model pipeline defined in an `impl`.
@@ -10,7 +32,7 @@ Cloud Instance Metadata currently implements only for 'AWS'.
 
 ## Usage
 
-In IEF, the model is called from an `impl`. An `impl` is a `.yaml` file that contains configuration metadata and usage observations. This is interpreted by the command line tool, `rimpl`. There, the model's `configure` method is called first. The model config shall be empty. Each observation is expected to contain `cloud-vendor` and `cloud-instance-type` fields.
+In IEF, the model is called from an `impl`. An `impl` is a `.yaml` file that contains configuration metadata and usage inputs. This is interpreted by the command line tool, `impact`. There, the model's `configure` method is called first. The model config shall be empty. Each input is expected to contain `cloud-vendor` and `cloud-instance-type` fields.
 
 You can see example Typescript invocations for each vendor below:
 
@@ -45,7 +67,7 @@ graph:
       pipeline:
         - cloud-instance-metadata
       config:
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           vendor: aws
           instance_type: m5n.large
@@ -53,10 +75,10 @@ graph:
           cpu-util: 10
 ```
 
-This impl is run using `rimpl` using the following command, run from the project root:
+This impl is run using `impact` using the following command, run from the project root:
 
 ```sh
-npx ts-node scripts/rimpl.ts --impl ./examples/impls/cimd-test.yml --ompl ./examples/ompls/cimd-test.yml
+npx ts-node scripts/impact.ts --impl ./examples/impls/cimd-test.yml --ompl ./examples/ompls/cimd-test.yml
 ```
 
 This yields a result that looks like the following (saved to `/ompls/cimd-test.yml`):
@@ -73,13 +95,13 @@ graph:
     front-end:
       pipeline:
         - cloud-instance-metadata
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00
           cloud-vendor: aws
           cloud-instance-type: m5n.large
           duration: 100
           cpu: 10
-      impacts:
+      outputs:
         - timestamp: 2023-07-06T00:00
           cloud-vendor: aws
           cloud-instance-type: m5n.large

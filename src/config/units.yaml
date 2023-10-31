@@ -15,7 +15,7 @@ disk-io:
   unit: GB
   aggregation: sum
 duration:
-  description: refers to the duration of the observation
+  description: refers to the duration of the input
   unit: seconds
   aggregation: sum
 energy-cpu:
@@ -111,7 +111,7 @@ total-embodied-emissions:
   unit: gCO2e
   aggregation: sum
 timestamp:
-  description: refers to the time of occurrence of the observation
+  description: refers to the time of occurrence of the input
   unit: RFC3339
   aggregation: None
 time-reserved:

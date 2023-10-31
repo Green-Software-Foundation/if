@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import {IImpactModelInterface} from '../interfaces';
+import {IOutputModelInterface} from '../interfaces';
 import {CONFIG} from '../../config';
 
 import {BoaviztaInstanceTypes, IBoaviztaUsageSCI} from '../../types/boavizta';
@@ -9,7 +9,7 @@ import {KeyValuePair} from '../../types/common';
 const {MODEL_IDS} = CONFIG;
 const {BOAVIZTA_CPU, BOAVIZTA_CLOUD} = MODEL_IDS;
 
-abstract class BoaviztaImpactModel implements IImpactModelInterface {
+abstract class BoaviztaOutputModel implements IOutputModelInterface {
   name: string | undefined;
   sharedParams: object | undefined = undefined;
   metricType: 'cpu-util' | 'gpu-util' | 'ram-util' = 'cpu-util';
@@ -23,7 +23,7 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   async configure(
     name: string,
     staticParams: object | undefined = undefined
-  ): Promise<IImpactModelInterface> {
+  ): Promise<IOutputModelInterface> {
     this.name = name;
     this.sharedParams = await this.captureStaticParams(staticParams ?? {});
     return this;
@@ -59,24 +59,22 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
     return usageInput;
   }
 
-  // Calculates the impact of the given usage
-  async calculate(
-    observations: object | object[] | undefined = undefined
+  // Calculates the output of the given usage
+  async execute(
+    inputs: object | object[] | undefined = undefined
   ): Promise<any[]> {
-    if (Array.isArray(observations)) {
+    if (Array.isArray(inputs)) {
       const results: KeyValuePair[] = [];
 
-      for (const observation of observations) {
-        const usageResult = await this.calculateUsageForObservation(
-          observation
-        );
+      for (const input of inputs) {
+        const usageResult = await this.calculateUsageForinput(input);
         results.push(usageResult);
       }
 
       return results;
     } else {
       throw new Error(
-        'Parameter Not Given: invalid observations parameter. Expecting an array of observations'
+        'Parameter Not Given: invalid inputs parameter. Expecting an array of inputs'
       );
     }
   }
@@ -93,22 +91,21 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   //abstract subs to make compatibility with base interface. allows configure to be defined in base class
   protected abstract captureStaticParams(staticParams: object): object;
 
-  // extracts information from Boavizta API response to return the impact in the format required by IMPL
+  // extracts information from Boavizta API response to return the output in the format required by IMPL
   protected formatResponse(data: KeyValuePair): KeyValuePair {
     let m = 0;
     let e = 0;
-
-    if ('impacts' in data) {
-      // embodied-carbon impact is in kgCO2eq, convert to gCO2eq
-      m = data['impacts']['gwp']['embodied-carbon'] * 1000;
-      // use impact is in J , convert to kWh.
+    if ('outputs' in data) {
+      // embodied-carbon output is in kgCO2eq, convert to gCO2eq
+      m = data['outputs']['gwp']['embedded']['value'] * 1000;
+      // use output is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
-      e = data['impacts']['pe']['use'] / 3.6;
+      e = data['outputs']['pe']['use']['value'] / 3.6;
     } else if ('gwp' in data && 'pe' in data) {
-      // embodied-carbon impact is in kgCO2eq, convert to gCO2eq
+      // embodied-carbon output is in kgCO2eq, convert to gCO2eq
       m = data['gwp']['embodied-carbon'] * 1000;
-      // use impact is in J , convert to kWh.
+      // use output is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
       e = data['pe']['use'] / 3.6;
@@ -118,30 +115,30 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   }
 
   // converts the usage to the format required by Boavizta API.
-  protected async calculateUsageForObservation(
-    observation: KeyValuePair
+  protected async calculateUsageForinput(
+    input: KeyValuePair
   ): Promise<KeyValuePair> {
     if (
-      'timestamp' in observation &&
-      'duration' in observation &&
-      this.metricType in observation
+      'timestamp' in input &&
+      'duration' in input &&
+      this.metricType in input
     ) {
       const usageInput = this.transformToBoaviztaUsage(
-        observation['duration'],
-        observation[this.metricType]
+        input['duration'],
+        input[this.metricType]
       );
       const usage = (await this.fetchData(usageInput)) as IBoaviztaUsageSCI;
 
       return usage;
     } else {
-      throw new Error('Invalid Input: Invalid observations parameter');
+      throw new Error('Invalid Input: Invalid inputs parameter');
     }
   }
 }
 
-export class BoaviztaCpuImpactModel
-  extends BoaviztaImpactModel
-  implements IImpactModelInterface
+export class BoaviztaCpuOutputModel
+  extends BoaviztaOutputModel
+  implements IOutputModelInterface
 {
   sharedParams: object | undefined = undefined;
   public name: string | undefined;
@@ -168,11 +165,18 @@ export class BoaviztaCpuImpactModel
     dataCast['usage'] = usageData;
 
     const response = await axios.post(
-      `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`,
+      `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
       dataCast
     );
 
     const result = this.formatResponse(response.data);
+
+    // console.log(
+    //   'hitting ',
+    //   `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
+    //   dataCast,
+    //   JSON.stringify(response.data)
+    // );
     return {
       'e-cpu': result.energy,
       'embodied-carbon': result['embodied-carbon'],
@@ -202,9 +206,9 @@ export class BoaviztaCpuImpactModel
   }
 }
 
-export class BoaviztaCloudImpactModel
-  extends BoaviztaImpactModel
-  implements IImpactModelInterface
+export class BoaviztaCloudOutputModel
+  extends BoaviztaOutputModel
+  implements IOutputModelInterface
 {
   public sharedParams: object | undefined = undefined;
   public instanceTypes: BoaviztaInstanceTypes = {};
@@ -233,69 +237,71 @@ export class BoaviztaCloudImpactModel
   }
 
   async validateInstanceType(staticParamsCast: object) {
-    if (!('vendor' in staticParamsCast)) {
-      throw new Error('Improper configure: Missing vendor parameter');
+    if (!('provider' in staticParamsCast)) {
+      throw new Error('Improper configure: Missing provider parameter');
     }
 
     if (!('instance-type' in staticParamsCast)) {
       throw new Error("Improper configure: Missing 'instance-type' parameter");
     }
 
-    const vendor = staticParamsCast.vendor as string;
+    const provider = staticParamsCast.provider as string;
 
     if (
-      this.instanceTypes[vendor] === undefined ||
-      this.instanceTypes[vendor].length === 0
+      this.instanceTypes[provider] === undefined ||
+      this.instanceTypes[provider].length === 0
     ) {
-      this.instanceTypes[vendor] = await this.supportedInstancesList(vendor);
+      this.instanceTypes[provider] = await this.supportedInstancesList(
+        provider
+      );
     }
 
     if ('instance-type' in staticParamsCast) {
       if (
-        !this.instanceTypes[vendor].includes(
+        !this.instanceTypes[provider].includes(
           staticParamsCast['instance-type'] as string
         )
       ) {
         throw new Error(
           `Improper configure: Invalid 'instance-type' parameter: '${
             staticParamsCast['instance-type']
-          }'. Valid values are : ${this.instanceTypes[vendor].join(', ')}`
+          }'. Valid values are : ${this.instanceTypes[provider].join(', ')}`
         );
       }
     }
   }
 
-  async validateVendor(staticParamsCast: object) {
-    if (!('vendor' in staticParamsCast)) {
-      throw new Error('Improper configure: Missing vendor parameter');
+  async validateProvider(staticParamsCast: object) {
+    if (!('provider' in staticParamsCast)) {
+      throw new Error('Improper configure: Missing provider parameter');
     } else {
-      const supportedVendors = await this.supportedVendorsList();
+      const supportedProviders = await this.supportedProvidersList();
 
-      if (!supportedVendors.includes(staticParamsCast.vendor as string)) {
+      if (!supportedProviders.includes(staticParamsCast.provider as string)) {
         throw new Error(
-          "Improper configure: Invalid vendor parameter: '" +
-            staticParamsCast.vendor +
+          "Improper configure: Invalid provider parameter: '" +
+            staticParamsCast.provider +
             "'. Valid values are : " +
-            supportedVendors.join(', ')
+            supportedProviders.join(', ')
         );
       }
     }
   }
 
-  async supportedInstancesList(vendor: string) {
+  async supportedInstancesList(provider: string) {
     const instances = await axios.get(
-      `https://api.boavizta.org/v1/cloud/all_instances?provider=${vendor}`
+      `https://api.boavizta.org/v1/cloud/instance/all_instances?provider=${provider}`
     );
 
     return instances.data;
   }
 
-  async supportedVendorsList(): Promise<string[]> {
-    const vendors = await axios.get(
-      'https://api.boavizta.org/v1/cloud/all_providers'
+  async supportedProvidersList(): Promise<string[]> {
+    const providers = await axios.get(
+      'https://api.boavizta.org/v1/cloud/instance/all_providers'
     );
 
-    return Object.values(vendors.data);
+    return Object.values(providers.data);
   }
 
   async fetchData(usageData: object | undefined): Promise<object> {
@@ -314,9 +320,14 @@ export class BoaviztaCloudImpactModel
     }
     dataCast['usage'] = usageData;
     const response = await axios.post(
-      `https://api.boavizta.org/v1/cloud/?verbose=${this.verbose}&allocation=${this.allocation}`,
+      `https://api.boavizta.org/v1/cloud/instance?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
       dataCast
     );
+    // console.log(
+    //   `https://api.boavizta.org/v1/cloud/instance?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
+    //   JSON.stringify(response.data),
+    //   dataCast
+    // );
 
     return this.formatResponse(response.data);
   }
@@ -326,8 +337,8 @@ export class BoaviztaCloudImpactModel
       this.verbose = (staticParams.verbose as boolean) ?? false;
       staticParams.verbose = undefined;
     }
-    // if no valid vendor found, throw error
-    await this.validateVendor(staticParams);
+    // if no valid provider found, throw error
+    await this.validateProvider(staticParams);
     // if no valid 'instance-type' found, throw error
     await this.validateInstanceType(staticParams);
     // if no valid location found, throw error
@@ -346,6 +357,6 @@ export class BoaviztaCloudImpactModel
 /**
  * For JSII.
  */
-export {IImpactModelInterface} from '../interfaces';
+export {IOutputModelInterface} from '../interfaces';
 export {BoaviztaInstanceTypes, IBoaviztaUsageSCI} from '../../types/boavizta';
 export {KeyValuePair} from '../../types/common';

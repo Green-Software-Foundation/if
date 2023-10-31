@@ -1,6 +1,6 @@
 import Spline from 'typescript-cubic-spline';
 
-import {IImpactModelInterface} from '../interfaces';
+import {IOutputModelInterface} from '../interfaces';
 
 import {CONFIG} from '../../config';
 
@@ -9,7 +9,7 @@ import {KeyValuePair, Interpolation} from '../../types/common';
 const {MODEL_IDS} = CONFIG;
 const {TEADS_CURVE} = MODEL_IDS;
 
-export class TeadsCurveModel implements IImpactModelInterface {
+export class TeadsCurveModel implements IOutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in TEADS.
   name: string | undefined; // Name of the data source.
   tdp = 0; // `tdp` of the chip being measured.
@@ -35,7 +35,7 @@ export class TeadsCurveModel implements IImpactModelInterface {
   async configure(
     name: string,
     staticParams: object | undefined = undefined
-  ): Promise<IImpactModelInterface> {
+  ): Promise<IOutputModelInterface> {
     this.name = name;
 
     if (staticParams === undefined) {
@@ -65,24 +65,24 @@ export class TeadsCurveModel implements IImpactModelInterface {
   }
 
   /**
-   * Calculate the total emissions for a list of observations
+   * Calculate the total emissions for a list of inputs
    *
-   * Each Observation require:
-   * @param {Object[]} observations
-   * @param {string} observations[].timestamp RFC3339 timestamp string
-   * @param {number} observations[].duration observation duration in seconds
-   * @param {number} observations[].cpu-util percentage cpu usage
+   * Each input require:
+   * @param {Object[]} inputs
+   * @param {string} inputs[].timestamp RFC3339 timestamp string
+   * @param {number} inputs[].duration input duration in seconds
+   * @param {number} inputs[].cpu-util percentage cpu usage
    */
-  async calculate(observations: object | object[] | undefined): Promise<any[]> {
-    if (observations === undefined) {
+  async execute(inputs: object | object[] | undefined): Promise<any[]> {
+    if (inputs === undefined) {
       throw new Error('Required Parameters not provided');
-    } else if (!Array.isArray(observations)) {
-      throw new Error('Observations must be an array');
+    } else if (!Array.isArray(inputs)) {
+      throw new Error('inputs must be an array');
     }
-    return observations.map((observation: KeyValuePair) => {
-      this.configure(this.name!, observation);
-      observation['energy-cpu'] = this.calculateEnergy(observation);
-      return observation;
+    return inputs.map((input: KeyValuePair) => {
+      this.configure(this.name!, input);
+      input['energy-cpu'] = this.calculateEnergy(input);
+      return input;
     });
   }
 
@@ -94,39 +94,39 @@ export class TeadsCurveModel implements IImpactModelInterface {
   }
 
   /**
-   * Calculates the energy consumption for a single observation
+   * Calculates the energy consumption for a single input
    * requires
    *
-   * duration: duration of the observation in seconds
+   * duration: duration of the input in seconds
    * cpu-util: cpu usage in percentage
    * timestamp: RFC3339 timestamp string
    *
    * Uses a spline method on the teads cpu wattage data
    */
-  private calculateEnergy(observation: KeyValuePair) {
+  private calculateEnergy(input: KeyValuePair) {
     if (
-      !('duration' in observation) ||
-      !('cpu-util' in observation) ||
-      !('timestamp' in observation)
+      !('duration' in input) ||
+      !('cpu-util' in input) ||
+      !('timestamp' in input)
     ) {
       throw new Error(
-        'Required Parameters duration,cpu-util,timestamp not provided for observation'
+        'Required Parameters duration,cpu-util,timestamp not provided for input'
       );
     }
 
     //    duration is in seconds
-    const duration = observation['duration'];
+    const duration = input['duration'];
 
     //    convert cpu usage to percentage
-    const cpu = observation['cpu-util'];
+    const cpu = input['cpu-util'];
     if (cpu < 0 || cpu > 100) {
       throw new Error('cpu usage must be between 0 and 100');
     }
 
     let tdp = this.tdp;
 
-    if ('thermal-design-power' in observation) {
-      tdp = observation['thermal-design-power'] as number;
+    if ('thermal-design-power' in input) {
+      tdp = input['thermal-design-power'] as number;
     }
     if (tdp === 0) {
       throw new Error(

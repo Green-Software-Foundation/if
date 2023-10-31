@@ -22,7 +22,6 @@ Calculation --> Enrichment --> Normalization --> Aggregation
 
 We loop through the impact graph and component node by component node, pass in the provided inputs to the configured model plugins, and capture the outputs as a series of Impact Metrics.
 
-
 > If multiple inputs have been provided, we provide **multiple** output impact metrics. At this stage 1-1 mapping exists between an input and an output Impact Metric.
 
 
@@ -347,6 +346,5 @@ component:
 		sci: 0.44 gCO2e / user		        
 ```
 
-> [!tip] 
-> 
+
 > The same normalization plugin code could provide this time series of functional unit denominators. We pass in a fake component with inputs that represent the functional unit denominators, pass through the normalization phase, and generate a series of users for the global time series of impact durations.

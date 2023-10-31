@@ -1,4 +1,4 @@
-import {IImpactModelInterface} from '../interfaces';
+import {IOutputModelInterface} from '../interfaces';
 
 import {CONFIG} from '../../config';
 
@@ -7,7 +7,7 @@ import {KeyValuePair} from '../../types/common';
 const {MODEL_IDS} = CONFIG;
 const {SCI_O} = MODEL_IDS;
 
-export class SciOModel implements IImpactModelInterface {
+export class SciOModel implements IOutputModelInterface {
   authParams: object | undefined = undefined;
   staticParams: object | undefined;
   name: string | undefined;
@@ -17,38 +17,38 @@ export class SciOModel implements IImpactModelInterface {
   }
 
   /**
-   * Calculate the total emissions for a list of observations.
+   * Calculate the total emissions for a list of inputs.
    *
-   * Each Observation require:
-   * @param {Object[]} observations
-   * @param {string} observations[].timestamp RFC3339 timestamp string
+   * Each input require:
+   * @param {Object[]} inputs
+   * @param {string} inputs[].timestamp RFC3339 timestamp string
    */
-  async calculate(observations: object | object[] | undefined): Promise<any[]> {
-    if (observations === undefined) {
+  async execute(inputs: object | object[] | undefined): Promise<any[]> {
+    if (inputs === undefined) {
       throw new Error('Required Parameters not provided');
-    } else if (!Array.isArray(observations)) {
-      throw new Error('Observations must be an array');
+    } else if (!Array.isArray(inputs)) {
+      throw new Error('inputs must be an array');
     }
 
-    return observations.map((observation: KeyValuePair) => {
-      if (!('grid-carbon-intensity' in observation)) {
-        throw new Error('observation missing `grid-carbon-intensity`');
+    return inputs.map((input: KeyValuePair) => {
+      if (!('grid-carbon-intensity' in input)) {
+        throw new Error('input missing `grid-carbon-intensity`');
       }
-      if (!('energy' in observation)) {
-        throw new Error('observation missing `energy`');
+      if (!('energy' in input)) {
+        throw new Error('input missing `energy`');
       }
-      this.configure(this.name!, observation);
-      const grid_ci = parseFloat(observation['grid-carbon-intensity']);
-      const energy = parseFloat(observation['energy']);
-      observation['operational-carbon'] = grid_ci * energy;
-      return observation;
+      this.configure(this.name!, input);
+      const grid_ci = parseFloat(input['grid-carbon-intensity']);
+      const energy = parseFloat(input['energy']);
+      input['operational-carbon'] = grid_ci * energy;
+      return input;
     });
   }
 
   async configure(
     name: string,
     staticParams: object | undefined
-  ): Promise<IImpactModelInterface> {
+  ): Promise<IOutputModelInterface> {
     this.staticParams = staticParams;
     this.name = name;
     return this;

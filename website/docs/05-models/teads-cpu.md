@@ -2,6 +2,26 @@
 
 Teads Engineering team has built a model that is capable of estimating CPU usages across varying type of CPUs using a curve commonly known as Teads Curve.
 
+## Model name
+
+IF recognizes the Teads CPU model as `teads-curve`.
+
+## Parameters
+
+### Model config
+
+- `thermal-design-power`: the TDp of the processor
+- `interpolation`: the interpolation method to apply to the TDP data
+
+### Observations
+
+- `cpu-util`: percentage CPU utilization for the observation 
+
+## Returns
+
+- `energy-cpu`: The energy used by the CPU, in kWh
+
+
 ## Implementation
 
 ### Linear Interpolation

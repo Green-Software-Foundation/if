@@ -18,11 +18,11 @@ try:
   data = yaml.safe_load(yaml_input)
 
   if data is not None:
-    data['impacts'] = []
-    for impact in data['observations']:
-      imp = copy.deepcopy(impact)
+    data['outputs'] = []
+    for output in data['inputs']:
+      imp = copy.deepcopy(output)
       imp['energy'] = 1
-      data['impacts'].append(imp)
+      data['outputs'].append(imp)
     print(yaml.dump(data, default_flow_style=False))
   else:
     print("No valid YAML input provided.")

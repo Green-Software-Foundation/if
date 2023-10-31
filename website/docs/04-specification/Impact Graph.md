@@ -47,7 +47,6 @@ During graph computation, we first calculate the Component nodes to generate Imp
 
 ![](../../static/img//bcb0066204a750f6b18a43a627c66b90.png)
 
-
 A computation of an Impact Graph can create one Impact Metric. It can also be configured to return a **time series of outputs**, so you can identify the moments when impact is higher or lower. Importantly a time series is computed for every node (grouping or component) in the graph so that you can analyze the source of impact structurally and temporally.
 
 ### Pipeline

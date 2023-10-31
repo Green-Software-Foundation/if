@@ -1,6 +1,6 @@
 import {
-  BoaviztaCpuImpactModel,
-  BoaviztaCloudImpactModel,
+  BoaviztaCpuOutputModel,
+  BoaviztaCloudOutputModel,
   CloudCarbonFootprint,
   ShellModel,
   SciMModel,
@@ -40,9 +40,9 @@ export class ModelsUniverse {
   private handBuiltinModel(name: string) {
     switch (name) {
       case 'boavizta-cpu':
-        return BoaviztaCpuImpactModel;
+        return BoaviztaCpuOutputModel;
       case 'boavizta-cloud':
-        return BoaviztaCloudImpactModel;
+        return BoaviztaCloudOutputModel;
       case 'ccf':
         return CloudCarbonFootprint;
       case 'teads-aws':

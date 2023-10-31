@@ -4,6 +4,28 @@ Software systems cause emissions through the hardware that they operate on, both
 
 Read more on [embodied carbon](https://github.com/Green-Software-Foundation/sci/blob/main/Software_Carbon_Intensity/Software_Carbon_Intensity_Specification.md#embodied-emissions)
 
+## Model name
+
+IF recognizes the SCI-M model as `sci-m` 
+
+## Parameters
+
+### Model config
+
+- `total-embodied-emissions`: the sum of Life Cycle Assessment (LCA) emissions for the component
+- `time-reserved`: the share of the total life span of the hardware reserved for use by an application
+- `expected-lifespan`: the length of time, in seconds, between a component's manufacture and its disposal
+- `reserved-resources`: the number of resources reserved for use by the software
+- `total-resources`: the total number of resources available
+
+### Observations
+- `timestamp`: a timestamp for the observation
+- `duration`: the amount of time, in seconds, that the observation covers.
+
+## Returns
+
+- `embodied-carbon`: the carbon emitted in manufacturing and disposing of a component, in gCO2eq
+
 ## Calculation
 
 To calculate the embodied carbon, `m` for a software application, use the equation:
@@ -30,15 +52,6 @@ Where:
 
 IEF implements the plugin based on the logic described above. To run the model, you must first create an instance of `SciMModel` and call its `configure()` method. Then, you can call `execute()` to return `m`.
 
-It expects all of the following parameters to be provided in order to calculate `m`:
-
-```
-te
-tir
-el
-rr
-tor
-```
 
 ## Usage
 
@@ -62,7 +75,7 @@ const results = sciMModel.execute([
 
 ## Example impl
 
-IEF users will typically call the model as part of a pipeline defined in an `impl` file. In this case, instantiating and configuring the model is handled by `rimpl` and does not have to be done explicitly by the user. The following is an example `impl` that calls `sci-m`:
+IEF users will typically call the model as part of a pipeline defined in an `impl` file. In this case, instantiating and configuring the model is handled by `impact` and does not have to be done explicitly by the user. The following is an example `impl` that calls `sci-m`:
 
 ```yaml
 name: sci-m
@@ -86,7 +99,7 @@ graph:
           expected-lifespan: 3 # 3 years in seconds        
           resources-reserved: 1
           total-resources: 8
-      observations: 
+      inputs: 
         - timestamp: 2023-07-06T00:00
           duration: 3600
 ```
@@ -94,7 +107,7 @@ graph:
 You can run this example `impl` by executing the following command from the project root:
 
 ```sh
-npx ts-node scripts/rimpl.ts --impl ./examples/impls/sci-m.yml --ompl ./examples/ompls/sci-m-test.yml
+npx ts-node scripts/impact.ts --impl ./examples/impls/sci-m.yml --ompl ./examples/ompls/sci-m-test.yml
 ```
 
 The results will be saved to a new `yaml` file in `/ompls`.

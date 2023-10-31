@@ -1,6 +1,6 @@
 import {ArgumentConfig} from 'ts-command-line-args';
 
-import {RimplProcessArgs} from '../types/process-args';
+import {impactProcessArgs} from '../types/process-args';
 
 export const CONFIG = {
   MODEL_IDS: {
@@ -24,7 +24,7 @@ export const CONFIG = {
     WATT_TIME: 'org.wattime.grid',
     CLOUD_INSTANCE_METADATA: 'org.gsf.cloud-instance-metadata',
   },
-  RIMPL: {
+  impact: {
     ARGS: {
       impl: {
         type: String,
@@ -42,7 +42,7 @@ export const CONFIG = {
         type: String,
         optional: true,
         description:
-          'The output file format. default to yaml but if csv is specified then it formats the impacts as a csv file for loading into another program.',
+          'The output file format. default to yaml but if csv is specified then it formats the outputs as a csv file for loading into another program.',
         defaultValue: 'yaml',
       },
       verbose: {
@@ -57,8 +57,8 @@ export const CONFIG = {
         alias: 'h',
         description: 'Prints this usage guide.',
       },
-    } as ArgumentConfig<RimplProcessArgs>,
-    HELP: `rimpl 
+    } as ArgumentConfig<impactProcessArgs>,
+    HELP: `impact 
   -impl [path to the input impl file]
   -ompl [path to the output impl file]
   -format [yaml|csv] 
@@ -66,7 +66,7 @@ export const CONFIG = {
   -help 
   impl: path to an input IMPL file
   ompl: path to the output IMPL file where the results as saved, if none is provided it prints to stdout.
-  format: the output file format. default to yaml but if csv is specified then it formats the impacts as a csv file for loading into another program.
+  format: the output file format. default to yaml but if csv is specified then it formats the outputs as a csv file for loading into another program.
   verbose: how much information to output about the calculation to aid investigation and debugging.
   help: prints out the above help instruction.
   `,
