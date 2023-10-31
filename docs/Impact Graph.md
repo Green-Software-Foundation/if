@@ -8,7 +8,7 @@ abstract: An impact graph is the core construct in an Impact Engine Framework th
 
 An Impact Graph is a manifest that defines everything you need to calculate the environmental impact of a piece of software. 
 
-You can describe it in YAML format ([impl](Impl%20(Impact%20YAML).md)) and execute using a command line tool ([rimpl](Rimpl.md)) using static input data ([Observation](Observation.md)). It can output a single value or a time series of impacts so you can narrow down the moments of peak environmental impacts. It can also be constructed in code using the IEF SDK for use cases where real-time streaming or monitoring of impacts is required.
+You can describe it in YAML format ([impl](Impl%20(Impact%20YAML).md)) and execute using a command line tool ([Impact](Impact.md)) using static input data ([input](input.md)). It can output a single value or a time series of outputs so you can narrow down the moments of peak environmental impacts. It can also be constructed in code using the IEF SDK for use cases where real-time streaming or monitoring of impacts is required.
 
 It allows you to evolve, start course grained for a fast high-level impact calculation, and then add granularity (structural and temporal) over time to dig deeper and identify the areas that drive the most impacts.
 
@@ -35,10 +35,10 @@ The intermediate nodes (**Groupings**) represent a grouping of leaf nodes for us
 
 ### Component
 
-Each component has some configuration, some observations, and a model.
+Each component has some configuration, some inputs, and a model.
 - **Configuration** describes shared information regarding this component and, most importantly, parameters required by this model.
-- **Observations** are a time series of data points used as inputs to the model.
-- **Model** is a plugin ([[Impact Model Plugin]]) which when given some configuration and a series of [[Observation]], can calculate the impact, e.g. carbon impact from an observation of CPU utilization.
+- **inputs** are a time series of data points used as inputs to the model.
+- **Model** is a plugin ([[Impact Model Plugin]]) which when given some configuration and a series of [[input]], can calculate the impact, e.g. carbon impact from an input of CPU utilization.
 
 ![](images/decc58c3420d1e4e3701e5d1ac12883e.png)
 %%[[Impact Graph - Component.excalidraw|🖋 Edit in Excalidraw]], and the [[Impact Graph - Component.excalidraw.dark.png|dark exported image]]%%
@@ -50,17 +50,17 @@ During graph computation, we first calculate the Component nodes to generate Imp
 ![](images/bcb0066204a750f6b18a43a627c66b90.png)
 %%[[Impact Graph - Computation.excalidraw|🖋 Edit in Excalidraw]], and the [[Impact Graph - Computation.excalidraw.dark.png|dark exported image]]%%
 
-A computation of an Impact Graph can create one Impact Metric. It can also be configured to return a **time series of impacts**, so you can identify the moments when impact is higher or lower. Importantly a time series is computed for every node (grouping or component) in the graph so that you can analyze the source of impact structurally and temporally.
+A computation of an Impact Graph can create one Impact Metric. It can also be configured to return a **time series of outputs**, so you can identify the moments when impact is higher or lower. Importantly a time series is computed for every node (grouping or component) in the graph so that you can analyze the source of impact structurally and temporally.
 
 ### Pipeline
 
 See [[Computation Pipeline]] for details regarding the phases of an Impact Graph Computation. 
 
 In summary, there are 4 phases:
-- **Calculation**: Calculating the impacts of every component leaf node.
-- **Enrichment**: Enriching the impacts, e.g. calculating the carbon from energy using grid emissions data.
-- **Normalization**: Bucketing the impacts into a time series of impact durations.
-- **Aggregation**: Aggregating the impacts by each impact duration, up the graph, to the parent nodes and finally, the root node 
+- **Calculation**: Calculating the outputs of every component leaf node.
+- **Enrichment**: Enriching the outputs, e.g. calculating the carbon from energy using grid emissions data.
+- **Normalization**: Bucketing the outputs into a time series of impact durations.
+- **Aggregation**: Aggregating the outputs by each impact duration, up the graph, to the parent nodes and finally, the root node 
 
 Through the above pipeline process, we can handle multiple types of calculations. To see how we can calculate an SCI score, see [[Computing SCI Scores]].
 
@@ -75,11 +75,11 @@ We can apply the [[4Ms]] using an Impact Graph.
 
 Creating a graph involves **mapping** a subject you want to measure, simulate and monitor. It could be a software application, a user journey, campaign. Modeling involves adding nodes to the graph, both component and grouping nodes.
 
-**Measuring** involves selecting and configuring the correct measurement plugins for each component in the graph and collecting observations to pass to those plugins.
+**Measuring** involves selecting and configuring the correct measurement plugins for each component in the graph and collecting inputs to pass to those plugins.
 
 Once both steps are complete and you have a baseline, *computable*, model of your graph's impacts, you can start **simulating** the effects of making changes. You can change the model to represent a *what if* scenario (e.g. changing part of the architecture or runtime of your software), compute the new simulation graph, and see how much this affects the overall impact without making any changes to your software.
 
-So far, graph computations are batch processes that start and end with static observations embedded. Since the graph represents executable code that takes in some observations to generate outputs impacts, it's possible to turn a graph calculation into a continuous process to **monitor** the impacts of your subject. Something that takes a stream of observations in and exhausts a stream of output impacts.
+So far, graph computations are batch processes that start and end with static inputs embedded. Since the graph represents executable code that takes in some inputs to generate outputs impacts, it's possible to turn a graph calculation into a continuous process to **monitor** the impacts of your subject. Something that takes a stream of inputs in and exhausts a stream of output impacts.
 
 ### Evolution
 
@@ -87,9 +87,9 @@ One of the most valuable features of a graph is that it can grow and evolve; it 
 
 We need to add [[Granularity]] to a graph to get the most out of this process. The more granular a graph is, the more accurate the impacts will be. The more granular a graph, the more opportunities to simulate present themselves. 
 
-Most graphs might begin life as **one** component node and **one** observation. This will give you a single impact.
+Most graphs might begin life as **one** component node and **one** input. This will give you a single impact.
 
-Once you desire to see the impacts over time, you might evolve the graph by adding multiple observations. 
+Once you desire to see the impacts over time, you might evolve the graph by adding multiple inputs. 
 
 Once you want to see the impacts broken down by sub-components, you evolve the graph by adding more components.
 

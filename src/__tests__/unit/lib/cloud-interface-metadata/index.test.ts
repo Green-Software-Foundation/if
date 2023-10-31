@@ -8,7 +8,7 @@ describe('ccf:configure test', () => {
     const model = await new CloudInstanceMetadataModel().configure('ccf', {});
     expect(model).toBeInstanceOf(CloudInstanceMetadataModel);
     await expect(
-      model.calculate([
+      model.execute([
         {
           'cloud-instance-type': 'm5n.large',
           'cloud-vendor': 'aws',
@@ -26,7 +26,7 @@ describe('ccf:configure test', () => {
       ])
     );
     await expect(
-      model.calculate([
+      model.execute([
         {
           'cloud-instance-type': 't2.micro',
           'cloud-vendor': 'aws2',
@@ -34,7 +34,7 @@ describe('ccf:configure test', () => {
       ])
     ).rejects.toThrowError('cloud-vendor: Only `aws` is currently supported');
     await expect(
-      model.calculate([
+      model.execute([
         {
           'cloud-instance-type': 't2.micro2',
           'cloud-vendor': 'aws',

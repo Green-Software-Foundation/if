@@ -43,7 +43,7 @@ graph:
           functional-unit-duration: 1 
           functional-duration-time: ''
           functional-unit: requests # factor to convert per time to per f.unit
-      observations: 
+      inputs: 
         - timestamp: 2023-07-06T00:00
           duration: 3600
           five-min-input-ratotal-embodied-emissions: 100
@@ -72,28 +72,28 @@ graph:
           functional-unit: requests # factor to convert per time to per f.unit
       children:
         switch-1:
-          observations:
+          inputs:
             - timestamp: 2023-07-06T00:00
               duration: 1
               energy-network: 0.000811 #kwh     
               grid-carbon-intensity: 457 # gCO2e/kWh
               requests: 38032740
         switch-2:
-          observations: 
+          inputs: 
             - timestamp: 2023-07-06T00:00
               duration: 1
               energy-network: 0 # no traffic at all
               grid-carbon-intensity: 457 # gCO2e/kWh
               requests: 38032740
         switch-3:
-          observations:
+          inputs:
             - timestamp: 2023-07-06T00:00
               duration: 1
               energy-network: 0.000955 #kwh
               grid-carbon-intensity: 457 # gCO2e/kWh
               requests: 38032740
         switch-4:
-          observations:
+          inputs:
             - timestamp: 2023-07-06T00:00
               duration: 1
               energy-network: 1.14e-8 #kwh
@@ -119,14 +119,14 @@ graph:
           functional-unit: requests
       children:
         db-server1:
-          observations:
+          inputs:
             - timestamp: 2023-07-06T00:00
               energy-cpu: 0.258
               duration: 1 #s
               grid-carbon-intensity: 457 # gCO2e/kWh
               requests: 38032740
         db-server2:
-          observations:
+          inputs:
             - timestamp: 2023-07-06T00:00
               energy-cpu: 0.193
               duration: 1 #s
@@ -153,13 +153,13 @@ graph:
           functional-unit: requests # factor to convert per time to per f.unit 
       children:
         app-server1:
-          observations: 
+          inputs: 
             - timestamp: 2023-07-06T00:00
               duration: 1
               energy-cpu: 0.149
               grid-carbon-intensity: 457 # gCO2e/kWh
         app-server2:
-          observations:  
+          inputs:  
             - timestamp: 2023-07-06T00:00
               duration: 1
               energy-cpu: 0.147
@@ -186,14 +186,14 @@ graph:
           functional-unit: requests # factor to convert per time to per f.unit
       children:
         web-server1:
-          observations: 
+          inputs: 
             - timestamp: 2023-07-06T00:00
               duration: 1
               energy-cpu: 0.139
               grid-carbon-intensity: 951 # gCO2e/kWh
               requests: 38032740
         web-server2:
-          observations: 
+          inputs: 
             - timestamp: 2023-07-06T00:00
               duration: 1
               energy-cpu: 0.116

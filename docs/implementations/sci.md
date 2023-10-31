@@ -57,7 +57,7 @@ SCI is the sum of the `operational-carbon` (calculated using the `sci-o` model) 
 
 `sci` takes `operational-carbon` and `embodied-carbon` as inputs along with three parameters related to the functional unit: 
 
-- `functional-unit`: a string describing the functional unit to normalize the SCI to. This must match a field provided in the `observations` with an associated value. For example, if `functional-unit` is `"requests"` then there should be a `requests` field in `obserations` with an associated value for the number of requests per `functional-unit-duration`.
+- `functional-unit`: a string describing the functional unit to normalize the SCI to. This must match a field provided in the `inputs` with an associated value. For example, if `functional-unit` is `"requests"` then there should be a `requests` field in `obserations` with an associated value for the number of requests per `functional-unit-duration`.
 - `functional-unit-time`: a time unit for `functional-unit-duration` as a string. E.g. `s`, `seconds`, `days`, `months`, `y`.
 - `functional-unit-duration`: The length of time, in units of `functional-unit-time` that the `sci` value should be normalized to. We expect this to nearly always be `1`, but for example if you want your `sci` value expressed as gC/user/2yr you could set `functional-unit-duration` to `2`, `functional-unit-time` to `years`, and `functional-unit` to `y`.
 
@@ -100,7 +100,7 @@ const results = sciModel.calculate([
 
 ## Example impl
 
-IEF users will typically call the model as part of a pipeline defined in an `impl` file. In this case, instantiating and configuring the model is handled by `rimpl` and does not have to be done explicitly by the user. The following is an example `impl` that calls `sci`:
+IEF users will typically call the model as part of a pipeline defined in an `impl` file. In this case, instantiating and configuring the model is handled by `impact` and does not have to be done explicitly by the user. The following is an example `impl` that calls `sci`:
 
 ```yaml
 name: sci-demo
@@ -121,7 +121,7 @@ graph:
           functional-unit-duration: 1 
           functional-unit-time: 'minutes'
           functional-unit: requests # factor to convert per time to per f.unit
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00
           operational-carbon: 0.02
           embodied-carbon: 5

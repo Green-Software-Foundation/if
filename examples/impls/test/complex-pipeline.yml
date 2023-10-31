@@ -23,7 +23,6 @@ initialize:
       kind: builtin
     - name: sampler
       kind: shell
-      path: python3 /usr/local/bin/sampler
 graph:
   children:
     child:
@@ -38,7 +37,7 @@ graph:
           thermal-design-power: 1
         sampler:
           executable: python3 /usr/local/bin/sampler
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           processor: Intel® Core™ i7-1185G7
           data-in: 1

@@ -4,15 +4,15 @@ abstract: Standardising the interface to measurement models.
 ---
 # Impact Model Plugin
 
-Calculating [Impact Metric](Impact%20Metric) 's (impacts) for every component in an [Impact Graph](Impact%20Graph.md) (graph) requires the use of an **Impact Model** (model) called through an [Impact Model Plugin](Impact%20Model%20Plugin.md) (model plugin).
+Calculating [Impact Metric](Impact%20Metric) 's (outputs) for every component in an [Impact Graph](Impact%20Graph.md) (graph) requires the use of an **Impact Model** (model) called through an [Impact Model Plugin](Impact%20Model%20Plugin.md) (model plugin).
 
 ## What are Impact Models?
 
-A model converts an input [Observation](Observation.md) into some output [Impact Metric](Impact%20Metric), for example, models that convert an observation of CPU utilization into an impact of energy.
+A model converts an input [input](input.md) into some output [Impact Metric](Impact%20Metric), for example, models that convert an input of CPU utilization into an impact of energy.
 
 There are many different **models**, [Boavizta](https://dataviz.boavizta.org/), [Cloud Carbon Footprint](https://github.com/cloud-carbon-footprint/ccf-coefficients), [Climatiq](https://www.climatiq.io/data) are some great examples of open-source IMs, there are **many other** closed source, commercial and private models being built in-house inside organizations.
 
-The set of models is increasing; however, no single model can cover all impacts, scenarios, environments, contexts, and use cases. To calculate the end-to-end impact of a software application, you need to stitch together many different models. Models differ in fundamental ways in the inputs observations they accept, their interface, their calculation methodology, their outputs, their granularity, and their coverage. 
+The set of models is increasing; however, no single model can cover all impacts, scenarios, environments, contexts, and use cases. To calculate the end-to-end impact of a software application, you need to stitch together many different models. Models differ in fundamental ways in the inputs inputs they accept, their interface, their calculation methodology, their outputs, their granularity, and their coverage. 
 	
 We expect the choice of which model to use for which software component to come down to an expert decision by a green software professional.
 
@@ -42,11 +42,11 @@ This specification version does not pick any specific language, but it assumes t
 
 This is a simple dictionary used to set up a model. Each model is different and can have a wide variety of parameters. The specification cannot define these parameters, so we choose a simple dictionary data type that accepts all types and quantities of parameters.
 
-### Observation
+### input
 
-- An [Observation](Observation.md) is a data unit describing some inputs to a model. 
-- Since every model differs, we can only specify a little. However, the only two fields that would be mandatory for each observation are the date/time when the measurement was gathered and the duration for which the observation is valid. 
-- For example, you might have some observation for CPU utilization, but we also need to know when this observation was gathered and for what period the observation spans.
+- An [input](input.md) is a data unit describing some inputs to a model. 
+- Since every model differs, we can only specify a little. However, the only two fields that would be mandatory for each input are the date/time when the measurement was gathered and the duration for which the input is valid. 
+- For example, you might have some input for CPU utilization, but we also need to know when this input was gathered and for what period the input spans.
 
 > ![note] We will likely need to add a location for grid emissions enrichment and also something regarding the context in which it was measured (e.g., utilization on a ten-year-old chip won't match utilization on a 2023 processor)
 ### ImpactMetric
@@ -66,7 +66,7 @@ This data type holds the results of a model call, the estimated energy, carbon, 
 interface ImpactModelPluginInterface {
   public configure(name: string, config: Configuration): ImpactModelPluginInterface
   public authenticate(authParams: AuthParams): void
-  public calculate(observations: Arrray<Observation>): Array<ImpactMetric>
+  public calculate(inputs: Arrray<input>): Array<ImpactMetric>
 }
 ```
 
@@ -154,12 +154,12 @@ Nothing.
 
 ### Calculate
 
-This function estimates the emissions based on a single input observation. For each input observation, we calculate one output Impact Metric. Observations and Impact Metrics have a 1-1 mapping and relationship.
+This function estimates the emissions based on a single input input. For each input input, we calculate one output Impact Metric. inputs and Impact Metrics have a 1-1 mapping and relationship.
 
 #### Signature
 
 ```ts
-public calculate(observations: Array<Observation>): Arrray<ImpactMetric>
+public calculate(inputs: Array<input>): Arrray<ImpactMetric>
 ```
 
 #### Example usage
@@ -168,9 +168,9 @@ public calculate(observations: Array<Observation>): Arrray<ImpactMetric>
 class ConcreteVM extends ImpactModelInterface { ... }
 let model = new ConcreteVM().configure("backend-server", {vendor: "GCP"});
 try {
-    let observation = {“date-time”: xxxx, “duration”: xxx, “cpu-util”: 0.5};
-    let impacts = model.calculate([observation]);
-    console.log(impacts);
+    let input = {“date-time”: xxxx, “duration”: xxx, “cpu-util”: 0.5};
+    let outputs = model.calculate([input]);
+    console.log(outputs);
 } catch {
     ...
 }
@@ -178,14 +178,14 @@ try {
 
 #### Responsibilities
 
-* Checked that the passed in observations have all the required fields for this model.
-* Performs what validations it can that the provided observations are not malformed.
-* Passes the observations to the underlying carbon model, executes the model, and translates the response to match the emissions data type.
+* Checked that the passed in inputs have all the required fields for this model.
+* Performs what validations it can that the provided inputs are not malformed.
+* Passes the inputs to the underlying carbon model, executes the model, and translates the response to match the emissions data type.
 
 #### Parameters
 
-* **observations** 
-  * This is an array of observations. 
+* **inputs** 
+  * This is an array of inputs. 
   * Each model can work with different types of inputs; the spec cannot predict what kinds of inputs will be used by all models, so we need to keep this very open. 
   * It's an array since we will (in the future) need to deal with GridEMissions (`I`), and that requires input data in a fine grain to make sure we map to `I` at the same granularity. E.g., we might want to output carbon per hour, but the input energy data is in 5min increments so that we can make the grid emissions in the same 5 min increments.
 

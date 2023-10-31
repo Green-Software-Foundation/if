@@ -33,7 +33,7 @@ graph:
         sci:
           functional-unit-duration: '' # signal to convert /s -> /hr
           functional-unit: '' # factor to convert per time to per f.unit ()
-    observations: 
+    inputs: 
       - timestamp: 2023-07-06T00:00
         duration: 1336 # 22.27 min runtime in seconds
         energy: 17.97
@@ -52,7 +52,7 @@ graph:
           functional-unit-duration: 1 
           functional-duration-time: ''
           functional-unit: requests # factor to convert per time to per f.unit
-    observations: 
+    inputs: 
       - timestamp: 2023-07-06T00:00
         duration: 1205 # 22.27 min runtime in seconds
         energy: 14.37

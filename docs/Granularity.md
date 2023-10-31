@@ -4,7 +4,7 @@ abstract: Why granularity is important to impact graphing and the two main types
 ---
 # Granularity
 
-An [Impact Graph](Impact%20Graph.md) (graph) can be created that is very coarse-grained, a single top-level component, with a single observation of long duration.
+An [Impact Graph](Impact%20Graph.md) (graph) can be created that is very coarse-grained, a single top-level component, with a single input of long duration.
 
 ```yaml
 name: My application
@@ -15,7 +15,7 @@ graph:
 
 This graph is legal, it can calculate an impact metric, and it *might* be helpful as a starting point.
 
-But as you add more granularity to your graph, you generate a more accurate impact metric and surface more interesting information, such as **where** and **when** the impacts are being generated.
+But as you add more granularity to your graph, you generate a more accurate impact metric and surface more interesting information, such as **where** and **when** the outputs are being generated.
 
 A top-level course-grained impact metric doesn't tell you which components are generating most of your emissions or when they are generating your emissions. To get more information about where to invest in reducing your application's impact, you need to get granular, both in terms of structural granularity and temporal granularity. 
 ### Structural Granularity
@@ -34,7 +34,7 @@ graph: # sum = 52
   email-servers: 5
 ```
 
-However, an impact graph contains grouping and component (leaf) nodes. Only components can generate impacts and can be measured. Grouping nodes are simply the sum of the impacts of their child nodes. Grouping nodes allow you to aggregate related components together for helpful analysis. Measure several components individually and see their aggregate impact in a grouping.
+However, an impact graph contains grouping and component (leaf) nodes. Only components can generate outputs and can be measured. Grouping nodes are simply the sum of the outputs of their child nodes. Grouping nodes allow you to aggregate related components together for helpful analysis. Measure several components individually and see their aggregate impact in a grouping.
 
 ```yaml
 name: My application
@@ -52,15 +52,15 @@ graph: # sum = 52
     email-servers: 5
 ```
 
-> [!note] Structural granularity is all about increasing the number of nodes in your graph; more nodes mean more Impacts are being calculated, and this information can surface insights.
+> [!note] Structural granularity is all about increasing the number of nodes in your graph; more nodes mean more outputs are being calculated, and this information can surface insights.
 
 ### Temporal Granularity
 
 A graph can calculate a single Impact Metric for its whole duration (graph duration) or create a time series of Impact Metrics for smaller durations (impact durations).
 
-The engine will handle normalizing, bucketing, and slicing time to generate any output time series from any sets of input observations. The input observations don't need to be in the same frequency or interval as the output time series. They don't need to be synchronized with the other components or output impacts.
+The engine will handle normalizing, bucketing, and slicing time to generate any output time series from any sets of input inputs. The input inputs don't need to be in the same frequency or interval as the output time series. They don't need to be synchronized with the other components or output outputs.
 
-However, the more granular observations you can provide, the more accurate the output impact metric time series will be. More observations of shorter duration drive temporal granularity.
+However, the more granular inputs you can provide, the more accurate the output impact metric time series will be. More inputs of shorter duration drive temporal granularity.
 
 ```yaml
 name: My application
@@ -78,6 +78,6 @@ graph: # sum = 52,51,...
     email-servers: 5,5,...
 ```
 
-> [!note] Adding temporal granularity surfaces information regarding when your components generate the most impact. This is achieved by adding in more observations of shorter durations. Instead of one observation per hour, can you provide one per minute?
+> [!note] Adding temporal granularity surfaces information regarding when your components generate the most impact. This is achieved by adding in more inputs of shorter durations. Instead of one input per hour, can you provide one per minute?
 
 

@@ -1,4 +1,4 @@
-import {IImpactModelInterface} from '../interfaces';
+import {IOutputModelInterface} from '../interfaces';
 
 import {CONFIG} from '../../config';
 
@@ -7,7 +7,7 @@ import {KeyValuePair} from '../../types/common';
 const {MODEL_IDS} = CONFIG;
 const {SCI_E} = MODEL_IDS;
 
-export class SciEModel implements IImpactModelInterface {
+export class SciEModel implements IOutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in thi smodel.
   name: string | undefined; // name of the data source
 
@@ -26,7 +26,7 @@ export class SciEModel implements IImpactModelInterface {
   async configure(
     name: string,
     staticParams: object | undefined = undefined
-  ): Promise<IImpactModelInterface> {
+  ): Promise<IOutputModelInterface> {
     this.name = name;
 
     if (staticParams === undefined) {
@@ -37,24 +37,24 @@ export class SciEModel implements IImpactModelInterface {
   }
 
   /**
-   * Calculate the total emissions for a list of observations.
+   * Calculate the total emissions for a list of inputs.
    *
-   * Each Observation require:
-   * @param {Object[]} observations
-   * @param {string} observations[].timestamp RFC3339 timestamp string
+   * Each input require:
+   * @param {Object[]} inputs
+   * @param {string} inputs[].timestamp RFC3339 timestamp string
    */
-  async calculate(observations: object | object[] | undefined): Promise<any[]> {
-    if (observations === undefined) {
+  async execute(inputs: object | object[] | undefined): Promise<any[]> {
+    if (inputs === undefined) {
       throw new Error('Required Parameters not provided');
-    } else if (!Array.isArray(observations)) {
-      throw new Error('Observations must be an array');
+    } else if (!Array.isArray(inputs)) {
+      throw new Error('inputs must be an array');
     }
 
-    return observations.map((observation: KeyValuePair) => {
-      this.configure(this.name!, observation);
-      observation['energy'] = this.calculateEnergy(observation);
+    return inputs.map((input: KeyValuePair) => {
+      this.configure(this.name!, input);
+      input['energy'] = this.calculateEnergy(input);
 
-      return observation;
+      return input;
     });
   }
 
@@ -75,30 +75,30 @@ export class SciEModel implements IImpactModelInterface {
    *
    * adds energy + e_net + e_mum
    */
-  private calculateEnergy(observation: KeyValuePair) {
+  private calculateEnergy(input: KeyValuePair) {
     let e_mem = 0;
     let e_net = 0;
     let e_cpu = 0;
 
     if (
-      !('energy-cpu' in observation) &&
-      !('energy-memory' in observation) &&
-      !('energy-network' in observation)
+      !('energy-cpu' in input) &&
+      !('energy-memory' in input) &&
+      !('energy-network' in input)
     ) {
       throw new Error(
-        'Required Parameters not provided: at least one of energy-memory, energy-network or energy must be present in observation'
+        'Required Parameters not provided: at least one of energy-memory, energy-network or energy must be present in input'
       );
     }
 
     // If the user gives a negative value it will default to zero.
-    if ('energy-cpu' in observation && observation['energy-cpu'] > 0) {
-      e_cpu = observation['energy-cpu'];
+    if ('energy-cpu' in input && input['energy-cpu'] > 0) {
+      e_cpu = input['energy-cpu'];
     }
-    if ('energy-memory' in observation && observation['energy-memory'] > 0) {
-      e_mem = observation['energy-memory'];
+    if ('energy-memory' in input && input['energy-memory'] > 0) {
+      e_mem = input['energy-memory'];
     }
-    if ('energy-network' in observation && observation['energy-network'] > 0) {
-      e_net = observation['energy-network'];
+    if ('energy-network' in input && input['energy-network'] > 0) {
+      e_net = input['energy-network'];
     }
 
     return e_cpu + e_net + e_mem;

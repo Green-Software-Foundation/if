@@ -1,4 +1,4 @@
-export interface RimplProcessArgs {
+export interface impactProcessArgs {
   impl?: string;
   ompl?: string;
   format?: string;

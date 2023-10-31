@@ -34,7 +34,7 @@ describe('watt-time:configure test', () => {
     });
     expect(model).toBeInstanceOf(WattTimeGridEmissions);
     await expect(
-      model.calculate([
+      model.execute([
         {
           location: '37.7749,-122.4194',
           timestamp: '2021-01-01T00:00:00Z',
@@ -50,7 +50,7 @@ describe('watt-time:configure test', () => {
       },
     ]);
     await expect(
-      model.calculate([
+      model.execute([
         {
           location: '37.7749,-122.4194',
           timestamp: '2021-01-01T00:00:00Z',
@@ -66,7 +66,7 @@ describe('watt-time:configure test', () => {
       },
     ]);
     await expect(
-      model.calculate([
+      model.execute([
         {
           location: '37.7749,-122.4194',
           timestamp: '2021-01-01T00:00:00Z',
@@ -82,7 +82,7 @@ describe('watt-time:configure test', () => {
       },
     ]);
     await expect(
-      model.calculate([
+      model.execute([
         {
           location: '37.7749,-122.4194',
           timestamp: '2021-01-01T00:00:00Z',
@@ -99,7 +99,7 @@ describe('watt-time:configure test', () => {
     ]);
 
     await expect(
-      model.calculate([
+      model.execute([
         {
           location: '37.7749,-122.4194',
           timestamp: '2021-01-01T00:00:00Z',

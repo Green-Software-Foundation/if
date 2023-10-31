@@ -1,19 +1,19 @@
-import {IImpactModelInterface} from '../../lib';
+import {IOutputModelInterface} from '../../lib';
 
 import {
   ImplInitializeModel,
   InitalizedModels,
 } from '../../types/models-universe';
 
-class MockModel implements IImpactModelInterface {
+class MockModel implements IOutputModelInterface {
   modelIdentifier(): string {
     return 'mock';
   }
 
-  configure(): Promise<IImpactModelInterface> {
+  configure(): Promise<IOutputModelInterface> {
     return Promise.resolve(this);
   }
-  calculate(): Promise<any[]> {
+  execute(): Promise<any[]> {
     return Promise.resolve([{data: 'mock-data'}]);
   }
   authenticate(): void {}

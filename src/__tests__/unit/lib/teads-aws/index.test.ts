@@ -7,13 +7,13 @@ jest.setTimeout(30000);
 
 describe('teads:configure test', () => {
   test('initialize with params', async () => {
-    const impactModel = new TeadsAWS();
-    await impactModel.configure('test', {
+    const outputModel = new TeadsAWS();
+    await outputModel.configure('test', {
       interpolation: Interpolation.LINEAR,
       'instance-type': 't2.micro',
     });
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {
           duration: 3600,
           'cpu-util': 50,
@@ -31,13 +31,13 @@ describe('teads:configure test', () => {
     ]);
   });
   test('teads:initialize with params: spline', async () => {
-    const impactModel = new TeadsAWS();
-    await impactModel.configure('test', {
+    const outputModel = new TeadsAWS();
+    await outputModel.configure('test', {
       'instance-type': 'm5n.large',
       interpolation: Interpolation.SPLINE,
     });
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {
           duration: 3600,
           'cpu-util': 10,
@@ -79,13 +79,13 @@ describe('teads:configure test', () => {
     ]);
   });
   test('teads:initialize with params: linear', async () => {
-    const impactModel = new TeadsAWS();
-    await impactModel.configure('test', {
+    const outputModel = new TeadsAWS();
+    await outputModel.configure('test', {
       'instance-type': 'm5n.large',
       interpolation: Interpolation.LINEAR,
     });
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {
           duration: 3600,
           'cpu-util': 10,
@@ -127,14 +127,14 @@ describe('teads:configure test', () => {
     ]);
   });
   test('teads:initialize with params: linear 2', async () => {
-    const impactModel = new TeadsAWS();
-    await impactModel.configure('test', {
+    const outputModel = new TeadsAWS();
+    await outputModel.configure('test', {
       'instance-type': 'm5n.large',
       interpolation: Interpolation.LINEAR,
       'expected-lifespan': 8 * 365 * 24 * 3600,
     });
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {
           duration: 3600,
           'cpu-util': 10,

@@ -1,13 +1,13 @@
-# Rimpl
+# Impact
 
 ## Introduction
 
-Rimpl is a command line tool that computes [Impl (Impact YAML)](Impl%20(Impact%20YAML).md) files. 
+Impact is a command line tool that computes [Impl (Impact YAML)](Impl%20(Impact%20YAML).md) files. 
 
 ## Quickstart
 
 ```
-rimpl 
+impact 
 -impl [path to the input impl file]
 -ompl [path to the output impl file]
 -format [yaml|csv] (not yet implemented)
@@ -17,15 +17,15 @@ rimpl
 
 - `impl`: path to an input IMPL file
 - `ompl`: path to the output IMPL file where the results as saved, if none is provided it prints to stdout.
-- `format`: the output file format. default to yaml but if csv is specified then it formats the impacts as a csv file for loading into another program.
+- `format`: the output file format. default to yaml but if csv is specified then it formats the outputs as a csv file for loading into another program.
 - `verbose`: how much information to output about the calculation to aid investigation and debugging.
 - `help`: prints out the above help file.
 
 
-To use Rimpl, you must first configure an impl. Then, you can simply pass the path to the impl to rimpl on the command line. You can also pass a path where you would like to save the output file to. For example, the following command, run from the project root, loads the `mst-eshoppen.yml` impl file from the examples directory, executes all the models defined in the impl, and saves the output to `examples/ompls/e-shoppen.yml`:
+To use Impact, you must first configure an impl. Then, you can simply pass the path to the impl to Impact on the command line. You can also pass a path where you would like to save the output file to. For example, the following command, run from the project root, loads the `mst-eshoppen.yml` impl file from the examples directory, executes all the models defined in the impl, and saves the output to `examples/ompls/e-shoppen.yml`:
 
 ```sh
-npx ts-node scripts/rimpl.ts --impl ./examples/impls/msft-eshoppen.yaml --ompl ./examples/ompls/e-shoppen.yml
+npx ts-node scripts/Impact.ts --impl ./examples/impls/msft-eshoppen.yaml --ompl ./examples/ompls/e-shoppen.yml
 ```
 
 
@@ -38,7 +38,7 @@ There are a series of functions defined in a [Lifecycle](#Lifecycle) section whi
 At the end a processed graph is serialized back out to the end user for them to use the data.
 ## Lifecycle
 
-Every `Rimpl` execution goes through a lifecycle, a set of distinct steps which process the graph in stages.
+Every `impact` execution goes through a lifecycle, a set of distinct steps which process the graph in stages.
 
 Currenty the lifecycle is fixed but in the future this maybe be configurable via plugins.
 
@@ -67,7 +67,7 @@ graph:
       component-node-1:
         pipeline: ~
         config: ~
-        observations: ~
+        inputs: ~
 ```
 
 **Longhand Notation:**
@@ -82,7 +82,7 @@ graph:
             component-node-1:
               pipeline: ~
               config: ~
-              observations: ~
+              inputs: ~
 ```
 
 ### Mirror Pipeline To Component
@@ -99,10 +99,10 @@ graph:
       component-node-1:
         pipeline: ~
         config: ~
-        observations: ~
+        inputs: ~
       component-node-2:
         config: ~
-        observations: ~        
+        inputs: ~        
 ```
 
 If a component doesn't have a pipeline defined, then copy the pipeline from the higher scope down into this component, like so:
@@ -117,20 +117,20 @@ graph:
       component-node-1:
         pipeline: ~
         config: ~
-        observations: ~
+        inputs: ~
       component-node-2:
         pipeline:
           - model-1
           - model-2      
         config: ~
-        observations: ~        
+        inputs: ~        
 ```
 
 In the above example `component-node-2` didn't have a pipeline defined so used the pipeline defined on the `grouping-node-1`.
 
 ## Namespace Config
 
-All configuration on all levels of the graph is both merged into an observation and also namespaced so that the config for different models do not conflict with each other.
+All configuration on all levels of the graph is both merged into an input and also namespaced so that the config for different models do not conflict with each other.
 
 Take this example:
 
@@ -152,7 +152,7 @@ graph:
             component-node-1:
               pipeline: ~
               config: ~
-              observations: ~
+              inputs: ~
 ```
 
 After the above lifecycle step the graph object turns into this:
@@ -175,7 +175,7 @@ graph:
             component-node-1:
               pipeline: ~
               config: ~
-              observations:
+              inputs:
                 - timestamp: xxxxx
                   key-1::model-1: value-1
                   key-2::model-1: value-2a
@@ -226,17 +226,17 @@ After all these steps in the lifecycle every component node should have all the 
 - Loop through the nodes in the tree.
 - For every component node:
   - For every model in the pipeline for the component code:
-    - Pass the observations through the model.
-    - Store the results as sibling to `observations` called `impacts` on the same component node.
+    - Pass the inputs through the model.
+    - Store the results as sibling to `inputs` called `outputs` on the same component node.
 
 > [!important] 
-> Each input observation is for a time and duration, and each output impact is for the same time and duration. We should link an impact to the exact observation used to generate it.
+> Each input input is for a time and duration, and each output impact is for the same time and duration. We should link an impact to the exact input used to generate it.
 
-Represented as [Impl (Impact YAML)](Impl%20(Impact%20YAML).md), the calculation phase would compute every component node in the tree with **observations** like so:
+Represented as [Impl (Impact YAML)](Impl%20(Impact%20YAML).md), the calculation phase would compute every component node in the tree with **inputs** like so:
 
 ```yaml
 component:
-  observations: 
+  inputs: 
       - timestamp: 2023-07-06T00:00
         duration: 15 
         cpu-util: 33
@@ -248,11 +248,11 @@ component:
         cpu-util: 11
 ```
 
-To components with **impacts**, like so:
+To components with **outputs**, like so:
 
 ```yaml
 component:
-  impacts:
+  outputs:
       - timestamp: 2023-07-06T00:00
         duration: 15 
         energy: 23 mWh
@@ -265,7 +265,7 @@ component:
         duration: 5
         cpu-util: 11
         energy: 18 mWh  
-  observations: 
+  inputs: 
       - timestamp: 2023-07-06T00:00
         duration: 15 
         cpu-util: 33
@@ -300,7 +300,7 @@ If `-format csv` was specified then instead of outputting a YAML file we output 
 
 ## Verbosity (not yet implemented)
 
-The `-verbose` settings in rimpl exports a version of the graph after each step in the lifecycle process, so we can see how the lifecycle adjusts the graph and help debug any issues.
+The `-verbose` settings in impact exports a version of the graph after each step in the lifecycle process, so we can see how the lifecycle adjusts the graph and help debug any issues.
 
 For example with the settings `-ompl path/to/my.yaml` and `-verbose` these files might be output instead.
 

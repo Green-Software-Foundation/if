@@ -80,7 +80,7 @@ runBoavizta();
 
 ## Example impl
 
-In IEF models are expected to be invoked from an `impl` file. This is a yaml containing the model configuration and observations. The following `impl` initializes and runs the `boavizta-cpu` model:
+In IEF models are expected to be invoked from an `impl` file. This is a yaml containing the model configuration and inputs. The following `impl` initializes and runs the `boavizta-cpu` model:
 
 ```yaml
 name: boavizta-demo
@@ -102,8 +102,7 @@ graph:
         boavizta-cpu:
           core-units: 24
           physical-processor: Intel® Core™ i7-1185G7
-          location: "USA"
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 3600 # Secs
           cpu-util: 18.392
@@ -113,8 +112,8 @@ graph:
           
 ```
 
-You can run this by passing it to `rimpl`. Run rimpl using the following command run from the project root:
+You can run this by passing it to `impact`. Run impact using the following command run from the project root:
 
 ```sh
-npx ts-node scripts/rimpl.ts --impl ./examples/impls/boavizta.yml --ompl ./examples/ompls/boavizta.yml
+npx ts-node scripts/impact.ts --impl ./examples/impls/boavizta.yml --ompl ./examples/ompls/boavizta.yml
 ```

@@ -37,7 +37,7 @@ graph:
           functional-unit-duration: 1 
           functional-unit-time: 'minutes'
           functional-unit: requests # factor to convert per time to per f.unit
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00
           duration: 1
           cpu-util: 55

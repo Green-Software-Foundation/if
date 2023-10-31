@@ -29,7 +29,7 @@ initialize:
       kind: builtin
       verbose: false
       path: '' 
-# Single observation
+# Single input
 graph:
   backend: # an advanced grouping node
     pipeline: 
@@ -57,11 +57,11 @@ graph:
       sci:
         time: hour # signal to convert /s -> /hr
         factotal-resources: 32000
-    observations: 
+    inputs: 
       - timestamp: 2023-07-06T00:00
         duration: 86400 # 1 day
         subscription-id: c60d99da-0c45-4dfa-bc21-87e3c4cb4716
         resource-group: my-application
         name: batch-servers
-        observation-window: 3600 # 1 min buckets
+        input-window: 3600 # 1 min buckets
 
