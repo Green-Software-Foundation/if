@@ -23,7 +23,6 @@ initialize:
       kind: builtin
     - name: sampler
       kind: shell
-      path: python3 /usr/local/bin/sampler
 graph:
   children:
     child:
