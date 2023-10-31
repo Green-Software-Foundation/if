@@ -17,3 +17,4 @@ These are the models that come bundled with the Impact Framework source code. Yo
 * [WattTime](./watttime.md) - WattTime Impact Plugin Documentation
 * [TEADS-CPU](./teads-cpu.md) - Teads CPU Model
 * [TEADS-AWS](./teads-aws.md) - Teads AWS Model
+* [SHELL](./shell.md) - A model that enables externalmodels to be run in a child process

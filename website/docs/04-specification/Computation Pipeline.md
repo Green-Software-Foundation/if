@@ -5,7 +5,7 @@ abstract: How to process the outputs of an impact graph calculation, enriching i
 # Computation Pipeline
 
 > [!note] Outdated
-> This document is now outdated and has been superceded by other aspects of this spec esp. the spec around [Rimpl](Rimpl.md). Parts of this doc are still in the processes of being migrated over to other parts of the spec so it's still here for now.
+> This document is now outdated and has been superceded by other aspects of this spec esp. the spec around [Impact](Impact.md). Parts of this doc are still in the processes of being migrated over to other parts of the spec so it's still here for now.
 
 ## Introduction
 
@@ -16,28 +16,28 @@ flowchart LR
 Calculation --> Enrichment --> Normalization --> Aggregation
 ```
 
-- **Calculation**: Calculating the impacts of every component (leaf) node.
-- **Enrichment**: Enriching the impacts, for example, calculating the carbon from energy using grid emissions data.
-- **Normalization**: Bucketing the impacts into an output time series based on a configured *globally defined* impact duration.
+- **Calculation**: Calculating the outputs of every component (leaf) node.
+- **Enrichment**: Enriching the outputs, for example, calculating the carbon from energy using grid emissions data.
+- **Normalization**: Bucketing the outputs into an output time series based on a configured *globally defined* impact duration.
 - **Aggregation**: Aggregating the inputs by each time bucket, up the impact graph, to the parent nodes, and finally, the root node 
 
 ## Calculation
 
-We loop through the impact graph and component node by component node, pass in the provided observations to the configured model plugins, and capture the outputs as a series of Impact Metrics.
+We loop through the impact graph and component node by component node, pass in the provided inputs to the configured model plugins, and capture the outputs as a series of Impact Metrics.
 
 > [!note] 
 > 
-> If multiple observations have been provided, we provide **multiple** output impact metrics. At this stage 1-1 mapping exists between an Observation and an output Impact Metric.
+> If multiple inputs have been provided, we provide **multiple** output impact metrics. At this stage 1-1 mapping exists between an input and an output Impact Metric.
 
 
 > [!important] 
-> Each input observation is for a time and duration, and each output impact metric is for the same time and duration. We should link an Impact Metric to the exact observation used to generate it.
+> Each input input is for a time and duration, and each output impact metric is for the same time and duration. We should link an Impact Metric to the exact input used to generate it.
 
-Represented as [Impl (Impact YAML)](Impl%20(Impact%20YAML).md), the calculation phase would compute every component node in the tree with **observations** like so:
+Represented as [Impl (Impact YAML)](Impl%20(Impact%20YAML).md), the calculation phase would compute every component node in the tree with **inputs** like so:
 
 ```yaml
 component:
-  observations: 
+  inputs: 
       - timestamp: 2023-07-06T00:00
         duration: 15 
         cpu: 33%
@@ -49,11 +49,11 @@ component:
         cpu: 11%
 ```
 
-To components with **impacts**, like so:
+To components with **outputs**, like so:
 
 ```yaml
 component:
-  impacts:
+  outputs:
       - timestamp: 2023-07-06T00:00
         duration: 15 
         energy: 23 mWh
@@ -63,7 +63,7 @@ component:
       - timestamp: 2023-07-06T20:00
         duration: 5
         energy: 18 mWh  
-  observations: 
+  inputs: 
       - timestamp: 2023-07-06T00:00
         duration: 15 
         cpu: 33%
@@ -77,12 +77,12 @@ component:
 
 ## Enrichment
 
-This phase involves enriching the calculated impacts with any other data. The primary use case for this phase is to convert any energy values in the impacts to carbon values using grid emissions data.
+This phase involves enriching the calculated outputs with any other data. The primary use case for this phase is to convert any energy values in the outputs to carbon values using grid emissions data.
 
 ### Grid Emissions
 The enrichment phase enables us to consistently apply the same grid emissions source, granularity, and methodology (average vs. marginal), to all components.
 
-This phase should instantiate a global grid emissions service. The service *could* return simply a global yearly average if grid emissions are not crucial in this graph. The service could be more advanced, using a vendor that produces granular data for grid emissions by time and region. The important thing is that we are using the **same grid emissions service and methodology for all impacts**.
+This phase should instantiate a global grid emissions service. The service *could* return simply a global yearly average if grid emissions are not crucial in this graph. The service could be more advanced, using a vendor that produces granular data for grid emissions by time and region. The important thing is that we are using the **same grid emissions service and methodology for all outputs**.
 
 > [!note] 
 > For the enrichment with grid emissions to work, each impact metric needs to have 
@@ -95,11 +95,11 @@ This phase should instantiate a global grid emissions service. The service *coul
 
 ### Example
 
-Represented as [Impl (Impact YAML)](Impl%20(Impact%20YAML).md), the enrichment phase would compute every component node in the tree with **energy impacts** and **locations** like so:
+Represented as [Impl (Impact YAML)](Impl%20(Impact%20YAML).md), the enrichment phase would compute every component node in the tree with **energy outputs** and **locations** like so:
 
 ```yaml
 component:
-  impacts:
+  outputs:
       - timestamp: 2023-07-06T00:00
         duration: 15 
         location: west-us
@@ -118,7 +118,7 @@ Into nodes with operational carbon emissions (energy * grid emissions) using the
 
 ```yaml
 component:
-  impacts:
+  outputs:
       - timestamp: 2023-07-06T00:00
         duration: 15 mins
         location: west-us
@@ -144,7 +144,7 @@ component:
 The next phase is for each leaf node to normalize the output impact metrics to a time series defined by a global *impact duration*.
 
 > [!warning] 
-> After normalization, we will lose the 1-1 mapping between input observations and output impact metrics, and the impact metrics will snap to a new time series defined by the impact duration.
+> After normalization, we will lose the 1-1 mapping between input inputs and output impact metrics, and the impact metrics will snap to a new time series defined by the impact duration.
 
 >[!note]
 > The output impact metric is effectively zero if no impact metric overlaps a given time and duration. It means nothing was running then, so there could not be any emissions from the component.
@@ -182,7 +182,7 @@ This would translate to YAML like so:
 
 ```yaml
 component:
-  impacts:
+  outputs:
       - timestamp: 2023-07-06T00:00
         duration: 5 mins
         location: west-us
@@ -213,7 +213,7 @@ component:
         energy: 18 mWh  
         grid-intensity: 470 gCO2e / kWh
         operational-carbon: 2.8g gCO2e         
-  observations: 
+  inputs: 
       - timestamp: 2023-07-06T00:00
         duration: 15 mins
         cpu: 33%
@@ -234,11 +234,11 @@ This phase aggregates the impact metrics from the component leaf nodes up the gr
 
 The aggregation snaps to the new global time series defined by any configured impact duration, so each time bucket is aggregated separately up the graph to the top.
 
-In the end, **each node in the graph has a time series of impacts** representing the aggregate impacts of itself and its children.
+In the end, **each node in the graph has a time series of outputs** representing the aggregate outputs of itself and its children.
 
 So not only are we returning a time series for the root node, but also for any child nodes.
 
-Suppose you want to investigate why one duration has more impact than another. In that case, you can dig into its children and discover which of them is contributing most to the total impacts for that particular time bucket.
+Suppose you want to investigate why one duration has more impact than another. In that case, you can dig into its children and discover which of them is contributing most to the total outputs for that particular time bucket.
 
 ### Functional Units (SCI)
 This also is the phase where we consider the functional units and generate an actual SCI score (carbon per X) instead of just carbon.
@@ -252,7 +252,7 @@ For example, if the functional unit is *Hour* and the Impact Duration is 24 hrs.
 
 ```yaml
 component:
-  impacts:
+  outputs:
       - timestamp: 2023-07-06T00:00
         duration: 24 hours
         carbon: 14300 gCO2e # gCO2 per 24 hour duration
@@ -263,7 +263,7 @@ If the functional unit is *Hour* and the Impact Duration is 10 mins. Then we mus
 
 ```yaml
 component:
-  impacts:
+  outputs:
       - timestamp: 2023-07-06T00:00
         duration: 10 mins
         carbon: 10 gCO2e # gCO2 per 10 min duration
@@ -286,7 +286,7 @@ So if a component had these impact metrics:
 
 ```yaml
 component:
-  impacts:
+  outputs:
       - timestamp: 2023-07-06T00:00
         duration: 5 mins
 		carbon: 19 gCO2e
@@ -331,7 +331,7 @@ And then we would divide the carbon by users for each matching time bucket to ge
 
 ```yaml
 component:
-  impacts:
+  outputs:
       - timestamp: 2023-07-06T00:00
         duration: 5 mins
 		carbon: 19 gCO2e
@@ -356,4 +356,4 @@ component:
 
 > [!tip] 
 > 
-> The same normalization plugin code could provide this time series of functional unit denominators. We pass in a fake component with observations that represent the functional unit denominators, pass through the normalization phase, and generate a series of users for the global time series of impact durations.
+> The same normalization plugin code could provide this time series of functional unit denominators. We pass in a fake component with inputs that represent the functional unit denominators, pass through the normalization phase, and generate a series of users for the global time series of impact durations.
