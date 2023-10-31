@@ -16,6 +16,8 @@ export type ImplInitializeModel = {
   config: InitializeOptions;
   name: string;
   kind: ModelKind;
+  model: string;
+  path: string;
 };
 
 export type InitalizedModels = {
