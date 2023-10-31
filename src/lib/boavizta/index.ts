@@ -97,17 +97,16 @@ abstract class BoaviztaImpactModel implements IImpactModelInterface {
   protected formatResponse(data: KeyValuePair): KeyValuePair {
     let m = 0;
     let e = 0;
-
     if ('impacts' in data) {
-      // manufacture impact is in kgCO2eq, convert to gCO2eq
-      m = data['impacts']['gwp']['manufacture'] * 1000;
+      // embodied-carbon impact is in kgCO2eq, convert to gCO2eq
+      m = data['impacts']['gwp']['embedded']['value'] * 1000;
       // use impact is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
-      e = data['impacts']['pe']['use'] / 3.6;
+      e = data['impacts']['pe']['use']['value'] / 3.6;
     } else if ('gwp' in data && 'pe' in data) {
-      // manufacture impact is in kgCO2eq, convert to gCO2eq
-      m = data['gwp']['manufacture'] * 1000;
+      // embodied-carbon impact is in kgCO2eq, convert to gCO2eq
+      m = data['gwp']['embodied-carbon'] * 1000;
       // use impact is in J , convert to kWh.
       // 1,000,000 J / 3600 = 277.7777777777778 Wh.
       // 1 MJ / 3.6 = 0.278 kWh
@@ -168,11 +167,18 @@ export class BoaviztaCpuImpactModel
     dataCast['usage'] = usageData;
 
     const response = await axios.post(
-      `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&allocation=${this.allocation}`,
+      `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
       dataCast
     );
 
     const result = this.formatResponse(response.data);
+
+    // console.log(
+    //   'hitting ',
+    //   `https://api.boavizta.org/v1/component/${this.componentType}?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
+    //   dataCast,
+    //   JSON.stringify(response.data)
+    // );
     return {
       'e-cpu': result.energy,
       'embodied-carbon': result['embodied-carbon'],
@@ -185,7 +191,7 @@ export class BoaviztaCpuImpactModel
       staticParams.verbose = undefined;
     }
 
-    if (!('processor' in staticParams)) {
+    if (!('physical-processor' in staticParams)) {
       throw new Error('Improper configure: Missing processor parameter');
     }
 
@@ -286,7 +292,7 @@ export class BoaviztaCloudImpactModel
 
   async supportedInstancesList(provider: string) {
     const instances = await axios.get(
-      `https://api.boavizta.org/v1/cloud/all_instances?provider=${provider}`
+      `https://api.boavizta.org/v1/cloud/instance/all_instances?provider=${provider}`
     );
 
     return instances.data;
@@ -294,7 +300,7 @@ export class BoaviztaCloudImpactModel
 
   async supportedProvidersList(): Promise<string[]> {
     const providers = await axios.get(
-      'https://api.boavizta.org/v1/cloud/all_providers'
+      'https://api.boavizta.org/v1/cloud/instance/all_providers'
     );
 
     return Object.values(providers.data);
@@ -316,9 +322,14 @@ export class BoaviztaCloudImpactModel
     }
     dataCast['usage'] = usageData;
     const response = await axios.post(
-      `https://api.boavizta.org/v1/cloud/?verbose=${this.verbose}&allocation=${this.allocation}`,
+      `https://api.boavizta.org/v1/cloud/instance?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
       dataCast
     );
+    // console.log(
+    //   `https://api.boavizta.org/v1/cloud/instance?verbose=${this.verbose}&duration=${dataCast['usage']['hours_use_time']}`,
+    //   JSON.stringify(response.data),
+    //   dataCast
+    // );
 
     return this.formatResponse(response.data);
   }

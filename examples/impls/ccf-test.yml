@@ -11,7 +11,7 @@ graph:
         - ccf
       config:
         ccf:
-          provider: aws
+          vendor: aws
           instance-type: m5n.large
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred

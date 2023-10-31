@@ -8,7 +8,7 @@ describe('lib/shell-imp: ', () => {
     test('initialize with params', async () => {
       const impactModel = new ShellModel();
       await impactModel.configure('test', {
-        provider: 'aws',
+        vendor: 'aws',
         instance_type: 't2.micro',
         executable: '/usr/local/bin/sampler',
       });

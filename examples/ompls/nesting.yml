@@ -1,0 +1,107 @@
+name: nesting-demo
+description: null
+tags:
+  kind: web
+  complexity: moderate
+  category: on-premise
+initialize:
+  models:
+    - name: teads-curve
+      kind: builtin
+    - name: sci-e
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci-m
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci-o
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci
+      kind: builtin
+      verbose: false
+      path: ''
+graph:
+  children:
+    child:
+      pipeline:
+        - teads-curve
+        - sci-e
+        - sci-m
+        - sci-o
+        - sci
+      config:
+        teads-curve:
+          thermal-design-power: 65
+        sci-m:
+          total-embodied-emissions: 251000
+          time-reserved: 3600
+          expected-lifespan: 126144000
+          resources-reserved: 1
+          total-resources: 1
+        sci-o:
+          grid-carbon-intensity: 457
+        sci:
+          functional-unit-duration: 1
+          functional-duration-time: ''
+          functional-unit: requests
+      children:
+        child-1:
+          observations:
+            - timestamp: 2023-07-06T00:00
+              duration: 10
+              cpu-util: 50
+              e-net: 0.000811
+              requests: 380
+          impacts:
+            - timestamp: 2023-07-06T00:00
+              duration: 10
+              cpu-util: 50
+              e-net: 0.000811
+              requests: 380
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              functional-unit-duration: 1
+              functional-duration-time: ''
+              functional-unit: requests
+              energy-cpu: 0.00013541666666666666
+              energy: 0.00013541666666666666
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.061885416666666665
+              sci: 0.01901349322578707
+        child-2:
+          observations:
+            - timestamp: 2023-07-06T00:00
+              duration: 10
+              cpu-util: 33
+              e-net: 0.000811
+              requests: 380
+          impacts:
+            - timestamp: 2023-07-06T00:00
+              duration: 10
+              cpu-util: 33
+              e-net: 0.000811
+              requests: 380
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              functional-unit-duration: 1
+              functional-duration-time: ''
+              functional-unit: requests
+              energy-cpu: 0.00011243956355860435
+              energy: 0.00011243956355860435
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.05138488054628219
+              sci: 0.018985860235996584

@@ -1,0 +1,65 @@
+name: nesting-demo
+description:
+tags:
+  kind: web
+  complexity: moderate
+  category: on-premise
+initialize:
+  models:
+    - name: teads-curve
+      kind: builtin
+    - name: sci-e
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci-m
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci-o
+      kind: builtin
+      verbose: false
+      path: ''
+    - name: sci
+      kind: builtin
+      verbose: false
+      path: ''
+graph:
+  children:
+    child: # an advanced grouping node
+      pipeline:
+        - teads-curve
+        - sci-e
+        - sci-m
+        - sci-o
+        - sci
+      config:
+        teads-curve:
+          thermal-design-power: 65
+        sci-m:
+          total-embodied-emissions: 251000 # gCO2eq
+          time-reserved: 3600 # 1 hour in s
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1 
+          total-resources: 1 
+        sci-o:
+          grid-carbon-intensity: 457 # gCO2/kwh
+        sci:
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
+      children:
+        child-1:
+          observations:
+            - timestamp: 2023-07-06T00:00
+              duration: 10
+              cpu-util: 50
+              e-net: 0.000811 #kwh     
+              requests: 380
+        child-2:
+          observations: 
+            - timestamp: 2023-07-06T00:00
+              duration: 10
+              cpu-util: 33
+              e-net: 0.000811 #kwh     
+              requests: 380

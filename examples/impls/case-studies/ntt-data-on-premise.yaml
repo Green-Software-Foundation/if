@@ -32,24 +32,24 @@ graph:
         - sci
       config:
         sci-m:
-          te: 251000 # gCO2eq
-          tir: 3600 # 1 hour in s
-          el: 126144000 # 4 years in seconds    
-          rr: 1 
-          tor: 1 
+          total-embodied-emissions: 251000 # gCO2eq
+          time-reserved: 3600 # 1 hour in s
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1 
+          total-resources: 1 
         sci-o:
-          grid-ci: 457 # gCO2/kwh
+          grid-carbon-intensity: 457 # gCO2/kwh
         sci:
-          functional_unit_duration: 1 
-          functional_duration_time: ''
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
       observations: 
         - timestamp: 2023-07-06T00:00
           duration: 3600
-          five-min-input-rate: 100
-          five-min-output-rate: 100
-          grid-ci: 457 # gCO2e/kWh
-          e-net: 0.00496 # 3.85e-3 * 24 ports * 1.5 (pue)
+          five-min-input-ratotal-embodied-emissions: 100
+          five-min-output-ratotal-embodied-emissions: 100
+          grid-carbon-intensity: 457 # gCO2e/kWh
+          energy-network: 0.00496 # 3.85e-3 * 24 ports * 1.5 (pue)
           requests: 38032740
     layer-2-switch:
       pipeline:
@@ -59,45 +59,45 @@ graph:
         - sci
       config:
         sci-m:
-          te: 251000 # gCO2eq
-          tir: 3600 # get from the duration field
-          el: 126144000 # 4 years in seconds    
-          rr: 1
-          tor: 1
+          total-embodied-emissions: 251000 # gCO2eq
+          time-reserved: 3600 # get from the duration field
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1
+          total-resources: 1
         sci-o:
-          grid_ci: 457 # gCO2/kwh 
+          grid-ci: 457 # gCO2/kwh 
         sci:
-          functional_unit_duration: 1 
-          functional_duration_time: ''
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
       children:
         switch-1:
           observations:
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e-net: 0.000811 #kwh     
-              grid-ci: 457 # gCO2e/kWh
+              energy-network: 0.000811 #kwh     
+              grid-carbon-intensity: 457 # gCO2e/kWh
               requests: 38032740
         switch-2:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e-net: 0 # no traffic at all
-              grid-ci: 457 # gCO2e/kWh
+              energy-network: 0 # no traffic at all
+              grid-carbon-intensity: 457 # gCO2e/kWh
               requests: 38032740
         switch-3:
           observations:
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e-net: 0.000955 #kwh
-              grid-ci: 457 # gCO2e/kWh
+              energy-network: 0.000955 #kwh
+              grid-carbon-intensity: 457 # gCO2e/kWh
               requests: 38032740
         switch-4:
           observations:
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e-net: 1.14e-8 #kwh
-              grid-ci: 457 # gCO2e/kWh
+              energy-network: 1.14e-8 #kwh
+              grid-carbon-intensity: 457 # gCO2e/kWh
               requests: 38032740
     db-servers:
       pipeline:
@@ -107,30 +107,30 @@ graph:
         - sci
       config:
         sci-m:
-          te: 6270000 # gCO2eq
-          tir: duration # get from the duration field
-          el: 126144000 # 4 years in seconds
-          rr: 1
-          tor: 1
+          total-embodied-emissions: 6270000 # gCO2eq
+          time-reserved: duration # get from the duration field
+          expected-lifespan: 126144000 # 4 years in seconds
+          resources-reserved: 1
+          total-resources: 1
         sci-o:
-          grid-ci: 457 # gCO2/kwh
+          grid-carbon-intensity: 457 # gCO2/kwh
         sci:
-          functional_unit_duration: ''
-          functional_unit: requests
+          functional-unit-duration: ''
+          functional-unit: requests
       children:
         db-server1:
           observations:
             - timestamp: 2023-07-06T00:00
-              e-cpu: 0.258
+              energy-cpu: 0.258
               duration: 1 #s
-              grid-ci: 457 # gCO2e/kWh
+              grid-carbon-intensity: 457 # gCO2e/kWh
               requests: 38032740
         db-server2:
           observations:
             - timestamp: 2023-07-06T00:00
-              e-cpu: 0.193
+              energy-cpu: 0.193
               duration: 1 #s
-              grid-ci: 457 # gCO2e/kWh
+              grid-carbon-intensity: 457 # gCO2e/kWh
               requests: 38032740
     app-servers:
       pipeline:
@@ -140,30 +140,30 @@ graph:
         - sci
       config:
         sci-m:
-          te: 6270000 # gCO2eq
-          tir: duration # get from the duration field
-          el: 126144000 # 4 years in seconds    
-          rr: 1 
-          tor: 1 
+          total-embodied-emissions: 6270000 # gCO2eq
+          time-reserved: duration # get from the duration field
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1 
+          total-resources: 1 
         sci-o:
-          grid-ci: 457 # gCO2/kwh
+          grid-carbon-intensity: 457 # gCO2/kwh
         sci:
-          functional_unit_duration: 1 
-          functional_duration_time: ''
-          functional_unit: requests # factor to convert per time to per f.unit 
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit 
       children:
         app-server1:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e-cpu: 0.149
-              grid-ci: 457 # gCO2e/kWh
+              energy-cpu: 0.149
+              grid-carbon-intensity: 457 # gCO2e/kWh
         app-server2:
           observations:  
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e-cpu: 0.147
-              grid-ci: 457 # gCO2e/kWh
+              energy-cpu: 0.147
+              grid-carbon-intensity: 457 # gCO2e/kWh
               requests: 38032740
     web-servers:
       pipeline: 
@@ -173,29 +173,29 @@ graph:
         - sci
       config:
         sci-m:
-          te: 6270000 # gCO2eq
-          tir: duration # get from the duration field
-          el: 126144000 # 4 years in seconds    
-          rr: 1 
-          tor: 1 
+          total-embodied-emissions: 6270000 # gCO2eq
+          time-reserved: duration # get from the duration field
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1 
+          total-resources: 1 
         sci-o:
-          grid-ci: 457 # gCO2/kwh
+          grid-carbon-intensity: 457 # gCO2/kwh
         sci:
-          functional_unit_duration: 1 
-          functional_duration_time: ''
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
       children:
         web-server1:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e-cpu: 0.139
-              grid-ci: 951 # gCO2e/kWh
+              energy-cpu: 0.139
+              grid-carbon-intensity: 951 # gCO2e/kWh
               requests: 38032740
         web-server2:
           observations: 
             - timestamp: 2023-07-06T00:00
               duration: 1
-              e-cpu: 0.116
-              grid-ci: 951 # gCO2e/kWh
+              energy-cpu: 0.116
+              grid-carbon-intensity: 951 # gCO2e/kWh
               requests: 38032740

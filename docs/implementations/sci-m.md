@@ -4,6 +4,28 @@ Software systems cause emissions through the hardware that they operate on, both
 
 Read more on [embodied carbon](https://github.com/Green-Software-Foundation/sci/blob/main/Software_Carbon_Intensity/Software_Carbon_Intensity_Specification.md#embodied-emissions)
 
+## Model name
+
+IF recognizes the SCI-M model as `sci-m` 
+
+## Parameters
+
+### Model config
+
+- `total-embodied-emissions`: the sum of Life Cycle Assessment (LCA) emissions for the component
+- `time-reserved`: the share of the total life span of the hardware reserved for use by an application
+- `expected-lifespan`: the length of time, in seconds, between a component's manufacture and its disposal
+- `reserved-resources`: the number of resources reserved for use by the software
+- `total-resources`: the total number of resources available
+
+### Observations
+- `timestamp`: a timestamp for the observation
+- `duration`: the amount of time, in seconds, that the observation covers.
+
+## Returns
+
+- `embodied-carbon`: the carbon emitted in manufacturing and disposing of a component, in gCO2eq
+
 ## Calculation
 
 To calculate the embodied carbon, `m` for a software application, use the equation:
@@ -30,15 +52,6 @@ Where:
 
 IEF implements the plugin based on the logic described above. To run the model, you must first create an instance of `SciMModel` and call its `configure()` method. Then, you can call `calculate()` to return `m`.
 
-It expects all of the following parameters to be provided in order to calculate `m`:
-
-```
-te
-tir
-el
-rr
-tor
-```
 
 ## Usage
 
@@ -51,11 +64,11 @@ const sciMModel = new SciMModel();
 sciMModel.configure()
 const results = sciMModel.calculate([
   {
-    te: 200, // in gCO2e for total resource units
-    tir: 60 * 60 * 24 * 30, // time reserved in seconds, can point to another field "duration"
-    el: 60 * 60 * 24 * 365 * 4, // lifespan in seconds (4 years)
-    rr: 1, // resource units reserved / used
-    tor: 1, // total resource units available
+    total-embodied-emissions: 200, // in gCO2e for total resource units
+    time-reserved 60 * 60 * 24 * 30, // time reserved in seconds, can point to another field "duration"
+    expected-lifespan: 60 * 60 * 24 * 365 * 4, // lifespan in seconds (4 years)
+    resources-reserved: 1, // resource units reserved / used
+    total-resources: 1, // total resource units available
   }
 ])
 ```
@@ -81,11 +94,11 @@ graph:
         - sci-m # duration & config -> embodied
       config:
         sci-m:
-          te: 1533.120 # gCO2eq
-          tir: 1 # s per hour
-          el: 3 # 3 years in seconds        
-          rr: 1
-          tor: 8
+          total-embodied-emissions: 1533.120 # gCO2eq
+          time-reserved: 1 # s per hour
+          expected-lifespan: 3 # 3 years in seconds        
+          resources-reserved: 1
+          total-resources: 8
       observations: 
         - timestamp: 2023-07-06T00:00
           duration: 3600

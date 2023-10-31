@@ -35,15 +35,24 @@ export class SciModel implements IImpactModelInterface {
       const operational = parseFloat(observation['operational-carbon']);
       const embodied = parseFloat(observation['embodied-carbon']);
 
+      /*
+      If `carbon` is in observations, use it.
+      If not, calculate it from operational and embodied carbon.
+      Divide by observation[duration] to ensure time unit is /s
+      */
       let sci_secs = 0;
       if ('carbon' in observation) {
-        sci_secs = observation['carbon'] / this.functionalUnitDuration;
+        sci_secs = observation['carbon'] / observation['duration'];
       } else {
-        sci_secs = (operational + embodied) / this.functionalUnitDuration; // sci in time units of /s
+        sci_secs = (operational + embodied) / observation['duration']; // sci in time units of /s
       }
 
       let sci_timed: number = sci_secs;
+      let sci_timed_duration = sci_secs;
 
+      /*
+      Convert C to desired time unit
+      */
       if (
         this.time === 's' ||
         this.time === 'second' ||
@@ -89,14 +98,20 @@ export class SciModel implements IImpactModelInterface {
         sci_timed = sci_secs * 60 * 60 * 24 * 365;
       }
 
+      /*
+      sci currently in whole single units of time - multiply by duration to
+      convert to user-defined span of time.
+      */
+      sci_timed_duration = sci_timed * this.functionalUnitDuration;
+
       const functionalUnit = this.functionalUnit;
 
       if (this.functionalUnit !== 'none') {
         const factor = observation[functionalUnit];
-        observation['sci'] = sci_timed / factor;
+        observation['sci'] = sci_timed_duration / factor;
         return observation;
       } else {
-        observation['sci'] = sci_timed;
+        observation['sci'] = sci_timed_duration;
         return observation;
       }
     });
@@ -115,25 +130,25 @@ export class SciModel implements IImpactModelInterface {
     this.staticParams = staticParams;
     this.name = name;
 
-    if ('functional_unit_time' in staticParams) {
-      this.time = staticParams?.functional_unit_time;
+    if ('functional-unit-time' in staticParams) {
+      this.time = staticParams['functional-unit-time'] as number;
     }
     if (
-      'functional_unit_duration' in staticParams &&
-      typeof staticParams.functional_unit_duration === 'number'
+      'functional-unit-duration' in staticParams &&
+      typeof staticParams['functional-unit-duration'] === 'number'
     ) {
-      this.functionalUnitDuration = staticParams?.functional_unit_duration;
+      this.functionalUnitDuration = staticParams['functional-unit-duration'];
     } else {
       throw new Error(
         'Functional unit duration is not a valid number: provide number of seconds represented by observation'
       );
     }
     if (
-      'functional_unit' in staticParams &&
-      typeof staticParams.functional_unit === 'string' &&
-      staticParams.functional_unit !== ''
+      'functional-unit' in staticParams &&
+      typeof staticParams['functional-unit'] === 'string' &&
+      staticParams['functional-unit'] !== ''
     ) {
-      this.functionalUnit = staticParams?.functional_unit;
+      this.functionalUnit = staticParams['functional-unit'];
     } else {
       this.functionalUnit = 'none';
     }

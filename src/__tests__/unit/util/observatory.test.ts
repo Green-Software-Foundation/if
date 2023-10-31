@@ -8,14 +8,14 @@ describe('util/observatory: ', () => {
       timestamp: '2023-07-06T00:00',
       duration: 3600,
       'cpu-util': 18.392,
-      'e-cpu': 2.5,
+      'energy-cpu': 2.5,
       'embodied-carbon': 0.619,
     },
     {
       timestamp: '2023-08-06T00:00',
       duration: 3600,
       'cpu-util': 16,
-      'e-cpu': 2.5,
+      'energy-cpu': 2.5,
       'embodied-carbon': 0.619,
     },
   ]; // model.calculate method's result (impact mock).
@@ -47,7 +47,7 @@ describe('util/observatory: ', () => {
 
     const params = {
       'core-units': 24,
-      processor: 'Intel® Core™ i7-1185G7',
+      'physical-processor': 'Intel® Core™ i7-1185G7',
       allocation: 'LINEAR',
       verbose: true,
     };
@@ -82,7 +82,7 @@ describe('util/observatory: ', () => {
           timestamp: '2023-07-06T00:00',
           duration: 3600,
           'cpu-util': 18.392,
-          'e-cpu': 2.5,
+          'energy-cpu': 2.5,
           'embodied-carbon': 0.619,
           e: 1,
         },
@@ -90,7 +90,7 @@ describe('util/observatory: ', () => {
           timestamp: '2023-08-06T00:00',
           duration: 3600,
           'cpu-util': 16,
-          'e-cpu': 2.5,
+          'energy-cpu': 2.5,
           'embodied-carbon': 0.619,
           e: 1,
         },
@@ -119,7 +119,7 @@ describe('util/observatory: ', () => {
 
     const params = {
       'core-units': 24,
-      processor: 'Intel® Core™ i7-1185G7',
+      'physical-processor': 'Intel® Core™ i7-1185G7',
       allocation: 'LINEAR',
       verbose: true,
     };

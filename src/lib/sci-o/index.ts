@@ -31,14 +31,14 @@ export class SciOModel implements IImpactModelInterface {
     }
 
     return observations.map((observation: KeyValuePair) => {
-      if (!('grid-ci' in observation)) {
-        throw new Error('observation missing `grid-ci`');
+      if (!('grid-carbon-intensity' in observation)) {
+        throw new Error('observation missing `grid-carbon-intensity`');
       }
       if (!('energy' in observation)) {
         throw new Error('observation missing `energy`');
       }
       this.configure(this.name!, observation);
-      const grid_ci = parseFloat(observation['grid-ci']);
+      const grid_ci = parseFloat(observation['grid-carbon-intensity']);
       const energy = parseFloat(observation['energy']);
       observation['operational-carbon'] = grid_ci * energy;
       return observation;

@@ -2,11 +2,34 @@
 
 "Cloud Carbon Footprint is an open source tool that provides visibility and tooling to measure, monitor and reduce your cloud carbon emissions. We use best practice methodologies to convert cloud utilization into estimated energy usage and carbon emissions, producing metrics and carbon savings estimates that can be shared with employees, investors, and other stakeholders." - [CCF](https://www.cloudcarbonfootprint.org/)
 
+## Model name
+
+IEF recognizes the Cloud Carbon Footprint model as `ccf`.
+
+## Parameters
+
+### model config
+
+- `vendor`: the cloud platform provider, e.g. `aws`
+- `instance-type`: the name of the specific instance being used, e.g. `m5n.large`
+
+### observations
+
+- `cpu-util`: percentage CPU utilization for a given observation
+- `duration`: the amount of time the observation covers, in seconds
+- `timestamp`: a timestamp for the observation
+ 
+## Returns
+
+- `embodied-carbon`: carbon emitted in manufacturing the device, in gCO2eq
+- `energy`: energy used by CPU in kWh
+  
+
 ## IEF Implementation
 
 IEF reimplements the Cloud Carbon Footprint methodology fro scratch conforming to the IEF specification. This means the CCF models can be run inside IEF without any external API calls and can be invoked as part of a model pipeline defined in an `impl`.
 
-Cloud Carbon Footprint includes calculations for three cloud providers: AWS, Azure and GCP. 
+Cloud Carbon Footprint includes calculations for three cloud vendors: AWS, Azure and GCP. 
 
 The general methodology is as follows:
 
@@ -14,7 +37,7 @@ The general methodology is as follows:
 
 Where:
 
-`Operational emissions = (Cloud provider service usage) x (Cloud energy conversion factors [kWh]) x (Cloud provider Power Usage Effectiveness (PUE)) x (grid emissions factors [metric tons CO2e])`
+`Operational emissions = (Cloud vendor service usage) x (Cloud energy conversion factors [kWh]) x (Cloud vendor Power Usage Effectiveness (PUE)) x (grid emissions factors [metric tons CO2e])`
 
 And:
 
@@ -24,9 +47,9 @@ You can read a detailed explanation ofn the calculations in the [CCF docs](https
 
 ## Usage
 
-In IEF, the model is called from an `impl`. An `impl` is a `.yaml` file that contains configuration metadata and usage observations. This is interpreted by the command line tool, `rimpl`. There, the model's `configure` method is called first. The model config should define a `provider` and `instance-type`. Each observation is expected to contain `duration`,`cpu-util` and `timestamp` fields.
+In IEF, the model is called from an `impl`. An `impl` is a `.yaml` file that contains configuration metadata and usage observations. This is interpreted by the command line tool, `rimpl`. There, the model's `configure` method is called first. The model config should define a `vendor` and `instance-type`. Each observation is expected to contain `duration`,`cpu-util` and `timestamp` fields.
 
-You can see example Typescript invocations for each provider below:
+You can see example Typescript invocations for each vendor below:
 
 ### AWS
 
@@ -35,7 +58,7 @@ import {CloudCarbonFootprint} from 'ief';
 
 const ccf = new CloudCarbonFootprint();
 ccf.configure({
-  provider: 'aws',
+  vendor: 'aws',
   instance_type: 'm5n.large'
 })
 const results = ccf.calculate([
@@ -54,7 +77,7 @@ import {CloudCarbonFootprint} from 'ief';
 
 const ccf = new CloudCarbonFootprint();
 ccf.configure({
-  provider: 'azure',
+  vendor: 'azure',
   instance_type: 'D4 v4'
 })
 const results = ccf.calculate([
@@ -73,7 +96,7 @@ import {CloudCarbonFootprint} from 'ief';
 
 const ccf = new CloudCarbonFootprint();
 ccf.configure({
-  provider: 'gcp',
+  vendor: 'gcp',
   instance_type: 'n2-standard-2'
 })
 const results = ccf.calculate([
@@ -103,7 +126,7 @@ graph:
         - ccf
       config:
         ccf:
-          provider: aws
+          vendor: aws
           instance_type: m5n.large
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
@@ -133,7 +156,7 @@ graph:
         - ccf
       config:
         ccf:
-          provider: aws
+          vendor: aws
           instance_type: m5n.large
       observations:
         - timestamp: 2023-07-06T00:00
@@ -143,7 +166,7 @@ graph:
         - timestamp: 2023-07-06T00:00
           duration: 1
           cpu-util: 10
-          provider: aws
+          vendor: aws
           instance_type: m5n.large
           energy: 0.000018845835066981333
           embodied_emissions: 0.02553890791476408

@@ -9,7 +9,7 @@ describe('ccf:configure test', () => {
 
     await expect(
       impactModel.configure('test', {
-        provider: 'aws2',
+        vendor: 'aws2',
         'instance-type': 't2.micro',
       })
     ).rejects.toThrowError();
@@ -22,7 +22,7 @@ describe('ccf:configure test', () => {
       expect(e.message).toBe('Gra2 not supported');
     }
     await impactModel.configure('test', {
-      provider: 'aws',
+      vendor: 'aws',
       'instance-type': 't2.micro',
     });
     await expect(
@@ -39,7 +39,7 @@ describe('ccf:configure test', () => {
       },
     ]);
     await impactModel.configure('test', {
-      provider: 'aws',
+      vendor: 'aws',
       interpolation: 'spline',
       'instance-type': 't2.micro',
     });
@@ -62,7 +62,7 @@ describe('ccf:configure test', () => {
   test('initialize with params:aws', async () => {
     const impactModel = new CloudCarbonFootprint();
     await impactModel.configure('test', {
-      provider: 'aws',
+      vendor: 'aws',
       'instance-type': 'm5n.large',
     });
     await expect(
@@ -110,7 +110,7 @@ describe('ccf:configure test', () => {
   test('initialize with params:azure', async () => {
     const impactModel = new CloudCarbonFootprint();
     await impactModel.configure('test', {
-      provider: 'azure',
+      vendor: 'azure',
       'instance-type': 'D2 v4',
     });
     await expect(
@@ -158,7 +158,7 @@ describe('ccf:configure test', () => {
   test('initialize with params:gcp', async () => {
     const impactModel = new CloudCarbonFootprint();
     await impactModel.configure('test', {
-      provider: 'gcp',
+      vendor: 'gcp',
       'instance-type': 'n2-standard-2',
     });
     await expect(
@@ -208,7 +208,7 @@ describe('ccf:configure test', () => {
     const impactModel = new CloudCarbonFootprint();
     await expect(
       impactModel.configure('test', {
-        provider: 'aws',
+        vendor: 'aws',
         'instance-type': 't5.micro',
       })
     ).rejects.toThrowError();
@@ -222,7 +222,7 @@ describe('ccf:configure test', () => {
     const impactModel = new CloudCarbonFootprint();
     await expect(
       impactModel.configure('test', {
-        provider: 'aws2',
+        vendor: 'aws2',
         'instance-type': 't2.micro',
       })
     ).rejects.toThrowError();
@@ -237,7 +237,7 @@ describe('ccf:configure test', () => {
     const impactModel = new CloudCarbonFootprint();
     await expect(
       impactModel.configure('test', {
-        provider: 'aws',
+        vendor: 'aws',
         'instance-type': 't2.micro',
       })
     ).resolves.toBeInstanceOf(CloudCarbonFootprint);

@@ -2,6 +2,39 @@
 
 [SCI](https://sci-guide.greensoftware.foundation/) is the final value the framework ultimately aims to return for some component or application. It represents the amount of carbon emitted per [functional unit](https://sci-guide.greensoftware.foundation/R/).
 
+## Model name
+
+IF recognizes the SCI model as `sci` 
+
+## Parameters
+
+### Model config
+
+`functional-unit`: the functional unit in which to express the carbon impact
+`functional-unit-time`: the time unit to be used for functional unit conversions, e.g. `mins`
+`functional-unit-duration`: the length of time the functional unit should cover, in units of `functional-time-unit`
+
+### Observations
+
+either:
+
+- `carbon`: total carbon, i.e. sum of embodied and operational, in gCO2eq
+
+or both of
+
+- `operational-carbon`: carbon emitted during an application's operation in gCO2eq
+- `embodied-carbon`: carbon emitted in a component's manufacture and disposal in gCO2eq
+
+plus:
+
+- `timestamp`: a timestamp for the observation
+- `duration`: the amount of time, in seconds, that the observation covers.
+
+## Returns
+
+- `operational-carbon`: the carbon emitted during a applications operation, in gCO2eq
+
+
 ## Calculation
 
 SCI is calculated as:
@@ -22,13 +55,13 @@ SCI is the sum of the `operational-carbon` (calculated using the `sci-o` model) 
 
 ## IEF Implementation
 
-`sci` takes `operatonal-carbon` and `embodied-carbon` as inputs along with three parameters related to the functional unit: 
+`sci` takes `operational-carbon` and `embodied-carbon` as inputs along with three parameters related to the functional unit: 
 
 - `functional-unit`: a string describing the functional unit to normalize the SCI to. This must match a field provided in the `observations` with an associated value. For example, if `functional-unit` is `"requests"` then there should be a `requests` field in `obserations` with an associated value for the number of requests per `functional-unit-duration`.
 - `functional-unit-time`: a time unit for `functional-unit-duration` as a string. E.g. `s`, `seconds`, `days`, `months`, `y`.
-- `functional-unit-duration`: The length of time, in seconds, that the observation covers. For example, if if the observation period is one day, then `functional-unit-duration` should be `86400` (seconds per day). This is used to ensure that `carbon` is represented in units of C/s at the start of the SCI calculation.
+- `functional-unit-duration`: The length of time, in units of `functional-unit-time` that the `sci` value should be normalized to. We expect this to nearly always be `1`, but for example if you want your `sci` value expressed as gC/user/2yr you could set `functional-unit-duration` to `2`, `functional-unit-time` to `years`, and `functional-unit` to `y`.
 
-In a model pipeline, time is always denominated in `seconds`. It is only in `sci` that other units of time are considered. Therefore, if `functional_unit_time` is `month`, then the sum of `operational-carbon` and `embodied-carbon` is multiplied by the number of seconds in one month.
+In a model pipeline, time is always denominated in `seconds`. It is only in `sci` that other units of time are considered. Therefore, if `functional-unit-time` is `month`, then the sum of `operational-carbon` and `embodied-carbon` is multiplied by the number of seconds in one month.
 
 Example:
 
@@ -37,10 +70,10 @@ operational-carbon: 0.02  // operational-carbon per s
 embodied-carbon: 5   // embodied-carbon per s
 functional-unit: requests  // indicate the functional unit is requests
 functional-unit-time: minute  // time unit is minutes
-functional-unit-duration: 1  // observation duration is 1 second
+functional-unit-duration: 1  // time span is 1 functional-unit-time (1 minute)
 requests: 100   // requests per minute
 
-sci-per-s = operational-carbon + embodied-carbon / functional-unit-duration  // (= 5.02)
+sci-per-s = operational-carbon + embodied-carbon / duration  // (= 5.02)
 sci-per-minute = sci-per-s * 60  // (= 301.2)
 sci-per-f-unit = sci-per-duration / 100  // (= 3.012 gC/request)
 ```
@@ -52,13 +85,14 @@ import { SciModel } from '@gsf/ief';
 
 const sciModel = new SciModel();
 sciModel.configure('name', {
-      functional_unit_time: 'day',
-      functional_unit: 'requests',
-      functional_unit_duration: 1,)
+      functional-unit-time: 'day',
+      functional-unit: 'requests',
+      functional-unit-duration: 1,)
 const results = sciModel.calculate([
   {
     operational-carbon: 0.02
     embodied-carbon: 5,
+    duration: 1
     requests: 100,
   }
 ])
@@ -84,12 +118,13 @@ graph:
         - sci
       config:
         sci:
-          functional_unit_duration: 1 
-          functional_unit_time: 'minutes'
-          functional_unit: requests # factor to convert per time to per f.unit
+          functional-unit-duration: 1 
+          functional-unit-time: 'minutes'
+          functional-unit: requests # factor to convert per time to per f.unit
       observations:
         - timestamp: 2023-07-06T00:00
           operational-carbon: 0.02
           embodied-carbon: 5
+          duration: 1
           requests: 100
 ```

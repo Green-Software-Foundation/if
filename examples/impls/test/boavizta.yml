@@ -16,7 +16,8 @@ graph:
       config:
         boavizta-cpu:
           core-units: 24
-          processor: Intel® Core™ i7-1185G7
+          physical-processor: Intel® Core™ i7-1185G7
+          location: "USA"
       observations:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 3600 # Secs

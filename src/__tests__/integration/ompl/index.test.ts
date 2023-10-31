@@ -21,16 +21,32 @@ describe('ompls: ', () => {
      * For each file in examples/ompls, load it and run test
      */
     files.forEach(file => {
-      it('check ompls have impacts field', async () => {
-        expect.assertions(1);
+      if (file.includes('nesting')) {
+        it('check nested ompls have impacts field', async () => {
+          expect.assertions(2);
+          const ompl = await openYamlFileAsObject(path + '/' + file);
+          const expectedProperty = 'impacts';
 
-        const ompl = await openYamlFileAsObject(path + '/' + file);
-        const expectedProperty = 'impacts';
+          expect(
+            ompl['graph']['children']['child']['children']['child-1']
+          ).toHaveProperty(expectedProperty);
+          expect(
+            ompl['graph']['children']['child']['children']['child-2']
+          ).toHaveProperty(expectedProperty);
+        });
+      } else {
+        console.log('condition: false, file = ', file);
+        it('check ompls have impacts field', async () => {
+          expect.assertions(1);
 
-        expect(ompl['graph']['children']['child']).toHaveProperty(
-          expectedProperty
-        );
-      });
+          const ompl = await openYamlFileAsObject(path + '/' + file);
+          const expectedProperty = 'impacts';
+
+          expect(ompl['graph']['children']['child']).toHaveProperty(
+            expectedProperty
+          );
+        });
+      }
 
       if (file.includes('sci-m')) {
         it('checks `sci-m` ompl to have impacts property.', async () => {
@@ -46,16 +62,16 @@ describe('ompls: ', () => {
       }
 
       if (file.includes('complex-pipeline')) {
-        it('checks `complex-pipeline` to have `e-mem`, `e-cpu`, etc. properties in impact.', async () => {
+        it('checks `complex-pipeline` to have `energy-memory`, `energy-cpu`, etc. properties in impact.', async () => {
           const ompl = await openYamlFileAsObject(`${path}/${file}`);
           const res: string = JSON.stringify(
             ompl['graph']['children']['child']['impacts'][0]
           );
 
           expect(
-            res.includes('e-mem') &&
-              res.includes('e-cpu') &&
-              res.includes('e-net') &&
+            res.includes('energy-memory') &&
+              res.includes('energy-cpu') &&
+              res.includes('energy-network') &&
               res.includes('energy') &&
               res.includes('operational-carbon')
           ).toBeTruthy();

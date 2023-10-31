@@ -1,5 +1,5 @@
 name: azure-metrics
-description: "https://github.com/yelghali/imapct-engine-framework/blob/main/src/lib/components/azure_vm.py"
+description: "https://github.com/yelghali/imapct-engine-framework/blob/main/src/lib/components/azure-vm.py"
 tags:
 initialize:
   models:
@@ -11,10 +11,10 @@ initialize:
       kind: builtin
       verbose: false
       path: ''
-    - name: e-mem # a model that calculates e for memory utilization (0.38 * mem_util)
+    - name: energy-memory # a model that calculates e for memory utilization (0.38 * mem-util)
       kind: builtin  
       path: ''
-    - name: sci-e # sums e components (can be e_cpu, e_gpu, e_mem, e_network) - in this case e-mem and e_cpu from teads
+    - name: sci-e # sums e components (can be e-cpu, e-gpu, e-mem, e-network) - in this case energy-memory and e-cpu from teads
       kind: builtin  
       path: ''
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
@@ -35,28 +35,28 @@ graph:
     pipeline: 
       - metrics-exporter - # grabs obs from azure-sdk and enriches impl
       - teads-cpu # tdp & cpu -> energy
-      - e-mem # calculates energy used by memory as component of sci-m
+      - energy-memory # calculates energy used by memory as component of sci-m
       - sci-m # duration & config -> embodied
-      - sci-e # sums e components (can be e_cpu, e_gpu, e_mem, e_network) - in this case e-mem and e_cpu from teads
+      - sci-e # sums e components (can be e-cpu, e-gpu, e-mem, e-network) - in this case energy-memory and e-cpu from teads
       - sci-o # takes in total e and outputs operational emissions
       - sci # sum sci-m and sci-o and apply functional unit
     config: 
       vendor: azure
       region: east-us  # lookup carbon intensity from region
-      e-mem:
-        mem_allocation: 32 # GB
+      energy-memory:
+        mem-allocation: 32 # GB
         mem-energy: 0.38 # kwh/GB
       sci-m:
-        te: 1200 # kgCO2eq
+        total-embodied-emissions: 1200 # kgCO2eq
         tr: 3600 # 1hr in s
-        el: 126144000 # 4 years in seconds        
-        rr: 2
-        tor: 16
+        expected-lifespan: 126144000 # 4 years in seconds        
+        resources-reserved: 2
+        total-resources: 16
       sci-e:
         i: 100 # gCO2e/kWh
       sci:
         time: hour # signal to convert /s -> /hr
-        factor: 32000
+        factotal-resources: 32000
     observations: 
       - timestamp: 2023-07-06T00:00
         duration: 86400 # 1 day

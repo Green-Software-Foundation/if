@@ -26,7 +26,7 @@ graph:
       config:
         sci-coefficient:
           time: month
-          factor: 67 # n builds per month
+          factotal-resources: 67 # n builds per month
         observations:
           - timestamp: 2023-07-06T00:00 
             c: 9.92063492063492e-07 #  2.4 g/month in g/s
@@ -36,7 +36,7 @@ graph:
       config:
         sci-coefficient:
           time: month
-          factor: 67 # n builds per month
+          factotal-resources: 67 # n builds per month
         observations:
           - timestamp: 2023-07-06T00:00 
             c: 9.92063492063492e-07 #  2.4 g/month in g/s

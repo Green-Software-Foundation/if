@@ -22,7 +22,7 @@ export class SciMModel implements IImpactModelInterface {
     }
 
     const tunedObservations = observations.map((observation: KeyValuePair) => {
-      // te or total-embodied: Total embodied emissions of some underlying hardware.
+      // te or total-embodied-emissions: Total embodied emissions of some underlying hardware.
       // tir or time-reserved: The length of time the hardware is reserved for use by the software.
       // el or expected-lifespan: The anticipated time that the equipment will be installed.
       // rr or resources-reserved: The number of resources reserved for use by the software. (e.g. number of vCPUs you are using)
@@ -32,72 +32,98 @@ export class SciMModel implements IImpactModelInterface {
       let el = 0.0;
       let rr = 0.0;
       let tor = 0.0;
-      if (!('te' in observation || 'total-embodied' in observation)) {
-        throw new Error('te: total-embodied is missing. Provide in gCO2e');
-      }
-      if (!('tir' in observation || 'time-reserved' in observation)) {
-        throw new Error('tir: time-reserved is missing. Provide in seconds');
-      }
-      if (!('el' in observation || 'expected-lifespan' in observation)) {
-        throw new Error('el: expected-lifespan is missing. Provide in seconds');
-      }
-      if (!('rr' in observation || 'resources-reserved' in observation)) {
+      if (
+        !(
+          'total-embodied-emissions' in observation ||
+          'total-embodied-emissions' in observation
+        )
+      ) {
         throw new Error(
-          'rr: resources-reserved is missing. Provide as a count'
+          'total-embodied-emissions is missing. Provide in gCO2e'
         );
       }
-      if (!('tor' in observation || 'total-resources' in observation)) {
-        throw new Error('tor: total-resources is missing. Provide as a count');
+      if (!('time-reserved' in observation || 'time-reserved' in observation)) {
+        throw new Error('time-reserved is missing. Provide in seconds');
       }
       if (
-        ('te' in observation || 'total-embodied' in observation) &&
-        ('tir' in observation || 'time-reserved' in observation) &&
-        ('el' in observation || 'expected-lifespan') &&
-        ('rr' in observation || 'resources-reserved') &&
-        ('tor' in observation || 'total-resources' in observation)
+        !(
+          'expected-lifespan' in observation ||
+          'expected-lifespan' in observation
+        )
       ) {
-        observation['te'] = observation['te'] ?? observation['total-embodied'];
-        observation['tir'] = observation['tir'] ?? observation['time-reserved'];
-        observation['el'] =
-          observation['el'] ?? observation['expected-lifespan'];
-        observation['rr'] =
-          observation['rr'] ?? observation['resources-reserved'];
-        observation['tor'] =
-          observation['tor'] ?? observation['total-resources'];
-        if (typeof observation['te'] === 'string') {
-          te = parseFloat(observation[observation['te']]);
-        } else if (typeof observation['te'] === 'number') {
-          te = observation['te'];
+        throw new Error('expected-lifespan is missing. Provide in seconds');
+      }
+      if (
+        !(
+          'resources-reserved' in observation ||
+          'resources-reserved' in observation
+        )
+      ) {
+        throw new Error('resources-reserved is missing. Provide as a count');
+      }
+      if (
+        !('total-resources' in observation || 'total-resources' in observation)
+      ) {
+        throw new Error(
+          'total-resources: total-resources is missing. Provide as a count'
+        );
+      }
+      if (
+        ('total-embodied-emissions' in observation ||
+          'total-embodied-emissions' in observation) &&
+        ('time-reserved' in observation || 'time-reserved' in observation) &&
+        ('expected-lifespan' in observation || 'expected-lifespan') &&
+        ('resources-reserved' in observation || 'resources-reserved') &&
+        ('total-resources' in observation || 'total-resources' in observation)
+      ) {
+        observation['total-embodied-emissions'] =
+          observation['total-embodied-emissions'] ??
+          observation['total-embodied-emissions'];
+        observation['time-reserved'] =
+          observation['time-reserved'] ?? observation['time-reserved'];
+        observation['expected-lifespan'] =
+          observation['expected-lifespan'] ?? observation['expected-lifespan'];
+        observation['resources-reserved'] =
+          observation['resources-reserved'] ??
+          observation['resources-reserved'];
+        observation['total-resources'] =
+          observation['total-resources'] ?? observation['total-resources'];
+        if (typeof observation['total-embodied-emissions'] === 'string') {
+          te = parseFloat(observation[observation['total-embodied-emissions']]);
+        } else if (
+          typeof observation['total-embodied-emissions'] === 'number'
+        ) {
+          te = observation['total-embodied-emissions'];
         } else {
-          te = parseFloat(observation['te']);
+          te = parseFloat(observation['total-embodied-emissions']);
         }
-        if (typeof observation['tir'] === 'string') {
-          tir = parseFloat(observation[observation['tir']]);
-        } else if (typeof observation['tir'] === 'number') {
-          tir = observation['tir'];
+        if (typeof observation['time-reserved'] === 'string') {
+          tir = parseFloat(observation[observation['time-reserved']]);
+        } else if (typeof observation['time-reserved'] === 'number') {
+          tir = observation['time-reserved'];
         } else {
-          tir = parseFloat(observation['tir']);
+          tir = parseFloat(observation['time-reserved']);
         }
-        if (typeof observation['el'] === 'string') {
-          el = parseFloat(observation[observation['el']]);
-        } else if (typeof observation['el'] === 'number') {
-          el = observation['el'];
+        if (typeof observation['expected-lifespan'] === 'string') {
+          el = parseFloat(observation[observation['expected-lifespan']]);
+        } else if (typeof observation['expected-lifespan'] === 'number') {
+          el = observation['expected-lifespan'];
         } else {
-          el = parseFloat(observation['el']);
+          el = parseFloat(observation['expected-lifespan']);
         }
-        if (typeof observation['rr'] === 'string') {
-          rr = parseFloat(observation[observation['rr']]);
-        } else if (typeof observation['rr'] === 'number') {
-          rr = observation['rr'];
+        if (typeof observation['resources-reserved'] === 'string') {
+          rr = parseFloat(observation[observation['resources-reserved']]);
+        } else if (typeof observation['resources-reserved'] === 'number') {
+          rr = observation['resources-reserved'];
         } else {
-          rr = parseFloat(observation['rr']);
+          rr = parseFloat(observation['resources-reserved']);
         }
-        if (typeof observation['tor'] === 'string') {
-          tor = parseFloat(observation[observation['tor']]);
-        } else if (typeof observation['tor'] === 'number') {
-          tor = observation['tor'];
+        if (typeof observation['total-resources'] === 'string') {
+          tor = parseFloat(observation[observation['total-resources']]);
+        } else if (typeof observation['total-resources'] === 'number') {
+          tor = observation['total-resources'];
         } else {
-          tor = parseFloat(observation['tor']);
+          tor = parseFloat(observation['total-resources']);
         }
         // M = TE * (TiR/EL) * (RR/ToR)
         observation['embodied-carbon'] = te * (tir / el) * (rr / tor);

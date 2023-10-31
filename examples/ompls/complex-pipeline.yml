@@ -34,7 +34,7 @@ graph:
         - sci-o
       config:
         teads-curve:
-          tdp: 1
+          thermal-design-power: 1
         sampler:
           executable: python3 /usr/local/bin/sampler
       observations:
@@ -48,9 +48,9 @@ graph:
           tdp-mem: 1
           tdp-coeff: 1
           duration: 3600
-          tdp: 28
+          thermal-design-power: 28
           cpu-util: 18.392
-          grid-ci: 951
+          grid-carbon-intensity: 951
         - timestamp: 2023-08-06T00:00
           processor: Intel® Core™ i7-1185G7
           data-in: 1
@@ -61,9 +61,9 @@ graph:
           tdp-mem: 1
           tdp-coeff: 1
           duration: 3600
-          tdp: 20
+          thermal-design-power: 20
           cpu-util: 16
-          grid-ci: 800
+          grid-carbon-intensity: 800
       impacts:
         - timestamp: 2023-07-06T00:00
           processor: Intel® Core™ i7-1185G7
@@ -75,13 +75,13 @@ graph:
           tdp-mem: 1
           tdp-coeff: 1
           duration: 3600
-          tdp: 1
+          thermal-design-power: 1
           cpu-util: 18.392
-          grid-ci: 951
+          grid-carbon-intensity: 951
           executable: python3 /usr/local/bin/sampler
-          e-mem: 0.001
-          e-cpu: 0.001
-          e-net: 0.002
+          energy-memory: 0.001
+          energy-cpu: 0.001
+          energy-network: 0.002
           energy: 0.004
           operational-carbon: 3.8040000000000003
         - timestamp: 2023-08-06T00:00
@@ -94,12 +94,12 @@ graph:
           tdp-mem: 1
           tdp-coeff: 1
           duration: 3600
-          tdp: 1
+          thermal-design-power: 1
           cpu-util: 16
-          grid-ci: 800
+          grid-carbon-intensity: 800
           executable: python3 /usr/local/bin/sampler
-          e-mem: 0.001
-          e-cpu: 0.001
-          e-net: 0.002
+          energy-memory: 0.001
+          energy-cpu: 0.001
+          energy-network: 0.002
           energy: 0.004
           operational-carbon: 3.2

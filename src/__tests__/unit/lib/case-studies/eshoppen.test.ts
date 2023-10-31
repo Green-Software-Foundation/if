@@ -9,7 +9,7 @@ jest.setTimeout(30000);
 describe('eshoppen:configure test', () => {
   test('initialize and test', async () => {
     const model = await new EshoppenModel().configure('eshoppen', {
-      type: 'e-cpu',
+      type: 'energy-cpu',
     });
     expect(model).toBeInstanceOf(EshoppenModel);
     await expect(
@@ -17,16 +17,16 @@ describe('eshoppen:configure test', () => {
         {
           'n-hours': 1,
           'n-chips': 1,
-          tdp: 120,
+          'thermal-design-power': 120,
           'tdp-coeff': 1.02,
         },
       ])
     ).resolves.toStrictEqual([
       {
-        'e-cpu': 0.12240000000000001,
+        'energy-cpu': 0.12240000000000001,
         'n-hours': 1,
         'n-chips': 1,
-        tdp: 120,
+        'thermal-design-power': 120,
         'tdp-coeff': 1.02,
       },
     ]);
@@ -35,7 +35,7 @@ describe('eshoppen:configure test', () => {
     expect(model.authenticate({test: 'test'})).toBe(undefined);
 
     const model2 = await new EshoppenMemModel().configure('eshoppen', {
-      type: 'e-mem',
+      type: 'energy-memory',
     });
     expect(model2).toBeInstanceOf(EshoppenMemModel);
     await expect(
@@ -49,7 +49,7 @@ describe('eshoppen:configure test', () => {
       ])
     ).resolves.toStrictEqual([
       {
-        'e-mem': 0.001,
+        'energy-memory': 0.001,
         'n-chips': 1,
         'n-hours': 1,
         'tdp-coeff': 1,
