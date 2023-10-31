@@ -4,9 +4,6 @@ abstract: How to process the outputs of an impact graph calculation, enriching i
 ---
 # Computation Pipeline
 
-> [!note] Outdated
-> This document is now outdated and has been superceded by other aspects of this spec esp. the spec around [Impact](Impact.md). Parts of this doc are still in the processes of being migrated over to other parts of the spec so it's still here for now.
-
 ## Introduction
 
 The execution of a  graph involves 4 phases:
@@ -25,8 +22,7 @@ Calculation --> Enrichment --> Normalization --> Aggregation
 
 We loop through the impact graph and component node by component node, pass in the provided inputs to the configured model plugins, and capture the outputs as a series of Impact Metrics.
 
-> [!note] 
-> 
+
 > If multiple inputs have been provided, we provide **multiple** output impact metrics. At this stage 1-1 mapping exists between an input and an output Impact Metric.
 
 
@@ -84,7 +80,6 @@ The enrichment phase enables us to consistently apply the same grid emissions so
 
 This phase should instantiate a global grid emissions service. The service *could* return simply a global yearly average if grid emissions are not crucial in this graph. The service could be more advanced, using a vendor that produces granular data for grid emissions by time and region. The important thing is that we are using the **same grid emissions service and methodology for all outputs**.
 
-> [!note] 
 > For the enrichment with grid emissions to work, each impact metric needs to have 
 > - time 
 > - duration 
@@ -146,7 +141,6 @@ The next phase is for each leaf node to normalize the output impact metrics to a
 > [!warning] 
 > After normalization, we will lose the 1-1 mapping between input inputs and output impact metrics, and the impact metrics will snap to a new time series defined by the impact duration.
 
->[!note]
 > The output impact metric is effectively zero if no impact metric overlaps a given time and duration. It means nothing was running then, so there could not be any emissions from the component.
 
 An impact metric might be of a longer or smaller duration than the new globally defined impact duration or overlaps the new impact duration in some way. There can be many algorithms we can use to bucket/slice up the values, but a good default strategy is to use a weighting of time. 
@@ -243,7 +237,7 @@ Suppose you want to investigate why one duration has more impact than another. I
 ### Functional Units (SCI)
 This also is the phase where we consider the functional units and generate an actual SCI score (carbon per X) instead of just carbon.
 
-> [!note] We could not do this earlier since normalization doesn't work once you've created an SCI score (a rate)
+> We could not do this earlier since normalization doesn't work once you've created an SCI score (a rate)
 
 **Time**
 The easiest option is when the functional unit (`R`) is a time, e.g. carbon per minute. We need to scale up or down each carbon value (`c`) by the ratio of the functional unit and the impact duration.

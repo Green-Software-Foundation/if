@@ -5,7 +5,7 @@ abstract: A core component of impact graphing is the concept of time and specifi
 # Durations
 
 
-> [!note] Terminology
+> Terminology
 > - **Graph Duration**: Total global duration for the whole Impact Graph.
 > - **Impact Duration**: The duration of an individual Impact Metric.
 > - **input Duration**: The duration of an individual input.

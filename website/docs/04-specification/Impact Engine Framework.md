@@ -2,7 +2,7 @@
 
 A Framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environmental impacts of software.
 
-> [!note] Key
+> Key
 > - ✅ Done
 > - ✍🏽 Draft
 > - 👷🏽‍♂️ Todo

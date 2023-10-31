@@ -52,7 +52,7 @@ graph: # sum = 52
     email-servers: 5
 ```
 
-> [!note] Structural granularity is all about increasing the number of nodes in your graph; more nodes mean more outputs are being calculated, and this information can surface insights.
+> Structural granularity is all about increasing the number of nodes in your graph; more nodes mean more outputs are being calculated, and this information can surface insights.
 
 ### Temporal Granularity
 
@@ -78,5 +78,5 @@ graph: # sum = 52,51,...
     email-servers: 5,5,...
 ```
 
-> [!note] Adding temporal granularity surfaces information regarding when your components generate the most impact. This is achieved by adding in more inputs of shorter durations. Instead of one input per hour, can you provide one per minute?
+> Adding temporal granularity surfaces information regarding when your components generate the most impact. This is achieved by adding in more inputs of shorter durations. Instead of one input per hour, can you provide one per minute?
 
