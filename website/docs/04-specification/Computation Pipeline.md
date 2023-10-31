@@ -224,7 +224,6 @@ component:
 This phase aggregates the impact metrics from the component leaf nodes up the graph to the root node. The aggregation also applies to any parent nodes created for grouping purposes.
 
 ![](../../static/img/4f5d33a26e8aa2964cf5272641e0618c.png)
-%%[🖋 Edit in Excalidraw](Pipeline%20-%20Aggregation.excalidraw.md), and the [dark exported image](Pipeline%20-%20Aggregation.excalidraw.dark.png)%%
 
 The aggregation snaps to the new global time series defined by any configured impact duration, so each time bucket is aggregated separately up the graph to the top.
 
