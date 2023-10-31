@@ -22,9 +22,9 @@ import {CONFIG, STRINGS} from '../config';
 
 import {
   GraphOptions,
+  HandModelParams,
   ImplInitializeModel,
   InitalizedModels,
-  ModelKind,
 } from '../types/models-universe';
 
 const {GITHUB_PATH} = CONFIG;
@@ -106,8 +106,8 @@ export class ModelsUniverse {
    * Then checks if `path` is starting with github, then grabs the repository name.
    * Imports module, then checks if it's a class which implements input model interface.
    */
-  private async handPluginModel(model: string, path: string) {
-    if (!model) {
+  private async handPluginModel(model?: string, path?: string) {
+    if (!model || !path) {
       throw new Error(MISSING_CLASSNAME);
     }
 
@@ -135,12 +135,9 @@ export class ModelsUniverse {
   /**
    * Gets model based on `name` and `kind` params.
    */
-  private async handModelByCriteria(
-    name: string,
-    kind: ModelKind,
-    model: string,
-    path: string
-  ) {
+  private async handModelByCriteria(params: HandModelParams) {
+    const {name, kind, model, path} = params;
+
     switch (kind) {
       case 'builtin':
         return this.handBuiltinModel(name);
@@ -158,7 +155,12 @@ export class ModelsUniverse {
     const {name, kind, config, model: className, path} = model;
 
     const callback = async (graphOptions: GraphOptions) => {
-      const Model = await this.handModelByCriteria(name, kind, className, path);
+      const Model = await this.handModelByCriteria({
+        name,
+        kind,
+        model: className,
+        path,
+      });
 
       const params = {
         ...config,
