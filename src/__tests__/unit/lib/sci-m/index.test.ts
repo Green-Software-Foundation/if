@@ -7,7 +7,7 @@ describe('sci-o:configure test', () => {
     const model = await new SciMModel().configure('sci-o', {});
     expect(model).toBeInstanceOf(SciMModel);
     await expect(
-      model.calculate([
+      model.execute([
         {
           'total-embodied-emissions': 200,
           'time-reserved': 60 * 60 * 24 * 30,
@@ -44,7 +44,7 @@ describe('sci-o:configure test', () => {
       },
     ]);
     await expect(
-      model.calculate([
+      model.execute([
         {
           tee: 200,
           duration: 60 * 60 * 24 * 30 * 2,

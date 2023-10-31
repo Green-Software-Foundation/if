@@ -1,4 +1,4 @@
-import {IImpactModelInterface} from '../interfaces';
+import {IOutputModelInterface} from '../interfaces';
 
 import {CONFIG} from '../../config';
 
@@ -7,7 +7,7 @@ import {KeyValuePair} from '../../types/common';
 const {MODEL_IDS} = CONFIG;
 const {SCI} = MODEL_IDS;
 
-export class SciModel implements IImpactModelInterface {
+export class SciModel implements IOutputModelInterface {
   authParams: object | undefined = undefined;
   staticParams: object | undefined;
   name: string | undefined;
@@ -19,32 +19,32 @@ export class SciModel implements IImpactModelInterface {
     this.authParams = authParams;
   }
 
-  async calculate(observations: object | object[] | undefined): Promise<any[]> {
-    if (!Array.isArray(observations)) {
-      throw new Error('observations should be an array');
+  async execute(inputs: object | object[] | undefined): Promise<any[]> {
+    if (!Array.isArray(inputs)) {
+      throw new Error('inputs should be an array');
     }
 
-    const tunedObservations = observations.map((observation: KeyValuePair) => {
-      if (!('operational-carbon' in observation)) {
-        throw new Error('observation missing `operational-carbon`');
+    const tunedinputs = inputs.map((input: KeyValuePair) => {
+      if (!('operational-carbon' in input)) {
+        throw new Error('input missing `operational-carbon`');
       }
-      if (!('embodied-carbon' in observation)) {
-        throw new Error('observation missing `embodied-carbon`');
+      if (!('embodied-carbon' in input)) {
+        throw new Error('input missing `embodied-carbon`');
       }
 
-      const operational = parseFloat(observation['operational-carbon']);
-      const embodied = parseFloat(observation['embodied-carbon']);
+      const operational = parseFloat(input['operational-carbon']);
+      const embodied = parseFloat(input['embodied-carbon']);
 
       /*
-      If `carbon` is in observations, use it.
+      If `carbon` is in inputs, use it.
       If not, calculate it from operational and embodied carbon.
-      Divide by observation[duration] to ensure time unit is /s
+      Divide by input[duration] to ensure time unit is /s
       */
       let sci_secs = 0;
-      if ('carbon' in observation) {
-        sci_secs = observation['carbon'] / observation['duration'];
+      if ('carbon' in input) {
+        sci_secs = input['carbon'] / input['duration'];
       } else {
-        sci_secs = (operational + embodied) / observation['duration']; // sci in time units of /s
+        sci_secs = (operational + embodied) / input['duration']; // sci in time units of /s
       }
 
       let sci_timed: number = sci_secs;
@@ -107,22 +107,22 @@ export class SciModel implements IImpactModelInterface {
       const functionalUnit = this.functionalUnit;
 
       if (this.functionalUnit !== 'none') {
-        const factor = observation[functionalUnit];
-        observation['sci'] = sci_timed_duration / factor;
-        return observation;
+        const factor = input[functionalUnit];
+        input['sci'] = sci_timed_duration / factor;
+        return input;
       } else {
-        observation['sci'] = sci_timed_duration;
-        return observation;
+        input['sci'] = sci_timed_duration;
+        return input;
       }
     });
 
-    return tunedObservations;
+    return tunedinputs;
   }
 
   async configure(
     name: string,
     staticParams: object | undefined
-  ): Promise<IImpactModelInterface> {
+  ): Promise<IOutputModelInterface> {
     if (staticParams === undefined) {
       throw new Error('Required Parameters not provided');
     }
@@ -140,7 +140,7 @@ export class SciModel implements IImpactModelInterface {
       this.functionalUnitDuration = staticParams['functional-unit-duration'];
     } else {
       throw new Error(
-        'Functional unit duration is not a valid number: provide number of seconds represented by observation'
+        'Functional unit duration is not a valid number: provide number of seconds represented by input'
       );
     }
     if (

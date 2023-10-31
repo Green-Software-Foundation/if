@@ -3,7 +3,7 @@ import Spline from 'typescript-cubic-spline';
 import * as AWS_INSTANCES from './aws-instances.json';
 import * as AWS_EMBODIED from './aws-embodied.json';
 
-import {IImpactModelInterface} from '../interfaces';
+import {IOutputModelInterface} from '../interfaces';
 
 import {CONFIG} from '../../config';
 
@@ -12,7 +12,7 @@ import {KeyValuePair, Interpolation} from '../../types/common';
 const {MODEL_IDS} = CONFIG;
 const {TEADS_AWS} = MODEL_IDS;
 
-export class TeadsAWS implements IImpactModelInterface {
+export class TeadsAWS implements IOutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in TEADS.
   name: string | undefined; // name of the data source
   // compute instances grouped by the vendor with usage data
@@ -47,7 +47,7 @@ export class TeadsAWS implements IImpactModelInterface {
   async configure(
     name: string,
     staticParams: object | undefined = undefined
-  ): Promise<IImpactModelInterface> {
+  ): Promise<IOutputModelInterface> {
     this.name = name;
 
     if (staticParams === undefined) {
@@ -77,33 +77,33 @@ export class TeadsAWS implements IImpactModelInterface {
   }
 
   /**
-   * Calculate the total emissions for a list of observations
+   * Calculate the total emissions for a list of inputs
    *
-   * Each Observation require:
-   *  @param {Object[]} observations  ISO 8601 timestamp string
-   *  @param {string} observations[].timestamp ISO 8601 timestamp string
-   *  @param {number} observations[].duration observation duration in seconds
-   *  @param {number} observations[].cpu-util percentage cpu usage
+   * Each input require:
+   *  @param {Object[]} inputs  ISO 8601 timestamp string
+   *  @param {string} inputs[].timestamp ISO 8601 timestamp string
+   *  @param {number} inputs[].duration input duration in seconds
+   *  @param {number} inputs[].cpu-util percentage cpu usage
    */
-  async calculate(observations: object | object[] | undefined): Promise<any[]> {
-    if (observations === undefined) {
+  async execute(inputs: object | object[] | undefined): Promise<any[]> {
+    if (inputs === undefined) {
       throw new Error('Required Parameters not provided');
     }
-    if (!Array.isArray(observations)) {
-      throw new Error('Observations should be an array');
+    if (!Array.isArray(inputs)) {
+      throw new Error('inputs should be an array');
     }
 
     if (this.instanceType === '') {
       throw new Error('Configuration is incomplete');
     }
 
-    return observations.map((observation: KeyValuePair) => {
-      this.configure(this.name!, observation);
-      const e = this.calculateEnergy(observation);
-      const m = this.embodiedEmissions(observation);
-      observation['energy'] = e;
-      observation['embodied-carbon'] = m;
-      return observation;
+    return inputs.map((input: KeyValuePair) => {
+      this.configure(this.name!, input);
+      const e = this.calculateEnergy(input);
+      const m = this.embodiedEmissions(input);
+      input['energy'] = e;
+      input['embodied-carbon'] = m;
+      return input;
     });
   }
 
@@ -145,28 +145,28 @@ export class TeadsAWS implements IImpactModelInterface {
   }
 
   /**
-   * Calculates the energy consumption for a single observation
+   * Calculates the energy consumption for a single input
    * requires
    *
-   * duration: duration of the observation in seconds
+   * duration: duration of the input in seconds
    * cpu-util: cpu usage in percentage
    * timestamp: RFC3339 timestamp string
    *
    * Uses a spline method for AWS and linear interpolation for GCP and Azure
    */
-  private calculateEnergy(observation: KeyValuePair) {
+  private calculateEnergy(input: KeyValuePair) {
     if (
-      !('duration' in observation) ||
-      !('cpu-util' in observation) ||
-      !('timestamp' in observation)
+      !('duration' in input) ||
+      !('cpu-util' in input) ||
+      !('timestamp' in input)
     ) {
       throw new Error(
-        'Required Parameters duration,cpu-util,timestamp not provided for observation'
+        'Required Parameters duration,cpu-util,timestamp not provided for input'
       );
     }
 
-    const duration = observation['duration']; // Duration is in seconds.
-    const cpu = observation['cpu-util']; // Convert cpu usage to percentage.
+    const duration = input['duration']; // Duration is in seconds.
+    const cpu = input['cpu-util']; // Convert cpu usage to percentage.
 
     const x = [0, 10, 50, 100]; // Get the wattage for the instance type.
     const y: number[] = [
@@ -215,11 +215,11 @@ export class TeadsAWS implements IImpactModelInterface {
   }
 
   /**
-   * Calculates the embodied emissions for a given observation
+   * Calculates the embodied emissions for a given input
    */
-  private embodiedEmissions(observation: KeyValuePair): number {
+  private embodiedEmissions(input: KeyValuePair): number {
     // duration
-    const durationInHours = observation['duration'] / 3600;
+    const durationInHours = input['duration'] / 3600;
     // M = TE * (TR/EL) * (RR/TR)
     // Where:
     // TE = Total Embodied Emissions, the sum of Life Cycle Assessment(LCA) emissions for all hardware components

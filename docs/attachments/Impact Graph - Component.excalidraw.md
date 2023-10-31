@@ -8,7 +8,7 @@ tags: [excalidraw]
 
 
 # Text Elements
-Observations ^yfTcGbwf
+inputs ^yfTcGbwf
 
 Component ^jPXDQIwA
 
@@ -463,12 +463,12 @@ Impact Metric ^o80OGLNq
 			"locked": false,
 			"fontSize": 20,
 			"fontFamily": 1,
-			"text": "Observations",
-			"rawText": "Observations",
+			"text": "inputs",
+			"rawText": "inputs",
 			"textAlign": "center",
 			"verticalAlign": "middle",
 			"containerId": "IxRm9zueKWAPMhtd9vYZT",
-			"originalText": "Observations",
+			"originalText": "inputs",
 			"lineHeight": 1.25,
 			"baseline": 18
 		},

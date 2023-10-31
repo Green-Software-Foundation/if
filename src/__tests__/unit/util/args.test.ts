@@ -33,8 +33,8 @@ import {parseProcessArgument} from '../../../util/args';
 
 import {STRINGS, CONFIG} from '../../../config';
 
-const {RIMPL} = CONFIG;
-const {HELP} = RIMPL;
+const {impact} = CONFIG;
+const {HELP} = impact;
 const {WRONG_CLI_ARGUMENT} = STRINGS;
 
 describe('util/args: ', () => {

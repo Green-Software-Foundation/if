@@ -1,4 +1,4 @@
-import {IImpactModelInterface} from '../interfaces';
+import {IOutputModelInterface} from '../interfaces';
 
 import {CONFIG} from '../../config';
 
@@ -7,7 +7,7 @@ import {KeyValuePair} from '../../types/common';
 const {MODEL_IDS} = CONFIG;
 const {EMEM} = MODEL_IDS;
 
-export class EMemModel implements IImpactModelInterface {
+export class EMemModel implements IOutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used in this.
   name: string | undefined; // name of the data source
   memoryAllocation = 0;
@@ -30,7 +30,7 @@ export class EMemModel implements IImpactModelInterface {
   async configure(
     name: string,
     staticParams: object | undefined = undefined
-  ): Promise<IImpactModelInterface> {
+  ): Promise<IOutputModelInterface> {
     this.name = name;
 
     if (staticParams === undefined) {
@@ -49,25 +49,25 @@ export class EMemModel implements IImpactModelInterface {
   }
 
   /**
-   * Calculate the total emissions for a list of observations.
+   * Calculate the total emissions for a list of inputs.
    *
-   * Each Observation require:
-   * @param {Object[]} observations
-   * @param {string} observations[].timestamp RFC3339 timestamp string
-   * @param {number} observations[].mem-util percentage mem usage
+   * Each input require:
+   * @param {Object[]} inputs
+   * @param {string} inputs[].timestamp RFC3339 timestamp string
+   * @param {number} inputs[].mem-util percentage mem usage
    */
-  async calculate(observations: object | object[] | undefined): Promise<any[]> {
-    if (observations === undefined) {
+  async execute(inputs: object | object[] | undefined): Promise<any[]> {
+    if (inputs === undefined) {
       throw new Error('Required Parameters not provided');
-    } else if (!Array.isArray(observations)) {
-      throw new Error('Observations must be an array');
+    } else if (!Array.isArray(inputs)) {
+      throw new Error('inputs must be an array');
     }
 
-    return observations.map((observation: KeyValuePair) => {
-      this.configure(this.name!, observation);
-      observation['energy-memory'] = this.calculateEnergy(observation);
+    return inputs.map((input: KeyValuePair) => {
+      this.configure(this.name!, input);
+      input['energy-memory'] = this.calculateEnergy(input);
 
-      return observation;
+      return input;
     });
   }
 
@@ -79,7 +79,7 @@ export class EMemModel implements IImpactModelInterface {
   }
 
   /**
-   * Calculates the energy consumption for a single observation
+   * Calculates the energy consumption for a single input
    * requires
    *
    * mem-util: ram usage in percentage
@@ -87,10 +87,10 @@ export class EMemModel implements IImpactModelInterface {
    *
    * multiplies memory used (GB) by a coefficient (wh/GB) and converts to kwh
    */
-  private calculateEnergy(observation: KeyValuePair) {
-    if (!('mem-util' in observation) || !('timestamp' in observation)) {
+  private calculateEnergy(input: KeyValuePair) {
+    if (!('mem-util' in input) || !('timestamp' in input)) {
       throw new Error(
-        'Required Parameters duration,cpu-util,timestamp not provided for observation'
+        'Required Parameters duration,cpu-util,timestamp not provided for input'
       );
     }
 
@@ -107,7 +107,7 @@ export class EMemModel implements IImpactModelInterface {
     }
 
     const mem_alloc = this.memoryAllocation;
-    const mem_util = observation['mem-util']; // convert cpu usage to percentage
+    const mem_util = input['mem-util']; // convert cpu usage to percentage
 
     if (mem_util < 0 || mem_util > 100) {
       throw new Error('cpu usage must be between 0 and 100');

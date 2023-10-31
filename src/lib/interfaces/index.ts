@@ -1,14 +1,14 @@
-export interface IImpactModelInterface {
+export interface IOutputModelInterface {
   modelIdentifier(): string;
 
   // params is a reserved keyword in C#. Hence it can not be used.
   configure(
     name: string,
     staticParams: object | undefined
-  ): Promise<IImpactModelInterface>;
+  ): Promise<IOutputModelInterface>;
 
   authenticate(authParams: object): void;
 
-  calculate(observations: object | object[] | undefined): Promise<any[]>;
+  execute(inputs: object | object[] | undefined): Promise<any[]>;
 }
 export * from './ccf';

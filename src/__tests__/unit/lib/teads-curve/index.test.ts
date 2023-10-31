@@ -5,12 +5,12 @@ jest.setTimeout(30000);
 
 describe('teads:configure test', () => {
   test('initialize with params', async () => {
-    const impactModel = new TeadsCurveModel();
-    await impactModel.configure('test', {
+    const outputModel = new TeadsCurveModel();
+    await outputModel.configure('test', {
       'thermal-design-power': 200,
     });
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {
           duration: 3600,
           'cpu-util': 50.0,
@@ -27,12 +27,12 @@ describe('teads:configure test', () => {
     ]);
   });
   test('teads:initialize with params:spline', async () => {
-    const impactModel = new TeadsCurveModel();
-    await impactModel.configure('test', {
+    const outputModel = new TeadsCurveModel();
+    await outputModel.configure('test', {
       'thermal-design-power': 300,
     });
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {
           duration: 3600,
           'cpu-util': 10.0,
@@ -71,13 +71,13 @@ describe('teads:configure test', () => {
     ]);
   });
   test('teads:initialize with params:linear', async () => {
-    const impactModel = new TeadsCurveModel();
-    await impactModel.configure('test', {
+    const outputModel = new TeadsCurveModel();
+    await outputModel.configure('test', {
       'thermal-design-power': 300,
       interpolation: 'linear',
     });
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {
           duration: 3600,
           'cpu-util': 10.0,

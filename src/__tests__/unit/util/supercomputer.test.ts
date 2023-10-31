@@ -41,7 +41,7 @@ describe('util/supercomputer: ', () => {
               processor: 'Intel® Core™ i7-1185G7',
             },
           },
-          observations: [
+          inputs: [
             {
               timestamp: '2023-07-06T00:00',
               duration: 3600,
@@ -116,7 +116,7 @@ describe('util/supercomputer: ', () => {
                 'grid-carbon-intensity': 457,
               },
             },
-            observations: [
+            inputs: [
               {
                 timestamp: '2023-07-06T00:00',
                 duration: 3600,
@@ -144,7 +144,7 @@ describe('util/supercomputer: ', () => {
             },
             children: {
               'switch-1': {
-                observations: [
+                inputs: [
                   {
                     timestamp: '2023-07-06T00:00',
                     duration: 1,
@@ -155,7 +155,7 @@ describe('util/supercomputer: ', () => {
                 ],
               },
               'switch-2': {
-                observations: [
+                inputs: [
                   {
                     timestamp: '2023-07-06T00:00',
                     duration: 1,
@@ -166,7 +166,7 @@ describe('util/supercomputer: ', () => {
                 ],
               },
               'switch-3': {
-                observations: [
+                inputs: [
                   {
                     timestamp: '2023-07-06T00:00',
                     duration: 1,
@@ -177,7 +177,7 @@ describe('util/supercomputer: ', () => {
                 ],
               },
               'switch-4': {
-                observations: [
+                inputs: [
                   {
                     timestamp: '2023-07-06T00:00',
                     duration: 1,
@@ -225,7 +225,7 @@ describe('util/supercomputer: ', () => {
       const children = ompl.graph.children;
       const childrenNames = Object.keys(children);
 
-      expect(ompl.graph.children[childrenNames[0]]).toHaveProperty('impacts');
+      expect(ompl.graph.children[childrenNames[0]]).toHaveProperty('outputs');
     });
 
     it('applies computing to nested children components.', async () => {
@@ -249,7 +249,7 @@ describe('util/supercomputer: ', () => {
       const nestedChildren = children[oneWithNested].children;
 
       Object.keys(nestedChildren).forEach((child: any) => {
-        expect(nestedChildren[child]).toHaveProperty('impacts');
+        expect(nestedChildren[child]).toHaveProperty('outputs');
       });
     });
   });

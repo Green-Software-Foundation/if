@@ -28,7 +28,7 @@ export const readFile = async (_filePath: string, _format: string) => {
           boavizta-cpu:
             core-units: 24
             processor: Intel® Core™ i7-1185G7
-        observations:
+        inputs:
           - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
             duration: 3600 # Secs
             cpu-util: 18.392

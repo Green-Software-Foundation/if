@@ -5,28 +5,28 @@ jest.setTimeout(30000);
 
 describe('ccf:configure test', () => {
   test('initialize with params', async () => {
-    const impactModel = new CloudCarbonFootprint();
+    const outputModel = new CloudCarbonFootprint();
 
     await expect(
-      impactModel.configure('test', {
+      outputModel.configure('test', {
         vendor: 'aws2',
         'instance-type': 't2.micro',
       })
     ).rejects.toThrowError();
-    expect(impactModel.resolveAwsArchitecture('Graviton')).toStrictEqual(
+    expect(outputModel.resolveAwsArchitecture('Graviton')).toStrictEqual(
       'Graviton'
     );
     try {
-      impactModel.resolveAwsArchitecture('Gra2');
+      outputModel.resolveAwsArchitecture('Gra2');
     } catch (e: any) {
       expect(e.message).toBe('Gra2 not supported');
     }
-    await impactModel.configure('test', {
+    await outputModel.configure('test', {
       vendor: 'aws',
       'instance-type': 't2.micro',
     });
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z'},
       ])
     ).resolves.toStrictEqual([
@@ -38,13 +38,13 @@ describe('ccf:configure test', () => {
         'embodied-carbon': 0.04216723744292237 * 1000,
       },
     ]);
-    await impactModel.configure('test', {
+    await outputModel.configure('test', {
       vendor: 'aws',
       interpolation: 'spline',
       'instance-type': 't2.micro',
     });
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z'},
       ])
     ).resolves.toStrictEqual([
@@ -56,17 +56,17 @@ describe('ccf:configure test', () => {
         energy: 0.004900000000000001,
       },
     ]);
-    await expect(impactModel.calculate(undefined)).rejects.toThrowError();
-    await expect(impactModel.calculate({})).rejects.toThrowError();
+    await expect(outputModel.execute(undefined)).rejects.toThrowError();
+    await expect(outputModel.execute({})).rejects.toThrowError();
   });
   test('initialize with params:aws', async () => {
-    const impactModel = new CloudCarbonFootprint();
-    await impactModel.configure('test', {
+    const outputModel = new CloudCarbonFootprint();
+    await outputModel.configure('test', {
       vendor: 'aws',
       'instance-type': 'm5n.large',
     });
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {
           duration: 3600,
           'cpu-util': 10,
@@ -108,13 +108,13 @@ describe('ccf:configure test', () => {
     ]);
   });
   test('initialize with params:azure', async () => {
-    const impactModel = new CloudCarbonFootprint();
-    await impactModel.configure('test', {
+    const outputModel = new CloudCarbonFootprint();
+    await outputModel.configure('test', {
       vendor: 'azure',
       'instance-type': 'D2 v4',
     });
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {
           duration: 3600,
           'cpu-util': 10,
@@ -156,13 +156,13 @@ describe('ccf:configure test', () => {
     ]);
   });
   test('initialize with params:gcp', async () => {
-    const impactModel = new CloudCarbonFootprint();
-    await impactModel.configure('test', {
+    const outputModel = new CloudCarbonFootprint();
+    await outputModel.configure('test', {
       vendor: 'gcp',
       'instance-type': 'n2-standard-2',
     });
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {
           duration: 3600,
           'cpu-util': 10,
@@ -205,44 +205,44 @@ describe('ccf:configure test', () => {
   });
 
   test('initialize with wrong params', async () => {
-    const impactModel = new CloudCarbonFootprint();
+    const outputModel = new CloudCarbonFootprint();
     await expect(
-      impactModel.configure('test', {
+      outputModel.configure('test', {
         vendor: 'aws',
         'instance-type': 't5.micro',
       })
     ).rejects.toThrowError();
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z'},
       ])
     ).rejects.toThrowError();
   });
   test('initialize with wrong params', async () => {
-    const impactModel = new CloudCarbonFootprint();
+    const outputModel = new CloudCarbonFootprint();
     await expect(
-      impactModel.configure('test', {
+      outputModel.configure('test', {
         vendor: 'aws2',
         'instance-type': 't2.micro',
       })
     ).rejects.toThrowError();
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {duration: 3600, 'cpu-util': 50, timestamp: '2021-01-01T00:00:00Z'},
       ])
     ).rejects.toThrowError();
   });
 
-  test('initialize with correct params but wrong observation', async () => {
-    const impactModel = new CloudCarbonFootprint();
+  test('initialize with correct params but wrong input', async () => {
+    const outputModel = new CloudCarbonFootprint();
     await expect(
-      impactModel.configure('test', {
+      outputModel.configure('test', {
         vendor: 'aws',
         'instance-type': 't2.micro',
       })
     ).resolves.toBeInstanceOf(CloudCarbonFootprint);
     await expect(
-      impactModel.calculate([
+      outputModel.execute([
         {duration: 3600, cpus: 1, timestamp: '2021-01-01T00:00:00Z'},
       ])
     ).rejects.toThrowError();

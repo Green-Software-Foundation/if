@@ -6,7 +6,7 @@ tags:
   category: on-premise
 initialize:
   models:
-    - name: aveva # a model that takes in power observations and returns e.
+    - name: aveva # a model that takes in power inputs and returns e.
       kind: builtin
     - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
       kind: builtin
@@ -39,7 +39,7 @@ graph:
           functional-unit-duration: 1 
           functional-duration-time: ''
           functional-unit: requests # factor to convert per time to per f.unit
-      observations: 
+      inputs: 
         - timestamp: 2023-07-06T00:00 
           pl: 16.009 # average over timespan
           pb: 11.335 # average over timespan

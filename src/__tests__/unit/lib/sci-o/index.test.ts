@@ -7,7 +7,7 @@ describe('ccf:configure test', () => {
     const model = await new SciOModel().configure('ccf', {});
     expect(model).toBeInstanceOf(SciOModel);
     await expect(
-      model.calculate([
+      model.execute([
         {
           'grid-carbon-intensity': 200.0,
           energy: 100.0,
@@ -21,7 +21,7 @@ describe('ccf:configure test', () => {
       },
     ]);
     await expect(
-      model.calculate([
+      model.execute([
         {
           'grid-carbon-intensity': 212.1,
           energy: 100.0,
@@ -35,7 +35,7 @@ describe('ccf:configure test', () => {
       },
     ]);
     await expect(
-      model.calculate([
+      model.execute([
         {
           'grid-carbon-intensityd': 212.1,
           energy: 100.0,

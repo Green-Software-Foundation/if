@@ -13,7 +13,7 @@ graph:
         ccf:
           vendor: aws
           instance-type: m5n.large
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 1
           cpu-util: 10

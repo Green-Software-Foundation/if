@@ -1,7 +1,7 @@
 import * as cp from 'child_process';
 import * as yaml from 'js-yaml';
 
-import {IImpactModelInterface} from '../interfaces';
+import {IOutputModelInterface} from '../interfaces';
 
 import {CONFIG} from '../../config';
 
@@ -10,7 +10,7 @@ import {KeyValuePair} from '../../types/common';
 const {MODEL_IDS} = CONFIG;
 const {SHELL_MODEL} = MODEL_IDS;
 
-export class ShellModel implements IImpactModelInterface {
+export class ShellModel implements IOutputModelInterface {
   authParams: object | undefined; // Defined for compatibility. Not used.
   name: string | undefined; // The name of the data source.
   staticParams: object | undefined;
@@ -30,7 +30,7 @@ export class ShellModel implements IImpactModelInterface {
   async configure(
     name: string,
     staticParams: object | undefined = undefined
-  ): Promise<IImpactModelInterface> {
+  ): Promise<IOutputModelInterface> {
     this.name = name;
     if (staticParams === undefined) {
       throw new Error('Required staticParams not provided');
@@ -43,13 +43,13 @@ export class ShellModel implements IImpactModelInterface {
     return this;
   }
 
-  async calculate(observations: object | object[] | undefined): Promise<any[]> {
-    if (observations === undefined) {
+  async execute(inputs: object | object[] | undefined): Promise<any[]> {
+    if (inputs === undefined) {
       throw new Error('Required Parameters not provided');
     }
 
     const input: KeyValuePair = {};
-    input['observations'] = observations;
+    input['inputs'] = inputs;
     if (this.staticParams !== undefined) {
       input['config'] = this.staticParams;
     }
@@ -58,7 +58,7 @@ export class ShellModel implements IImpactModelInterface {
 
     const results = this.runModelInShell(inputAsString, this.executable);
 
-    return results['impacts'];
+    return results['outputs'];
   }
 
   /**
@@ -70,7 +70,7 @@ export class ShellModel implements IImpactModelInterface {
 
   /**
    * Runs the model in a shell. Spawns a child process to run an external IMP,
-   *  expects `execPath` to be a path to an executable with a CLI exposing two methods: `--calculate` and `--impl`.
+   *  expects `execPath` to be a path to an executable with a CLI exposing two methods: `--execute` and `--impl`.
    * The shell command then calls the `--command` method passing var impl as the path to the desired impl file.
    * @param input Yaml string (impl minus top level config).
    * @param {string} execPath Path to executable.
@@ -84,7 +84,7 @@ export class ShellModel implements IImpactModelInterface {
       const executable = execs.shift() ?? '';
 
       const result = cp
-        .spawnSync(executable, [...execs, '--calculate'], {
+        .spawnSync(executable, [...execs, '--execute'], {
           input: input,
           encoding: 'utf8',
         })

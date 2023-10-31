@@ -5,7 +5,7 @@ abstract: Guidance for writing valid impls.
 
 # IMPL writing guide
 
-The Impact Framework receives all its configuration and observation data in the form of a `yaml` file known as an `impl` (input-yaml).
+The Impact Framework receives all its configuration and input data in the form of a `yaml` file known as an `impl` (input-yaml).
 To use the framework, a user only has to write an `impl` file and pass its path to the command line tool. This guide will help you to understand how to construct an `impl` and use it to measure the energy and carbon usage of your app.
 
 ## Structure of an `impl`
@@ -28,7 +28,7 @@ graph:
       pipeline:
         - 
       config:
-      observations:
+      inputs:
 ```
 
 The `impl` starts with some metadata about the project, specifically:
@@ -56,7 +56,7 @@ initialize:
 
 ## `graph`
 
-`graph` is where you define the various components of your application. `graph` is organized into `children`. Each `child` is a component whose impacts should be summed to give the overall impact of your `graph`. `children` can be nested with arbitrary depth. Each `child` can have its own model pipeline and its own config. When no config is provided, it is inherited from the `graph` level config.
+`graph` is where you define the various components of your application. `graph` is organized into `children`. Each `child` is a component whose outputs should be summed to give the overall impact of your `graph`. `children` can be nested with arbitrary depth. Each `child` can have its own model pipeline and its own config. When no config is provided, it is inherited from the `graph` level config.
 
 In the following example, there is only one component. The model pipeline contains two models, `teads-curve` and `sci-m`. `teads-curve` requires the `tdp` to be defined in `config` and `sci-m` requires five pieces of `config` data: `total-embodied-emissions`, `time-reserved`, `expected-lifespan`, `resources-reserved` and `total-resources`.
 
@@ -79,18 +79,18 @@ graph:
 
 ```
 
-## `observations`
+## `inputs`
 
-Each `child` has its own set of `observations`. These are the most granular data, each of which are associated with a specific timestamp. Every `observation` must always include a `timestamp` and a `duration`.
+Each `child` has its own set of `inputs`. These are the most granular data, each of which are associated with a specific timestamp. Every `input` must always include a `timestamp` and a `duration`.
 
 ```yaml
-observations:
+inputs:
   - timestamp: 2023-07-06T00:00
     duration: 3600
     cpu-util: 45
 ```
 
-That's it! You now have a simple `impl` file that will use the model config and observation data to run the `teads-curve` and `sci-m` models! The output data will be appended to the `impl` under a new `impacts` field and saved as an `ompl` file.
+That's it! You now have a simple `impl` file that will use the model config and input data to run the `teads-curve` and `sci-m` models! The output data will be appended to the `impl` under a new `outputs` field and saved as an `ompl` file.
 
 ## More complex `impls`
 
@@ -140,7 +140,7 @@ graph:
           functional_unit_duration: 1 
           functional_unit_time: 'minutes'
           functional_unit: requests # factor to convert per time to per f.unit
-      observations:
+      inputs:
         - timestamp: 2023-07-06T00:00
           duration: 1
           cpu-util: 55
@@ -206,14 +206,14 @@ graph:
           functional_unit: requests # factor to convert per time to per f.unit
       children:
         nested-1:
-          observations:
+          inputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 50
               e-net: 0.000811 #kwh     
               requests: 380
         nested-2:
-          observations: 
+          inputs: 
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 33
@@ -222,13 +222,13 @@ graph:
 
 ```
 
-You can combine complex model pipelines and complex application architectures to calculate the energy and carbon impacts of complicated systems!
+You can combine complex model pipelines and complex application architectures to calculate the energy and carbon outputs of complicated systems!
 
 ## Choosing which models to run
 
 The models are designed to be composable, but they each have specific input requirements that must be met in order for the models to run correctly. For example, teh `teads-curve` model requires `tdp` to be available in the `impl`. If it is not there, the model cannot use it to calculate `e-cpu`. You can refer to the [individual model documentation](../docs/implementations/Readme.md) to see the parameters and return values for each model. 
 
-it is also possible to leapfrog some models if you have access to high-level data. For example, perhaps you already know the energy being used by your CPU. In this case, there is no need to run `teads-curve`, you can simply provide `e-cpu` as an `observation` and omit `teads-curve` from the model pipeline.
+it is also possible to leapfrog some models if you have access to high-level data. For example, perhaps you already know the energy being used by your CPU. In this case, there is no need to run `teads-curve`, you can simply provide `e-cpu` as an `input` and omit `teads-curve` from the model pipeline.
 
 We have deliberately made the models modular and composable so that you can be creative in developing new plugins to replace those provided as part of IEF.
 
@@ -237,6 +237,6 @@ We have deliberately made the models modular and composable so that you can be c
 You run an impl by providing its path to our command line tool, along with a path to save the results file to. You can run an `impl` named `my-impl.yml` as follows:
 
 ```sh
-npx ts-node scripts/rimpl.ts --impl ./examples/impls/my-impl.yml --ompl ./examples/ompls/my-ompl.yml
+npx ts-node scripts/impact.ts --impl ./examples/impls/my-impl.yml --ompl ./examples/ompls/my-ompl.yml
 ```
 
