@@ -1,0 +1,24 @@
+name: gsf-demo-pipeline
+description:
+  More complex pipeline example
+tags:
+  kind: web
+  complexity: moderate
+  category: cloud
+initialize:
+  models:
+    - name: sampler
+      kind: shell
+      path: python3 /usr/local/bin/sampler
+graph:
+  children:
+    child:
+      pipeline:
+        - sampler
+      config:
+        sampler:
+          executable: python3 /usr/local/bin/sampler
+      observations:
+        - timestamp: 2023-07-06T00:00
+          duration: 1 # Secs
+  
