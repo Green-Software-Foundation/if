@@ -9,7 +9,7 @@ import {KeyValuePair} from '../../types/common';
 const {MODEL_IDS} = CONFIG;
 const {BOAVIZTA_CPU, BOAVIZTA_CLOUD} = MODEL_IDS;
 
-abstract class BoaviztaoutputModel implements IOutputModelInterface {
+abstract class BoaviztaOutputModel implements IOutputModelInterface {
   name: string | undefined;
   sharedParams: object | undefined = undefined;
   metricType: 'cpu-util' | 'gpu-util' | 'ram-util' = 'cpu-util';
@@ -137,7 +137,7 @@ abstract class BoaviztaoutputModel implements IOutputModelInterface {
 }
 
 export class BoaviztaCpuOutputModel
-  extends BoaviztaoutputModel
+  extends BoaviztaOutputModel
   implements IOutputModelInterface
 {
   sharedParams: object | undefined = undefined;
@@ -206,8 +206,8 @@ export class BoaviztaCpuOutputModel
   }
 }
 
-export class BoaviztaCloudoutputModel
-  extends BoaviztaoutputModel
+export class BoaviztaCloudOutputModel
+  extends BoaviztaOutputModel
   implements IOutputModelInterface
 {
   public sharedParams: object | undefined = undefined;
