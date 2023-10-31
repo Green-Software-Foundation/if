@@ -251,9 +251,8 @@ export class BoaviztaCloudOutputModel
       this.instanceTypes[provider] === undefined ||
       this.instanceTypes[provider].length === 0
     ) {
-      this.instanceTypes[provider] = await this.supportedInstancesList(
-        provider
-      );
+      this.instanceTypes[provider] =
+        await this.supportedInstancesList(provider);
     }
 
     if ('instance-type' in staticParamsCast) {
