@@ -38,7 +38,7 @@ ccf.configure({
   vendor: 'aws',
   instance_type: 'm5n.large'
 })
-const results = ccf.calculate([
+const results = ccf.execute([
   {
     duration: 3600, // duration institute
     cpu-util: 10, // CPU usage as a percentage
@@ -57,7 +57,7 @@ ccf.configure({
   vendor: 'azure',
   instance_type: 'D4 v4'
 })
-const results = ccf.calculate([
+const results = ccf.execute([
   {
     duration: 3600, // duration institute
     cpu-util: 10, // CPU usage as a percentage
@@ -76,7 +76,7 @@ ccf.configure({
   vendor: 'gcp',
   instance_type: 'n2-standard-2'
 })
-const results = ccf.calculate([
+const results = ccf.execute([
   {
     duration: 3600, // duration institute
     cpu-util: 10, // CPU usage as a percentage

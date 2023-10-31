@@ -25,7 +25,7 @@ const teads = new TeadsCurveModel();
 teads.configure({
   thermal-design-power: 100, // thermal-design-power of the CPU
 });
-const results = teads.calculate([
+const results = teads.execute([
   {
     duration: 3600, // duration institute
     cpu: 100, // CPU usage as a value between 0 to 100 in percentage
@@ -53,7 +53,7 @@ teads.configure({
   tdp: 100, // TDP of the CPU
   interpolation: Interpolation.SPLINE,
 });
-const results = teads.calculate([
+const results = teads.execute([
   {
     duration: 3600, // duration institute
     cpu: 100, // CPU usage as a value between 0 to 100 in percentage

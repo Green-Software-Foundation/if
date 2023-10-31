@@ -66,7 +66,7 @@ This data type holds the results of a model call, the estimated energy, carbon, 
 interface ImpactModelPluginInterface {
   public configure(name: string, config: Configuration): ImpactModelPluginInterface
   public authenticate(authParams: AuthParams): void
-  public calculate(inputs: Arrray<input>): Array<ImpactMetric>
+  public execute(inputs: Arrray<input>): Array<ImpactMetric>
 }
 ```
 
@@ -159,7 +159,7 @@ This function estimates the emissions based on a single input input. For each in
 #### Signature
 
 ```ts
-public calculate(inputs: Array<input>): Arrray<ImpactMetric>
+public execute(inputs: Array<input>): Arrray<ImpactMetric>
 ```
 
 #### Example usage
@@ -169,7 +169,7 @@ class ConcreteVM extends ImpactModelInterface { ... }
 let model = new ConcreteVM().configure("backend-server", {vendor: "GCP"});
 try {
     let input = {“date-time”: xxxx, “duration”: xxx, “cpu-util”: 0.5};
-    let outputs = model.calculate([input]);
+    let outputs = model.execute([input]);
     console.log(outputs);
 } catch {
     ...

@@ -26,7 +26,7 @@ IEF implements the plugin based on the simple multiplication of the energy and i
 
 > Note that the `energy` field is added to the `impl` by the `sci-e` model only. This means `sci-o` must always be preceded by `sci-e` in a model pipeline. This is always true, even if there is only a single component of `energy` such as `energy-cpu` from `teads-curve`. `sci-e` sums all the available components and adds the sum to the `impl` as `energy`.
 
-To run the model, you must first create an instance of `SciOModel` and call its `configure()` method. Then, you can call `calculate()` to return `operational-carbon`.
+To run the model, you must first create an instance of `SciOModel` and call its `configure()` method. Then, you can call `execute()` to return `operational-carbon`.
 
 ## Usage
 
@@ -37,7 +37,7 @@ import {SciOModel} from '@gsf/ief';
 
 const sciOModel = new SciOModel();
 sciOModel.configure()
-const results = sciOModel.calculate([
+const results = sciOModel.execute([
   {
     energy: 0.5, // energy value in kWh 
     'grid-carbon-intensity': 0.5, // intensity value gCO2e/kWh

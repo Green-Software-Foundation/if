@@ -40,7 +40,7 @@ Any configuration here should be:
 
 ## inputs
 
-Ultimately, the inputs are passed to the model through the `calculate(inputs: Array<input>)` function. 
+Ultimately, the inputs are passed to the model through the `execute(inputs: Array<input>)` function. 
 
 An essential characteristic of the Impact Engine is that the model is passed everything it needs to perform its calculation in the input nodes. All the data required to calculate an input exists in each input node. Ensuring all the required data is self-contained in an input makes building and testing models easier. 
 
@@ -141,7 +141,7 @@ Both models use a param called `verbose` to signal how much data the model shoul
 
 We handle this by post-pending `::<name-of-model>` to the key and adding it to the input. That way, model-1 and model-2 can have the same variable but different values.
 
-But the model expects `verbose` to be passed into the calculate function, not `verbose::model-1`.
+But the model expects `verbose` to be passed into the execute function, not `verbose::model-1`.
 
 IEF ensures that for every model, it only passes in:
 - Data that **isn't** associated with any namespace (i.e., data that doesn't end with `::<namespace>`)

@@ -45,7 +45,7 @@ sci-per-minute = sci-per-s * 60  // (= 301.2)
 sci-per-f-unit = sci-per-duration / 100  // (= 3.012 gC/request)
 ```
 
-To run the model, you must first create an instance of `SciModel` and call its `configure()` method. Then, you can call `calculate()` to return `sci`.
+To run the model, you must first create an instance of `SciModel` and call its `configure()` method. Then, you can call `execute()` to return `sci`.
 
 ```typescript
 import { SciModel } from '@gsf/ief';
@@ -55,7 +55,7 @@ sciModel.configure('name', {
       functional-unit-time: 'day',
       functional-unit: 'requests',
       functional-unit-duration: 1,)
-const results = sciModel.calculate([
+const results = sciModel.execute([
   {
     operational-carbon: 0.02
     embodied-carbon: 5,

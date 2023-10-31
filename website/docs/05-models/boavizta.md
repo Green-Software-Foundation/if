@@ -8,7 +8,7 @@ Boavizta exposes a [REST API](https://doc.api.boavizta.org/). If the `boavizta` 
 
 ## Usage
 
-To run the `boavista-cpu` model an instance of `BoaviztaCpuImpactModel` must be created and its `configure()` method called. Then, the model's `calculate()` method can be called, passing `duration`,`cpu-util`,`timestamp` arguments.
+To run the `boavista-cpu` model an instance of `BoaviztaCpuImpactModel` must be created and its `configure()` method called. Then, the model's `execute()` method can be called, passing `duration`,`cpu-util`,`timestamp` arguments.
 
 This is how you could run the model in Typescript:
 

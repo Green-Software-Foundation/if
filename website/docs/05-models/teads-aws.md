@@ -22,7 +22,7 @@ const teads = new TeadsAWS();
 teads.configure({
   instance_type: 'c6i.large'
 })
-const results = teads.calculate([
+const results = teads.execute([
   {
     duration: 3600, // duration institute
     cpu: 0.1, // CPU usage as a value between 0 and 1 in floating point number

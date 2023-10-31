@@ -20,7 +20,7 @@ You can see example Typescript invocations for each vendor below:
 import {CloudInstanceMetadataModel} from 'ief';
 
 const cimm = new CloudInstanceMetadataModel();
-const results = cimm.calculate([
+const results = cimm.execute([
   {
     'cloud-vendor': 'aws',
     'cloud-instance-type': 'm5n.large'

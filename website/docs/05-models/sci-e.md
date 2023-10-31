@@ -14,14 +14,14 @@ In any model pipeline that includes `sci-o`, `sci-o` must be preceded by `sci-e`
 
 ## Implementation
 
-To run the model, you must first create an instance of `SciEModel` and call its `configure()` method. Then, you can call `calculate()` to return `energy`.
+To run the model, you must first create an instance of `SciEModel` and call its `configure()` method. Then, you can call `execute()` to return `energy`.
 
 ```typescript
 import { SciEModel } from '@gsf/ief';
 
 const sciEModel = new SciEModel();
 sciEModel.configure()
-const results = sciEModel.calculate([
+const results = sciEModel.execute([
   {
     energy-cpu: 0.001,
     energy-memory: 0.0005,

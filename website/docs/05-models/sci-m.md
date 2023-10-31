@@ -13,7 +13,7 @@ m = te * ts * rs
 ```
 Where:
 
-- `te` = Total embodied emissions; the sum of Life Cycle Assessment (LCA) emissions for the component.
+- `total-embodied` = Total embodied emissions; the sum of Life Cycle Assessment (LCA) emissions for the component.
 
 - `ts` = Time-share; the share of the total life span of the hardware reserved for use by an application. 
   - `ts` is calculated as `tir/el`, where:
@@ -28,7 +28,7 @@ Where:
 
 ## Implementation
 
-IEF implements the plugin based on the logic described above. To run the model, you must first create an instance of `SciMModel` and call its `configure()` method. Then, you can call `calculate()` to return `m`.
+IEF implements the plugin based on the logic described above. To run the model, you must first create an instance of `SciMModel` and call its `configure()` method. Then, you can call `execute()` to return `m`.
 
 It expects all of the following parameters to be provided in order to calculate `m`:
 
@@ -49,7 +49,7 @@ import { SciMModel } from '@gsf/ief';
 
 const sciMModel = new SciMModel();
 sciMModel.configure()
-const results = sciMModel.calculate([
+const results = sciMModel.execute([
   {
     total-embodied-emissions: 200, // in gCO2e for total resource units
     time-reserved 60 * 60 * 24 * 30, // time reserved in seconds, can point to another field "duration"
