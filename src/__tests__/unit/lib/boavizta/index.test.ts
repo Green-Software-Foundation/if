@@ -1,6 +1,6 @@
 import {describe, expect, jest, test} from '@jest/globals';
 import {
-  BoaviztaCloudoutputModel,
+  BoaviztaCloudOutputModel,
   BoaviztaCpuOutputModel,
 } from '../../../../lib/boavizta/index';
 import axios, {AxiosResponse} from 'axios';
@@ -485,7 +485,7 @@ describe('cpu:initialize with params', () => {
 
 describe('cloud:initialize with params', () => {
   test('initialize with params and call usage in RAW Format', async () => {
-    const outputModel = new BoaviztaCloudoutputModel();
+    const outputModel = new BoaviztaCloudOutputModel();
     expect(outputModel.modelIdentifier()).toBe('org.boavizta.cloud.sci');
     await expect(
       outputModel.validateLocation({location: 'SomethingFail'})
@@ -504,7 +504,7 @@ describe('cloud:initialize with params', () => {
         provider: 'aws',
         verbose: false,
       })
-    ).resolves.toBeInstanceOf(BoaviztaCloudoutputModel);
+    ).resolves.toBeInstanceOf(BoaviztaCloudOutputModel);
     await expect(
       outputModel.configure('test', {
         'instance-type': 't2.micro',
@@ -513,7 +513,7 @@ describe('cloud:initialize with params', () => {
         provider: 'aws',
         verbose: 'false',
       })
-    ).resolves.toBeInstanceOf(BoaviztaCloudoutputModel);
+    ).resolves.toBeInstanceOf(BoaviztaCloudOutputModel);
     await expect(
       outputModel.configure('test', {
         'instance-type': 't2.micro',
@@ -522,13 +522,13 @@ describe('cloud:initialize with params', () => {
         provider: 'aws',
         verbose: 0,
       })
-    ).resolves.toBeInstanceOf(BoaviztaCloudoutputModel);
+    ).resolves.toBeInstanceOf(BoaviztaCloudOutputModel);
     expect(outputModel.name).toBe('test');
     // configure without static params will cause improper configure error
   });
 
   test("correct 'instance-type': initialize with params and call usage in IMPL Format", async () => {
-    const outputModel = new BoaviztaCloudoutputModel();
+    const outputModel = new BoaviztaCloudOutputModel();
 
     await expect(
       outputModel.configure('test', {
@@ -548,7 +548,7 @@ describe('cloud:initialize with params', () => {
         location: 'USA',
         provider: 'aws',
       })
-    ).resolves.toBeInstanceOf(BoaviztaCloudoutputModel);
+    ).resolves.toBeInstanceOf(BoaviztaCloudOutputModel);
     expect(outputModel.name).toBe('test');
     // mockAxios.get.mockResolvedValue({data: {}});
     await expect(
@@ -568,7 +568,7 @@ describe('cloud:initialize with params', () => {
   });
 
   test('wrong "instance-type": initialize with params and call usage in IMPL Format throws error', async () => {
-    const outputModel = new BoaviztaCloudoutputModel();
+    const outputModel = new BoaviztaCloudOutputModel();
 
     await expect(
       outputModel.configure('test', {
@@ -606,7 +606,7 @@ describe('cloud:initialize with params', () => {
   });
 
   test('without "instance-type": initialize with params and call usage in IMPL Format throws error', async () => {
-    const outputModel = new BoaviztaCloudoutputModel();
+    const outputModel = new BoaviztaCloudOutputModel();
 
     await expect(
       outputModel.configure('test', {
