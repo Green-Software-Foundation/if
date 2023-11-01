@@ -11,6 +11,7 @@ import * as dotenv from 'dotenv';
  * Define new type to handle outputs from Azure API
  */
 type AzureOutputs = {
+  // add instance-type here
   timestamps: string[];
   cpu_utils: string[];
   mem_utils: string[];
@@ -98,19 +99,23 @@ export class AzureImporterModel implements IOutputModelInterface {
       this.aggregation
     );
 
-    console.log('rawResults', rawResults);
-
+    const formattedResults = [];
     for (let i = 0; i < rawResults.timestamps.length; i++) {
-      console.log(i);
+      formattedResults.push('-timestamp: ' + '${rawResults.timestamps[i]}');
+      formattedResults.push(' cpu-util: ' + '${rawResults.cpu_utils[i]}');
+      formattedResults.push(' mem-util : ${rawResults.mem_utils[i]}');
     }
+
+    console.log(formattedResults);
+    return formattedResults;
 
     // here we need to iterate over elements in each field in `rawResults: AzureOutputs` and append each value to our yaml file
     // --->
 
     // temporary junk return to satisfy func signature
-    const junkReturn = [];
-    junkReturn.push('dummy');
-    return junkReturn;
+    // const junkReturn = [];
+    // junkReturn.push('dummy');
+    // return junkReturn;
   }
 
   async getVmUsage(
@@ -175,6 +180,7 @@ export class AzureImporterModel implements IOutputModelInterface {
     }
 
     const results: AzureOutputs = {
+      //add instance type here
       timestamps: timestamps,
       cpu_utils: cpu_utils,
       mem_utils: mem_utils,
