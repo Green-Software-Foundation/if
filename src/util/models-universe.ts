@@ -30,7 +30,7 @@ import {
 const {GITHUB_PATH} = CONFIG;
 const {
   MISSING_CLASSNAME,
-  NOT_INPUT_MODEL_EXTENSION,
+  NOT_OUTPUT_MODEL_EXTENSION,
   NOT_INITIALIZED_MODEL,
   WRONG_OR_MISSING_MODEL,
   MISSING_PATH,
@@ -88,7 +88,7 @@ export class ModelsUniverse {
   }
 
   /**
-   * Checks if model is instance of `IImpactModelInterface`.
+   * Checks if model is instance of `IOutputModelInterface`.
    */
   private instanceOfModel(ClassContainer: any) {
     const testModel = new ClassContainer();
@@ -97,7 +97,7 @@ export class ModelsUniverse {
       'modelIdentifier' in testModel &&
       'configure' in testModel &&
       'authenticate' in testModel &&
-      'calculate' in testModel;
+      'execute' in testModel;
 
     return boolable;
   }
@@ -127,7 +127,7 @@ export class ModelsUniverse {
       return pluginModule[model];
     }
 
-    throw new Error(NOT_INPUT_MODEL_EXTENSION);
+    throw new Error(NOT_OUTPUT_MODEL_EXTENSION);
   }
 
   /**
