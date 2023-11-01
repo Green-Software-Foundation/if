@@ -1,4 +1,5 @@
 import {
+  AzureImporterModel,
   BoaviztaCpuOutputModel,
   BoaviztaCloudOutputModel,
   CloudCarbonFootprint,
@@ -111,7 +112,7 @@ export class ModelsUniverse {
    * Initializes and registers model.
    */
   public writeDown(model: ImplInitializeModel) {
-    const {name, kind, config} = model;
+    const { name, kind, config } = model;
 
     const Model = this.handModelByCriteria(name, kind);
 
