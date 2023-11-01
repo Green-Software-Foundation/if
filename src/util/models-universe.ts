@@ -33,6 +33,7 @@ const {
   NOT_INPUT_MODEL_EXTENSION,
   NOT_INITIALIZED_MODEL,
   WRONG_OR_MISSING_MODEL,
+  MISSING_PATH,
 } = STRINGS;
 
 /**
@@ -107,8 +108,12 @@ export class ModelsUniverse {
    * Imports module, then checks if it's a class which implements input model interface.
    */
   private async handPluginModel(model?: string, path?: string) {
-    if (!model || !path) {
+    if (!model) {
       throw new Error(MISSING_CLASSNAME);
+    }
+
+    if (!path) {
+      throw new Error(MISSING_PATH);
     }
 
     if (path?.startsWith(GITHUB_PATH)) {
