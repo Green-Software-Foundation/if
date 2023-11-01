@@ -17,6 +17,15 @@ type AzureOutputs = {
   mem_utils: string[];
 };
 
+type AzureInputs = {
+  myRG: string;
+  myVM: string;
+  mySubscriptionId: string;
+  timespan: string;
+  interval: string;
+  aggregation: string;
+};
+
 export class AzureImporterModel implements IOutputModelInterface {
   authParams: object | undefined = undefined;
   staticParams: object | undefined;
@@ -89,46 +98,32 @@ export class AzureImporterModel implements IOutputModelInterface {
       }
     });
 
+    const inData: AzureInputs = {
+      myRG: myRG,
+      myVM: myVM,
+      mySubscriptionId: mySubscriptionId,
+      timespan: this.timespan,
+      interval: this.interval,
+      aggregation: this.aggregation,
+    };
     //Call the function and get data back in AzureOutputs object
-    const rawResults = await this.getVmUsage(
-      myRG,
-      myVM,
-      mySubscriptionId,
-      this.timespan,
-      this.interval,
-      this.aggregation
-    );
+    const rawResults = await this.getVmUsage(inData);
 
-    const formattedResults = [];
-    for (let i = 0; i < rawResults.timestamps.length; i++) {
-      formattedResults.push('-timestamp: ' + '${rawResults.timestamps[i]}');
-      formattedResults.push(' cpu-util: ' + '${rawResults.cpu_utils[i]}');
-      formattedResults.push(' mem-util : ${rawResults.mem_utils[i]}');
-    }
-
-    console.log(formattedResults);
+    const formattedResults = rawResults.timestamps.map((timestamp, index) => ({
+      '- timestamp': timestamp,
+      ' cpu-util': rawResults.cpu_utils[index],
+      ' mem-util': rawResults.mem_utils[index],
+    }));
     return formattedResults;
-
-    // here we need to iterate over elements in each field in `rawResults: AzureOutputs` and append each value to our yaml file
-    // --->
-
-    // temporary junk return to satisfy func signature
-    // const junkReturn = [];
-    // junkReturn.push('dummy');
-    // return junkReturn;
   }
 
-  async getVmUsage(
-    myRG: string,
-    myVM: string,
-    mySubscriptionId: string,
-    timespan: string,
-    interval: string,
-    aggregation: string
-  ): Promise<AzureOutputs> {
-    const subscriptionId = mySubscriptionId;
-    const resourceGroupName = myRG;
-    const vmName = myVM;
+  async getVmUsage(indata: AzureInputs): Promise<AzureOutputs> {
+    const subscriptionId = indata.mySubscriptionId;
+    const resourceGroupName = indata.myRG;
+    const vmName = indata.myVM;
+    const timespan = indata.timespan;
+    const interval = indata.interval;
+    const aggregation = indata.aggregation;
     const timestamps: string[] = [];
     const cpu_utils: string[] = [];
     const mem_utils: string[] = [];
