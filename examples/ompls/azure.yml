@@ -1,0 +1,25 @@
+name: ccf-demo
+description: example impl invoking CCF model
+initialize:
+  models:
+    - name: azure-importer
+      kind: builtin
+graph:
+  children:
+    child:
+      pipeline:
+        - azure-importer
+      config:
+        azure-importer: null
+      inputs:
+        - timestamp: '2023-11-01T14:45:00Z'
+          interval: PT1M
+          timespan: PT1H
+          aggregation: average
+      outputs:
+        - timestamp: Wed Nov 01 2023 14:37:00 GMT+0000 (Greenwich Mean Time)
+          interval: PT1M
+          timespan: PT1H
+          aggregation: average
+          cpu-util: '3.09'
+          mem-util: '0'

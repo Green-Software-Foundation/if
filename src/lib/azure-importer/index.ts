@@ -98,22 +98,26 @@ export class AzureImporterModel implements IOutputModelInterface {
       }
     });
 
-    const inData: AzureInputs = {
-      myRG: myRG,
-      myVM: myVM,
-      mySubscriptionId: mySubscriptionId,
-      timespan: this.timespan,
-      interval: this.interval,
-      aggregation: this.aggregation,
-    };
+    //const inData: AzureInputs = { myRG: myRG, myVM: myVM, mySubscriptionId: mySubscriptionId, timespan: this.timespan, interval: this.interval, aggregation: this.aggregation }
     //Call the function and get data back in AzureOutputs object
-    const rawResults = await this.getVmUsage(inData);
+    //const rawResults = await this.getVmUsage(inData);
+    const rawResults = {
+      timestamps: [
+        'Wed Nov 01 2023 14:37:00 GMT+0000 (Greenwich Mean Time)',
+        'Wed Nov 01 2023 14:38:00 GMT+0000 (Greenwich Mean Time)',
+        'Wed Nov 01 2023 14:39:00 GMT+0000 (Greenwich Mean Time)',
+      ],
+      cpu_utils: ['3.09', '0.34', '0.355'],
+      mem_utils: ['0', '242221056', '481296384', '470286336'],
+    };
 
     const formattedResults = rawResults.timestamps.map((timestamp, index) => ({
-      '- timestamp': timestamp,
-      ' cpu-util': rawResults.cpu_utils[index],
-      ' mem-util': rawResults.mem_utils[index],
+      timestamp,
+      'cpu-util': rawResults.cpu_utils[index],
+      'mem-util': rawResults.mem_utils[index],
     }));
+
+    console.log(formattedResults);
     return formattedResults;
   }
 

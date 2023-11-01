@@ -11,10 +11,9 @@ graph:
         - azure-importer
       config:
         azure-importer:
-      observations:
-          timestamp: '2023-11-01T14:45:00Z'
-          metric: 'Percentage CPU'
-          interval: 'PT1M'
-          timespan: 'PT1H'
-          aggregation: 'avg'
+      inputs:
+          - timestamp: '2023-11-01T14:45:00Z'
+            interval: 'PT1M' # granularity, e.g. 1m 
+            timespan: 'PT1H' # this can be a pair of timestamps to specify a date range
+            aggregation: 'average'
 

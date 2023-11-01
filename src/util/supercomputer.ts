@@ -80,6 +80,7 @@ export class Supercomputer {
       childrenObject[childName].config
     );
 
+    //console.log(enrichedInputs)
     const observatory = new Observatory(enrichedInputs);
 
     for (const modelName of pipeline) {
@@ -102,6 +103,7 @@ export class Supercomputer {
 
     this.impl.graph.children[this.olderChild.name].outputs =
       observatory.getOutputs();
+    //console.log(observatory.getOutputs())
   }
 
   /**

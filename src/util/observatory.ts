@@ -21,7 +21,7 @@ export class Observatory {
     const reuseCalculation = this.outputs.length ? this.outputs : this.inputs;
 
     const calculatedOutputs = await modelInstance.execute(reuseCalculation);
-
+    console.log(calculatedOutputs);
     const result = this.inputs.map((input: any, index: number) => ({
       ...input,
       ...calculatedOutputs[index],
