@@ -10,7 +10,7 @@ describe('sci:configure test', () => {
       model.execute([
         {
           duration: 3600,
-          timestamp: '2021-01-01T00:00:00Z',
+          timestamp: '2023-11-01T14:45:00Z',
           interval: 'PT1M',
           timespan: 'PT1H',
           aggregation: 'average',

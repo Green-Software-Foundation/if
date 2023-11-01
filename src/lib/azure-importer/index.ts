@@ -89,7 +89,7 @@ export class AzureImporterModel implements IOutputModelInterface {
     });
 
     //Call the function and get data back in AzureOutputs object
-    const rawResults = this.getVmUsage(
+    const rawResults = await this.getVmUsage(
       myRG,
       myVM,
       mySubscriptionId,
@@ -97,7 +97,12 @@ export class AzureImporterModel implements IOutputModelInterface {
       this.interval,
       this.aggregation
     );
-    console.log(rawResults);
+
+    console.log('rawResults', rawResults);
+
+    for (let i = 0; i < rawResults.timestamps.length; i++) {
+      console.log(i);
+    }
 
     // here we need to iterate over elements in each field in `rawResults: AzureOutputs` and append each value to our yaml file
     // --->
@@ -161,7 +166,6 @@ export class AzureImporterModel implements IOutputModelInterface {
       }
     );
 
-    console.log('RAM Usage:');
     for (const timeSeries of ramMetricsResponse.value[0].timeseries || []) {
       for (const data of timeSeries.data || []) {
         if (!(typeof data.average === 'undefined')) {
