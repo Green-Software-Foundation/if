@@ -103,7 +103,7 @@ describe('util/observatory: ', () => {
     });
   });
 
-  describe('getoutputs(): ', () => {
+  describe('getOutputs(): ', () => {
     const inputs: any = [
       {
         timestamp: '2023-07-06T00:00',
@@ -147,7 +147,7 @@ describe('util/observatory: ', () => {
     });
   });
 
-  describe('getinputs(): ', () => {
+  describe('getInputs(): ', () => {
     it('initalized given obsercations.', () => {
       const inputs: any = [
         {
