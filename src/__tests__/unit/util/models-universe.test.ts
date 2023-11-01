@@ -1,4 +1,6 @@
-import {describe, expect, it} from '@jest/globals';
+import {MockModel} from '../../../__mocks__/model-universe';
+
+import {describe, expect, it, jest, beforeEach} from '@jest/globals';
 
 import {BoaviztaCpuOutputModel} from '../../../lib';
 
@@ -8,7 +10,7 @@ import {STRINGS} from '../../../config';
 
 import {ImplInitializeModel} from '../../../types/models-universe';
 
-const {MISSING_CLASSNAME, MISSING_PATH} = STRINGS;
+const {MISSING_CLASSNAME, MISSING_PATH, NOT_OUTPUT_MODEL_EXTENSION} = STRINGS;
 
 describe('util/models-universe: ', () => {
   describe('init ModelsUniverse', () => {
@@ -23,6 +25,11 @@ describe('util/models-universe: ', () => {
   });
 
   describe('writeDown(): ', () => {
+    beforeEach(() => {
+      jest.resetModules();
+      jest.restoreAllMocks();
+    });
+
     it('throws error in case model is not supported.', () => {
       const modelsHandbook = new ModelsUniverse();
       const modelInfo: ImplInitializeModel = {
@@ -157,7 +164,7 @@ describe('util/models-universe: ', () => {
         },
         name: 'mock-name',
         kind: 'plugin',
-        model: 'MockavitzaModel',
+        model: 'MockaviztaModel',
       };
 
       const modelsList = modelsHandbook.writeDown(modelInfo);
@@ -174,6 +181,81 @@ describe('util/models-universe: ', () => {
         if (error instanceof Error) {
           expect(error).toBeInstanceOf(Error);
           expect(error.message).toEqual(MISSING_PATH);
+        }
+      }
+    });
+
+    it('should successfully initalize plugin model.', async () => {
+      jest.mock(
+        'mockavizta-model',
+        () => ({
+          __esModule: true,
+          MockaviztaModel: MockModel,
+        }),
+        {virtual: true}
+      );
+
+      const modelsHandbook = new ModelsUniverse();
+      const modelInfo: ImplInitializeModel = {
+        config: {
+          allocation: 'mock-allocation',
+          verbose: true,
+        },
+        name: 'mock-name',
+        kind: 'plugin',
+        model: 'MockaviztaModel',
+        path: 'https://github.com/mock/mockavizta-model',
+      };
+
+      const modelsList = modelsHandbook.writeDown(modelInfo);
+      const model = modelsList[modelInfo.name];
+
+      expect.assertions(1);
+
+      const response = await model({
+        'core-units': 1,
+        'physical-processor': 'intel',
+      });
+
+      expect(response).toBeInstanceOf(MockModel);
+    });
+
+    it('should throw `input model does not extend base interface` error.', async () => {
+      jest.mock(
+        'mockavizta-model',
+        () => ({
+          __esModule: true,
+          MockaviztaModel: class FakeModel {},
+        }),
+        {virtual: true}
+      );
+
+      const modelsHandbook = new ModelsUniverse();
+      const modelInfo: ImplInitializeModel = {
+        config: {
+          allocation: 'mock-allocation',
+          verbose: true,
+        },
+        name: 'mock-name',
+        kind: 'plugin',
+        model: 'MockaviztaModel',
+        path: 'https://github.com/mock/mockavizta-model',
+      };
+
+      const modelsList = modelsHandbook.writeDown(modelInfo);
+      const model = modelsList[modelInfo.name];
+
+      expect.assertions(2);
+
+      try {
+        await model({
+          'core-units': 1,
+          'physical-processor': 'intel',
+        });
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error.message).toEqual(NOT_OUTPUT_MODEL_EXTENSION);
         }
       }
     });
