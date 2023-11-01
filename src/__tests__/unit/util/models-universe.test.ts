@@ -1,8 +1,14 @@
 import {describe, expect, it} from '@jest/globals';
 
-import {ModelsUniverse} from '../../../util/models-universe';
-import {ImplInitializeModel} from '../../../types/models-universe';
 import {BoaviztaCpuOutputModel} from '../../../lib';
+
+import {ModelsUniverse} from '../../../util/models-universe';
+
+import {STRINGS} from '../../../config';
+
+import {ImplInitializeModel} from '../../../types/models-universe';
+
+const {MISSING_CLASSNAME, MISSING_PATH} = STRINGS;
 
 describe('util/models-universe: ', () => {
   describe('init ModelsUniverse', () => {
@@ -111,6 +117,65 @@ describe('util/models-universe: ', () => {
       const modelsList = modelsHandbook.writeDown(modelInfo);
       expect(modelsList).toHaveProperty(modelInfo.name);
       expect(typeof modelsList[modelInfo.name]).toBe('function');
+    });
+
+    it('throws `missing classname` error while registration of `plugin` model.', async () => {
+      const modelsHandbook = new ModelsUniverse();
+      const modelInfo: ImplInitializeModel = {
+        config: {
+          allocation: 'mock-allocation',
+          verbose: true,
+        },
+        name: 'mock-name',
+        kind: 'plugin',
+      };
+
+      const modelsList = modelsHandbook.writeDown(modelInfo);
+      const model = modelsList[modelInfo.name];
+
+      expect.assertions(2);
+
+      try {
+        await model({
+          'core-units': 1,
+          'physical-processor': 'intel',
+        });
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error.message).toEqual(MISSING_CLASSNAME);
+        }
+      }
+    });
+
+    it('throws `missing path parameter` error while registration of `plugin` model.', async () => {
+      const modelsHandbook = new ModelsUniverse();
+      const modelInfo: ImplInitializeModel = {
+        config: {
+          allocation: 'mock-allocation',
+          verbose: true,
+        },
+        name: 'mock-name',
+        kind: 'plugin',
+        model: 'MockavitzaModel',
+      };
+
+      const modelsList = modelsHandbook.writeDown(modelInfo);
+      const model = modelsList[modelInfo.name];
+
+      expect.assertions(2);
+
+      try {
+        await model({
+          'core-units': 1,
+          'physical-processor': 'intel',
+        });
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error.message).toEqual(MISSING_PATH);
+        }
+      }
     });
   });
 
