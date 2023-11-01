@@ -7,4 +7,5 @@ export const STRINGS = {
     `Model ${modelName} is not initalized yet.`,
   WRONG_OR_MISSING_MODEL: (modelName: string) =>
     `Missing or wrong model: ${modelName}.`,
+  MISSING_PATH: 'Plugin path parameter is missing.',
 };
