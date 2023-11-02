@@ -1,8 +1,9 @@
-import {IOutputModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/common';
+import { IOutputModelInterface } from '../interfaces';
+import { KeyValuePair } from '../../types/common';
 
-import {DefaultAzureCredential} from '@azure/identity';
-import {MonitorClient} from '@azure/arm-monitor';
+import { DefaultAzureCredential } from '@azure/identity';
+import { MonitorClient } from '@azure/arm-monitor';
+import { ComputeManagementClient } from '@azure/arm-compute';
 
 import * as dotenv from 'dotenv';
 
@@ -16,6 +17,9 @@ type AzureOutputs = {
   mem_utils: string[];
 };
 
+/**
+ * Define new type to handle inputts to Azure API
+ */
 type AzureInputs = {
   resource_group_name: string;
   vm_name: string;
@@ -47,6 +51,7 @@ export class AzureImporterModel implements IOutputModelInterface {
   modelIdentifier(): string {
     return 'azure';
   }
+
   /**
    * Each input require:
    * @param {Object[]} inputs
@@ -104,9 +109,12 @@ export class AzureImporterModel implements IOutputModelInterface {
       }
     });
 
+
+    // This pair of functions translate impl input data into the formats expected by Azure API
     this.timespan = this.getTimeSpan(this.duration, this.timestamp);
     this.interval = this.getInterval(this.window);
 
+    // Compile inputs
     const inData: AzureInputs = {
       resource_group_name: this.resource_group_name,
       vm_name: this.vm_name,
@@ -116,21 +124,23 @@ export class AzureImporterModel implements IOutputModelInterface {
       aggregation: this.aggregation,
     };
 
-    console.log(inData);
-    // // Call the function and get data back in AzureOutputs object
-    // const rawResults = await this.getVmUsage(inData);
+    // // Call the function wrapping the Azure API calls and get data back in AzureOutputs object
+    const rawResults = await this.getVmUsage(inData);
+    const metaDataResults = await this.getInstanceMetadata(this.subscription_id, this.vm_name, this.resource_group_name)
+    console.log(metaDataResults)
 
     //TEMPORARY MOCK DATA FOR TESTING
-    const rawResults = {
-      timestamps: [
-        'Wed Nov 01 2023 14:37:00 GMT+0000 (Greenwich Mean Time)',
-        'Wed Nov 01 2023 14:38:00 GMT+0000 (Greenwich Mean Time)',
-        'Wed Nov 01 2023 14:39:00 GMT+0000 (Greenwich Mean Time)',
-      ],
-      cpu_utils: ['3.09', '0.34', '0.355'],
-      mem_utils: ['0', '242221056', '481296384', '470286336'],
-    };
+    // const rawResults = {
+    //   timestamps: [
+    //     'Wed Nov 01 2023 14:37:00 GMT+0000 (Greenwich Mean Time)',
+    //     'Wed Nov 01 2023 14:38:00 GMT+0000 (Greenwich Mean Time)',
+    //     'Wed Nov 01 2023 14:39:00 GMT+0000 (Greenwich Mean Time)',
+    //   ],
+    //   cpu_utils: ['3.09', '0.34', '0.355'],
+    //   mem_utils: ['0', '242221056', '481296384', '470286336'],
+    // };
 
+    // reformat outputs into expected ompl format
     const formattedResults = rawResults.timestamps.map((timestamp, index) => ({
       timestamp,
       'cpu-util': rawResults.cpu_utils[index],
@@ -151,12 +161,14 @@ export class AzureImporterModel implements IOutputModelInterface {
     const timestamps: string[] = [];
     const cpu_utils: string[] = [];
     const mem_utils: string[] = [];
+
     // Use DefaultAzureCredential which works with AZURE_TENANT_ID, AZURE_CLIENT_ID, and AZURE_CLIENT_SECRET environment variables.
     // You can also use other credentials provided by @azure/identity package.
     const credential = new DefaultAzureCredential();
 
     const monitorClient = new MonitorClient(credential, subscriptionId);
 
+    // get CPU util data
     const cpuMetricsResponse = await monitorClient.metrics.list(
       `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
       {
@@ -167,6 +179,7 @@ export class AzureImporterModel implements IOutputModelInterface {
       }
     );
 
+    // parse CPU util data
     for (const timeSeries of cpuMetricsResponse.value[0].timeseries || []) {
       for (const data of timeSeries.data || []) {
         try {
@@ -180,6 +193,7 @@ export class AzureImporterModel implements IOutputModelInterface {
       }
     }
 
+    // get RAM util data
     const ramMetricsResponse = await monitorClient.metrics.list(
       `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
       {
@@ -190,6 +204,7 @@ export class AzureImporterModel implements IOutputModelInterface {
       }
     );
 
+    // parse ram util data
     for (const timeSeries of ramMetricsResponse.value[0].timeseries || []) {
       for (const data of timeSeries.data || []) {
         if (!(typeof data.average === 'undefined')) {
@@ -197,6 +212,7 @@ export class AzureImporterModel implements IOutputModelInterface {
         }
       }
     }
+
 
     const results: AzureOutputs = {
       //add instance type here
@@ -289,5 +305,23 @@ export class AzureImporterModel implements IOutputModelInterface {
       throw new Error('azure-observation-window parameter is malformed');
     }
     return outString;
+  }
+
+  async getInstanceMetadata(subscription_id: string, vm_name: string, resource_group_name: string): Promise<Object> {
+    const credential = new DefaultAzureCredential();
+    const client = new ComputeManagementClient(credential, subscription_id);
+    const locationArray = new Array();
+    const instanceTypeArray = new Array();
+    for await (let item of client.virtualMachines.list(resource_group_name)) {
+      if (item.name === vm_name) {
+        locationArray.push(item.location);
+        instanceTypeArray.push(item.hardwareProfile?.vmSize)
+      }
+    }
+
+    //TODO parse this data into an object and handle in top level func
+    console.log(locationArray);
+    console.log(instanceTypeArray);
+    return {}
   }
 }

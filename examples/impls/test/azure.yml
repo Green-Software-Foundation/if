@@ -12,7 +12,7 @@ graph:
       config:
         azure-importer:
       inputs:
-          - timestamp: '2023-11-02T09:35:31.820Z'
+          - timestamp: '2023-11-02T10:35:31.820Z'
             duration: 3600
             azure-observation-window: 5 min # value and unit must be space separated 
             azure-observation-aggregation: 'average'
