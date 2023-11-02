@@ -1,0 +1,29 @@
+name: boavizta-demo
+description: calls boavizta api
+tags: null
+initialize:
+  models:
+    - name: boavizta-cpu
+      kind: plugin
+      model: BoaviztaCpuImpactModel
+      path: boavizta-cpu-model
+      config:
+        allocation: LINEAR
+        verbose: true
+graph:
+  children:
+    child:
+      pipeline:
+        - boavizta-cpu
+      config:
+        boavizta-cpu:
+          core-units: 24
+          processor: Intel® Core™ i7-1185G7
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
+          cpu-util: 18.392
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          cpu-util: 16
+      
