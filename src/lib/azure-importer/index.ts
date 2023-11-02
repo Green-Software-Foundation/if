@@ -1,9 +1,8 @@
-import {IOutputModelInterface} from '../interfaces';
+import { IOutputModelInterface } from '../interfaces';
+import { KeyValuePair } from '../../types/common';
 
-import {KeyValuePair} from '../../types/common';
-
-import {DefaultAzureCredential} from '@azure/identity';
-import {MonitorClient} from '@azure/arm-monitor';
+import { DefaultAzureCredential } from '@azure/identity';
+import { MonitorClient } from '@azure/arm-monitor';
 
 import * as dotenv from 'dotenv';
 
@@ -18,8 +17,8 @@ type AzureOutputs = {
 };
 
 type AzureInputs = {
-  myRG: string;
-  myVM: string;
+  resource_group_name: string;
+  vm_name: string;
   mySubscriptionId: string;
   timespan: string;
   interval: string;
@@ -31,9 +30,15 @@ export class AzureImporterModel implements IOutputModelInterface {
   staticParams: object | undefined;
   name: string | undefined;
   metrics: string[] | undefined;
+  vm_name: string = '';
+  resource_group_name: string = '';
+  subscription_id: string = '';
+  timestamp = '';
+  duration: number = 0;
   timespan = '';
   interval = '';
   aggregation = '';
+  window = '';
 
   authenticate(authParams: object): void {
     this.authParams = authParams;
@@ -56,51 +61,56 @@ export class AzureImporterModel implements IOutputModelInterface {
       throw new Error('inputs must be an array');
     }
 
-    //Load Azure Model Config params from dotenv
-    const mySubscriptionId: string | undefined =
-      process.env.AZURE_SUBSCRIPTION_ID;
-    const myRG: string | undefined = process.env.AZURE_RESOURCE_GROUP_NAME;
-    const myVM: string | undefined = process.env.AZURE_VM_NAME;
-
-    // check for valid azure credentials in .env file
-    if (
-      mySubscriptionId === undefined ||
-      myRG === undefined ||
-      myVM === undefined
-    ) {
-      throw new Error('Azure credentials missing from .env');
-    }
 
     inputs.map((input: KeyValuePair) => {
-      if (!('interval' in input)) {
-        throw new Error('input missing `interval`');
-      }
-      if (!('timespan' in input)) {
-        throw new Error('input missing `timespan`');
-      }
-      if (!('aggregation' in input)) {
-        throw new Error('input missing `aggregation`');
-      }
-      if (typeof input['timespan'] === 'string') {
-        this.timespan = input['timespan'];
-      } else {
-        throw new Error('timespan is not a string');
-      }
-      if (typeof input['aggregation'] === 'string') {
-        this.aggregation = input['aggregation'];
-      } else {
-        throw new Error('aggregation is not a string');
-      }
-      if (typeof input['interval'] === 'string') {
-        this.interval = input['interval'];
+      if (typeof input['azure-observation-window'] === 'string') {
+        this.interval = input['azure-observation-window'];
       } else {
         throw new Error('interval is not a string');
       }
+      if (typeof input['azure-observation-aggregation'] === 'string') {
+        this.aggregation = input['azure-observation-aggregation'];
+      } else {
+        throw new Error('azure-observation-window is not a string');
+      }
+      if (typeof input['azure-resource-group'] === 'string') {
+        this.resource_group_name = input['azure-resource-group'];
+      } else {
+        throw new Error('resource group is not a string');
+      }
+      if (typeof input['azure-vm-name'] === 'string') {
+        this.vm_name = input['azure-vm-name'];
+      } else {
+        throw new Error('azure-vm-name is not a string');
+      }
+      if (typeof input['azure-subscription-id'] === 'string') {
+        this.subscription_id = input['azure-subscription-id'];
+      } else {
+        throw new Error('azure-subscription-id is not a string');
+      }
+      if (typeof input['timestamp'] === 'string') {
+        this.timestamp = input['timestamp'];
+      } else {
+        throw new Error('azure-subscription-id is not a string');
+      }
+      if (typeof input['duration'] === 'number') {
+        this.duration = input['duration'];
+      } else {
+        throw new Error('duration is not a number');
+      }
     });
 
-    //const inData: AzureInputs = { myRG: myRG, myVM: myVM, mySubscriptionId: mySubscriptionId, timespan: this.timespan, interval: this.interval, aggregation: this.aggregation }
-    //Call the function and get data back in AzureOutputs object
-    //const rawResults = await this.getVmUsage(inData);
+
+    this.timespan = this.getTimeSpan(this.duration, this.timestamp)
+
+
+    const inData: AzureInputs = { resource_group_name: this.resource_group_name, vm_name: this.vm_name, mySubscriptionId: this.subscription_id, timespan: this.timespan, interval: this.interval, aggregation: this.aggregation }
+
+    console.log(inData)
+    // // Call the function and get data back in AzureOutputs object
+    // const rawResults = await this.getVmUsage(inData);
+
+    //TEMPORARY MOCK DATA FOR TESTING
     const rawResults = {
       timestamps: [
         'Wed Nov 01 2023 14:37:00 GMT+0000 (Greenwich Mean Time)',
@@ -123,8 +133,8 @@ export class AzureImporterModel implements IOutputModelInterface {
 
   async getVmUsage(indata: AzureInputs): Promise<AzureOutputs> {
     const subscriptionId = indata.mySubscriptionId;
-    const resourceGroupName = indata.myRG;
-    const vmName = indata.myVM;
+    const resourceGroupName = indata.resource_group_name;
+    const vmName = indata.vm_name;
     const timespan = indata.timespan;
     const interval = indata.interval;
     const aggregation = indata.aggregation;
@@ -195,5 +205,19 @@ export class AzureImporterModel implements IOutputModelInterface {
     this.name = name;
 
     return this;
+  }
+
+  /**
+   * Takes impl timestamp and duration and returns an Azure formatted `timespan` value
+   * @param duration 
+   * @param timestamp 
+   */
+  private getTimeSpan(duration: number, timestamp: string): string {
+    console.log(timestamp)
+    const start = new Date(timestamp)
+    const end = new Date(start.getTime() + duration * 1000).toISOString();
+    const outString = start.toISOString() + "/" + end;
+    console.log(outString)
+    return outString
   }
 }
