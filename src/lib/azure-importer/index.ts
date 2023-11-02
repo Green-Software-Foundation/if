@@ -4,7 +4,11 @@ import * as dotenv from 'dotenv';
 import {z} from 'zod';
 
 import {IOutputModelInterface} from '../interfaces';
-import {AzureInputs, AzureOutputs} from '../../types/azure-importer';
+import {
+  AzureInputs,
+  AzureOutputs,
+  GetMetricsParams,
+} from '../../types/azure-importer';
 
 /**
  * @todo Move all input validation schemas to separate file.
@@ -35,6 +39,10 @@ export class AzureImporterModel implements IOutputModelInterface {
     return 'azure';
   }
 
+  /**
+   * Validates given `inputs` params. If it's valid, then captures params, then passes to monitor.
+   * Returns flattened result from Azure monitor client.
+   */
   async execute(inputs: any[]): Promise<any[]> {
     dotenv.config();
 
@@ -69,14 +77,68 @@ export class AzureImporterModel implements IOutputModelInterface {
       mem_utils: ['0', '242221056', '481296384', '470286336'],
     };
 
-    const formattedResults = rawResults.timestamps.map((timestamp, index) => ({
+    return rawResults.timestamps.map((timestamp, index) => ({
       timestamp,
       'cpu-util': rawResults.cpu_utils[index],
       'mem-util': rawResults.mem_utils[index],
     }));
-
-    return formattedResults;
   }
+
+  /**
+   * Gets CPU metrics by calling monitor client.
+   */
+  private getCPUMetrics = (
+    monitorClient: MonitorClient,
+    params: GetMetricsParams
+  ) => {
+    const {
+      subscriptionId,
+      resourceGroupName,
+      timespan,
+      interval,
+      aggregation,
+      vmName,
+    } = params;
+    const metricnames = 'Percentage CPU';
+
+    return monitorClient.metrics.list(
+      `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
+      {
+        metricnames,
+        timespan,
+        interval,
+        aggregation,
+      }
+    );
+  };
+
+  /**
+   * Gets RAW metrics by calling monitor client.
+   */
+  private getRawMetrics = (
+    monitorClient: MonitorClient,
+    params: GetMetricsParams
+  ) => {
+    const {
+      subscriptionId,
+      resourceGroupName,
+      timespan,
+      interval,
+      aggregation,
+      vmName,
+    } = params;
+    const metricnames = 'Available Memory Bytes';
+
+    return monitorClient.metrics.list(
+      `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
+      {
+        metricnames, // TODO: we need to get memory used = total - available
+        timespan,
+        interval,
+        aggregation,
+      }
+    );
+  };
 
   /**
    * Use DefaultAzureCredential which works with AZURE_TENANT_ID, AZURE_CLIENT_ID, and AZURE_CLIENT_SECRET environment variables.
@@ -91,6 +153,14 @@ export class AzureImporterModel implements IOutputModelInterface {
       interval,
       aggregation,
     } = params;
+    const getMetricParams = {
+      subscriptionId,
+      resourceGroupName,
+      vmName,
+      timespan,
+      interval,
+      aggregation,
+    };
 
     const timestamps: string[] = [];
     const cpu_utils: string[] = [];
@@ -99,18 +169,14 @@ export class AzureImporterModel implements IOutputModelInterface {
     const credential = new DefaultAzureCredential();
     const monitorClient = new MonitorClient(credential, subscriptionId);
 
-    const cpuMetricsResponse = await monitorClient.metrics.list(
-      `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
-      {
-        metricnames: 'Percentage CPU',
-        timespan,
-        interval,
-        aggregation,
-      }
+    const cpuMetricsResponse = await this.getCPUMetrics(
+      monitorClient,
+      getMetricParams
     );
 
     for (const timeSeries of cpuMetricsResponse.value[0].timeseries || []) {
-      for (const data of timeSeries.data || []) {
+      const timeSeriesData = timeSeries.data || [];
+      for (const data of timeSeriesData) {
         try {
           timestamps.push(data.timeStamp.toString());
 
@@ -123,14 +189,9 @@ export class AzureImporterModel implements IOutputModelInterface {
       }
     }
 
-    const ramMetricsResponse = await monitorClient.metrics.list(
-      `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
-      {
-        metricnames: 'Available Memory Bytes', // TODO: we need to get memory used = total - available
-        timespan,
-        interval,
-        aggregation,
-      }
+    const ramMetricsResponse = await this.getRawMetrics(
+      monitorClient,
+      getMetricParams
     );
 
     for (const timeSeries of ramMetricsResponse.value[0].timeseries || []) {
