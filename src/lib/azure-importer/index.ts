@@ -4,26 +4,11 @@ import * as dotenv from 'dotenv';
 import {z} from 'zod';
 
 import {IOutputModelInterface} from '../interfaces';
+import {AzureInputs, AzureOutputs} from '../../types/azure-importer';
 
 /**
- * Define new type to handle outputs from Azure API
+ * @todo Move all input validation schemas to separate file.
  */
-type AzureOutputs = {
-  // add instance-type here
-  timestamps: string[];
-  cpu_utils: string[];
-  mem_utils: string[];
-};
-
-type AzureInputs = {
-  resource_group_name: string;
-  vm_name: string;
-  mySubscriptionId: string;
-  timespan: string;
-  interval: string;
-  aggregation: string;
-};
-
 const azureInputSchema = z
   .object({
     'azure-observation-window': z.string(),
@@ -41,16 +26,6 @@ export class AzureImporterModel implements IOutputModelInterface {
   authParams: object | undefined = undefined;
   staticParams: object | undefined;
   name: string | undefined;
-  metrics: string[] | undefined;
-  vm_name = '';
-  resource_group_name = '';
-  subscription_id = '';
-  timestamp = '';
-  duration = 0;
-  timespan = '';
-  interval = '';
-  aggregation = '';
-  window = '';
 
   authenticate(authParams: object): void {
     this.authParams = authParams;
@@ -67,31 +42,23 @@ export class AzureImporterModel implements IOutputModelInterface {
 
     const input = inputs[0];
 
-    this.interval = input['azure-observation-window'];
-    this.aggregation = input['azure-observation-aggregation'];
-    this.resource_group_name = input['azure-resource-group'];
-    this.vm_name = input['azure-vm-name'];
-    this.subscription_id = input['azure-subscription-id'];
-    this.timestamp = input['timestamp'];
-    this.duration = input['duration'];
-    this.window = input['azure-observation-window'];
-
-    this.timespan = this.getTimeSpan(this.duration, this.timestamp);
-    this.interval = this.getInterval(this.window);
-    const inData: AzureInputs = {
-      resource_group_name: this.resource_group_name,
-      vm_name: this.vm_name,
-      mySubscriptionId: this.subscription_id,
-      timespan: this.timespan,
-      interval: this.interval,
-      aggregation: this.aggregation,
+    const params: AzureInputs = {
+      aggregation: input['azure-observation-aggregation'],
+      resourceGroupName: input['azure-resource-group'],
+      vmName: input['azure-vm-name'],
+      subscriptionId: input['azure-subscription-id'],
+      timestamp: input['timestamp'],
+      duration: input['duration'],
+      window: input['azure-observation-window'],
+      timespan: this.getTimeSpan(input['duration'], input['timestamp']),
+      interval: this.getInterval(input['azure-observation-window']),
     };
 
-    console.log(inData);
+    console.log(params);
     // Call the function and get data back in AzureOutputs object
     // const rawResults = await this.getVmUsage(inData);
 
-    //TEMPORARY MOCK DATA FOR TESTING
+    // TEMPORARY MOCK DATA FOR TESTING
     const rawResults = {
       timestamps: [
         'Wed Nov 01 2023 14:37:00 GMT+0000 (Greenwich Mean Time)',
@@ -111,11 +78,15 @@ export class AzureImporterModel implements IOutputModelInterface {
     return formattedResults;
   }
 
+  /**
+   * Use DefaultAzureCredential which works with AZURE_TENANT_ID, AZURE_CLIENT_ID, and AZURE_CLIENT_SECRET environment variables.
+   * You can also use other credentials provided by @azure/identity package.
+   */
   async getVmUsage(params: AzureInputs): Promise<AzureOutputs> {
     const {
-      mySubscriptionId,
-      resource_group_name,
-      vm_name,
+      subscriptionId,
+      resourceGroupName,
+      vmName,
       timespan,
       interval,
       aggregation,
@@ -124,14 +95,12 @@ export class AzureImporterModel implements IOutputModelInterface {
     const timestamps: string[] = [];
     const cpu_utils: string[] = [];
     const mem_utils: string[] = [];
-    // Use DefaultAzureCredential which works with AZURE_TENANT_ID, AZURE_CLIENT_ID, and AZURE_CLIENT_SECRET environment variables.
-    // You can also use other credentials provided by @azure/identity package.
-    const credential = new DefaultAzureCredential();
 
-    const monitorClient = new MonitorClient(credential, mySubscriptionId);
+    const credential = new DefaultAzureCredential();
+    const monitorClient = new MonitorClient(credential, subscriptionId);
 
     const cpuMetricsResponse = await monitorClient.metrics.list(
-      `subscriptions/${mySubscriptionId}/resourceGroups/${resource_group_name}/providers/Microsoft.Compute/virtualMachines/${vm_name}`,
+      `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
       {
         metricnames: 'Percentage CPU',
         timespan,
@@ -155,7 +124,7 @@ export class AzureImporterModel implements IOutputModelInterface {
     }
 
     const ramMetricsResponse = await monitorClient.metrics.list(
-      `subscriptions/${mySubscriptionId}/resourceGroups/${resource_group_name}/providers/Microsoft.Compute/virtualMachines/${vm_name}`,
+      `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
       {
         metricnames: 'Available Memory Bytes', // TODO: we need to get memory used = total - available
         timespan,
@@ -180,6 +149,9 @@ export class AzureImporterModel implements IOutputModelInterface {
     };
   }
 
+  /**
+   * Initalize static params.
+   */
   async configure(
     name: string,
     staticParams: object | undefined
