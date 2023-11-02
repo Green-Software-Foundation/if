@@ -1,8 +1,8 @@
-import { IOutputModelInterface } from '../interfaces';
-import { KeyValuePair } from '../../types/common';
+import {IOutputModelInterface} from '../interfaces';
+import {KeyValuePair} from '../../types/common';
 
-import { DefaultAzureCredential } from '@azure/identity';
-import { MonitorClient } from '@azure/arm-monitor';
+import {DefaultAzureCredential} from '@azure/identity';
+import {MonitorClient} from '@azure/arm-monitor';
 
 import * as dotenv from 'dotenv';
 
@@ -30,11 +30,11 @@ export class AzureImporterModel implements IOutputModelInterface {
   staticParams: object | undefined;
   name: string | undefined;
   metrics: string[] | undefined;
-  vm_name: string = '';
-  resource_group_name: string = '';
-  subscription_id: string = '';
+  vm_name = '';
+  resource_group_name = '';
+  subscription_id = '';
   timestamp = '';
-  duration: number = 0;
+  duration = 0;
   timespan = '';
   interval = '';
   aggregation = '';
@@ -60,7 +60,6 @@ export class AzureImporterModel implements IOutputModelInterface {
     } else if (!Array.isArray(inputs)) {
       throw new Error('inputs must be an array');
     }
-
 
     inputs.map((input: KeyValuePair) => {
       if (typeof input['azure-observation-window'] === 'string') {
@@ -105,14 +104,19 @@ export class AzureImporterModel implements IOutputModelInterface {
       }
     });
 
+    this.timespan = this.getTimeSpan(this.duration, this.timestamp);
+    this.interval = this.getInterval(this.window);
 
-    this.timespan = this.getTimeSpan(this.duration, this.timestamp)
-    this.interval = this.getInterval(this.window)
+    const inData: AzureInputs = {
+      resource_group_name: this.resource_group_name,
+      vm_name: this.vm_name,
+      mySubscriptionId: this.subscription_id,
+      timespan: this.timespan,
+      interval: this.interval,
+      aggregation: this.aggregation,
+    };
 
-
-    const inData: AzureInputs = { resource_group_name: this.resource_group_name, vm_name: this.vm_name, mySubscriptionId: this.subscription_id, timespan: this.timespan, interval: this.interval, aggregation: this.aggregation }
-
-    console.log(inData)
+    console.log(inData);
     // // Call the function and get data back in AzureOutputs object
     // const rawResults = await this.getVmUsage(inData);
 
@@ -215,46 +219,75 @@ export class AzureImporterModel implements IOutputModelInterface {
 
   /**
    * Takes impl timestamp and duration and returns an Azure formatted `timespan` value
-   * @param duration 
-   * @param timestamp 
+   * @param duration
+   * @param timestamp
    */
   private getTimeSpan(duration: number, timestamp: string): string {
-    const start = new Date(timestamp)
+    const start = new Date(timestamp);
     const end = new Date(start.getTime() + duration * 1000).toISOString();
-    const outString = start.toISOString() + "/" + end;
-    return outString
+    const outString = start.toISOString() + '/' + end;
+    return outString;
   }
-
 
   /**
    * Takes granularity as e.g. "1 m", "1 hr" and translates into ISO8601
    * as expected by the azure API
    * @param window
-   * @returns 
+   * @returns
    */
   private getInterval(window: string): string {
+    let outString = '';
+    const prefix = 'P';
+    let stub = '';
+    try {
+      const splits = window.split(' ', 2);
+      let num: number = parseFloat(splits[0]);
+      const unit: string = splits[1];
 
-    const splits = window.split(' ', 2)
-    var num: number = parseFloat(splits[0]);
-    const unit: string = splits[1];
-    var stub: string = '';
-    const prefix: string = 'P';
+      // if number is a whole number, cast as int to avoid the ".0"
+      if (num % 1 === 0) {
+        num = Math.floor(num);
+      }
 
-    console.log(num, unit)
+      // now check for time units and
+      if (
+        unit === 'minutes' ||
+        unit === 'm' ||
+        unit === 'min' ||
+        unit === 'mins'
+      ) {
+        stub = `T${num}M`;
+      } else if (unit === 'days' || unit === 'd') {
+        stub = `${num}D`;
+      } else if (
+        unit === 'week' ||
+        unit === 'weeks' ||
+        unit === 'w' ||
+        unit === 'wk' ||
+        unit === 'wks'
+      ) {
+        stub = `${num}W`;
+      } else if (unit === 'month' || unit === 'months' || unit === 'mth') {
+        stub = `${num}M`;
+      } else if (
+        unit === 'year' ||
+        unit === 'years' ||
+        unit === 'yr' ||
+        unit === 'yrs' ||
+        unit === 'y' ||
+        unit === 'ys'
+      ) {
+        stub = `${num}Y`;
+      } else {
+        throw new Error('Unit in azure-time-window not recognized');
+      }
 
-    if (num % 1 === 0) {
-      num = Math.floor(num)
+      outString = prefix + stub;
+
+      console.log('outString', outString);
+    } catch {
+      throw new Error('azure-observation-window parameter is malformed');
     }
-
-    if ((unit === 'minutes') || (unit === 'm') || (unit === 'min') || (unit === 'mins')) {
-      stub = `T${num}M`
-    }
-
-    const outString = prefix + stub
-
-    console.log("splits ", splits)
-    console.log("outString", outString)
-    return outString
+    return outString;
   }
-
 }

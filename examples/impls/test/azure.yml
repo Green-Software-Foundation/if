@@ -12,8 +12,12 @@ graph:
       config:
         azure-importer:
       inputs:
-          - timestamp: '2023-11-01T14:45:00Z'
-            interval: 'PT1M' # granularity, e.g. 1m 
-            timespan: 'PT1H' # this can be a pair of timestamps to specify a date range
-            aggregation: 'average'
+          - timestamp: '2023-11-02T09:35:31.820Z'
+            duration: 3600
+            azure-observation-window: 5 min # value and unit must be space separated 
+            azure-observation-aggregation: 'average'
+            azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
+            azure-resource-group: vm1_group
+            azure-vm-name: vm1
+
 
