@@ -15,3 +15,12 @@ export type AzureInputs = {
   duration: string;
   window: string;
 };
+
+export type GetMetricsParams = {
+  subscriptionId: string;
+  resourceGroupName: string;
+  timespan: string;
+  interval: string;
+  aggregation: string;
+  vmName: string;
+};
