@@ -1,10 +1,9 @@
-import {IOutputModelInterface} from '../interfaces';
-import {KeyValuePair} from '../../types/common';
-
 import {DefaultAzureCredential} from '@azure/identity';
 import {MonitorClient} from '@azure/arm-monitor';
-
 import * as dotenv from 'dotenv';
+import {z} from 'zod';
+
+import {IOutputModelInterface} from '../interfaces';
 
 /**
  * Define new type to handle outputs from Azure API
@@ -24,6 +23,19 @@ type AzureInputs = {
   interval: string;
   aggregation: string;
 };
+
+const azureInputSchema = z
+  .object({
+    'azure-observation-window': z.string(),
+    'azure-observation-aggregation': z.string(),
+    'azure-resource-group': z.string(),
+    'azure-vm-name': z.string(),
+    'azure-subscription-id': z.string(),
+    timestamp: z.string().datetime(),
+    duration: z.number(),
+  })
+  .required()
+  .array();
 
 export class AzureImporterModel implements IOutputModelInterface {
   authParams: object | undefined = undefined;
@@ -47,66 +59,25 @@ export class AzureImporterModel implements IOutputModelInterface {
   modelIdentifier(): string {
     return 'azure';
   }
-  /**
-   * Each input require:
-   * @param {Object[]} inputs
-   */
-  async execute(inputs: object | object[] | undefined): Promise<any[]> {
-    // load items from .env file
+
+  async execute(inputs: any[]): Promise<any[]> {
     dotenv.config();
 
-    if (inputs === undefined) {
-      throw new Error('Required Parameters not provided');
-    } else if (!Array.isArray(inputs)) {
-      throw new Error('inputs must be an array');
-    }
+    azureInputSchema.parse(inputs);
 
-    inputs.map((input: KeyValuePair) => {
-      if (typeof input['azure-observation-window'] === 'string') {
-        this.interval = input['azure-observation-window'];
-      } else {
-        throw new Error('interval is not a string');
-      }
-      if (typeof input['azure-observation-aggregation'] === 'string') {
-        this.aggregation = input['azure-observation-aggregation'];
-      } else {
-        throw new Error('azure-observation-window is not a string');
-      }
-      if (typeof input['azure-resource-group'] === 'string') {
-        this.resource_group_name = input['azure-resource-group'];
-      } else {
-        throw new Error('resource group is not a string');
-      }
-      if (typeof input['azure-vm-name'] === 'string') {
-        this.vm_name = input['azure-vm-name'];
-      } else {
-        throw new Error('azure-vm-name is not a string');
-      }
-      if (typeof input['azure-subscription-id'] === 'string') {
-        this.subscription_id = input['azure-subscription-id'];
-      } else {
-        throw new Error('azure-subscription-id is not a string');
-      }
-      if (typeof input['timestamp'] === 'string') {
-        this.timestamp = input['timestamp'];
-      } else {
-        throw new Error('azure-subscription-id is not a string');
-      }
-      if (typeof input['duration'] === 'number') {
-        this.duration = input['duration'];
-      } else {
-        throw new Error('duration is not a number');
-      }
-      if (typeof input['azure-observation-window'] === 'string') {
-        this.window = input['azure-observation-window'];
-      } else {
-        throw new Error('observation window is not a string');
-      }
-    });
+    const input = inputs[0];
+
+    this.interval = input['azure-observation-window'];
+    this.aggregation = input['azure-observation-aggregation'];
+    this.resource_group_name = input['azure-resource-group'];
+    this.vm_name = input['azure-vm-name'];
+    this.subscription_id = input['azure-subscription-id'];
+    this.timestamp = input['timestamp'];
+    this.duration = input['duration'];
+    this.window = input['azure-observation-window'];
 
     this.timespan = this.getTimeSpan(this.duration, this.timestamp);
     this.interval = this.getInterval(this.window);
-
     const inData: AzureInputs = {
       resource_group_name: this.resource_group_name,
       vm_name: this.vm_name,
@@ -117,7 +88,7 @@ export class AzureImporterModel implements IOutputModelInterface {
     };
 
     console.log(inData);
-    // // Call the function and get data back in AzureOutputs object
+    // Call the function and get data back in AzureOutputs object
     // const rawResults = await this.getVmUsage(inData);
 
     //TEMPORARY MOCK DATA FOR TESTING
@@ -137,17 +108,19 @@ export class AzureImporterModel implements IOutputModelInterface {
       'mem-util': rawResults.mem_utils[index],
     }));
 
-    console.log(formattedResults);
     return formattedResults;
   }
 
-  async getVmUsage(indata: AzureInputs): Promise<AzureOutputs> {
-    const subscriptionId = indata.mySubscriptionId;
-    const resourceGroupName = indata.resource_group_name;
-    const vmName = indata.vm_name;
-    const timespan = indata.timespan;
-    const interval = indata.interval;
-    const aggregation = indata.aggregation;
+  async getVmUsage(params: AzureInputs): Promise<AzureOutputs> {
+    const {
+      mySubscriptionId,
+      resource_group_name,
+      vm_name,
+      timespan,
+      interval,
+      aggregation,
+    } = params;
+
     const timestamps: string[] = [];
     const cpu_utils: string[] = [];
     const mem_utils: string[] = [];
@@ -155,15 +128,15 @@ export class AzureImporterModel implements IOutputModelInterface {
     // You can also use other credentials provided by @azure/identity package.
     const credential = new DefaultAzureCredential();
 
-    const monitorClient = new MonitorClient(credential, subscriptionId);
+    const monitorClient = new MonitorClient(credential, mySubscriptionId);
 
     const cpuMetricsResponse = await monitorClient.metrics.list(
-      `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
+      `subscriptions/${mySubscriptionId}/resourceGroups/${resource_group_name}/providers/Microsoft.Compute/virtualMachines/${vm_name}`,
       {
         metricnames: 'Percentage CPU',
-        timespan: timespan,
-        interval: interval,
-        aggregation: aggregation,
+        timespan,
+        interval,
+        aggregation,
       }
     );
 
@@ -171,7 +144,8 @@ export class AzureImporterModel implements IOutputModelInterface {
       for (const data of timeSeries.data || []) {
         try {
           timestamps.push(data.timeStamp.toString());
-          if (!(typeof data.average === 'undefined')) {
+
+          if (typeof data.average !== 'undefined') {
             cpu_utils.push(data.average.toString());
           }
         } catch (error) {
@@ -181,12 +155,12 @@ export class AzureImporterModel implements IOutputModelInterface {
     }
 
     const ramMetricsResponse = await monitorClient.metrics.list(
-      `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
+      `subscriptions/${mySubscriptionId}/resourceGroups/${resource_group_name}/providers/Microsoft.Compute/virtualMachines/${vm_name}`,
       {
         metricnames: 'Available Memory Bytes', // TODO: we need to get memory used = total - available
-        timespan: timespan,
-        interval: interval,
-        aggregation: aggregation,
+        timespan,
+        interval,
+        aggregation,
       }
     );
 
@@ -198,13 +172,12 @@ export class AzureImporterModel implements IOutputModelInterface {
       }
     }
 
-    const results: AzureOutputs = {
-      //add instance type here
-      timestamps: timestamps,
-      cpu_utils: cpu_utils,
-      mem_utils: mem_utils,
+    return {
+      // add instance type here
+      timestamps,
+      cpu_utils,
+      mem_utils,
     };
-    return results;
   }
 
   async configure(
@@ -218,76 +191,61 @@ export class AzureImporterModel implements IOutputModelInterface {
   }
 
   /**
-   * Takes impl timestamp and duration and returns an Azure formatted `timespan` value
-   * @param duration
-   * @param timestamp
+   * Takes impl timestamp and duration and returns an Azure formatted `timespan` value.
    */
   private getTimeSpan(duration: number, timestamp: string): string {
     const start = new Date(timestamp);
     const end = new Date(start.getTime() + duration * 1000).toISOString();
-    const outString = start.toISOString() + '/' + end;
-    return outString;
+
+    return `${start.toISOString()}/${end}`;
   }
 
   /**
-   * Takes granularity as e.g. "1 m", "1 hr" and translates into ISO8601
-   * as expected by the azure API
-   * @param window
-   * @returns
+   * Formats given `amountOfTime` according to given `unit`.
+   * Throws error if given `unit` is not supported.
+   */
+  private timeUnitConverter(amountOfTime: number, unit: string) {
+    const minutes = ['minutes', 'm', 'min', 'mins'];
+    const days = ['days', 'd'];
+    const weeks = ['week', 'weeks', 'w', 'wk', 'wks'];
+    const months = ['month', 'months', 'mth'];
+    const years = ['year', 'years', 'yr', 'yrs', 'y', 'ys'];
+
+    if (minutes.includes(unit)) {
+      return `T${amountOfTime}M`;
+    }
+
+    if (days.includes(unit)) {
+      return `${amountOfTime}D`;
+    }
+
+    if (weeks.includes(unit)) {
+      return `${amountOfTime}W`;
+    }
+
+    if (months.includes(unit)) {
+      return `${amountOfTime}M`;
+    }
+
+    if (years.includes(unit)) {
+      return `${amountOfTime}Y`;
+    }
+
+    throw new Error('azure-observation-window parameter is malformed');
+  }
+
+  /**
+   * Takes granularity as e.g. "1 m", "1 hr" and translates into ISO8601 as expected by the azure API.
    */
   private getInterval(window: string): string {
-    let outString = '';
-    const prefix = 'P';
-    let stub = '';
-    try {
-      const splits = window.split(' ', 2);
-      let num: number = parseFloat(splits[0]);
-      const unit: string = splits[1];
+    const splits = window.split(' ', 2);
+    const floatNumber: number = parseFloat(splits[0]);
+    // if number is a whole number, cast as int to avoid the ".0"
+    const amountOfTime =
+      floatNumber % 1 === 0 ? Math.floor(floatNumber) : floatNumber;
+    const unit: string = splits[1];
+    const numberInFormat = this.timeUnitConverter(amountOfTime, unit);
 
-      // if number is a whole number, cast as int to avoid the ".0"
-      if (num % 1 === 0) {
-        num = Math.floor(num);
-      }
-
-      // now check for time units and
-      if (
-        unit === 'minutes' ||
-        unit === 'm' ||
-        unit === 'min' ||
-        unit === 'mins'
-      ) {
-        stub = `T${num}M`;
-      } else if (unit === 'days' || unit === 'd') {
-        stub = `${num}D`;
-      } else if (
-        unit === 'week' ||
-        unit === 'weeks' ||
-        unit === 'w' ||
-        unit === 'wk' ||
-        unit === 'wks'
-      ) {
-        stub = `${num}W`;
-      } else if (unit === 'month' || unit === 'months' || unit === 'mth') {
-        stub = `${num}M`;
-      } else if (
-        unit === 'year' ||
-        unit === 'years' ||
-        unit === 'yr' ||
-        unit === 'yrs' ||
-        unit === 'y' ||
-        unit === 'ys'
-      ) {
-        stub = `${num}Y`;
-      } else {
-        throw new Error('Unit in azure-time-window not recognized');
-      }
-
-      outString = prefix + stub;
-
-      console.log('outString', outString);
-    } catch {
-      throw new Error('azure-observation-window parameter is malformed');
-    }
-    return outString;
+    return `P${numberInFormat}`;
   }
 }
