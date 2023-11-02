@@ -71,4 +71,5 @@ export const CONFIG = {
   help: prints out the above help instruction.
   `,
   },
+  GITHUB_PATH: 'https://github.com',
 };
