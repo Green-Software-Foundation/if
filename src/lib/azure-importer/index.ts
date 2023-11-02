@@ -98,10 +98,16 @@ export class AzureImporterModel implements IOutputModelInterface {
       } else {
         throw new Error('duration is not a number');
       }
+      if (typeof input['azure-observation-window'] === 'string') {
+        this.window = input['azure-observation-window'];
+      } else {
+        throw new Error('observation window is not a string');
+      }
     });
 
 
     this.timespan = this.getTimeSpan(this.duration, this.timestamp)
+    this.interval = this.getInterval(this.window)
 
 
     const inData: AzureInputs = { resource_group_name: this.resource_group_name, vm_name: this.vm_name, mySubscriptionId: this.subscription_id, timespan: this.timespan, interval: this.interval, aggregation: this.aggregation }
@@ -213,11 +219,42 @@ export class AzureImporterModel implements IOutputModelInterface {
    * @param timestamp 
    */
   private getTimeSpan(duration: number, timestamp: string): string {
-    console.log(timestamp)
     const start = new Date(timestamp)
     const end = new Date(start.getTime() + duration * 1000).toISOString();
     const outString = start.toISOString() + "/" + end;
-    console.log(outString)
     return outString
   }
+
+
+  /**
+   * Takes granularity as e.g. "1 m", "1 hr" and translates into ISO8601
+   * as expected by the azure API
+   * @param window
+   * @returns 
+   */
+  private getInterval(window: string): string {
+
+    const splits = window.split(' ', 2)
+    var num: number = parseFloat(splits[0]);
+    const unit: string = splits[1];
+    var stub: string = '';
+    const prefix: string = 'P';
+
+    console.log(num, unit)
+
+    if (num % 1 === 0) {
+      num = Math.floor(num)
+    }
+
+    if ((unit === 'minutes') || (unit === 'm') || (unit === 'min') || (unit === 'mins')) {
+      stub = `T${num}M`
+    }
+
+    const outString = prefix + stub
+
+    console.log("splits ", splits)
+    console.log("outString", outString)
+    return outString
+  }
+
 }
