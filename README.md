@@ -10,17 +10,17 @@ Every environment requires a different model of measurement, and there is no sin
 
 The friction to measuring software emissions isn't that we need to know how, it's that we run software on many things and each thing has several different ways to measure.
 
-Read the [specification and design docs](docs/Impact%20Engine%20Framework.md) to begin.
+Read the [specification and design docs](https://github.com/Green-Software-Foundation/if-docs) to begin.
 
 
 ## Get started
 
-Run `rimpl` using the following command:
+Run `impact` using the following command:
 
 ```sh
-npx ts-node scripts/rimpl.ts --impl <path-to-your-impl-file> --ompl <path-to-output-file>
+npx ts-node scripts/impact.ts --impl <path-to-your-impl-file> --ompl <path-to-output-file>
 ```
-The `rimpl` CLI tool will condifure and run the models defined in your input `yaml` ()`impl`) and return the results as an output `yaml` (`ompl`).
+The `impact` CLI tool will condigure and run the models defined in your input `yaml` (`impl`) and return the results as an output `yaml` (`ompl`).
 
 ## Video walk-through
 
@@ -37,10 +37,10 @@ To run the complete set of tests simply run
 yarn test
 ```
 
-To refresh the set of ompls used for validating the output files, run the `scripts/rimpl-test.sh` bash script (for unix only) as follows:
+To refresh the set of ompls used for validating the output files, run the `scripts/impact-test.sh` bash script (for unix only) as follows:
 
 ```sh
-./scripts/rimpl-test.sh
+./scripts/impact-test.sh
 ```
 
 Then run
