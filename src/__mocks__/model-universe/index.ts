@@ -5,7 +5,7 @@ import {
   InitalizedModels,
 } from '../../types/models-universe';
 
-class MockModel implements IOutputModelInterface {
+export class MockModel implements IOutputModelInterface {
   modelIdentifier(): string {
     return 'mock';
   }
