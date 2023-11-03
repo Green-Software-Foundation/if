@@ -1,10 +1,10 @@
-import {DefaultAzureCredential} from '@azure/identity';
-import {MonitorClient} from '@azure/arm-monitor';
-import {ComputeManagementClient} from '@azure/arm-compute';
+import { DefaultAzureCredential } from '@azure/identity';
+import { MonitorClient } from '@azure/arm-monitor';
+import { ComputeManagementClient } from '@azure/arm-compute';
 import * as dotenv from 'dotenv';
-import {z} from 'zod';
+import { z } from 'zod';
 
-import {IOutputModelInterface} from '../interfaces';
+import { IOutputModelInterface } from '../interfaces';
 import {
   AzureInputs,
   AzureOutputs,
@@ -79,15 +79,18 @@ export class AzureImporterModel implements IOutputModelInterface {
     //     'Wed Nov 01 2023 14:39:00 GMT+0000 (Greenwich Mean Time)',
     //   ],
     //   cpu_utils: ['3.09', '0.34', '0.355'],
-    //   mem_utils: ['0', '242221056', '481296384', '470286336'],
+    //   mem_available: ['0', '242221056', '481296384', '470286336'],
     // };
 
     return rawResults.timestamps.map((timestamp, index) => ({
       timestamp,
       'cpu-util': rawResults.cpu_utils[index],
-      'mem-util': rawResults.mem_utils[index],
+      'mem-availableGB': parseFloat(rawResults.mem_available[index]) * 1e-9,
+      'total-memoryGB': rawMetadataResults.totalMemoryGB,
+      'mem_util': ((parseFloat(rawResults.mem_available[index]) * 1e-9) / parseFloat(rawMetadataResults.totalMemoryGB)) * 100,
       location: rawMetadataResults.location,
       'instance-type': rawMetadataResults.instanceType,
+
     }));
   }
 
@@ -171,11 +174,10 @@ export class AzureImporterModel implements IOutputModelInterface {
 
     const timestamps: string[] = [];
     const cpu_utils: string[] = [];
-    const mem_utils: string[] = [];
+    const mem_available: string[] = [];
 
     const credential = new DefaultAzureCredential();
     const monitorClient = new MonitorClient(credential, subscriptionId);
-
     const cpuMetricsResponse = await this.getCPUMetrics(
       monitorClient,
       getMetricParams
@@ -188,7 +190,7 @@ export class AzureImporterModel implements IOutputModelInterface {
         try {
           timestamps.push(data.timeStamp.toISOString());
 
-          if (typeof data.average !== 'undefined') {
+          if (!(data.average === undefined)) {
             cpu_utils.push(data.average.toString());
           }
         } catch (error) {
@@ -206,7 +208,7 @@ export class AzureImporterModel implements IOutputModelInterface {
     for (const timeSeries of ramMetricsResponse.value[0].timeseries || []) {
       for (const data of timeSeries.data || []) {
         if (!(typeof data.average === 'undefined')) {
-          mem_utils.push(data.average.toString());
+          mem_available.push(data.average.toString());
         }
       }
     }
@@ -214,7 +216,7 @@ export class AzureImporterModel implements IOutputModelInterface {
     return {
       timestamps,
       cpu_utils,
-      mem_utils,
+      mem_available,
     };
   }
 
@@ -309,6 +311,30 @@ export class AzureImporterModel implements IOutputModelInterface {
       item => item.hardwareProfile?.vmSize ?? 'unknown'
     )[0];
 
-    return {location: location, instanceType: instance};
+    const memResponseData = [];
+    for await (const item of client.resourceSkus.list()) {
+      memResponseData.push(item);
+    }
+
+    let totalMemoryGB: string = '';
+    const filteredMemData = memResponseData
+      .filter(item => item.resourceType === 'virtualMachines')
+      .filter(item => item.name === instance)
+      .filter(item => item.locations !== undefined);
+    const vmCapabilitiesData = filteredMemData
+      .filter(
+        item => item.locations !== undefined && item.locations[0] === location
+      )
+      .map(item => item.capabilities)[0];
+    if (vmCapabilitiesData !== undefined) {
+      const totalMemoryObject = vmCapabilitiesData.filter(
+        item => item.name === 'MemoryGB'
+      )[0];
+      if (totalMemoryObject.value != undefined) {
+        totalMemoryGB = totalMemoryObject.value;
+      }
+    }
+
+    return { location: location, instanceType: instance, totalMemoryGB: totalMemoryGB };
   }
 }
