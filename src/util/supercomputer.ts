@@ -103,7 +103,6 @@ export class Supercomputer {
 
     this.impl.graph.children[this.olderChild.name].outputs =
       observatory.getOutputs();
-    //console.log(observatory.getOutputs())
   }
 
   /**
