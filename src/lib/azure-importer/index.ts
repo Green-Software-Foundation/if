@@ -298,21 +298,16 @@ export class AzureImporterModel implements IOutputModelInterface {
   ): Promise<AzureMetadataOutputs> {
     const credential = new DefaultAzureCredential();
     const client = new ComputeManagementClient(credential, subscriptionId);
-    const locationArray: string[] = [];
-    const instanceTypeArray: string[] = [];
-    for await (const item of client.virtualMachines.list(resourceGroupName)) {
-      if (item.name === vmName) {
-        locationArray.push(item.location);
-        if (typeof item.hardwareProfile?.vmSize === 'string') {
-          instanceTypeArray.push(item.hardwareProfile.vmSize);
-        } else {
-          instanceTypeArray.push('unknown');
-        }
-      } else {
-        throw new Error('Azure metadata dows not recognize vmName');
-      }
-    }
 
-    return {location: locationArray[0], instanceType: instanceTypeArray[0]};
+    const vmData = [];
+    for await (const item of client.virtualMachines.list(resourceGroupName)) {
+      vmData.push(item);
+    }
+    const filteredVmData = vmData.filter(item => item.name === vmName);
+    const location = filteredVmData.map(item => item.location ?? 'unknown')[0];
+    const instance = filteredVmData.map(
+      item => item.hardwareProfile?.vmSize ?? 'unknown'
+    )[0];
+    return {location: location, instanceType: instance};
   }
 }
