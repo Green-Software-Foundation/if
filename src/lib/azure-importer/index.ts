@@ -1,13 +1,15 @@
-import { DefaultAzureCredential } from '@azure/identity';
-import { MonitorClient } from '@azure/arm-monitor';
+import {DefaultAzureCredential} from '@azure/identity';
+import {MonitorClient} from '@azure/arm-monitor';
+import {ComputeManagementClient} from '@azure/arm-compute';
 import * as dotenv from 'dotenv';
-import { z } from 'zod';
+import {z} from 'zod';
 
-import { IOutputModelInterface } from '../interfaces';
+import {IOutputModelInterface} from '../interfaces';
 import {
   AzureInputs,
   AzureOutputs,
   GetMetricsParams,
+  AzureMetadataOutputs,
 } from '../../types/azure-importer';
 
 /**
@@ -64,23 +66,29 @@ export class AzureImporterModel implements IOutputModelInterface {
 
     console.log(params);
     // Call the function and get data back in AzureOutputs object
-    // const rawResults = await this.getVmUsage(inData);
-
+    const rawResults = await this.getVmUsage(params);
+    const rawMetadataResults = await this.getInstanceMetadata(
+      params.subscriptionId,
+      params.vmName,
+      params.resourceGroupName
+    );
     // TEMPORARY MOCK DATA FOR TESTING
-    const rawResults = {
-      timestamps: [
-        'Wed Nov 01 2023 14:37:00 GMT+0000 (Greenwich Mean Time)',
-        'Wed Nov 01 2023 14:38:00 GMT+0000 (Greenwich Mean Time)',
-        'Wed Nov 01 2023 14:39:00 GMT+0000 (Greenwich Mean Time)',
-      ],
-      cpu_utils: ['3.09', '0.34', '0.355'],
-      mem_utils: ['0', '242221056', '481296384', '470286336'],
-    };
+    // const rawResults = {
+    //   timestamps: [
+    //     'Wed Nov 01 2023 14:37:00 GMT+0000 (Greenwich Mean Time)',
+    //     'Wed Nov 01 2023 14:38:00 GMT+0000 (Greenwich Mean Time)',
+    //     'Wed Nov 01 2023 14:39:00 GMT+0000 (Greenwich Mean Time)',
+    //   ],
+    //   cpu_utils: ['3.09', '0.34', '0.355'],
+    //   mem_utils: ['0', '242221056', '481296384', '470286336'],
+    // };
 
     return rawResults.timestamps.map((timestamp, index) => ({
       timestamp,
       'cpu-util': rawResults.cpu_utils[index],
       'mem-util': rawResults.mem_utils[index],
+      location: rawMetadataResults.location,
+      'instance-type': rawMetadataResults.instanceType,
     }));
   }
 
@@ -205,7 +213,6 @@ export class AzureImporterModel implements IOutputModelInterface {
     }
 
     return {
-      // add instance type here
       timestamps,
       cpu_utils,
       mem_utils,
@@ -284,21 +291,22 @@ export class AzureImporterModel implements IOutputModelInterface {
     return `P${numberInFormat}`;
   }
 
-  async getInstanceMetadata(subscription_id: string, vm_name: string, resource_group_name: string): Promise<Object> {
+  async getInstanceMetadata(
+    subscriptionId: string,
+    vmName: string,
+    resourceGroupName: string
+  ): Promise<AzureMetadataOutputs> {
     const credential = new DefaultAzureCredential();
-    const client = new ComputeManagementClient(credential, subscription_id);
-    const locationArray = new Array();
-    const instanceTypeArray = new Array();
-    for await (let item of client.virtualMachines.list(resource_group_name)) {
-      if (item.name === vm_name) {
+    const client = new ComputeManagementClient(credential, subscriptionId);
+    const locationArray = [];
+    const instanceTypeArray = [];
+    for await (const item of client.virtualMachines.list(resourceGroupName)) {
+      if (item.name === vmName) {
         locationArray.push(item.location);
-        instanceTypeArray.push(item.hardwareProfile?.vmSize)
+        instanceTypeArray.push(item.hardwareProfile?.vmSize);
       }
     }
 
-    //TODO parse this data into an object and handle in top level func
-    console.log(locationArray);
-    console.log(instanceTypeArray);
-    return {}
+    return {location: locationArray[0], instanceType: instanceTypeArray[0]};
   }
 }

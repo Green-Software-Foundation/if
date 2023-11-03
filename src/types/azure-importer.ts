@@ -24,3 +24,8 @@ export type GetMetricsParams = {
   aggregation: string;
   vmName: string;
 };
+
+export type AzureMetadataOutputs = {
+  location: string[];
+  instanceType: string[];
+};

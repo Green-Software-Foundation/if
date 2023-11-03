@@ -8,6 +8,7 @@
     "email": "info@gsf.com"
   },
   "dependencies": {
+    "@azure/arm-compute": "^21.2.0",
     "@azure/arm-monitor": "*",
     "@azure/identity": "*",
     "@cloud-carbon-footprint/aws": "*",
