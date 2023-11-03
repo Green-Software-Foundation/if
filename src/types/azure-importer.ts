@@ -26,6 +26,6 @@ export type GetMetricsParams = {
 };
 
 export type AzureMetadataOutputs = {
-  location: string[];
-  instanceType: string[];
+  location: string;
+  instanceType: string;
 };
