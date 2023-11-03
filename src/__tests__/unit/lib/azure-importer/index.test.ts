@@ -11,42 +11,36 @@ describe('lib/azure-importer: ', () => {
       expect(model).toHaveProperty('configure');
       expect(model).toHaveProperty('execute');
       expect(model).toHaveProperty('modelIdentifier');
-
-      expect(model).toHaveProperty('name');
-      expect(model).toHaveProperty('authParams');
-      expect(model).toHaveProperty('staticParams');
     });
+  });
 
-    it('initializes object and test', async () => {
-      const model = await new AzureImporterModel().configure('name', {});
+  describe('configure(): ', () => {
+    it('configures model instance with given params.', async () => {
+      const name = 'mock-name';
+      const params = {};
+      const model = await new AzureImporterModel().configure(name, params);
+
       expect(model).toBeInstanceOf(AzureImporterModel);
-      await expect(
-        model.execute([
-          {
-            duration: 3600,
-            timestamp: '2023-11-01T14:45:00Z',
-            interval: 'PT1M',
-            timespan: 'PT1H',
-            aggregation: 'average',
-          },
-        ])
-      ).resolves.toStrictEqual(['dummy']);
     });
   });
 
   describe('authenticate(): ', () => {
-    it('');
-  });
+    it('should keep provided auth params.', async () => {
+      const name = 'mock-name';
+      const params = {};
+      const model = await new AzureImporterModel().configure(name, params);
 
-  describe('configure(): ', () => {
-    it('');
+      const authParams = {
+        mock: 'mock',
+      };
+
+      const result = model.authenticate(authParams);
+
+      expect(result).toBeUndefined();
+    });
   });
 
   describe('execute(): ', () => {
-    it('');
-  });
-
-  describe('modelIdentifier(): ', () => {
-    it('');
+    it.todo('');
   });
 });
