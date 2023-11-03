@@ -64,7 +64,6 @@ export class AzureImporterModel implements IOutputModelInterface {
       interval: this.getInterval(input['azure-observation-window']),
     };
 
-    console.log(params);
     // Call the function and get data back in AzureOutputs object
     const rawResults = await this.getVmUsage(params);
     const rawMetadataResults = await this.getInstanceMetadata(
@@ -152,7 +151,7 @@ export class AzureImporterModel implements IOutputModelInterface {
    * Use DefaultAzureCredential which works with AZURE_TENANT_ID, AZURE_CLIENT_ID, and AZURE_CLIENT_SECRET environment variables.
    * You can also use other credentials provided by @azure/identity package.
    */
-  async getVmUsage(params: AzureInputs): Promise<AzureOutputs> {
+  private async getVmUsage(params: AzureInputs): Promise<AzureOutputs> {
     const {
       subscriptionId,
       resourceGroupName,
@@ -291,7 +290,7 @@ export class AzureImporterModel implements IOutputModelInterface {
     return `P${numberInFormat}`;
   }
 
-  async getInstanceMetadata(
+  private async getInstanceMetadata(
     subscriptionId: string,
     vmName: string,
     resourceGroupName: string
@@ -303,11 +302,13 @@ export class AzureImporterModel implements IOutputModelInterface {
     for await (const item of client.virtualMachines.list(resourceGroupName)) {
       vmData.push(item);
     }
+
     const filteredVmData = vmData.filter(item => item.name === vmName);
     const location = filteredVmData.map(item => item.location ?? 'unknown')[0];
     const instance = filteredVmData.map(
       item => item.hardwareProfile?.vmSize ?? 'unknown'
     )[0];
+
     return {location: location, instanceType: instance};
   }
 }
