@@ -19,12 +19,23 @@ import {
   SciEModel,
 } from '../lib';
 
+import {CONFIG, STRINGS} from '../config';
+
 import {
   GraphOptions,
+  HandModelParams,
   ImplInitializeModel,
   InitalizedModels,
-  ModelKind,
 } from '../types/models-universe';
+
+const {GITHUB_PATH} = CONFIG;
+const {
+  MISSING_CLASSNAME,
+  NOT_OUTPUT_MODEL_EXTENSION,
+  NOT_INITIALIZED_MODEL,
+  WRONG_OR_MISSING_MODEL,
+  MISSING_PATH,
+} = STRINGS;
 
 /**
  * Models Initialization Lifecycle.
@@ -36,10 +47,10 @@ export class ModelsUniverse {
   public initalizedModels: InitalizedModels = {};
 
   /**
-   * Gets model class by provided `name` param.
+   * Gets model class by provided `modelName` param.
    */
-  private handBuiltinModel(name: string) {
-    switch (name) {
+  private handBuiltinModel(modelName: string) {
+    switch (modelName) {
       case 'azure-importer':
         return AzureImporterModel;
       case 'boavizta-cpu':
@@ -75,16 +86,51 @@ export class ModelsUniverse {
       case 'aveva':
         return EAvevaModel;
       default:
-        throw new Error(`Missing or wrong model: ${name}.`);
+        throw new Error(WRONG_OR_MISSING_MODEL(modelName));
     }
   }
 
   /**
-   * Returns plugin model.
-   * @todo Update function when plugin model will ready.
+   * Checks if model is instance of `IOutputModelInterface`.
    */
-  private handPluginModel() {
-    return ShellModel;
+  private instanceOfModel(ClassContainer: any) {
+    const testModel = new ClassContainer();
+
+    const boolable =
+      'modelIdentifier' in testModel &&
+      'configure' in testModel &&
+      'authenticate' in testModel &&
+      'execute' in testModel;
+
+    return boolable;
+  }
+
+  /**
+   * Returns plugin model. Checks if model is missing then rejects with error.
+   * Then checks if `path` is starting with github, then grabs the repository name.
+   * Imports module, then checks if it's a class which implements input model interface.
+   */
+  private async handPluginModel(model?: string, path?: string) {
+    if (!model) {
+      throw new Error(MISSING_CLASSNAME);
+    }
+
+    if (!path) {
+      throw new Error(MISSING_PATH);
+    }
+
+    if (path?.startsWith(GITHUB_PATH)) {
+      const parts = path.split('/');
+      path = parts[parts.length - 1];
+    }
+
+    const pluginModule = await import(path);
+
+    if (this.instanceOfModel(pluginModule[model])) {
+      return pluginModule[model];
+    }
+
+    throw new Error(NOT_OUTPUT_MODEL_EXTENSION);
   }
 
   /**
@@ -97,12 +143,14 @@ export class ModelsUniverse {
   /**
    * Gets model based on `name` and `kind` params.
    */
-  private handModelByCriteria(name: string, kind: ModelKind) {
+  private async handModelByCriteria(params: HandModelParams) {
+    const {name, kind, model, path} = params;
+
     switch (kind) {
       case 'builtin':
         return this.handBuiltinModel(name);
       case 'plugin':
-        return this.handPluginModel();
+        return this.handPluginModel(model, path);
       case 'shell':
         return this.handShellModel();
     }
@@ -112,11 +160,16 @@ export class ModelsUniverse {
    * Initializes and registers model.
    */
   public writeDown(model: ImplInitializeModel) {
-    const {name, kind, config} = model;
-
-    const Model = this.handModelByCriteria(name, kind);
+    const {name, kind, config, model: className, path} = model;
 
     const callback = async (graphOptions: GraphOptions) => {
+      const Model = await this.handModelByCriteria({
+        name,
+        kind,
+        model: className,
+        path,
+      });
+
       const params = {
         ...config,
         ...graphOptions,
@@ -143,6 +196,6 @@ export class ModelsUniverse {
       return await this.initalizedModels[modelName](config);
     }
 
-    throw new Error(`Model ${modelName} is not initalized yet.`);
+    throw new Error(NOT_INITIALIZED_MODEL(modelName));
   }
 }
