@@ -80,7 +80,6 @@ export class Supercomputer {
       childrenObject[childName].config
     );
 
-    //console.log(enrichedInputs)
     const observatory = new Observatory(enrichedInputs);
 
     for (const modelName of pipeline) {
