@@ -187,7 +187,7 @@ export class AzureImporterModel implements IOutputModelInterface {
       const timeSeriesData = timeSeries.data || [];
       for (const data of timeSeriesData) {
         try {
-          timestamps.push(data.timeStamp.toString());
+          timestamps.push(data.timeStamp.toISOString());
 
           if (typeof data.average !== 'undefined') {
             cpu_utils.push(data.average.toString());
