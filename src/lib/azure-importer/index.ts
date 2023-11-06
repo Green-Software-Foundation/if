@@ -45,7 +45,7 @@ export class AzureImporterModel implements IOutputModelInterface {
    * Validates given `inputs` params. If it's valid, then captures params, then passes to monitor.
    * Returns flattened result from Azure monitor client.
    */
-  async execute(inputs: any[]): Promise<any[]> {
+  async execute(inputs: any[]): Promise<any> {
     dotenv.config();
 
     azureInputSchema.parse(inputs);
@@ -71,16 +71,6 @@ export class AzureImporterModel implements IOutputModelInterface {
       params.vmName,
       params.resourceGroupName
     );
-    // TEMPORARY MOCK DATA FOR TESTING
-    // const rawResults = {
-    //   timestamps: [
-    //     'Wed Nov 01 2023 14:37:00 GMT+0000 (Greenwich Mean Time)',
-    //     'Wed Nov 01 2023 14:38:00 GMT+0000 (Greenwich Mean Time)',
-    //     'Wed Nov 01 2023 14:39:00 GMT+0000 (Greenwich Mean Time)',
-    //   ],
-    //   cpu_utils: ['3.09', '0.34', '0.355'],
-    //   memAvailable: ['0', '242221056', '481296384', '470286336'],
-    // };
 
     return rawResults.timestamps.map((timestamp, index) => ({
       timestamp,
@@ -254,11 +244,16 @@ export class AzureImporterModel implements IOutputModelInterface {
    * Throws error if given `unit` is not supported.
    */
   private timeUnitConverter(amountOfTime: number, unit: string) {
+    const seconds = ['seconds', 'second', 'secs', 'sec', 's'];
     const minutes = ['minutes', 'm', 'min', 'mins'];
     const days = ['days', 'd'];
     const weeks = ['week', 'weeks', 'w', 'wk', 'wks'];
     const months = ['month', 'months', 'mth'];
     const years = ['year', 'years', 'yr', 'yrs', 'y', 'ys'];
+
+    if (seconds.includes(unit)) {
+      throw new Error('The minimum unit of time for azure importer is minutes');
+    }
 
     if (minutes.includes(unit)) {
       return `T${amountOfTime}M`;
