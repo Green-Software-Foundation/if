@@ -4,7 +4,7 @@
     "cpu-cores-utilized" : "1",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel Xeon E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_A1_v2",
     "memory-available" : "2"
   },
@@ -13,7 +13,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel Xeon E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_A2_v2",
     "memory-available" : "4"
   },
@@ -22,7 +22,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel Xeon E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_A4_v2",
     "memory-available" : "8"
   },
@@ -31,7 +31,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel Xeon E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_A8_v2",
     "memory-available" : "16"
   },
@@ -40,7 +40,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel Xeon E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_A2m_v2",
     "memory-available" : "16"
   },
@@ -49,7 +49,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel Xeon E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_A4m_v2",
     "memory-available" : "32"
   },
@@ -58,7 +58,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel Xeon E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_A8m_v2",
     "memory-available" : "64"
   },
@@ -67,7 +67,7 @@
     "cpu-cores-utilized" : "1",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B1ls2",
     "memory-available" : "0.5"
   },
@@ -76,7 +76,7 @@
     "cpu-cores-utilized" : "1",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B1s",
     "memory-available" : "1"
   },
@@ -85,7 +85,7 @@
     "cpu-cores-utilized" : "1",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B1ms",
     "memory-available" : "2"
   },
@@ -94,7 +94,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B2s",
     "memory-available" : "4"
   },
@@ -103,7 +103,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B2ms",
     "memory-available" : "8"
   },
@@ -112,7 +112,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B4ms",
     "memory-available" : "16"
   },
@@ -121,7 +121,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B8ms",
     "memory-available" : "32"
   },
@@ -130,7 +130,7 @@
     "cpu-cores-utilized" : "12",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B12ms",
     "memory-available" : "48"
   },
@@ -139,7 +139,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B16ms",
     "memory-available" : "64"
   },
@@ -148,7 +148,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B20ms",
     "memory-available" : "80"
   },
@@ -157,7 +157,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B2ts_v2",
     "memory-available" : "1"
   },
@@ -166,7 +166,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B2ls_v2",
     "memory-available" : "4"
   },
@@ -175,7 +175,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B2s_v2",
     "memory-available" : "8"
   },
@@ -184,7 +184,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B4ls_v2",
     "memory-available" : "8"
   },
@@ -193,7 +193,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B4s_v2",
     "memory-available" : "16"
   },
@@ -202,7 +202,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B8ls_v2",
     "memory-available" : "16"
   },
@@ -211,7 +211,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B8s_v2",
     "memory-available" : "32"
   },
@@ -220,7 +220,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B16ls_v2",
     "memory-available" : "32"
   },
@@ -229,7 +229,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B16s_v2",
     "memory-available" : "64"
   },
@@ -238,7 +238,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B32ls_v2",
     "memory-available" : "64"
   },
@@ -247,7 +247,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_B32s_v2",
     "memory-available" : "128"
   },
@@ -256,7 +256,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_B2ats_v2",
     "memory-available" : "1"
   },
@@ -265,7 +265,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_B2als_v2",
     "memory-available" : "4"
   },
@@ -274,7 +274,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_B2as_v2",
     "memory-available" : "8"
   },
@@ -283,7 +283,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_B4als_v2",
     "memory-available" : "8"
   },
@@ -292,7 +292,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_B4as_v2",
     "memory-available" : "16"
   },
@@ -301,7 +301,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_B8als_v2",
     "memory-available" : "16"
   },
@@ -310,7 +310,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_B8as_v2",
     "memory-available" : "32"
   },
@@ -319,7 +319,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_B16als_v2",
     "memory-available" : "32"
   },
@@ -328,7 +328,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_B16as_v2",
     "memory-available" : "64"
   },
@@ -337,7 +337,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_B32als_v2",
     "memory-available" : "64"
   },
@@ -346,7 +346,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_B32as_v2",
     "memory-available" : "128"
   },
@@ -355,7 +355,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_B2pts_v2",
     "memory-available" : "1"
   },
@@ -364,7 +364,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_B2pls_v2",
     "memory-available" : "4"
   },
@@ -373,7 +373,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_B2ps_v2",
     "memory-available" : "8"
   },
@@ -382,7 +382,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_B4pls_v2",
     "memory-available" : "8"
   },
@@ -391,7 +391,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_B4ps_v2",
     "memory-available" : "16"
   },
@@ -400,7 +400,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_B8pls_v2",
     "memory-available" : "16"
   },
@@ -409,7 +409,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_B8ps_v2",
     "memory-available" : "32"
   },
@@ -418,7 +418,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_B16pls_v2",
     "memory-available" : "32"
   },
@@ -427,7 +427,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_B16ps_v2",
     "memory-available" : "64"
   },
@@ -436,7 +436,7 @@
     "cpu-cores-utilized" : "1",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel® Xeon® E-2288G",
-    "cpu-tdp" : "95",
+    "thermal-design-power" : "95",
     "instance-class" : "Standard_DC1s_v2",
     "memory-available" : "4"
   },
@@ -445,7 +445,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel® Xeon® E-2288G",
-    "cpu-tdp" : "95",
+    "thermal-design-power" : "95",
     "instance-class" : "Standard_DC2s_v2",
     "memory-available" : "8"
   },
@@ -454,7 +454,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel® Xeon® E-2288G",
-    "cpu-tdp" : "95",
+    "thermal-design-power" : "95",
     "instance-class" : "Standard_DC4s_v2",
     "memory-available" : "16"
   },
@@ -463,7 +463,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel® Xeon® E-2288G",
-    "cpu-tdp" : "95",
+    "thermal-design-power" : "95",
     "instance-class" : "Standard_DC8_v2",
     "memory-available" : "32"
   },
@@ -472,7 +472,7 @@
     "cpu-cores-utilized" : "1",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC1ds_v3",
     "memory-available" : "8"
   },
@@ -481,7 +481,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC2ds_v3",
     "memory-available" : "16"
   },
@@ -490,7 +490,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC4ds_v3",
     "memory-available" : "32"
   },
@@ -499,7 +499,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC8ds_v3",
     "memory-available" : "64"
   },
@@ -508,7 +508,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC16ds_v3",
     "memory-available" : "128"
   },
@@ -517,7 +517,7 @@
     "cpu-cores-utilized" : "24",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC24ds_v3",
     "memory-available" : "192"
   },
@@ -526,7 +526,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC32ds_v3",
     "memory-available" : "256"
   },
@@ -535,7 +535,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC48ds_v3",
     "memory-available" : "384"
   },
@@ -544,7 +544,7 @@
     "cpu-cores-utilized" : "1",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC1s_v3",
     "memory-available" : "8"
   },
@@ -553,7 +553,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC2s_v3",
     "memory-available" : "16"
   },
@@ -562,7 +562,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC4s_v3",
     "memory-available" : "32"
   },
@@ -571,7 +571,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC8s_v3",
     "memory-available" : "64"
   },
@@ -580,7 +580,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC16s_v3",
     "memory-available" : "128"
   },
@@ -589,7 +589,7 @@
     "cpu-cores-utilized" : "24",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC24s_v3",
     "memory-available" : "192"
   },
@@ -598,7 +598,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC32s_v3",
     "memory-available" : "256"
   },
@@ -607,7 +607,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DC48s_v3",
     "memory-available" : "384"
   },
@@ -616,7 +616,7 @@
     "cpu-cores-utilized" : "1",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D1_v2",
     "memory-available" : "3.5"
   },
@@ -625,7 +625,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2_v2",
     "memory-available" : "7"
   },
@@ -634,7 +634,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D3_v2",
     "memory-available" : "14"
   },
@@ -643,7 +643,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4_v2",
     "memory-available" : "28"
   },
@@ -652,7 +652,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D5_v2",
     "memory-available" : "56"
   },
@@ -661,7 +661,7 @@
     "cpu-cores-utilized" : "1",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DS1_v2",
     "memory-available" : "3.5"
   },
@@ -670,7 +670,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DS2_v2",
     "memory-available" : "7"
   },
@@ -679,7 +679,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DS3_v2",
     "memory-available" : "14"
   },
@@ -688,7 +688,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DS4_v2",
     "memory-available" : "28"
   },
@@ -697,7 +697,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_DS5_v2",
     "memory-available" : "56"
   },
@@ -706,7 +706,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2_v31",
     "memory-available" : "8"
   },
@@ -715,7 +715,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4_v3",
     "memory-available" : "16"
   },
@@ -724,7 +724,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8_v3",
     "memory-available" : "32"
   },
@@ -733,7 +733,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16_v3",
     "memory-available" : "64"
   },
@@ -742,7 +742,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32_v3",
     "memory-available" : "128"
   },
@@ -751,7 +751,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48_v3",
     "memory-available" : "192"
   },
@@ -760,7 +760,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64_v3",
     "memory-available" : "256"
   },
@@ -769,7 +769,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2s_v32",
     "memory-available" : "8"
   },
@@ -778,7 +778,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4s_v3",
     "memory-available" : "16"
   },
@@ -787,7 +787,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8s_v3",
     "memory-available" : "32"
   },
@@ -796,7 +796,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16s_v3",
     "memory-available" : "64"
   },
@@ -805,7 +805,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32s_v3",
     "memory-available" : "128"
   },
@@ -814,7 +814,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48s_v3",
     "memory-available" : "192"
   },
@@ -823,7 +823,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64s_v3",
     "memory-available" : "256"
   },
@@ -832,7 +832,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2_v41",
     "memory-available" : "8"
   },
@@ -841,7 +841,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4_v4",
     "memory-available" : "16"
   },
@@ -850,7 +850,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8_v4",
     "memory-available" : "32"
   },
@@ -859,7 +859,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16_v4",
     "memory-available" : "64"
   },
@@ -868,7 +868,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32_v4",
     "memory-available" : "128"
   },
@@ -877,7 +877,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48_v4",
     "memory-available" : "192"
   },
@@ -886,7 +886,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64_v4",
     "memory-available" : "256"
   },
@@ -895,7 +895,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2s_v42",
     "memory-available" : "8"
   },
@@ -904,7 +904,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4s_v4",
     "memory-available" : "16"
   },
@@ -913,7 +913,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8s_v4",
     "memory-available" : "32"
   },
@@ -922,7 +922,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16s_v4",
     "memory-available" : "64"
   },
@@ -931,7 +931,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32s_v4",
     "memory-available" : "128"
   },
@@ -940,7 +940,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48s_v4",
     "memory-available" : "192"
   },
@@ -949,7 +949,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64s_v4",
     "memory-available" : "256"
   },
@@ -958,7 +958,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D2a_v41",
     "memory-available" : "8"
   },
@@ -967,7 +967,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D4a_v4",
     "memory-available" : "16"
   },
@@ -976,7 +976,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D8a_v4",
     "memory-available" : "32"
   },
@@ -985,7 +985,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D16a_v4",
     "memory-available" : "64"
   },
@@ -994,7 +994,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D32a_v4",
     "memory-available" : "128"
   },
@@ -1003,7 +1003,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D48a_v4",
     "memory-available" : "192"
   },
@@ -1012,7 +1012,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D64a_v4",
     "memory-available" : "256"
   },
@@ -1021,7 +1021,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D96a_v4",
     "memory-available" : "384"
   },
@@ -1030,7 +1030,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D2as_v42",
     "memory-available" : "8"
   },
@@ -1039,7 +1039,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D4as_v4",
     "memory-available" : "16"
   },
@@ -1048,7 +1048,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D8as_v4",
     "memory-available" : "32"
   },
@@ -1057,7 +1057,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D16as_v4",
     "memory-available" : "64"
   },
@@ -1066,7 +1066,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D32as_v4",
     "memory-available" : "128"
   },
@@ -1075,7 +1075,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D48as_v4",
     "memory-available" : "192"
   },
@@ -1084,7 +1084,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D64as_v4",
     "memory-available" : "256"
   },
@@ -1093,7 +1093,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452",
-    "cpu-tdp" : "155",
+    "thermal-design-power" : "155",
     "instance-class" : "Standard_D96as_v4",
     "memory-available" : "384"
   },
@@ -1102,7 +1102,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2d_v41",
     "memory-available" : "8"
   },
@@ -1111,7 +1111,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4d_v4",
     "memory-available" : "16"
   },
@@ -1120,7 +1120,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8d_v4",
     "memory-available" : "32"
   },
@@ -1129,7 +1129,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16d_v4",
     "memory-available" : "64"
   },
@@ -1138,7 +1138,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32d_v4",
     "memory-available" : "128"
   },
@@ -1147,7 +1147,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48d_v4",
     "memory-available" : "192"
   },
@@ -1156,7 +1156,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64d_v4",
     "memory-available" : "256"
   },
@@ -1165,7 +1165,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2ds_v42",
     "memory-available" : "8"
   },
@@ -1174,7 +1174,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4ds_v4",
     "memory-available" : "16"
   },
@@ -1183,7 +1183,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8ds_v4",
     "memory-available" : "32"
   },
@@ -1192,7 +1192,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16ds_v4",
     "memory-available" : "64"
   },
@@ -1201,7 +1201,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32ds_v4",
     "memory-available" : "128"
   },
@@ -1210,7 +1210,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48ds_v4",
     "memory-available" : "192"
   },
@@ -1219,7 +1219,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64ds_v4",
     "memory-available" : "256"
   },
@@ -1228,7 +1228,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2d_v41",
     "memory-available" : "8"
   },
@@ -1237,7 +1237,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4d_v4",
     "memory-available" : "16"
   },
@@ -1246,7 +1246,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8d_v4",
     "memory-available" : "32"
   },
@@ -1255,7 +1255,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16d_v4",
     "memory-available" : "64"
   },
@@ -1264,7 +1264,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32d_v4",
     "memory-available" : "128"
   },
@@ -1273,7 +1273,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48d_v4",
     "memory-available" : "192"
   },
@@ -1282,7 +1282,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64d_v4",
     "memory-available" : "256"
   },
@@ -1291,7 +1291,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2ds_v42",
     "memory-available" : "8"
   },
@@ -1300,7 +1300,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4ds_v4",
     "memory-available" : "16"
   },
@@ -1309,7 +1309,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8ds_v4",
     "memory-available" : "32"
   },
@@ -1318,7 +1318,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16ds_v4",
     "memory-available" : "64"
   },
@@ -1327,7 +1327,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32ds_v4",
     "memory-available" : "128"
   },
@@ -1336,7 +1336,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48ds_v4",
     "memory-available" : "192"
   },
@@ -1345,7 +1345,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64ds_v4",
     "memory-available" : "256"
   },
@@ -1354,7 +1354,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2_v5",
     "memory-available" : "8"
   },
@@ -1363,7 +1363,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4_v5",
     "memory-available" : "16"
   },
@@ -1372,7 +1372,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8_v5",
     "memory-available" : "32"
   },
@@ -1381,7 +1381,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16_v5",
     "memory-available" : "64"
   },
@@ -1390,7 +1390,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32_v5",
     "memory-available" : "128"
   },
@@ -1399,7 +1399,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48_v5",
     "memory-available" : "192"
   },
@@ -1408,7 +1408,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64_v5",
     "memory-available" : "256"
   },
@@ -1417,7 +1417,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D96_v5",
     "memory-available" : "384"
   },
@@ -1426,7 +1426,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2s_v5",
     "memory-available" : "8"
   },
@@ -1435,7 +1435,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4s_v5",
     "memory-available" : "16"
   },
@@ -1444,7 +1444,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8s_v5",
     "memory-available" : "32"
   },
@@ -1453,7 +1453,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16s_v5",
     "memory-available" : "64"
   },
@@ -1462,7 +1462,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32s_v5",
     "memory-available" : "128"
   },
@@ -1471,7 +1471,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48s_v5",
     "memory-available" : "192"
   },
@@ -1480,7 +1480,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64s_v5",
     "memory-available" : "256"
   },
@@ -1489,7 +1489,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D96s_v5",
     "memory-available" : "384"
   },
@@ -1498,7 +1498,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2d_v5",
     "memory-available" : "8"
   },
@@ -1507,7 +1507,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4d_v5",
     "memory-available" : "16"
   },
@@ -1516,7 +1516,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8d_v5",
     "memory-available" : "32"
   },
@@ -1525,7 +1525,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16d_v5",
     "memory-available" : "64"
   },
@@ -1534,7 +1534,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32d_v5",
     "memory-available" : "128"
   },
@@ -1543,7 +1543,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48d_v5",
     "memory-available" : "192"
   },
@@ -1552,7 +1552,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64d_v5",
     "memory-available" : "256"
   },
@@ -1561,7 +1561,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D96d_v5",
     "memory-available" : "384"
   },
@@ -1570,7 +1570,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2ds_v5",
     "memory-available" : "8"
   },
@@ -1579,7 +1579,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4ds_v5",
     "memory-available" : "16"
   },
@@ -1588,7 +1588,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8ds_v5",
     "memory-available" : "32"
   },
@@ -1597,7 +1597,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16ds_v5",
     "memory-available" : "64"
   },
@@ -1606,7 +1606,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32ds_v5",
     "memory-available" : "128"
   },
@@ -1615,7 +1615,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48ds_v5",
     "memory-available" : "192"
   },
@@ -1624,7 +1624,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64ds_v5",
     "memory-available" : "256"
   },
@@ -1633,7 +1633,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D96ds_v5",
     "memory-available" : "384"
   },
@@ -1642,7 +1642,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D2as_v5",
     "memory-available" : "8"
   },
@@ -1651,7 +1651,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D4as_v5",
     "memory-available" : "16"
   },
@@ -1660,7 +1660,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D8as_v5",
     "memory-available" : "32"
   },
@@ -1669,7 +1669,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D16as_v5",
     "memory-available" : "64"
   },
@@ -1678,7 +1678,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D32as_v5",
     "memory-available" : "128"
   },
@@ -1687,7 +1687,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D48as_v5",
     "memory-available" : "192"
   },
@@ -1696,7 +1696,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D64as_v5",
     "memory-available" : "256"
   },
@@ -1705,7 +1705,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D96as_v5",
     "memory-available" : "384"
   },
@@ -1714,7 +1714,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D2ads_v5",
     "memory-available" : "8"
   },
@@ -1723,7 +1723,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D4ads_v5",
     "memory-available" : "16"
   },
@@ -1732,7 +1732,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D8ads_v5",
     "memory-available" : "32"
   },
@@ -1741,7 +1741,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D16ads_v5",
     "memory-available" : "64"
   },
@@ -1750,7 +1750,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D32ads_v5",
     "memory-available" : "128"
   },
@@ -1759,7 +1759,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D48ads_v5",
     "memory-available" : "192"
   },
@@ -1768,7 +1768,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D64ads_v5",
     "memory-available" : "256"
   },
@@ -1777,7 +1777,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_D96ads_v5",
     "memory-available" : "384"
   },
@@ -1786,7 +1786,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC2as_v5",
     "memory-available" : "8"
   },
@@ -1795,7 +1795,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC4as_v5",
     "memory-available" : "16"
   },
@@ -1804,7 +1804,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC8as_v5",
     "memory-available" : "32"
   },
@@ -1813,7 +1813,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC16as_v5",
     "memory-available" : "64"
   },
@@ -1822,7 +1822,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC32as_v5",
     "memory-available" : "128"
   },
@@ -1831,7 +1831,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC48as_v5",
     "memory-available" : "192"
   },
@@ -1840,7 +1840,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC64as_v5",
     "memory-available" : "256"
   },
@@ -1849,7 +1849,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC96as_v5",
     "memory-available" : "384"
   },
@@ -1858,7 +1858,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC2ads_v5",
     "memory-available" : "8"
   },
@@ -1867,7 +1867,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC4ads_v5",
     "memory-available" : "16"
   },
@@ -1876,7 +1876,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC8ads_v5",
     "memory-available" : "32"
   },
@@ -1885,7 +1885,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC16ads_v5",
     "memory-available" : "64"
   },
@@ -1894,7 +1894,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC32ads_v5",
     "memory-available" : "128"
   },
@@ -1903,7 +1903,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC48ads_v5",
     "memory-available" : "192"
   },
@@ -1912,7 +1912,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC64ads_v5",
     "memory-available" : "256"
   },
@@ -1921,7 +1921,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC96ads_v5",
     "memory-available" : "384"
   },
@@ -1930,7 +1930,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC4as_cc_v5",
     "memory-available" : "16"
   },
@@ -1939,7 +1939,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC8as_cc_v5",
     "memory-available" : "32"
   },
@@ -1948,7 +1948,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC16as_cc_v5",
     "memory-available" : "64"
   },
@@ -1957,7 +1957,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC32as_cc_v5",
     "memory-available" : "128"
   },
@@ -1966,7 +1966,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC48as_cc_v5",
     "memory-available" : "192"
   },
@@ -1975,7 +1975,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC64as_cc_v5",
     "memory-available" : "256"
   },
@@ -1984,7 +1984,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_DC96as_cc_v5",
     "memory-available" : "384"
   },
@@ -1993,7 +1993,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D2ps_v5",
     "memory-available" : "8"
   },
@@ -2002,7 +2002,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D4ps_v5",
     "memory-available" : "8"
   },
@@ -2011,7 +2011,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D8ps_v5",
     "memory-available" : "16"
   },
@@ -2020,7 +2020,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D16ps_v5",
     "memory-available" : "16"
   },
@@ -2029,7 +2029,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D32ps_v5",
     "memory-available" : "32"
   },
@@ -2038,7 +2038,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D48ps_v5",
     "memory-available" : "32"
   },
@@ -2047,7 +2047,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D64ps_v5",
     "memory-available" : "64"
   },
@@ -2056,7 +2056,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D2pds_v5",
     "memory-available" : "8"
   },
@@ -2065,7 +2065,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D4pds_v5",
     "memory-available" : "8"
   },
@@ -2074,7 +2074,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D8pds_v5",
     "memory-available" : "16"
   },
@@ -2083,7 +2083,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D16pds_v5",
     "memory-available" : "16"
   },
@@ -2092,7 +2092,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D32pds_v5",
     "memory-available" : "32"
   },
@@ -2101,7 +2101,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D48pds_v5",
     "memory-available" : "32"
   },
@@ -2110,7 +2110,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D64pds_v5",
     "memory-available" : "64"
   },
@@ -2119,7 +2119,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D2pls_v5",
     "memory-available" : "4"
   },
@@ -2128,7 +2128,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D4pls_v5",
     "memory-available" : "8"
   },
@@ -2137,7 +2137,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D8pls_v5",
     "memory-available" : "16"
   },
@@ -2146,7 +2146,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D16pls_v5",
     "memory-available" : "32"
   },
@@ -2155,7 +2155,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D32pls_v5",
     "memory-available" : "64"
   },
@@ -2164,7 +2164,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D48pls_v5",
     "memory-available" : "96"
   },
@@ -2173,7 +2173,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D64pls_v5",
     "memory-available" : "128"
   },
@@ -2182,7 +2182,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D2plds_v5",
     "memory-available" : "4"
   },
@@ -2191,7 +2191,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D4plds_v5",
     "memory-available" : "8"
   },
@@ -2200,7 +2200,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D8plds_v5",
     "memory-available" : "16"
   },
@@ -2209,7 +2209,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D16plds_v5",
     "memory-available" : "32"
   },
@@ -2218,7 +2218,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D32plds_v5",
     "memory-available" : "64"
   },
@@ -2227,7 +2227,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D48plds_v5",
     "memory-available" : "96"
   },
@@ -2236,7 +2236,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_D64plds_v5",
     "memory-available" : "128"
   },
@@ -2245,7 +2245,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2ls_v5",
     "memory-available" : "4"
   },
@@ -2254,7 +2254,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4ls_v5",
     "memory-available" : "8"
   },
@@ -2263,7 +2263,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8ls_v5",
     "memory-available" : "16"
   },
@@ -2272,7 +2272,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16ls_v5",
     "memory-available" : "32"
   },
@@ -2281,7 +2281,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32ls_v5",
     "memory-available" : "64"
   },
@@ -2290,7 +2290,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48ls_v5",
     "memory-available" : "96"
   },
@@ -2299,7 +2299,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64ls_v5",
     "memory-available" : "128"
   },
@@ -2308,7 +2308,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D96ls_v5",
     "memory-available" : "192"
   },
@@ -2317,7 +2317,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D2lds_v5",
     "memory-available" : "4"
   },
@@ -2326,7 +2326,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D4lds_v5",
     "memory-available" : "8"
   },
@@ -2335,7 +2335,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D8lds_v5",
     "memory-available" : "16"
   },
@@ -2344,7 +2344,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D16lds_v5",
     "memory-available" : "32"
   },
@@ -2353,7 +2353,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D32lds_v5",
     "memory-available" : "64"
   },
@@ -2362,7 +2362,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D48lds_v5",
     "memory-available" : "96"
   },
@@ -2371,7 +2371,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D64lds_v5",
     "memory-available" : "128"
   },
@@ -2380,7 +2380,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D96lds_v5",
     "memory-available" : "192"
   },
@@ -2389,7 +2389,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon Platinum 8168",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_F2s_v2",
     "memory-available" : "4"
   },
@@ -2398,7 +2398,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon Platinum 8168",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_F4s_v2",
     "memory-available" : "8"
   },
@@ -2407,7 +2407,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon Platinum 8168",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_F8s_v2",
     "memory-available" : "16"
   },
@@ -2416,7 +2416,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon Platinum 8168",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_F16s_v2",
     "memory-available" : "32"
   },
@@ -2425,7 +2425,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon Platinum 8168",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_F32s_v2",
     "memory-available" : "64"
   },
@@ -2434,7 +2434,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon Platinum 8168",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_F48s_v2",
     "memory-available" : "96"
   },
@@ -2443,7 +2443,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon Platinum 8168",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_F64s_v2",
     "memory-available" : "128"
   },
@@ -2452,7 +2452,7 @@
     "cpu-cores-utilized" : "72",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_F72s_v2",
     "memory-available" : "144"
   },
@@ -2461,7 +2461,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Gold 6246R",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_FX4mds",
     "memory-available" : "84"
   },
@@ -2470,7 +2470,7 @@
     "cpu-cores-utilized" : "12",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Gold 6246R",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_FX12mds",
     "memory-available" : "252"
   },
@@ -2479,7 +2479,7 @@
     "cpu-cores-utilized" : "24",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Gold 6246R",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_FX24mds",
     "memory-available" : "504"
   },
@@ -2488,7 +2488,7 @@
     "cpu-cores-utilized" : "36",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Gold 6246R",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_FX36mds",
     "memory-available" : "756"
   },
@@ -2497,7 +2497,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Gold 6246R",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_FX48mds",
     "memory-available" : "1008"
   },
@@ -2506,7 +2506,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel Xeon E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D11_v2",
     "memory-available" : "14"
   },
@@ -2515,7 +2515,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel Xeon E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D12_v2",
     "memory-available" : "28"
   },
@@ -2524,7 +2524,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel Xeon E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D13_v2",
     "memory-available" : "56"
   },
@@ -2533,7 +2533,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel Xeon E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D14_v2",
     "memory-available" : "112"
   },
@@ -2542,7 +2542,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz,Intel Xeon E5-2673 v3 2.4 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_D15_v2",
     "memory-available" : "140"
   },
@@ -2551,7 +2551,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E2_v3",
     "memory-available" : "16"
   },
@@ -2560,7 +2560,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E4_v3",
     "memory-available" : "32"
   },
@@ -2569,7 +2569,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E8_v3",
     "memory-available" : "64"
   },
@@ -2578,7 +2578,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E16_v3",
     "memory-available" : "128"
   },
@@ -2587,7 +2587,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E20_v3",
     "memory-available" : "160"
   },
@@ -2596,7 +2596,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E32_v3",
     "memory-available" : "256"
   },
@@ -2605,7 +2605,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E48_v3",
     "memory-available" : "384"
   },
@@ -2614,7 +2614,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E64_v3",
     "memory-available" : "432"
   },
@@ -2623,7 +2623,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E64i_v3",
     "memory-available" : "432"
   },
@@ -2632,7 +2632,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E2s_v3",
     "memory-available" : "16"
   },
@@ -2641,7 +2641,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E4s_v3",
     "memory-available" : "32"
   },
@@ -2650,7 +2650,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E8s_v3",
     "memory-available" : "64"
   },
@@ -2659,7 +2659,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E16s_v3",
     "memory-available" : "128"
   },
@@ -2668,7 +2668,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E20s_v3",
     "memory-available" : "160"
   },
@@ -2677,7 +2677,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E32s_v3",
     "memory-available" : "256"
   },
@@ -2686,7 +2686,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E48s_v3",
     "memory-available" : "384"
   },
@@ -2695,7 +2695,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E64s_v3",
     "memory-available" : "432"
   },
@@ -2704,7 +2704,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL,Intel Xeon 8171M 2.1 GHz,Intel Xeon E5-2673 v4 2.3 GHz",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E64is_v3",
     "memory-available" : "432"
   },
@@ -2713,7 +2713,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E2a_v4",
     "memory-available" : "16"
   },
@@ -2722,7 +2722,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E4a_v4",
     "memory-available" : "32"
   },
@@ -2731,7 +2731,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E8a_v4",
     "memory-available" : "64"
   },
@@ -2740,7 +2740,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E16a_v4",
     "memory-available" : "128"
   },
@@ -2749,7 +2749,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E20a_v4",
     "memory-available" : "160"
   },
@@ -2758,7 +2758,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E32a_v4",
     "memory-available" : "256"
   },
@@ -2767,7 +2767,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E48a_v4",
     "memory-available" : "384"
   },
@@ -2776,7 +2776,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E64a_v4",
     "memory-available" : "512"
   },
@@ -2785,7 +2785,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E96a_v4",
     "memory-available" : "672"
   },
@@ -2794,7 +2794,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E2as_v4",
     "memory-available" : "16"
   },
@@ -2803,7 +2803,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E4as_v4",
     "memory-available" : "32"
   },
@@ -2812,7 +2812,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E8as_v4",
     "memory-available" : "64"
   },
@@ -2821,7 +2821,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E16as_v4",
     "memory-available" : "128"
   },
@@ -2830,7 +2830,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E20as_v4",
     "memory-available" : "160"
   },
@@ -2839,7 +2839,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E32as_v4",
     "memory-available" : "256"
   },
@@ -2848,7 +2848,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E48as_v4",
     "memory-available" : "384"
   },
@@ -2857,7 +2857,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E64as_v4",
     "memory-available" : "512"
   },
@@ -2866,7 +2866,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E96as_v4",
     "memory-available" : "672"
   },
@@ -2875,7 +2875,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E2d_v4",
     "memory-available" : "16"
   },
@@ -2884,7 +2884,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E4d_v4",
     "memory-available" : "32"
   },
@@ -2893,7 +2893,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E8d_v4",
     "memory-available" : "64"
   },
@@ -2902,7 +2902,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E16d_v4",
     "memory-available" : "128"
   },
@@ -2911,7 +2911,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E20d_v4",
     "memory-available" : "160"
   },
@@ -2920,7 +2920,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E32d_v4",
     "memory-available" : "256"
   },
@@ -2929,7 +2929,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E48d_v4",
     "memory-available" : "384"
   },
@@ -2938,7 +2938,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E64d_v4",
     "memory-available" : "504"
   },
@@ -2947,7 +2947,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E2ds_v4",
     "memory-available" : "16"
   },
@@ -2956,7 +2956,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E4ds_v4",
     "memory-available" : "32"
   },
@@ -2965,7 +2965,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E8ds_v4",
     "memory-available" : "64"
   },
@@ -2974,7 +2974,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E16ds_v4",
     "memory-available" : "128"
   },
@@ -2983,7 +2983,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E20ds_v4",
     "memory-available" : "160"
   },
@@ -2992,7 +2992,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E32ds_v4",
     "memory-available" : "256"
   },
@@ -3001,7 +3001,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E48ds_v4",
     "memory-available" : "384"
   },
@@ -3010,7 +3010,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E64ds_v4",
     "memory-available" : "504"
   },
@@ -3019,7 +3019,7 @@
     "cpu-cores-utilized" : "80",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E80ids_v4",
     "memory-available" : "504"
   },
@@ -3028,7 +3028,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E2_v4",
     "memory-available" : "16"
   },
@@ -3037,7 +3037,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E4_v4",
     "memory-available" : "32"
   },
@@ -3046,7 +3046,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E8_v4",
     "memory-available" : "64"
   },
@@ -3055,7 +3055,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E16_v4",
     "memory-available" : "128"
   },
@@ -3064,7 +3064,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E20_v4",
     "memory-available" : "160"
   },
@@ -3073,7 +3073,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E32_v4",
     "memory-available" : "256"
   },
@@ -3082,7 +3082,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E48_v4",
     "memory-available" : "384"
   },
@@ -3091,7 +3091,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E64_v4",
     "memory-available" : "504"
   },
@@ -3100,7 +3100,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E2s_v4",
     "memory-available" : "16"
   },
@@ -3109,7 +3109,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E4s_v4",
     "memory-available" : "32"
   },
@@ -3118,7 +3118,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E8s_v4",
     "memory-available" : "64"
   },
@@ -3127,7 +3127,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E16s_v4",
     "memory-available" : "128"
   },
@@ -3136,7 +3136,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E20s_v4",
     "memory-available" : "160"
   },
@@ -3145,7 +3145,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E32s_v4",
     "memory-available" : "256"
   },
@@ -3154,7 +3154,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E48s_v4",
     "memory-available" : "384"
   },
@@ -3163,7 +3163,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E64s_v4",
     "memory-available" : "504"
   },
@@ -3172,7 +3172,7 @@
     "cpu-cores-utilized" : "80",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C,Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E80is_v4",
     "memory-available" : "504"
   },
@@ -3181,7 +3181,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E2_v5",
     "memory-available" : "16"
   },
@@ -3190,7 +3190,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E4_v5",
     "memory-available" : "32"
   },
@@ -3199,7 +3199,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E8_v5",
     "memory-available" : "64"
   },
@@ -3208,7 +3208,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E16_v5",
     "memory-available" : "128"
   },
@@ -3217,7 +3217,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E20_v5",
     "memory-available" : "160"
   },
@@ -3226,7 +3226,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E32_v5",
     "memory-available" : "256"
   },
@@ -3235,7 +3235,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E48_v5",
     "memory-available" : "384"
   },
@@ -3244,7 +3244,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E64_v5",
     "memory-available" : "512"
   },
@@ -3253,7 +3253,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E96_v5",
     "memory-available" : "672"
   },
@@ -3262,7 +3262,7 @@
     "cpu-cores-utilized" : "104",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E104i_v5",
     "memory-available" : "672"
   },
@@ -3271,7 +3271,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E2s_v5",
     "memory-available" : "16"
   },
@@ -3280,7 +3280,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E4s_v5",
     "memory-available" : "32"
   },
@@ -3289,7 +3289,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E8s_v5",
     "memory-available" : "64"
   },
@@ -3298,7 +3298,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E16s_v5",
     "memory-available" : "128"
   },
@@ -3307,7 +3307,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E20s_v5",
     "memory-available" : "160"
   },
@@ -3316,7 +3316,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E32s_v5",
     "memory-available" : "256"
   },
@@ -3325,7 +3325,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E48s_v5",
     "memory-available" : "384"
   },
@@ -3334,7 +3334,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E64s_v5",
     "memory-available" : "512"
   },
@@ -3343,7 +3343,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E96s_v5",
     "memory-available" : "672"
   },
@@ -3352,7 +3352,7 @@
     "cpu-cores-utilized" : "104",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E104is_v5",
     "memory-available" : "672"
   },
@@ -3361,7 +3361,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E2bs_v5",
     "memory-available" : "16"
   },
@@ -3370,7 +3370,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E4bs_v5",
     "memory-available" : "32"
   },
@@ -3379,7 +3379,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E8bs_v5",
     "memory-available" : "64"
   },
@@ -3388,7 +3388,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E16bs_v5",
     "memory-available" : "128"
   },
@@ -3397,7 +3397,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E32bs_v5",
     "memory-available" : "256"
   },
@@ -3406,7 +3406,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E48bs_v5",
     "memory-available" : "384"
   },
@@ -3415,7 +3415,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E64bs_v5",
     "memory-available" : "512"
   },
@@ -3424,7 +3424,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E96bs_v5",
     "memory-available" : "672"
   },
@@ -3433,7 +3433,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E2bs_v5",
     "memory-available" : "16"
   },
@@ -3442,7 +3442,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E4bs_v5",
     "memory-available" : "32"
   },
@@ -3451,7 +3451,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E8bs_v5",
     "memory-available" : "64"
   },
@@ -3460,7 +3460,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E16bs_v5",
     "memory-available" : "128"
   },
@@ -3469,7 +3469,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E32bs_v5",
     "memory-available" : "160"
   },
@@ -3478,7 +3478,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E48bs_v5",
     "memory-available" : "256"
   },
@@ -3487,7 +3487,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E64bs_v5",
     "memory-available" : "384"
   },
@@ -3496,7 +3496,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E96bs_v5",
     "memory-available" : "512"
   },
@@ -3505,7 +3505,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8272CL",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_E112ibs_v5",
     "memory-available" : "672"
   },
@@ -3514,7 +3514,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E2d_v5",
     "memory-available" : "16"
   },
@@ -3523,7 +3523,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E4d_v5",
     "memory-available" : "32"
   },
@@ -3532,7 +3532,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E8d_v5",
     "memory-available" : "64"
   },
@@ -3541,7 +3541,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E16d_v5",
     "memory-available" : "128"
   },
@@ -3550,7 +3550,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E20d_v5",
     "memory-available" : "160"
   },
@@ -3559,7 +3559,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E32d_v5",
     "memory-available" : "256"
   },
@@ -3568,7 +3568,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E48d_v5",
     "memory-available" : "384"
   },
@@ -3577,7 +3577,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E64d_v5",
     "memory-available" : "512"
   },
@@ -3586,7 +3586,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E96d_v5",
     "memory-available" : "672"
   },
@@ -3595,7 +3595,7 @@
     "cpu-cores-utilized" : "104",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_E104id_v5",
     "memory-available" : "672"
   },
@@ -3604,7 +3604,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E2as_v5",
     "memory-available" : "16"
   },
@@ -3613,7 +3613,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E4as_v5",
     "memory-available" : "32"
   },
@@ -3622,7 +3622,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E8as_v5",
     "memory-available" : "64"
   },
@@ -3631,7 +3631,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E16as_v5",
     "memory-available" : "128"
   },
@@ -3640,7 +3640,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E20as_v5",
     "memory-available" : "160"
   },
@@ -3649,7 +3649,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E32as_v5",
     "memory-available" : "256"
   },
@@ -3658,7 +3658,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E48as_v5",
     "memory-available" : "384"
   },
@@ -3667,7 +3667,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E64as_v5",
     "memory-available" : "512"
   },
@@ -3676,7 +3676,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E96as_v5",
     "memory-available" : "672"
   },
@@ -3685,7 +3685,7 @@
     "cpu-cores-utilized" : "112",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E112ias_v5",
     "memory-available" : "672"
   },
@@ -3694,7 +3694,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E2ads_v5",
     "memory-available" : "16"
   },
@@ -3703,7 +3703,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E4ads_v52",
     "memory-available" : "32"
   },
@@ -3712,7 +3712,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E8ads_v52",
     "memory-available" : "64"
   },
@@ -3721,7 +3721,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E16ads_v52",
     "memory-available" : "128"
   },
@@ -3730,7 +3730,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E20ads_v5",
     "memory-available" : "160"
   },
@@ -3739,7 +3739,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E32ads_v52",
     "memory-available" : "256"
   },
@@ -3748,7 +3748,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E48ads_v5",
     "memory-available" : "384"
   },
@@ -3757,7 +3757,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E64ads_v52",
     "memory-available" : "512"
   },
@@ -3766,7 +3766,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E96ads_v52",
     "memory-available" : "672"
   },
@@ -3775,7 +3775,7 @@
     "cpu-cores-utilized" : "112",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_E112iads_v53",
     "memory-available" : "672"
   },
@@ -3784,7 +3784,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC2as_v5",
     "memory-available" : "16"
   },
@@ -3793,7 +3793,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC4as_v5",
     "memory-available" : "32"
   },
@@ -3802,7 +3802,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC8as_v5",
     "memory-available" : "64"
   },
@@ -3811,7 +3811,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC16as_v5",
     "memory-available" : "128"
   },
@@ -3820,7 +3820,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC20as_v5",
     "memory-available" : "160"
   },
@@ -3829,7 +3829,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC32as_v5",
     "memory-available" : "256"
   },
@@ -3838,7 +3838,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC48as_v5",
     "memory-available" : "384"
   },
@@ -3847,7 +3847,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC64as_v5",
     "memory-available" : "512"
   },
@@ -3856,7 +3856,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC96as_v5",
     "memory-available" : "672"
   },
@@ -3865,7 +3865,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC2ads_v5",
     "memory-available" : "16"
   },
@@ -3874,7 +3874,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC4ads_v5",
     "memory-available" : "32"
   },
@@ -3883,7 +3883,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC8ads_v5",
     "memory-available" : "64"
   },
@@ -3892,7 +3892,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC16ads_v5",
     "memory-available" : "128"
   },
@@ -3901,7 +3901,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC20ads_v5",
     "memory-available" : "160"
   },
@@ -3910,7 +3910,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC32ads_v5",
     "memory-available" : "256"
   },
@@ -3919,7 +3919,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC48ads_v5",
     "memory-available" : "384"
   },
@@ -3928,7 +3928,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC64ads_v5",
     "memory-available" : "512"
   },
@@ -3937,7 +3937,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC96ads_v5",
     "memory-available" : "672"
   },
@@ -3946,7 +3946,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC4as_cc_v5",
     "memory-available" : "32"
   },
@@ -3955,7 +3955,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC8as_cc_v5",
     "memory-available" : "64"
   },
@@ -3964,7 +3964,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC16as_cc_v5",
     "memory-available" : "128"
   },
@@ -3973,7 +3973,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC20as_cc_v5",
     "memory-available" : "160"
   },
@@ -3982,7 +3982,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC32as_cc_v5",
     "memory-available" : "256"
   },
@@ -3991,7 +3991,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC48as_cc_v5",
     "memory-available" : "384"
   },
@@ -4000,7 +4000,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC64as_cc_v5",
     "memory-available" : "512"
   },
@@ -4009,7 +4009,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC96as_cc_v5",
     "memory-available" : "672"
   },
@@ -4018,7 +4018,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC4ads_cc_v5",
     "memory-available" : "32"
   },
@@ -4027,7 +4027,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC8ads_cc_v5",
     "memory-available" : "64"
   },
@@ -4036,7 +4036,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC16ads_cc_v5",
     "memory-available" : "128"
   },
@@ -4045,7 +4045,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC20ads_cc_v5",
     "memory-available" : "160"
   },
@@ -4054,7 +4054,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC32ads_cc_v5",
     "memory-available" : "256"
   },
@@ -4063,7 +4063,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC48ads_cc_v5",
     "memory-available" : "384"
   },
@@ -4072,7 +4072,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC64ads_cc_v5",
     "memory-available" : "512"
   },
@@ -4081,7 +4081,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_EC96ads_cc_v5",
     "memory-available" : "672"
   },
@@ -4090,7 +4090,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_E2ps_v5",
     "memory-available" : "16"
   },
@@ -4099,7 +4099,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_E4ps_v5",
     "memory-available" : "32"
   },
@@ -4108,7 +4108,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_E8ps_v5",
     "memory-available" : "64"
   },
@@ -4117,7 +4117,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_E16ps_v5",
     "memory-available" : "128"
   },
@@ -4126,7 +4126,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_E20ps_v5",
     "memory-available" : "160"
   },
@@ -4135,7 +4135,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_E32ps_v5",
     "memory-available" : "208"
   },
@@ -4144,7 +4144,7 @@
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_E2pds_v5",
     "memory-available" : "16"
   },
@@ -4153,7 +4153,7 @@
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_E4pds_v5",
     "memory-available" : "32"
   },
@@ -4162,7 +4162,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_E8pds_v5",
     "memory-available" : "64"
   },
@@ -4171,7 +4171,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_E16pds_v5",
     "memory-available" : "128"
   },
@@ -4180,7 +4180,7 @@
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_E20pds_v5",
     "memory-available" : "160"
   },
@@ -4189,7 +4189,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Ampere",
     "cpu-model-name" : "Ampere® Altra® ",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_E32pds_v5",
     "memory-available" : "208"
   },
@@ -4198,7 +4198,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M8ms",
     "memory-available" : "218.75"
   },
@@ -4207,7 +4207,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M16ms",
     "memory-available" : "437.50"
   },
@@ -4216,7 +4216,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M32ts",
     "memory-available" : "192"
   },
@@ -4225,7 +4225,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M32ls",
     "memory-available" : "256"
   },
@@ -4234,7 +4234,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M32ms",
     "memory-available" : "875"
   },
@@ -4243,7 +4243,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M64s",
     "memory-available" : "1024"
   },
@@ -4252,7 +4252,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M64ls",
     "memory-available" : "512"
   },
@@ -4261,7 +4261,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M64ms",
     "memory-available" : "1792"
   },
@@ -4270,7 +4270,7 @@
     "cpu-cores-utilized" : "128",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M128s",
     "memory-available" : "2048"
   },
@@ -4279,7 +4279,7 @@
     "cpu-cores-utilized" : "128",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M128ms",
     "memory-available" : "3892"
   },
@@ -4288,7 +4288,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M64",
     "memory-available" : "1024"
   },
@@ -4297,7 +4297,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M64m",
     "memory-available" : "1792"
   },
@@ -4306,7 +4306,7 @@
     "cpu-cores-utilized" : "128",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M128",
     "memory-available" : "2048"
   },
@@ -4315,7 +4315,7 @@
     "cpu-cores-utilized" : "128",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Processor E7-8890 v3,Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M128m",
     "memory-available" : "3892"
   },
@@ -4324,7 +4324,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M32ms_v2",
     "memory-available" : "875"
   },
@@ -4333,7 +4333,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M64s_v2",
     "memory-available" : "1024"
   },
@@ -4342,7 +4342,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M64ms_v2",
     "memory-available" : "1792"
   },
@@ -4351,7 +4351,7 @@
     "cpu-cores-utilized" : "128",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M128s_v2",
     "memory-available" : "2048"
   },
@@ -4360,7 +4360,7 @@
     "cpu-cores-utilized" : "128",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M128ms_v2",
     "memory-available" : "3892"
   },
@@ -4369,7 +4369,7 @@
     "cpu-cores-utilized" : "192",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M192is_v2",
     "memory-available" : "2048"
   },
@@ -4378,7 +4378,7 @@
     "cpu-cores-utilized" : "192",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M192ims_v2",
     "memory-available" : "4096"
   },
@@ -4387,7 +4387,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M32dms_v2",
     "memory-available" : "875"
   },
@@ -4396,7 +4396,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M64ds_v2",
     "memory-available" : "1024"
   },
@@ -4405,7 +4405,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M64dms_v2",
     "memory-available" : "1792"
   },
@@ -4414,7 +4414,7 @@
     "cpu-cores-utilized" : "128",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M128ds_v2",
     "memory-available" : "2048"
   },
@@ -4423,7 +4423,7 @@
     "cpu-cores-utilized" : "128",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M128dms_v2",
     "memory-available" : "3892"
   },
@@ -4432,7 +4432,7 @@
     "cpu-cores-utilized" : "192",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M192ids_v2",
     "memory-available" : "2048"
   },
@@ -4441,7 +4441,7 @@
     "cpu-cores-utilized" : "192",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8280",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M192idms_v2",
     "memory-available" : "4096"
   },
@@ -4450,7 +4450,7 @@
     "cpu-cores-utilized" : "208",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8180M",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M208s_v2",
     "memory-available" : "2850"
   },
@@ -4459,7 +4459,7 @@
     "cpu-cores-utilized" : "208",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8180M",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M208ms_v2",
     "memory-available" : "5700"
   },
@@ -4468,7 +4468,7 @@
     "cpu-cores-utilized" : "416",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8180M",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M416s_v2",
     "memory-available" : "5700"
   },
@@ -4477,7 +4477,7 @@
     "cpu-cores-utilized" : "416",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8180M",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M416s_8_v2",
     "memory-available" : "7600"
   },
@@ -4486,7 +4486,7 @@
     "cpu-cores-utilized" : "416",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8180M",
-    "cpu-tdp" : "205",
+    "thermal-design-power" : "205",
     "instance-class" : "Standard_M416ms_v2",
     "memory-available" : "11400"
   },
@@ -4495,7 +4495,7 @@
     "cpu-cores-utilized" : "12",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Scalable",
-    "cpu-tdp" : "",
+    "thermal-design-power" : "",
     "instance-class" : "Standard_M12s_v3",
     "memory-available" : "240"
   },
@@ -4504,7 +4504,7 @@
     "cpu-cores-utilized" : "24",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Scalable",
-    "cpu-tdp" : "",
+    "thermal-design-power" : "",
     "instance-class" : "Standard_M24s_v3",
     "memory-available" : "480"
   },
@@ -4513,7 +4513,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Scalable",
-    "cpu-tdp" : "",
+    "thermal-design-power" : "",
     "instance-class" : "Standard_M48s_1_v3",
     "memory-available" : "974"
   },
@@ -4522,7 +4522,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Scalable",
-    "cpu-tdp" : "",
+    "thermal-design-power" : "",
     "instance-class" : "Standard_M96s_1_v3",
     "memory-available" : "974"
   },
@@ -4531,7 +4531,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Scalable",
-    "cpu-tdp" : "",
+    "thermal-design-power" : "",
     "instance-class" : "Standard_M96s_2_v3",
     "memory-available" : "1946"
   },
@@ -4540,7 +4540,7 @@
     "cpu-cores-utilized" : "176",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Scalable",
-    "cpu-tdp" : "",
+    "thermal-design-power" : "",
     "instance-class" : "Standard_M176s_3_v3",
     "memory-available" : "2794"
   },
@@ -4549,7 +4549,7 @@
     "cpu-cores-utilized" : "12",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Scalable",
-    "cpu-tdp" : "",
+    "thermal-design-power" : "",
     "instance-class" : "Standard_M12ds_v3",
     "memory-available" : "240"
   },
@@ -4558,7 +4558,7 @@
     "cpu-cores-utilized" : "24",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Scalable",
-    "cpu-tdp" : "",
+    "thermal-design-power" : "",
     "instance-class" : "Standard_M24ds_v3",
     "memory-available" : "480"
   },
@@ -4567,7 +4567,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Scalable",
-    "cpu-tdp" : "",
+    "thermal-design-power" : "",
     "instance-class" : "Standard_M48ds_1_v3",
     "memory-available" : "974"
   },
@@ -4576,7 +4576,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Scalable",
-    "cpu-tdp" : "",
+    "thermal-design-power" : "",
     "instance-class" : "Standard_M96ds_1_v3",
     "memory-available" : "974"
   },
@@ -4585,7 +4585,7 @@
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Scalable",
-    "cpu-tdp" : "",
+    "thermal-design-power" : "",
     "instance-class" : "Standard_M96ds_2_v3",
     "memory-available" : "1946"
   },
@@ -4594,7 +4594,7 @@
     "cpu-cores-utilized" : "176",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Scalable",
-    "cpu-tdp" : "",
+    "thermal-design-power" : "",
     "instance-class" : "Standard_M176ds_3_v3",
     "memory-available" : "2794"
   },
@@ -4603,7 +4603,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7551",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_L8s_v2",
     "memory-available" : "64"
   },
@@ -4612,7 +4612,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7551",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_L16s_v2",
     "memory-available" : "128"
   },
@@ -4621,7 +4621,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7551",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_L32s_v2",
     "memory-available" : "256"
   },
@@ -4630,7 +4630,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7551",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_L48s_v2",
     "memory-available" : "384"
   },
@@ -4639,7 +4639,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7551",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_L64s_v2",
     "memory-available" : "512"
   },
@@ -4648,7 +4648,7 @@
     "cpu-cores-utilized" : "80",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7551",
-    "cpu-tdp" : "180",
+    "thermal-design-power" : "180",
     "instance-class" : "Standard_L80s_v2",
     "memory-available" : "640"
   },
@@ -4657,7 +4657,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_L8s_v3",
     "memory-available" : "64"
   },
@@ -4666,7 +4666,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_L16s_v3",
     "memory-available" : "128"
   },
@@ -4675,7 +4675,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_L32s_v3",
     "memory-available" : "256"
   },
@@ -4684,7 +4684,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_L48s_v3",
     "memory-available" : "384"
   },
@@ -4693,7 +4693,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_L64s_v3",
     "memory-available" : "512"
   },
@@ -4702,7 +4702,7 @@
     "cpu-cores-utilized" : "80",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon Platinum 8370C",
-    "cpu-tdp" : "270",
+    "thermal-design-power" : "270",
     "instance-class" : "Standard_L80s_v3",
     "memory-available" : "640"
   },
@@ -4711,7 +4711,7 @@
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_L8as_v3",
     "memory-available" : "64"
   },
@@ -4720,7 +4720,7 @@
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_L16as_v3",
     "memory-available" : "128"
   },
@@ -4729,7 +4729,7 @@
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_L32as_v3",
     "memory-available" : "256"
   },
@@ -4738,7 +4738,7 @@
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_L48as_v3",
     "memory-available" : "384"
   },
@@ -4747,7 +4747,7 @@
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_L64as_v3",
     "memory-available" : "512"
   },
@@ -4756,7 +4756,7 @@
     "cpu-cores-utilized" : "80",
     "cpu-manufacturer" : "AMD",
     "cpu-model-name" : "AMD EPYC 7763",
-    "cpu-tdp" : "280",
+    "thermal-design-power" : "280",
     "instance-class" : "Standard_L80as_v3",
     "memory-available" : "640"
   },
@@ -4765,7 +4765,7 @@
     "cpu-cores-utilized" : "6",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon E5-2690 v3",
-    "cpu-tdp" : "135",
+    "thermal-design-power" : "135",
     "instance-class" : "Standard_NC6",
     "memory-available" : "56"
   },
@@ -4774,7 +4774,7 @@
     "cpu-cores-utilized" : "12",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon E5-2690 v3",
-    "cpu-tdp" : "135",
+    "thermal-design-power" : "135",
     "instance-class" : "Standard_NC12",
     "memory-available" : "112"
   },
@@ -4783,7 +4783,7 @@
     "cpu-cores-utilized" : "24",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon E5-2690 v3",
-    "cpu-tdp" : "135",
+    "thermal-design-power" : "135",
     "instance-class" : "Standard_NC24",
     "memory-available" : "224"
   },
@@ -4792,7 +4792,7 @@
     "cpu-cores-utilized" : "24",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon E5-2690 v3",
-    "cpu-tdp" : "135",
+    "thermal-design-power" : "135",
     "instance-class" : "Standard_NC24r*",
     "memory-available" : "224"
   },
@@ -4801,7 +4801,7 @@
     "cpu-cores-utilized" : "6",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon E5-2690 v4",
-    "cpu-tdp" : "135",
+    "thermal-design-power" : "135",
     "instance-class" : "Standard_NC6s_v2",
     "memory-available" : "112"
   },
@@ -4810,7 +4810,7 @@
     "cpu-cores-utilized" : "12",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon E5-2690 v4",
-    "cpu-tdp" : "135",
+    "thermal-design-power" : "135",
     "instance-class" : "Standard_NC12s_v2",
     "memory-available" : "224"
   },
@@ -4819,7 +4819,7 @@
     "cpu-cores-utilized" : "24",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon E5-2690 v4",
-    "cpu-tdp" : "135",
+    "thermal-design-power" : "135",
     "instance-class" : "Standard_NC24s_v2",
     "memory-available" : "448"
   },
@@ -4828,7 +4828,7 @@
     "cpu-cores-utilized" : "24",
     "cpu-manufacturer" : "Intel",
     "cpu-model-name" : "Intel Xeon E5-2690 v4",
-    "cpu-tdp" : "135",
+    "thermal-design-power" : "135",
     "instance-class" : "Standard_NC24rs_v2*",
     "memory-available" : "448"
   },
@@ -4837,7 +4837,7 @@
     "cpu-cores-utilized" : "6",
     "cpu-manufacturer" : "736",
     "cpu-model-name" : "Intel Xeon E5-2690 v4",
-    "cpu-tdp" : "135",
+    "thermal-design-power" : "135",
     "instance-class" : "Standard_NC6s_v3",
     "memory-available" : "112"
   },
@@ -4846,7 +4846,7 @@
     "cpu-cores-utilized" : "12",
     "cpu-manufacturer" : "1474",
     "cpu-model-name" : "Intel Xeon E5-2690 v4",
-    "cpu-tdp" : "135",
+    "thermal-design-power" : "135",
     "instance-class" : "Standard_NC12s_v3",
     "memory-available" : "224"
   },
@@ -4855,7 +4855,7 @@
     "cpu-cores-utilized" : "24",
     "cpu-manufacturer" : "2948",
     "cpu-model-name" : "Intel Xeon E5-2690 v4",
-    "cpu-tdp" : "135",
+    "thermal-design-power" : "135",
     "instance-class" : "Standard_NC24s_v3",
     "memory-available" : "448"
   },
@@ -4864,7 +4864,7 @@
     "cpu-cores-utilized" : "24",
     "cpu-manufacturer" : "2948",
     "cpu-model-name" : "Intel Xeon E5-2690 v4",
-    "cpu-tdp" : "135",
+    "thermal-design-power" : "135",
     "instance-class" : "Standard_NC24rs_v3*",
     "memory-available" : "448"
   }
