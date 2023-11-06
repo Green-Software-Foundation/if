@@ -4,6 +4,7 @@ import {CONFIG} from '../../config';
 
 import {KeyValuePair} from '../../types/common';
 import * as AWS_INSTANCES from './aws-instances.json';
+import * as AZURE_INSTANCES from './azure-instances.json';
 
 const {MODEL_IDS} = CONFIG;
 const {CLOUD_INSTANCE_METADATA} = MODEL_IDS;
@@ -47,34 +48,56 @@ export class CloudInstanceMetadataModel implements IOutputModelInterface {
       } else {
         throw new Error('Each input must contain a cloud-instance-type key');
       }
-      if (vendor !== 'aws') {
-        throw new Error('cloud-vendor: Only `aws` is currently supported');
-      }
-
-      const instance = AWS_INSTANCES.find(
-        instance => instance['Instance type'] === instance_type
-      );
-      if (instance) {
-        console.log(instance);
-        console.log(vendor);
-        input['vcpus-allocated'] = instance['Instance vCPU'];
-        input['vcpus-total'] = instance['Platform Total Number of vCPU'];
-        const cpuType = instance['Platform CPU Name'];
-        let platform = '';
-        if (cpuType.startsWith('EPYC')) {
-          platform = 'AMD';
-        } else if (cpuType.startsWith('Xeon')) {
-          platform = 'Intel';
-        } else if (cpuType.startsWith('Graviton')) {
-          platform = 'AWS';
-        } else if (cpuType.startsWith('Core')) {
-          platform = 'Intel';
-        }
-        input['physical-processor'] = `${platform} ${cpuType}`;
-      } else {
+      // console.log(['aws', 'azure'].includes(vendor));
+      if (!['aws', 'azure'].includes(vendor)) {
         throw new Error(
-          `cloud-instance-type: ${instance_type} is not supported in vendor: ${vendor}`
+          'cloud-vendor: Only `aws`/`azure` is currently supported'
         );
+      }
+      if (vendor === 'aws') {
+        const instance = AWS_INSTANCES.find(
+          instance => instance['Instance type'] === instance_type
+        );
+        if (instance) {
+          console.log(instance);
+          console.log(vendor);
+          input['vcpus-allocated'] = instance['Instance vCPU'];
+          input['vcpus-total'] = instance['Platform Total Number of vCPU'];
+          input['memory-available'] = instance['Instance Memory (in GB)'];
+          const cpuType = instance['Platform CPU Name'];
+          let platform = '';
+          if (cpuType.startsWith('EPYC')) {
+            platform = 'AMD';
+          } else if (cpuType.startsWith('Xeon')) {
+            platform = 'Intel';
+          } else if (cpuType.startsWith('Graviton')) {
+            platform = 'AWS';
+          } else if (cpuType.startsWith('Core')) {
+            platform = 'Intel';
+          }
+          input['physical-processor'] = `${platform} ${cpuType}`;
+        } else {
+          throw new Error(
+            `cloud-instance-type: ${instance_type} is not supported in vendor: ${vendor}`
+          );
+        }
+      } else if (vendor === 'azure') {
+        console.log(`INSTANCE TYPE: ${instance_type}`);
+        const instance = AZURE_INSTANCES.find(
+          instance => instance['instance-type'] === instance_type
+        );
+        console.log(instance);
+        if (instance) {
+          input['vcpus-allocated'] = instance['cpu-cores-utilized'];
+          input['vcpus-total'] = instance['cpu-cores-available'];
+          input['physical-processor'] = instance['cpu-model-name'];
+          input['memory-available'] = instance['memory-available'];
+          input['thermal-design-power'] = instance['thermal-design-power'];
+        } else {
+          throw new Error(
+            `cloud-instance-type: ${instance_type} is not supported in vendor: ${vendor}`
+          );
+        }
       }
       return input;
     });

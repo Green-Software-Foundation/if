@@ -2,6 +2,7 @@ import {
   BoaviztaCpuOutputModel,
   BoaviztaCloudOutputModel,
   CloudCarbonFootprint,
+  CloudInstanceMetadataModel,
   ShellModel,
   SciMModel,
   SciOModel,
@@ -56,6 +57,8 @@ export class ModelsUniverse {
         return BoaviztaCloudOutputModel;
       case 'ccf':
         return CloudCarbonFootprint;
+      case 'cloud-instance-metadata':
+        return CloudInstanceMetadataModel;
       case 'teads-aws':
         return TeadsAWS;
       case 'teads-curve':

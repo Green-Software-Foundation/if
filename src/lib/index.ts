@@ -1,6 +1,7 @@
 export * from './boavizta';
 export * from './case-studies';
 export * from './ccf';
+export * from './cloud-instance-metadata';
 export * from './shell-imp';
 export * from './sci';
 export * from './sci-e';
