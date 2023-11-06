@@ -298,6 +298,45 @@ export class AzureImporterModel implements IOutputModelInterface {
     return `P${numberInFormat}`;
   }
 
+  /**
+   * Caculates total memory based on data from ComputeManagementClient response.
+   */
+  private async calculateTotalMemory(params: any) {
+    const {client, instanceType} = params;
+    // here we grab the total memory for the instance
+    const memResponseData = [];
+
+    for await (const item of client.resourceSkus.list()) {
+      memResponseData.push(item);
+    }
+
+    let totalMemoryGB = '';
+    const filteredMemData = memResponseData
+      .filter(item => item.resourceType === 'virtualMachines')
+      .filter(item => item.name === instanceType)
+      .filter(item => item.locations !== undefined);
+    const vmCapabilitiesData = filteredMemData
+      .filter(
+        item => item.locations !== undefined && item.locations[0] === location
+      )
+      .map(item => item.capabilities)[0];
+
+    if (vmCapabilitiesData !== undefined) {
+      const totalMemoryObject = vmCapabilitiesData.filter(
+        (item: any) => item.name === 'MemoryGB'
+      )[0];
+
+      if (totalMemoryObject.value !== undefined) {
+        totalMemoryGB = totalMemoryObject.value;
+      }
+    }
+
+    return totalMemoryGB;
+  }
+
+  /**
+   * Gathers instance metadata.
+   */
   private async getInstanceMetadata(
     subscriptionId: string,
     vmName: string,
@@ -313,39 +352,19 @@ export class AzureImporterModel implements IOutputModelInterface {
 
     const filteredVmData = vmData.filter(item => item.name === vmName);
     const location = filteredVmData.map(item => item.location ?? 'unknown')[0];
-    const instance = filteredVmData.map(
+    const instanceType = filteredVmData.map(
       item => item.hardwareProfile?.vmSize ?? 'unknown'
     )[0];
 
-    // here we grab the total memory for the instance
-    const memResponseData = [];
-    for await (const item of client.resourceSkus.list()) {
-      memResponseData.push(item);
-    }
-
-    let totalMemoryGB = '';
-    const filteredMemData = memResponseData
-      .filter(item => item.resourceType === 'virtualMachines')
-      .filter(item => item.name === instance)
-      .filter(item => item.locations !== undefined);
-    const vmCapabilitiesData = filteredMemData
-      .filter(
-        item => item.locations !== undefined && item.locations[0] === location
-      )
-      .map(item => item.capabilities)[0];
-    if (vmCapabilitiesData !== undefined) {
-      const totalMemoryObject = vmCapabilitiesData.filter(
-        item => item.name === 'MemoryGB'
-      )[0];
-      if (totalMemoryObject.value !== undefined) {
-        totalMemoryGB = totalMemoryObject.value;
-      }
-    }
+    const totalMemoryGB = await this.calculateTotalMemory({
+      client,
+      instanceType,
+    });
 
     return {
-      location: location,
-      instanceType: instance,
-      totalMemoryGB: totalMemoryGB,
+      location,
+      instanceType,
+      totalMemoryGB,
     };
   }
 }
