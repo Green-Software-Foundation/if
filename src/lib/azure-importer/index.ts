@@ -302,7 +302,7 @@ export class AzureImporterModel implements IOutputModelInterface {
    * Caculates total memory based on data from ComputeManagementClient response.
    */
   private async calculateTotalMemory(params: any) {
-    const {client, instanceType} = params;
+    const {client, instanceType, location} = params;
     // here we grab the total memory for the instance
     const memResponseData = [];
 
@@ -359,6 +359,7 @@ export class AzureImporterModel implements IOutputModelInterface {
     const totalMemoryGB = await this.calculateTotalMemory({
       client,
       instanceType,
+      location,
     });
 
     return {
