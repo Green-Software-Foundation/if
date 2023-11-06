@@ -255,7 +255,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_B2ats_v2",
     "memory-available" : "1"
@@ -264,7 +264,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_B2als_v2",
     "memory-available" : "4"
@@ -273,7 +273,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_B2as_v2",
     "memory-available" : "8"
@@ -282,7 +282,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_B4als_v2",
     "memory-available" : "8"
@@ -291,7 +291,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_B4as_v2",
     "memory-available" : "16"
@@ -300,7 +300,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_B8als_v2",
     "memory-available" : "16"
@@ -309,7 +309,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_B8as_v2",
     "memory-available" : "32"
@@ -318,7 +318,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_B16als_v2",
     "memory-available" : "32"
@@ -327,7 +327,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_B16as_v2",
     "memory-available" : "64"
@@ -336,7 +336,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_B32als_v2",
     "memory-available" : "64"
@@ -345,7 +345,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_B32as_v2",
     "memory-available" : "128"
@@ -957,7 +957,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D2a_v41",
     "memory-available" : "8"
@@ -966,7 +966,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D4a_v4",
     "memory-available" : "16"
@@ -975,7 +975,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D8a_v4",
     "memory-available" : "32"
@@ -984,7 +984,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D16a_v4",
     "memory-available" : "64"
@@ -993,7 +993,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D32a_v4",
     "memory-available" : "128"
@@ -1002,7 +1002,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D48a_v4",
     "memory-available" : "192"
@@ -1011,7 +1011,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D64a_v4",
     "memory-available" : "256"
@@ -1020,7 +1020,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D96a_v4",
     "memory-available" : "384"
@@ -1029,7 +1029,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D2as_v42",
     "memory-available" : "8"
@@ -1038,7 +1038,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D4as_v4",
     "memory-available" : "16"
@@ -1047,7 +1047,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D8as_v4",
     "memory-available" : "32"
@@ -1056,7 +1056,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D16as_v4",
     "memory-available" : "64"
@@ -1065,7 +1065,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D32as_v4",
     "memory-available" : "128"
@@ -1074,7 +1074,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D48as_v4",
     "memory-available" : "192"
@@ -1083,7 +1083,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D64as_v4",
     "memory-available" : "256"
@@ -1092,7 +1092,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452",
+    "cpu-model-name" : "AMD EPYC 7452",
     "cpu-tdp" : "155",
     "instance-class" : "Standard_D96as_v4",
     "memory-available" : "384"
@@ -1641,7 +1641,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D2as_v5",
     "memory-available" : "8"
@@ -1650,7 +1650,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D4as_v5",
     "memory-available" : "16"
@@ -1659,7 +1659,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D8as_v5",
     "memory-available" : "32"
@@ -1668,7 +1668,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D16as_v5",
     "memory-available" : "64"
@@ -1677,7 +1677,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D32as_v5",
     "memory-available" : "128"
@@ -1686,7 +1686,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D48as_v5",
     "memory-available" : "192"
@@ -1695,7 +1695,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D64as_v5",
     "memory-available" : "256"
@@ -1704,7 +1704,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D96as_v5",
     "memory-available" : "384"
@@ -1713,7 +1713,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D2ads_v5",
     "memory-available" : "8"
@@ -1722,7 +1722,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D4ads_v5",
     "memory-available" : "16"
@@ -1731,7 +1731,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D8ads_v5",
     "memory-available" : "32"
@@ -1740,7 +1740,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D16ads_v5",
     "memory-available" : "64"
@@ -1749,7 +1749,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D32ads_v5",
     "memory-available" : "128"
@@ -1758,7 +1758,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D48ads_v5",
     "memory-available" : "192"
@@ -1767,7 +1767,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D64ads_v5",
     "memory-available" : "256"
@@ -1776,7 +1776,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_D96ads_v5",
     "memory-available" : "384"
@@ -1785,7 +1785,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC2as_v5",
     "memory-available" : "8"
@@ -1794,7 +1794,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC4as_v5",
     "memory-available" : "16"
@@ -1803,7 +1803,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC8as_v5",
     "memory-available" : "32"
@@ -1812,7 +1812,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC16as_v5",
     "memory-available" : "64"
@@ -1821,7 +1821,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC32as_v5",
     "memory-available" : "128"
@@ -1830,7 +1830,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC48as_v5",
     "memory-available" : "192"
@@ -1839,7 +1839,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC64as_v5",
     "memory-available" : "256"
@@ -1848,7 +1848,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC96as_v5",
     "memory-available" : "384"
@@ -1857,7 +1857,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC2ads_v5",
     "memory-available" : "8"
@@ -1866,7 +1866,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC4ads_v5",
     "memory-available" : "16"
@@ -1875,7 +1875,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC8ads_v5",
     "memory-available" : "32"
@@ -1884,7 +1884,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC16ads_v5",
     "memory-available" : "64"
@@ -1893,7 +1893,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC32ads_v5",
     "memory-available" : "128"
@@ -1902,7 +1902,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC48ads_v5",
     "memory-available" : "192"
@@ -1911,7 +1911,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC64ads_v5",
     "memory-available" : "256"
@@ -1920,7 +1920,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC96ads_v5",
     "memory-available" : "384"
@@ -1929,7 +1929,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC4as_cc_v5",
     "memory-available" : "16"
@@ -1938,7 +1938,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC8as_cc_v5",
     "memory-available" : "32"
@@ -1947,7 +1947,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC16as_cc_v5",
     "memory-available" : "64"
@@ -1956,7 +1956,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC32as_cc_v5",
     "memory-available" : "128"
@@ -1965,7 +1965,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC48as_cc_v5",
     "memory-available" : "192"
@@ -1974,7 +1974,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC64as_cc_v5",
     "memory-available" : "256"
@@ -1983,7 +1983,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_DC96as_cc_v5",
     "memory-available" : "384"
@@ -2712,7 +2712,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E2a_v4",
     "memory-available" : "16"
@@ -2721,7 +2721,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E4a_v4",
     "memory-available" : "32"
@@ -2730,7 +2730,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E8a_v4",
     "memory-available" : "64"
@@ -2739,7 +2739,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E16a_v4",
     "memory-available" : "128"
@@ -2748,7 +2748,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E20a_v4",
     "memory-available" : "160"
@@ -2757,7 +2757,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E32a_v4",
     "memory-available" : "256"
@@ -2766,7 +2766,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E48a_v4",
     "memory-available" : "384"
@@ -2775,7 +2775,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E64a_v4",
     "memory-available" : "512"
@@ -2784,7 +2784,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E96a_v4",
     "memory-available" : "672"
@@ -2793,7 +2793,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E2as_v4",
     "memory-available" : "16"
@@ -2802,7 +2802,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E4as_v4",
     "memory-available" : "32"
@@ -2811,7 +2811,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E8as_v4",
     "memory-available" : "64"
@@ -2820,7 +2820,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E16as_v4",
     "memory-available" : "128"
@@ -2829,7 +2829,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E20as_v4",
     "memory-available" : "160"
@@ -2838,7 +2838,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E32as_v4",
     "memory-available" : "256"
@@ -2847,7 +2847,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E48as_v4",
     "memory-available" : "384"
@@ -2856,7 +2856,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E64as_v4",
     "memory-available" : "512"
@@ -2865,7 +2865,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7452,AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7452,AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E96as_v4",
     "memory-available" : "672"
@@ -3603,7 +3603,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E2as_v5",
     "memory-available" : "16"
@@ -3612,7 +3612,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E4as_v5",
     "memory-available" : "32"
@@ -3621,7 +3621,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E8as_v5",
     "memory-available" : "64"
@@ -3630,7 +3630,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E16as_v5",
     "memory-available" : "128"
@@ -3639,7 +3639,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E20as_v5",
     "memory-available" : "160"
@@ -3648,7 +3648,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E32as_v5",
     "memory-available" : "256"
@@ -3657,7 +3657,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E48as_v5",
     "memory-available" : "384"
@@ -3666,7 +3666,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E64as_v5",
     "memory-available" : "512"
@@ -3675,7 +3675,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E96as_v5",
     "memory-available" : "672"
@@ -3684,7 +3684,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "112",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E112ias_v5",
     "memory-available" : "672"
@@ -3693,7 +3693,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E2ads_v5",
     "memory-available" : "16"
@@ -3702,7 +3702,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E4ads_v52",
     "memory-available" : "32"
@@ -3711,7 +3711,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E8ads_v52",
     "memory-available" : "64"
@@ -3720,7 +3720,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E16ads_v52",
     "memory-available" : "128"
@@ -3729,7 +3729,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E20ads_v5",
     "memory-available" : "160"
@@ -3738,7 +3738,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E32ads_v52",
     "memory-available" : "256"
@@ -3747,7 +3747,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E48ads_v5",
     "memory-available" : "384"
@@ -3756,7 +3756,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E64ads_v52",
     "memory-available" : "512"
@@ -3765,7 +3765,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E96ads_v52",
     "memory-available" : "672"
@@ -3774,7 +3774,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "112",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_E112iads_v53",
     "memory-available" : "672"
@@ -3783,7 +3783,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC2as_v5",
     "memory-available" : "16"
@@ -3792,7 +3792,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC4as_v5",
     "memory-available" : "32"
@@ -3801,7 +3801,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC8as_v5",
     "memory-available" : "64"
@@ -3810,7 +3810,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC16as_v5",
     "memory-available" : "128"
@@ -3819,7 +3819,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC20as_v5",
     "memory-available" : "160"
@@ -3828,7 +3828,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC32as_v5",
     "memory-available" : "256"
@@ -3837,7 +3837,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC48as_v5",
     "memory-available" : "384"
@@ -3846,7 +3846,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC64as_v5",
     "memory-available" : "512"
@@ -3855,7 +3855,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC96as_v5",
     "memory-available" : "672"
@@ -3864,7 +3864,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "2",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC2ads_v5",
     "memory-available" : "16"
@@ -3873,7 +3873,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC4ads_v5",
     "memory-available" : "32"
@@ -3882,7 +3882,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC8ads_v5",
     "memory-available" : "64"
@@ -3891,7 +3891,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC16ads_v5",
     "memory-available" : "128"
@@ -3900,7 +3900,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC20ads_v5",
     "memory-available" : "160"
@@ -3909,7 +3909,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC32ads_v5",
     "memory-available" : "256"
@@ -3918,7 +3918,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC48ads_v5",
     "memory-available" : "384"
@@ -3927,7 +3927,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC64ads_v5",
     "memory-available" : "512"
@@ -3936,7 +3936,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC96ads_v5",
     "memory-available" : "672"
@@ -3945,7 +3945,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC4as_cc_v5",
     "memory-available" : "32"
@@ -3954,7 +3954,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC8as_cc_v5",
     "memory-available" : "64"
@@ -3963,7 +3963,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC16as_cc_v5",
     "memory-available" : "128"
@@ -3972,7 +3972,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC20as_cc_v5",
     "memory-available" : "160"
@@ -3981,7 +3981,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC32as_cc_v5",
     "memory-available" : "256"
@@ -3990,7 +3990,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC48as_cc_v5",
     "memory-available" : "384"
@@ -3999,7 +3999,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC64as_cc_v5",
     "memory-available" : "512"
@@ -4008,7 +4008,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC96as_cc_v5",
     "memory-available" : "672"
@@ -4017,7 +4017,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "4",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC4ads_cc_v5",
     "memory-available" : "32"
@@ -4026,7 +4026,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC8ads_cc_v5",
     "memory-available" : "64"
@@ -4035,7 +4035,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC16ads_cc_v5",
     "memory-available" : "128"
@@ -4044,7 +4044,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "20",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC20ads_cc_v5",
     "memory-available" : "160"
@@ -4053,7 +4053,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC32ads_cc_v5",
     "memory-available" : "256"
@@ -4062,7 +4062,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC48ads_cc_v5",
     "memory-available" : "384"
@@ -4071,7 +4071,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC64ads_cc_v5",
     "memory-available" : "512"
@@ -4080,7 +4080,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "96",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_EC96ads_cc_v5",
     "memory-available" : "672"
@@ -4602,7 +4602,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7551",
+    "cpu-model-name" : "AMD EPYC 7551",
     "cpu-tdp" : "180",
     "instance-class" : "Standard_L8s_v2",
     "memory-available" : "64"
@@ -4611,7 +4611,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7551",
+    "cpu-model-name" : "AMD EPYC 7551",
     "cpu-tdp" : "180",
     "instance-class" : "Standard_L16s_v2",
     "memory-available" : "128"
@@ -4620,7 +4620,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7551",
+    "cpu-model-name" : "AMD EPYC 7551",
     "cpu-tdp" : "180",
     "instance-class" : "Standard_L32s_v2",
     "memory-available" : "256"
@@ -4629,7 +4629,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7551",
+    "cpu-model-name" : "AMD EPYC 7551",
     "cpu-tdp" : "180",
     "instance-class" : "Standard_L48s_v2",
     "memory-available" : "384"
@@ -4638,7 +4638,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7551",
+    "cpu-model-name" : "AMD EPYC 7551",
     "cpu-tdp" : "180",
     "instance-class" : "Standard_L64s_v2",
     "memory-available" : "512"
@@ -4647,7 +4647,7 @@
     "cpu-cores-available" : "64",
     "cpu-cores-utilized" : "80",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7551",
+    "cpu-model-name" : "AMD EPYC 7551",
     "cpu-tdp" : "180",
     "instance-class" : "Standard_L80s_v2",
     "memory-available" : "640"
@@ -4710,7 +4710,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "8",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_L8as_v3",
     "memory-available" : "64"
@@ -4719,7 +4719,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "16",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_L16as_v3",
     "memory-available" : "128"
@@ -4728,7 +4728,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "32",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_L32as_v3",
     "memory-available" : "256"
@@ -4737,7 +4737,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "48",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_L48as_v3",
     "memory-available" : "384"
@@ -4746,7 +4746,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "64",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_L64as_v3",
     "memory-available" : "512"
@@ -4755,7 +4755,7 @@
     "cpu-cores-available" : "128",
     "cpu-cores-utilized" : "80",
     "cpu-manufacturer" : "AMD",
-    "cpu-model-name" : "AMD EPYC™ 7763",
+    "cpu-model-name" : "AMD EPYC 7763",
     "cpu-tdp" : "280",
     "instance-class" : "Standard_L80as_v3",
     "memory-available" : "640"
