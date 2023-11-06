@@ -84,7 +84,7 @@ export class CloudInstanceMetadataModel implements IOutputModelInterface {
       } else if (vendor === 'azure') {
         console.log(`INSTANCE TYPE: ${instance_type}`);
         const instance = AZURE_INSTANCES.find(
-          instance => instance['instance-class'] === instance_type
+          instance => instance['instance-type'] === instance_type
         );
         console.log(instance);
         if (instance) {
@@ -92,6 +92,7 @@ export class CloudInstanceMetadataModel implements IOutputModelInterface {
           input['vcpus-total'] = instance['cpu-cores-available'];
           input['physical-processor'] = instance['cpu-model-name'];
           input['memory-available'] = instance['memory-available'];
+          input['thermal-design-power'] = instance['thermal-design-power'];
         } else {
           throw new Error(
             `cloud-instance-type: ${instance_type} is not supported in vendor: ${vendor}`
