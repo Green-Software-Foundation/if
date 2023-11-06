@@ -92,6 +92,7 @@ export class CloudInstanceMetadataModel implements IOutputModelInterface {
           input['vcpus-total'] = instance['cpu-cores-available'];
           input['physical-processor'] = instance['cpu-model-name'];
           input['memory-available'] = instance['memory-available'];
+          input['thermal-design-power'] = instance['thermal-design-power'];
         } else {
           throw new Error(
             `cloud-instance-type: ${instance_type} is not supported in vendor: ${vendor}`
