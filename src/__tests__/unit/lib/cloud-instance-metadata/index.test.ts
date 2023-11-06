@@ -1,5 +1,5 @@
-import { describe, expect, jest, test } from '@jest/globals';
-import { CloudInstanceMetadataModel } from '../../../../lib/cloud-instance-metadata/index';
+import {describe, expect, jest, test} from '@jest/globals';
+import {CloudInstanceMetadataModel} from '../../../../lib/cloud-instance-metadata/index';
 
 jest.setTimeout(30000);
 
@@ -69,7 +69,7 @@ describe('cimd:configure test:azure', () => {
           'vcpus-allocated': '24',
           'vcpus-total': '28',
           'memory-available': '448',
-          'thermal-design-power': '135'
+          'thermal-design-power': '135',
         },
       ])
     );
