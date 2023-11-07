@@ -1,7 +1,5 @@
 jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
 
-import {describe, expect, it, jest} from '@jest/globals';
-
 import {
   checkIfFileIsYaml,
   openYamlFileAsObject,
