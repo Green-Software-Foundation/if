@@ -160,6 +160,16 @@ describe('lib/azure-importer: ', () => {
     });
   });
 
+  describe('configure(): ', () => {
+    it('configures model instance with given params.', async () => {
+      const name = 'mock-name';
+      const params = {};
+      const model = await new AzureImporterModel().configure(name, params);
+
+      expect(model).toBeInstanceOf(AzureImporterModel);
+    });
+  });
+
   describe('authenticate(): ', () => {
     it('authenticate is undefined', async () => {
       const azureModel = await new AzureImporterModel().configure('name', {});
