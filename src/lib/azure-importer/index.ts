@@ -1,10 +1,10 @@
-import {DefaultAzureCredential} from '@azure/identity';
-import {MonitorClient} from '@azure/arm-monitor';
-import {ComputeManagementClient} from '@azure/arm-compute';
+import { DefaultAzureCredential } from '@azure/identity';
+import { MonitorClient } from '@azure/arm-monitor';
+import { ComputeManagementClient } from '@azure/arm-compute';
 import * as dotenv from 'dotenv';
-import {z} from 'zod';
+import { z } from 'zod';
 
-import {IOutputModelInterface} from '../interfaces';
+import { IOutputModelInterface } from '../interfaces';
 import {
   AzureInputs,
   AzureOutputs,
@@ -298,7 +298,7 @@ export class AzureImporterModel implements IOutputModelInterface {
    * Caculates total memory based on data from ComputeManagementClient response.
    */
   private async calculateTotalMemory(params: any) {
-    const {client, instanceType, location} = params;
+    const { client, instanceType, location } = params;
     // here we grab the total memory for the instance
     const memResponseData = [];
 
@@ -345,6 +345,8 @@ export class AzureImporterModel implements IOutputModelInterface {
     for await (const item of client.virtualMachines.list(resourceGroupName)) {
       vmData.push(item);
     }
+    console.log(await client.virtualMachines.list(resourceGroupName).next());
+
 
     const filteredVmData = vmData.filter(item => item.name === vmName);
     const location = filteredVmData.map(item => item.location ?? 'unknown')[0];
