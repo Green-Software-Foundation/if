@@ -1,5 +1,21 @@
 import {AzureImporterModel} from '../../../../lib/azure-importer';
-import {describe, expect, jest, it} from '@jest/globals';
+
+jest.mock('@azure/identity', () => ({
+  __esModule: true,
+  DefaultAzureCredential: class MockAzureCredentials {},
+}));
+jest.mock('@azure/arm-monitor', () => ({
+  __esModule: true,
+  MonitorClient: class MockMonitorClient {
+    public metrics: any;
+
+    constructor(credentials: any, subscriptionId: any) {
+      this.metrics = {
+        list: (endpoint: string, params: any) => {},
+      };
+    }
+  },
+}));
 
 jest.setTimeout(30000);
 
@@ -61,8 +77,11 @@ describe('lib/azure-importer: ', () => {
 
     it('execute() throws error for time unit of seconds ', async () => {
       const azureModel = new AzureImporterModel();
-      await expect(
-        azureModel.execute([
+
+      expect.assertions(2);
+
+      try {
+        await azureModel.execute([
           {
             timestamp: '2023-11-02T10:35:31.820Z',
             duration: 3600,
@@ -72,10 +91,15 @@ describe('lib/azure-importer: ', () => {
             'azure-resource-group': 'vm1_group',
             'azure-vm-name': 'vm1',
           },
-        ])
-      ).rejects.toStrictEqual(
-        Error('The minimum unit of time for azure importer is minutes')
-      );
+        ]);
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error.message).toEqual(
+            'The minimum unit of time for azure importer is minutes'
+          );
+        }
+      }
     });
 
     it('execute() throws error for time unit of seconds ', async () => {
