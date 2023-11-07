@@ -26,7 +26,7 @@ graph:
           mem-availableGB: 0.488636416
           mem-usedGB: 0.5113635839999999
           total-memoryGB: '1'
-          mem_util: 51.13635839999999
+          mem-util: 51.13635839999999
           location: uksouth
           cloud-instance-type: Standard_B1s
         - timestamp: '2023-11-02T10:40:00.000Z'
@@ -35,7 +35,7 @@ graph:
           mem-availableGB: 0.48978984960000005
           mem-usedGB: 0.5102101504
           total-memoryGB: '1'
-          mem_util: 51.021015039999995
+          mem-util: 51.021015039999995
           location: uksouth
           cloud-instance-type: Standard_B1s
         - timestamp: '2023-11-02T10:45:00.000Z'
@@ -44,7 +44,7 @@ graph:
           mem-availableGB: 0.490733568
           mem-usedGB: 0.509266432
           total-memoryGB: '1'
-          mem_util: 50.9266432
+          mem-util: 50.9266432
           location: uksouth
           cloud-instance-type: Standard_B1s
         - timestamp: '2023-11-02T10:50:00.000Z'
@@ -53,7 +53,7 @@ graph:
           mem-availableGB: 0.490733568
           mem-usedGB: 0.509266432
           total-memoryGB: '1'
-          mem_util: 50.9266432
+          mem-util: 50.9266432
           location: uksouth
           cloud-instance-type: Standard_B1s
         - timestamp: '2023-11-02T10:55:00.000Z'
@@ -62,7 +62,7 @@ graph:
           mem-availableGB: 0.49178214400000003
           mem-usedGB: 0.5082178559999999
           total-memoryGB: '1'
-          mem_util: 50.82178559999999
+          mem-util: 50.82178559999999
           location: uksouth
           cloud-instance-type: Standard_B1s
         - timestamp: '2023-11-02T11:00:00.000Z'
@@ -71,7 +71,7 @@ graph:
           mem-availableGB: 0.49178214400000003
           mem-usedGB: 0.5082178559999999
           total-memoryGB: '1'
-          mem_util: 50.82178559999999
+          mem-util: 50.82178559999999
           location: uksouth
           cloud-instance-type: Standard_B1s
         - timestamp: '2023-11-02T11:05:00.000Z'
@@ -80,7 +80,7 @@ graph:
           mem-availableGB: 0.492306432
           mem-usedGB: 0.507693568
           total-memoryGB: '1'
-          mem_util: 50.7693568
+          mem-util: 50.7693568
           location: uksouth
           cloud-instance-type: Standard_B1s
         - timestamp: '2023-11-02T11:10:00.000Z'
@@ -89,7 +89,7 @@ graph:
           mem-availableGB: 0.49283072000000006
           mem-usedGB: 0.50716928
           total-memoryGB: '1'
-          mem_util: 50.716927999999996
+          mem-util: 50.716927999999996
           location: uksouth
           cloud-instance-type: Standard_B1s
         - timestamp: '2023-11-02T11:15:00.000Z'
@@ -98,7 +98,7 @@ graph:
           mem-availableGB: 0.5062524928000001
           mem-usedGB: 0.49374750719999994
           total-memoryGB: '1'
-          mem_util: 49.374750719999994
+          mem-util: 49.374750719999994
           location: uksouth
           cloud-instance-type: Standard_B1s
         - timestamp: '2023-11-02T11:20:00.000Z'
@@ -107,7 +107,7 @@ graph:
           mem-availableGB: 0.509607936
           mem-usedGB: 0.490392064
           total-memoryGB: '1'
-          mem_util: 49.039206400000005
+          mem-util: 49.039206400000005
           location: uksouth
           cloud-instance-type: Standard_B1s
         - timestamp: '2023-11-02T11:25:00.000Z'
@@ -116,7 +116,7 @@ graph:
           mem-availableGB: 0.5106565120000001
           mem-usedGB: 0.48934348799999994
           total-memoryGB: '1'
-          mem_util: 48.934348799999995
+          mem-util: 48.934348799999995
           location: uksouth
           cloud-instance-type: Standard_B1s
         - timestamp: '2023-11-02T11:30:00.000Z'
@@ -125,6 +125,6 @@ graph:
           mem-availableGB: 0.5106565120000001
           mem-usedGB: 0.48934348799999994
           total-memoryGB: '1'
-          mem_util: 48.934348799999995
+          mem-util: 48.934348799999995
           location: uksouth
           cloud-instance-type: Standard_B1s

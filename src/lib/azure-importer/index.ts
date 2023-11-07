@@ -1,10 +1,10 @@
-import { DefaultAzureCredential } from '@azure/identity';
-import { MonitorClient } from '@azure/arm-monitor';
-import { ComputeManagementClient } from '@azure/arm-compute';
+import {DefaultAzureCredential} from '@azure/identity';
+import {MonitorClient} from '@azure/arm-monitor';
+import {ComputeManagementClient} from '@azure/arm-compute';
 import * as dotenv from 'dotenv';
-import { z } from 'zod';
+import {z} from 'zod';
 
-import { IOutputModelInterface } from '../interfaces';
+import {IOutputModelInterface} from '../interfaces';
 import {
   AzureInputs,
   AzureOutputs,
@@ -72,9 +72,6 @@ export class AzureImporterModel implements IOutputModelInterface {
       params.resourceGroupName
     );
 
-    console.log("rawMetaDataResults", rawMetadataResults)
-    console.log("rawResults", rawResults)
-
     return rawResults.timestamps.map((timestamp, index) => ({
       timestamp,
       duration: params.duration,
@@ -84,7 +81,7 @@ export class AzureImporterModel implements IOutputModelInterface {
         parseFloat(rawMetadataResults.totalMemoryGB) -
         parseFloat(rawResults.memAvailable[index]) * 1e-9,
       'total-memoryGB': rawMetadataResults.totalMemoryGB,
-      mem_util:
+      'mem-util':
         ((parseFloat(rawMetadataResults.totalMemoryGB) -
           parseFloat(rawResults.memAvailable[index]) * 1e-9) /
           parseFloat(rawMetadataResults.totalMemoryGB)) *
@@ -182,8 +179,6 @@ export class AzureImporterModel implements IOutputModelInterface {
     );
 
     // parse CPU util data
-    console.log("cpuMetricsResponse", cpuMetricsResponse.value[0].timeseries[0].data)
-
     for (const timeSeries of cpuMetricsResponse.value[0].timeseries || []) {
       const timeSeriesData = timeSeries.data || [];
       for (const data of timeSeriesData) {
@@ -301,10 +296,9 @@ export class AzureImporterModel implements IOutputModelInterface {
    * Caculates total memory based on data from ComputeManagementClient response.
    */
   private async calculateTotalMemory(params: any) {
-    const { client, instanceType, location } = params;
+    const {client, instanceType, location} = params;
     // here we grab the total memory for the instance
     const memResponseData = [];
-
 
     for await (const item of client.resourceSkus.list()) {
       memResponseData.push(item);
@@ -326,7 +320,6 @@ export class AzureImporterModel implements IOutputModelInterface {
       const totalMemoryObject = vmCapabilitiesData.filter(
         (item: any) => item.name === 'MemoryGB'
       )[0];
-      console.log("totalMemoryObject\n", totalMemoryObject)
       if (totalMemoryObject.value !== undefined) {
         totalMemoryGB = totalMemoryObject.value;
       }
@@ -350,7 +343,6 @@ export class AzureImporterModel implements IOutputModelInterface {
     for await (const item of client.virtualMachines.list(resourceGroupName)) {
       vmData.push(item);
     }
-    console.log(await client.virtualMachines.list(resourceGroupName).next());
 
     const filteredVmData = vmData.filter(item => item.name === vmName);
     const location = filteredVmData.map(item => item.location ?? 'unknown')[0];

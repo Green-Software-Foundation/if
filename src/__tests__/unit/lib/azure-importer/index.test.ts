@@ -1,8 +1,8 @@
-import { AzureImporterModel } from '../../../../lib/azure-importer';
-
+import {AzureImporterModel} from '../../../../lib/azure-importer';
+import {MetricsListOptionalParams} from '@azure/arm-monitor';
 jest.mock('@azure/identity', () => ({
   __esModule: true,
-  DefaultAzureCredential: class MockAzureCredentials { },
+  DefaultAzureCredential: class MockAzureCredentials {},
 }));
 
 jest.mock('@azure/arm-monitor', () => ({
@@ -12,26 +12,79 @@ jest.mock('@azure/arm-monitor', () => ({
     public metrics: any;
     constructor() {
       this.metrics = {
-        list: () => {
-          return {
-            cost: 59,
-            timespan: '2023-11-02T10:35:31Z/2023-11-02T11:35:31Z',
-            interval: 'PT5M',
-            namespace: 'Microsoft.Compute/virtualMachines',
-            resourceregion: 'uksouth',
-            value: [
-              {
-                id: '/subscriptions/9de7e19f-8a18-4e73-9451-45fc74e7d0d3/resourceGroups/vm1_group/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.Insights/metrics/Percentage CPU',
-                type: 'Microsoft.Insights/metrics',
-                name: [Object],
-                displayDescription:
-                  'The percentage of allocated compute units that are currently in use by the Virtual Machine(s)',
-                errorCode: 'Success',
-                unit: 'Percent',
-                timeseries: [{ data: [{ timeStamp: '2023-11-02T10:35:00.000Z', average: 0.314 }] }],
-              },
-            ],
-          };
+        list: (
+          resourceUri: string,
+          options?: MetricsListOptionalParams | undefined
+        ) => {
+          if (
+            options !== undefined &&
+            options.metricnames === 'Percentage CPU'
+          ) {
+            return {
+              url: resourceUri,
+              cost: 59,
+              timespan: '2023-11-02T10:35:31Z/2023-11-02T11:35:31Z',
+              interval: 'PT5M',
+              namespace: 'Microsoft.Compute/virtualMachines',
+              resourceregion: 'uksouth',
+              value: [
+                {
+                  id: '/subscriptions/9de7e19f-8a18-4e73-9451-45fc74e7d0d3/resourceGroups/vm1_group/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.Insights/metrics/Percentage CPU',
+                  type: 'Microsoft.Insights/metrics',
+                  name: [Object],
+                  displayDescription:
+                    'The percentage of allocated compute units that are currently in use by the Virtual Machine(s)',
+                  errorCode: 'Success',
+                  unit: 'Percent',
+                  timeseries: [
+                    {
+                      data: [
+                        {
+                          timeStamp: new Date('2023-11-02T10:35:00.000Z'),
+                          average: 3.14,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            };
+          } else if (
+            options !== undefined &&
+            options.metricnames === 'Available Memory Bytes'
+          ) {
+            return {
+              url: resourceUri,
+              cost: 59,
+              timespan: '2023-11-02T10:35:31Z/2023-11-02T11:35:31Z',
+              interval: 'PT5M',
+              namespace: 'Microsoft.Compute/virtualMachines',
+              resourceregion: 'uksouth',
+              value: [
+                {
+                  id: '/subscriptions/9de7e19f-8a18-4e73-9451-45fc74e7d0d3/resourceGroups/vm1_group/providers/Microsoft.Compute/virtualMachines/vm1/providers/Microsoft.Insights/metrics/Percentage CPU',
+                  type: 'Microsoft.Insights/metrics',
+                  name: [Object],
+                  displayDescription:
+                    'The percentage of allocated compute units that are currently in use by the Virtual Machine(s)',
+                  errorCode: 'Success',
+                  unit: 'Percent',
+                  timeseries: [
+                    {
+                      data: [
+                        {
+                          timeStamp: new Date('2023-11-02T10:35:00.000Z'),
+                          average: 500000000,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            };
+          } else {
+            throw new Error('invalid params');
+          }
         },
       };
     }
@@ -52,7 +105,7 @@ jest.mock('@azure/arm-compute', () => ({
             type: 'Microsoft.Compute/virtualMachines',
             location: 'uksouth',
             zones: ['1'],
-            hardwareProfile: { vmSize: 'Standard_B1s' },
+            hardwareProfile: {vmSize: 'Standard_B1s'},
             storageProfile: {
               imageReference: [Object],
               osDisk: [Object],
@@ -67,12 +120,12 @@ jest.mock('@azure/arm-compute', () => ({
               allowExtensionOperations: true,
               requireGuestProvisionSignal: true,
             },
-            networkProfile: { networkInterfaces: [Array] },
+            networkProfile: {networkInterfaces: [Array]},
             securityProfile: {
               uefiSettings: [Object],
               securityType: 'TrustedLaunch',
             },
-            diagnosticsProfile: { bootDiagnostics: [Object] },
+            diagnosticsProfile: {bootDiagnostics: [Object]},
             provisioningState: 'Succeeded',
             vmId: '11cf628c-38bb-4b5e-b1f4-0c60d8dcbf13',
             timeCreated: '2023-10-20T10:54:50.248Z',
@@ -85,11 +138,8 @@ jest.mock('@azure/arm-compute', () => ({
             resourceType: 'virtualMachines',
             name: 'Standard_B1s',
             locations: ['uksouth'],
-            locationInfo: [
-              { location: 'uksouth', zones: [], zoneDetails: [] },
-            ],
-            capabilities:
-              [{ name: 'MemoryGB', value: 1 }],
+            locationInfo: [{location: 'uksouth', zones: [], zoneDetails: []}],
+            capabilities: [{name: 'MemoryGB', value: 1}],
             restrictions: [],
           };
         },
@@ -214,7 +264,7 @@ describe('lib/azure-importer: ', () => {
     await expect(
       azureModel.execute([
         {
-          timestamp: '2023-11-02T10:35:31.820Z',
+          timestamp: '2023-11-02T10:35:00.000Z',
           duration: 3600,
           'azure-observation-window': '5 mins',
           'azure-observation-aggregation': 'average',
@@ -225,13 +275,13 @@ describe('lib/azure-importer: ', () => {
       ])
     ).resolves.toEqual([
       {
-        timestamp: '2023-11-02T10:35:31.820Z',
+        timestamp: '2023-11-02T10:35:00.000Z',
         duration: 3600,
-        'cpu-util': 3.14,
-        'mem-availableGB': 50,
-        'mem-usedGB': 20,
+        'cpu-util': '3.14',
+        'mem-availableGB': 0.5,
+        'mem-usedGB': 0.5,
         'total-memoryGB': 1,
-        'mem-util': 48,
+        'mem-util': 50,
         location: 'uksouth',
         'cloud-instance-type': 'Standard_B1s',
       },
