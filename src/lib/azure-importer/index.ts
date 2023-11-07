@@ -45,7 +45,7 @@ export class AzureImporterModel implements IOutputModelInterface {
    * Validates given `inputs` params. If it's valid, then captures params, then passes to monitor.
    * Returns flattened result from Azure monitor client.
    */
-  async execute(inputs: any[]): Promise<any[]> {
+  async execute(inputs: any[]): Promise<any> {
     dotenv.config();
 
     azureInputSchema.parse(inputs);
@@ -71,23 +71,23 @@ export class AzureImporterModel implements IOutputModelInterface {
       params.vmName,
       params.resourceGroupName
     );
-    // TEMPORARY MOCK DATA FOR TESTING
-    // const rawResults = {
-    //   timestamps: [
-    //     'Wed Nov 01 2023 14:37:00 GMT+0000 (Greenwich Mean Time)',
-    //     'Wed Nov 01 2023 14:38:00 GMT+0000 (Greenwich Mean Time)',
-    //     'Wed Nov 01 2023 14:39:00 GMT+0000 (Greenwich Mean Time)',
-    //   ],
-    //   cpu_utils: ['3.09', '0.34', '0.355'],
-    //   mem_utils: ['0', '242221056', '481296384', '470286336'],
-    // };
 
     return rawResults.timestamps.map((timestamp, index) => ({
       timestamp,
+      duration: params.duration,
       'cpu-util': rawResults.cpu_utils[index],
-      'mem-util': rawResults.mem_utils[index],
+      'mem-availableGB': parseFloat(rawResults.memAvailable[index]) * 1e-9,
+      'mem-usedGB':
+        parseFloat(rawMetadataResults.totalMemoryGB) -
+        parseFloat(rawResults.memAvailable[index]) * 1e-9,
+      'total-memoryGB': rawMetadataResults.totalMemoryGB,
+      'mem-util':
+        ((parseFloat(rawMetadataResults.totalMemoryGB) -
+          parseFloat(rawResults.memAvailable[index]) * 1e-9) /
+          parseFloat(rawMetadataResults.totalMemoryGB)) *
+        100,
       location: rawMetadataResults.location,
-      'instance-type': rawMetadataResults.instanceType,
+      'cloud-instance-type': rawMetadataResults.instanceType,
     }));
   }
 
@@ -107,7 +107,6 @@ export class AzureImporterModel implements IOutputModelInterface {
       vmName,
     } = params;
     const metricnames = 'Percentage CPU';
-
     return monitorClient.metrics.list(
       `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
       {
@@ -135,11 +134,10 @@ export class AzureImporterModel implements IOutputModelInterface {
       vmName,
     } = params;
     const metricnames = 'Available Memory Bytes';
-
     return monitorClient.metrics.list(
       `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
       {
-        metricnames, // TODO: we need to get memory used = total - available
+        metricnames,
         timespan,
         interval,
         aggregation,
@@ -171,11 +169,10 @@ export class AzureImporterModel implements IOutputModelInterface {
 
     const timestamps: string[] = [];
     const cpu_utils: string[] = [];
-    const mem_utils: string[] = [];
+    const memAvailable: string[] = [];
 
     const credential = new DefaultAzureCredential();
     const monitorClient = new MonitorClient(credential, subscriptionId);
-
     const cpuMetricsResponse = await this.getCPUMetrics(
       monitorClient,
       getMetricParams
@@ -188,7 +185,7 @@ export class AzureImporterModel implements IOutputModelInterface {
         try {
           timestamps.push(data.timeStamp.toISOString());
 
-          if (typeof data.average !== 'undefined') {
+          if (!(data.average === undefined)) {
             cpu_utils.push(data.average.toString());
           }
         } catch (error) {
@@ -206,7 +203,7 @@ export class AzureImporterModel implements IOutputModelInterface {
     for (const timeSeries of ramMetricsResponse.value[0].timeseries || []) {
       for (const data of timeSeries.data || []) {
         if (!(typeof data.average === 'undefined')) {
-          mem_utils.push(data.average.toString());
+          memAvailable.push(data.average.toString());
         }
       }
     }
@@ -214,7 +211,7 @@ export class AzureImporterModel implements IOutputModelInterface {
     return {
       timestamps,
       cpu_utils,
-      mem_utils,
+      memAvailable,
     };
   }
 
@@ -246,11 +243,16 @@ export class AzureImporterModel implements IOutputModelInterface {
    * Throws error if given `unit` is not supported.
    */
   private timeUnitConverter(amountOfTime: number, unit: string) {
+    const seconds = ['seconds', 'second', 'secs', 'sec', 's'];
     const minutes = ['minutes', 'm', 'min', 'mins'];
     const days = ['days', 'd'];
     const weeks = ['week', 'weeks', 'w', 'wk', 'wks'];
     const months = ['month', 'months', 'mth'];
     const years = ['year', 'years', 'yr', 'yrs', 'y', 'ys'];
+
+    if (seconds.includes(unit)) {
+      throw new Error('The minimum unit of time for azure importer is minutes');
+    }
 
     if (minutes.includes(unit)) {
       return `T${amountOfTime}M`;
@@ -290,6 +292,45 @@ export class AzureImporterModel implements IOutputModelInterface {
     return `P${numberInFormat}`;
   }
 
+  /**
+   * Caculates total memory based on data from ComputeManagementClient response.
+   */
+  private async calculateTotalMemory(params: any) {
+    const {client, instanceType, location} = params;
+    // here we grab the total memory for the instance
+    const memResponseData = [];
+
+    for await (const item of client.resourceSkus.list()) {
+      memResponseData.push(item);
+    }
+
+    let totalMemoryGB = '';
+    const filteredMemData = memResponseData
+      .filter(item => item.resourceType === 'virtualMachines')
+      .filter(item => item.name === instanceType)
+      .filter(item => item.locations !== undefined);
+
+    const vmCapabilitiesData = filteredMemData
+      .filter(
+        item => item.locations !== undefined && item.locations[0] === location
+      )
+      .map(item => item.capabilities)[0];
+
+    if (vmCapabilitiesData !== undefined) {
+      const totalMemoryObject = vmCapabilitiesData.filter(
+        (item: any) => item.name === 'MemoryGB'
+      )[0];
+      if (totalMemoryObject.value !== undefined) {
+        totalMemoryGB = totalMemoryObject.value;
+      }
+    }
+
+    return totalMemoryGB;
+  }
+
+  /**
+   * Gathers instance metadata.
+   */
   private async getInstanceMetadata(
     subscriptionId: string,
     vmName: string,
@@ -305,10 +346,20 @@ export class AzureImporterModel implements IOutputModelInterface {
 
     const filteredVmData = vmData.filter(item => item.name === vmName);
     const location = filteredVmData.map(item => item.location ?? 'unknown')[0];
-    const instance = filteredVmData.map(
+    const instanceType = filteredVmData.map(
       item => item.hardwareProfile?.vmSize ?? 'unknown'
     )[0];
 
-    return {location: location, instanceType: instance};
+    const totalMemoryGB = await this.calculateTotalMemory({
+      client,
+      instanceType,
+      location,
+    });
+
+    return {
+      location,
+      instanceType,
+      totalMemoryGB,
+    };
   }
 }

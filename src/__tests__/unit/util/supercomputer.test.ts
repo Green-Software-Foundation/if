@@ -5,8 +5,6 @@ jest.mock('../../../util/models-universe', () => ({
   ModelsUniverse: MockModelUniverse,
 }));
 
-import {describe, expect, it, jest} from '@jest/globals';
-
 import {Supercomputer} from '../../../util/supercomputer';
 import {ModelsUniverse} from '../../../util/models-universe';
 

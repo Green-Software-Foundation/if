@@ -1,7 +1,7 @@
 export type AzureOutputs = {
   timestamps: string[];
   cpu_utils: string[];
-  mem_utils: string[];
+  memAvailable: string[];
 };
 
 export type AzureInputs = {
@@ -28,4 +28,5 @@ export type GetMetricsParams = {
 export type AzureMetadataOutputs = {
   location: string;
   instanceType: string;
+  totalMemoryGB: string;
 };
