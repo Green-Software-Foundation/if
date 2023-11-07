@@ -1,8 +1,8 @@
 import {MetricsListOptionalParams} from '@azure/arm-monitor';
 
-export const mockCredentials = class MockAzureCredentials {};
+export class MockAzureCredentials {}
 
-export const mockMonitor = class MockMonitorClient {
+export class MockMonitorClient {
   public metrics: any;
   constructor() {
     this.metrics = {
@@ -79,9 +79,9 @@ export const mockMonitor = class MockMonitorClient {
       },
     };
   }
-};
+}
 
-export const mockComputeClient = class MockComputeManagementClient {
+export class MockComputeManagementClient {
   public virtualMachines: any;
   public resourceSkus: any;
   constructor() {
@@ -133,4 +133,4 @@ export const mockComputeClient = class MockComputeManagementClient {
       },
     };
   }
-};
+}
