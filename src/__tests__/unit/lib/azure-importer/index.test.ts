@@ -238,7 +238,7 @@ describe('lib/azure-importer: ', () => {
       }
     });
 
-    it('execute() throws error for time unit of seconds ', async () => {
+    it('throws error for time unit of seconds ', async () => {
       const azureModel = new AzureImporterModel();
       await expect(
         azureModel.execute([
@@ -256,35 +256,34 @@ describe('lib/azure-importer: ', () => {
         Error('The minimum unit of time for azure importer is minutes')
       );
     });
-  });
 
-  it('returns valid data.', async () => {
-    const azureModel = new AzureImporterModel();
-
-    await expect(
-      azureModel.execute([
+    it('returns valid data.', async () => {
+      const azureModel = new AzureImporterModel();
+      await expect(
+        azureModel.execute([
+          {
+            timestamp: '2023-11-02T10:35:00.000Z',
+            duration: 3600,
+            'azure-observation-window': '5 mins',
+            'azure-observation-aggregation': 'average',
+            'azure-subscription-id': '9de7e19f-8a18-4e73-9451-45fc74e7d0d3',
+            'azure-resource-group': 'vm1_group',
+            'azure-vm-name': 'vm1',
+          },
+        ])
+      ).resolves.toEqual([
         {
           timestamp: '2023-11-02T10:35:00.000Z',
           duration: 3600,
-          'azure-observation-window': '5 mins',
-          'azure-observation-aggregation': 'average',
-          'azure-subscription-id': '9de7e19f-8a18-4e73-9451-45fc74e7d0d3',
-          'azure-resource-group': 'vm1_group',
-          'azure-vm-name': 'vm1',
+          'cpu-util': '3.14',
+          'mem-availableGB': 0.5,
+          'mem-usedGB': 0.5,
+          'total-memoryGB': 1,
+          'mem-util': 50,
+          location: 'uksouth',
+          'cloud-instance-type': 'Standard_B1s',
         },
-      ])
-    ).resolves.toEqual([
-      {
-        timestamp: '2023-11-02T10:35:00.000Z',
-        duration: 3600,
-        'cpu-util': '3.14',
-        'mem-availableGB': 0.5,
-        'mem-usedGB': 0.5,
-        'total-memoryGB': 1,
-        'mem-util': 50,
-        location: 'uksouth',
-        'cloud-instance-type': 'Standard_B1s',
-      },
-    ]);
+      ]);
+    });
   });
 });
