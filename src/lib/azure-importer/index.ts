@@ -1,10 +1,10 @@
-import {DefaultAzureCredential} from '@azure/identity';
-import {MonitorClient} from '@azure/arm-monitor';
-import {ComputeManagementClient} from '@azure/arm-compute';
+import { DefaultAzureCredential } from '@azure/identity';
+import { MonitorClient } from '@azure/arm-monitor';
+import { ComputeManagementClient } from '@azure/arm-compute';
 import * as dotenv from 'dotenv';
-import {z} from 'zod';
+import { z } from 'zod';
 
-import {IOutputModelInterface} from '../interfaces';
+import { IOutputModelInterface } from '../interfaces';
 import {
   AzureInputs,
   AzureOutputs,
@@ -72,6 +72,9 @@ export class AzureImporterModel implements IOutputModelInterface {
       params.resourceGroupName
     );
 
+    console.log("rawMetaDataResults", rawMetadataResults)
+    console.log("rawResults", rawResults)
+
     return rawResults.timestamps.map((timestamp, index) => ({
       timestamp,
       duration: params.duration,
@@ -107,7 +110,6 @@ export class AzureImporterModel implements IOutputModelInterface {
       vmName,
     } = params;
     const metricnames = 'Percentage CPU';
-
     return monitorClient.metrics.list(
       `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
       {
@@ -135,11 +137,10 @@ export class AzureImporterModel implements IOutputModelInterface {
       vmName,
     } = params;
     const metricnames = 'Available Memory Bytes';
-
     return monitorClient.metrics.list(
       `subscriptions/${subscriptionId}/resourceGroups/${resourceGroupName}/providers/Microsoft.Compute/virtualMachines/${vmName}`,
       {
-        metricnames, // TODO: we need to get memory used = total - available
+        metricnames,
         timespan,
         interval,
         aggregation,
@@ -181,6 +182,8 @@ export class AzureImporterModel implements IOutputModelInterface {
     );
 
     // parse CPU util data
+    console.log("cpuMetricsResponse", cpuMetricsResponse.value[0].timeseries[0].data)
+
     for (const timeSeries of cpuMetricsResponse.value[0].timeseries || []) {
       const timeSeriesData = timeSeries.data || [];
       for (const data of timeSeriesData) {
@@ -298,9 +301,10 @@ export class AzureImporterModel implements IOutputModelInterface {
    * Caculates total memory based on data from ComputeManagementClient response.
    */
   private async calculateTotalMemory(params: any) {
-    const {client, instanceType, location} = params;
+    const { client, instanceType, location } = params;
     // here we grab the total memory for the instance
     const memResponseData = [];
+
 
     for await (const item of client.resourceSkus.list()) {
       memResponseData.push(item);
@@ -311,6 +315,7 @@ export class AzureImporterModel implements IOutputModelInterface {
       .filter(item => item.resourceType === 'virtualMachines')
       .filter(item => item.name === instanceType)
       .filter(item => item.locations !== undefined);
+
     const vmCapabilitiesData = filteredMemData
       .filter(
         item => item.locations !== undefined && item.locations[0] === location
@@ -321,7 +326,7 @@ export class AzureImporterModel implements IOutputModelInterface {
       const totalMemoryObject = vmCapabilitiesData.filter(
         (item: any) => item.name === 'MemoryGB'
       )[0];
-
+      console.log("totalMemoryObject\n", totalMemoryObject)
       if (totalMemoryObject.value !== undefined) {
         totalMemoryGB = totalMemoryObject.value;
       }

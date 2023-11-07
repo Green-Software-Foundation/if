@@ -1,8 +1,8 @@
-import {AzureImporterModel} from '../../../../lib/azure-importer';
+import { AzureImporterModel } from '../../../../lib/azure-importer';
 
 jest.mock('@azure/identity', () => ({
   __esModule: true,
-  DefaultAzureCredential: class MockAzureCredentials {},
+  DefaultAzureCredential: class MockAzureCredentials { },
 }));
 
 jest.mock('@azure/arm-monitor', () => ({
@@ -28,7 +28,7 @@ jest.mock('@azure/arm-monitor', () => ({
                   'The percentage of allocated compute units that are currently in use by the Virtual Machine(s)',
                 errorCode: 'Success',
                 unit: 'Percent',
-                timeseries: [Array],
+                timeseries: [{ data: [{ timeStamp: '2023-11-02T10:35:00.000Z', average: 0.314 }] }],
               },
             ],
           };
@@ -43,7 +43,7 @@ jest.mock('@azure/arm-compute', () => ({
   ComputeManagementClient: class MockComputeManagementClient {
     public virtualMachines: any;
     public resourceSkus: any;
-    constructor() { 
+    constructor() {
       this.virtualMachines = {
         list: function* () {
           yield {
@@ -52,7 +52,7 @@ jest.mock('@azure/arm-compute', () => ({
             type: 'Microsoft.Compute/virtualMachines',
             location: 'uksouth',
             zones: ['1'],
-            hardwareProfile: {vmSize: 'Standard_B1s'},
+            hardwareProfile: { vmSize: 'Standard_B1s' },
             storageProfile: {
               imageReference: [Object],
               osDisk: [Object],
@@ -67,12 +67,12 @@ jest.mock('@azure/arm-compute', () => ({
               allowExtensionOperations: true,
               requireGuestProvisionSignal: true,
             },
-            networkProfile: {networkInterfaces: [Array]},
+            networkProfile: { networkInterfaces: [Array] },
             securityProfile: {
               uefiSettings: [Object],
               securityType: 'TrustedLaunch',
             },
-            diagnosticsProfile: {bootDiagnostics: [Object]},
+            diagnosticsProfile: { bootDiagnostics: [Object] },
             provisioningState: 'Succeeded',
             vmId: '11cf628c-38bb-4b5e-b1f4-0c60d8dcbf13',
             timeCreated: '2023-10-20T10:54:50.248Z',
@@ -82,19 +82,15 @@ jest.mock('@azure/arm-compute', () => ({
       this.resourceSkus = {
         list: function* () {
           yield {
-            value: {
-              resourceType: 'availabilitySets',
-              name: 'Aligned',
-              locations: ['AustraliaCentral'],
-              locationInfo: [
-                {location: 'AustraliaCentral', zones: [], zoneDetails: []},
-              ],
-              capabilities: [
-                {name: 'MaximumPlatformFaultDomainCount', value: '2'},
-              ],
-              restrictions: [],
-            },
-            done: false,
+            resourceType: 'virtualMachines',
+            name: 'Standard_B1s',
+            locations: ['uksouth'],
+            locationInfo: [
+              { location: 'uksouth', zones: [], zoneDetails: [] },
+            ],
+            capabilities:
+              [{ name: 'MemoryGB', value: 1 }],
+            restrictions: [],
           };
         },
       };
@@ -231,13 +227,13 @@ describe('lib/azure-importer: ', () => {
       {
         timestamp: '2023-11-02T10:35:31.820Z',
         duration: 3600,
-        'cpu-util': 48,
+        'cpu-util': 3.14,
         'mem-availableGB': 50,
         'mem-usedGB': 20,
-        'total-memoryGB': 30,
+        'total-memoryGB': 1,
         'mem-util': 48,
         location: 'uksouth',
-        'cloud-instance-type': 'Standard-B1s',
+        'cloud-instance-type': 'Standard_B1s',
       },
     ]);
   });
