@@ -7,6 +7,6 @@ do
 echo ""
 echo executing $file, outfile is ${file#"$prefix"}
 echo ""
-npx ts-node scripts/impact.ts --impl $file --ompl examples/ompls/${file#"$prefix"}
+npx ts-node impact-engine.ts --impl $file --ompl examples/ompls/${file#"$prefix"}
 done
 exit 0
