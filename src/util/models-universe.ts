@@ -19,6 +19,8 @@ import {
   SciEModel,
 } from '../lib';
 
+import {ERRORS} from './errors';
+
 import {CONFIG, STRINGS} from '../config';
 
 import {
@@ -27,6 +29,8 @@ import {
   ImplInitializeModel,
   InitalizedModels,
 } from '../types/models-universe';
+
+const {ModelInitializationError, ModelCredentialError} = ERRORS;
 
 const {GITHUB_PATH} = CONFIG;
 const {
@@ -112,11 +116,11 @@ export class ModelsUniverse {
    */
   private async handPluginModel(model?: string, path?: string) {
     if (!model) {
-      throw new Error(MISSING_CLASSNAME);
+      throw new ModelCredentialError(MISSING_CLASSNAME);
     }
 
     if (!path) {
-      throw new Error(MISSING_PATH);
+      throw new ModelCredentialError(MISSING_PATH);
     }
 
     if (path?.startsWith(GITHUB_PATH)) {
@@ -192,10 +196,16 @@ export class ModelsUniverse {
    * Returns existing model by `name`.
    */
   public async getInitializedModel(modelName: string, config: any) {
-    if (this.initalizedModels[modelName]) {
-      return await this.initalizedModels[modelName](config);
+    try {
+      if (this.initalizedModels[modelName]) {
+        return await this.initalizedModels[modelName](config);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new ModelInitializationError(error.message);
+      }
     }
 
-    throw new Error(NOT_INITIALIZED_MODEL(modelName));
+    throw new ModelInitializationError(NOT_INITIALIZED_MODEL(modelName));
   }
 }
