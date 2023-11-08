@@ -1,6 +1,12 @@
-import {z} from 'zod';
+import {ZodIssue, z} from 'zod';
 
-export const implValidation = z.object({
+import {ERRORS} from './errors';
+
+import {Impl} from '../types/impl';
+
+const {ImplValidationError} = ERRORS;
+
+const implValidation = z.object({
   name: z.string(),
   description: z.string(),
   tags: z
@@ -27,3 +33,32 @@ export const implValidation = z.object({
     })
     .required(),
 });
+
+/**
+ * Validates given `impl` object to match pattern.
+ */
+export const validateImpl = (impl: Impl) => {
+  const validatedImpl = implValidation.safeParse(impl);
+
+  if (!validatedImpl.success) {
+    const prettifyErrorMessage = (issues: string) => {
+      const issuesArray = JSON.parse(issues);
+
+      return issuesArray.map((issue: ZodIssue) => {
+        const {code, path, message} = issue;
+        const flattenPath = path.map(part =>
+          typeof part === 'number' ? `[${part}]` : part
+        );
+        const fullPath = flattenPath.join('.');
+
+        return `"${fullPath}" parameter is ${message.toLowerCase()}. Error code: ${code}.`;
+      });
+    };
+
+    throw new ImplValidationError(
+      prettifyErrorMessage(validatedImpl.error.message)
+    );
+  }
+
+  return validatedImpl.data;
+};
