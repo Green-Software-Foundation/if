@@ -11,7 +11,7 @@ import {Supercomputer} from '../../../util/supercomputer';
 import {ModelsUniverse} from '../../../util/models-universe';
 
 describe('util/supercomputer: ', () => {
-  const impl = {
+  const impl: any = {
     name: 'gsf-demo',
     description: 'Hello',
     tags: {
@@ -60,7 +60,7 @@ describe('util/supercomputer: ', () => {
 
   describe('init Supercomputer: ', () => {
     it('initializes object with required properties.', () => {
-      const impl = {};
+      const impl: any = {};
       const modelsHandbook = new ModelsUniverse();
       const aterui = new Supercomputer(impl, modelsHandbook);
 
@@ -69,7 +69,7 @@ describe('util/supercomputer: ', () => {
   });
 
   describe('compute(): ', () => {
-    const implWithNestedChildren = {
+    const implWithNestedChildren: any = {
       name: 'ntt-data-on-premise',
       description:
         'https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/nttdatta-On-Premise-Web-system.md',
@@ -246,7 +246,7 @@ describe('util/supercomputer: ', () => {
       const childrenNames = Object.keys(children);
       const oneWithNested = childrenNames[1];
 
-      const nestedChildren = children[oneWithNested].children;
+      const nestedChildren: any = children[oneWithNested].children;
 
       Object.keys(nestedChildren).forEach((child: any) => {
         expect(nestedChildren[child]).toHaveProperty('outputs');
