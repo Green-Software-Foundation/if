@@ -3,13 +3,15 @@ import * as path from 'path';
 
 import * as YAML from 'js-yaml';
 
+import {Impl} from '../types/impl';
+
 /**
  * Reads and parses `yaml` file to object.
  */
-export const openYamlFileAsObject = async (filePath: string): Promise<any> => {
+export const openYamlFileAsObject = async (filePath: string): Promise<Impl> => {
   const yamlFileBuffer = await fs.readFile(filePath, 'utf8');
 
-  return YAML.load(yamlFileBuffer);
+  return YAML.load(yamlFileBuffer) as Impl;
 };
 
 /**
