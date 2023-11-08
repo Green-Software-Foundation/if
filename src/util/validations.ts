@@ -9,15 +9,17 @@ export const implValidation = z.object({
       complexity: z.string().optional(),
       category: z.string().optional(),
     })
-    .optional(),
+    .nullable(),
   initialize: z.object({
-    models: z.object({
-      name: z.string(),
-      kind: z.string(),
-      path: z.string().optional(),
-      model: z.string().optional(),
-      config: z.object({}),
-    }),
+    models: z.array(
+      z.object({
+        name: z.string(),
+        kind: z.string(),
+        path: z.string().optional(),
+        model: z.string().optional(),
+        config: z.object({}),
+      })
+    ),
   }),
   graph: z
     .object({
