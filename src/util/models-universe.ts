@@ -1,4 +1,5 @@
 import {
+  AzureImporterModel,
   BoaviztaCpuOutputModel,
   BoaviztaCloudOutputModel,
   CloudCarbonFootprint,
@@ -51,6 +52,8 @@ export class ModelsUniverse {
    */
   private handBuiltinModel(modelName: string) {
     switch (modelName) {
+      case 'azure-importer':
+        return AzureImporterModel;
       case 'boavizta-cpu':
         return BoaviztaCpuOutputModel;
       case 'boavizta-cloud':

@@ -1,7 +1,5 @@
 import {MockModel} from '../../../__mocks__/model-universe';
 
-import {describe, expect, it, jest, beforeEach} from '@jest/globals';
-
 import {BoaviztaCpuOutputModel} from '../../../lib';
 
 import {ModelsUniverse} from '../../../util/models-universe';
