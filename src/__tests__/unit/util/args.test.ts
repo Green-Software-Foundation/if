@@ -30,12 +30,15 @@ import path = require('path');
 import {describe, expect, it, jest} from '@jest/globals';
 
 import {parseProcessArgument} from '../../../util/args';
+import {ERRORS} from '../../../util/errors';
 
 import {STRINGS, CONFIG} from '../../../config';
 
+const {CliInputError} = ERRORS;
+
 const {impact} = CONFIG;
 const {HELP} = impact;
-const {WRONG_CLI_ARGUMENT} = STRINGS;
+const {IMPL_IS_MISSING} = STRINGS;
 
 describe('util/args: ', () => {
   const originalEnv = process.env;
@@ -50,8 +53,8 @@ describe('util/args: ', () => {
         parseProcessArgument();
       } catch (error) {
         if (error instanceof Error) {
-          expect(error).toBeInstanceOf(Error);
-          expect(error.message).toEqual(WRONG_CLI_ARGUMENT);
+          expect(error).toBeInstanceOf(CliInputError);
+          expect(error.message).toEqual(IMPL_IS_MISSING);
         }
       }
     });
