@@ -29,7 +29,11 @@ const implValidation = z.object({
   }),
   graph: z
     .object({
-      children: z.object({}),
+      children: z
+        .object({
+          child: z.any(),
+        })
+        .required(),
     })
     .required(),
 });
