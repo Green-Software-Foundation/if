@@ -1,10 +1,10 @@
-import {DefaultAzureCredential} from '@azure/identity';
-import {MonitorClient} from '@azure/arm-monitor';
-import {ComputeManagementClient} from '@azure/arm-compute';
+import { DefaultAzureCredential } from '@azure/identity';
+import { MonitorClient } from '@azure/arm-monitor';
+import { ComputeManagementClient } from '@azure/arm-compute';
 import * as dotenv from 'dotenv';
-import {z} from 'zod';
+import { z } from 'zod';
 
-import {IOutputModelInterface} from '../interfaces';
+import { IOutputModelInterface } from '../interfaces';
 import {
   AzureInputs,
   AzureOutputs,
@@ -72,9 +72,8 @@ export class AzureImporterModel implements IOutputModelInterface {
       params.resourceGroupName
     );
 
-    return rawResults.timestamps.map((timestamp, index) => ({
+    let enrichedOutputs = rawResults.timestamps.map((timestamp, index) => ({
       timestamp,
-      duration: params.duration,
       'cloud-vendor': 'azure',
       'cpu-util': rawResults.cpu_utils[index],
       'mem-availableGB': parseFloat(rawResults.memAvailable[index]) * 1e-9,
@@ -89,8 +88,15 @@ export class AzureImporterModel implements IOutputModelInterface {
         100,
       location: rawMetadataResults.location,
       'cloud-instance-type': rawMetadataResults.instanceType,
-    }));
+    }))
+
+    for (let i = 0; i < Object.entries(enrichedOutputs).length; i++) {
+      enrichedOutputs[i] = Object.assign(enrichedOutputs[i], input)
+    }
+    return enrichedOutputs
   }
+
+
 
   /**
    * Gets CPU metrics by calling monitor client.
@@ -297,7 +303,7 @@ export class AzureImporterModel implements IOutputModelInterface {
    * Caculates total memory based on data from ComputeManagementClient response.
    */
   private async calculateTotalMemory(params: any) {
-    const {client, instanceType, location} = params;
+    const { client, instanceType, location } = params;
     // here we grab the total memory for the instance
     const memResponseData = [];
 
