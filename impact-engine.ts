@@ -1,7 +1,11 @@
-import {parseProcessArgument} from '../src/util/args';
-import {ModelsUniverse} from '../src/util/models-universe';
-import {Supercomputer} from '../src/util/supercomputer';
-import {openYamlFileAsObject, saveYamlFileAs} from '../src/util/yaml';
+import {parseProcessArgument} from './src/util/args';
+import {ModelsUniverse} from './src/util/models-universe';
+import {Supercomputer} from './src/util/supercomputer';
+import {openYamlFileAsObject, saveYamlFileAs} from './src/util/yaml';
+import {implValidation} from './src/util/validations';
+import {ERRORS} from './src/util/errors';
+
+const {ImplValidationError} = ERRORS;
 
 /**
  * 1. Parses yml input/output process arguments.
@@ -11,7 +15,7 @@ import {openYamlFileAsObject, saveYamlFileAs} from '../src/util/yaml';
  * 5. Saves processed object as a yaml file.
  * @example run following command `npx ts-node scripts/impact.ts --impl ./test.yml --ompl ./result.yml`
  */
-const impactScript = async () => {
+const impactEngine = async () => {
   try {
     const processParams = parseProcessArgument();
 
@@ -19,8 +23,11 @@ const impactScript = async () => {
       const {inputPath, outputPath} = processParams;
       const impl = await openYamlFileAsObject(inputPath);
 
-      if (!('graph' in impl)) {
-        throw new Error('No graph data found.');
+      // Lifecycle Validation
+      const result = implValidation.safeParse(impl);
+
+      if (!result.success) {
+        return new ImplValidationError(result.error.message);
       }
 
       // Lifecycle Initialize Models
@@ -45,4 +52,4 @@ const impactScript = async () => {
   }
 };
 
-impactScript();
+impactEngine();
