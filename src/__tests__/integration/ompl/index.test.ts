@@ -24,7 +24,7 @@ describe('ompls: ', () => {
       if (file.includes('nesting')) {
         it('check nested ompls have outputs field', async () => {
           expect.assertions(2);
-          const ompl = await openYamlFileAsObject(path + '/' + file);
+          const ompl: any = await openYamlFileAsObject(path + '/' + file);
           const expectedProperty = 'outputs';
 
           expect(
@@ -63,7 +63,7 @@ describe('ompls: ', () => {
 
       if (file.includes('complex-pipeline')) {
         it('checks `complex-pipeline` to have `energy-memory`, `energy-cpu`, etc. properties in output.', async () => {
-          const ompl = await openYamlFileAsObject(`${path}/${file}`);
+          const ompl: any = await openYamlFileAsObject(`${path}/${file}`);
           const res: string = JSON.stringify(
             ompl['graph']['children']['child']['outputs'][0]
           );
