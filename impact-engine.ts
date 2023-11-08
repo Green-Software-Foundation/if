@@ -2,10 +2,7 @@ import {parseProcessArgument} from './src/util/args';
 import {ModelsUniverse} from './src/util/models-universe';
 import {Supercomputer} from './src/util/supercomputer';
 import {openYamlFileAsObject, saveYamlFileAs} from './src/util/yaml';
-import {implValidation} from './src/util/validations';
-import {ERRORS} from './src/util/errors';
-
-const {ImplValidationError} = ERRORS;
+import {validateImpl} from './src/util/validations';
 
 /**
  * 1. Parses yml input/output process arguments.
@@ -16,40 +13,36 @@ const {ImplValidationError} = ERRORS;
  * @example run following command `npx ts-node scripts/impact.ts --impl ./test.yml --ompl ./result.yml`
  */
 const impactEngine = async () => {
-  try {
-    const processParams = parseProcessArgument();
+  const processParams = parseProcessArgument();
 
-    if (processParams) {
-      const {inputPath, outputPath} = processParams;
-      const impl = await openYamlFileAsObject(inputPath);
+  if (processParams) {
+    const {inputPath, outputPath} = processParams;
+    const rawImpl = await openYamlFileAsObject(inputPath);
 
-      // Lifecycle Validation
-      const result = implValidation.safeParse(impl);
+    // Lifecycle Validation
+    const impl = validateImpl(rawImpl);
 
-      if (!result.success) {
-        return new ImplValidationError(result.error.message);
-      }
+    // Lifecycle Initialize Models
+    const modelsHandbook = new ModelsUniverse();
+    impl.initialize.models.forEach((model: any) =>
+      modelsHandbook.writeDown(model)
+    );
 
-      // Lifecycle Initialize Models
-      const modelsHandbook = new ModelsUniverse();
-      impl.initialize.models.forEach((model: any) =>
-        modelsHandbook.writeDown(model)
-      );
+    // Lifecycle Computing
+    const ateruiComputer = new Supercomputer(impl, modelsHandbook);
+    const ompl = await ateruiComputer.compute();
 
-      // Lifecycle Computing
-      const ateruiComputer = new Supercomputer(impl, modelsHandbook);
-      const ompl = await ateruiComputer.compute();
-
-      if (!outputPath) {
-        console.log(JSON.stringify(ompl));
-        return;
-      }
-
-      await saveYamlFileAs(ompl, outputPath);
+    if (!outputPath) {
+      console.log(JSON.stringify(ompl));
+      return;
     }
-  } catch (error) {
-    console.error(error);
+
+    await saveYamlFileAs(ompl, outputPath);
+
+    return;
   }
+
+  return Promise.reject(new Error('missing params'));
 };
 
-impactEngine();
+impactEngine().catch(error => console.error(`\n ${error}`));
