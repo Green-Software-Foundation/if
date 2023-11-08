@@ -75,6 +75,7 @@ export class AzureImporterModel implements IOutputModelInterface {
     return rawResults.timestamps.map((timestamp, index) => ({
       timestamp,
       duration: params.duration,
+      'cloud-vendor': 'azure',
       'cpu-util': rawResults.cpu_utils[index],
       'mem-availableGB': parseFloat(rawResults.memAvailable[index]) * 1e-9,
       'mem-usedGB':
