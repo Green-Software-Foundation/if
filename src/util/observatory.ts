@@ -33,13 +33,6 @@ export class Observatory {
   }
 
   /**
-   * Getter for input data.
-   */
-  public getInputs() {
-    return this.inputs;
-  }
-
-  /**
    * Getter for output data.
    */
   public getOutputs() {
