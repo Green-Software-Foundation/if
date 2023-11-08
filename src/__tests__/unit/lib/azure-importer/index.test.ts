@@ -19,7 +19,7 @@ jest.mock('@azure/arm-compute', () => ({
   ComputeManagementClient: MockComputeManagementClient,
 }));
 
-import {AzureImporterModel} from '../../../../lib/azure-importer';
+import { AzureImporterModel } from '../../../../lib/azure-importer';
 
 jest.setTimeout(30000);
 
@@ -165,6 +165,7 @@ describe('lib/azure-importer: ', () => {
           'mem-util': 50,
           location: 'uksouth',
           'cloud-instance-type': 'Standard_B1s',
+          'cloud-vendor': 'azure'
         },
       ]);
     });
