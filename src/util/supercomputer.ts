@@ -122,7 +122,7 @@ export class Supercomputer {
   public async compute(childrenObject?: any) {
     const implOrChildren = childrenObject || this.impl;
     const areChildrenNested = !!childrenObject;
-    const children = areChildrenNested
+    const children: Children = areChildrenNested
       ? implOrChildren
       : implOrChildren.graph.children;
     const childrenNames = Object.keys(children);
