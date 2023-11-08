@@ -72,9 +72,11 @@ export class AzureImporterModel implements IOutputModelInterface {
       params.resourceGroupName
     );
 
+    const perInputDuration = this.calculateDurationPerInput(params);
+
     return rawResults.timestamps.map((timestamp, index) => ({
       timestamp,
-      duration: params.duration,
+      duration: perInputDuration,
       'cloud-vendor': 'azure',
       'cpu-util': rawResults.cpu_utils[index],
       'mem-availableGB': parseFloat(rawResults.memAvailable[index]) * 1e-9,
@@ -246,6 +248,7 @@ export class AzureImporterModel implements IOutputModelInterface {
   private timeUnitConverter(amountOfTime: number, unit: string) {
     const seconds = ['seconds', 'second', 'secs', 'sec', 's'];
     const minutes = ['minutes', 'm', 'min', 'mins'];
+    const hours = ['hour', 'hours', 'h', 'hr', 'hrs'];
     const days = ['days', 'd'];
     const weeks = ['week', 'weeks', 'w', 'wk', 'wks'];
     const months = ['month', 'months', 'mth'];
@@ -257,6 +260,10 @@ export class AzureImporterModel implements IOutputModelInterface {
 
     if (minutes.includes(unit)) {
       return `T${amountOfTime}M`;
+    }
+
+    if (hours.includes(unit)) {
+      return `T${amountOfTime}H`;
     }
 
     if (days.includes(unit)) {
@@ -362,5 +369,52 @@ export class AzureImporterModel implements IOutputModelInterface {
       instanceType,
       totalMemoryGB,
     };
+  }
+
+  private calculateDurationPerInput(params: AzureInputs): number {
+    const window = params.window;
+    const splits = window.split(' ', 2);
+    const floatNumber = parseFloat(splits[0]);
+    const unit = splits[1];
+    let duration = 0;
+
+    const seconds = ['seconds', 'second', 'secs', 'sec', 's'];
+    const minutes = ['minutes', 'm', 'min', 'mins'];
+    const hours = ['hour', 'hours', 'h', 'hr', 'hrs'];
+    const days = ['days', 'd'];
+    const weeks = ['week', 'weeks', 'w', 'wk', 'wks'];
+    const months = ['month', 'months', 'mth'];
+    const years = ['year', 'years', 'yr', 'yrs', 'y', 'ys'];
+
+    if (seconds.includes(unit)) {
+      const secs_per_unit = 1;
+      duration = secs_per_unit * floatNumber;
+    }
+    if (minutes.includes(unit)) {
+      const secs_per_unit = 60;
+      duration = secs_per_unit * floatNumber;
+    }
+    if (hours.includes(unit)) {
+      const secs_per_unit = 3600;
+      duration = secs_per_unit * floatNumber;
+    }
+    if (days.includes(unit)) {
+      const secs_per_unit = 86400;
+      duration = secs_per_unit * floatNumber;
+    }
+    if (weeks.includes(unit)) {
+      const secs_per_unit = 604800;
+      duration = secs_per_unit * floatNumber;
+    }
+    if (months.includes(unit)) {
+      const secs_per_unit = 2419200;
+      duration = secs_per_unit * floatNumber;
+    }
+    if (years.includes(unit)) {
+      const secs_per_unit = 29030400;
+      duration = secs_per_unit * floatNumber;
+    }
+
+    return duration;
   }
 }
