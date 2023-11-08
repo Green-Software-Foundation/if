@@ -1,3 +1,4 @@
+export * from './azure-importer';
 export * from './boavizta';
 export * from './case-studies';
 export * from './ccf';

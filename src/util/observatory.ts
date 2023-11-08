@@ -20,14 +20,7 @@ export class Observatory {
   public async doInvestigationsWith(modelInstance: IOutputModelInterface) {
     const reuseCalculation = this.outputs.length ? this.outputs : this.inputs;
 
-    const calculatedOutputs = await modelInstance.execute(reuseCalculation);
-
-    const result = this.inputs.map((input: any, index: number) => ({
-      ...input,
-      ...calculatedOutputs[index],
-    }));
-
-    this.outputs = result;
+    this.outputs = await modelInstance.execute(reuseCalculation);
 
     return this;
   }

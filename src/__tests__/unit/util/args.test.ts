@@ -27,7 +27,6 @@ jest.mock('ts-command-line-args', () => ({
 }));
 
 import path = require('path');
-import {describe, expect, it, jest} from '@jest/globals';
 
 import {parseProcessArgument} from '../../../util/args';
 import {ERRORS} from '../../../util/errors';
