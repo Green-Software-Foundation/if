@@ -23,7 +23,7 @@ const implValidation = z.object({
         kind: z.string(),
         path: z.string().optional(),
         model: z.string().optional(),
-        config: z.object({}),
+        config: z.object({}).optional(),
       })
     ),
   }),
