@@ -48,7 +48,8 @@
     "fix:package": "fixpack",
     "lint": "gts lint",
     "coverage": "jest --verbose --coverage",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "impact-engine": "npx ts-node"
   },
   "stability": "stable",
   "types": "src/index.d.ts"
