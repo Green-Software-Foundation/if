@@ -92,16 +92,17 @@ export class Supercomputer {
       await observatory.doInvestigationsWith(modelInstance);
     }
 
+    const outputs = observatory.getOutputs();
+
     if (areChildrenNested) {
       this.impl.graph.children[this.olderChild.name].children[
         childName
-      ].outputs = observatory.getOutputs();
+      ].outputs = outputs;
 
       return;
     }
 
-    this.impl.graph.children[this.olderChild.name].outputs =
-      observatory.getOutputs();
+    this.impl.graph.children[this.olderChild.name].outputs = outputs;
   }
 
   /**
