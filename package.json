@@ -2,18 +2,17 @@
   "name": "ief",
   "description": "",
   "version": "1.0.0",
-  "license": "MIT",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
   },
   "dependencies": {
-    "@cloud-carbon-footprint/aws": "*",
-    "@cloud-carbon-footprint/core": "*",
-    "@types/node": "^20.4.5",
     "@azure/arm-compute": "^21.2.0",
     "@azure/arm-monitor": "*",
     "@azure/identity": "*",
+    "@cloud-carbon-footprint/aws": "*",
+    "@cloud-carbon-footprint/core": "*",
+    "@types/node": "^20.4.5",
     "axios": "^1.4.0",
     "dayjs": "^1.11.9",
     "dotenv": "^16.3.1",
@@ -45,17 +44,18 @@
     "yarn": "1.22.19"
   },
   "keywords": [],
+  "license": "MIT",
   "main": "src/index.ts",
   "repository": {
     "url": "https://github.com/Green-Software-Foundation/ief.git"
   },
   "scripts": {
+    "coverage": "jest --verbose --coverage",
     "fix": "gts fix",
     "fix:package": "fixpack",
+    "impact-engine": "npx ts-node",
     "lint": "gts lint",
-    "coverage": "jest --verbose --coverage",
-    "test": "jest --verbose",
-    "impact-engine": "npx ts-node"
+    "test": "jest --verbose"
   },
   "stability": "stable",
   "types": "src/index.d.ts"
