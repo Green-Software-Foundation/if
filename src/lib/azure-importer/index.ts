@@ -373,8 +373,6 @@ export class AzureImporterModel implements IOutputModelInterface {
 
   /**
    * Calculates number of seconds covered by each individual input using azure-time-window value
-   * @param params
-   * @returns number
    */
   private calculateDurationPerInput(params: AzureInputs): number {
     const window = params.window;
