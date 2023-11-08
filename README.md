@@ -15,18 +15,24 @@ Read the [specification and design docs](https://github.com/Green-Software-Found
 
 ## Get started
 
-Run `impact` using the following command:
+Run `impact-engine` using the following command:
 
 ```sh
-npx ts-node scripts/impact.ts --impl <path-to-your-impl-file> --ompl <path-to-output-file>
+npx ts-node impact-engine.ts --impl <path-to-your-impl-file>
 ```
-The `impact` CLI tool will configure and run the models defined in your input `yaml` (`impl`) and return the results as an output `yaml` (`ompl`).
+
+You can also add an optional savepath for your output yaml if you want to use something other than the default (`/examples/ompls`):
+
+```sh
+npx ts-node impact-engine.ts --impl <path-to-your-impl-file> --ompl <your-savepath>
+```
+The `impact-engine` CLI tool will configure and run the models defined in your input `yaml` (`impl`) and return the results as an output `yaml` (`ompl`).
 
 ## Video walk-through
 
 Watch this video to learn how to create and run an `impl`.
 
-[![Watch the walk through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/R-6eDM8AsvY)
+[![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/R-6eDM8AsvY)
 
 
 ## Run tests
@@ -37,7 +43,7 @@ To run the complete set of tests simply run
 yarn test
 ```
 
-To refresh the set of ompls used for validating the output files, run the `scripts/impact-test.sh` bash script (for unix only) as follows:
+To refresh the set of `ompl`s used for validating the output files, run the `scripts/impact-test.sh` bash script (for unix only) as follows:
 
 ```sh
 ./scripts/impact-test.sh
