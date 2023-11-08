@@ -90,7 +90,7 @@ export class ModelsUniverse {
       case 'aveva':
         return EAvevaModel;
       default:
-        throw new Error(WRONG_OR_MISSING_MODEL(modelName));
+        throw new Error(WRONG_OR_MISSING_MODEL(modelName)); // will be dropped after models separation
     }
   }
 
@@ -179,7 +179,7 @@ export class ModelsUniverse {
         ...graphOptions,
       };
 
-      const initalizedModel = await new Model().configure('test', params);
+      const initalizedModel = await new Model().configure(params);
 
       return initalizedModel;
     };
