@@ -2,16 +2,17 @@ import {ModelsUniverse} from './models-universe';
 import {Observatory} from './observatory';
 
 import {ChildInformation} from '../types/supercomputer';
+import {Children, Config, Impl, ModelParams} from '../types/impl';
 
 /**
  * Computer for `impl` documents.
  */
 export class Supercomputer {
   private olderChild: ChildInformation = {name: '', info: {}};
-  private impl: any;
+  private impl: Impl;
   private modelsHandbook: ModelsUniverse;
 
-  constructor(impl: any, modelsHandbook: ModelsUniverse) {
+  constructor(impl: Impl, modelsHandbook: ModelsUniverse) {
     this.impl = impl;
     this.modelsHandbook = modelsHandbook;
   }
@@ -19,7 +20,7 @@ export class Supercomputer {
   /**
    * Flattens config entries.
    */
-  private flattenConfigValues(config: any) {
+  private flattenConfigValues(config: Config) {
     const configModelNames = Object.keys(config);
     const values = configModelNames.reduce((acc: any, name: string) => {
       acc = {
@@ -36,7 +37,11 @@ export class Supercomputer {
   /**
    * Adds config entries to each obsercation object passed.
    */
-  private enrichInputs(inputs: any[], config: any[], nestedConfig: any[]) {
+  private enrichInputs(
+    inputs: ModelParams[],
+    config: Config,
+    nestedConfig: Config
+  ) {
     const configValues = this.flattenConfigValues(config);
     const nestedConfigValues =
       nestedConfig && this.flattenConfigValues(nestedConfig);
@@ -54,7 +59,10 @@ export class Supercomputer {
    * Otherwise enriches inputs, passes them to Observatory.
    * For each model from pipeline Observatory gathers inputs. Then results are stored.
    */
-  private async calculateOutputsForChild(childrenObject: any, params: any) {
+  private async calculateOutputsForChild(
+    childrenObject: Children,
+    params: any
+  ) {
     const {childName, areChildrenNested} = params;
 
     if (!areChildrenNested) {
@@ -95,14 +103,17 @@ export class Supercomputer {
     const outputs = observatory.getOutputs();
 
     if (areChildrenNested) {
-      this.impl.graph.children[this.olderChild.name].children[
-        childName
-      ].outputs = outputs;
+      const olderChilds = this.impl.graph.children[this.olderChild.name];
+
+      if (olderChilds.children && olderChilds.children[childName].outputs) {
+        olderChilds.children[childName].outputs = outputs;
+      }
 
       return;
     }
 
     this.impl.graph.children[this.olderChild.name].outputs = outputs;
+    return;
   }
 
   /**
