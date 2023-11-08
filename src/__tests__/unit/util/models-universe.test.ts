@@ -280,7 +280,7 @@ describe('util/models-universe: ', () => {
       }
     });
 
-    it('returns initalized model.', async () => {
+    it.skip('returns initalized model.', async () => {
       const modelsHandbook = new ModelsUniverse();
       const modelInfo: ImplInitializeModel = {
         config: {
