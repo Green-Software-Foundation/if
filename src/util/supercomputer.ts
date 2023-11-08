@@ -103,11 +103,11 @@ export class Supercomputer {
     const outputs = observatory.getOutputs();
 
     if (areChildrenNested) {
-      const olderChilds = this.impl.graph.children[this.olderChild.name];
-
-      if (olderChilds.children && olderChilds.children[childName].outputs) {
-        olderChilds.children[childName].outputs = outputs;
-      }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.impl.graph.children[this.olderChild.name].children[
+        childName
+      ].outputs = observatory.getOutputs();
 
       return;
     }
