@@ -36,7 +36,7 @@ describe('util/models-universe: ', () => {
           verbose: true,
         },
         name: 'test',
-        kind: 'builtin',
+        kind: 'plugin',
       };
 
       const expectedMessage = `Missing or wrong model: ${modelInfo.name}.`;
@@ -244,7 +244,7 @@ describe('util/models-universe: ', () => {
           verbose: true,
         },
         name: 'boavizta-cpu',
-        kind: 'builtin',
+        kind: 'plugin',
       };
       modelsHandbook.writeDown(modelInfo);
 
