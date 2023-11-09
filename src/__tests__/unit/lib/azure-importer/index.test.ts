@@ -152,12 +152,19 @@ describe('lib/azure-importer: ', () => {
             'azure-subscription-id': '9de7e19f-8a18-4e73-9451-45fc74e7d0d3',
             'azure-resource-group': 'vm1_group',
             'azure-vm-name': 'vm1',
+            'grid-carbon-intensity': 951,
           },
         ])
       ).resolves.toEqual([
         {
           timestamp: '2023-11-02T10:35:00.000Z',
           duration: 300,
+          'grid-carbon-intensity': 951,
+          'azure-observation-aggregation': 'average',
+          'azure-observation-window': '5 mins',
+          'azure-resource-group': 'vm1_group',
+          'azure-subscription-id': '9de7e19f-8a18-4e73-9451-45fc74e7d0d3',
+          'azure-vm-name': 'vm1',
           'cpu-util': '3.14',
           'mem-availableGB': 0.5,
           'mem-usedGB': 0.5,

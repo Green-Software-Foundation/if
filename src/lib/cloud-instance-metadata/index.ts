@@ -59,8 +59,6 @@ export class CloudInstanceMetadataModel implements IOutputModelInterface {
           instance => instance['Instance type'] === instance_type
         );
         if (instance) {
-          console.log(instance);
-          console.log(vendor);
           input['vcpus-allocated'] = instance['Instance vCPU'];
           input['vcpus-total'] = instance['Platform Total Number of vCPU'];
           input['memory-available'] = instance['Instance Memory (in GB)'];
@@ -82,11 +80,9 @@ export class CloudInstanceMetadataModel implements IOutputModelInterface {
           );
         }
       } else if (vendor === 'azure') {
-        console.log(`INSTANCE TYPE: ${instance_type}`);
         const instance = AZURE_INSTANCES.find(
           instance => instance['instance-type'] === instance_type
         );
-        console.log(instance);
         if (instance) {
           input['vcpus-allocated'] = instance['cpu-cores-utilized'];
           input['vcpus-total'] = instance['cpu-cores-available'];
