@@ -17,7 +17,9 @@ export type ModelParams = {
   [key: string]: any;
 };
 
-export type Config = {[key: string]: any};
+export type Config = {
+  [key: string]: any;
+};
 
 export type Children = {
   [key: string]: {
@@ -31,7 +33,7 @@ export type Children = {
 
 export type Impl = {
   name: string;
-  description: string;
+  description: string | null | undefined;
   tags: Tag | null | undefined;
   initialize: {
     models: Model[];
