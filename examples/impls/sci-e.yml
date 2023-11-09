@@ -4,7 +4,10 @@ tags:
 initialize:
   models:
     - name: sci-e
-      kind: builtin
+      kind: plugin
+      verbose: false
+      model: SciEModel
+      path: if-models
 graph:
   children:
     child:
