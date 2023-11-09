@@ -1,24 +1,6 @@
-import {
-  AzureImporterModel,
-  BoaviztaCpuOutputModel,
-  BoaviztaCloudOutputModel,
-  CloudCarbonFootprint,
-  CloudInstanceMetadataModel,
-  ShellModel,
-  SciMModel,
-  SciOModel,
-  TeadsAWS,
-  TeadsCurveModel,
-  SciModel,
-  EshoppenModel,
-  EshoppenCpuModel,
-  EshoppenMemModel,
-  EshoppenNetModel,
-  EMemModel,
-  SciAccentureModel,
-  EAvevaModel,
-  SciEModel,
-} from '../lib';
+import {ShellModel} from '../lib';
+
+import {ERRORS} from './errors';
 
 import {CONFIG, STRINGS} from '../config';
 
@@ -29,13 +11,15 @@ import {
   InitalizedModels,
 } from '../types/models-universe';
 
+const {ModelInitializationError, ModelCredentialError} = ERRORS;
+
 const {GITHUB_PATH} = CONFIG;
 const {
   MISSING_CLASSNAME,
   NOT_OUTPUT_MODEL_EXTENSION,
   NOT_INITIALIZED_MODEL,
-  WRONG_OR_MISSING_MODEL,
   MISSING_PATH,
+  MODEL_DOESNT_EXIST,
 } = STRINGS;
 
 /**
@@ -48,64 +32,18 @@ export class ModelsUniverse {
   public initalizedModels: InitalizedModels = {};
 
   /**
-   * Gets model class by provided `modelName` param.
-   */
-  private handBuiltinModel(modelName: string) {
-    switch (modelName) {
-      case 'azure-importer':
-        return AzureImporterModel;
-      case 'boavizta-cpu':
-        return BoaviztaCpuOutputModel;
-      case 'boavizta-cloud':
-        return BoaviztaCloudOutputModel;
-      case 'ccf':
-        return CloudCarbonFootprint;
-      case 'cloud-instance-metadata':
-        return CloudInstanceMetadataModel;
-      case 'teads-aws':
-        return TeadsAWS;
-      case 'teads-curve':
-        return TeadsCurveModel;
-      case 'sci-e':
-        return SciEModel;
-      case 'sci-m':
-        return SciMModel;
-      case 'sci-o':
-        return SciOModel;
-      case 'sci':
-        return SciModel;
-      case 'eshoppen':
-        return EshoppenModel;
-      case 'eshoppen-net':
-        return EshoppenNetModel;
-      case 'eshoppen-cpu':
-        return EshoppenCpuModel;
-      case 'eshoppen-mem':
-        return EshoppenMemModel;
-      case 'sci-accenture':
-        return SciAccentureModel;
-      case 'emem':
-        return EMemModel;
-      case 'aveva':
-        return EAvevaModel;
-      default:
-        throw new Error(WRONG_OR_MISSING_MODEL(modelName));
-    }
-  }
-
-  /**
    * Checks if model is instance of `IOutputModelInterface`.
    */
   private instanceOfModel(ClassContainer: any) {
-    const testModel = new ClassContainer();
+    try {
+      const testModel = new ClassContainer();
 
-    const boolable =
-      'modelIdentifier' in testModel &&
-      'configure' in testModel &&
-      'authenticate' in testModel &&
-      'execute' in testModel;
+      const boolable = 'configure' in testModel && 'execute' in testModel;
 
-    return boolable;
+      return boolable;
+    } catch (error) {
+      throw ModelInitializationError(MODEL_DOESNT_EXIST);
+    }
   }
 
   /**
@@ -115,11 +53,11 @@ export class ModelsUniverse {
    */
   private async handPluginModel(model?: string, path?: string) {
     if (!model) {
-      throw new Error(MISSING_CLASSNAME);
+      throw new ModelCredentialError(MISSING_CLASSNAME);
     }
 
     if (!path) {
-      throw new Error(MISSING_PATH);
+      throw new ModelCredentialError(MISSING_PATH);
     }
 
     if (path?.startsWith(GITHUB_PATH)) {
@@ -147,11 +85,9 @@ export class ModelsUniverse {
    * Gets model based on `name` and `kind` params.
    */
   private async handModelByCriteria(params: HandModelParams) {
-    const {name, kind, model, path} = params;
+    const {kind, model, path} = params;
 
     switch (kind) {
-      case 'builtin':
-        return this.handBuiltinModel(name);
       case 'plugin':
         return this.handPluginModel(model, path);
       case 'shell':
@@ -178,7 +114,7 @@ export class ModelsUniverse {
         ...graphOptions,
       };
 
-      const initalizedModel = await new Model().configure('test', params);
+      const initalizedModel = await new Model().configure(params);
 
       return initalizedModel;
     };
@@ -195,10 +131,16 @@ export class ModelsUniverse {
    * Returns existing model by `name`.
    */
   public async getInitializedModel(modelName: string, config: any) {
-    if (this.initalizedModels[modelName]) {
-      return await this.initalizedModels[modelName](config);
+    try {
+      if (this.initalizedModels[modelName]) {
+        return await this.initalizedModels[modelName](config);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new ModelInitializationError(error.message);
+      }
     }
 
-    throw new Error(NOT_INITIALIZED_MODEL(modelName));
+    throw new ModelInitializationError(NOT_INITIALIZED_MODEL(modelName));
   }
 }

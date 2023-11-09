@@ -1,17 +1,26 @@
 import {ModelsUniverse} from './models-universe';
 import {Observatory} from './observatory';
 
+import {ERRORS} from './errors';
+
+import {STRINGS} from '../config';
+
 import {ChildInformation} from '../types/supercomputer';
+import {Children, Config, Impl, ModelParams} from '../types/impl';
+
+const {ImplValidationError} = ERRORS;
+
+const {STRUCTURE_MALFORMED} = STRINGS;
 
 /**
  * Computer for `impl` documents.
  */
 export class Supercomputer {
   private olderChild: ChildInformation = {name: '', info: {}};
-  private impl: any;
+  private impl: Impl;
   private modelsHandbook: ModelsUniverse;
 
-  constructor(impl: any, modelsHandbook: ModelsUniverse) {
+  constructor(impl: Impl, modelsHandbook: ModelsUniverse) {
     this.impl = impl;
     this.modelsHandbook = modelsHandbook;
   }
@@ -19,7 +28,11 @@ export class Supercomputer {
   /**
    * Flattens config entries.
    */
-  private flattenConfigValues(config: any) {
+  private flattenConfigValues(config: Config) {
+    if (!config) {
+      return {};
+    }
+
     const configModelNames = Object.keys(config);
     const values = configModelNames.reduce((acc: any, name: string) => {
       acc = {
@@ -36,10 +49,13 @@ export class Supercomputer {
   /**
    * Adds config entries to each obsercation object passed.
    */
-  private enrichInputs(inputs: any[], config: any[], nestedConfig: any[]) {
+  private enrichInputs(
+    inputs: ModelParams[],
+    config: Config,
+    nestedConfig: Config
+  ) {
     const configValues = this.flattenConfigValues(config);
-    const nestedConfigValues =
-      nestedConfig && this.flattenConfigValues(nestedConfig);
+    const nestedConfigValues = this.flattenConfigValues(nestedConfig);
 
     return inputs.map((input: any) => ({
       ...input,
@@ -54,7 +70,10 @@ export class Supercomputer {
    * Otherwise enriches inputs, passes them to Observatory.
    * For each model from pipeline Observatory gathers inputs. Then results are stored.
    */
-  private async calculateOutputsForChild(childrenObject: any, params: any) {
+  private async calculateOutputsForChild(
+    childrenObject: Children,
+    params: any
+  ) {
     const {childName, areChildrenNested} = params;
 
     if (!areChildrenNested) {
@@ -70,14 +89,20 @@ export class Supercomputer {
       return this.compute(childrenObject[childName].children);
     }
 
+    if (!('inputs' in childrenObject[childName])) {
+      throw new ImplValidationError(STRUCTURE_MALFORMED(childName));
+    }
+
     const specificInputs = areChildrenNested
       ? childrenObject[childName].inputs
       : inputs;
 
+    const childrenConfig = childrenObject[childName].config || {};
+
     const enrichedInputs = this.enrichInputs(
       specificInputs,
       config,
-      childrenObject[childName].config
+      childrenConfig
     );
 
     const observatory = new Observatory(enrichedInputs);
@@ -92,7 +117,11 @@ export class Supercomputer {
       await observatory.doInvestigationsWith(modelInstance);
     }
 
+    const outputs = observatory.getOutputs();
+
     if (areChildrenNested) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.impl.graph.children[this.olderChild.name].children[
         childName
       ].outputs = observatory.getOutputs();
@@ -100,8 +129,8 @@ export class Supercomputer {
       return;
     }
 
-    this.impl.graph.children[this.olderChild.name].outputs =
-      observatory.getOutputs();
+    this.impl.graph.children[this.olderChild.name].outputs = outputs;
+    return;
   }
 
   /**
@@ -110,7 +139,7 @@ export class Supercomputer {
   public async compute(childrenObject?: any) {
     const implOrChildren = childrenObject || this.impl;
     const areChildrenNested = !!childrenObject;
-    const children = areChildrenNested
+    const children: Children = areChildrenNested
       ? implOrChildren
       : implOrChildren.graph.children;
     const childrenNames = Object.keys(children);

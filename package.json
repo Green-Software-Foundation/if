@@ -2,7 +2,6 @@
   "name": "ief",
   "description": "",
   "version": "1.0.0",
-  "license": "MIT",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
@@ -44,15 +43,17 @@
     "yarn": "1.22.19"
   },
   "keywords": [],
+  "license": "MIT",
   "main": "src/index.ts",
   "repository": {
     "url": "https://github.com/Green-Software-Foundation/ief.git"
   },
   "scripts": {
+    "coverage": "jest --verbose --coverage",
     "fix": "gts fix",
     "fix:package": "fixpack",
+    "impact-engine": "npx ts-node",
     "lint": "gts lint",
-    "coverage": "jest --verbose --coverage",
     "test": "jest --verbose"
   },
   "stability": "stable",

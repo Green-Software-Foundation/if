@@ -10,7 +10,7 @@ export type GraphOptions = {
   'physical-processor': string;
 };
 
-export type ModelKind = 'builtin' | 'plugin' | 'shell';
+export type ModelKind = 'plugin' | 'shell';
 
 export type ImplInitializeModel = {
   config: InitializeOptions;

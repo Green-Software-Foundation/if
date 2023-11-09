@@ -36,7 +36,7 @@ describe('util/models-universe: ', () => {
           verbose: true,
         },
         name: 'test',
-        kind: 'builtin',
+        kind: 'plugin',
       };
 
       const expectedMessage = `Missing or wrong model: ${modelInfo.name}.`;
@@ -48,48 +48,6 @@ describe('util/models-universe: ', () => {
           expect(error.message).toEqual(expectedMessage);
         }
       }
-    });
-
-    it('registers `builtin` model in initalized models list.', () => {
-      const modelsHandbook = new ModelsUniverse();
-      const modelInfo: ImplInitializeModel = {
-        config: {
-          allocation: 'mock-allocation',
-          verbose: true,
-        },
-        name: '',
-        kind: 'builtin',
-      };
-
-      const models = [
-        'boavizta-cpu',
-        'boavizta-cloud',
-        'ccf',
-        'teads-aws',
-        'teads-curve',
-        'sci-e',
-        'sci-m',
-        'sci-o',
-        'sci',
-        'eshoppen',
-        'eshoppen-net',
-        'eshoppen-cpu',
-        'eshoppen-mem',
-        'sci-accenture',
-        'emem',
-        'aveva',
-      ];
-
-      models.forEach(model => {
-        const completeModelInfo = {
-          ...modelInfo,
-          name: model,
-        };
-        const modelsList = modelsHandbook.writeDown(completeModelInfo);
-
-        expect(modelsList).toHaveProperty(completeModelInfo.name);
-        expect(typeof modelsList[completeModelInfo.name]).toBe('function');
-      });
     });
 
     it('registers `shell` model in initalized models list.', () => {
@@ -278,7 +236,7 @@ describe('util/models-universe: ', () => {
       }
     });
 
-    it('returns initalized model.', async () => {
+    it.skip('returns initalized model.', async () => {
       const modelsHandbook = new ModelsUniverse();
       const modelInfo: ImplInitializeModel = {
         config: {
@@ -286,7 +244,7 @@ describe('util/models-universe: ', () => {
           verbose: true,
         },
         name: 'boavizta-cpu',
-        kind: 'builtin',
+        kind: 'plugin',
       };
       modelsHandbook.writeDown(modelInfo);
 

@@ -2,15 +2,18 @@ import * as path from 'path';
 import {parse} from 'ts-command-line-args';
 
 import {checkIfFileIsYaml} from './yaml';
+import {ERRORS} from './errors';
 
 import {CONFIG, STRINGS} from '../config';
 
 import {impactProcessArgs} from '../types/process-args';
 
+const {CliInputError} = ERRORS;
+
 const {impact} = CONFIG;
 const {ARGS, HELP} = impact;
 
-const {WRONG_CLI_ARGUMENT} = STRINGS;
+const {FILE_IS_NOT_YAML, IMPL_IS_MISSING} = STRINGS;
 
 /**
  * Validates process arguments
@@ -47,7 +50,9 @@ export const parseProcessArgument = () => {
         ...(ompl && {outputPath: prependFullFilePath(ompl)}),
       };
     }
+
+    throw new CliInputError(FILE_IS_NOT_YAML);
   }
 
-  throw Error(WRONG_CLI_ARGUMENT);
+  throw new CliInputError(IMPL_IS_MISSING);
 };
