@@ -1,24 +1,4 @@
-import {
-  AzureImporterModel,
-  BoaviztaCpuOutputModel,
-  BoaviztaCloudOutputModel,
-  CloudCarbonFootprint,
-  CloudInstanceMetadataModel,
-  ShellModel,
-  SciMModel,
-  SciOModel,
-  TeadsAWS,
-  TeadsCurveModel,
-  SciModel,
-  EshoppenModel,
-  EshoppenCpuModel,
-  EshoppenMemModel,
-  EshoppenNetModel,
-  EMemModel,
-  SciAccentureModel,
-  EAvevaModel,
-  SciEModel,
-} from '../lib';
+import {ShellModel} from '../lib';
 
 import {ERRORS} from './errors';
 
@@ -38,7 +18,6 @@ const {
   MISSING_CLASSNAME,
   NOT_OUTPUT_MODEL_EXTENSION,
   NOT_INITIALIZED_MODEL,
-  WRONG_OR_MISSING_MODEL,
   MISSING_PATH,
   MODEL_DOESNT_EXIST,
 } = STRINGS;
@@ -51,52 +30,6 @@ export class ModelsUniverse {
    * Models list.
    */
   public initalizedModels: InitalizedModels = {};
-
-  /**
-   * Gets model class by provided `modelName` param.
-   */
-  private handBuiltinModel(modelName: string) {
-    switch (modelName) {
-      case 'azure-importer':
-        return AzureImporterModel;
-      case 'boavizta-cpu':
-        return BoaviztaCpuOutputModel;
-      case 'boavizta-cloud':
-        return BoaviztaCloudOutputModel;
-      case 'ccf':
-        return CloudCarbonFootprint;
-      case 'cloud-instance-metadata':
-        return CloudInstanceMetadataModel;
-      case 'teads-aws':
-        return TeadsAWS;
-      case 'teads-curve':
-        return TeadsCurveModel;
-      case 'sci-e':
-        return SciEModel;
-      case 'sci-m':
-        return SciMModel;
-      case 'sci-o':
-        return SciOModel;
-      case 'sci':
-        return SciModel;
-      case 'eshoppen':
-        return EshoppenModel;
-      case 'eshoppen-net':
-        return EshoppenNetModel;
-      case 'eshoppen-cpu':
-        return EshoppenCpuModel;
-      case 'eshoppen-mem':
-        return EshoppenMemModel;
-      case 'sci-accenture':
-        return SciAccentureModel;
-      case 'emem':
-        return EMemModel;
-      case 'aveva':
-        return EAvevaModel;
-      default:
-        throw new Error(WRONG_OR_MISSING_MODEL(modelName)); // will be dropped after models separation
-    }
-  }
 
   /**
    * Checks if model is instance of `IOutputModelInterface`.
@@ -152,11 +85,9 @@ export class ModelsUniverse {
    * Gets model based on `name` and `kind` params.
    */
   private async handModelByCriteria(params: HandModelParams) {
-    const {name, kind, model, path} = params;
+    const {kind, model, path} = params;
 
     switch (kind) {
-      case 'builtin':
-        return this.handBuiltinModel(name);
       case 'plugin':
         return this.handPluginModel(model, path);
       case 'shell':
