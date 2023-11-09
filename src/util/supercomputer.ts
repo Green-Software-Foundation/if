@@ -1,8 +1,16 @@
 import {ModelsUniverse} from './models-universe';
 import {Observatory} from './observatory';
 
+import {ERRORS} from './errors';
+
+import {STRINGS} from '../config';
+
 import {ChildInformation} from '../types/supercomputer';
 import {Children, Config, Impl, ModelParams} from '../types/impl';
+
+const {ImplValidationError} = ERRORS;
+
+const {STRUCTURE_MALFORMED} = STRINGS;
 
 /**
  * Computer for `impl` documents.
@@ -69,10 +77,14 @@ export class Supercomputer {
     const {childName, areChildrenNested} = params;
 
     if (!areChildrenNested) {
-      this.olderChild = {
-        name: childName,
-        info: this.impl.graph.children[childName],
-      };
+      if ('inputs' in this.impl.graph.children[childName]) {
+        this.olderChild = {
+          name: childName,
+          info: this.impl.graph.children[childName],
+        };
+      }
+
+      throw new ImplValidationError(STRUCTURE_MALFORMED(childName));
     }
 
     const {pipeline, inputs, config} = this.olderChild.info;
