@@ -4,9 +4,10 @@ tags:
 initialize:
   models:
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
-      kind: builtin
+      kind: plugin
       verbose: false
-      path: ''
+      model: SciMModel
+      path: if-models
 graph:
   children:
     child:
@@ -14,7 +15,7 @@ graph:
         - sci-m # duration & config -> embodied
       config:
         sci-m:
-          total-embodied: 1533.120 # gCO2eq
+          total-embodied-emissions: 1533.120 # gCO2eq
           time-reserved: 3600 # 1hr in seconds
           expected-lifespan: 94608000 # 3 years in seconds        
           resources-reserved: 1
