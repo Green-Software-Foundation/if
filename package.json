@@ -12,7 +12,6 @@
     "@azure/identity": "*",
     "@cloud-carbon-footprint/aws": "*",
     "@cloud-carbon-footprint/core": "*",
-    "@types/node": "^20.4.5",
     "axios": "^1.4.0",
     "dayjs": "^1.11.9",
     "dotenv": "^16.3.1",
