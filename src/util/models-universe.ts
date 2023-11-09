@@ -40,6 +40,7 @@ const {
   NOT_INITIALIZED_MODEL,
   WRONG_OR_MISSING_MODEL,
   MISSING_PATH,
+  MODEL_DOESNT_EXIST,
 } = STRINGS;
 
 /**
@@ -101,15 +102,15 @@ export class ModelsUniverse {
    * Checks if model is instance of `IOutputModelInterface`.
    */
   private instanceOfModel(ClassContainer: any) {
-    const testModel = new ClassContainer();
+    try {
+      const testModel = new ClassContainer();
 
-    const boolable =
-      'modelIdentifier' in testModel &&
-      'configure' in testModel &&
-      'authenticate' in testModel &&
-      'execute' in testModel;
+      const boolable = 'configure' in testModel && 'execute' in testModel;
 
-    return boolable;
+      return boolable;
+    } catch (error) {
+      throw ModelInitializationError(MODEL_DOESNT_EXIST);
+    }
   }
 
   /**
