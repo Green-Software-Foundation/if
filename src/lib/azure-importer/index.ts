@@ -71,12 +71,10 @@ export class AzureImporterModel implements IOutputModelInterface {
       params.vmName,
       params.resourceGroupName
     );
+    input['duration'] = this.calculateDurationPerInput(params);
 
-    const perInputDuration = this.calculateDurationPerInput(params);
-
-    return rawResults.timestamps.map((timestamp, index) => ({
+    const enrichedOutputs = rawResults.timestamps.map((timestamp, index) => ({
       timestamp,
-      duration: perInputDuration,
       'cloud-vendor': 'azure',
       'cpu-util': rawResults.cpu_utils[index],
       'mem-availableGB': parseFloat(rawResults.memAvailable[index]) * 1e-9,
@@ -92,6 +90,11 @@ export class AzureImporterModel implements IOutputModelInterface {
       location: rawMetadataResults.location,
       'cloud-instance-type': rawMetadataResults.instanceType,
     }));
+
+    for (let i = 0; i < Object.entries(enrichedOutputs).length; i++) {
+      enrichedOutputs[i] = Object.assign(enrichedOutputs[i], input);
+    }
+    return enrichedOutputs;
   }
 
   /**

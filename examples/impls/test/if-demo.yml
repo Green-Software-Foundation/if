@@ -1,0 +1,50 @@
+name: ccf-demo
+description: example impl invoking CCF model
+initialize:
+  models:
+    - name: azure-importer
+      kind: builtin
+    - name: cloud-instance-metadata
+      kind: builtin
+    - name: teads-curve
+      kind: builtin
+    - name: sci-e
+      kind: builtin
+    - name: sci-o
+      kind: builtin
+    - name: sci-e
+      kind: builtin
+    - name: sci-m
+      kind: builtin
+    - name: sci
+      kind: builtin
+graph:
+  children:
+    child:
+      pipeline:
+        - azure-importer
+        - cloud-instance-metadata
+        - teads-curve
+        - sci-e
+        - sci-o
+        - sci-m
+        - sci
+      config:
+        sci:
+          functional-unit: ''
+          functional-unit-time: hour
+          functional-unit-duration: 1
+      inputs:
+          - timestamp: '2023-11-02T10:35:31.820Z'
+            duration: 3600
+            azure-observation-window: 5 min # value and unit must be space separated 
+            azure-observation-aggregation: 'average'
+            azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
+            azure-resource-group: vm1_group
+            azure-vm-name: vm1
+            grid-carbon-intensity: 951
+            total-embodied-emissions: 1533.12
+            time-reserved: 300
+            expected-lifespan: 94348800 # 3 yrs in seconds
+            resources-reserved: 1
+            total-resources: 64
