@@ -77,20 +77,20 @@ export class Supercomputer {
     const {childName, areChildrenNested} = params;
 
     if (!areChildrenNested) {
-      if ('inputs' in this.impl.graph.children[childName]) {
-        this.olderChild = {
-          name: childName,
-          info: this.impl.graph.children[childName],
-        };
-      }
-
-      throw new ImplValidationError(STRUCTURE_MALFORMED(childName));
+      this.olderChild = {
+        name: childName,
+        info: this.impl.graph.children[childName],
+      };
     }
 
     const {pipeline, inputs, config} = this.olderChild.info;
 
     if ('children' in childrenObject[childName]) {
       return this.compute(childrenObject[childName].children);
+    }
+
+    if (!('inputs' in childrenObject[childName])) {
+      throw new ImplValidationError(STRUCTURE_MALFORMED(childName));
     }
 
     const specificInputs = areChildrenNested
