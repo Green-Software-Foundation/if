@@ -1,5 +1,6 @@
 name: if-demo
 description: demo pipeline
+tags:
 initialize:
   models:
     - name: azure-importer
