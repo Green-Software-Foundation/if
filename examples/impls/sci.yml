@@ -3,9 +3,11 @@ description: example invoking sci model
 tags:
 initialize:
   models:
-    - name: sci # sums SCI components and converts to f.unit
-      kind: builtin
-      path: ''
+    - name: sci 
+      kind: plugin
+      verbose: false
+      model: SciModel
+      path: if-models
 graph:
   children:
     child:
@@ -21,3 +23,4 @@ graph:
           operational-carbon: 5
           embodied-carbon: 0.02
           requests: 100
+          duration: 3600
