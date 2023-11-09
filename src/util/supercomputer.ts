@@ -21,6 +21,10 @@ export class Supercomputer {
    * Flattens config entries.
    */
   private flattenConfigValues(config: Config) {
+    if (!config) {
+      return {};
+    }
+
     const configModelNames = Object.keys(config);
     const values = configModelNames.reduce((acc: any, name: string) => {
       acc = {
@@ -43,8 +47,7 @@ export class Supercomputer {
     nestedConfig: Config
   ) {
     const configValues = this.flattenConfigValues(config);
-    const nestedConfigValues =
-      nestedConfig && this.flattenConfigValues(nestedConfig);
+    const nestedConfigValues = this.flattenConfigValues(nestedConfig);
 
     return inputs.map((input: any) => ({
       ...input,
@@ -82,10 +85,12 @@ export class Supercomputer {
       ? childrenObject[childName].inputs
       : inputs;
 
+    const childrenConfig = childrenObject[childName].config || {};
+
     const enrichedInputs = this.enrichInputs(
       specificInputs,
       config,
-      childrenObject[childName].config
+      childrenConfig
     );
 
     const observatory = new Observatory(enrichedInputs);
