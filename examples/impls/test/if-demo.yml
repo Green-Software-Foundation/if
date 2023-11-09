@@ -1,5 +1,5 @@
-name: ccf-demo
-description: example impl invoking CCF model
+name: if-demo
+description: demo pipeline
 initialize:
   models:
     - name: azure-importer
@@ -11,6 +11,8 @@ initialize:
     - name: sci-e
       kind: builtin
     - name: sci-o
+      kind: builtin
+    - name: sci-e
       kind: builtin
     - name: sci-m
       kind: builtin
