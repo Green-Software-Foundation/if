@@ -25,4 +25,3 @@ graph:
           operational-carbon: 5
           embodied-carbon: 0.02
           requests: 100
-          duration: 3600
