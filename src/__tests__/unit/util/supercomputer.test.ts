@@ -21,7 +21,7 @@ describe('util/supercomputer: ', () => {
       models: [
         {
           name: 'boavizta-cpu',
-          kind: 'builtin',
+          kind: 'plugin',
           config: {
             allocation: 'LINEAR',
             verbose: true,
@@ -80,19 +80,19 @@ describe('util/supercomputer: ', () => {
         models: [
           {
             name: 'sci-e',
-            kind: 'builtin',
+            kind: 'plugin',
             verbose: false,
             path: '',
           },
           {
             name: 'sci-m',
-            kind: 'builtin',
+            kind: 'plugin',
             verbose: false,
             path: '',
           },
           {
             name: 'sci-o',
-            kind: 'builtin',
+            kind: 'plugin',
             verbose: false,
             path: '',
           },
