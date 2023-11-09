@@ -9,7 +9,7 @@ initialize:
       kind: plugin
 graph:
   children:
-    test:
+    child:
       pipeline:
         - azure-importer
       config:

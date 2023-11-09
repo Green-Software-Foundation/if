@@ -7,7 +7,7 @@ initialize:
       kind: shell
 graph:
   children:
-    test:
+    child:
       pipeline:
         - sampler
       config:

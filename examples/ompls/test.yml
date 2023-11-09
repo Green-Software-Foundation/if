@@ -1,9 +1,0 @@
-name: ccf-demo
-description: example impl invoking CCF model
-tags: null
-initialize:
-  models:
-    - name: azure-importer
-      kind: builtin
-graph:
-  children: {}
