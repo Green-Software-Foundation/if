@@ -44,11 +44,13 @@ export class SciModel implements IOutputModelInterface {
       if ('carbon' in input) {
         sci_secs = input['carbon'] / input['duration'];
       } else {
-        sci_secs = (operational + embodied) / input['duration']; // sci in time units of /s
+        sci_secs = (operational + embodied) / parseFloat(input['duration']); // sci in time units of /s
       }
 
+      console.log('sci-secs = ', sci_secs);
+
       let sci_timed: number = sci_secs;
-      let sci_timed_duration = sci_secs;
+      let sci_timed_duration: number = sci_secs;
 
       /*
       Convert C to desired time unit
@@ -98,16 +100,17 @@ export class SciModel implements IOutputModelInterface {
         sci_timed = sci_secs * 60 * 60 * 24 * 365;
       }
 
+      console.log('sci-timed = ', sci_timed);
       /*
       sci currently in whole single units of time - multiply by duration to
       convert to user-defined span of time.
       */
       sci_timed_duration = sci_timed * this.functionalUnitDuration;
-
+      console.log('sci-timed-duration = ', sci_timed_duration);
       const functionalUnit = this.functionalUnit;
 
       if (this.functionalUnit !== 'none') {
-        const factor = input[functionalUnit];
+        const factor = parseFloat(input[functionalUnit]);
         input['sci'] = sci_timed_duration / factor;
         return input;
       } else {
