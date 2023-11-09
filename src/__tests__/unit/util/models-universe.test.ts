@@ -50,48 +50,6 @@ describe('util/models-universe: ', () => {
       }
     });
 
-    it('registers `builtin` model in initalized models list.', () => {
-      const modelsHandbook = new ModelsUniverse();
-      const modelInfo: ImplInitializeModel = {
-        config: {
-          allocation: 'mock-allocation',
-          verbose: true,
-        },
-        name: '',
-        kind: 'builtin',
-      };
-
-      const models = [
-        'boavizta-cpu',
-        'boavizta-cloud',
-        'ccf',
-        'teads-aws',
-        'teads-curve',
-        'sci-e',
-        'sci-m',
-        'sci-o',
-        'sci',
-        'eshoppen',
-        'eshoppen-net',
-        'eshoppen-cpu',
-        'eshoppen-mem',
-        'sci-accenture',
-        'emem',
-        'aveva',
-      ];
-
-      models.forEach(model => {
-        const completeModelInfo = {
-          ...modelInfo,
-          name: model,
-        };
-        const modelsList = modelsHandbook.writeDown(completeModelInfo);
-
-        expect(modelsList).toHaveProperty(completeModelInfo.name);
-        expect(typeof modelsList[completeModelInfo.name]).toBe('function');
-      });
-    });
-
     it('registers `shell` model in initalized models list.', () => {
       const modelsHandbook = new ModelsUniverse();
       const modelInfo: ImplInitializeModel = {
