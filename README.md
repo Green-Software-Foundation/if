@@ -21,11 +21,12 @@ Run `impact-engine` using the following command:
 npx ts-node impact-engine.ts --impl <path-to-your-impl-file>
 ```
 
-You can also add an optional savepath for your output yaml if you want to use something other than the default (`/examples/ompls`):
+You can also add an optional savepath for your output yaml (if you do not provide one, the output will be printed to the console):
 
 ```sh
 npx ts-node impact-engine.ts --impl <path-to-your-impl-file> --ompl <your-savepath>
 ```
+
 The `impact-engine` CLI tool will configure and run the models defined in your input `yaml` (`impl`) and return the results as an output `yaml` (`ompl`).
 
 ## Video walk-through
