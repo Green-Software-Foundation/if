@@ -8,7 +8,7 @@ const {ImplValidationError} = ERRORS;
 
 const implValidation = z.object({
   name: z.string(),
-  description: z.string(),
+  description: z.string().nullable(),
   tags: z
     .object({
       kind: z.string().optional(),
@@ -23,17 +23,13 @@ const implValidation = z.object({
         kind: z.string(),
         path: z.string().optional(),
         model: z.string().optional(),
-        config: z.object({}).optional(),
+        config: z.record(z.string(), z.any()).optional(),
       })
     ),
   }),
   graph: z
     .object({
-      children: z
-        .object({
-          child: z.any(),
-        })
-        .required(),
+      children: z.record(z.string(), z.any()),
     })
     .required(),
 });
