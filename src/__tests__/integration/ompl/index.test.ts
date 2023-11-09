@@ -38,10 +38,14 @@ describe('ompls: ', () => {
         console.log('condition: false, file = ', file);
         it('check ompls have outputs field', async () => {
           expect.assertions(1);
-
           const ompl = await openYamlFileAsObject(path + '/' + file);
           const expectedProperty = 'outputs';
-
+          console.log('\n*********\n', file, '\n*********\n');
+          console.log(
+            '\n*********\n',
+            ompl['graph']['children']['child'],
+            '\n*********\n'
+          );
           expect(ompl['graph']['children']['child']).toHaveProperty(
             expectedProperty
           );

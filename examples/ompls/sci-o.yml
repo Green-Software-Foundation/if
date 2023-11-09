@@ -1,0 +1,29 @@
+name: sci-o-demo
+description: null
+tags: null
+initialize:
+  models:
+    - name: sci-e
+      kind: builtin
+    - name: sci-o
+      kind: builtin
+graph:
+  children:
+    child:
+      pipeline:
+        - sci-e
+        - sci-o
+      config:
+        sci-e: null
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          energy-cpu: 0.001
+          grid-carbon-intensity: 800
+      outputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          energy-cpu: 0.001
+          grid-carbon-intensity: 800
+          energy: 0.001
+          operational-carbon: 0.8

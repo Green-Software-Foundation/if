@@ -1,0 +1,23 @@
+name: ccf-demo
+description: example impl invoking CCF model
+tags: null
+initialize:
+  models:
+    - name: sampler
+      kind: shell
+graph:
+  children:
+    child:
+      pipeline:
+        - sampler
+      config:
+        sampler:
+          executable: python3 /usr/local/bin/sampler
+      inputs:
+        - timestamp: '2023-11-02T10:35:31.820Z'
+          duration: 3600
+      outputs:
+        - duration: 3600
+          energy: 1
+          executable: python3 /usr/local/bin/sampler
+          timestamp: '2023-11-02T10:35:31.820Z'

@@ -1,5 +1,5 @@
-name: ccf-demo
-description: example impl invoking CCF model
+name: if-demo
+description: demo pipeline
 initialize:
   models:
     - name: azure-importer

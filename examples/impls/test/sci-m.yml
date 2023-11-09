@@ -1,33 +1,24 @@
 name: sci-m
 description: simple demo invoking sci-m
-tags: null
+tags:
 initialize:
   models:
-    - name: sci-m
+    - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
       kind: builtin
       verbose: false
       path: ''
 graph:
   children:
     child:
-      pipeline:
-        - sci-m
+      pipeline: 
+        - sci-m # duration & config -> embodied
       config:
         sci-m:
-          total-embodied-emissions: 1533.12
-          time-reserved: 1
-          expected-lifespan: 3
+          total-embodied-emissions: 1533.120 # gCO2eq
+          time-reserved: 3600 # 1hr in seconds
+          expected-lifespan: 94608000 # 3 years in seconds        
           resources-reserved: 1
           total-resources: 8
-      inputs:
+      inputs: 
         - timestamp: 2023-07-06T00:00
           duration: 3600
-      outputs:
-        - timestamp: 2023-07-06T00:00
-          duration: 3600
-          total-embodied-emissions: 1533.12
-          time-reserved: 1
-          expected-lifespan: 3
-          resources-reserved: 1
-          total-resources: 8
-          embodied-carbon: 63.879999999999995
