@@ -32,6 +32,7 @@ graph:
         - eshoppen-net
         - sci-e
         - sci-o
+        - sampler
       config:
         teads-curve:
           thermal-design-power: 1

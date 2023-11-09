@@ -18,6 +18,8 @@ graph:
           functional-unit: requests # factor to convert per time to per f.unit
       inputs:
         - timestamp: 2023-07-06T00:00
+          duration: 3600
+          energy: 5
           operational-carbon: 5
           embodied-carbon: 0.02
           requests: 100

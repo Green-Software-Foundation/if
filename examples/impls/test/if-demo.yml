@@ -12,8 +12,6 @@ initialize:
       kind: builtin
     - name: sci-o
       kind: builtin
-    - name: sci-e
-      kind: builtin
     - name: sci-m
       kind: builtin
     - name: sci
