@@ -34,17 +34,19 @@ export class TdpFinderModel implements IOutputModelInterface {
     }
 
     return observations.map((observation: KeyValuePair) => {
+      observation['thermal-design-power'] = 0;
       if ('physical-processor' in observation) {
         const physicalProcessors = observation['physical-processor'] as string;
         physicalProcessors.split(',').forEach(physicalProcessor => {
+          physicalProcessor = physicalProcessor.trim();
           if (
             physicalProcessor in this.data &&
             observation['thermal-design-power'] < this.data[physicalProcessor]
           ) {
             observation['thermal-design-power'] = this.data[physicalProcessor];
-          } else {
+          } else if (!(physicalProcessor in this.data)) {
             throw new Error(
-              'physical-processor not found in database. Please check spelling / contribute to IEF with the data.'
+              `physical-processor ${physicalProcessor} not found in database. Please check spelling / contribute to IEF with the data.`
             );
           }
         });

@@ -34,13 +34,32 @@ describe('tdp-finder:configure test', () => {
     await expect(
       model.execute([
         {
-          'physical-processor': 'Intel Xeon Platinum 8175M',
+          'physical-processor': 'Intel Xeon Platinum 8175M,AMD A8-9600',
         },
       ])
     ).resolves.toStrictEqual([
       {
-        'physical-processor': 'Intel Xeon Platinum 8175M',
+        'physical-processor': 'Intel Xeon Platinum 8175M,AMD A8-9600',
         'thermal-design-power': 240.0,
+      },
+    ]);
+    await expect(
+      model.execute([
+        {
+          'physical-processor': 'Intel Xeon Platinum 8175M,AMD A8-9600f',
+        },
+      ])
+    ).rejects.toThrowError();
+    await expect(
+      model.execute([
+        {
+          'physical-processor': 'AMD A8-9600',
+        },
+      ])
+    ).resolves.toStrictEqual([
+      {
+        'physical-processor': 'AMD A8-9600',
+        'thermal-design-power': 65,
       },
     ]);
     await expect(
