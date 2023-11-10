@@ -4,9 +4,9 @@ tags:
 initialize:
   models:
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
-      kind: builtin
+      model: SciMModel
       verbose: false
-      path: ''
+      path: if-models
 graph:
   children:
     child:

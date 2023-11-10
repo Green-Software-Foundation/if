@@ -5,11 +5,9 @@ initialize:
   models:
     - name: sci-e
       kind: plugin
-      verbose: false
       model: SciEModel
       path: if-models
     - name: sci-o
-      kind: plugin
       verbose: false
       model: SciOModel
       path: if-models

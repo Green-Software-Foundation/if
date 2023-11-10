@@ -1,21 +1,32 @@
-name: ccf-demo
-description: example impl invoking CCF model
+name: if-demo
+description: demo pipeline
+tags: null
 initialize:
   models:
     - name: azure-importer
-      kind: builtin
+      path: if-models
+      model: AzureImporterModel
     - name: cloud-instance-metadata
-      kind: builtin
+      path: if-models
+      model: CloudInstanceMetadataModel
     - name: teads-curve
-      kind: builtin
+      path: if-community-models
+      model: TeadsCurveModel
     - name: sci-e
-      kind: builtin
+      path: if-models
+      model: SciEModel
     - name: sci-o
-      kind: builtin
+      path: if-models
+      model: SciOModel
+    - name: sci-e
+      path: if-models
+      model: SciEModel
     - name: sci-m
-      kind: builtin
+      path: if-models
+      model: SciMModel
     - name: sci
-      kind: builtin
+      path: if-models
+      model: SciModel
 graph:
   children:
     child:
@@ -28,6 +39,8 @@ graph:
         - sci-m
         - sci
       config:
+        sci-o:
+          grid-carbon-intensity: 951
         sci:
           functional-unit: ''
           functional-unit-time: hour
@@ -40,7 +53,6 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
@@ -62,12 +74,12 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
           resources-reserved: 1
           total-resources: 64
+          grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: hour
           functional-unit-duration: 1
@@ -83,6 +95,7 @@ graph:
           energy: 0.0028475446387886973
           operational-carbon: 2.708014951488051
           embodied-carbon: 0.00007616949023199022
+          carbon: 0.009026970403260942
           sci: 32.49709345173939
         - timestamp: '2023-11-02T10:35:31.820Z'
           cloud-vendor: azure
@@ -99,12 +112,12 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
           resources-reserved: 1
           total-resources: 64
+          grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: hour
           functional-unit-duration: 1
@@ -120,6 +133,7 @@ graph:
           energy: 0.0028475446387886973
           operational-carbon: 2.708014951488051
           embodied-carbon: 0.00007616949023199022
+          carbon: 0.009026970403260942
           sci: 32.49709345173939
         - timestamp: '2023-11-02T10:35:31.820Z'
           cloud-vendor: azure
@@ -136,12 +150,12 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
           resources-reserved: 1
           total-resources: 64
+          grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: hour
           functional-unit-duration: 1
@@ -157,6 +171,7 @@ graph:
           energy: 0.0028414365818491432
           operational-carbon: 2.7022061893385354
           embodied-carbon: 0.00007616949023199022
+          carbon: 0.009007607862762558
           sci: 32.42738830594521
         - timestamp: '2023-11-02T10:35:31.820Z'
           cloud-vendor: azure
@@ -173,12 +188,12 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
           resources-reserved: 1
           total-resources: 64
+          grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: hour
           functional-unit-duration: 1
@@ -194,6 +209,7 @@ graph:
           energy: 0.0028400270215236593
           operational-carbon: 2.700865697469
           embodied-carbon: 0.00007616949023199022
+          carbon: 0.009003139556530775
           sci: 32.41130240351079
         - timestamp: '2023-11-02T10:35:31.820Z'
           cloud-vendor: azure
@@ -210,12 +226,12 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
           resources-reserved: 1
           total-resources: 64
+          grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: hour
           functional-unit-duration: 1
@@ -231,6 +247,7 @@ graph:
           energy: 0.0028414365818491432
           operational-carbon: 2.7022061893385354
           embodied-carbon: 0.00007616949023199022
+          carbon: 0.009007607862762558
           sci: 32.42738830594521
         - timestamp: '2023-11-02T10:35:31.820Z'
           cloud-vendor: azure
@@ -247,12 +264,12 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
           resources-reserved: 1
           total-resources: 64
+          grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: hour
           functional-unit-duration: 1
@@ -268,6 +285,7 @@ graph:
           energy: 0.0028400270215236593
           operational-carbon: 2.700865697469
           embodied-carbon: 0.00007616949023199022
+          carbon: 0.009003139556530775
           sci: 32.41130240351079
         - timestamp: '2023-11-02T10:35:31.820Z'
           cloud-vendor: azure
@@ -284,12 +302,12 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
           resources-reserved: 1
           total-resources: 64
+          grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: hour
           functional-unit-duration: 1
@@ -305,6 +323,7 @@ graph:
           energy: 0.0028428461389389424
           operational-carbon: 2.7035466781309343
           embodied-carbon: 0.00007616949023199022
+          carbon: 0.00901207615873722
           sci: 32.44347417145399
         - timestamp: '2023-11-02T10:35:31.820Z'
           cloud-vendor: azure
@@ -321,12 +340,12 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
           resources-reserved: 1
           total-resources: 64
+          grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: hour
           functional-unit-duration: 1
@@ -342,6 +361,7 @@ graph:
           energy: 0.0028409667287652447
           operational-carbon: 2.701759359055748
           embodied-carbon: 0.00007616949023199022
+          carbon: 0.009006118428486599
           sci: 32.42202634255176
         - timestamp: '2023-11-02T10:35:31.820Z'
           cloud-vendor: azure
@@ -358,12 +378,12 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
           resources-reserved: 1
           total-resources: 64
+          grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: hour
           functional-unit-duration: 1
@@ -379,6 +399,7 @@ graph:
           energy: 0.0029988096470848187
           operational-carbon: 2.8518679743776625
           embodied-carbon: 0.00007616949023199022
+          carbon: 0.009506480479559648
           sci: 34.22332972641473
         - timestamp: '2023-11-02T10:35:31.820Z'
           cloud-vendor: azure
@@ -395,12 +416,12 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
           resources-reserved: 1
           total-resources: 64
+          grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: hour
           functional-unit-duration: 1
@@ -416,6 +437,7 @@ graph:
           energy: 0.0028386174579947384
           operational-carbon: 2.699525202552996
           embodied-carbon: 0.00007616949023199022
+          carbon: 0.008998671240144094
           sci: 32.39521646451874
         - timestamp: '2023-11-02T10:35:31.820Z'
           cloud-vendor: azure
@@ -432,12 +454,12 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
           resources-reserved: 1
           total-resources: 64
+          grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: hour
           functional-unit-duration: 1
@@ -453,6 +475,7 @@ graph:
           energy: 0.0028451953934772694
           operational-carbon: 2.705780819196883
           embodied-carbon: 0.00007616949023199022
+          carbon: 0.009019523295623716
           sci: 32.470283864245374
         - timestamp: '2023-11-02T10:35:31.820Z'
           cloud-vendor: azure
@@ -469,12 +492,12 @@ graph:
           azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
           azure-resource-group: vm1_group
           azure-vm-name: vm1
-          grid-carbon-intensity: 951
           total-embodied-emissions: 1533.12
           time-reserved: 300
           expected-lifespan: 94348800
           resources-reserved: 1
           total-resources: 64
+          grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: hour
           functional-unit-duration: 1
@@ -490,4 +513,5 @@ graph:
           energy: 0.002927412423351122
           operational-carbon: 2.783969214606917
           embodied-carbon: 0.00007616949023199022
+          carbon: 0.00928015128032383
           sci: 33.40854460916579

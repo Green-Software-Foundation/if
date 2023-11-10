@@ -4,21 +4,29 @@ tags:
 initialize:
   models:
     - name: azure-importer
-      kind: builtin
+      model: AzureImporterModel
+      path: if-models
     - name: cloud-instance-metadata
-      kind: builtin
+      model: CloudInstanceMetadataModel
+      path: if-models
     - name: teads-curve
-      kind: builtin
+      model: TeadsCurveModel
+      path: if-community-models
     - name: sci-e
-      kind: builtin
+      model: SciEModel
+      path: if-models
     - name: sci-o
-      kind: builtin
+      model: SciOModel
+      path: if-models
     - name: sci-e
-      kind: builtin
+      model: SciEModel
+      path: if-models
     - name: sci-m
-      kind: builtin
+      model: SciMModel
+      path: if-models
     - name: sci
-      kind: builtin
+      model: SciModel
+      path: if-models
 graph:
   children:
     child:
@@ -31,6 +39,8 @@ graph:
         - sci-m
         - sci
       config:
+        sci-o:
+          grid-carbon-intensity: 951
         sci:
           functional-unit: ''
           functional-unit-time: hour
@@ -43,9 +53,9 @@ graph:
             azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
             azure-resource-group: vm1_group
             azure-vm-name: vm1
-            grid-carbon-intensity: 951
             total-embodied-emissions: 1533.12
             time-reserved: 300
             expected-lifespan: 94348800 # 3 yrs in seconds
             resources-reserved: 1
             total-resources: 64
+

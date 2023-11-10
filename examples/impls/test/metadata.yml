@@ -1,10 +1,11 @@
-name: sci-m
+name: cloud-instance-metadata
 description: simple demo invoking metadata lookup
 tags: null
 initialize:
   models:
     - name: cloud-instance-metadata
-      kind: builtin
+      model: CloudInstanceMetadataModel
+      path: if-models
 graph:
   children:
     child:

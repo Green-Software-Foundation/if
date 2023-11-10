@@ -1,9 +1,11 @@
 name: ccf-demo
 description: example impl invoking CCF model
+tags:
 initialize:
   models:
     - name: ccf
-      kind: builtin
+      model: CloudCarbonFootprint
+      path: if-community-models
 graph:
   children:
     child:
@@ -11,8 +13,8 @@ graph:
         - ccf
       config:
         ccf:
-          vendor: aws
-          instance-type: m5n.large
+          vendor: 'aws'
+          instance-type: 'm5n.large'
       inputs:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
           duration: 1

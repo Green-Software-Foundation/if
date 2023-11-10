@@ -7,23 +7,20 @@ tags:
 initialize:
   models:
     - name: teads-curve
-      kind: builtin
+      model: TeadsCurveModel
+      path: if-community-models
     - name: sci-e
-      kind: builtin
-      verbose: false
-      path: ''
+      model: SciEModel
+      path: if-models
     - name: sci-m
-      kind: builtin
-      verbose: false
-      path: ''
+      path: if-models
+      model: SciMModel
     - name: sci-o
-      kind: builtin
-      verbose: false
-      path: ''
+      model: SciOModel
+      path: if-models
     - name: sci
-      kind: builtin
-      verbose: false
-      path: ''
+      model: SciModel
+      path: if-models
 graph:
   children:
     child: # an advanced grouping node

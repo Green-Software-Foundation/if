@@ -4,7 +4,8 @@ tags:
 initialize:
   models:
     - name: sampler
-      kind: shell
+      model: ShellModel
+      path: if-models
 graph:
   children:
     child:

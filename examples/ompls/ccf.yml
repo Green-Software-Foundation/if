@@ -1,9 +1,11 @@
 name: ccf-demo
 description: example impl invoking CCF model
+tags:
 initialize:
   models:
     - name: ccf
-      kind: builtin
+      model: CloudCarbonMetadataModel
+      path: if-models
 graph:
   children:
     child:
