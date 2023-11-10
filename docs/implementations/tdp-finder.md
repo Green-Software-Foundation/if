@@ -2,7 +2,7 @@
 
 ## Scope
 
-The TDP Finder model enables finding the TDP of known set processor in the model dataset. Highest TDP value of provided CPUs is provided as the TDP power. The TDP is then used by other models to calculate the e-cpu value. 
+The TDP Finder model finds the thermal design power (TDP) of a given processor by looking it up in the model datasets. There are scenarios where the lookup can return multiple possible TDP values. In these cases, we return the maximum of the possible values. There are also cases where no TDP can be found for a specific processor. In these cases, we throw an error. The TDP is then used by other models to calculate the `energy-cpu` value. 
 
 ## Used DataSets
 
