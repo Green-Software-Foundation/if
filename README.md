@@ -6,7 +6,7 @@
 
 Modern applications are composed of many smaller pieces of software (components) running on many different environments, for example, private cloud, public cloud, bare-metal, virtualized, containerized, mobile, laptops, and desktops.
 
-Every environment requires a different model of measurement, and there is no single solution you can use to calculate the environmental impacts for all components on all environments.      
+Every environment requires a different model of measurement, and there is no single solution you can use to calculate the environmental impacts for all components across all environments.      
 
 The friction to measuring software emissions isn't that we need to know how, it's that we run software on many things and each thing has several different ways to measure.
 
@@ -15,7 +15,17 @@ Read the [specification and design docs](https://github.com/Green-Software-Found
 
 ## Get started
 
-Run `impact-engine` using the following command:
+The first thing to understand is that IF is a framework for running model plugins. This means that in order to do some calculations, you need to load some models from some external resource. We provide a [standard library of models](https://github.com/Green-Software-Foundation/if-models) and a repository of [community models](https://github.com/Green-Software-Foundation/if-community-models) to get you started. 
+
+Start by installing some models:
+
+```sh
+yarn add https://github.com/Green-Software-Foundation/if-models
+```
+
+Then create an `impl` file that describes your application (see our docs for a detailed explanation).
+
+Then, run `impact-engine` using the following command:
 
 ```sh
 npx ts-node impact-engine.ts --impl <path-to-your-impl-file>
