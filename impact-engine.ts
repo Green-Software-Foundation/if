@@ -1,12 +1,18 @@
 import {parseProcessArgument} from './src/util/args';
+import {ERRORS} from './src/util/errors';
+import {andHandleWith} from './src/util/helpers';
 import {ModelsUniverse} from './src/util/models-universe';
 import {Supercomputer} from './src/util/supercomputer';
-import {openYamlFileAsObject, saveYamlFileAs} from './src/util/yaml';
 import {validateImpl} from './src/util/validations';
+import {openYamlFileAsObject, saveYamlFileAs} from './src/util/yaml';
 
 import {STRINGS} from './src/config';
 
-const {DISCLAIMER_MESSAGE} = STRINGS;
+import * as packageData from './package.json';
+
+const {CliInputError} = ERRORS;
+
+const {DISCLAIMER_MESSAGE, SOMETHING_WRONG} = STRINGS;
 
 /**
  * 1. Parses yml input/output process arguments.
@@ -14,7 +20,8 @@ const {DISCLAIMER_MESSAGE} = STRINGS;
  * 3. Initializes models.
  * 4. Initializes graph, does computing.
  * 5. Saves processed object as a yaml file.
- * @example run following command `npx ts-node scripts/impact.ts --impl ./test.yml --ompl ./result.yml`
+ * @example run `npx ts-node impact-engine.ts --impl ./test.yml --ompl ./result.yml`
+ * @example run `npm run impact-engine -- --impl ./test.yml --ompl ./result.yml`
  */
 const impactEngine = async () => {
   console.log(DISCLAIMER_MESSAGE);
@@ -48,7 +55,7 @@ const impactEngine = async () => {
     return;
   }
 
-  return Promise.reject(new Error('missing params'));
+  return Promise.reject(new CliInputError(SOMETHING_WRONG));
 };
 
-impactEngine().catch(error => console.error(`\n ${error}`));
+impactEngine().catch(andHandleWith(packageData.bugs.url));
