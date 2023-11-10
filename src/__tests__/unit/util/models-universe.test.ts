@@ -36,7 +36,6 @@ describe('util/models-universe: ', () => {
           verbose: true,
         },
         name: 'test',
-        kind: 'plugin',
       };
 
       const expectedMessage = `Missing or wrong model: ${modelInfo.name}.`;
@@ -58,7 +57,6 @@ describe('util/models-universe: ', () => {
           verbose: true,
         },
         name: 'mock-name',
-        kind: 'shell',
       };
 
       const modelsList = modelsHandbook.writeDown(modelInfo);
@@ -74,7 +72,6 @@ describe('util/models-universe: ', () => {
           verbose: true,
         },
         name: 'mock-name',
-        kind: 'plugin',
       };
 
       const modelsList = modelsHandbook.writeDown(modelInfo);
@@ -90,7 +87,6 @@ describe('util/models-universe: ', () => {
           verbose: true,
         },
         name: 'mock-name',
-        kind: 'plugin',
       };
 
       const modelsList = modelsHandbook.writeDown(modelInfo);
@@ -119,7 +115,6 @@ describe('util/models-universe: ', () => {
           verbose: true,
         },
         name: 'mock-name',
-        kind: 'plugin',
         model: 'MockaviztaModel',
       };
 
@@ -158,7 +153,6 @@ describe('util/models-universe: ', () => {
           verbose: true,
         },
         name: 'mock-name',
-        kind: 'plugin',
         model: 'MockaviztaModel',
         path: 'https://github.com/mock/mockavizta-model',
       };
@@ -193,7 +187,6 @@ describe('util/models-universe: ', () => {
           verbose: true,
         },
         name: 'mock-name',
-        kind: 'plugin',
         model: 'MockaviztaModel',
         path: 'https://github.com/mock/mockavizta-model',
       };
@@ -244,7 +237,6 @@ describe('util/models-universe: ', () => {
           verbose: true,
         },
         name: 'boavizta-cpu',
-        kind: 'plugin',
       };
       modelsHandbook.writeDown(modelInfo);
 

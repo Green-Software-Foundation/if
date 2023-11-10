@@ -10,12 +10,9 @@ export type GraphOptions = {
   'physical-processor': string;
 };
 
-export type ModelKind = 'plugin' | 'shell';
-
 export type ImplInitializeModel = {
   config: InitializeOptions;
   name: string;
-  kind: ModelKind;
   model?: string;
   path?: string;
 };
@@ -26,7 +23,6 @@ export type InitalizedModels = {
 
 export type HandModelParams = {
   name: string;
-  kind: ModelKind;
   model?: string;
   path?: string;
 };
