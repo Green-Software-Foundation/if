@@ -4,6 +4,10 @@ import {Supercomputer} from './src/util/supercomputer';
 import {openYamlFileAsObject, saveYamlFileAs} from './src/util/yaml';
 import {validateImpl} from './src/util/validations';
 
+import {STRINGS} from './src/config';
+
+const {DISCLAIMER_MESSAGE} = STRINGS;
+
 /**
  * 1. Parses yml input/output process arguments.
  * 2. Opens yaml file as an object.
@@ -13,6 +17,8 @@ import {validateImpl} from './src/util/validations';
  * @example run following command `npx ts-node scripts/impact.ts --impl ./test.yml --ompl ./result.yml`
  */
 const impactEngine = async () => {
+  console.log(DISCLAIMER_MESSAGE);
+
   const processParams = parseProcessArgument();
 
   if (processParams) {
