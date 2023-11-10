@@ -20,7 +20,7 @@ const implValidation = z.object({
     models: z.array(
       z.object({
         name: z.string(),
-        kind: z.string(),
+        kind: z.string().optional(),
         path: z.string().optional(),
         model: z.string().optional(),
         config: z.record(z.string(), z.any()).optional(),
