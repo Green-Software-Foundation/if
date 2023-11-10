@@ -8,11 +8,17 @@ export const STRINGS = {
   STRUCTURE_MALFORMED: (childName: string) =>
     `Graph is malformed: graph.children.${childName} is not valid.`,
   NOT_INITIALIZED_MODEL: (modelName: string) =>
-    `Model ${modelName} is not initalized yet.`,
+    `You're trying to use not initalized model: ${modelName}.`,
   DISCLAIMER_MESSAGE: `
 [!important] Incubation Project
 
 This project is an incubation project being run inside the Green Software Foundation; as such, we *DON’T recommend using it in any critical use case. 
 Incubation projects are experimental, offer no support guarantee, have minimal governance and process, and may be retired at any moment. This project may one day graduate, in which case this disclaimer will be removed.
 `,
+  NOT_NATIVE_MODEL: `
+[!important]
+
+You are using models that are not part of the Impact Framework standard library. You should do your own research to ensure the models are up to date and accurate. They may not be actively maintained.  
+`,
+  SOMETHING_WRONG: 'Something wrong with cli arguments. Please check docs.',
 };
