@@ -197,7 +197,8 @@ describe('util/supercomputer: ', () => {
       const modelsHandbook = new ModelsUniverse();
       const aterui = new Supercomputer(impl, modelsHandbook);
 
-      const expectedMessage = 'Model boavizta-cpu is not initalized yet.';
+      const expectedMessage =
+        "You're trying to use not initalized model: mock-modelName.";
 
       try {
         await aterui.compute();
