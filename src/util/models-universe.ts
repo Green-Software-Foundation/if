@@ -1,12 +1,9 @@
-import {ShellModel} from '../lib';
-
 import {ERRORS} from './errors';
 
 import {CONFIG, STRINGS} from '../config';
 
 import {
   GraphOptions,
-  HandModelParams,
   ImplInitializeModel,
   InitalizedModels,
 } from '../types/models-universe';
@@ -75,39 +72,13 @@ export class ModelsUniverse {
   }
 
   /**
-   * Returns shell model.
-   */
-  private handShellModel() {
-    return ShellModel;
-  }
-
-  /**
-   * Gets model based on `name` and `kind` params.
-   */
-  private async handModelByCriteria(params: HandModelParams) {
-    const {kind, model, path} = params;
-
-    switch (kind) {
-      case 'plugin':
-        return this.handPluginModel(model, path);
-      case 'shell':
-        return this.handShellModel();
-    }
-  }
-
-  /**
    * Initializes and registers model.
    */
-  public writeDown(model: ImplInitializeModel) {
-    const {name, kind, config, model: className, path} = model;
+  public writeDown(modelToInitalize: ImplInitializeModel) {
+    const {name, config, model, path} = modelToInitalize;
 
     const callback = async (graphOptions: GraphOptions) => {
-      const Model = await this.handModelByCriteria({
-        name,
-        kind,
-        model: className,
-        path,
-      });
+      const Model = await this.handPluginModel(model, path);
 
       const params = {
         ...config,
