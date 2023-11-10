@@ -17,6 +17,7 @@ const {
   NOT_INITIALIZED_MODEL,
   MISSING_PATH,
   MODEL_DOESNT_EXIST,
+  NOT_NATIVE_MODEL,
 } = STRINGS;
 
 /**
@@ -60,6 +61,10 @@ export class ModelsUniverse {
     if (path?.startsWith(GITHUB_PATH)) {
       const parts = path.split('/');
       path = parts[parts.length - 1];
+    }
+
+    if (!path.includes('if-models')) {
+      console.log(NOT_NATIVE_MODEL);
     }
 
     const pluginModule = await import(path);
