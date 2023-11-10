@@ -8,7 +8,12 @@ import {STRINGS} from '../../../config';
 
 import {ImplInitializeModel} from '../../../types/models-universe';
 
-const {MISSING_CLASSNAME, MISSING_PATH, NOT_OUTPUT_MODEL_EXTENSION} = STRINGS;
+const {
+  MISSING_CLASSNAME,
+  MISSING_PATH,
+  NOT_OUTPUT_MODEL_EXTENSION,
+  NOT_INITIALIZED_MODEL,
+} = STRINGS;
 
 describe('util/models-universe: ', () => {
   describe('init ModelsUniverse', () => {
@@ -217,7 +222,7 @@ describe('util/models-universe: ', () => {
       const modelName = 'mock-modelName';
       const config = {};
 
-      const expectedMessage = `Model ${modelName} is not initalized yet.`;
+      const expectedMessage = NOT_INITIALIZED_MODEL(modelName);
 
       try {
         await modelsHandbook.getInitializedModel(modelName, config);
