@@ -2,7 +2,7 @@
 
 ## Scope
 
-The TDP Finder model enables finding the TDP of a known processor in the model dataset. The TDP is then used by other models to calculate the e-cpu value. 
+The TDP Finder model enables finding the TDP of known set processor in the model dataset. Highest TDP value of provided CPUs is provided as the TDP power. The TDP is then used by other models to calculate the e-cpu value. 
 
 ## Used DataSets
 
@@ -22,7 +22,7 @@ IEF implements the plugin based on the logic described above.
 * Model Name: `tdp-finder`
 ```yaml
 input:
-  - physical-processor: Intel Xeon Platinum 8175M
+  - physical-processor: Intel Xeon Platinum 8175M, AMD A8-9600
 ```
 
 ## Output in OMPL
