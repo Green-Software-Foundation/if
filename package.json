@@ -1,7 +1,7 @@
 {
-  "name": "ief",
-  "description": "",
-  "version": "1.0.0",
+  "name": "if",
+  "description": "Impact Framework",
+  "version": "v0.0.1",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
