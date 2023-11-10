@@ -8,6 +8,10 @@ jest.mock('../../../util/models-universe', () => ({
 import {Supercomputer} from '../../../util/supercomputer';
 import {ModelsUniverse} from '../../../util/models-universe';
 
+import {STRINGS} from '../../../config';
+
+const {NOT_INITIALIZED_MODEL} = STRINGS;
+
 describe('util/supercomputer: ', () => {
   const impl: any = {
     name: 'gsf-demo',
@@ -197,7 +201,7 @@ describe('util/supercomputer: ', () => {
       const modelsHandbook = new ModelsUniverse();
       const aterui = new Supercomputer(impl, modelsHandbook);
 
-      const expectedMessage = 'Model boavizta-cpu is not initalized yet.';
+      const expectedMessage = NOT_INITIALIZED_MODEL('boavizta-cpu');
 
       try {
         await aterui.compute();
