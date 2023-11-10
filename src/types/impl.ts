@@ -6,7 +6,7 @@ type Tag = {
 
 type Model = {
   name: string;
-  kind: string;
+  kind?: string;
   verbose?: boolean;
   path?: string;
 };
