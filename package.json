@@ -6,12 +6,15 @@
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
   },
+  "bugs": {
+    "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
+  },
   "dependencies": {
     "@azure/arm-compute": "^21.2.0",
-    "@azure/arm-monitor": "*",
-    "@azure/identity": "*",
-    "@cloud-carbon-footprint/aws": "*",
-    "@cloud-carbon-footprint/core": "*",
+    "@azure/arm-monitor": "^7.0.0",
+    "@azure/identity": "^4.0.0",
+    "@cloud-carbon-footprint/aws": "^0.15.0",
+    "@cloud-carbon-footprint/core": "^0.17.3",
     "axios": "^1.4.0",
     "dayjs": "^1.11.9",
     "dotenv": "^16.3.1",
@@ -42,18 +45,21 @@
     "node": "18",
     "yarn": "1.22.19"
   },
+  "homepage": "https://greensoftware.foundation",
   "keywords": [],
   "license": "MIT",
-  "main": "src/index.ts",
+  "main": "build/index.js",
   "repository": {
-    "url": "https://github.com/Green-Software-Foundation/ief.git"
+    "url": "https://github.com/Green-Software-Foundation/if"
   },
   "scripts": {
+    "build": "tsc",
     "coverage": "jest --verbose --coverage",
     "fix": "gts fix",
     "fix:package": "fixpack",
-    "impact-engine": "npx ts-node",
+    "impact-engine": "npx ts-node impact-engine.ts",
     "lint": "gts lint",
+    "prepare": "yarn build",
     "test": "jest --verbose"
   },
   "stability": "stable",

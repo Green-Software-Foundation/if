@@ -35,9 +35,9 @@
     "@azure/core-rest-pipeline" "^1.8.0"
     tslib "^2.2.0"
 
-"@azure/arm-monitor@*":
+"@azure/arm-monitor@^7.0.0":
   version "7.0.0"
-  resolved "https://registry.npmjs.org/@azure/arm-monitor/-/arm-monitor-7.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/@azure/arm-monitor/-/arm-monitor-7.0.0.tgz#f649fda2c65468c12a057dc2819d37053d94a7b9"
   integrity sha512-RtCLRc/29bqaaf5iuUOmJvc5XDolN/icFhlKC/rXXKTtmwB3sKymaOZbNHnOM4P0nJYpS5QIo7Nzvh4M3Wj+FA==
   dependencies:
     "@azure/abort-controller" "^1.0.0"
@@ -117,10 +117,10 @@
     "@azure/abort-controller" "^1.0.0"
     tslib "^2.2.0"
 
-"@azure/identity@*":
-  version "3.3.2"
-  resolved "https://registry.npmjs.org/@azure/identity/-/identity-3.3.2.tgz"
-  integrity sha512-aDLwgMXpNBEXOlfCP9r5Rn+inmbnTbadlOnrKI2dPS9Lpf4gHvpYBV+DEZKttakfJ+qn4iWWb7zONQSO3A4XSA==
+"@azure/identity@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/identity/-/identity-4.0.0.tgz#87d4c7b745f0855b83993518f1c7782dfb258bba"
+  integrity sha512-gtPYxIL0kI39Dw4t3HvlbfhOdXqKD2MqDgynlklF0j728j51dcKgRo6FLX0QzpBw/1gGfLxjMXqq3nKOSQ2lmA==
   dependencies:
     "@azure/abort-controller" "^1.0.0"
     "@azure/core-auth" "^1.5.0"
@@ -129,15 +129,13 @@
     "@azure/core-tracing" "^1.0.0"
     "@azure/core-util" "^1.0.0"
     "@azure/logger" "^1.0.0"
-    "@azure/msal-browser" "^2.37.1"
-    "@azure/msal-common" "^13.1.0"
-    "@azure/msal-node" "^1.17.3"
+    "@azure/msal-browser" "^3.5.0"
+    "@azure/msal-node" "^2.5.1"
     events "^3.0.0"
     jws "^4.0.0"
     open "^8.0.0"
     stoppable "^1.1.0"
     tslib "^2.2.0"
-    uuid "^8.3.0"
 
 "@azure/logger@^1.0.0":
   version "1.0.4"
@@ -146,24 +144,24 @@
   dependencies:
     tslib "^2.2.0"
 
-"@azure/msal-browser@^2.37.1":
-  version "2.38.3"
-  resolved "https://registry.npmjs.org/@azure/msal-browser/-/msal-browser-2.38.3.tgz"
-  integrity sha512-2WuLFnWWPR1IdvhhysT18cBbkXx1z0YIchVss5AwVA95g7CU5CpT3d+5BcgVGNXDXbUU7/5p0xYHV99V5z8C/A==
+"@azure/msal-browser@^3.5.0":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@azure/msal-browser/-/msal-browser-3.5.0.tgz#eb64c931c78c2b75c70807f618e1284bbb183380"
+  integrity sha512-2NtMuel4CI3UEelCPKkNRXgKzpWEX48fvxIvPz7s0/sTcCaI08r05IOkH2GkXW+czUOtuY6+oGafJCpumnjRLg==
   dependencies:
-    "@azure/msal-common" "13.3.1"
+    "@azure/msal-common" "14.4.0"
 
-"@azure/msal-common@13.3.1", "@azure/msal-common@^13.1.0":
-  version "13.3.1"
-  resolved "https://registry.npmjs.org/@azure/msal-common/-/msal-common-13.3.1.tgz"
-  integrity sha512-Lrk1ozoAtaP/cp53May3v6HtcFSVxdFrg2Pa/1xu5oIvsIwhxW6zSPibKefCOVgd5osgykMi5jjcZHv8XkzZEQ==
+"@azure/msal-common@14.4.0":
+  version "14.4.0"
+  resolved "https://registry.yarnpkg.com/@azure/msal-common/-/msal-common-14.4.0.tgz#f938c1d96bb73d65baab985c96faaa273c97cfd5"
+  integrity sha512-ffCymScQuMKVj+YVfwNI52A5Tu+uiZO2eTf+c+3TXxdAssks4nokJhtr+uOOMxH0zDi6d1OjFKFKeXODK0YLSg==
 
-"@azure/msal-node@^1.17.3":
-  version "1.18.4"
-  resolved "https://registry.npmjs.org/@azure/msal-node/-/msal-node-1.18.4.tgz"
-  integrity sha512-Kc/dRvhZ9Q4+1FSfsTFDME/v6+R2Y1fuMty/TfwqE5p9GTPw08BPbKgeWinE8JRHRp+LemjQbUZsn4Q4l6Lszg==
+"@azure/msal-node@^2.5.1":
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/@azure/msal-node/-/msal-node-2.5.1.tgz#d180a1ba5fdc611a318a8f018a2db3453e2e2898"
+  integrity sha512-PsPRISqCG253HQk1cAS7eJW7NWTbnBGpG+vcGGz5z4JYRdnM2EIXlj1aBpXCdozenEPtXEVvHn2ELleW1w82nQ==
   dependencies:
-    "@azure/msal-common" "13.3.1"
+    "@azure/msal-common" "14.4.0"
     jsonwebtoken "^9.0.0"
     uuid "^8.3.0"
 
@@ -557,12 +555,12 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cloud-carbon-footprint/aws@*":
-  version "0.14.5"
-  resolved "https://registry.npmjs.org/@cloud-carbon-footprint/aws/-/aws-0.14.5.tgz"
-  integrity sha512-rMZjHYRX+SQfkMSOkyLSHtlLT4xvxMq2BAiUtpCnfdyQsZRM386KyW8ya+7qXVvVGIwxxPOfx72SB3ajS5n5oQ==
+"@cloud-carbon-footprint/aws@^0.15.0":
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/@cloud-carbon-footprint/aws/-/aws-0.15.0.tgz#daea540f95e4a6c89d9cbfa4eb5f41bd2cf060cd"
+  integrity sha512-vGZAy2TDs9pej6xV4rsN9/zKOii4dTtl1qbjofgWIaXK1Ga+V9h37X9g/+HL9prc1wj51T44/JSmvkxZT0BPEw==
   dependencies:
-    "@cloud-carbon-footprint/common" "^1.10.0"
+    "@cloud-carbon-footprint/common" "^1.13.0"
     "@cloud-carbon-footprint/core" "^0.17.3"
     "@google-cloud/iam-credentials" "^1.1.1"
     aws-sdk "^2.927.0"
@@ -581,7 +579,18 @@
     moment "^2.29.1"
     winston "^3.3.3"
 
-"@cloud-carbon-footprint/core@*", "@cloud-carbon-footprint/core@^0.17.3":
+"@cloud-carbon-footprint/common@^1.13.0":
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/@cloud-carbon-footprint/common/-/common-1.13.1.tgz#b8289d291c8bf785bb452e3f3dcf124f916d754b"
+  integrity sha512-Sp/uzxwmXZ7VkMyz1fUllCwTNDYpSEWf1IscIbaSHxtCUXqdI9QN/SvwmGPpGLv01bFm4rmnzMHSV1AP++mZTQ==
+  dependencies:
+    "@google-cloud/logging-winston" "^4.1.1"
+    dotenv "^16.0.0"
+    moment "^2.29.1"
+    node-fetch "^2.6.1"
+    winston "^3.3.3"
+
+"@cloud-carbon-footprint/core@^0.17.3":
   version "0.17.3"
   resolved "https://registry.npmjs.org/@cloud-carbon-footprint/core/-/core-0.17.3.tgz"
   integrity sha512-lNYrgkN1ijFUtTs6kNyti4tufmYLwGjzTOTphD8OX8c3v2sA8ZtgyqCd0QylcORwf4uGZSoquBk7O4ctBVYYmw==
