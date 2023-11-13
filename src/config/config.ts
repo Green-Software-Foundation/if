@@ -3,29 +3,6 @@ import {ArgumentConfig} from 'ts-command-line-args';
 import {impactProcessArgs} from '../types/process-args';
 
 export const CONFIG = {
-  MODEL_IDS: {
-    AZURE_IMPORTER: 'org.gsf.azure-importer',
-    BOAVIZTA_CPU: 'org.boavizta.cpu.sci',
-    BOAVIZTA_CLOUD: 'org.boavizta.cloud.sci',
-    AVEVA: 'aveva',
-    EMEM: 'energy-memory',
-    ESHOPPEN: 'org.gsf.eshoppen',
-    ESHOPPEN_CPU: 'org.gsf.eshoppen-cpu',
-    ESHOPPEN_MEM: 'org.gsf.eshoppen-mem',
-    ESHOPPEN_NET: 'org.gsf.eshoppen-net',
-    SCI_ACCENTURE: 'org.gsf.sci-o',
-    CCF: 'ccf.cloud.sci',
-    SCI: 'org.gsf.sci',
-    SCI_E: 'sci-e',
-    SCI_M: 'org.gsf.sci-m',
-    SCI_O: 'org.gsf.sci-o',
-    SHELL_MODEL: 'shellModel',
-    TDP: 'tdp',
-    TEADS_AWS: 'teads.cloud.sci',
-    TEADS_CURVE: 'teads.curve',
-    WATT_TIME: 'org.wattime.grid',
-    CLOUD_INSTANCE_METADATA: 'org.gsf.cloud-instance-metadata',
-  },
   impact: {
     ARGS: {
       impl: {
