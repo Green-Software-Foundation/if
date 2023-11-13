@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import {parseProcessArgument} from './util/args';
 import {ERRORS} from './util/errors';
 import {andHandle} from './util/helpers';
