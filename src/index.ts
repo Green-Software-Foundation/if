@@ -1,9 +1,10 @@
 #!/usr/bin/env node
+import {ModelsUniverse} from './lib/models-universe';
+import {Supercomputer} from './lib/supercomputer';
+
 import {parseProcessArgument} from './util/args';
 import {ERRORS} from './util/errors';
 import {andHandle} from './util/helpers';
-import {ModelsUniverse} from './util/models-universe';
-import {Supercomputer} from './util/supercomputer';
 import {validateImpl} from './util/validations';
 import {openYamlFileAsObject, saveYamlFileAs} from './util/yaml';
 
