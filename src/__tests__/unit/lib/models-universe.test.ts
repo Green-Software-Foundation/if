@@ -1,6 +1,6 @@
 import {MockModel} from '../../../__mocks__/model-universe';
 
-import {ModelsUniverse} from '../../../util/models-universe';
+import {ModelsUniverse} from '../../../lib/models-universe';
 
 import {STRINGS} from '../../../config';
 

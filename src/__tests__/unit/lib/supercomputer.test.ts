@@ -1,12 +1,12 @@
 import {ModelsUniverse as MockModelUniverse} from '../../../__mocks__/model-universe';
 
-jest.mock('../../../util/models-universe', () => ({
+jest.mock('../../../lib/models-universe', () => ({
   __esModule: true,
   ModelsUniverse: MockModelUniverse,
 }));
 
-import {Supercomputer} from '../../../util/supercomputer';
-import {ModelsUniverse} from '../../../util/models-universe';
+import {Supercomputer} from '../../../lib/supercomputer';
+import {ModelsUniverse} from '../../../lib/models-universe';
 
 import {STRINGS} from '../../../config';
 

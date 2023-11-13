@@ -1,5 +1,5 @@
 import {ModelPluginInterface} from '../../../types/model-interface';
-import {Observatory} from '../../../util/observatory';
+import {Observatory} from '../../../lib/observatory';
 
 describe('util/observatory: ', () => {
   class MockaviztaModel implements ModelPluginInterface {
