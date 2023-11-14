@@ -1,7 +1,7 @@
 import {ModelsUniverse} from './models-universe';
 import {Observatory} from './observatory';
 
-import {ERRORS} from './errors';
+import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 

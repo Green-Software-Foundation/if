@@ -1,26 +1,20 @@
-import {IOutputModelInterface} from '../../lib';
-
 import {STRINGS} from '../../config';
 
 import {
   ImplInitializeModel,
   InitalizedModels,
 } from '../../types/models-universe';
+import {ModelPluginInterface} from '../../types/model-interface';
 
 const {NOT_INITIALIZED_MODEL} = STRINGS;
 
-export class MockModel implements IOutputModelInterface {
-  modelIdentifier(): string {
-    return 'mock';
-  }
-
-  configure(): Promise<IOutputModelInterface> {
+export class MockModel implements ModelPluginInterface {
+  configure(): Promise<ModelPluginInterface> {
     return Promise.resolve(this);
   }
   execute(): Promise<any[]> {
     return Promise.resolve([{data: 'mock-data'}]);
   }
-  authenticate(): void {}
 }
 
 /**

@@ -15,12 +15,17 @@ Read the [specification and design docs](https://github.com/Green-Software-Found
 
 ## Get started
 
-The first thing to understand is that IF is a framework for running model plugins. This means that in order to do some calculations, you need to load some models from some external resource. We provide a [standard library of models](https://github.com/Green-Software-Foundation/if-models) and a repository of [community models](https://github.com/Green-Software-Foundation/if-community-models) to get you started. 
+The first thing to understand is that IF is a framework for running model plugins. This means that in order to do some calculations, you need to load some models from some external resource. We provide a [standard library of models](https://github.com/Green-Software-Foundation/if-models) and a repository of [community models](https://github.com/Green-Software-Foundation/if-unofficial-models) to get you started. 
 
-Start by installing some models:
+Start by installing framework itself:
 
 ```sh
-yarn add https://github.com/Green-Software-Foundation/if-models
+npm install -g "@grnsft/if"
+```
+Then installing some models:
+
+```sh
+npm install -g "@grnsft/if-models"
 ```
 
 Then create an `impl` file that describes your application (see our docs for a detailed explanation).
@@ -28,23 +33,57 @@ Then create an `impl` file that describes your application (see our docs for a d
 Then, run `impact-engine` using the following command:
 
 ```sh
-npx ts-node impact-engine.ts --impl <path-to-your-impl-file>
+impact-engine --impl <path-to-your-impl-file>
 ```
 
 You can also add an optional savepath for your output yaml (if you do not provide one, the output will be printed to the console):
 
 ```sh
-npx ts-node impact-engine.ts --impl <path-to-your-impl-file> --ompl <your-savepath>
+impact-engine --impl <path-to-your-impl-file> --ompl <your-savepath>
 ```
 
 The `impact-engine` CLI tool will configure and run the models defined in your input `yaml` (`impl`) and return the results as an output `yaml` (`ompl`).
+
+### Alternate version
+
+Start by cloning repository locally:
+
+```sh
+git clone https://github.com/Green-Software-Foundation/if
+
+cd if
+
+yarn install
+```
+
+Then installing some models:
+
+```sh
+yarn add "@grnsft/if-models"
+```
+
+Then create an `impl` file that describes your application (see our docs for a detailed explanation).
+
+Then, run `impact-engine` using the following command:
+
+```sh
+yarn impact-engine -- --impl <path-to-your-impl-file>
+```
+
+You can also add an optional savepath for your output yaml (if you do not provide one, the output will be printed to the console):
+
+```sh
+yarn impact-engine -- --impl <path-to-your-impl-file> --ompl <your-savepath>
+```
+
+The `impact-engine` CLI tool will configure and run the models defined in your input `yaml` (`impl`) and return the results as an output `yaml` (`ompl`).
+
 
 ## Video walk-through
 
 Watch this video to learn how to create and run an `impl`.
 
 [![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/R-6eDM8AsvY)
-
 
 ## Run tests
 

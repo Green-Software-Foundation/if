@@ -1,8 +1,17 @@
-import {BoaviztaCpuOutputModel} from '../../../lib';
-
-import {Observatory} from '../../../util/observatory';
+import {ModelPluginInterface} from '../../../types/model-interface';
+import {Observatory} from '../../../lib/observatory';
 
 describe('util/observatory: ', () => {
+  class MockaviztaModel implements ModelPluginInterface {
+    configure(params: any): Promise<ModelPluginInterface> {
+      params;
+      return Promise.resolve(this);
+    }
+    execute(): Promise<any[]> {
+      return Promise.resolve([{data: 'mock-data'}]);
+    }
+  }
+
   const expectedValue = [
     {
       timestamp: '2023-07-06T00:00',
@@ -54,10 +63,7 @@ describe('util/observatory: ', () => {
     it('returns Observatory class.', async () => {
       const lab = new Observatory(inputs);
 
-      const boaviztaModel = await new BoaviztaCpuOutputModel().configure(
-        'test',
-        params
-      );
+      const boaviztaModel = await new MockaviztaModel().configure(params);
 
       boaviztaModel.execute = jest.fn(() => Promise.resolve(expectedValue));
 
@@ -97,10 +103,7 @@ describe('util/observatory: ', () => {
 
     it('returns executed outputs data.', async () => {
       const lab = new Observatory(inputs);
-      const boaviztaModel = await new BoaviztaCpuOutputModel().configure(
-        'test',
-        params
-      );
+      const boaviztaModel = await new MockaviztaModel().configure(params);
 
       boaviztaModel.execute = jest.fn(() => Promise.resolve(expectedValue));
       const result = await lab.doInvestigationsWith(boaviztaModel);

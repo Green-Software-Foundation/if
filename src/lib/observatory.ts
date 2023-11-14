@@ -1,4 +1,4 @@
-import {IOutputModelInterface} from '../lib';
+import {ModelPluginInterface} from '../types/model-interface';
 
 /**
  * Observatory is responsible for output calculations based on the `inputs` and the `model`.
@@ -17,7 +17,7 @@ export class Observatory {
   /**
    * Does investigations by given `output` information
    */
-  public async doInvestigationsWith(modelInstance: IOutputModelInterface) {
+  public async doInvestigationsWith(modelInstance: ModelPluginInterface) {
     const reuseCalculation = this.outputs.length ? this.outputs : this.inputs;
 
     this.outputs = await modelInstance.execute(reuseCalculation);

@@ -1,4 +1,4 @@
-import {IOutputModelInterface} from '../lib';
+import {ModelPluginInterface} from '../types/model-interface';
 
 type InitializeOptions = {
   allocation: string;
@@ -18,7 +18,7 @@ export type ImplInitializeModel = {
 };
 
 export type InitalizedModels = {
-  [key: string]: (graphOptions: GraphOptions) => Promise<IOutputModelInterface>;
+  [key: string]: (graphOptions: GraphOptions) => Promise<ModelPluginInterface>;
 };
 
 export type HandModelParams = {

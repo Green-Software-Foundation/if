@@ -1,8 +1,6 @@
 import {MockModel} from '../../../__mocks__/model-universe';
 
-import {BoaviztaCpuOutputModel} from '../../../lib';
-
-import {ModelsUniverse} from '../../../util/models-universe';
+import {ModelsUniverse} from '../../../lib/models-universe';
 
 import {STRINGS} from '../../../config';
 
@@ -232,30 +230,6 @@ describe('util/models-universe: ', () => {
           expect(error.message).toEqual(expectedMessage);
         }
       }
-    });
-
-    it.skip('returns initalized model.', async () => {
-      const modelsHandbook = new ModelsUniverse();
-      const modelInfo: ImplInitializeModel = {
-        config: {
-          allocation: 'mock-allocation',
-          verbose: true,
-        },
-        name: 'boavizta-cpu',
-      };
-      modelsHandbook.writeDown(modelInfo);
-
-      const config = {
-        'physical-processor': 'intel',
-        'core-units': 1,
-      };
-
-      const model = await modelsHandbook.getInitializedModel(
-        modelInfo.name,
-        config
-      );
-
-      expect(model).toBeInstanceOf(BoaviztaCpuOutputModel);
     });
   });
 });

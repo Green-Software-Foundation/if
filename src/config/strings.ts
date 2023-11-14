@@ -22,6 +22,7 @@ You are using models that are not part of the Impact Framework standard library.
 `,
   SOMETHING_WRONG: 'Something wrong with cli arguments. Please check docs.',
   ISSUE_TEMPLATE: `
-Impact Framework is an alpha release from the Green Software Foundation and is released to capture early feedback. If you'd like to offer some feedback, please use this issue template:
+Impact Framework is an alpha release from the Green Software Foundation and is released to capture early feedback. If you'd like to offer some feedback, please use this issue template: 
+https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+
 `,
 };

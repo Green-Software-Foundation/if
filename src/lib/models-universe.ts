@@ -1,4 +1,4 @@
-import {ERRORS} from './errors';
+import {ERRORS} from '../util/errors';
 
 import {CONFIG, STRINGS} from '../config';
 
