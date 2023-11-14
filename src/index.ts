@@ -20,7 +20,6 @@ const {DISCLAIMER_MESSAGE, SOMETHING_WRONG} = STRINGS;
  * 3. Initializes models.
  * 4. Initializes graph, does computing.
  * 5. Saves processed object as a yaml file.
- * @example run `npx ts-node impact-engine.ts --impl ./test.yml --ompl ./result.yml`
  * @example run `npm run impact-engine -- --impl ./test.yml --ompl ./result.yml`
  */
 const impactEngine = async () => {
