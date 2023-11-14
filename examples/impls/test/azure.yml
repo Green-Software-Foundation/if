@@ -4,7 +4,7 @@ tags:
 initialize:
   models:
     - name: azure-importer
-      path: if-models
+      path: "@grnsft/if-unofficial-models"
       model: AzureImporterModel
       kind: plugin
 graph:
@@ -15,12 +15,12 @@ graph:
       config:
         azure-importer:
       inputs:
-          - timestamp: '2023-11-02T10:35:31.820Z'
-            duration: 3600
-            azure-observation-window: 5 min # value and unit must be space separated 
-            azure-observation-aggregation: 'average'
-            azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
-            azure-resource-group: vm1_group
-            azure-vm-name: vm1
+        - timestamp: '2023-11-02T10:35:31.820Z'
+          duration: 3600
+          azure-observation-window: 5 min # value and unit must be space separated 
+          azure-observation-aggregation: 'average'
+          azure-subscription-id: 9de7e19f-8a18-4e73-9451-45fc74e7d0d3
+          azure-resource-group: vm1_group
+          azure-vm-name: vm1
 
 
