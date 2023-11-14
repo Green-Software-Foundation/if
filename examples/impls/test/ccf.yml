@@ -5,7 +5,7 @@ initialize:
   models:
     - name: ccf
       model: CloudCarbonFootprint
-      path: if-community-models
+      path: "@grnsft/if-unofficial-models"
 graph:
   children:
     child:
