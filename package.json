@@ -45,13 +45,13 @@
     "url": "https://github.com/Green-Software-Foundation/if"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf build && tsc --project tsconfig.build.json",
     "coverage": "jest --verbose --coverage",
     "fix": "gts fix",
     "fix:package": "fixpack",
     "impact-engine": "npx ts-node src/index.ts",
     "lint": "gts lint",
-    "prepare": "yarn build",
+    "prepublish": "yarn build",
     "test": "jest --verbose"
   },
   "stability": "stable",
