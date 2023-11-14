@@ -1,7 +1,7 @@
 {
   "name": "@grnsft/if",
   "description": "Impact Framework",
-  "version": "v0.0.7",
+  "version": "v0.1.0",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
@@ -35,7 +35,14 @@
     "yarn": "1.22.19"
   },
   "homepage": "https://greensoftware.foundation",
-  "keywords": [],
+  "keywords": [
+    "engine",
+    "green software foundation",
+    "greensoftware",
+    "if",
+    "impact",
+    "models"
+  ],
   "license": "MIT",
   "main": "build/index.js",
   "publishConfig": {
@@ -45,13 +52,13 @@
     "url": "https://github.com/Green-Software-Foundation/if"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf build && tsc --project tsconfig.build.json",
     "coverage": "jest --verbose --coverage",
     "fix": "gts fix",
     "fix:package": "fixpack",
     "impact-engine": "npx ts-node src/index.ts",
     "lint": "gts lint",
-    "prepare": "yarn build",
+    "prepublish": "yarn build",
     "test": "jest --verbose"
   },
   "stability": "stable",
