@@ -35,7 +35,14 @@
     "yarn": "1.22.19"
   },
   "homepage": "https://greensoftware.foundation",
-  "keywords": [],
+  "keywords": [
+    "engine",
+    "green software foundation",
+    "greensoftware",
+    "if",
+    "impact",
+    "models"
+  ],
   "license": "MIT",
   "main": "build/index.js",
   "publishConfig": {
