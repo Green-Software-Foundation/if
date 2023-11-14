@@ -5,7 +5,7 @@ initialize:
   models:
     - name: tdp-finder # a model that returns an embodied value given the sci embodied attribution equation.
       model: TdpFinderModel 
-      path: if-models
+      path: "@grnsft/if-models"
 graph:
   children:
     child:

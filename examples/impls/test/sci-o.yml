@@ -6,11 +6,11 @@ initialize:
     - name: sci-e
       kind: plugin
       model: SciEModel
-      path: if-models
+      path: "@grnsft/if-models"
     - name: sci-o
       verbose: false
       model: SciOModel
-      path: if-models
+      path: "@grnsft/if-models"
 graph:
   children:
     child:
