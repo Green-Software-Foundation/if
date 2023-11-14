@@ -1,7 +1,7 @@
 {
   "name": "@grnsft/if",
   "description": "Impact Framework",
-  "version": "v0.0.4",
+  "version": "v0.0.7",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
@@ -49,7 +49,7 @@
     "coverage": "jest --verbose --coverage",
     "fix": "gts fix",
     "fix:package": "fixpack",
-    "impact-engine": "npx ts-node impact-engine.ts",
+    "impact-engine": "npx ts-node src/index.ts",
     "lint": "gts lint",
     "prepare": "yarn build",
     "test": "jest --verbose"
