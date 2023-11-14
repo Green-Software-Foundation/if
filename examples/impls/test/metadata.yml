@@ -5,7 +5,7 @@ initialize:
   models:
     - name: cloud-instance-metadata
       model: CloudInstanceMetadataModel
-      path: if-models
+      path: "@grnsft/if-models"
 graph:
   children:
     child:

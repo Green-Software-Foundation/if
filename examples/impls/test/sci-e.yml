@@ -7,7 +7,7 @@ initialize:
       kind: plugin
       verbose: false
       model: SciEModel
-      path: if-models
+      path: "@grnsft/if-models"
 graph:
   children:
     child:
