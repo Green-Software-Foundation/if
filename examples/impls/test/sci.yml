@@ -6,7 +6,7 @@ initialize:
     - name: sci 
       kind: plugin
       model: SciModel
-      path: if-models
+      path: "@grnsft/if-models"
 graph:
   children:
     child:

@@ -5,28 +5,28 @@ initialize:
   models:
     - name: azure-importer
       model: AzureImporterModel
-      path: if-models
+      path: "@grnsft/if-unofficial-models"
     - name: cloud-instance-metadata
       model: CloudInstanceMetadataModel
-      path: if-models
+      path: "@grnsft/if-models"
     - name: teads-curve
       model: TeadsCurveModel
-      path: if-community-models
+      path: "@grnsft/if-unofficial-models"
     - name: sci-e
       model: SciEModel
-      path: if-models
+      path: "@grnsft/if-models"
     - name: sci-o
       model: SciOModel
-      path: if-models
+      path: "@grnsft/if-models"
     - name: sci-e
       model: SciEModel
-      path: if-models
+      path: "@grnsft/if-models"
     - name: sci-m
       model: SciMModel
-      path: if-models
+      path: "@grnsft/if-models"
     - name: sci
       model: SciModel
-      path: if-models
+      path: "@grnsft/if-models"
 graph:
   children:
     child:
