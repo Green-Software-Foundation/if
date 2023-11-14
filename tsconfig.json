@@ -28,7 +28,6 @@
     "stripInternal": false,
     "target": "ES2020",
     "composite": false,
-    "tsBuildInfoFile": "tsconfig.tsbuildinfo"
   },
   "include": [
     "src/**/*.ts"
