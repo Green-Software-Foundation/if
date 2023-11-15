@@ -31,8 +31,9 @@
     "ts-jest": "^29.1.1"
   },
   "engines": {
-    "node": "18",
-    "yarn": "1.22.19"
+    "node": ">=18",
+    "yarn": ">=1.22",
+    "npm": ">=8"
   },
   "homepage": "https://greensoftware.foundation",
   "keywords": [
