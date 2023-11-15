@@ -3,6 +3,7 @@ import {ERRORS} from '../util/errors';
 import {CONFIG, STRINGS} from '../config';
 
 import {
+  ClassContainerParams,
   GraphOptions,
   ImplInitializeModel,
   InitalizedModels,
@@ -13,11 +14,11 @@ const {ModelInitializationError, ModelCredentialError} = ERRORS;
 const {GITHUB_PATH} = CONFIG;
 const {
   MISSING_CLASSNAME,
-  NOT_OUTPUT_MODEL_EXTENSION,
-  NOT_INITIALIZED_MODEL,
+  NOT_MODEL_PLUGIN_EXTENSION,
   MISSING_PATH,
-  MODEL_DOESNT_EXIST,
   NOT_NATIVE_MODEL,
+  NOT_CONSTRUCTABLE_MODEL,
+  NOT_INITIALIZED_MODEL,
 } = STRINGS;
 
 /**
@@ -32,15 +33,14 @@ export class ModelsUniverse {
   /**
    * Checks if model is instance of `IOutputModelInterface`.
    */
-  private instanceOfModel(ClassContainer: any) {
+  private instanceOfModel(ClassContainer: any, params: ClassContainerParams) {
     try {
       const testModel = new ClassContainer();
-
       const boolable = 'configure' in testModel && 'execute' in testModel;
 
       return boolable;
     } catch (error) {
-      throw ModelInitializationError(MODEL_DOESNT_EXIST);
+      throw new ModelInitializationError(NOT_CONSTRUCTABLE_MODEL(params));
     }
   }
 
@@ -69,22 +69,22 @@ export class ModelsUniverse {
 
     const pluginModule = await import(path);
 
-    if (this.instanceOfModel(pluginModule[model])) {
+    if (this.instanceOfModel(pluginModule[model], {model, path})) {
       return pluginModule[model];
     }
 
-    throw new Error(NOT_OUTPUT_MODEL_EXTENSION);
+    throw new ModelInitializationError(NOT_MODEL_PLUGIN_EXTENSION);
   }
 
   /**
    * Initializes and registers model.
    */
-  public writeDown(modelToInitalize: ImplInitializeModel) {
-    const {name, config, model, path} = modelToInitalize;
+  public async writeDown(modelToInitalize: ImplInitializeModel) {
+    const {model, path, config, name} = modelToInitalize;
+
+    const Model = await this.handPluginModel(model, path);
 
     const callback = async (graphOptions: GraphOptions) => {
-      const Model = await this.handPluginModel(model, path);
-
       const params = {
         ...config,
         ...graphOptions,
@@ -107,14 +107,8 @@ export class ModelsUniverse {
    * Returns existing model by `name`.
    */
   public async getInitializedModel(modelName: string, config: any) {
-    try {
-      if (this.initalizedModels[modelName]) {
-        return await this.initalizedModels[modelName](config);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new ModelInitializationError(error.message);
-      }
+    if (this.initalizedModels[modelName]) {
+      return this.initalizedModels[modelName](config);
     }
 
     throw new ModelInitializationError(NOT_INITIALIZED_MODEL(modelName));
