@@ -9,6 +9,7 @@ type Model = {
   kind?: string;
   verbose?: boolean;
   path?: string;
+  config?: Config;
 };
 
 export type ModelParams = {
@@ -17,9 +18,7 @@ export type ModelParams = {
   [key: string]: any;
 };
 
-export type Config = {
-  [key: string]: any;
-};
+export type Config = Record<string, any>;
 
 export type Children = {
   [key: string]: {
