@@ -17,10 +17,11 @@ const {DISCLAIMER_MESSAGE, SOMETHING_WRONG} = STRINGS;
 /**
  * 1. Parses yml input/output process arguments.
  * 2. Opens yaml file as an object.
- * 3. Initializes models.
- * 4. Initializes graph, does computing.
- * 5. Saves processed object as a yaml file.
- * @example run `npm run impact-engine -- --impl ./test.yml --ompl ./result.yml`
+ * 3. Validates given impl to match basic structure.
+ * 4. Initializes requested models.
+ * 5. Initializes graph, does computing.
+ * 6. Saves processed object as a yaml file.
+ * @example run `yarn impact-engine --impl ./test.yml --ompl ./result.yml`
  */
 const impactEngine = async () => {
   console.log(DISCLAIMER_MESSAGE);
@@ -36,13 +37,13 @@ const impactEngine = async () => {
 
     // Lifecycle Initialize Models
     const modelsHandbook = new ModelsUniverse();
-    impl.initialize.models.forEach((model: any) =>
-      modelsHandbook.writeDown(model)
-    );
+    for (const model of impl.initialize.models) {
+      await modelsHandbook.writeDown(model);
+    }
 
     // Lifecycle Computing
-    const ateruiComputer = new Supercomputer(impl, modelsHandbook);
-    const ompl = await ateruiComputer.compute();
+    const engine = new Supercomputer(impl, modelsHandbook);
+    const ompl = await engine.compute();
 
     if (!outputPath) {
       console.log(JSON.stringify(ompl));

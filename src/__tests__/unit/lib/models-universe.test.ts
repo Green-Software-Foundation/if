@@ -1,16 +1,19 @@
 import {MockModel} from '../../../__mocks__/model-universe';
 
 import {ModelsUniverse} from '../../../lib/models-universe';
+import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
 
 import {ImplInitializeModel} from '../../../types/models-universe';
 
+const {ModelInitializationError} = ERRORS;
+
 const {
   MISSING_CLASSNAME,
   MISSING_PATH,
-  NOT_OUTPUT_MODEL_EXTENSION,
   NOT_INITIALIZED_MODEL,
+  NOT_MODEL_PLUGIN_EXTENSION,
 } = STRINGS;
 
 describe('util/models-universe: ', () => {
@@ -31,7 +34,7 @@ describe('util/models-universe: ', () => {
       jest.restoreAllMocks();
     });
 
-    it('throws error in case model is not supported.', () => {
+    it('throws error in case model is not supported.', async () => {
       const modelsHandbook = new ModelsUniverse();
       const modelInfo: ImplInitializeModel = {
         config: {
@@ -41,45 +44,13 @@ describe('util/models-universe: ', () => {
         name: 'test',
       };
 
-      const expectedMessage = `Missing or wrong model: ${modelInfo.name}.`;
-
       try {
-        modelsHandbook.writeDown(modelInfo);
+        await modelsHandbook.writeDown(modelInfo);
       } catch (error) {
         if (error instanceof Error) {
-          expect(error.message).toEqual(expectedMessage);
+          expect(error.message).toEqual(MISSING_CLASSNAME);
         }
       }
-    });
-
-    it('registers `shell` model in initalized models list.', () => {
-      const modelsHandbook = new ModelsUniverse();
-      const modelInfo: ImplInitializeModel = {
-        config: {
-          allocation: 'mock-allocation',
-          verbose: true,
-        },
-        name: 'mock-name',
-      };
-
-      const modelsList = modelsHandbook.writeDown(modelInfo);
-      expect(modelsList).toHaveProperty(modelInfo.name);
-      expect(typeof modelsList[modelInfo.name]).toBe('function');
-    });
-
-    it('registers `plugin` model in initalized models list.', () => {
-      const modelsHandbook = new ModelsUniverse();
-      const modelInfo: ImplInitializeModel = {
-        config: {
-          allocation: 'mock-allocation',
-          verbose: true,
-        },
-        name: 'mock-name',
-      };
-
-      const modelsList = modelsHandbook.writeDown(modelInfo);
-      expect(modelsList).toHaveProperty(modelInfo.name);
-      expect(typeof modelsList[modelInfo.name]).toBe('function');
     });
 
     it('throws `missing classname` error while registration of `plugin` model.', async () => {
@@ -92,16 +63,10 @@ describe('util/models-universe: ', () => {
         name: 'mock-name',
       };
 
-      const modelsList = modelsHandbook.writeDown(modelInfo);
-      const model = modelsList[modelInfo.name];
-
       expect.assertions(2);
 
       try {
-        await model({
-          'core-units': 1,
-          'physical-processor': 'intel',
-        });
+        await modelsHandbook.writeDown(modelInfo);
       } catch (error) {
         if (error instanceof Error) {
           expect(error).toBeInstanceOf(Error);
@@ -121,16 +86,10 @@ describe('util/models-universe: ', () => {
         model: 'MockaviztaModel',
       };
 
-      const modelsList = modelsHandbook.writeDown(modelInfo);
-      const model = modelsList[modelInfo.name];
-
       expect.assertions(2);
 
       try {
-        await model({
-          'core-units': 1,
-          'physical-processor': 'intel',
-        });
+        await modelsHandbook.writeDown(modelInfo);
       } catch (error) {
         if (error instanceof Error) {
           expect(error).toBeInstanceOf(Error);
@@ -160,7 +119,7 @@ describe('util/models-universe: ', () => {
         path: 'https://github.com/mock/mockavizta-model',
       };
 
-      const modelsList = modelsHandbook.writeDown(modelInfo);
+      const modelsList = await modelsHandbook.writeDown(modelInfo);
       const model = modelsList[modelInfo.name];
 
       expect.assertions(1);
@@ -194,20 +153,21 @@ describe('util/models-universe: ', () => {
         path: 'https://github.com/mock/mockavizta-model',
       };
 
-      const modelsList = modelsHandbook.writeDown(modelInfo);
-      const model = modelsList[modelInfo.name];
-
-      expect.assertions(2);
-
       try {
+        const modelsList = await modelsHandbook.writeDown(modelInfo);
+        const model = modelsList[modelInfo.name];
+
+        expect.assertions(1);
+
         await model({
           'core-units': 1,
           'physical-processor': 'intel',
         });
       } catch (error) {
-        if (error instanceof Error) {
-          expect(error).toBeInstanceOf(Error);
-          expect(error.message).toEqual(NOT_OUTPUT_MODEL_EXTENSION);
+        expect(error).toBeInstanceOf(ModelInitializationError);
+
+        if (error instanceof ModelInitializationError) {
+          expect(error.message).toEqual(NOT_MODEL_PLUGIN_EXTENSION);
         }
       }
     });
