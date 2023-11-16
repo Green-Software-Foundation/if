@@ -3,10 +3,10 @@ import {ClassContainerParams} from '../types/models-universe';
 export const STRINGS = {
   FILE_IS_NOT_YAML: 'Provided impl file is not in yaml format.',
   IMPL_IS_MISSING: 'Impl file is missing.',
-  MISSING_CLASSNAME: 'Initalization param `model` is missing.',
-  MISSING_PATH: 'Initalization param `path` is missing.',
+  MISSING_CLASSNAME: "Initalization param 'model` is missing.",
+  MISSING_PATH: "Initalization param 'path' is missing.",
   NOT_MODEL_PLUGIN_EXTENSION:
-    'Provided model does not extend `ModelPluginInterface`.',
+    "Provided model does not extend 'ModelPluginInterface'.",
   STRUCTURE_MALFORMED: (childName: string) =>
     `Graph is malformed: graph.children.${childName} is not valid.`,
   NOT_INITIALIZED_MODEL: (className: string) =>
@@ -29,4 +29,6 @@ https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=fee
 `,
   NOT_CONSTRUCTABLE_MODEL: (params: ClassContainerParams) =>
     `Provided model '${params.model}' is not constructable or does not belong to given plugin '${params.path}'.`,
+  INVALID_MODULE_PATH: (path: string) =>
+    `Provided module path: '${path}' is invalid.`,
 };
