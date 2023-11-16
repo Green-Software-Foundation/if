@@ -44,13 +44,11 @@ describe('util/models-universe: ', () => {
         name: 'test',
       };
 
-      const expectedMessage = 'Initalization param `model` is missing.';
-
       try {
         await modelsHandbook.writeDown(modelInfo);
       } catch (error) {
         if (error instanceof Error) {
-          expect(error.message).toEqual(expectedMessage);
+          expect(error.message).toEqual(MISSING_CLASSNAME);
         }
       }
     });
