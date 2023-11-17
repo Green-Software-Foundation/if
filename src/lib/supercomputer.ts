@@ -1,22 +1,22 @@
-import { ModelsUniverse } from './models-universe';
-import { Observatory } from './observatory';
+import {ModelsUniverse} from './models-universe';
+import {Observatory} from './observatory';
 
-import { ERRORS } from '../util/errors';
+import {ERRORS} from '../util/errors';
 
-import { STRINGS } from '../config';
+import {STRINGS} from '../config';
 
-import { ChildInformation } from '../types/supercomputer';
-import { Children, Config, Impl, ModelParams } from '../types/impl';
+import {ChildInformation} from '../types/supercomputer';
+import {Children, Config, Impl, ModelParams} from '../types/impl';
 
-const { ImplValidationError } = ERRORS;
+const {ImplValidationError} = ERRORS;
 
-const { STRUCTURE_MALFORMED } = STRINGS;
+const {STRUCTURE_MALFORMED} = STRINGS;
 
 /**
  * Computer for `impl` documents.
  */
 export class Supercomputer {
-  private olderChild: ChildInformation = { name: '', info: {} };
+  private olderChild: ChildInformation = {name: '', info: {}};
   private impl: Impl;
   private modelsHandbook: ModelsUniverse;
 
@@ -68,7 +68,7 @@ export class Supercomputer {
     let carbon = 0;
     let energy = 0;
     let denominator = 0;
-    const method = this.impl.tags?.aggregation?.toString() || "sum";
+    const method = this.impl.tags?.aggregation?.toString() || 'sum';
     const subGraph = this.impl.graph.children.child;
     if (
       !('children' in subGraph) &&
@@ -133,9 +133,9 @@ export class Supercomputer {
       }
     }
 
-    console.log(method)
+    console.log(method);
     //const averageNames = ["average", 'av', 'avg', 'mean']
-    if ((method == "average") || (method == "avg") || (method == "av")) {
+    if (method == 'average' || method == 'avg' || method == 'av') {
       const mean_carbon = carbon / denominator;
       const mean_energy = energy / denominator;
       Object.assign(this.impl, {
@@ -146,10 +146,9 @@ export class Supercomputer {
       });
     } else {
       Object.assign(this.impl, {
-        'aggregated-inputs': { 'total-energy': energy, 'total-carbon': carbon },
+        'aggregated-inputs': {'total-energy': energy, 'total-carbon': carbon},
       });
     }
-
   }
 
   /**
@@ -162,7 +161,7 @@ export class Supercomputer {
     childrenObject: Children,
     params: any
   ) {
-    const { childName, areChildrenNested } = params;
+    const {childName, areChildrenNested} = params;
 
     if (!areChildrenNested) {
       this.olderChild = {
@@ -171,7 +170,7 @@ export class Supercomputer {
       };
     }
 
-    const { pipeline, inputs, config } = this.olderChild.info;
+    const {pipeline, inputs, config} = this.olderChild.info;
 
     if ('children' in childrenObject[childName]) {
       return this.compute(childrenObject[childName].children);
