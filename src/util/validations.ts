@@ -1,10 +1,10 @@
-import {ZodIssue, z} from 'zod';
+import { ZodIssue, z } from 'zod';
 
-import {ERRORS} from './errors';
+import { ERRORS } from './errors';
 
-import {Impl} from '../types/impl';
+import { Impl } from '../types/impl';
 
-const {ImplValidationError} = ERRORS;
+const { ImplValidationError } = ERRORS;
 
 const implValidation = z.object({
   name: z.string(),
@@ -14,6 +14,7 @@ const implValidation = z.object({
       kind: z.string().optional(),
       complexity: z.string().optional(),
       category: z.string().optional(),
+      aggregation: z.string().optional(),
     })
     .nullable(),
   initialize: z.object({
@@ -45,7 +46,7 @@ export const validateImpl = (impl: Impl) => {
       const issuesArray = JSON.parse(issues);
 
       return issuesArray.map((issue: ZodIssue) => {
-        const {code, path, message} = issue;
+        const { code, path, message } = issue;
         const flattenPath = path.map(part =>
           typeof part === 'number' ? `[${part}]` : part
         );

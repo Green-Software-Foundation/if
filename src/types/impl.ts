@@ -2,6 +2,7 @@ type Tag = {
   kind?: string;
   complexity?: string;
   category?: string;
+  aggregation?: string;
 };
 
 type Model = {
