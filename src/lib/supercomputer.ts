@@ -64,6 +64,75 @@ export class Supercomputer {
     }));
   }
 
+  public aggregate() {
+    let carbon = 0;
+    let energy = 0;
+    const subGraph = this.impl.graph.children.child;
+    if (
+      !('children' in subGraph) &&
+      'outputs' in subGraph &&
+      subGraph.outputs !== undefined
+    ) {
+      const outputs = subGraph.outputs;
+      if (outputs !== undefined) {
+        if (
+          outputs[0]['carbon'] !== undefined &&
+          typeof outputs[0]['carbon'] === 'string'
+        ) {
+          carbon += parseFloat(outputs[0]['carbon']);
+        } else if (
+          outputs[0]['carbon'] !== undefined &&
+          typeof outputs[0]['carbon'] === 'number'
+        )
+          carbon += outputs[0]['carbon'];
+
+        if (
+          outputs[0]['energy'] !== undefined &&
+          typeof outputs[0]['energy'] === 'string'
+        ) {
+          energy += parseFloat(outputs[0]['energy']);
+        } else if (
+          outputs[0]['energy'] !== undefined &&
+          typeof outputs[0]['energy'] === 'number'
+        )
+          energy += outputs[0]['energy'];
+      }
+    } else {
+      const childNames = Object.keys(subGraph.children ?? ['']);
+      if (subGraph.children !== undefined) {
+        for (const childName of childNames) {
+          const outputs = subGraph.children[childName].outputs;
+          if (outputs !== undefined) {
+            if (
+              outputs[0]['carbon'] !== undefined &&
+              typeof outputs[0]['carbon'] === 'string'
+            ) {
+              carbon += parseFloat(outputs[0]['carbon']);
+            } else if (
+              outputs[0]['carbon'] !== undefined &&
+              typeof outputs[0]['carbon'] === 'number'
+            )
+              carbon += outputs[0]['carbon'];
+
+            if (
+              outputs[0]['energy'] !== undefined &&
+              typeof outputs[0]['energy'] === 'string'
+            ) {
+              energy += parseFloat(outputs[0]['energy']);
+            } else if (
+              outputs[0]['energy'] !== undefined &&
+              typeof outputs[0]['energy'] === 'number'
+            )
+              energy += outputs[0]['energy'];
+          }
+        }
+      }
+    }
+    Object.assign(this.impl, {
+      'aggregated-inputs': {'total-energy': energy, 'total-carbon': carbon},
+    });
+  }
+
   /**
    * If child is top level, then initializes `this.olderChild`.
    * If `children` object contains `children` property, it means inputs are nested (calls compute again).
@@ -143,7 +212,6 @@ export class Supercomputer {
       ? implOrChildren
       : implOrChildren.graph.children;
     const childrenNames = Object.keys(children);
-
     for (const childName of childrenNames) {
       await this.calculateOutputsForChild(children, {
         childName,

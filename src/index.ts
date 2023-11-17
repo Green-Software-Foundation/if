@@ -44,7 +44,7 @@ const impactEngine = async () => {
     // Lifecycle Computing
     const engine = new Supercomputer(impl, modelsHandbook);
     const ompl = await engine.compute();
-
+    engine.aggregate();
     if (!outputPath) {
       console.log(JSON.stringify(ompl));
       return;
