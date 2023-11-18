@@ -1,17 +1,18 @@
 ---
 name: Agenda
-about: The standard agenda template for carbon ql
+about: The standard agenda template for Impact Framework
 title: "GSF IEF Meeting Agenda yyyy-mm-dd"
 labels: agenda
 assignees: ''
 
 ---
 
-Time 11:30am (GMT) / 4:00pm (IST) - See the time in your [timezone](https://everytimezone.com/s/e7e219dd)
+Time 10:30am (GMT) / 4:00pm (IST) - See the time in your [timezone](https://everytimezone.com/s/e7e219dd)
 
 - Lead – @srini1978 (Microsoft)
 - Co-Lead @navveenb (Accenture)
-- PM – @jawache (GSF)
+- Co-Lead – @jawache (GSF)
+- PM - @jmcook1186 (GSF)
 
 ## Antitrust Policy
 Joint Development Foundation meetings may involve participation by industry competitors, and it is the intention of the Joint Development Foundation to conduct all of its activities in accordance with applicable antitrust and competition laws. It is therefore extremely important that attendees adhere to meeting agendas, and be aware of, and not participate in, any activities that are prohibited under applicable US state, federal or foreign antitrust and competition laws.
