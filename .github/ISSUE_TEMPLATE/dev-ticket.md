@@ -26,6 +26,9 @@
 ## What does "done" look like?
 <!--- Explain what needs to happen in order for this to be considered complete -->
 
+## Does this require updaes to documentation or other materials??
+<!--- Are there documentation, website or other media changes required after this change is implemented?. -->
+
 ## What testing is required?
 <!--- Describe what tests are required to ensure this change has been delivered as expected -->
 
