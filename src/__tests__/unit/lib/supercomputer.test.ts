@@ -8,9 +8,13 @@ jest.mock('../../../lib/models-universe', () => ({
 import {Supercomputer} from '../../../lib/supercomputer';
 import {ModelsUniverse} from '../../../lib/models-universe';
 
+import {ERRORS} from '../../../util/errors';
+
 import {STRINGS} from '../../../config';
 
-const {NOT_INITIALIZED_MODEL} = STRINGS;
+const {ImplValidationError} = ERRORS;
+
+const {NOT_INITIALIZED_MODEL, STRUCTURE_MALFORMED} = STRINGS;
 
 describe('util/supercomputer: ', () => {
   const impl: any = {
@@ -24,8 +28,9 @@ describe('util/supercomputer: ', () => {
     initialize: {
       models: [
         {
-          name: 'boavizta-cpu',
+          name: 'mock-name',
           kind: 'plugin',
+          model: 'MockaviztaModel',
           config: {
             allocation: 'LINEAR',
             verbose: true,
@@ -36,9 +41,9 @@ describe('util/supercomputer: ', () => {
     graph: {
       children: {
         'front-end': {
-          pipeline: ['boavizta-cpu'],
+          pipeline: ['mock-name'],
           config: {
-            'boavizta-cpu': {
+            'mock-name': {
               'core-units': 24,
               processor: 'Intel® Core™ i7-1185G7',
             },
@@ -201,7 +206,9 @@ describe('util/supercomputer: ', () => {
       const modelsHandbook = new ModelsUniverse();
       const aterui = new Supercomputer(impl, modelsHandbook);
 
-      const expectedMessage = NOT_INITIALIZED_MODEL('boavizta-cpu');
+      const expectedMessage = NOT_INITIALIZED_MODEL(
+        impl.initialize.models[0].name
+      );
 
       try {
         await aterui.compute();
@@ -253,6 +260,66 @@ describe('util/supercomputer: ', () => {
       Object.keys(nestedChildren).forEach((child: any) => {
         expect(nestedChildren[child]).toHaveProperty('outputs');
       });
+    });
+
+    it('applies computing to nested children components if config is empty.', async () => {
+      const implWithoutConfig = {
+        ...impl,
+        graph: {
+          ...impl.graph,
+          children: {
+            ...impl.graph.children,
+            'front-end': {
+              ...impl.graph.children['front-end'],
+              config: null,
+            },
+          },
+        },
+      };
+
+      const modelsHandbook = new ModelsUniverse();
+
+      for (const model of implWithoutConfig.initialize.models) {
+        await modelsHandbook.writeDown(model);
+      }
+
+      const ateruiComputer = new Supercomputer(
+        implWithoutConfig,
+        modelsHandbook
+      );
+
+      const result = await ateruiComputer.compute();
+
+      const expectedOutput = [{data: 'mock-data'}];
+
+      expect(result.graph.children['front-end'].outputs).toEqual(
+        expectedOutput
+      );
+    });
+
+    it('throws `structure malformed` error if nested children component misses `inputs`.', async () => {
+      const jsonObj = JSON.stringify(impl);
+      const implCopy = JSON.parse(jsonObj);
+      delete implCopy.graph.children['front-end'].inputs;
+
+      const modelsHandbook = new ModelsUniverse();
+
+      for (const model of implCopy.initialize.models) {
+        await modelsHandbook.writeDown(model);
+      }
+
+      const ateruiComputer = new Supercomputer(implCopy, modelsHandbook);
+
+      expect.assertions(2);
+
+      try {
+        await ateruiComputer.compute();
+      } catch (error) {
+        expect(error).toBeInstanceOf(ImplValidationError);
+        if (error instanceof ImplValidationError) {
+          expect(error.message).toEqual(STRUCTURE_MALFORMED('front-end'));
+        }
+      }
     });
   });
 });
