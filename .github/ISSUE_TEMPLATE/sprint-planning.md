@@ -19,7 +19,7 @@ What tickets are on the backlog, blocked or still in progress?
 
 ## Prioritization
 - [ ] 
-What are the most urgent tickets that should be worked on this sprint?
+What are the most urgent tickets that should be worked on this sprint, and why?
 
 ## Readiness check
 - [ ] 
