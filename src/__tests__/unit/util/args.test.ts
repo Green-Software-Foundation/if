@@ -17,6 +17,10 @@ jest.mock('ts-command-line-args', () => ({
         return {
           help: true,
         };
+      case 'not-yaml':
+        return {
+          impl: 'mock.notyaml',
+        };
       default:
         return {
           impl: 'mock-impl.yaml',
@@ -37,7 +41,7 @@ const {CliInputError} = ERRORS;
 
 const {impact} = CONFIG;
 const {HELP} = impact;
-const {IMPL_IS_MISSING} = STRINGS;
+const {IMPL_IS_MISSING, FILE_IS_NOT_YAML} = STRINGS;
 
 describe('util/args: ', () => {
   const originalEnv = process.env;
@@ -103,10 +107,25 @@ describe('util/args: ', () => {
       const result = parseProcessArgument();
 
       expect(result).toBeUndefined();
-      expect(console.log).toBeCalledTimes(1);
-      expect(console.log).toBeCalledWith(HELP);
+      expect(console.log).toHaveBeenCalledTimes(1);
+      expect(console.log).toHaveBeenCalledWith(HELP);
 
       console.log = originalLog;
+    });
+
+    it('throws error if file is not yaml.', () => {
+      expect.assertions(2);
+
+      process.env.result = 'not-yaml';
+
+      try {
+        parseProcessArgument();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toBeInstanceOf(CliInputError);
+          expect(error.message).toEqual(FILE_IS_NOT_YAML);
+        }
+      }
     });
   });
 
