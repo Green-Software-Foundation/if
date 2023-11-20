@@ -9,10 +9,10 @@
 <!--- This is where you can provide more details thathelp the reader understand why you want to make this change -->
 
 ## Implementation details
-<!--- Explain the steps you will take to implement this change -->
+<!--- Explain the steps you will take to implement this change. If you do not have specific steps yet, write your implementation ideas or outline general approach -->
 
 ## Priority
-<!--- How urgent is this issue? -->
+<!--- How urgent is this issue, and why? -->
 <!--- Explain in writing or give a numerical value from 1 (nice-to-have) to 5 (critical) -->
 
 ## Scope
