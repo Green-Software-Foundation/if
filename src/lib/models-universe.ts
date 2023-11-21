@@ -83,11 +83,11 @@ export class ModelsUniverse {
 
     const pluginModule = await this.importModuleFrom(path);
 
-    if (this.instanceOfModel(pluginModule[model], {model, path})) {
-      return pluginModule[model];
+    if (!this.instanceOfModel(pluginModule[model], {model, path})) {
+      throw new ModelInitializationError(NOT_MODEL_PLUGIN_EXTENSION);
     }
 
-    throw new ModelInitializationError(NOT_MODEL_PLUGIN_EXTENSION);
+    return pluginModule[model];
   }
 
   /**
