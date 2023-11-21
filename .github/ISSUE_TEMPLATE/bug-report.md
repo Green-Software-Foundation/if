@@ -5,7 +5,7 @@ Issue tracker is **ONLY** used for reporting bugs.
 ## Expected Behavior
 <!--- Tell us what should happen -->
 
-## Current Behavior
+## Actual Behavior
 <!--- Tell us what happens instead of the expected behavior -->
 
 ## Ideas for Solution
