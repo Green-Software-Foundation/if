@@ -13,14 +13,14 @@ const {InvalidAggregationParams} = ERRORS;
 const {AVERAGE_NAMES} = CONFIG;
 
 /**
- * Aggregates all the necessary values which are provided in `params`.
+ * Aggregates child node level metrics. Uses provided aggregation `params`.
  */
 export const planetAggregator = (
   inputs: ModelParams[],
   params: PlanetAggregatorParams
 ) => {
   const aggregationMetrics = params['aggregation-metrics'];
-  const aggregationMethod = String(params['aggregation-method'] ?? 'sum');
+  const aggregationMethod = params['aggregation-method'] ?? 'sum';
 
   if (!aggregationMetrics) {
     throw new InvalidAggregationParams(
