@@ -149,27 +149,35 @@ export class Supercomputer {
     }
 
     const outputs = observatory.getOutputs();
-    const aggregatedImpactsPerChild = planetAggregator(
-      outputs,
-      this.impl.aggregation
-    );
 
-    this.aggregatedImpacts.push(aggregatedImpactsPerChild);
+    /**
+     * If aggregation is required, then init `aggregated-outputs`.
+     */
+    if (this.impl.aggregation) {
+      const aggregatedImpactsPerChild = planetAggregator(
+        outputs,
+        this.impl.aggregation
+      );
+
+      this.aggregatedImpacts.push(aggregatedImpactsPerChild);
+
+      if (areChildrenNested) {
+        this.impl.graph.children[this.olderChild.name].children[childName][
+          'aggregated-outputs'
+        ] = aggregatedImpactsPerChild;
+      } else {
+        this.impl.graph.children[this.olderChild.name]['aggregated-outputs'] =
+          aggregatedImpactsPerChild;
+      }
+    }
 
     if (areChildrenNested) {
       this.impl.graph.children[this.olderChild.name].children[
         childName
       ].outputs = outputs;
-      this.impl.graph.children[this.olderChild.name].children[childName][
-        'aggregated-outputs'
-      ] = aggregatedImpactsPerChild;
-
-      return;
+    } else {
+      this.impl.graph.children[this.olderChild.name].outputs = outputs;
     }
-
-    this.impl.graph.children[this.olderChild.name].outputs = outputs;
-    this.impl.graph.children[this.olderChild.name]['aggregated-outputs'] =
-      aggregatedImpactsPerChild;
 
     return;
   }
