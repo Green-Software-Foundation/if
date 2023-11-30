@@ -45,6 +45,11 @@ const impactEngine = async () => {
     const engine = new Supercomputer(impl, modelsHandbook);
     const ompl = await engine.compute();
 
+    if (impl.aggregation) {
+      const aggregations = engine.calculateAggregation();
+      ompl['aggregated-outputs'] = aggregations;
+    }
+
     if (!outputPath) {
       console.log(JSON.stringify(ompl));
       return;
