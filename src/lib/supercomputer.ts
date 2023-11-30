@@ -3,13 +3,16 @@ import {Observatory} from './observatory';
 
 import {ERRORS} from '../util/errors';
 
-import {STRINGS} from '../config';
+import {CONFIG, STRINGS} from '../config';
 
 import {ChildInformation} from '../types/supercomputer';
 import {Children, Config, Impl, ModelParams} from '../types/impl';
+import {planetAggregator} from './planet-aggregator';
+import {AggregationResult} from '../types/planet-aggregator';
 
 const {ImplValidationError} = ERRORS;
 
+const {AVERAGE_NAMES} = CONFIG;
 const {STRUCTURE_MALFORMED} = STRINGS;
 
 /**
@@ -19,10 +22,36 @@ export class Supercomputer {
   private olderChild: ChildInformation = {name: '', info: {}};
   private impl: Impl;
   private modelsHandbook: ModelsUniverse;
+  private aggregatedImpacts: AggregationResult[] = [];
+  private childAmount = 0;
 
   constructor(impl: Impl, modelsHandbook: ModelsUniverse) {
     this.impl = impl;
     this.modelsHandbook = modelsHandbook;
+  }
+
+  /**
+   * Goes through all aggregations collected from child components, then calculates the average.
+   */
+  public calculateAggregation() {
+    const method = this.impl.aggregation['aggregation-method'];
+
+    return this.aggregatedImpacts.reduce((acc, impact, index) => {
+      const keys = Object.keys(impact);
+
+      keys.forEach(key => {
+        acc[key] = acc[key] ?? 0;
+        acc[key] += impact[key];
+
+        if (index === this.childAmount - 1) {
+          if (AVERAGE_NAMES.includes(method)) {
+            acc[key] /= this.childAmount;
+          }
+        }
+      });
+
+      return acc;
+    }, {});
   }
 
   /**
@@ -93,6 +122,8 @@ export class Supercomputer {
       throw new ImplValidationError(STRUCTURE_MALFORMED(childName));
     }
 
+    this.childAmount++;
+
     const specificInputs = areChildrenNested
       ? childrenObject[childName].inputs
       : inputs;
@@ -119,12 +150,16 @@ export class Supercomputer {
 
     const outputs = observatory.getOutputs();
 
+    this.aggregatedImpacts.push(
+      planetAggregator(outputs, this.impl.aggregation)
+    );
+
     if (areChildrenNested) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       this.impl.graph.children[this.olderChild.name].children[
         childName
-      ].outputs = observatory.getOutputs();
+      ].outputs = outputs;
 
       return;
     }
