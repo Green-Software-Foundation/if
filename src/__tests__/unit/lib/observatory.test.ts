@@ -1,7 +1,7 @@
 import {ModelPluginInterface} from '../../../types/model-interface';
 import {Observatory} from '../../../lib/observatory';
 
-describe('util/observatory: ', () => {
+describe('lib/observatory: ', () => {
   class MockaviztaModel implements ModelPluginInterface {
     configure(params: any): Promise<ModelPluginInterface> {
       params;
