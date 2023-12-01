@@ -6,6 +6,10 @@
 
 [Impact Framework](https://greensoftwarefoundation.atlassian.net/wiki/spaces/~612dd45e45cd76006a84071a/pages/17072136/Opensource+Impact+Engine+Framework) (IF) is an [Incubation](https://oc.greensoftware.foundation/project-lifecycle.html#incubation) project from the [Open Source Working Group](https://greensoftwarefoundation.atlassian.net/wiki/spaces/~612dd45e45cd76006a84071a/pages/852049/Open+Source+Working+Group) in the [Green Software Foundation](https://greensoftware.foundation/).
 
+
+**Our documentation is online at [if.greensoftware.foundation]([if.greensoftware.foundation](https://if.greensoftware.foundation/))**
+
+
 **IF** is a framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environmental impacts of software
 
 Modern applications are composed of many smaller pieces of software (components) running on many different environments, for example, private cloud, public cloud, bare-metal, virtualized, containerized, mobile, laptops, and desktops.
@@ -14,7 +18,7 @@ Every environment requires a different model of measurement, and there is no sin
 
 The friction to measuring software emissions isn't that we need to know how, it's that we run software on many things and each thing has several different ways to measure.
 
-Read the [specification and design docs](https://github.com/Green-Software-Foundation/if-docs) to begin.
+Read the [specification and design docs](https://if.greensoftware.foundation) to begin.
 
 
 ## Get started
@@ -82,12 +86,15 @@ yarn impact-engine -- --impl <path-to-your-impl-file> --ompl <your-savepath>
 
 The `impact-engine` CLI tool will configure and run the models defined in your input `yaml` (`impl`) and return the results as an output `yaml` (`ompl`).
 
+## Documentation
+
+Please read our documentation at [if.greensoftware.foundation](https://if.greensoftware.foundation/)
 
 ## Video walk-through
 
 Watch this video to learn how to create and run an `impl`.
 
-[![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/R-6eDM8AsvY)
+[![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/GW37Qd4AQbU)
 
 
 ## Contributing
