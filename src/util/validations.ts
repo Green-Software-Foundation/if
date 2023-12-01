@@ -40,12 +40,15 @@ function constructZodLiteralUnionType<T extends z.ZodLiteral<unknown>>(
 const implValidation = z.object({
   name: z.string(),
   description: z.string().nullable(),
-  aggregation: z.object({
-    'aggregation-metrics': z.array(
-      constructZodLiteralUnionType(aggregationMetric)
-    ),
-    'aggregation-method': constructZodLiteralUnionType(aggregationMethods),
-  }),
+  aggregation: z
+    .object({
+      'aggregation-metrics': z.array(
+        constructZodLiteralUnionType(aggregationMetric)
+      ),
+      'aggregation-method':
+        constructZodLiteralUnionType(aggregationMethods).default('sum'),
+    })
+    .optional(),
   tags: z
     .object({
       kind: z.string().optional(),
