@@ -2,13 +2,53 @@ import {ZodIssue, z} from 'zod';
 
 import {ERRORS} from './errors';
 
+import {CONFIG} from '../config';
+
 import {Impl} from '../types/impl';
 
 const {ImplValidationError} = ERRORS;
 
+const {AGGREGATION_METRICS, AGGREGATION_METHODS} = CONFIG;
+
+const aggregationMethods = AGGREGATION_METHODS.map(method => z.literal(method));
+const aggregationMetric = AGGREGATION_METRICS.map(metric => z.literal(metric));
+
+/**
+ * Zod literal union validator which checks if members are more than 2.
+ */
+function isValidZodLiteralUnion<T extends z.ZodLiteral<unknown>>(
+  literals: T[]
+): literals is [T, T, ...T[]] {
+  return literals.length >= 2;
+}
+
+/**
+ * Literal union type helper.
+ */
+function constructZodLiteralUnionType<T extends z.ZodLiteral<unknown>>(
+  literals: T[]
+) {
+  if (!isValidZodLiteralUnion(literals)) {
+    throw new Error(
+      'Literals passed do not meet the criteria for constructing a union schema, the minimum length is 2.'
+    );
+  }
+
+  return z.union(literals);
+}
+
 const implValidation = z.object({
   name: z.string(),
   description: z.string().nullable(),
+  aggregation: z
+    .object({
+      'aggregation-metrics': z.array(
+        constructZodLiteralUnionType(aggregationMetric)
+      ),
+      'aggregation-method':
+        constructZodLiteralUnionType(aggregationMethods).default('sum'),
+    })
+    .optional(),
   tags: z
     .object({
       kind: z.string().optional(),

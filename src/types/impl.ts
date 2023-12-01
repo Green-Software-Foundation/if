@@ -1,3 +1,8 @@
+import {CONFIG} from '../config';
+import {AggregationResult} from './planet-aggregator';
+
+const {AGGREGATION_METHODS, AGGREGATION_METRICS} = CONFIG;
+
 type Tag = {
   kind?: string;
   complexity?: string;
@@ -13,7 +18,7 @@ type Model = {
 };
 
 export type ModelParams = {
-  timestamp: number;
+  timestamp: string;
   duration: number;
   [key: string]: any;
 };
@@ -25,10 +30,14 @@ export type Children = {
     pipeline: string[];
     config: Config;
     inputs: ModelParams[];
-    children?: Children;
+    children: Children;
     outputs?: ModelParams[];
+    'aggregated-outputs'?: AggregationResult;
   };
 };
+
+export type AggregationMetrics = (typeof AGGREGATION_METRICS)[number];
+export type AggregationMethod = (typeof AGGREGATION_METHODS)[number];
 
 export type Impl = {
   name: string;
@@ -40,4 +49,9 @@ export type Impl = {
   graph: {
     children: Children;
   };
+  aggregation?: {
+    'aggregation-metrics': AggregationMetrics[];
+    'aggregation-method': AggregationMethod;
+  };
+  'aggregated-outputs'?: AggregationResult;
 };

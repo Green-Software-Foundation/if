@@ -19,7 +19,7 @@ const {
   INVALID_MODULE_PATH,
 } = STRINGS;
 
-describe('util/models-universe: ', () => {
+describe('lib/models-universe: ', () => {
   describe('init ModelsUniverse', () => {
     it('initializes object with required properties.', () => {
       const modelsHandbook = new ModelsUniverse();
