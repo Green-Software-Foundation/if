@@ -1,4 +1,5 @@
-# Contributing to IEF <!-- omit from toc -->
+## Contribution Guidelines <!-- omit from toc -->
+
 
 First off, thanks for taking the time to contribute! 🎉
 
@@ -7,7 +8,7 @@ The following document is a rule set of guidelines for contributing.
 ## Table of Contents <!-- omit from toc -->
 
 - [Code Contributions](#code-contributions)
-    - [Step 1: Clone](#step-1-clone)
+    - [Step 1: Fork](#step-1-fork)
     - [Step 2: Branch](#step-2-branch)
     - [Step 3: Commit](#step-3-commit)
     - [Step 4: Sync](#step-4-sync)
@@ -24,20 +25,15 @@ The following document is a rule set of guidelines for contributing.
 
 ## Code Contributions
 
-#### Step 1: Clone
+#### Step 1: Fork
 
-Clone the project on [GitHub](git@github.com:Green-Software-Foundation/ief.git)
-   
-   ```bash
-   $ git clone git@github.com:Green-Software-Foundation/ief.git
-   $ cd ief
-   ```
-   
-For developing new features and bug fixes, the development branch should be pulled and built upon.
+Fork the project on [GitHub](git@github.com:Green-Software-Foundation/if.git)
+
+You then have your own copy of the repository that you can change. 
 
 #### Step 2: Branch
 
-Create new branch from main (`staging` or `master`), which will contain your new feature, fix or change. 
+Create new branch in your forked copy of the `if` repository, which will contain your new feature, fix or change. 
 
     ```bash
     $ git checkout -b <topic-branch-name>
@@ -71,15 +67,15 @@ Please adhere to these [Commit message guidelines](#commit-message-guidelines)
 
 #### Step 4: Sync
 
-Use git pull/merge to synchronize your work with the main repository.
+Use git pull/merge to synchronize your work with the IF repository.
 
    ```bash
-   $ git pull origin dev
+   $ git pull upstream dev
    ```
    
 #### Step 5: Push
 
-Push your topic branch:
+Push your topic branch to your fork:
 
    ```bash
    $ git push origin <topic-branch-name>
@@ -87,7 +83,7 @@ Push your topic branch:
 
 #### Step 6: Pull Request
 
-Open a Pull Request with a clear title and description according to [template](.github/PULL_REQUEST_TEMPLATE.md).
+Open a Pull Request from your fork of the repository to the `dev` branch of the IF repository with a clear title and description according to [template](.github/PULL_REQUEST_TEMPLATE.md).
 
 Pull request should pass all CI which are defined, should have at least one approve. It should adher to the specification for getting approved.
 

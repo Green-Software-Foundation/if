@@ -89,22 +89,9 @@ Watch this video to learn how to create and run an `impl`.
 
 [![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/R-6eDM8AsvY)
 
-## Run tests
 
-To run the complete set of tests simply run
+## Contributing
 
-```sh
-yarn test
-```
+To contribute to IF, please fork this repository and raise a pull request from your fork. The same process is also appropriate for updates to `if-docs`, `if-models` and `if-unofficial-models`.
 
-To refresh the set of `ompl`s used for validating the output files, run the `scripts/impact-test.sh` bash script (for unix only) as follows:
-
-```sh
-./scripts/impact-test.sh
-```
-
-Then run
-
-```sh
-yarn test
-```
+Please read the full contribution guidelines at [if.greensoftware.foundation](https://if.greensoftware.foundation/Contributing)
