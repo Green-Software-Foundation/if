@@ -77,7 +77,7 @@ describe('lib/planet-aggregator: ', () => {
         'aggregation-method': '',
       };
 
-      expect.assertions(1);
+      expect.assertions(2);
 
       const result = planetAggregator(inputs, params);
       const expectedCarbon =
