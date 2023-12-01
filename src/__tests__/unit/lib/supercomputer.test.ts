@@ -16,7 +16,7 @@ const {ImplValidationError} = ERRORS;
 
 const {NOT_INITIALIZED_MODEL, STRUCTURE_MALFORMED} = STRINGS;
 
-describe('util/supercomputer: ', () => {
+describe('lib/supercomputer: ', () => {
   const impl: any = {
     name: 'gsf-demo',
     description: 'Hello',
