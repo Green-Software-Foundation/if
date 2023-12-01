@@ -34,8 +34,11 @@ export class Supercomputer {
    * Goes through all aggregations collected from child components, then calculates the average.
    */
   public calculateAggregation() {
-    const method = this.impl.aggregation['aggregation-method'];
+    if (!this.impl.aggregation) {
+      throw new ImplValidationError('Aggregation params are not provided.');
+    }
 
+    const method = this.impl.aggregation['aggregation-method'];
     return this.aggregatedImpacts.reduce((acc, impact, index) => {
       const keys = Object.keys(impact);
 
