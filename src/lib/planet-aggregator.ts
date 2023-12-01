@@ -19,14 +19,17 @@ export const planetAggregator = (
   inputs: ModelParams[],
   params: PlanetAggregatorParams
 ) => {
-  const aggregationMetrics = params['aggregation-metrics'];
-  const aggregationMethod = params['aggregation-method'] ?? 'sum';
-
-  if (!aggregationMetrics) {
+  if (
+    !params['aggregation-metrics'] ||
+    params['aggregation-metrics'].length === 0
+  ) {
     throw new InvalidAggregationParams(
-      'Aggregation metrics not parsed correctly. Please provide an array of strings.'
+      'Provided aggregation metrics are invalid. Please provide an array of strings.'
     );
   }
+
+  const aggregationMetrics = params['aggregation-metrics'];
+  const aggregationMethod = params['aggregation-method'];
 
   return inputs.reduce((acc, input: ModelParams, index) => {
     for (const metric of aggregationMetrics) {
