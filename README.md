@@ -90,7 +90,7 @@ Please read our documentation at [if.greensoftware.foundation](https://if.greens
 
 Watch this video to learn how to create and run an `impl`.
 
-[![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://www.youtube.com/watch?v=xnRVC2ysL8w)
+[![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/GW37Qd4AQbU)
 
 ## Run tests
 
