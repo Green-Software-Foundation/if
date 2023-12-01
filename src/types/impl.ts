@@ -49,7 +49,7 @@ export type Impl = {
   graph: {
     children: Children;
   };
-  aggregation: {
+  aggregation?: {
     'aggregation-metrics': AggregationMetrics[];
     'aggregation-method': AggregationMethod;
   };
