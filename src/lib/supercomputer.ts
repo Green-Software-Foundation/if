@@ -39,6 +39,7 @@ export class Supercomputer {
     }
 
     const method = this.impl.aggregation['aggregation-method'];
+
     return this.aggregatedImpacts.reduce((acc, impact, index) => {
       const keys = Object.keys(impact);
 
