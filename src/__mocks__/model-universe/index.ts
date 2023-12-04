@@ -12,7 +12,11 @@ export class MockModel implements ModelPluginInterface {
   configure(): Promise<ModelPluginInterface> {
     return Promise.resolve(this);
   }
-  execute(): Promise<any[]> {
+  execute(inputs: any): Promise<any[]> {
+    if (inputs[0].carbon) {
+      return Promise.resolve(inputs);
+    }
+
     return Promise.resolve([{data: 'mock-data'}]);
   }
 }
