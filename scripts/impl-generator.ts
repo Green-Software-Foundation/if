@@ -1,6 +1,7 @@
 import * as yaml from 'js-yaml';
 import * as fs from 'fs';
 
+const savepath = 'examples/impls/auto-generated-impl.yml';
 const frontmatter =
   'name: nesting-demo\ndescription:\ntags:\nkind:\ninitialize:\n  models:\n';
 const models = ['teads-curve', 'sci-e', 'sci-m', 'sci-o', 'sci'];
@@ -19,11 +20,11 @@ const configSciO = '        sci-o:\n          grid-carbon-intensity: 457\n';
 const configSci =
   '        sci:\n          functional-unit-duration: 1\n          functional-duration-time:\n          functional-unit:\n';
 const children = '      children: \n';
+const n_nodes = 1000;
+const n_timestamps = 50;
 let inputData = '';
 let pipeline = '';
 let child = '';
-const n_nodes = 1000;
-const n_timestamps = 50;
 
 let graph = 'graph:\n  children:\n    child:\n      pipeline:\n';
 for (let i = 0; i < models.length; i++) {
@@ -67,7 +68,4 @@ const out =
   configSci +
   children +
   inputData;
-fs.writeFileSync(
-  'examples/impls/auto-generated.yml',
-  yaml.dump(yaml.load(out))
-);
+fs.writeFileSync(savepath, yaml.dump(yaml.load(out)));
