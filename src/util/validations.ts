@@ -37,6 +37,9 @@ function constructZodLiteralUnionType<T extends z.ZodLiteral<unknown>>(
   return z.union(literals);
 }
 
+/**
+ * Validation schema for impl files.
+ */
 const implValidation = z.object({
   name: z.string(),
   description: z.string().nullable(),
