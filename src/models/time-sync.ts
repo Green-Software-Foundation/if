@@ -68,9 +68,11 @@ export class TimeSyncModel implements ModelPluginInterface {
 
       for (let i = unixStartTime; i < unixEndTime; i++) {
         acc.push({
-          timestamp: i.toString(),
+          timestamp: new Date(i * 1000).toISOString(),
           carbon: carbonPerSecond,
           energy: energyPerSecond,
+          'operational-carbon': 30,
+          'embodied-carbon': 30,
           duration: interval,
         });
       }
