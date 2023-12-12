@@ -3,18 +3,13 @@ import {ERRORS} from '../util/errors';
 import {STRINGS} from '../config';
 
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
+import {TimeNormalizerConfig} from '../types/time-normalization';
 
 const {InputValidationError} = ERRORS;
 
 const {INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL} = STRINGS;
 
-type TimeNormalizerConfig = {
-  startTime: string;
-  endTime: string;
-  interval: number;
-};
-
-export class TimeNormalizerModel implements ModelPluginInterface {
+export class TimeSyncModel implements ModelPluginInterface {
   startTime: string | undefined;
   endTime: string | undefined;
   interval = 1;
@@ -23,8 +18,8 @@ export class TimeNormalizerModel implements ModelPluginInterface {
    * Setups basic configuration.
    */
   async configure(params: TimeNormalizerConfig): Promise<ModelPluginInterface> {
-    this.startTime = params.startTime;
-    this.endTime = params.endTime;
+    this.startTime = params['start-time'];
+    this.endTime = params['end-time'];
     this.interval = params.interval;
 
     return this;
