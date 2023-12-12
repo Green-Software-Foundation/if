@@ -1,0 +1,177 @@
+name: nesting-demo
+description:
+time-synchronization:
+    - start-time: 2023-12-12T00:0000 # ISO timestamp
+    - end-time: 2023-12-12T00:0330 # ISO timestamp
+    - interval: 5 # seconds
+tags:
+initialize:
+  models:
+    - name: teads-curve
+      model: TeadsCurveModel
+      path: "@grnsft/if-unofficial-models"
+    - name: sci-e
+      model: SciEModel
+      path: "@grnsft/if-models"
+    - name: sci-m
+      path: "@grnsft/if-models"
+      model: SciMModel
+    - name: sci-o
+      model: SciOModel
+      path: "@grnsft/if-models"
+    - name: time-synchronization
+      model: TimeSyncModel
+      path: "builtin"
+    - name: sci
+      model: SciModel
+      path: "@grnsft/if-models"
+graph:
+  children:
+    child: # an advanced grouping node
+      pipeline:
+        - teads-curve
+        - sci-e
+        - sci-m
+        - sci-o
+        - time-synchronization
+        - sci
+      config:
+        teads-curve:
+          thermal-design-power: 65
+        sci-m:
+          total-embodied-emissions: 251000 # gCO2eq
+          time-reserved: 3600 # 1 hour in s
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1 
+          total-resources: 1 
+        sci-o:
+          grid-carbon-intensity: 457 # gCO2/kwh
+        sci:
+          functional-unit-duration: 1 
+          functional-duration-time: ''
+          functional-unit: requests # factor to convert per time to per f.unit
+      children:
+        child-1:
+          inputs:
+            - timestamp: 2023-12-12T00:0000
+              duration: 10
+              cpu-util: 10    
+              requests: 300
+            - timestamp: 2023-12-12T00:0010
+              duration: 10
+              cpu-util: 20    
+              requests: 380
+            - timestamp: 2023-12-12T00:0020
+              duration: 10
+              cpu-util: 40   
+              requests: 400
+            - timestamp: 2023-12-12T00:0030
+              duration: 20
+              cpu-util: 30
+              e-net: 0.000811 #kwh     
+              requests: 700
+            - timestamp: 2023-12-12T00:0050
+              duration: 10
+              cpu-util: 20   
+              requests: 280
+            - timestamp: 2023-12-12T01:0000
+              duration: 10
+              cpu-util: 70  
+              requests: 390
+            - timestamp: 2023-12-12T01:0010
+              duration: 10
+              cpu-util: 50  
+              requests: 350
+        child-2:
+          inputs: 
+            - timestamp: 2023-12-12T00:0000
+              duration: 10
+              cpu-util: 10    
+              requests: 300
+            - timestamp: 2023-12-12T00:0010
+              duration: 30
+              cpu-util: 20    
+              requests: 380
+            - timestamp: 2023-12-12T00:0040
+              duration: 60
+              cpu-util: 40   
+              requests: 400
+            - timestamp: 2023-12-12T00:0140
+              duration: 60
+              cpu-util: 30
+              e-net: 0.000811 #kwh     
+              requests: 700
+            - timestamp: 2023-12-12T00:0240
+              duration: 15
+              cpu-util: 20   
+              requests: 280
+            - timestamp: 2023-12-12T00:0255
+              duration: 10
+              cpu-util: 70  
+              requests: 390
+            - timestamp: 2023-12-12T00:0305
+              duration: 10
+              cpu-util: 50  
+              requests: 350
+          child-3:
+            children:
+              child-3-1:
+                - timestamp: 2023-12-12T00:0040
+                  duration: 10
+                  cpu-util: 10    
+                  requests: 300
+                - timestamp: 2023-12-12T00:0050
+                  duration: 30
+                  cpu-util: 20    
+                  requests: 380
+                - timestamp: 2023-12-12T00:0120
+                  duration: 30
+                  cpu-util: 40   
+                  requests: 400
+                - timestamp: 2023-12-12T00:0150
+                  duration: 20
+                  cpu-util: 30
+                  e-net: 0.000811 #kwh     
+                  requests: 700
+                - timestamp: 2023-12-12T00:0155
+                  duration: 5
+                  cpu-util: 20   
+                  requests: 280
+                - timestamp: 2023-12-12T00:0200
+                  duration: 10
+                  cpu-util: 70  
+                  requests: 390
+                - timestamp: 2023-12-12T00:0210
+                  duration: 10
+                  cpu-util: 50  
+                  requests: 350
+              child-3-2:
+                - timestamp: 2023-12-12T00:0010
+                  duration: 40
+                  cpu-util: 10    
+                  requests: 300
+                - timestamp: 2023-12-12T00:0050
+                  duration: 30
+                  cpu-util: 20    
+                  requests: 380
+                - timestamp: 2023-12-12T00:0120
+                  duration: 10
+                  cpu-util: 40   
+                  requests: 400
+                - timestamp: 2023-12-12T00:0130
+                  duration: 10
+                  cpu-util: 30
+                  e-net: 0.000811 #kwh     
+                  requests: 700
+                - timestamp: 2023-12-12T00:0140
+                  duration: 5
+                  cpu-util: 20   
+                  requests: 280
+                - timestamp: 2023-12-12T00:0145
+                  duration: 5
+                  cpu-util: 70  
+                  requests: 390
+                - timestamp: 2023-12-12T00:0150
+                  duration: 10
+                  cpu-util: 50  
+                  requests: 350
