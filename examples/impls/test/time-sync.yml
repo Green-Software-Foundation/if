@@ -17,11 +17,11 @@ initialize:
       path: "@grnsft/if-models"
     - name: time-synchronization
       model: TimeSyncModel
-      path: "builtin"
+      path: builtin
       config: 
-        - start-time: 2023-12-12T00:0000 # ISO timestamp
-        - end-time: 2023-12-12T00:0330 # ISO timestamp
-        - interval: 5 # seconds
+        start-time: 2023-12-12T00:00:00.000Z # ISO timestamp
+        end-time: 2023-12-12T00:00:30.000Z # ISO timestamp
+        interval: 5 # seconds
     - name: sci
       model: SciModel
       path: "@grnsft/if-models"
