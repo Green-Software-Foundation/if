@@ -3,7 +3,7 @@ import {ERRORS} from '../util/errors';
 import {STRINGS} from '../config';
 
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
-import {TimeNormalizerConfig} from '../types/time-normalization';
+import {TimeNormalizerConfig} from '../types/time-sync';
 
 const {InputValidationError} = ERRORS;
 
