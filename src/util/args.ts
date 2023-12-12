@@ -19,7 +19,17 @@ const {FILE_IS_NOT_YAML, IMPL_IS_MISSING} = STRINGS;
  * Validates process arguments
  * @private
  */
-const validateAndParseProcessArgs = () => parse<impactProcessArgs>(ARGS);
+const validateAndParseProcessArgs = () => {
+  try {
+    return parse<impactProcessArgs>(ARGS);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new CliInputError(error.message);
+    }
+
+    throw error;
+  }
+};
 
 /**
  * Prepends process path to fiven `filePath`.
