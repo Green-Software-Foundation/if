@@ -49,24 +49,24 @@ export class TimeSyncModel implements ModelPluginInterface {
     }
 
     const newInputs = inputs.reduce((acc, input) => {
-      const {energy, carbon, duration} = input;
+      const {energy, duration} = input;
+      input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo: this should be handled in appropriate layer
+
       const energyPerSecond = this.convertPerInterval(
         energy,
         duration,
         interval
       );
       const carbonPerSecond = this.convertPerInterval(
-        carbon,
+        input.carbon,
         duration,
         interval
       );
 
-      const startTimestamp = Math.floor(
-        new Date(input.timestamp).getTime() / 1000
-      );
-      const endTimestamp = startTimestamp + input.duration;
+      const unixStartTime = Math.floor(new Date(startTime).getTime() / 1000);
+      const unixEndTime = Math.floor(new Date(endTime).getTime() / 1000);
 
-      for (let i = startTimestamp; i < endTimestamp; i++) {
+      for (let i = unixStartTime; i < unixEndTime; i++) {
         acc.push({
           timestamp: i.toString(),
           carbon: carbonPerSecond,
