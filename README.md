@@ -1,6 +1,24 @@
 > [!IMPORTANT]
 > Incubation Project: This project is an incubation project being run inside the Green Software Foundation; as such, we DON’T recommend using it in any critical use case. Incubation projects are experimental, offer no support guarantee, have minimal governance and process, and may be retired at any moment. This project may one day Graduate, in which case this disclaimer will be removed.
 
+<div id="header" align="center">
+<img style=”margin: 0px” src=hack-banner.png alt=”banner” height=”500" />
+</div>
+
+----------------------------
+
+**Welcome to [CarbonHack 24](https://grnsft.org/hack/github) from the Green Software Foundation.**
+
+> From Monday, February 26 - Friday, March 15, 2024, participants will compete to showcase their best application of IF in measuring the environmental impacts of software. 
+> 
+> Carbon Hack is a dynamic competition that combines healthy rivalry with collaborative innovation. Hackers will push the limits of the framework, uncover potential weaknesses, and create innovations to enhance the tool.
+> 
+> CarbonHack is open to all, including software practitioners and those with a passion for Green Software.
+>
+> Find out more about CarbonHack 2024 on the [CarbonHack website](https://grnsft.org/hack/github)
+> 
+> Registration opens 15th January!
+----------------------------
 
 
 # Impact Framework
