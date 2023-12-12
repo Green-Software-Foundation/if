@@ -1,9 +1,5 @@
 name: nesting-demo
-description:
-time-synchronization:
-    - start-time: 2023-12-12T00:0000 # ISO timestamp
-    - end-time: 2023-12-12T00:0330 # ISO timestamp
-    - interval: 5 # seconds
+description: impl with 2 levels of nesting with non-uniform timing of observations
 tags:
 initialize:
   models:
@@ -22,6 +18,10 @@ initialize:
     - name: time-synchronization
       model: TimeSyncModel
       path: "builtin"
+      config: 
+        - start-time: 2023-12-12T00:0000 # ISO timestamp
+        - end-time: 2023-12-12T00:0330 # ISO timestamp
+        - interval: 5 # seconds
     - name: sci
       model: SciModel
       path: "@grnsft/if-models"
