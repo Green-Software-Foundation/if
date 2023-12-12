@@ -30,6 +30,7 @@ export const planetAggregator = (
 
   const aggregationMetrics = params['aggregation-metrics'];
   const aggregationMethod = params['aggregation-method'];
+  const isAverageMethod = AVERAGE_NAMES.includes(aggregationMethod);
 
   return inputs.reduce((acc, input: ModelParams, index) => {
     for (const metric of aggregationMetrics) {
@@ -45,7 +46,7 @@ export const planetAggregator = (
       acc[accessKey] += value;
 
       if (index === inputs.length - 1) {
-        if (AVERAGE_NAMES.includes(aggregationMethod)) {
+        if (isAverageMethod) {
           acc[accessKey] /= inputs.length;
         }
       }
