@@ -73,11 +73,11 @@ operational-carbon:
 physical-processor:
   description: Name of the physical processor 
   unit: None
-  aggregation: None
+  aggregation: none
 vendor:
   description: Name of the cloud service provider in the ccf model. Can be aws, gcp or azure
   unit: None
-  aggregation: None
+  aggregation: none
 ram-alloc:
   description: refers to GB of memory allocated.
   unit: GB
@@ -101,7 +101,7 @@ total-embodied-emissions:
 timestamp:
   description: refers to the time of occurrence of the input
   unit: RFC3339
-  aggregation: None
+  aggregation: none
 time-reserved:
   description: time reserved for a component
   unit: seconds
@@ -110,4 +110,3 @@ total-resources:
   description: total resources available
   unit: count
   aggregation: none
-
