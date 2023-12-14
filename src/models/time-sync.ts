@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
 import {TimeNormalizerConfig} from '../types/time-sync';
+import {UnitsDealer} from '../util/unit-dealer';
+import {UnitKeyName} from '../types/units';
+import {AsyncReturnType} from '../types/helpers';
 
 const {InputValidationError} = ERRORS;
 
@@ -28,11 +32,42 @@ export class TimeSyncModel implements ModelPluginInterface {
   /**
    * Calculates minimal factor.
    */
-  private convertPerInterval = (
-    value: number,
-    duration: number,
-    interval: number
-  ) => (value / duration) * interval;
+  private convertPerInterval = (value: number, duration: number) =>
+    (value / duration) * this.interval;
+
+  private flattenInput = (
+    input: ModelParams,
+    arrivedDealer: AsyncReturnType<typeof UnitsDealer>,
+    i: number
+  ) => {
+    const inputKeys = Object.keys(input) as UnitKeyName[];
+
+    return inputKeys.reduce((acc, key) => {
+      console.log(key);
+      const method = arrivedDealer.askToGiveUnitFor(key);
+
+      // @ts-ignore
+      if (key === 'timestamp') {
+        // @ts-ignore
+        acc[key] = new Date(i * 1000).toISOString();
+
+        return acc;
+      }
+
+      if (key === 'duration') {
+        // @ts-ignore
+        acc[key] = this.interval;
+      }
+
+      // @ts-ignore
+      acc[key] =
+        method === 'sum'
+          ? this.convertPerInterval(input[key], input['duration'])
+          : input[key];
+
+      return acc;
+    }, {});
+  };
 
   /**
    * Normalizes provided time window according to time configuration.
@@ -48,33 +83,19 @@ export class TimeSyncModel implements ModelPluginInterface {
       throw new InputValidationError(INVALID_TIME_INTERVAL);
     }
 
-    const newInputs = inputs.reduce((acc, input) => {
-      const {energy, duration} = input;
-      input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo: this should be handled in appropriate layer
+    const arrivedDealer = await UnitsDealer(); // 😎
 
-      const energyPerSecond = this.convertPerInterval(
-        energy,
-        duration,
-        interval
-      );
-      const carbonPerSecond = this.convertPerInterval(
-        input.carbon,
-        duration,
-        interval
-      );
+    const newInputs = inputs.reduce((acc, input) => {
+      input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo: this should be handled in appropriate layer
 
       const unixStartTime = Math.floor(new Date(startTime).getTime() / 1000);
       const unixEndTime = Math.floor(new Date(endTime).getTime() / 1000);
 
       for (let i = unixStartTime; i < unixEndTime; i++) {
-        acc.push({
-          timestamp: new Date(i * 1000).toISOString(),
-          carbon: carbonPerSecond,
-          energy: energyPerSecond,
-          'operational-carbon': 30,
-          'embodied-carbon': 30,
-          duration: interval,
-        });
+        const currentValue = this.flattenInput(input, arrivedDealer, i);
+
+        // @ts-ignore
+        acc.push(currentValue);
       }
 
       return acc;
