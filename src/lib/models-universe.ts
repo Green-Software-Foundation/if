@@ -1,3 +1,5 @@
+import pathLib = require('path');
+
 import {ERRORS} from '../util/errors';
 
 import {CONFIG, STRINGS} from '../config';
@@ -54,6 +56,7 @@ export class ModelsUniverse {
 
       return module;
     } catch (error) {
+      console.log(error);
       throw new ModelInitializationError(INVALID_MODULE_PATH(path));
     }
   }
@@ -78,7 +81,7 @@ export class ModelsUniverse {
    */
   private async handModel(model: string, path: string) {
     if (path === 'builtin') {
-      path = '../models';
+      path = pathLib.normalize(`${__dirname}/../models/index.ts`);
     } else {
       if (path?.startsWith(GITHUB_PATH)) {
         const parts = path.split('/');
