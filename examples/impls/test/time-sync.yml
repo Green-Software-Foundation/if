@@ -22,9 +22,9 @@ initialize:
         start-time: 2023-12-12T00:00:00.000Z # ISO timestamp
         end-time: 2023-12-12T00:00:30.000Z # ISO timestamp
         interval: 5 # seconds
-    - name: sci
-      model: SciModel
-      path: "@grnsft/if-models"
+    # - name: sci
+    #   model: SciModel
+    #   path: "@grnsft/if-models"
 graph:
   children:
     child: # an advanced grouping node
@@ -34,7 +34,7 @@ graph:
         - sci-m
         - sci-o
         - time-synchronization
-        - sci
+        # - sci
       config:
         teads-curve:
           thermal-design-power: 65
@@ -46,10 +46,10 @@ graph:
           total-resources: 1 
         sci-o:
           grid-carbon-intensity: 457 # gCO2/kwh
-        sci:
-          functional-unit-duration: 1 
-          functional-duration-time: ''
-          functional-unit: requests # factor to convert per time to per f.unit
+        # sci:
+        #   functional-unit-duration: 1 
+        #   functional-duration-time: ''
+        #   functional-unit: requests # factor to convert per time to per f.unit
       children:
         child-1:
           inputs:
@@ -131,7 +131,6 @@ graph:
                 - timestamp: 2023-12-12T00:0150
                   duration: 20
                   cpu-util: 30
-                  e-net: 0.000811 #kwh     
                   requests: 700
                 - timestamp: 2023-12-12T00:0155
                   duration: 5
@@ -160,8 +159,7 @@ graph:
                   requests: 400
                 - timestamp: 2023-12-12T00:0130
                   duration: 10
-                  cpu-util: 30
-                  e-net: 0.000811 #kwh     
+                  cpu-util: 30 
                   requests: 700
                 - timestamp: 2023-12-12T00:0140
                   duration: 5
