@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { ERRORS } from '../util/errors';
+import {ERRORS} from '../util/errors';
 
-import { STRINGS } from '../config';
+import {STRINGS} from '../config';
 
-import { ModelParams, ModelPluginInterface } from '../types/model-interface';
-import { TimeNormalizerConfig } from '../types/time-sync';
-import { UnitsDealer } from '../util/unit-dealer';
-import { UnitKeyName } from '../types/units';
-import { AsyncReturnType } from '../types/helpers';
+import {ModelParams, ModelPluginInterface} from '../types/model-interface';
+import {TimeNormalizerConfig} from '../types/time-sync';
+import {UnitsDealer} from '../util/unit-dealer';
+import {UnitKeyName} from '../types/units';
+import {AsyncReturnType} from '../types/helpers';
 
-const { InputValidationError } = ERRORS;
+const {InputValidationError} = ERRORS;
 
-const { INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL } = STRINGS;
+const {INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL} = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
   startTime: string | undefined;
@@ -33,7 +33,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Calculates minimal factor.
    */
   private convertPerInterval = (value: number, duration: number) =>
-    (value / duration);
+    value / duration;
 
   private flattenInput = (
     input: ModelParams,
@@ -71,8 +71,8 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Normalizes provided time window according to time configuration.
    */
   async execute(inputs: ModelParams[]): Promise<ModelParams[]> {
-    const { startTime, endTime, interval } = this;
-    console.log("IN EXECUTE");
+    const {startTime, endTime, interval} = this;
+    console.log('IN EXECUTE');
     if (!startTime || !endTime) {
       throw new InputValidationError(INVALID_TIME_NORMALIZATION);
     }
@@ -100,13 +100,16 @@ export class TimeSyncModel implements ModelPluginInterface {
       //   // @ts-ignore
       //   acc.push(currentValue);
       // }
-      for (let i = unixStartTimeForObservation; i <= unixStartTimeForObservation + input.duration * 1000; i += 1000) {
+      for (
+        let i = unixStartTimeForObservation;
+        i <= unixStartTimeForObservation + input.duration * 1000;
+        i += 1000
+      ) {
         const currentValue = this.flattenInput(input, arrivedDealer, i);
 
         // @ts-ignore
         acc.push(currentValue);
       }
-
 
       return acc;
     }, [] as ModelParams[]);
