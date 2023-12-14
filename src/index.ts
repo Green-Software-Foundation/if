@@ -10,6 +10,8 @@ import {openYamlFileAsObject, saveYamlFileAs} from './util/yaml';
 
 import {STRINGS} from './config';
 
+import {Impl} from './types/impl';
+
 const {CliInputError} = ERRORS;
 
 const {DISCLAIMER_MESSAGE, SOMETHING_WRONG} = STRINGS;
@@ -30,7 +32,7 @@ const impactEngine = async () => {
 
   if (processParams) {
     const {inputPath, outputPath} = processParams;
-    const rawImpl = await openYamlFileAsObject(inputPath);
+    const rawImpl = await openYamlFileAsObject<Impl>(inputPath);
 
     // Lifecycle Validation
     const impl = validateImpl(rawImpl);
