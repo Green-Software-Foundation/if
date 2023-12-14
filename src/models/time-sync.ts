@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import {ERRORS} from '../util/errors';
+import { ERRORS } from '../util/errors';
 
-import {STRINGS} from '../config';
+import { STRINGS } from '../config';
 
-import {ModelParams, ModelPluginInterface} from '../types/model-interface';
-import {TimeNormalizerConfig} from '../types/time-sync';
-import {UnitsDealer} from '../util/unit-dealer';
-import {UnitKeyName} from '../types/units';
-import {AsyncReturnType} from '../types/helpers';
+import { ModelParams, ModelPluginInterface } from '../types/model-interface';
+import { TimeNormalizerConfig } from '../types/time-sync';
+import { UnitsDealer } from '../util/unit-dealer';
+import { UnitKeyName } from '../types/units';
+import { AsyncReturnType } from '../types/helpers';
 
-const {InputValidationError} = ERRORS;
+const { InputValidationError } = ERRORS;
 
-const {INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL} = STRINGS;
+const { INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL } = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
   startTime: string | undefined;
@@ -33,7 +33,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Calculates minimal factor.
    */
   private convertPerInterval = (value: number, duration: number) =>
-    (value / duration) * this.interval;
+    (value / duration);
 
   private flattenInput = (
     input: ModelParams,
@@ -43,14 +43,12 @@ export class TimeSyncModel implements ModelPluginInterface {
     const inputKeys = Object.keys(input) as UnitKeyName[];
 
     return inputKeys.reduce((acc, key) => {
-      console.log(key);
       const method = arrivedDealer.askToGiveUnitFor(key);
 
       // @ts-ignore
       if (key === 'timestamp') {
         // @ts-ignore
-        acc[key] = new Date(i * 1000).toISOString();
-
+        acc[key] = new Date(i).toISOString();
         return acc;
       }
 
@@ -73,9 +71,13 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Normalizes provided time window according to time configuration.
    */
   async execute(inputs: ModelParams[]): Promise<ModelParams[]> {
-    const {startTime, endTime, interval} = this;
-
+    const { startTime, endTime, interval } = this;
+    console.log("IN EXECUTE");
     if (!startTime || !endTime) {
+      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
+    }
+
+    if (startTime > endTime) {
       throw new InputValidationError(INVALID_TIME_NORMALIZATION);
     }
 
@@ -84,33 +86,30 @@ export class TimeSyncModel implements ModelPluginInterface {
     }
 
     const arrivedDealer = await UnitsDealer(); // 😎
-
     const newInputs = inputs.reduce((acc, input) => {
       input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo: this should be handled in appropriate layer
+      const unixStartTimeForObservation = new Date(input.timestamp).getTime();
 
-      const unixStartTime = Math.floor(new Date(startTime).getTime() / 1000);
-      const unixEndTime = Math.floor(new Date(endTime).getTime() / 1000);
+      ////////////////////////////////////////////////////////////////////////////////////////////
+      // PROBLEM - this loop is getting executed multiple times when it should only be called once
+      ////////////////////////////////////////////////////////////////////////////////////////////
+      // here we actually want to iterate between current timestamp and current timestamp + duration in units of 1 second, niot from start -> end
+      // for (let i = unixStartTime; i <= unixEndTime; i += 1000) {
+      //   const currentValue = this.flattenInput(input, arrivedDealer, i);
 
-      for (let i = unixStartTime; i < unixEndTime; i++) {
+      //   // @ts-ignore
+      //   acc.push(currentValue);
+      // }
+      for (let i = unixStartTimeForObservation; i <= unixStartTimeForObservation + input.duration * 1000; i += 1000) {
         const currentValue = this.flattenInput(input, arrivedDealer, i);
 
         // @ts-ignore
         acc.push(currentValue);
       }
 
+
       return acc;
     }, [] as ModelParams[]);
-
-    const unixStartTime = Math.floor(new Date(startTime).getTime() / 1000);
-    const unixEndTime = Math.floor(new Date(endTime).getTime() / 1000);
-
-    for (let i = unixStartTime; i < unixEndTime; i += interval) {
-      const timestamp = i.toString();
-
-      if (!newInputs.some(input => input.timestamp === timestamp)) {
-        newInputs.push({timestamp, energy: 0, carbon: 0, duration: interval});
-      }
-    }
 
     return newInputs;
   }

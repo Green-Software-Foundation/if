@@ -29,7 +29,7 @@ energy-cpu:
 expected-lifespan:
   description: Total Expected Lifespan of the Component in Seconds
   unit: seconds
-  aggregation: None
+  aggregation: sum
 energy-memory:
   description: Energy consumed by the Memory of the component
   unit: kWh
