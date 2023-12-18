@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
@@ -35,36 +34,43 @@ export class TimeSyncModel implements ModelPluginInterface {
   private convertPerInterval = (value: number, duration: number) =>
     value / duration;
 
+  /**
+   * Checks if global timeslot has intersection with observation timestamps.
+   */
+  // private checkIfThereIsIntersection = () => {};
+
   private flattenInput = (
     input: ModelParams,
-    arrivedDealer: AsyncReturnType<typeof UnitsDealer>,
+    dealer: AsyncReturnType<typeof UnitsDealer>,
     i: number
   ) => {
     const inputKeys = Object.keys(input) as UnitKeyName[];
 
     return inputKeys.reduce((acc, key) => {
-      const method = arrivedDealer.askToGiveUnitFor(key);
+      const method = dealer.askToGiveUnitFor(key);
 
-      // @ts-ignore
       if (key === 'timestamp') {
-        // @ts-ignore
-        acc[key] = new Date(i).toISOString();
+        acc[key] = (
+          parseFloat(input.timestamp) -
+          (parseFloat(input.timestamp) % 1000) +
+          i * 1000
+        ) // trimming to get whole seconds
+          .toString();
+
         return acc;
       }
 
       if (key === 'duration') {
-        // @ts-ignore
-        acc[key] = this.interval;
+        acc[key] = 1; // @todo use user defined resolution later
       }
 
-      // @ts-ignore
       acc[key] =
         method === 'sum'
           ? this.convertPerInterval(input[key], input['duration'])
           : input[key];
 
       return acc;
-    }, {});
+    }, {} as ModelParams);
   };
 
   /**
@@ -72,7 +78,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    */
   async execute(inputs: ModelParams[]): Promise<ModelParams[]> {
     const {startTime, endTime, interval} = this;
-    console.log('IN EXECUTE');
+
     if (!startTime || !endTime) {
       throw new InputValidationError(INVALID_TIME_NORMALIZATION);
     }
@@ -85,34 +91,25 @@ export class TimeSyncModel implements ModelPluginInterface {
       throw new InputValidationError(INVALID_TIME_INTERVAL);
     }
 
-    const arrivedDealer = await UnitsDealer(); // 😎
-    const newInputs = inputs.reduce((acc, input) => {
+    const dealer = await UnitsDealer(); // 😎
+
+    const newInputs: ModelParams[] = [];
+
+    inputs.forEach(input => {
       input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo: this should be handled in appropriate layer
-      const unixStartTimeForObservation = new Date(input.timestamp).getTime();
+      input.timestamp = Math.floor(
+        new Date(input.timestamp).getTime() / 1000
+      ).toString();
 
-      ////////////////////////////////////////////////////////////////////////////////////////////
-      // PROBLEM - this loop is getting executed multiple times when it should only be called once
-      ////////////////////////////////////////////////////////////////////////////////////////////
-      // here we actually want to iterate between current timestamp and current timestamp + duration in units of 1 second, niot from start -> end
-      // for (let i = unixStartTime; i <= unixEndTime; i += 1000) {
-      //   const currentValue = this.flattenInput(input, arrivedDealer, i);
+      for (let i = 0; i < input.duration; i++) {
+        const normalizedInput = this.flattenInput(input, dealer, i);
 
-      //   // @ts-ignore
-      //   acc.push(currentValue);
-      // }
-      for (
-        let i = unixStartTimeForObservation;
-        i <= unixStartTimeForObservation + input.duration * 1000;
-        i += 1000
-      ) {
-        const currentValue = this.flattenInput(input, arrivedDealer, i);
-
-        // @ts-ignore
-        acc.push(currentValue);
+        newInputs.push(normalizedInput);
       }
+    });
 
-      return acc;
-    }, [] as ModelParams[]);
+    // sort data into time order by UNX timestamp
+    newInputs.sort((a, b) => parseFloat(a.timestamp) - parseFloat(b.timestamp)); // b - a for reverse sort
 
     return newInputs;
   }
