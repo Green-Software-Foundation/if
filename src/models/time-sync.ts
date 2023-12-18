@@ -1,16 +1,42 @@
-import {ERRORS} from '../util/errors';
+import { ERRORS } from '../util/errors';
 
-import {STRINGS} from '../config';
+import { STRINGS } from '../config';
 
-import {ModelParams, ModelPluginInterface} from '../types/model-interface';
-import {TimeNormalizerConfig} from '../types/time-sync';
-import {UnitsDealer} from '../util/unit-dealer';
-import {UnitKeyName} from '../types/units';
-import {AsyncReturnType} from '../types/helpers';
+import { ModelParams, ModelPluginInterface } from '../types/model-interface';
+import { TimeNormalizerConfig } from '../types/time-sync';
+import { UnitsDealer } from '../util/unit-dealer';
+import { UnitKeyName } from '../types/units';
+import { AsyncReturnType } from '../types/helpers';
 
-const {InputValidationError} = ERRORS;
+const { InputValidationError } = ERRORS;
 
-const {INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL} = STRINGS;
+const { INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL } = STRINGS;
+
+
+/**
+ * const fillObject = {
+    timestamp: 2023-12-12T00:00:00.000Z // whatever the right timestamp is for the 1 s interval
+    duration: 1
+    cpu-util: 0 // if aggregation method is sum or avg, set value to 0
+    requests: 0 // if value not in units.yasml assume it should bet set to 0
+    thermal-design-power: 65 // if aggregation method = none, copy value as-is
+    total-embodied-emissions: 251000 // if aggregation method = none, copy value as-is
+    time-reserved: 1 // set to duration
+    expected-lifespan: 126144000 // if aggregation method = none, copy value as-is
+    resources-reserved: 1 // if aggregation method = none, copy value as-is
+    total-resources: 1 // if aggregation method = none, copy value as-is
+    grid-carbon-intensity: 457 // if aggregation method = none, copy value as-is
+    energy-cpu: 0 // if aggregation method is sum or avg, set value to 0 
+    energy: 0 // if aggregation method is sum or avg, set value to 0
+    embodied-carbon: 0 // if aggregation method is sum or avg, set value to 0
+    operational-carbon:0 // if aggregation method is sum or avg, set value to 0
+    carbon: 0 // if aggregation method is sum or avg, set value to 0
+ * }
+ * 
+ */
+
+
+
 
 export class TimeSyncModel implements ModelPluginInterface {
   startTime: string | undefined;
@@ -77,7 +103,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Normalizes provided time window according to time configuration.
    */
   async execute(inputs: ModelParams[]): Promise<ModelParams[]> {
-    const {startTime, endTime, interval} = this;
+    const { startTime, endTime, interval } = this;
 
     if (!startTime || !endTime) {
       throw new InputValidationError(INVALID_TIME_NORMALIZATION);
