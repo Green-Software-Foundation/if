@@ -2,11 +2,12 @@ import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
+import {UnitsDealer} from '../util/units-dealer';
+
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
 import {TimeNormalizerConfig} from '../types/time-sync';
-import {UnitsDealer} from '../util/unit-dealer';
+import {UnitsDealerUsage} from '../types/units-dealer';
 import {UnitKeyName} from '../types/units';
-import {AsyncReturnType} from '../types/helpers';
 
 const {InputValidationError} = ERRORS;
 
@@ -41,7 +42,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
   private flattenInput = (
     input: ModelParams,
-    dealer: AsyncReturnType<typeof UnitsDealer>,
+    dealer: UnitsDealerUsage,
     i: number
   ) => {
     const inputKeys = Object.keys(input) as UnitKeyName[];
@@ -73,7 +74,9 @@ export class TimeSyncModel implements ModelPluginInterface {
     }, {} as ModelParams);
   };
 
-  private sorter() {}
+  // private fillMissingInput(input: ModelParams, dealer: UnitsDealerUsage) {
+
+  // }
 
   /**
    * Normalizes provided time window according to time configuration.
@@ -107,11 +110,23 @@ export class TimeSyncModel implements ModelPluginInterface {
        * Check if not the first input, then check consistency with previous ones.
        */
       if (index > 0) {
-        const previousInputTimestamp = parseInt(inputs[index - 1].timestamp);
-        const previousInputDuration = inputs[index - 1].duration * 1000;
-        const compareableTime = previousInputTimestamp + previousInputDuration;
+        const previousInput = inputs[index - 1];
+        const previousInputTimestamp = parseInt(previousInput.timestamp);
+        const compareableTime = previousInputTimestamp + previousInput.duration;
 
-        if (parseInt(input.timestamp) - compareableTime > 0) {
+        console.log(previousInputTimestamp);
+        console.log(compareableTime);
+        console.log(parseInt(input.timestamp));
+
+        const currentTimestamp = parseInt(input.timestamp);
+        const timelineGapSize = currentTimestamp - compareableTime;
+
+        if (timelineGapSize > 0) {
+          for (let i = compareableTime + 1; i <= currentTimestamp; i++) {
+            // fill the missing values here
+            newInputs.push();
+          }
+
           /**
            * we need to fill the gap
            * @example
