@@ -1,0 +1,212 @@
+name: nesting-demo
+description: impl with 2 levels of nesting with non-uniform timing of observations
+tags: null
+initialize:
+  models:
+    - name: teads-curve
+      path: '@grnsft/if-unofficial-models'
+      model: TeadsCurveModel
+    - name: sci-e
+      path: '@grnsft/if-models'
+      model: SciEModel
+    - name: sci-m
+      path: '@grnsft/if-models'
+      model: SciMModel
+    - name: sci-o
+      path: '@grnsft/if-models'
+      model: SciOModel
+    - name: time-synchronization
+      path: builtin
+      model: TimeSyncModel
+      config:
+        start-time: 2023-12-12T00:00:00.000Z
+        end-time: 2023-12-12T00:01:00.000Z
+        interval: 5
+graph:
+  children:
+    child:
+      pipeline:
+        - teads-curve
+        - sci-e
+        - sci-m
+        - sci-o
+        - time-synchronization
+      config:
+        teads-curve:
+          thermal-design-power: 65
+        sci-m:
+          total-embodied-emissions: 251000
+          time-reserved: 3600
+          expected-lifespan: 126144000
+          resources-reserved: 1
+          total-resources: 1
+        sci-o:
+          grid-carbon-intensity: 457
+      children:
+        child-1:
+          inputs:
+            - timestamp: 2023-12-12T00:00:00.000Z
+              duration: 10
+              cpu-util: 10
+              requests: 300
+          outputs:
+            - timestamp: '2023-12-12T00:00:00.000Z'
+              duration: 10
+              cpu-util: 10
+              requests: 30
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              energy-cpu: 0.000057777777777777776
+              energy: 0.000057777777777777776
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.026404444444444442
+              carbon: 7.189646453576864
+            - timestamp: '2023-12-12T00:00:01.000Z'
+              duration: 10
+              cpu-util: 10
+              requests: 30
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              energy-cpu: 0.000057777777777777776
+              energy: 0.000057777777777777776
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.026404444444444442
+              carbon: 7.189646453576864
+            - timestamp: '2023-12-12T00:00:02.000Z'
+              duration: 10
+              cpu-util: 10
+              requests: 30
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              energy-cpu: 0.000057777777777777776
+              energy: 0.000057777777777777776
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.026404444444444442
+              carbon: 7.189646453576864
+            - timestamp: '2023-12-12T00:00:03.000Z'
+              duration: 10
+              cpu-util: 10
+              requests: 30
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              energy-cpu: 0.000057777777777777776
+              energy: 0.000057777777777777776
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.026404444444444442
+              carbon: 7.189646453576864
+            - timestamp: '2023-12-12T00:00:04.000Z'
+              duration: 10
+              cpu-util: 10
+              requests: 30
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              energy-cpu: 0.000057777777777777776
+              energy: 0.000057777777777777776
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.026404444444444442
+              carbon: 7.189646453576864
+            - timestamp: '2023-12-12T00:00:05.000Z'
+              duration: 10
+              cpu-util: 10
+              requests: 30
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              energy-cpu: 0.000057777777777777776
+              energy: 0.000057777777777777776
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.026404444444444442
+              carbon: 7.189646453576864
+            - timestamp: '2023-12-12T00:00:06.000Z'
+              duration: 10
+              cpu-util: 10
+              requests: 30
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              energy-cpu: 0.000057777777777777776
+              energy: 0.000057777777777777776
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.026404444444444442
+              carbon: 7.189646453576864
+            - timestamp: '2023-12-12T00:00:07.000Z'
+              duration: 10
+              cpu-util: 10
+              requests: 30
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              energy-cpu: 0.000057777777777777776
+              energy: 0.000057777777777777776
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.026404444444444442
+              carbon: 7.189646453576864
+            - timestamp: '2023-12-12T00:00:08.000Z'
+              duration: 10
+              cpu-util: 10
+              requests: 30
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              energy-cpu: 0.000057777777777777776
+              energy: 0.000057777777777777776
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.026404444444444442
+              carbon: 7.189646453576864
+            - timestamp: '2023-12-12T00:00:09.000Z'
+              duration: 10
+              cpu-util: 10
+              requests: 30
+              thermal-design-power: 65
+              total-embodied-emissions: 251000
+              time-reserved: 3600
+              expected-lifespan: 126144000
+              resources-reserved: 1
+              total-resources: 1
+              grid-carbon-intensity: 457
+              energy-cpu: 0.000057777777777777776
+              energy: 0.000057777777777777776
+              embodied-carbon: 7.16324200913242
+              operational-carbon: 0.026404444444444442
+              carbon: 7.189646453576864
