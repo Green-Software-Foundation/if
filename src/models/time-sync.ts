@@ -1,17 +1,17 @@
-import {ERRORS} from '../util/errors';
+import { ERRORS } from '../util/errors';
 
-import {STRINGS} from '../config';
+import { STRINGS } from '../config';
 
-import {UnitsDealer} from '../util/units-dealer';
+import { UnitsDealer } from '../util/units-dealer';
 
-import {ModelParams, ModelPluginInterface} from '../types/model-interface';
-import {TimeNormalizerConfig} from '../types/time-sync';
-import {UnitsDealerUsage} from '../types/units-dealer';
-import {UnitKeyName} from '../types/units';
+import { ModelParams, ModelPluginInterface } from '../types/model-interface';
+import { TimeNormalizerConfig } from '../types/time-sync';
+import { UnitsDealerUsage } from '../types/units-dealer';
+import { UnitKeyName } from '../types/units';
 
-const {InputValidationError} = ERRORS;
+const { InputValidationError } = ERRORS;
 
-const {INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL} = STRINGS;
+const { INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL } = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
   startTime: string | undefined;
@@ -82,7 +82,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Normalizes provided time window according to time configuration.
    */
   async execute(inputs: ModelParams[]): Promise<ModelParams[]> {
-    const {startTime, endTime, interval} = this;
+    const { startTime, endTime, interval } = this;
 
     if (!startTime || !endTime) {
       throw new InputValidationError(INVALID_TIME_NORMALIZATION);
@@ -102,7 +102,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
     inputs.forEach((input, index) => {
       input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo: this should be handled in appropriate layer
-      input.timestamp = Math.floor(
+      input.timestamp = Math.round(
         new Date(input.timestamp).getTime() / 1000
       ).toString();
 
@@ -112,19 +112,23 @@ export class TimeSyncModel implements ModelPluginInterface {
       if (index > 0) {
         const previousInput = inputs[index - 1];
         const previousInputTimestamp = parseInt(previousInput.timestamp);
-        const compareableTime = previousInputTimestamp + previousInput.duration;
+        const comparableTime = previousInputTimestamp + previousInput.duration; // end of last set of obs
 
         console.log(previousInputTimestamp);
-        console.log(compareableTime);
+        console.log(comparableTime);
         console.log(parseInt(input.timestamp));
 
         const currentTimestamp = parseInt(input.timestamp);
-        const timelineGapSize = currentTimestamp - compareableTime;
+        const timelineGapSize = currentTimestamp - comparableTime;
 
         if (timelineGapSize > 0) {
-          for (let i = compareableTime + 1; i <= currentTimestamp; i++) {
+          console.log("gap = ", timelineGapSize)
+
+          for (let i = comparableTime + 1; i <= currentTimestamp; i++) {
+            console.log("i ", i)
             // fill the missing values here
-            newInputs.push();
+            const newTimeStamp = new Date(i * 1000).toISOString()
+            newInputs.push({ 'timestamp': newTimeStamp, duration: 1 });
           }
 
           /**
