@@ -1,7 +1,6 @@
 import moment = require('moment');
 
 import {ERRORS} from '../util/errors';
-
 import {STRINGS} from '../config';
 
 import {UnitsDealer} from '../util/units-dealer';
