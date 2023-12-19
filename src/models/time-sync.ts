@@ -1,3 +1,5 @@
+import moment = require('moment');
+
 import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
@@ -36,10 +38,8 @@ export class TimeSyncModel implements ModelPluginInterface {
     value / duration;
 
   /**
-   * Checks if global timeslot has intersection with observation timestamps.
+   * Input flattener.
    */
-  // private checkIfThereIsIntersection = () => {};
-
   private flattenInput = (
     input: ModelParams,
     dealer: UnitsDealerUsage,
@@ -51,12 +51,8 @@ export class TimeSyncModel implements ModelPluginInterface {
       const method = dealer.askToGiveUnitFor(key);
 
       if (key === 'timestamp') {
-        acc[key] = (
-          parseFloat(input.timestamp) -
-          (parseFloat(input.timestamp) % 1000) +
-          i * 1000
-        ) // trimming to get whole seconds
-          .toString();
+        const perSecond = this.normalizeTimePerSecond(input.timestamp, i);
+        acc[key] = moment(perSecond).toISOString();
 
         return acc;
       }
@@ -74,9 +70,14 @@ export class TimeSyncModel implements ModelPluginInterface {
     }, {} as ModelParams);
   };
 
-  // private fillMissingInput(input: ModelParams, dealer: UnitsDealerUsage) {
+  /**
+   * Normalize time per given second.
+   */
+  private normalizeTimePerSecond = (currentRoundMoment: string, i: number) => {
+    const thisMoment = moment(currentRoundMoment).milliseconds(0);
 
-  // }
+    return thisMoment.add(i, 'second');
+  };
 
   /**
    * Normalizes provided time window according to time configuration.
@@ -96,59 +97,54 @@ export class TimeSyncModel implements ModelPluginInterface {
       throw new InputValidationError(INVALID_TIME_INTERVAL);
     }
 
-    const dealer = await UnitsDealer(); // 😎
-
     const newInputs: ModelParams[] = [];
+    const dealer = await UnitsDealer(); // 😎
 
     inputs.forEach((input, index) => {
       input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo: this should be handled in appropriate layer
-      input.timestamp = Math.floor(
-        new Date(input.timestamp).getTime() / 1000
-      ).toString();
+      const currentMoment = moment(input.timestamp);
 
       /**
        * Check if not the first input, then check consistency with previous ones.
        */
       if (index > 0) {
         const previousInput = inputs[index - 1];
-        const previousInputTimestamp = parseInt(previousInput.timestamp);
-        const compareableTime = previousInputTimestamp + previousInput.duration;
+        const previousInputTimestamp = moment(previousInput.timestamp);
+        const compareableTime = previousInputTimestamp.add(
+          previousInput.duration,
+          'second'
+        );
 
-        console.log(previousInputTimestamp);
-        console.log(compareableTime);
-        console.log(parseInt(input.timestamp));
-
-        const currentTimestamp = parseInt(input.timestamp);
-        const timelineGapSize = currentTimestamp - compareableTime;
+        const timelineGapSize = currentMoment.diff(compareableTime, 'second');
 
         if (timelineGapSize > 0) {
-          for (let i = compareableTime + 1; i <= currentTimestamp; i++) {
+          for (
+            let missingTimestamp = compareableTime.valueOf();
+            missingTimestamp <= currentMoment.valueOf() - 1000;
+            missingTimestamp += 1000
+          ) {
             // fill the missing values here
-            newInputs.push();
-          }
+            const fillObject = {
+              timestamp: moment(missingTimestamp).toISOString(), // whatever the right timestamp is for the 1 s interval
+              duration: 1,
+              'cpu-util': 0, // if aggregation method is sum or avg, set value to 0
+              requests: 0, // if value not in units.yaml assume it should bet set to 0
+              'thermal-design-power': 65, // if aggregation method = none, copy value as-is
+              'total-embodied-emissions': 251000, // if aggregation method = none, copy value as-is
+              'time-reserved': 1, // set to duration
+              'expected-lifespan': 126144000, // if aggregation method = none, copy value as-is
+              'resources-reserved': 1, // if aggregation method = none, copy value as-is
+              'total-resources': 1, // if aggregation method = none, copy value as-is
+              'grid-carbon-intensity': 457, // if aggregation method = none, copy value as-is
+              'energy-cpu': 0, // if aggregation method is sum or avg, set value to 0
+              energy: 0, // if aggregation method is sum or avg, set value to 0
+              'embodied-carbon': 0, // if aggregation method is sum or avg, set value to 0
+              'operational-carbon': 0, // if aggregation method is sum or avg, set value to 0
+              carbon: 0, // if aggregation method is sum or avg, set value to 0
+            };
 
-          /**
-           * we need to fill the gap
-           * @example
-           * const fillObject = {
-           *  timestamp: 2023-12-12T00:00:00.000Z // whatever the right timestamp is for the 1 s interval
-           *  duration: 1
-           *  cpu-util: 0 // if aggregation method is sum or avg, set value to 0
-           *  requests: 0 // if value not in units.yasml assume it should bet set to 0
-           *  thermal-design-power: 65 // if aggregation method = none, copy value as-is
-           *  total-embodied-emissions: 251000 // if aggregation method = none, copy value as-is
-           *  time-reserved: 1 // set to duration
-           *  expected-lifespan: 126144000 // if aggregation method = none, copy value as-is
-           *  resources-reserved: 1 // if aggregation method = none, copy value as-is
-           *  total-resources: 1 // if aggregation method = none, copy value as-is
-           *  grid-carbon-intensity: 457 // if aggregation method = none, copy value as-is
-           *  energy-cpu: 0 // if aggregation method is sum or avg, set value to 0
-           *  energy: 0 // if aggregation method is sum or avg, set value to 0
-           *  embodied-carbon: 0 // if aggregation method is sum or avg, set value to 0
-           *  operational-carbon:0 // if aggregation method is sum or avg, set value to 0
-           *  carbon: 0 // if aggregation method is sum or avg, set value to 0
-           * }
-           **/
+            newInputs.push(fillObject);
+          }
         }
       }
 
@@ -163,7 +159,7 @@ export class TimeSyncModel implements ModelPluginInterface {
     });
 
     // sort data into time order by UNX timestamp
-    newInputs.sort((a, b) => parseFloat(a.timestamp) - parseFloat(b.timestamp)); // b - a for reverse sort
+    newInputs.sort((a, b) => moment(a.timestamp).diff(moment(b.timestamp))); // b - a for reverse sort
 
     return newInputs;
   }
