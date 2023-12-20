@@ -37,13 +37,22 @@ export class TimeSyncModel implements ModelPluginInterface {
     value / duration;
 
   /**
+   * Normalize time per given second.
+   */
+  private normalizeTimePerSecond = (currentRoundMoment: string, i: number) => {
+    const thisMoment = moment(currentRoundMoment).milliseconds(0);
+
+    return thisMoment.add(i, 'second');
+  };
+
+  /**
    * Input flattener.
    */
-  private flattenInput = (
+  private flattenInput(
     input: ModelParams,
     dealer: UnitsDealerUsage,
     i: number
-  ) => {
+  ) {
     const inputKeys = Object.keys(input) as UnitKeyName[];
 
     return inputKeys.reduce((acc, key) => {
@@ -51,7 +60,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
       if (key === 'timestamp') {
         const perSecond = this.normalizeTimePerSecond(input.timestamp, i);
-        acc[key] = moment(perSecond).toISOString();
+        acc[key] = moment(perSecond).milliseconds(0).toISOString();
 
         return acc;
       }
@@ -67,16 +76,46 @@ export class TimeSyncModel implements ModelPluginInterface {
 
       return acc;
     }, {} as ModelParams);
-  };
+  }
 
   /**
-   * Normalize time per given second.
+   * Populates object to fill the gaps in observation timeline.
    */
-  private normalizeTimePerSecond = (currentRoundMoment: string, i: number) => {
-    const thisMoment = moment(currentRoundMoment).milliseconds(0);
+  private inputFiller(
+    input: ModelParams,
+    missingTimestamp: number,
+    dealer: UnitsDealerUsage
+  ) {
+    const metrics = Object.keys(input) as UnitKeyName[];
 
-    return thisMoment.add(i, 'second');
-  };
+    return metrics.reduce((acc, metric) => {
+      if (metric === 'timestamp') {
+        acc[metric] = moment(missingTimestamp).milliseconds(0).toISOString();
+
+        return acc;
+      }
+
+      if (metric === 'duration') {
+        acc[metric] = 1; // later will be changed to user defined interval
+
+        return acc;
+      }
+
+      if (metric === 'time-reserved') {
+        acc[metric] = acc['duration'];
+
+        return acc;
+      }
+
+      const method = dealer.askToGiveUnitFor(metric);
+      acc[metric] =
+        method === 'sum'
+          ? this.convertPerInterval(input[metric], input['duration'])
+          : input[metric];
+
+      return acc;
+    }, {} as ModelParams);
+  }
 
   /**
    * Normalizes provided time window according to time configuration.
@@ -122,27 +161,9 @@ export class TimeSyncModel implements ModelPluginInterface {
             missingTimestamp <= currentMoment.valueOf() - 1000;
             missingTimestamp += 1000
           ) {
-            // fill the missing values here
-            const fillObject = {
-              timestamp: moment(missingTimestamp).toISOString(), // whatever the right timestamp is for the 1 s interval
-              duration: 1,
-              'cpu-util': 0, // if aggregation method is sum or avg, set value to 0
-              requests: 0, // if value not in units.yaml assume it should bet set to 0
-              'thermal-design-power': 65, // if aggregation method = none, copy value as-is
-              'total-embodied-emissions': 251000, // if aggregation method = none, copy value as-is
-              'time-reserved': 1, // set to duration
-              'expected-lifespan': 126144000, // if aggregation method = none, copy value as-is
-              'resources-reserved': 1, // if aggregation method = none, copy value as-is
-              'total-resources': 1, // if aggregation method = none, copy value as-is
-              'grid-carbon-intensity': 457, // if aggregation method = none, copy value as-is
-              'energy-cpu': 0, // if aggregation method is sum or avg, set value to 0
-              energy: 0, // if aggregation method is sum or avg, set value to 0
-              'embodied-carbon': 0, // if aggregation method is sum or avg, set value to 0
-              'operational-carbon': 0, // if aggregation method is sum or avg, set value to 0
-              carbon: 0, // if aggregation method is sum or avg, set value to 0
-            };
+            const filledGap = this.inputFiller(input, missingTimestamp, dealer);
 
-            newInputs.push(fillObject);
+            newInputs.push(filledGap);
           }
         }
       }
