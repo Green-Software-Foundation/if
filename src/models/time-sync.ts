@@ -1,13 +1,14 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import {ERRORS} from '../util/errors';
+import moment = require('moment');
 
+import {ERRORS} from '../util/errors';
 import {STRINGS} from '../config';
+
+import {UnitsDealer} from '../util/units-dealer';
 
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
 import {TimeNormalizerConfig} from '../types/time-sync';
-import {UnitsDealer} from '../util/unit-dealer';
+import {UnitsDealerUsage} from '../types/units-dealer';
 import {UnitKeyName} from '../types/units';
-import {AsyncReturnType} from '../types/helpers';
 
 const {InputValidationError} = ERRORS;
 
@@ -33,41 +34,88 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Calculates minimal factor.
    */
   private convertPerInterval = (value: number, duration: number) =>
-    (value / duration) * this.interval;
+    value / duration;
 
-  private flattenInput = (
+  /**
+   * Normalize time per given second.
+   */
+  private normalizeTimePerSecond = (currentRoundMoment: string, i: number) => {
+    const thisMoment = moment(currentRoundMoment).milliseconds(0);
+
+    return thisMoment.add(i, 'second');
+  };
+
+  /**
+   * Input flattener.
+   */
+  private flattenInput(
     input: ModelParams,
-    arrivedDealer: AsyncReturnType<typeof UnitsDealer>,
+    dealer: UnitsDealerUsage,
     i: number
-  ) => {
+  ) {
     const inputKeys = Object.keys(input) as UnitKeyName[];
 
     return inputKeys.reduce((acc, key) => {
-      console.log(key);
-      const method = arrivedDealer.askToGiveUnitFor(key);
+      const method = dealer.askToGiveUnitFor(key);
 
-      // @ts-ignore
       if (key === 'timestamp') {
-        // @ts-ignore
-        acc[key] = new Date(i * 1000).toISOString();
+        const perSecond = this.normalizeTimePerSecond(input.timestamp, i);
+        acc[key] = moment(perSecond).milliseconds(0).toISOString();
 
         return acc;
       }
 
       if (key === 'duration') {
-        // @ts-ignore
-        acc[key] = this.interval;
+        acc[key] = 1; // @todo use user defined resolution later
       }
 
-      // @ts-ignore
       acc[key] =
         method === 'sum'
           ? this.convertPerInterval(input[key], input['duration'])
           : input[key];
 
       return acc;
-    }, {});
-  };
+    }, {} as ModelParams);
+  }
+
+  /**
+   * Populates object to fill the gaps in observation timeline.
+   */
+  private inputFiller(
+    input: ModelParams,
+    missingTimestamp: number,
+    dealer: UnitsDealerUsage
+  ) {
+    const metrics = Object.keys(input) as UnitKeyName[];
+
+    return metrics.reduce((acc, metric) => {
+      if (metric === 'timestamp') {
+        acc[metric] = moment(missingTimestamp).milliseconds(0).toISOString();
+
+        return acc;
+      }
+
+      if (metric === 'duration') {
+        acc[metric] = 1; // later will be changed to user defined interval
+
+        return acc;
+      }
+
+      if (metric === 'time-reserved') {
+        acc[metric] = acc['duration'];
+
+        return acc;
+      }
+
+      const method = dealer.askToGiveUnitFor(metric);
+      acc[metric] =
+        method === 'sum'
+          ? this.convertPerInterval(input[metric], input['duration'])
+          : input[metric];
+
+      return acc;
+    }, {} as ModelParams);
+  }
 
   /**
    * Normalizes provided time window according to time configuration.
@@ -79,38 +127,59 @@ export class TimeSyncModel implements ModelPluginInterface {
       throw new InputValidationError(INVALID_TIME_NORMALIZATION);
     }
 
+    if (startTime > endTime) {
+      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
+    }
+
     if (!interval) {
       throw new InputValidationError(INVALID_TIME_INTERVAL);
     }
 
-    const arrivedDealer = await UnitsDealer(); // 😎
+    const newInputs: ModelParams[] = [];
+    const dealer = await UnitsDealer(); // 😎
 
-    const newInputs = inputs.reduce((acc, input) => {
+    inputs.forEach((input, index) => {
       input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo: this should be handled in appropriate layer
+      const currentMoment = moment(input.timestamp);
 
-      const unixStartTime = Math.floor(new Date(startTime).getTime() / 1000);
-      const unixEndTime = Math.floor(new Date(endTime).getTime() / 1000);
+      /**
+       * Check if not the first input, then check consistency with previous ones.
+       */
+      if (index > 0) {
+        const previousInput = inputs[index - 1];
+        const previousInputTimestamp = moment(previousInput.timestamp);
+        const compareableTime = previousInputTimestamp.add(
+          previousInput.duration,
+          'second'
+        );
 
-      for (let i = unixStartTime; i < unixEndTime; i++) {
-        const currentValue = this.flattenInput(input, arrivedDealer, i);
+        const timelineGapSize = currentMoment.diff(compareableTime, 'second');
 
-        // @ts-ignore
-        acc.push(currentValue);
+        if (timelineGapSize > 0) {
+          for (
+            let missingTimestamp = compareableTime.valueOf();
+            missingTimestamp <= currentMoment.valueOf() - 1000;
+            missingTimestamp += 1000
+          ) {
+            const filledGap = this.inputFiller(input, missingTimestamp, dealer);
+
+            newInputs.push(filledGap);
+          }
+        }
       }
 
-      return acc;
-    }, [] as ModelParams[]);
+      /**
+       * Brake down current observation.
+       */
+      for (let i = 0; i < input.duration; i++) {
+        const normalizedInput = this.flattenInput(input, dealer, i);
 
-    const unixStartTime = Math.floor(new Date(startTime).getTime() / 1000);
-    const unixEndTime = Math.floor(new Date(endTime).getTime() / 1000);
-
-    for (let i = unixStartTime; i < unixEndTime; i += interval) {
-      const timestamp = i.toString();
-
-      if (!newInputs.some(input => input.timestamp === timestamp)) {
-        newInputs.push({timestamp, energy: 0, carbon: 0, duration: interval});
+        newInputs.push(normalizedInput);
       }
-    }
+    });
+
+    // sort data into time order by UNX timestamp
+    newInputs.sort((a, b) => moment(a.timestamp).diff(moment(b.timestamp))); // b - a for reverse sort
 
     return newInputs;
   }

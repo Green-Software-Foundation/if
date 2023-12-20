@@ -34,7 +34,7 @@ describe('util/yaml: ', () => {
     it('should load and serve yaml as object.', async () => {
       expect.assertions(2);
 
-      const result = await openYamlFileAsObject('mock');
+      const result = await openYamlFileAsObject<any>('mock');
       const expectedType = 'object';
       const expectedYamlName = 'gsf-demo';
 

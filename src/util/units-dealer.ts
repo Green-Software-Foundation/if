@@ -19,6 +19,9 @@ export const UnitsDealer = async () => {
   const unitsStack = await getUnitsFile();
 
   return {
+    /**
+     * Returns unit for given `unitName`. If doesn't exist then returns value `sum`.
+     */
     askToGiveUnitFor: (unitName: UnitKeyName) => {
       if (unitsStack[unitName]) {
         return unitsStack[unitName].unit;
