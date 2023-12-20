@@ -118,69 +118,79 @@ export class TimeSyncModel implements ModelPluginInterface {
   }
 
   /**
+   * Validates `startTime`, `endTime` and `interval` params.
+   */
+  private validateParams() {
+    if (!this.startTime || !this.endTime) {
+      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
+    }
+
+    if (this.startTime > this.endTime) {
+      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
+    }
+
+    if (!this.interval) {
+      throw new InputValidationError(INVALID_TIME_INTERVAL);
+    }
+  }
+
+  /**
    * Normalizes provided time window according to time configuration.
    */
   async execute(inputs: ModelParams[]): Promise<ModelParams[]> {
-    const {startTime, endTime, interval} = this;
+    this.validateParams();
 
-    if (!startTime || !endTime) {
-      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
-    }
+    const dealer = await UnitsDealer();
 
-    if (startTime > endTime) {
-      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
-    }
+    return inputs
+      .reduce((acc, input, index) => {
+        input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo - should be handled in appropriate layer
+        const currentMoment = moment(input.timestamp);
 
-    if (!interval) {
-      throw new InputValidationError(INVALID_TIME_INTERVAL);
-    }
+        /**
+         * Checks if not the first input, then check consistency with previous ones.
+         */
+        if (index > 0) {
+          const previousInput = inputs[index - 1];
+          const previousInputTimestamp = moment(previousInput.timestamp);
+          const compareableTime = previousInputTimestamp.add(
+            previousInput.duration,
+            'second'
+          );
 
-    const newInputs: ModelParams[] = [];
-    const dealer = await UnitsDealer(); // 😎
+          const timelineGapSize = currentMoment.diff(compareableTime, 'second');
 
-    inputs.forEach((input, index) => {
-      input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo: this should be handled in appropriate layer
-      const currentMoment = moment(input.timestamp);
+          /**
+           * Checks if there is gap in timeline.
+           */
+          if (timelineGapSize > 0) {
+            for (
+              let missingTimestamp = compareableTime.valueOf();
+              missingTimestamp <= currentMoment.valueOf() - 1000;
+              missingTimestamp += 1000
+            ) {
+              const filledGap = this.inputFiller(
+                input,
+                missingTimestamp,
+                dealer
+              );
 
-      /**
-       * Check if not the first input, then check consistency with previous ones.
-       */
-      if (index > 0) {
-        const previousInput = inputs[index - 1];
-        const previousInputTimestamp = moment(previousInput.timestamp);
-        const compareableTime = previousInputTimestamp.add(
-          previousInput.duration,
-          'second'
-        );
-
-        const timelineGapSize = currentMoment.diff(compareableTime, 'second');
-
-        if (timelineGapSize > 0) {
-          for (
-            let missingTimestamp = compareableTime.valueOf();
-            missingTimestamp <= currentMoment.valueOf() - 1000;
-            missingTimestamp += 1000
-          ) {
-            const filledGap = this.inputFiller(input, missingTimestamp, dealer);
-
-            newInputs.push(filledGap);
+              acc.push(filledGap);
+            }
           }
         }
-      }
 
-      /**
-       * Brake down current observation.
-       */
-      for (let i = 0; i < input.duration; i++) {
-        const normalizedInput = this.flattenInput(input, dealer, i);
+        /**
+         * Brake down current observation.
+         */
+        for (let i = 0; i < input.duration; i++) {
+          const normalizedInput = this.flattenInput(input, dealer, i);
 
-        newInputs.push(normalizedInput);
-      }
-    });
+          acc.push(normalizedInput);
+        }
 
-    // sort data into time order by UNX timestamp
-    newInputs.sort((a, b) => moment(a.timestamp).diff(moment(b.timestamp))); // b - a for reverse sort
-
-    return newInputs;
+        return acc;
+      }, [] as ModelParams[])
+      .sort((a, b) => moment(a.timestamp).diff(moment(b.timestamp)));
   }
 }
