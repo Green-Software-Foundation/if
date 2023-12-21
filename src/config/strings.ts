@@ -33,4 +33,5 @@ https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=fee
     `Provided module path: '${path}' is invalid.`,
   INVALID_TIME_NORMALIZATION: 'Start time or end time is missing.',
   INVALID_TIME_INTERVAL: 'Interval is missing.',
+  INVALID_OBSERVATION_OVERLAP: 'Observation timestamps overlap.',
 };
