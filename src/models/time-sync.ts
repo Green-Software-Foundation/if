@@ -1,20 +1,20 @@
 import moment = require('moment');
-import { extendMoment } from 'moment-range';
+import {extendMoment} from 'moment-range';
 const momentRange = extendMoment(moment);
 
-import { STRINGS } from '../config';
+import {STRINGS} from '../config';
 
-import { ERRORS } from '../util/errors';
-import { UnitsDealer } from '../util/units-dealer';
+import {ERRORS} from '../util/errors';
+import {UnitsDealer} from '../util/units-dealer';
 
-import { ModelParams, ModelPluginInterface } from '../types/model-interface';
-import { TimeNormalizerConfig } from '../types/time-sync';
-import { UnitsDealerUsage } from '../types/units-dealer';
-import { UnitKeyName } from '../types/units';
+import {ModelParams, ModelPluginInterface} from '../types/model-interface';
+import {TimeNormalizerConfig} from '../types/time-sync';
+import {UnitsDealerUsage} from '../types/units-dealer';
+import {UnitKeyName} from '../types/units';
 
-const { InputValidationError } = ERRORS;
+const {InputValidationError} = ERRORS;
 
-const { INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL } = STRINGS;
+const {INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL} = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
   startTime: string | undefined;
@@ -168,7 +168,7 @@ export class TimeSyncModel implements ModelPluginInterface {
       );
       for (const second of dateRange.by('second')) {
         // @todo apply zero-fill logic to create this object (any fields with aggregation-method == sum or avg should be zeros, others copied from inputs[0])
-        inputs.push({ timestamp: second.toISOString(), duration: 1, carbon: 0 });
+        inputs.push({timestamp: second.toISOString(), duration: 1, carbon: 0});
       }
     }
     if (pad[1]) {
@@ -181,9 +181,8 @@ export class TimeSyncModel implements ModelPluginInterface {
       );
       for (const second of dateRange.by('second')) {
         // @todo apply zero-fill logic to create this object (any fields with aggregation-method == sum or avg should be zeros, others copied from inputs[0])
-        inputs.push({ timestamp: second.toISOString(), duration: 1, carbon: 0 });
+        inputs.push({timestamp: second.toISOString(), duration: 1, carbon: 0});
       }
-      ;
     }
     return inputs.sort((a, b) => moment(a.timestamp).diff(moment(b.timestamp)));
   }
