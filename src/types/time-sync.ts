@@ -3,3 +3,8 @@ export type TimeNormalizerConfig = {
   'end-time': string;
   interval: number;
 };
+
+export type PaddingReceipt = {
+  start: boolean;
+  end: boolean;
+};
