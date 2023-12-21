@@ -1,5 +1,25 @@
 # Time sync
 
+Time sync standardizes the start time, end time and temporal resolution of all output data across an entire graph.
+
+## Parameters
+
+### Model config
+The following should be defined in the model initialization:
+
+- `start-time`: global start time as ISO 8061 string
+- `stop`: global end time as ISO 8061 string
+- `interval`: temporal resolution in seconds
+
+### Inputs:
+
+- none
+  
+### Returns
+
+- `inputs`: time-synchronized version of the graph
+
+
 ## Concept
 
 ### Overview
@@ -143,7 +163,104 @@ To do time synchronization, we assume:
 - Evenly distributing the total for a `duration` across higher resolution `observations` is appropriate, as opposed to having some non-uniform distribution.
 
 
-## How to use
+## Typescript implementation
 
-...
+To run the model, you must first create an instance of `SciModel` and call
+its `configure()` method. Then, you can call `execute()` to return `sci`.
 
+```typescript
+const sciModel = new SciModel();
+sciModel.configure('name', {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:30.000Z',
+      interval: 10
+})
+const results = sciModel.execute([
+    {
+        timestamp: 2023-12-12T00:00:00.000Z
+        duration: 10
+        cpu-util: 10
+        carbon: 100 
+        energy: 100   
+        requests: 300
+    },
+    {
+        timestamp: 2023-12-12T00:00:10.000Z
+        duration: 10
+        cpu-util: 20 
+        carbon: 100,
+        energy: 100,   
+        requests: 380
+    }
+])
+```
+
+## Example impl
+
+IEF users will typically call the model as part of a pipeline defined in an `impl`
+file. In this case, instantiating and configuring the model is handled by
+`impact-engine` and does not have to be done explicitly by the user.
+The following is an example `impl` that calls `time-sync`:
+
+```yaml
+name: time-sync-demo
+description: impl with 2 levels of nesting with non-uniform timing of observations
+tags:
+initialize:
+  models:
+    - name: teads-curve
+      model: TeadsCurveModel
+      path: "@grnsft/if-unofficial-models"
+    - name: sci-e
+      model: SciEModel
+      path: "@grnsft/if-models"
+    - name: sci-m
+      path: "@grnsft/if-models"
+      model: SciMModel
+    - name: sci-o
+      model: SciOModel
+      path: "@grnsft/if-models"
+    - name: time-synchronization
+      model: TimeSyncModel
+      path: builtin
+      config: 
+        start-time: 2023-12-12T00:00:00.000Z # ISO timestamp
+        end-time: 2023-12-12T00:01:00.000Z # ISO timestamp
+        interval: 5 # seconds
+graph:
+  children:
+    child: # an advanced grouping node
+      pipeline:
+        - teads-curve
+        - sci-e
+        - sci-m
+        - sci-o
+        - time-synchronization
+      config:
+        teads-curve:
+          thermal-design-power: 65
+        sci-m:
+          total-embodied-emissions: 251000 # gCO2eq
+          time-reserved: 3600 # 1 hour in s
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1 
+          total-resources: 1 
+        sci-o:
+          grid-carbon-intensity: 457 # gCO2/kwh
+      children:
+        child-1:
+          inputs:
+            - timestamp: 2023-12-12T00:00:00.000Z
+              duration: 10
+              cpu-util: 10
+              carbon: 100 
+              energy: 100   
+              requests: 300
+            - timestamp: 2023-12-12T00:00:10.000Z
+              duration: 10
+              cpu-util: 20    
+              carbon: 200 
+              energy: 200 
+              requests: 380
+
+```
