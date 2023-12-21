@@ -1,7 +1,6 @@
 import moment = require('moment');
 import {extendMoment} from 'moment-range';
 const momentRange = extendMoment(moment);
-import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
