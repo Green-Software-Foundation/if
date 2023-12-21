@@ -112,7 +112,7 @@ export class TimeSyncModel implements ModelPluginInterface {
       }
 
       const method = dealer.askToGiveMethodFor(metric);
-      acc[method] = method === 'avg' || method === 'sum' ? 0 : input[metric];
+      acc[metric] = method === 'avg' || method === 'sum' ? 0 : input[metric];
 
       return acc;
     }, {} as ModelParams);
@@ -193,7 +193,6 @@ export class TimeSyncModel implements ModelPluginInterface {
         );
       }
     }
-
     return paddedArray;
   }
 
@@ -215,7 +214,7 @@ export class TimeSyncModel implements ModelPluginInterface {
          * Checks if not the first input, then check consistency with previous ones.
          */
         if (index > 0) {
-          const previousInput = inputs[index - 1];
+          const previousInput = paddedInputs[index - 1];
           const previousInputTimestamp = moment(previousInput.timestamp);
           const compareableTime = previousInputTimestamp.add(
             previousInput.duration,
