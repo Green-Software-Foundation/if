@@ -1,18 +1,18 @@
 import moment = require('moment');
 
-import { ERRORS } from '../util/errors';
-import { STRINGS } from '../config';
+import {ERRORS} from '../util/errors';
+import {STRINGS} from '../config';
 
-import { UnitsDealer } from '../util/units-dealer';
+import {UnitsDealer} from '../util/units-dealer';
 
-import { ModelParams, ModelPluginInterface } from '../types/model-interface';
-import { TimeNormalizerConfig } from '../types/time-sync';
-import { UnitsDealerUsage } from '../types/units-dealer';
-import { UnitKeyName } from '../types/units';
+import {ModelParams, ModelPluginInterface} from '../types/model-interface';
+import {TimeNormalizerConfig} from '../types/time-sync';
+import {UnitsDealerUsage} from '../types/units-dealer';
+import {UnitKeyName} from '../types/units';
 
-const { InputValidationError } = ERRORS;
+const {InputValidationError} = ERRORS;
 
-const { INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL } = STRINGS;
+const {INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL} = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
   startTime: string | undefined;

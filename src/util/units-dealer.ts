@@ -1,8 +1,8 @@
 import path = require('path');
 
-import { openYamlFileAsObject } from './yaml';
+import {openYamlFileAsObject} from './yaml';
 
-import { Units, UnitKeyName } from '../types/units';
+import {Units, UnitKeyName} from '../types/units';
 
 /**
  * Gets units file as an object.
