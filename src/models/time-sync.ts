@@ -142,7 +142,7 @@ export class TimeSyncModel implements ModelPluginInterface {
   /**
    * Checks if padding is needed either at start of the timeline or the end and returns status.
    */
-  private checkPad(inputs: ModelParams[]): PaddingReceipt {
+  private checkPadding(inputs: ModelParams[]): PaddingReceipt {
     const startDiffInSeconds =
       moment(inputs[0].timestamp).diff(moment(this.startTime)) / 1000;
 
@@ -200,11 +200,13 @@ export class TimeSyncModel implements ModelPluginInterface {
     return paddedArray;
   }
 
+  /**
+   * Trims time series down to match global timespan
+   */
   private trimInputs(inputs: ModelParams[]): ModelParams[] {
     const trimmedInputs: ModelParams[] = [];
 
     inputs.forEach(input => {
-      console.log(input);
       if (
         moment(input.timestamp).isSameOrAfter(moment(this.startTime)) &&
         moment(input.timestamp).isSameOrBefore(moment(this.endTime))
@@ -212,7 +214,6 @@ export class TimeSyncModel implements ModelPluginInterface {
         trimmedInputs.push(input);
       }
     });
-    // console.log("trimmedInputs: ", trimmedInputs)
     return trimmedInputs;
   }
 
@@ -223,7 +224,7 @@ export class TimeSyncModel implements ModelPluginInterface {
     this.validateParams();
 
     const dealer = await UnitsDealer();
-    const pad = this.checkPad(inputs);
+    const pad = this.checkPadding(inputs);
     const paddedInputs = this.padInputs(inputs, pad, dealer);
 
     return paddedInputs
