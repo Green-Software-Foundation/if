@@ -1,18 +1,19 @@
 import moment = require('moment');
+import { extendMoment } from 'moment-range';
+const momentRange = extendMoment(moment);
+import { ERRORS } from '../util/errors';
+import { STRINGS } from '../config';
 
-import {ERRORS} from '../util/errors';
-import {STRINGS} from '../config';
+import { UnitsDealer } from '../util/units-dealer';
 
-import {UnitsDealer} from '../util/units-dealer';
+import { ModelParams, ModelPluginInterface } from '../types/model-interface';
+import { TimeNormalizerConfig } from '../types/time-sync';
+import { UnitsDealerUsage } from '../types/units-dealer';
+import { UnitKeyName } from '../types/units';
 
-import {ModelParams, ModelPluginInterface} from '../types/model-interface';
-import {TimeNormalizerConfig} from '../types/time-sync';
-import {UnitsDealerUsage} from '../types/units-dealer';
-import {UnitKeyName} from '../types/units';
+const { InputValidationError } = ERRORS;
 
-const {InputValidationError} = ERRORS;
-
-const {INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL} = STRINGS;
+const { INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL } = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
   startTime: string | undefined;
@@ -139,6 +140,20 @@ export class TimeSyncModel implements ModelPluginInterface {
     this.validateParams();
 
     const dealer = await UnitsDealer();
+
+    if (this.startTime !== undefined) {
+      const startDiffInSeconds = moment(inputs[0].timestamp).diff(moment(this.startTime)) / 1000;
+      if (startDiffInSeconds > 0) {
+        // if positive, this.startTime is AFTER the global start time, which requires padding
+        const dateRange = momentRange.range(moment(this.startTime), moment(inputs[0].timestamp));
+        for (let second of dateRange.by('second')) {
+          inputs.push({ timestamp: second.toISOString(), duration: 1 })
+        }
+      }
+      else if (startDiffInSeconds < 0) {
+        // if negative, this.startTime is BEFORE the global start time, which requires trimming
+      }
+    }
 
     return inputs
       .reduce((acc, input, index) => {
