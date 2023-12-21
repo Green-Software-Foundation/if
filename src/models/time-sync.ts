@@ -157,11 +157,11 @@ export class TimeSyncModel implements ModelPluginInterface {
   /**
    * Pads zeroish inputs from the beginning or at the end of the inputs if needed.
    */
-  private async padInputs(
+  private padInputs(
     inputs: ModelParams[],
     pad: PaddingReceipt,
     dealer: UnitsDealerUsage
-  ): Promise<ModelParams[]> {
+  ): ModelParams[] {
     const {start, end} = pad;
     const paddedFromBeginning = [];
 
@@ -205,7 +205,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
     const dealer = await UnitsDealer();
     const pad = this.checkPadding(inputs);
-    const paddedInputs = await this.padInputs(inputs, pad, dealer);
+    const paddedInputs = this.padInputs(inputs, pad, dealer);
 
     return paddedInputs
       .reduce((acc, input, index) => {
