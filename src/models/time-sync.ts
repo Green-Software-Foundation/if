@@ -14,7 +14,11 @@ import {UnitKeyName} from '../types/units';
 
 const {InputValidationError} = ERRORS;
 
-const {INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL} = STRINGS;
+const {
+  INVALID_TIME_NORMALIZATION,
+  INVALID_TIME_INTERVAL,
+  INVALID_OBSERVATION_OVERLAP,
+} = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
   startTime: string | undefined;
@@ -216,6 +220,16 @@ export class TimeSyncModel implements ModelPluginInterface {
         if (index > 0) {
           const previousInput = paddedInputs[index - 1];
           const previousInputTimestamp = moment(previousInput.timestamp);
+
+          // check obs are not overlapping
+          if (
+            previousInputTimestamp
+              .add(previousInput.duration, 'seconds')
+              .isAfter(currentMoment)
+          ) {
+            throw new InputValidationError(INVALID_OBSERVATION_OVERLAP);
+          }
+
           const compareableTime = previousInputTimestamp.add(
             previousInput.duration,
             'second'
