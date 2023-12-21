@@ -81,9 +81,9 @@ export class TimeSyncModel implements ModelPluginInterface {
   }
 
   /**
-   * Populates object to fill the gaps in observation timeline.
+   * Populates object to fill the gaps in observational timeline using zeroish values.
    */
-  private inputFiller(
+  private fillWithZeroishInput(
     input: ModelParams,
     missingTimestamp: number,
     dealer: UnitsDealerUsage
@@ -112,10 +112,7 @@ export class TimeSyncModel implements ModelPluginInterface {
       }
 
       const method = dealer.askToGiveMethodFor(metric);
-      acc[metric] =
-        method === 'sum'
-          ? this.convertPerInterval(input[metric], input['duration'])
-          : input[metric];
+      acc[method] = method === 'avg' || method === 'sum' ? 0 : input[metric];
 
       return acc;
     }, {} as ModelParams);
@@ -223,7 +220,7 @@ export class TimeSyncModel implements ModelPluginInterface {
               missingTimestamp <= currentMoment.valueOf() - 1000;
               missingTimestamp += 1000
             ) {
-              const filledGap = this.inputFiller(
+              const filledGap = this.fillWithZeroishInput(
                 input,
                 missingTimestamp,
                 dealer

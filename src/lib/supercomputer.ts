@@ -3,7 +3,7 @@ import {Observatory} from './observatory';
 
 import {ERRORS} from '../util/errors';
 
-import {CONFIG, STRINGS} from '../config';
+import {STRINGS} from '../config';
 
 import {ChildInformation} from '../types/supercomputer';
 import {Children, Config, Impl, ModelParams} from '../types/impl';
@@ -12,7 +12,6 @@ import {AggregationResult} from '../types/planet-aggregator';
 
 const {ImplValidationError} = ERRORS;
 
-const {AVERAGE_NAMES} = CONFIG;
 const {STRUCTURE_MALFORMED} = STRINGS;
 
 /**
@@ -48,7 +47,7 @@ export class Supercomputer {
         acc[key] += impact[key];
 
         if (index === this.childAmount - 1) {
-          if (AVERAGE_NAMES.includes(method)) {
+          if (method === 'avg') {
             acc[key] /= this.childAmount;
           }
         }
