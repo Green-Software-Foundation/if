@@ -1,19 +1,19 @@
 import moment = require('moment');
-import { extendMoment } from 'moment-range';
+import {extendMoment} from 'moment-range';
 const momentRange = extendMoment(moment);
-import { ERRORS } from '../util/errors';
-import { STRINGS } from '../config';
+import {ERRORS} from '../util/errors';
+import {STRINGS} from '../config';
 
-import { UnitsDealer } from '../util/units-dealer';
+import {UnitsDealer} from '../util/units-dealer';
 
-import { ModelParams, ModelPluginInterface } from '../types/model-interface';
-import { TimeNormalizerConfig } from '../types/time-sync';
-import { UnitsDealerUsage } from '../types/units-dealer';
-import { UnitKeyName } from '../types/units';
+import {ModelParams, ModelPluginInterface} from '../types/model-interface';
+import {TimeNormalizerConfig} from '../types/time-sync';
+import {UnitsDealerUsage} from '../types/units-dealer';
+import {UnitKeyName} from '../types/units';
 
-const { InputValidationError } = ERRORS;
+const {InputValidationError} = ERRORS;
 
-const { INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL } = STRINGS;
+const {INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL} = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
   startTime: string | undefined;
@@ -133,6 +133,59 @@ export class TimeSyncModel implements ModelPluginInterface {
     }
   }
 
+  private checkPadding(inputs: ModelParams[]): boolean[] {
+    const out = [false, false];
+    if (this.startTime !== undefined) {
+      const startDiffInSeconds =
+        moment(inputs[0].timestamp).diff(moment(this.startTime)) / 1000;
+      const endDiffInSeconds =
+        moment(inputs[inputs.length - 1].timestamp)
+          .add(inputs[inputs.length - 1].duration, 'seconds')
+          .diff(moment(this.endTime)) / 1000;
+      if (startDiffInSeconds > 0) {
+        out[0] = true;
+      }
+      if (endDiffInSeconds < 0) {
+        out[1] = true;
+      }
+    }
+    return out;
+  }
+
+  private async padInputs(
+    inputs: ModelParams[],
+    pad: boolean[]
+  ): Promise<ModelParams[]> {
+    if (pad[0]) {
+      const dateRange = momentRange.range(
+        moment(this.startTime),
+        moment(inputs[0].timestamp).subtract(1, 'second')
+      );
+      for (const second of dateRange.by('second')) {
+        // @todo apply zero-fill logic to create this object (any fields with aggregation-method == sum or avg should be zeros, others copied from inputs[0])
+        inputs.push({timestamp: second.toISOString(), duration: 1, carbon: 0});
+      }
+      inputs.sort((a, b) => moment(a.timestamp).diff(moment(b.timestamp)));
+    }
+    if (pad[1]) {
+      const dateRange = momentRange.range(
+        moment(inputs[inputs.length - 1].timestamp).add(
+          inputs[inputs.length - 1].duration + 1,
+          'seconds'
+        ),
+        moment(this.endTime)
+      );
+      console.log('DATE RANGE ', dateRange);
+      console.log(inputs);
+      for (const second of dateRange.by('second')) {
+        // @todo apply zero-fill logic to create this object (any fields with aggregation-method == sum or avg should be zeros, others copied from inputs[0])
+        inputs.push({timestamp: second.toISOString(), duration: 1, carbon: 0});
+      }
+      inputs.sort((a, b) => moment(a.timestamp).diff(moment(b.timestamp)));
+    }
+    return inputs;
+  }
+
   /**
    * Normalizes provided time window according to time configuration.
    */
@@ -140,22 +193,10 @@ export class TimeSyncModel implements ModelPluginInterface {
     this.validateParams();
 
     const dealer = await UnitsDealer();
+    const pad = this.checkPadding(inputs);
+    const paddedInputs = await this.padInputs(inputs, pad);
 
-    if (this.startTime !== undefined) {
-      const startDiffInSeconds = moment(inputs[0].timestamp).diff(moment(this.startTime)) / 1000;
-      if (startDiffInSeconds > 0) {
-        // if positive, this.startTime is AFTER the global start time, which requires padding
-        const dateRange = momentRange.range(moment(this.startTime), moment(inputs[0].timestamp));
-        for (let second of dateRange.by('second')) {
-          inputs.push({ timestamp: second.toISOString(), duration: 1 })
-        }
-      }
-      else if (startDiffInSeconds < 0) {
-        // if negative, this.startTime is BEFORE the global start time, which requires trimming
-      }
-    }
-
-    return inputs
+    return paddedInputs
       .reduce((acc, input, index) => {
         //input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo - should be handled in appropriate layer
         const currentMoment = moment(input.timestamp);
