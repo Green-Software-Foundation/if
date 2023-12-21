@@ -51,12 +51,14 @@ graph:
           inputs:
             - timestamp: 2023-12-12T00:00:00.000Z
               duration: 10
-              cpu-util: 10    
+              cpu-util: 10
+              carbon: 100 
+              energy: 100   
               requests: 300
-            # - timestamp: 2023-12-12T00:00:10.000Z
-            #   duration: 10
-            #   cpu-util: 20    
-            #   requests: 380
+            - timestamp: 2023-12-12T00:00:10.000Z
+              duration: 10
+              cpu-util: 20    
+              requests: 380
         #     - timestamp: 2023-12-12T00:00:20.000Z
         #       duration: 10
         #       cpu-util: 40   
