@@ -1,18 +1,18 @@
 import moment = require('moment');
 
-import {ERRORS} from '../util/errors';
-import {STRINGS} from '../config';
+import { ERRORS } from '../util/errors';
+import { STRINGS } from '../config';
 
-import {UnitsDealer} from '../util/units-dealer';
+import { UnitsDealer } from '../util/units-dealer';
 
-import {ModelParams, ModelPluginInterface} from '../types/model-interface';
-import {TimeNormalizerConfig} from '../types/time-sync';
-import {UnitsDealerUsage} from '../types/units-dealer';
-import {UnitKeyName} from '../types/units';
+import { ModelParams, ModelPluginInterface } from '../types/model-interface';
+import { TimeNormalizerConfig } from '../types/time-sync';
+import { UnitsDealerUsage } from '../types/units-dealer';
+import { UnitKeyName } from '../types/units';
 
-const {InputValidationError} = ERRORS;
+const { InputValidationError } = ERRORS;
 
-const {INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL} = STRINGS;
+const { INVALID_TIME_NORMALIZATION, INVALID_TIME_INTERVAL } = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
   startTime: string | undefined;
@@ -54,9 +54,8 @@ export class TimeSyncModel implements ModelPluginInterface {
     i: number
   ) {
     const inputKeys = Object.keys(input) as UnitKeyName[];
-
     return inputKeys.reduce((acc, key) => {
-      const method = dealer.askToGiveUnitFor(key);
+      const method = dealer.askToGiveMethodFor(key);
 
       if (key === 'timestamp') {
         const perSecond = this.normalizeTimePerSecond(input.timestamp, i);
@@ -68,7 +67,6 @@ export class TimeSyncModel implements ModelPluginInterface {
       if (key === 'duration') {
         acc[key] = 1; // @todo use user defined resolution later
       }
-
       acc[key] =
         method === 'sum'
           ? this.convertPerInterval(input[key], input['duration'])
@@ -107,7 +105,7 @@ export class TimeSyncModel implements ModelPluginInterface {
         return acc;
       }
 
-      const method = dealer.askToGiveUnitFor(metric);
+      const method = dealer.askToGiveMethodFor(metric);
       acc[metric] =
         method === 'sum'
           ? this.convertPerInterval(input[metric], input['duration'])
@@ -144,7 +142,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
     return inputs
       .reduce((acc, input, index) => {
-        input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo - should be handled in appropriate layer
+        //input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo - should be handled in appropriate layer
         const currentMoment = moment(input.timestamp);
 
         /**
@@ -174,7 +172,6 @@ export class TimeSyncModel implements ModelPluginInterface {
                 missingTimestamp,
                 dealer
               );
-
               acc.push(filledGap);
             }
           }
