@@ -8,7 +8,7 @@ import {ERRORS} from '../util/errors';
 import {UnitsDealer} from '../util/units-dealer';
 
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
-import {TimeNormalizerConfig} from '../types/time-sync';
+import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
 import {UnitsDealerUsage} from '../types/units-dealer';
 import {UnitKeyName} from '../types/units';
 
@@ -135,53 +135,66 @@ export class TimeSyncModel implements ModelPluginInterface {
     }
   }
 
-  private checkPadding(inputs: ModelParams[]): boolean[] {
-    const out = [false, false];
-    if (this.startTime !== undefined) {
-      const startDiffInSeconds =
-        moment(inputs[0].timestamp).diff(moment(this.startTime)) / 1000;
-      const endDiffInSeconds =
-        moment(inputs[inputs.length - 1].timestamp)
-          .add(inputs[inputs.length - 1].duration, 'seconds')
-          .diff(moment(this.endTime)) / 1000;
-      if (startDiffInSeconds > 0) {
-        out[0] = true;
-      }
-      if (endDiffInSeconds < 0) {
-        out[1] = true;
-      }
-    }
-    return out;
+  /**
+   * Checks if padding is needed either at start of the timeline or the end and returns status.
+   */
+  private checkPadding(inputs: ModelParams[]): PaddingReceipt {
+    const startDiffInSeconds =
+      moment(inputs[0].timestamp).diff(moment(this.startTime)) / 1000;
+
+    const lastInput = inputs[inputs.length - 1];
+    const endDiffInSeconds =
+      moment(lastInput.timestamp)
+        .add(lastInput.duration, 'seconds')
+        .diff(moment(this.endTime)) / 1000;
+
+    return {
+      start: startDiffInSeconds > 0,
+      end: endDiffInSeconds < 0,
+    };
   }
 
+  /**
+   * Pads zeroish inputs from the beginning or at the end of the inputs if needed.
+   */
   private async padInputs(
     inputs: ModelParams[],
-    pad: boolean[]
+    pad: PaddingReceipt,
+    dealer: UnitsDealerUsage
   ): Promise<ModelParams[]> {
-    if (pad[0]) {
+    const {start, end} = pad;
+    const paddedFromBeginning = [];
+
+    if (start) {
       const dateRange = momentRange.range(
         moment(this.startTime),
         moment(inputs[0].timestamp).subtract(1, 'second')
       );
+
       for (const second of dateRange.by('second')) {
-        // @todo apply zero-fill logic to create this object (any fields with aggregation-method == sum or avg should be zeros, others copied from inputs[0])
-        inputs.push({timestamp: second.toISOString(), duration: 1, carbon: 0});
+        paddedFromBeginning.push(
+          this.fillWithZeroishInput(inputs[0], second.valueOf(), dealer)
+        ); // check if converting to value of is needed
       }
     }
-    if (pad[1]) {
+
+    const paddedArray = paddedFromBeginning.concat(inputs);
+
+    if (end) {
+      const lastInput = inputs[inputs.length - 1];
       const dateRange = momentRange.range(
-        moment(inputs[inputs.length - 1].timestamp).add(
-          inputs[inputs.length - 1].duration + 1,
-          'seconds'
-        ),
+        moment(lastInput.timestamp).add(lastInput.duration + 1, 'seconds'),
         moment(this.endTime)
       );
+
       for (const second of dateRange.by('second')) {
-        // @todo apply zero-fill logic to create this object (any fields with aggregation-method == sum or avg should be zeros, others copied from inputs[0])
-        inputs.push({timestamp: second.toISOString(), duration: 1, carbon: 0});
+        paddedArray.push(
+          this.fillWithZeroishInput(lastInput, second.valueOf(), dealer)
+        );
       }
     }
-    return inputs.sort((a, b) => moment(a.timestamp).diff(moment(b.timestamp)));
+
+    return paddedArray;
   }
 
   /**
@@ -192,7 +205,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
     const dealer = await UnitsDealer();
     const pad = this.checkPadding(inputs);
-    const paddedInputs = await this.padInputs(inputs, pad);
+    const paddedInputs = await this.padInputs(inputs, pad, dealer);
 
     return paddedInputs
       .reduce((acc, input, index) => {
