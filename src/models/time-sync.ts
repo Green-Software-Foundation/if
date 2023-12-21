@@ -1,8 +1,8 @@
 import moment = require('moment');
 
-import {ERRORS} from '../util/errors';
 import {STRINGS} from '../config';
 
+import {ERRORS} from '../util/errors';
 import {UnitsDealer} from '../util/units-dealer';
 
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
@@ -65,7 +65,9 @@ export class TimeSyncModel implements ModelPluginInterface {
       }
 
       if (key === 'duration') {
-        acc[key] = 1; // @todo use user defined resolution later
+        acc[key] = 1; /** @todo use user defined resolution later */
+
+        return acc;
       }
       acc[key] =
         method === 'sum'
@@ -94,7 +96,9 @@ export class TimeSyncModel implements ModelPluginInterface {
       }
 
       if (metric === 'duration') {
-        acc[metric] = 1; // later will be changed to user defined interval
+        acc[
+          metric
+        ] = 1; /** @todo later will be changed to user defined interval */
 
         return acc;
       }
@@ -142,7 +146,6 @@ export class TimeSyncModel implements ModelPluginInterface {
 
     return inputs
       .reduce((acc, input, index) => {
-        //input.carbon = input['operational-carbon'] + input['embodied-carbon']; // @todo - should be handled in appropriate layer
         const currentMoment = moment(input.timestamp);
 
         /**
