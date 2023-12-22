@@ -1,6 +1,5 @@
 import moment = require('moment');
 import {extendMoment} from 'moment-range';
-const momentRange = extendMoment(moment);
 
 import {STRINGS} from '../config';
 
@@ -11,6 +10,8 @@ import {ModelParams, ModelPluginInterface} from '../types/model-interface';
 import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
 import {UnitsDealerUsage} from '../types/units-dealer';
 import {UnitKeyName} from '../types/units';
+
+const momentRange = extendMoment(moment);
 
 const {InputValidationError} = ERRORS;
 
@@ -70,8 +71,9 @@ export class TimeSyncModel implements ModelPluginInterface {
         return acc;
       }
 
+      /** @todo use user defined resolution later */
       if (key === 'duration') {
-        acc[key] = 1; /** @todo use user defined resolution later */
+        acc[key] = 1;
 
         return acc;
       }
@@ -101,10 +103,9 @@ export class TimeSyncModel implements ModelPluginInterface {
         return acc;
       }
 
+      /** @todo later will be changed to user defined interval */
       if (metric === 'duration') {
-        acc[
-          metric
-        ] = 1; /** @todo later will be changed to user defined interval */
+        acc[metric] = 1;
 
         return acc;
       }
@@ -142,7 +143,7 @@ export class TimeSyncModel implements ModelPluginInterface {
   /**
    * Checks if padding is needed either at start of the timeline or the end and returns status.
    */
-  private checkPadding(inputs: ModelParams[]): PaddingReceipt {
+  private checkForPadding(inputs: ModelParams[]): PaddingReceipt {
     const startDiffInSeconds =
       moment(inputs[0].timestamp).diff(moment(this.startTime)) / 1000;
 
@@ -175,10 +176,11 @@ export class TimeSyncModel implements ModelPluginInterface {
         moment(inputs[0].timestamp).subtract(1, 'second')
       );
 
+      /** Checks if converting to value of is needed. */
       for (const second of dateRange.by('second')) {
         paddedFromBeginning.push(
           this.fillWithZeroishInput(inputs[0], second.valueOf(), dealer)
-        ); // check if converting to value of is needed
+        );
       }
     }
 
@@ -200,21 +202,20 @@ export class TimeSyncModel implements ModelPluginInterface {
     return paddedArray;
   }
 
-  /**
-   * Trims time series down to match global timespan
-   */
-  private trimInputs(inputs: ModelParams[]): ModelParams[] {
-    const trimmedInputs: ModelParams[] = [];
+  /** Checks if input's timestamp is included in global specified period then leaves it, otherwise. */
+  private trimInputsByGlobalTimeline(inputs: ModelParams[]): ModelParams[] {
+    return inputs.reduce((acc, item) => {
+      const {timestamp} = item;
 
-    inputs.forEach(input => {
       if (
-        moment(input.timestamp).isSameOrAfter(moment(this.startTime)) &&
-        moment(input.timestamp).isSameOrBefore(moment(this.endTime))
+        moment(timestamp).isSameOrAfter(moment(this.startTime)) &&
+        moment(timestamp).isSameOrBefore(moment(this.endTime))
       ) {
-        trimmedInputs.push(input);
+        acc.push(item);
       }
-    });
-    return trimmedInputs;
+
+      return acc;
+    }, [] as ModelParams[]);
   }
 
   /**
@@ -224,21 +225,20 @@ export class TimeSyncModel implements ModelPluginInterface {
     this.validateParams();
 
     const dealer = await UnitsDealer();
-    const pad = this.checkPadding(inputs);
+
+    const pad = this.checkForPadding(inputs);
     const paddedInputs = this.padInputs(inputs, pad, dealer);
 
     return paddedInputs
       .reduce((acc, input, index) => {
         const currentMoment = moment(input.timestamp);
 
-        /**
-         * Checks if not the first input, then check consistency with previous ones.
-         */
+        /** Checks if not the first input, then check consistency with previous ones. */
         if (index > 0) {
           const previousInput = paddedInputs[index - 1];
           const previousInputTimestamp = moment(previousInput.timestamp);
 
-          // check obs are not overlapping
+          /** Checks for timestamps overlap. */
           if (
             previousInputTimestamp
               .add(previousInput.duration, 'seconds')
@@ -254,9 +254,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
           const timelineGapSize = currentMoment.diff(compareableTime, 'second');
 
-          /**
-           * Checks if there is gap in timeline.
-           */
+          /** Checks if there is gap in timeline. */
           if (timelineGapSize > 0) {
             for (
               let missingTimestamp = compareableTime.valueOf();
@@ -273,16 +271,14 @@ export class TimeSyncModel implements ModelPluginInterface {
           }
         }
 
-        /**
-         * Brake down current observation.
-         */
+        /** Brake down current observation. */
         for (let i = 0; i < input.duration; i++) {
           const normalizedInput = this.flattenInput(input, dealer, i);
 
           acc.push(normalizedInput);
         }
 
-        const trimmedInputs = this.trimInputs(acc);
+        const trimmedInputs = this.trimInputsByGlobalTimeline(acc);
 
         return trimmedInputs;
       }, [] as ModelParams[])
