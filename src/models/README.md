@@ -13,7 +13,7 @@ The following should be defined in the model initialization:
 
 ### Inputs:
 
-- none
+- `inputs`: an array of observations
   
 ### Returns
 
