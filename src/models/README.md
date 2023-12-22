@@ -169,13 +169,13 @@ To run the model, you must first create an instance of `SciModel` and call
 its `configure()` method. Then, you can call `execute()` to return `sci`.
 
 ```typescript
-const sciModel = new SciModel();
-sciModel.configure('name', {
+const timeSyncModel = new TimeSyncModel();
+timeSyncModel.configure('name', {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:30.000Z',
       interval: 10
 })
-const results = sciModel.execute([
+const results = timeSyncModel.execute([
     {
         timestamp: 2023-12-12T00:00:00.000Z
         duration: 10
