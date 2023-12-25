@@ -1,4 +1,5 @@
 import {CONFIG} from '../config';
+import {ModelParams} from './model-interface';
 import {AggregationResult} from './planet-aggregator';
 
 const {AGGREGATION_METHODS, AGGREGATION_METRICS} = CONFIG;
@@ -15,12 +16,6 @@ type Model = {
   verbose?: boolean;
   path?: string;
   config?: Config;
-};
-
-export type ModelParams = {
-  timestamp: string;
-  duration: number;
-  [key: string]: any;
 };
 
 export type Config = Record<string, any>;
