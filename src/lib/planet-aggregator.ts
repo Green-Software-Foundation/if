@@ -1,10 +1,11 @@
 import {ERRORS} from '../util/errors';
 
-import {ModelParams} from '../types/impl';
 import {
   AggregationResult,
   PlanetAggregatorParams,
 } from '../types/planet-aggregator';
+import {ModelParams} from '../types/model-interface';
+import {UnitKeyName} from '../types/units';
 
 const {InvalidAggregationParams} = ERRORS;
 
@@ -24,10 +25,10 @@ export const planetAggregator = (
     );
   }
 
-  const aggregationMetrics = params['aggregation-metrics'];
+  const aggregationMetrics = params['aggregation-metrics'] as UnitKeyName[];
   const aggregationMethod = params['aggregation-method'];
 
-  return inputs.reduce((acc, input: ModelParams, index) => {
+  return inputs.reduce((acc, input, index) => {
     for (const metric of aggregationMetrics) {
       if (!(metric in input)) {
         throw new InvalidAggregationParams(
