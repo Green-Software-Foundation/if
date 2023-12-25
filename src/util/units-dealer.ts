@@ -1,8 +1,11 @@
 import path = require('path');
 
 import {openYamlFileAsObject} from './yaml';
+import {ERRORS} from './errors';
 
 import {Units, UnitKeyName} from '../types/units';
+
+const {FileNotFoundError} = ERRORS;
 
 /**
  * Gets units file as an object.
@@ -10,10 +13,12 @@ import {Units, UnitKeyName} from '../types/units';
 const getUnitsFile = () =>
   openYamlFileAsObject<Units>(
     path.normalize(`${__dirname}/../config/units.yaml`)
-  );
+  ).catch((error: Error) => {
+    throw FileNotFoundError(error.message);
+  });
 
 /**
- * Units dealer 😎 🃏.
+ * Units dealer 😎 .
  */
 export const UnitsDealer = async () => {
   const unitsStack = await getUnitsFile();
