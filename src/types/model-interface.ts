@@ -1,7 +1,7 @@
+import {UnitKeyName} from './units';
+
 export type ModelParams = {
-  timestamp: string;
-  duration: number;
-  [key: string]: any;
+  [K in UnitKeyName]?: any;
 };
 
 export interface ModelPluginInterface {
