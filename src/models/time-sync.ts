@@ -254,6 +254,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
   /*
    * Checks if input's timestamp is included in global specified period then leaves it, otherwise.
+   *
    */
   private trimInputsByGlobalTimeline(inputs: ModelParams[]): ModelParams[] {
     return inputs.reduce((acc, item) => {
