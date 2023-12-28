@@ -1,14 +1,15 @@
 import {ModelsUniverse} from './models-universe';
 import {Observatory} from './observatory';
+import {planetAggregator} from './planet-aggregator';
 
 import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
-import {ChildInformation} from '../types/supercomputer';
-import {Children, Config, Impl, ModelParams} from '../types/impl';
-import {planetAggregator} from './planet-aggregator';
+import {Children, Config, Impl} from '../types/impl';
+import {ModelParams} from '../types/model-interface';
 import {AggregationResult} from '../types/planet-aggregator';
+import {ChildInformation} from '../types/supercomputer';
 
 const {ImplValidationError} = ERRORS;
 

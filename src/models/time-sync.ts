@@ -24,6 +24,7 @@ const {
 export class TimeSyncModel implements ModelPluginInterface {
   startTime: string | undefined;
   endTime: string | undefined;
+  dealer!: UnitsDealerUsage;
   interval = 1;
 
   /**
@@ -33,8 +34,26 @@ export class TimeSyncModel implements ModelPluginInterface {
     this.startTime = params['start-time'];
     this.endTime = params['end-time'];
     this.interval = params.interval;
+    this.dealer = await UnitsDealer();
 
     return this;
+  }
+
+  /**
+   * Validates `startTime`, `endTime` and `interval` params.
+   */
+  private validateParams() {
+    if (!this.startTime || !this.endTime) {
+      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
+    }
+
+    if (this.startTime > this.endTime) {
+      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
+    }
+
+    if (!this.interval) {
+      throw new InputValidationError(INVALID_TIME_INTERVAL);
+    }
   }
 
   /**
@@ -53,16 +72,13 @@ export class TimeSyncModel implements ModelPluginInterface {
   };
 
   /**
-   * Input flattener.
+   * Barkes down input per minimal time unit.
    */
-  private flattenInput(
-    input: ModelParams,
-    dealer: UnitsDealerUsage,
-    i: number
-  ) {
+  private brakeDownInput(input: ModelParams, i: number) {
     const inputKeys = Object.keys(input) as UnitKeyName[];
+
     return inputKeys.reduce((acc, key) => {
-      const method = dealer.askToGiveMethodFor(key);
+      const method = this.dealer.askToGiveMethodFor(key);
 
       if (key === 'timestamp') {
         const perSecond = this.normalizeTimePerSecond(input.timestamp, i);
@@ -77,6 +93,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
         return acc;
       }
+
       acc[key] =
         method === 'sum'
           ? this.convertPerInterval(input[key], input['duration'])
@@ -89,11 +106,7 @@ export class TimeSyncModel implements ModelPluginInterface {
   /**
    * Populates object to fill the gaps in observational timeline using zeroish values.
    */
-  private fillWithZeroishInput(
-    input: ModelParams,
-    missingTimestamp: number,
-    dealer: UnitsDealerUsage
-  ) {
+  private fillWithZeroishInput(input: ModelParams, missingTimestamp: number) {
     const metrics = Object.keys(input) as UnitKeyName[];
 
     return metrics.reduce((acc, metric) => {
@@ -116,28 +129,11 @@ export class TimeSyncModel implements ModelPluginInterface {
         return acc;
       }
 
-      const method = dealer.askToGiveMethodFor(metric);
+      const method = this.dealer.askToGiveMethodFor(metric);
       acc[metric] = method === 'avg' || method === 'sum' ? 0 : input[metric];
 
       return acc;
     }, {} as ModelParams);
-  }
-
-  /**
-   * Validates `startTime`, `endTime` and `interval` params.
-   */
-  private validateParams() {
-    if (!this.startTime || !this.endTime) {
-      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
-    }
-
-    if (this.startTime > this.endTime) {
-      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
-    }
-
-    if (!this.interval) {
-      throw new InputValidationError(INVALID_TIME_INTERVAL);
-    }
   }
 
   /**
@@ -160,13 +156,66 @@ export class TimeSyncModel implements ModelPluginInterface {
   }
 
   /**
+   * Iterates over given inputs frame, meanwhile checking if aggregation method is `sum`, then calculates it.
+   * For methods is `avg` and `none` calculating average of the frame.
+   */
+  private resampleInputFrame = (inputsInTimeslot: ModelParams[]) => {
+    return inputsInTimeslot.reduce((acc, input, index, inputs) => {
+      const metrics = Object.keys(input) as UnitKeyName[];
+
+      metrics.forEach(metric => {
+        const method = this.dealer.askToGiveMethodFor(metric);
+        acc[metric] = acc[metric] ?? 0;
+
+        if (metric === 'timestamp') {
+          acc[metric] = inputs[0][metric];
+
+          return;
+        }
+
+        if (method === 'sum') {
+          acc[metric] += input[metric];
+
+          return;
+        }
+
+        if (index === inputsInTimeslot.length - 1) {
+          acc[metric] /= inputsInTimeslot.length;
+
+          return;
+        }
+
+        acc[metric] += input[metric];
+      });
+
+      return acc;
+    }, {} as ModelParams);
+  };
+
+  /**
+   * Takes each array frame with interval length, then aggregating them toghether as from units.yaml file.
+   */
+  private resampleInputs(inputs: ModelParams[]) {
+    return inputs.reduce((acc, _input, index, inputs) => {
+      const frameStart = index * this.interval;
+      const frameEnd = (index + 1) * this.interval;
+      const inputsFrame = inputs.slice(frameStart, frameEnd);
+
+      const resampledInput = this.resampleInputFrame(inputsFrame);
+
+      /** Checks if resampled input is not empty, then includes in result. */
+      if (Object.keys(resampledInput).length > 0) {
+        acc.push(resampledInput);
+      }
+
+      return acc;
+    }, [] as ModelParams[]);
+  }
+
+  /**
    * Pads zeroish inputs from the beginning or at the end of the inputs if needed.
    */
-  private padInputs(
-    inputs: ModelParams[],
-    pad: PaddingReceipt,
-    dealer: UnitsDealerUsage
-  ): ModelParams[] {
+  private padInputs(inputs: ModelParams[], pad: PaddingReceipt): ModelParams[] {
     const {start, end} = pad;
     const paddedFromBeginning = [];
 
@@ -179,7 +228,7 @@ export class TimeSyncModel implements ModelPluginInterface {
       /** Checks if converting to value of is needed. */
       for (const second of dateRange.by('second')) {
         paddedFromBeginning.push(
-          this.fillWithZeroishInput(inputs[0], second.valueOf(), dealer)
+          this.fillWithZeroishInput(inputs[0], second.valueOf())
         );
       }
     }
@@ -189,20 +238,23 @@ export class TimeSyncModel implements ModelPluginInterface {
     if (end) {
       const lastInput = inputs[inputs.length - 1];
       const dateRange = momentRange.range(
-        moment(lastInput.timestamp).add(lastInput.duration + 1, 'seconds'),
+        moment(lastInput.timestamp).add(lastInput.duration, 'seconds'),
         moment(this.endTime)
       );
 
       for (const second of dateRange.by('second')) {
         paddedArray.push(
-          this.fillWithZeroishInput(lastInput, second.valueOf(), dealer)
+          this.fillWithZeroishInput(lastInput, second.valueOf())
         );
       }
     }
+
     return paddedArray;
   }
 
-  /** Checks if input's timestamp is included in global specified period then leaves it, otherwise. */
+  /*
+   * Checks if input's timestamp is included in global specified period then leaves it, otherwise.
+   */
   private trimInputsByGlobalTimeline(inputs: ModelParams[]): ModelParams[] {
     return inputs.reduce((acc, item) => {
       const {timestamp} = item;
@@ -224,64 +276,63 @@ export class TimeSyncModel implements ModelPluginInterface {
   async execute(inputs: ModelParams[]): Promise<ModelParams[]> {
     this.validateParams();
 
-    const dealer = await UnitsDealer();
-
     const pad = this.checkForPadding(inputs);
-    const paddedInputs = this.padInputs(inputs, pad, dealer);
+    const paddedInputs = this.padInputs(inputs, pad);
 
-    return paddedInputs
-      .reduce((acc, input, index) => {
-        const currentMoment = moment(input.timestamp);
+    const flattenInputs = paddedInputs.reduce((acc, input, index) => {
+      const currentMoment = moment(input.timestamp);
 
-        /** Checks if not the first input, then check consistency with previous ones. */
-        if (index > 0) {
-          const previousInput = paddedInputs[index - 1];
-          const previousInputTimestamp = moment(previousInput.timestamp);
+      /** Checks if not the first input, then check consistency with previous ones. */
+      if (index > 0) {
+        const previousInput = paddedInputs[index - 1];
+        const previousInputTimestamp = moment(previousInput.timestamp);
 
-          /** Checks for timestamps overlap. */
-          if (
-            previousInputTimestamp
-              .add(previousInput.duration, 'seconds')
-              .isAfter(currentMoment)
+        /** Checks for timestamps overlap. */
+        if (
+          previousInputTimestamp
+            .add(previousInput.duration, 'seconds')
+            .isAfter(currentMoment)
+        ) {
+          throw new InputValidationError(INVALID_OBSERVATION_OVERLAP);
+        }
+
+        const compareableTime = previousInputTimestamp.add(
+          previousInput.duration,
+          'second'
+        );
+
+        const timelineGapSize = currentMoment.diff(compareableTime, 'second');
+
+        /** Checks if there is gap in timeline. */
+        if (timelineGapSize > 0) {
+          for (
+            let missingTimestamp = compareableTime.valueOf();
+            missingTimestamp <= currentMoment.valueOf() - 1000;
+            missingTimestamp += 1000
           ) {
-            throw new InputValidationError(INVALID_OBSERVATION_OVERLAP);
-          }
-
-          const compareableTime = previousInputTimestamp.add(
-            previousInput.duration,
-            'second'
-          );
-
-          const timelineGapSize = currentMoment.diff(compareableTime, 'second');
-
-          /** Checks if there is gap in timeline. */
-          if (timelineGapSize > 0) {
-            for (
-              let missingTimestamp = compareableTime.valueOf();
-              missingTimestamp <= currentMoment.valueOf() - 1000;
-              missingTimestamp += 1000
-            ) {
-              const filledGap = this.fillWithZeroishInput(
-                input,
-                missingTimestamp,
-                dealer
-              );
-              acc.push(filledGap);
-            }
+            const filledGap = this.fillWithZeroishInput(
+              input,
+              missingTimestamp
+            );
+            acc.push(filledGap);
           }
         }
+      }
 
-        /** Brake down current observation. */
-        for (let i = 0; i < input.duration; i++) {
-          const normalizedInput = this.flattenInput(input, dealer, i);
+      /** Brake down current observation. */
+      for (let i = 0; i < input.duration; i++) {
+        const normalizedInput = this.brakeDownInput(input, i);
 
-          acc.push(normalizedInput);
-        }
+        acc.push(normalizedInput);
+      }
 
-        const trimmedInputs = this.trimInputsByGlobalTimeline(acc);
+      return this.trimInputsByGlobalTimeline(acc);
+    }, [] as ModelParams[]);
 
-        return trimmedInputs;
-      }, [] as ModelParams[])
-      .sort((a, b) => moment(a.timestamp).diff(moment(b.timestamp)));
+    const sortedInputs = flattenInputs.sort((a, b) =>
+      moment(a.timestamp).diff(moment(b.timestamp))
+    );
+
+    return this.resampleInputs(sortedInputs);
   }
 }
