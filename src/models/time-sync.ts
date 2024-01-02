@@ -335,6 +335,17 @@ export class TimeSyncModel implements ModelPluginInterface {
       moment(a.timestamp).diff(moment(b.timestamp))
     );
 
+<<<<<<< Updated upstream
     return this.resampleInputs(sortedInputs);
+=======
+
+        let finalArray = []ModelParams;
+        
+
+
+        return trimmedInputs;
+      }, [] as ModelParams[])
+      .sort((a, b) => moment(a.timestamp).diff(moment(b.timestamp)));
+>>>>>>> Stashed changes
   }
 }
