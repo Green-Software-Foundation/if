@@ -1,19 +1,19 @@
 import moment = require('moment');
-import { extendMoment } from 'moment-range';
+import {extendMoment} from 'moment-range';
 
-import { STRINGS } from '../config';
+import {STRINGS} from '../config';
 
-import { ERRORS } from '../util/errors';
-import { UnitsDealer } from '../util/units-dealer';
+import {ERRORS} from '../util/errors';
+import {UnitsDealer} from '../util/units-dealer';
 
-import { ModelParams, ModelPluginInterface } from '../types/model-interface';
-import { PaddingReceipt, TimeNormalizerConfig } from '../types/time-sync';
-import { UnitsDealerUsage } from '../types/units-dealer';
-import { UnitKeyName } from '../types/units';
+import {ModelParams, ModelPluginInterface} from '../types/model-interface';
+import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
+import {UnitsDealerUsage} from '../types/units-dealer';
+import {UnitKeyName} from '../types/units';
 
 const momentRange = extendMoment(moment);
 
-const { InputValidationError } = ERRORS;
+const {InputValidationError} = ERRORS;
 
 const {
   INVALID_TIME_NORMALIZATION,
@@ -217,7 +217,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Pads zeroish inputs from the beginning or at the end of the inputs if needed.
    */
   private padInputs(inputs: ModelParams[], pad: PaddingReceipt): ModelParams[] {
-    const { start, end } = pad;
+    const {start, end} = pad;
     const paddedFromBeginning = [];
 
     if (start) {
@@ -258,7 +258,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    */
   private trimInputsByGlobalTimeline(inputs: ModelParams[]): ModelParams[] {
     return inputs.reduce((acc, item) => {
-      const { timestamp } = item;
+      const {timestamp} = item;
 
       if (
         moment(timestamp).isSameOrAfter(moment(this.startTime)) &&
@@ -281,7 +281,6 @@ export class TimeSyncModel implements ModelPluginInterface {
     const paddedInputs = this.padInputs(inputs, pad);
 
     const flattenInputs = paddedInputs.reduce((acc, input, index) => {
-
       const currentMoment = moment(input.timestamp);
 
       /** Checks if not the first input, then check consistency with previous ones. */
@@ -321,7 +320,6 @@ export class TimeSyncModel implements ModelPluginInterface {
           }
         }
       }
-
 
       /** Break down current observation. */
       for (let i = 0; i < input.duration; i++) {

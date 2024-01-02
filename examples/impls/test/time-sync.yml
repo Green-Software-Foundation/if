@@ -22,9 +22,6 @@ initialize:
         start-time: 2023-12-12T00:00:00.000Z # ISO timestamp
         end-time: 2023-12-12T00:01:00.000Z # ISO timestamp
         interval: 5 # seconds
-    # - name: sci
-    #   model: SciModel
-    #   path: "@grnsft/if-models"
 graph:
   children:
     child: # an advanced grouping node
@@ -34,7 +31,6 @@ graph:
         - sci-m
         - sci-o
         - time-synchronization
-        # - sci
       config:
         teads-curve:
           thermal-design-power: 65
@@ -55,57 +51,25 @@ graph:
               carbon: 100 
               energy: 100   
               requests: 300
-            - timestamp: 2023-12-12T00:00:10.000Z
+            - timestamp: 2023-12-12T00:00:15.000Z
               duration: 10
               cpu-util: 20    
+              requests: 300
+            - timestamp: 2023-12-12T00:00:35.000Z
+              duration: 15
+              cpu-util: 20    
+              requests: 400
+        child-2:
+          inputs: 
+            - timestamp: 2023-12-12T00:00:00.000Z
+              duration: 10
+              cpu-util: 10    
+              requests: 300
+            - timestamp: 2023-12-12T00:00:10.000Z
+              duration: 30
+              cpu-util: 20    
               requests: 380
-        #     - timestamp: 2023-12-12T00:00:20.000Z
-        #       duration: 10
-        #       cpu-util: 40   
-        #       requests: 400
-        #     - timestamp: 2023-12-12T00:00:30.000Z
-        #       duration: 20
-        #       cpu-util: 30    
-        #       requests: 700
-        #     - timestamp: 2023-12-12T00:00:50.000Z
-        #       duration: 10
-        #       cpu-util: 20   
-        #       requests: 280
-        #     - timestamp: 2023-12-12T00:01:00.000Z
-        #       duration: 10
-        #       cpu-util: 70  
-        #       requests: 390
-        #     - timestamp: 2023-12-12T00:01:10.000Z
-        #       duration: 10
-        #       cpu-util: 50  
-        #       requests: 350
-        # child-2:
-        #   inputs: 
-        #     - timestamp: 2023-12-12T00:00:00.000Z
-        #       duration: 10
-        #       cpu-util: 10    
-        #       requests: 300
-        #     - timestamp: 2023-12-12T00:00:10.000Z
-        #       duration: 30
-        #       cpu-util: 20    
-        #       requests: 380
-        #     - timestamp: 2023-12-12T00:00:40.000Z
-        #       duration: 60
-        #       cpu-util: 40   
-        #       requests: 400
-        #     - timestamp: 2023-12-12T00:01:40.000Z
-        #       duration: 60
-        #       cpu-util: 30
-        #       requests: 700
-        #     - timestamp: 2023-12-12T00:02:40.000Z
-        #       duration: 15
-        #       cpu-util: 20   
-        #       requests: 280
-        #     - timestamp: 2023-12-12T00:02:55.000Z
-        #       duration: 10
-        #       cpu-util: 70  
-        #       requests: 390
-        #     - timestamp: 2023-12-12T00:03:05.000Z
-        #       duration: 10
-        #       cpu-util: 50  
-        #       requests: 350
+            - timestamp: 2023-12-12T00:00:50.000Z
+              duration: 20
+              cpu-util: 20    
+              requests: 380
