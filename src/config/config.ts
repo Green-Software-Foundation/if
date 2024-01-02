@@ -3,9 +3,8 @@ import {ArgumentConfig} from 'ts-command-line-args';
 import {impactProcessArgs} from '../types/process-args';
 
 export const CONFIG = {
-  AVERAGE_NAMES: ['av', 'avg', 'avrg', 'average', 'mean'],
   AGGREGATION_METRICS: ['carbon', 'energy'],
-  AGGREGATION_METHODS: ['sum', 'av', 'avg', 'avrg', 'average', 'mean'],
+  AGGREGATION_METHODS: ['sum', 'avg'],
   impact: {
     ARGS: {
       impl: {
@@ -54,4 +53,5 @@ export const CONFIG = {
   `,
   },
   GITHUB_PATH: 'https://github.com',
+  NATIVE_MODEL: 'if-models',
 };

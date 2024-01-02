@@ -1,6 +1,8 @@
 const CUSTOM_ERRORS = [
   'CliInputError',
+  'FileNotFoundError',
   'ImplValidationError',
+  'InputValidationError',
   'InvalidAggregationParams',
   'ModelInitializationError',
   'ModelCredentialError',

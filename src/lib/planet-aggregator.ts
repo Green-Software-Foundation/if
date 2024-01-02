@@ -1,16 +1,13 @@
 import {ERRORS} from '../util/errors';
 
-import {CONFIG} from '../config';
-
-import {ModelParams} from '../types/impl';
 import {
   AggregationResult,
   PlanetAggregatorParams,
 } from '../types/planet-aggregator';
+import {ModelParams} from '../types/model-interface';
+import {UnitKeyName} from '../types/units';
 
 const {InvalidAggregationParams} = ERRORS;
-
-const {AVERAGE_NAMES} = CONFIG;
 
 /**
  * Aggregates child node level metrics. Uses provided aggregation `params`.
@@ -28,10 +25,10 @@ export const planetAggregator = (
     );
   }
 
-  const aggregationMetrics = params['aggregation-metrics'];
+  const aggregationMetrics = params['aggregation-metrics'] as UnitKeyName[];
   const aggregationMethod = params['aggregation-method'];
 
-  return inputs.reduce((acc, input: ModelParams, index) => {
+  return inputs.reduce((acc, input, index) => {
     for (const metric of aggregationMetrics) {
       if (!(metric in input)) {
         throw new InvalidAggregationParams(
@@ -45,7 +42,7 @@ export const planetAggregator = (
       acc[accessKey] += value;
 
       if (index === inputs.length - 1) {
-        if (AVERAGE_NAMES.includes(aggregationMethod)) {
+        if (aggregationMethod === 'avg') {
           acc[accessKey] /= inputs.length;
         }
       }

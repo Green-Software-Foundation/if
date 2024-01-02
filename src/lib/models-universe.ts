@@ -1,3 +1,5 @@
+import pathLib = require('path');
+
 import {ERRORS} from '../util/errors';
 
 import {CONFIG, STRINGS} from '../config';
@@ -11,7 +13,7 @@ import {
 
 const {ModelInitializationError, ModelCredentialError} = ERRORS;
 
-const {GITHUB_PATH} = CONFIG;
+const {GITHUB_PATH, NATIVE_MODEL} = CONFIG;
 const {
   MISSING_CLASSNAME,
   NOT_MODEL_PLUGIN_EXTENSION,
@@ -54,33 +56,15 @@ export class ModelsUniverse {
 
       return module;
     } catch (error) {
+      console.log(error);
       throw new ModelInitializationError(INVALID_MODULE_PATH(path));
     }
   }
 
   /**
-   * Returns plugin model. Checks if model is missing then rejects with error.
-   * Then checks if `path` is starting with github, then grabs the repository name.
-   * Imports module, then checks if it's a class which implements input model interface.
+   * Imports `module` from given `path`, then checks if it's `ModelPluginInterface` extension.
    */
-  private async handPluginModel(model?: string, path?: string) {
-    if (!model) {
-      throw new ModelCredentialError(MISSING_CLASSNAME);
-    }
-
-    if (!path) {
-      throw new ModelCredentialError(MISSING_PATH);
-    }
-
-    if (path?.startsWith(GITHUB_PATH)) {
-      const parts = path.split('/');
-      path = parts[parts.length - 1];
-    }
-
-    if (!path.includes('if-models')) {
-      console.log(NOT_NATIVE_MODEL);
-    }
-
+  private async importAndVerifyModule(model: string, path: string) {
     const pluginModule = await this.importModuleFrom(path);
 
     if (!this.instanceOfModel(pluginModule[model], {model, path})) {
@@ -91,12 +75,42 @@ export class ModelsUniverse {
   }
 
   /**
+   * Returns plugin model. Checks if model is missing then rejects with error.
+   * Then checks if `path` is starting with github, then grabs the repository name.
+   * Imports module, then checks if it's a class which implements input model interface.
+   */
+  private async handModel(model: string, path: string) {
+    if (path === 'builtin') {
+      path = pathLib.normalize(`${__dirname}/../models/index.ts`);
+    } else {
+      if (path?.startsWith(GITHUB_PATH)) {
+        const parts = path.split('/');
+        path = parts[parts.length - 1];
+      }
+
+      if (!path.includes(NATIVE_MODEL)) {
+        console.log(NOT_NATIVE_MODEL);
+      }
+    }
+
+    return this.importAndVerifyModule(model, path);
+  }
+
+  /**
    * Initializes and registers model.
    */
   public async writeDown(modelToInitalize: ImplInitializeModel) {
     const {model, path, config, name} = modelToInitalize;
 
-    const Model = await this.handPluginModel(model, path);
+    if (!model) {
+      throw new ModelCredentialError(MISSING_CLASSNAME);
+    }
+
+    if (!path) {
+      throw new ModelCredentialError(MISSING_PATH);
+    }
+
+    const Model = await this.handModel(model, path);
 
     const callback = async (graphOptions: GraphOptions) => {
       const params = {

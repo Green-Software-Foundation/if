@@ -18,14 +18,18 @@ duration:
   description: refers to the duration of the input
   unit: seconds
   aggregation: sum
+energy:
+  description: amount of energy utilised by the component
+  unit: kWh
+  aggregation: sum
 energy-cpu:
   description: Energy consumed by the CPU of the component
   unit: kWh
   aggregation: sum
 expected-lifespan:
-  description: expected lifespan for some component
+  description: Total Expected Lifespan of the Component in Seconds
   unit: seconds
-  aggregation: none
+  aggregation: sum
 energy-memory:
   description: Energy consumed by the Memory of the component
   unit: kWh
@@ -34,28 +38,16 @@ embodied-carbon:
   description: Embodied Emissions of the component
   unit: gCO2e
   aggregation: sum
-energy:
-  description: amount of energy utilised by the component
-  unit: kWh
-  aggregation: sum
 energy-network:
   description: Energy consumed by the Network of the component
   unit: kWh
   aggregation: sum
-expected-lifespan:
-  description: Total Expected Lifespan of the Component in Seconds
-  unit: seconds
-  aggregation: None
 functional-unit:
   description: the name of the functional unit in which the final SCI value should be expressed, e.g. requests, users
   unit: none
-  aggregation: none
-functional-unit-duration:
-  description: how many units of functional-unit-time the final SCI value should be expressed in.
-  unit: functional-unit-time
-  aggregation: none
+  aggregation: sum
 functional-unit-time:
-  description: string describing the unit of time in which the final SCI calculation should be expressed
+  description: string describing the unit of time in which the final SCI calculation should be expressed, e.g. "1-min"
   unit: none
   aggregation: none
 gpu-util:
@@ -74,10 +66,6 @@ location:
   description: Geographic location of provider as string (for watt-time model it is provided as latitude and longitude, comma separated, in decimal degrees)
   unit: None (decimal degrees for watt-time model)
   aggregation: None
-embodied-carbon:
-  description: Carbon emitted from component manufacture (returned from Boavizta)
-  unit: gCO2eq
-  aggregation: sum
 operational-carbon:
   description: Operational Emissions of the component
   unit: gCO2e
@@ -85,11 +73,11 @@ operational-carbon:
 physical-processor:
   description: Name of the physical processor 
   unit: None
-  aggregation: None
+  aggregation: none
 vendor:
   description: Name of the cloud service provider in the ccf model. Can be aws, gcp or azure
   unit: None
-  aggregation: None
+  aggregation: none
 ram-alloc:
   description: refers to GB of memory allocated.
   unit: GB
@@ -113,7 +101,7 @@ total-embodied-emissions:
 timestamp:
   description: refers to the time of occurrence of the input
   unit: RFC3339
-  aggregation: None
+  aggregation: none
 time-reserved:
   description: time reserved for a component
   unit: seconds
@@ -122,4 +110,3 @@ total-resources:
   description: total resources available
   unit: count
   aggregation: none
-

@@ -1,0 +1,75 @@
+name: nesting-demo
+description: impl with 2 levels of nesting with non-uniform timing of observations
+tags:
+initialize:
+  models:
+    - name: teads-curve
+      model: TeadsCurveModel
+      path: "@grnsft/if-unofficial-models"
+    - name: sci-e
+      model: SciEModel
+      path: "@grnsft/if-models"
+    - name: sci-m
+      path: "@grnsft/if-models"
+      model: SciMModel
+    - name: sci-o
+      model: SciOModel
+      path: "@grnsft/if-models"
+    - name: time-synchronization
+      model: TimeSyncModel
+      path: builtin
+      config: 
+        start-time: 2023-12-12T00:00:00.000Z # ISO timestamp
+        end-time: 2023-12-12T00:01:00.000Z # ISO timestamp
+        interval: 5 # seconds
+graph:
+  children:
+    child: # an advanced grouping node
+      pipeline:
+        - teads-curve
+        - sci-e
+        - sci-m
+        - sci-o
+        - time-synchronization
+      config:
+        teads-curve:
+          thermal-design-power: 65
+        sci-m:
+          total-embodied-emissions: 251000 # gCO2eq
+          time-reserved: 3600 # 1 hour in s
+          expected-lifespan: 126144000 # 4 years in seconds    
+          resources-reserved: 1 
+          total-resources: 1 
+        sci-o:
+          grid-carbon-intensity: 457 # gCO2/kwh
+      children:
+        child-1:
+          inputs:
+            - timestamp: 2023-12-12T00:00:00.000Z
+              duration: 10
+              cpu-util: 10
+              carbon: 100 
+              energy: 100   
+              requests: 300
+            - timestamp: 2023-12-12T00:00:15.000Z
+              duration: 10
+              cpu-util: 20    
+              requests: 300
+            - timestamp: 2023-12-12T00:00:35.000Z
+              duration: 15
+              cpu-util: 20    
+              requests: 400
+        child-2:
+          inputs: 
+            - timestamp: 2023-12-12T00:00:00.000Z
+              duration: 10
+              cpu-util: 10    
+              requests: 300
+            - timestamp: 2023-12-12T00:00:10.000Z
+              duration: 30
+              cpu-util: 20    
+              requests: 380
+            - timestamp: 2023-12-12T00:00:50.000Z
+              duration: 20
+              cpu-util: 20    
+              requests: 380
