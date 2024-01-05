@@ -81,7 +81,7 @@ export class ModelsUniverse {
    */
   private async handModel(model: string, path: string) {
     if (path === 'builtin') {
-      path = pathLib.normalize(`${__dirname}/../models/index.ts`);
+      path = pathLib.normalize(`${__dirname}/../models`);
     } else {
       if (path?.startsWith(GITHUB_PATH)) {
         const parts = path.split('/');
