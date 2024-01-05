@@ -13,3 +13,9 @@ dist
 # Include .jsii and .jsii.gz
 !.jsii
 !.jsii.gz
+
+# Exclude project, configuration folders
+.devcontainer
+.examples
+.github
+scripts
