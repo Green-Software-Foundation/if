@@ -22,10 +22,10 @@ const {
 } = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
-  startTime: string | undefined;
-  endTime: string | undefined;
-  dealer!: UnitsDealerUsage;
-  interval = 1;
+  private startTime!: string;
+  private endTime!: string;
+  private dealer!: UnitsDealerUsage;
+  private interval = 1;
 
   /**
    * Setups basic configuration.
@@ -179,7 +179,7 @@ export class TimeSyncModel implements ModelPluginInterface {
           return;
         }
 
-        /** divide each metric by the timeslot length, so that their sum yields the timeslot average.*/
+        /** Divide each metric by the timeslot length, so that their sum yields the timeslot average. */
         if (index === inputsInTimeslot.length - 1) {
           acc[metric] /= inputsInTimeslot.length;
 
@@ -303,7 +303,7 @@ export class TimeSyncModel implements ModelPluginInterface {
         );
 
         const timelineGapSize = currentMoment.diff(compareableTime, 'second');
-        //console.log(currentMoment, timelineGapSize)
+
         /** Checks if there is gap in timeline. */
         if (timelineGapSize > 1) {
           for (
