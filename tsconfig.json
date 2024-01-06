@@ -8,7 +8,6 @@
     "alwaysStrict": true,
     "declaration": true,
     "experimentalDecorators": true,
-    "incremental": true,
     "lib": [
       "es2020", "DOM"
     ],

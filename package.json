@@ -1,7 +1,7 @@
 {
   "name": "@grnsft/if",
   "description": "Impact Framework",
-  "version": "v0.1.3",
+  "version": "v0.1.6",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
@@ -13,6 +13,7 @@
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
   },
   "dependencies": {
+    "copyfiles": "^2.4.1",
     "js-yaml": "^4.1.0",
     "moment": "^2.29.4",
     "moment-range": "^4.0.2",
@@ -55,7 +56,7 @@
     "url": "https://github.com/Green-Software-Foundation/if"
   },
   "scripts": {
-    "build": "rm -rf build && tsc --project tsconfig.build.json",
+    "build": "rm -rf build && tsc --project tsconfig.build.json && copyfiles -u 2 src/config/units.yaml build/config",
     "coverage": "jest --verbose --coverage",
     "fix": "gts fix",
     "fix:package": "fixpack",

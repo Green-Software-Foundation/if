@@ -6,7 +6,7 @@
 
 **Welcome to [CarbonHack 24](https://grnsft.org/hack/github) from the Green Software Foundation.**
 
-> From Monday, February 26 - Friday, March 15, 2024, participants will compete to showcase their best application of IF in measuring the environmental impacts of software. 
+> From Monday, 18th March - Monday, 8th April 2024, participants will compete to showcase their best application of IF in measuring the environmental impacts of software. 
 > 
 > Carbon Hack is a dynamic competition that combines healthy rivalry with collaborative innovation. Hackers will push the limits of the framework, uncover potential weaknesses, and create innovations to enhance the tool.
 > 
