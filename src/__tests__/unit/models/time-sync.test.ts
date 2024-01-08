@@ -1,12 +1,12 @@
-import {TimeSyncModel} from '../../../models';
+import { TimeSyncModel } from '../../../models';
 
-import {ERRORS} from '../../../util/errors';
+import { ERRORS } from '../../../util/errors';
 
-import {STRINGS} from '../../../config';
+import { STRINGS } from '../../../config';
 
-const {InputValidationError} = ERRORS;
+const { InputValidationError } = ERRORS;
 
-const {INVALID_TIME_NORMALIZATION} = STRINGS;
+const { INVALID_TIME_NORMALIZATION } = STRINGS;
 
 describe('models/time-sync: ', () => {
   describe('class TimeSync: ', () => {
@@ -67,8 +67,8 @@ describe('execute(): ', () => {
 
   it('throws error if `end-time` is missing.', async () => {
     const invalidEndTimeConfig = {
-      'start-time': '',
-      'end-time': '2023-12-12T00:01:00.000Z',
+      'start-time': '2023-12-12T00:01:00.000Z',
+      'end-time': '',
       interval: 5,
     };
     const timeModel = await new TimeSyncModel().configure(invalidEndTimeConfig);
@@ -93,12 +93,13 @@ describe('execute(): ', () => {
     }
   });
 
-  it('throws error if `interval` is missing.', async () => {
+  it('throws error if interval is invalid.', async () => {
     const invalidIntervalConfig = {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:01:00.000Z',
       interval: 0,
     };
+
     const timeModel = await new TimeSyncModel().configure(
       invalidIntervalConfig
     );
@@ -107,7 +108,7 @@ describe('execute(): ', () => {
       await timeModel.execute([
         {
           timestamp: '2023-12-12T00:00:00.000Z',
-          duration: 10,
+          duration: 15,
           'cpu-util': 10,
         },
         {
@@ -119,6 +120,38 @@ describe('execute(): ', () => {
     } catch (error) {
       expect(error).toStrictEqual(
         new InputValidationError('Interval is missing.')
+      );
+    }
+  });
+
+
+  it('throws error if timesteps overlap.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:01:00.000Z',
+      interval: 5,
+    };
+
+    const timeModel = await new TimeSyncModel().configure(
+      basicConfig
+    );
+
+    try {
+      await timeModel.execute([
+        {
+          timestamp: '2023-12-12T00:00:00.000Z',
+          duration: 15,
+          'cpu-util': 10,
+        },
+        {
+          timestamp: '2023-12-12T00:00:10.000Z',
+          duration: 30,
+          'cpu-util': 20,
+        },
+      ]);
+    } catch (error) {
+      expect(error).toStrictEqual(
+        new InputValidationError('Observation timestamps overlap.')
       );
     }
   });
