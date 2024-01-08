@@ -35,7 +35,6 @@
   },
   "engines": {
     "node": ">=18",
-    "yarn": ">=1.22",
     "npm": ">=8"
   },
   "homepage": "https://greensoftware.foundation",
@@ -62,7 +61,7 @@
     "fix:package": "fixpack",
     "impact-engine": "npx ts-node src/index.ts",
     "lint": "gts lint",
-    "prepublish": "yarn build",
+    "prepublish": "npm run build",
     "test": "jest --verbose"
   },
   "stability": "stable",
