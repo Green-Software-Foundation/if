@@ -1,5 +1,4 @@
 import {ModelsUniverse} from './models-universe';
-import {Observatory} from './observatory';
 import {planetAggregator} from './planet-aggregator';
 
 import {ERRORS} from '../util/errors';
@@ -59,49 +58,10 @@ export class Supercomputer {
   }
 
   /**
-   * Flattens config entries.
-   */
-  private flattenConfigValues(config: Config) {
-    if (!config) {
-      return {};
-    }
-
-    const configModelNames = Object.keys(config);
-    const values = configModelNames.reduce((acc: any, name: string) => {
-      acc = {
-        ...acc,
-        ...config[name],
-      };
-
-      return acc;
-    }, {});
-
-    return values;
-  }
-
-  /**
-   * Adds config entries to each obsercation object passed.
-   */
-  private enrichInputs(
-    inputs: ModelParams[],
-    config: Config,
-    nestedConfig: Config
-  ) {
-    const configValues = this.flattenConfigValues(config);
-    const nestedConfigValues = this.flattenConfigValues(nestedConfig);
-
-    return inputs.map((input: any) => ({
-      ...input,
-      ...configValues,
-      ...nestedConfigValues,
-    }));
-  }
-
-  /**
    * If child is top level, then initializes `this.olderChild`.
    * If `children` object contains `children` property, it means inputs are nested (calls compute again).
-   * Otherwise enriches inputs, passes them to Observatory.
-   * For each model from pipeline Observatory gathers inputs. Then results are stored.
+   * For each model from pipeline Observatory gathers inputs, providing output from previous models
+   * in the pipeline to the next ones. Then results are stored.
    */
   private async calculateOutputsForChild(
     childrenObject: Children,
@@ -132,27 +92,27 @@ export class Supercomputer {
       ? childrenObject[childName].inputs
       : inputs;
 
+    const inputsCopy = specificInputs.map((input: any) => ({...input}));
+
     const childrenConfig = childrenObject[childName].config || {};
 
-    const enrichedInputs = this.enrichInputs(
-      specificInputs,
-      config,
-      childrenConfig
+    const outputs = await pipeline.reduce(
+      async (acc: ModelParams[], modelName: string) => {
+        const parentModelConfig = (config && config[modelName]) || {};
+        const currentNodeModelConfig = childrenConfig[modelName] || {};
+        const mergedModelConfig: Config = {
+          ...parentModelConfig,
+          ...currentNodeModelConfig,
+        };
+
+        const modelInstance = await this.modelsHandbook.getInitializedModel(
+          modelName,
+          mergedModelConfig
+        );
+        return await modelInstance.execute(await acc, mergedModelConfig);
+      },
+      inputsCopy
     );
-
-    const observatory = new Observatory(enrichedInputs);
-
-    for (const modelName of pipeline) {
-      const params = config && config[modelName];
-      const modelInstance = await this.modelsHandbook.getInitializedModel(
-        modelName,
-        params
-      );
-
-      await observatory.doInvestigationsWith(modelInstance);
-    }
-
-    const outputs = observatory.getOutputs();
 
     /**
      * If aggregation is required, then init `aggregated-outputs`.

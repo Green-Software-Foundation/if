@@ -6,7 +6,6 @@ import {CONFIG, STRINGS} from '../config';
 
 import {
   ClassContainerParams,
-  GraphOptions,
   ImplInitializeModel,
   InitalizedModels,
 } from '../types/models-universe';
@@ -100,7 +99,7 @@ export class ModelsUniverse {
    * Initializes and registers model.
    */
   public async writeDown(modelToInitalize: ImplInitializeModel) {
-    const {model, path, config, name} = modelToInitalize;
+    const {model, path, config: initConfig, name} = modelToInitalize;
 
     if (!model) {
       throw new ModelCredentialError(MISSING_CLASSNAME);
@@ -112,10 +111,10 @@ export class ModelsUniverse {
 
     const Model = await this.handModel(model, path);
 
-    const callback = async (graphOptions: GraphOptions) => {
+    const callback = async (nodeConfig: Record<string, any>) => {
       const params = {
-        ...config,
-        ...graphOptions,
+        ...initConfig,
+        ...nodeConfig,
       };
 
       const initalizedModel = await new Model().configure(params);

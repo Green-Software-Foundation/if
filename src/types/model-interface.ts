@@ -11,7 +11,7 @@ export interface ModelPluginInterface {
   configure(params: object | undefined): Promise<ModelPluginInterface>;
 
   /**
-   * Calculates `output` based on given model's `input`.
+   * Calculates `output` based on given model's `input` and `config`.
    */
-  execute(inputs: ModelParams[]): Promise<ModelParams[]>;
+  execute(inputs: ModelParams[], config?: object): Promise<ModelParams[]>;
 }

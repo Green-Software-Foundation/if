@@ -4,8 +4,9 @@ tags: null
 initialize:
   models:
     - name: sci
-      kind: builtin
-      path: ''
+      kind: plugin
+      path: '@grnsft/if-models'
+      model: SciModel
 graph:
   children:
     child:
@@ -30,7 +31,5 @@ graph:
           operational-carbon: 5
           embodied-carbon: 0.02
           requests: 100
-          functional-unit-duration: 1
-          functional-unit-time: minutes
-          functional-unit: requests
+          carbon: 0.0013944444444444442
           sci: 0.0008366666666666665
