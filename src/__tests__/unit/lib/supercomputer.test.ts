@@ -306,6 +306,123 @@ describe('lib/supercomputer: ', () => {
       );
     });
 
+    it('passes output from earlier executed model to the later ones as an input', async () => {
+      const testImpl: any = {
+        name: 'test-impl',
+        graph: {
+          children: {
+            child: {
+              pipeline: ['model-one', 'model-two'],
+              inputs: [{testProp: 5}],
+            },
+          },
+        },
+      };
+
+      const mockModelOneExecutor = jest.fn(() => [
+        {testProp: 5, 'model-one-output': true},
+      ]);
+      const mockModelTwoExecutor = jest.fn();
+
+      const modelsHandbook = {
+        getInitializedModel: jest.fn(modelName => {
+          if (modelName === 'model-one') return {execute: mockModelOneExecutor};
+          if (modelName === 'model-two') return {execute: mockModelTwoExecutor};
+          return;
+        }),
+      };
+
+      const supercomputer = new Supercomputer(
+        testImpl,
+        modelsHandbook as unknown as ModelsUniverse
+      );
+      await supercomputer.compute();
+
+      expect(modelsHandbook.getInitializedModel).toHaveBeenNthCalledWith(
+        1,
+        'model-one',
+        {}
+      );
+
+      expect(modelsHandbook.getInitializedModel).toHaveBeenNthCalledWith(
+        2,
+        'model-two',
+        {}
+      );
+
+      expect(mockModelOneExecutor).toHaveBeenNthCalledWith(
+        1,
+        [{testProp: 5}],
+        {}
+      );
+
+      expect(mockModelTwoExecutor).toHaveBeenNthCalledWith(
+        1,
+        [{testProp: 5, 'model-one-output': true}],
+        {}
+      );
+    });
+
+    it('runs model execute method with two arguments: inputs and properly merged config', async () => {
+      const testImpl: any = {
+        name: 'test-impl',
+        graph: {
+          children: {
+            child: {
+              pipeline: ['model-one'],
+              config: {
+                'model-one': {
+                  'config-prop-one': true,
+                  'config-prop-two': 'test',
+                },
+              },
+              children: {
+                child: {
+                  config: {
+                    'model-one': {
+                      'config-prop-one': false,
+                      'config-prop-three': 1,
+                    },
+                  },
+                  inputs: [{testProp: 5}],
+                },
+              },
+            },
+          },
+        },
+      };
+
+      const mockModelOneExecutor = jest.fn();
+
+      const modelsHandbook = {
+        getInitializedModel: jest.fn(() => ({
+          execute: mockModelOneExecutor,
+        })),
+      };
+
+      const supercomputer = new Supercomputer(
+        testImpl,
+        modelsHandbook as unknown as ModelsUniverse
+      );
+      await supercomputer.compute();
+
+      expect(modelsHandbook.getInitializedModel).toHaveBeenNthCalledWith(
+        1,
+        'model-one',
+        {
+          'config-prop-one': false,
+          'config-prop-two': 'test',
+          'config-prop-three': 1,
+        }
+      );
+
+      expect(mockModelOneExecutor).toHaveBeenNthCalledWith(1, [{testProp: 5}], {
+        'config-prop-one': false,
+        'config-prop-two': 'test',
+        'config-prop-three': 1,
+      });
+    });
+
     it('throws `structure malformed` error if nested children component misses `inputs`.', async () => {
       const jsonObj = JSON.stringify(impl);
       const implCopy = JSON.parse(jsonObj);
