@@ -155,4 +155,145 @@ describe('execute(): ', () => {
       );
     }
   });
+
+  it('throws error if end is before start in global config.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:10.000Z',
+      'end-time': '2023-12-12T00:00:00.000Z',
+      interval: 5,
+    };
+
+    const timeModel = await new TimeSyncModel().configure(
+      basicConfig
+    );
+
+    try {
+      await timeModel.execute([
+        {
+          timestamp: '2023-12-12T00:00:00.000Z',
+          duration: 15,
+          'cpu-util': 10,
+        },
+        {
+          timestamp: '2023-12-12T00:00:10.000Z',
+          duration: 30,
+          'cpu-util': 20,
+        },
+      ]);
+    } catch (error) {
+      expect(error).toStrictEqual(
+        new InputValidationError('Start time or end time is missing.')
+      );
+    }
+  });
+
+  it('throws error if end is before start in observation timestamps.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:10.000Z',
+      interval: 5,
+    };
+
+    const timeModel = await new TimeSyncModel().configure(
+      basicConfig
+    );
+
+    try {
+      await timeModel.execute([
+        {
+          timestamp: '2023-12-12T00:00:10.000Z',
+          duration: 1,
+          'cpu-util': 10,
+        },
+        {
+          timestamp: '2023-12-12T00:00:00.000Z',
+          duration: 30,
+          'cpu-util': 20,
+        },
+      ]);
+    } catch (error) {
+      expect(error).toStrictEqual(
+        new InputValidationError('Observation timestamps overlap.')
+      );
+    }
+  });
+
+  it('happy case.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:10.000Z',
+      interval: 1,
+    };
+
+    const timeModel = await new TimeSyncModel().configure(
+      basicConfig
+    );
+    await expect(timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 5,
+        'cpu-util': 10,
+      },
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 5,
+        'cpu-util': 10,
+      },
+    ])).resolves.toStrictEqual(
+      [
+        {
+          'cpu-util': 10,
+          "duration": 1,
+          "timestamp": "2023-12-12T00:00:00.000Z"
+        },
+        {
+          'cpu-util': 10,
+          "duration": 1,
+          "timestamp": "2023-12-12T00:00:01.000Z"
+        },
+        {
+          'cpu-util': 10,
+          "duration": 1,
+          "timestamp": "2023-12-12T00:00:02.000Z"
+        },
+        {
+          'cpu-util': 10,
+          "duration": 1,
+          "timestamp": "2023-12-12T00:00:03.000Z"
+        },
+        {
+          'cpu-util': 10,
+          "duration": 1,
+          "timestamp": "2023-12-12T00:00:04.000Z"
+        },
+        {
+          'cpu-util': 10,
+          "duration": 1,
+          "timestamp": "2023-12-12T00:00:05.000Z"
+        },
+        {
+          'cpu-util': 10,
+          "duration": 1,
+          "timestamp": "2023-12-12T00:00:06.000Z"
+        },
+        {
+          'cpu-util': 10,
+          "duration": 1,
+          "timestamp": "2023-12-12T00:00:07.000Z"
+        },
+        {
+          'cpu-util': 10,
+          "duration": 1,
+          "timestamp": "2023-12-12T00:00:08.000Z"
+        },
+        {
+          'cpu-util': 10,
+          "duration": 1,
+          "timestamp": "2023-12-12T00:00:09.000Z"
+        },
+      ]
+    );
+  })
+
+
 });
