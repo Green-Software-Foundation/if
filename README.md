@@ -72,39 +72,6 @@ impact-engine --impl <path-to-your-impl-file> --ompl <your-savepath>
 
 The `impact-engine` CLI tool will configure and run the models defined in your input `yaml` (`impl`) and return the results as an output `yaml` (`ompl`).
 
-### Alternate version
-
-Start by cloning repository locally:
-
-```sh
-git clone https://github.com/Green-Software-Foundation/if
-
-cd if
-
-yarn install
-```
-
-Then installing some models:
-
-```sh
-yarn add "@grnsft/if-models"
-```
-
-Then create an `impl` file that describes your application (see our docs for a detailed explanation).
-
-Then, run `impact-engine` using the following command:
-
-```sh
-yarn impact-engine -- --impl <path-to-your-impl-file>
-```
-
-You can also add an optional savepath for your output yaml (if you do not provide one, the output will be printed to the console):
-
-```sh
-yarn impact-engine -- --impl <path-to-your-impl-file> --ompl <your-savepath>
-```
-
-The `impact-engine` CLI tool will configure and run the models defined in your input `yaml` (`impl`) and return the results as an output `yaml` (`ompl`).
 
 ## Documentation
 
