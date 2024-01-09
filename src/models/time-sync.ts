@@ -349,8 +349,6 @@ export class TimeSyncModel implements ModelPluginInterface {
       moment(a.timestamp).diff(moment(b.timestamp))
     );
 
-    // return sortedInputs;
-
     return this.resampleInputs(sortedInputs);
   }
 }
