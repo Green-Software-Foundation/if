@@ -1,12 +1,16 @@
-import { TimeSyncModel } from '../../../models';
+import {TimeSyncModel} from '../../../models';
 
-import { ERRORS } from '../../../util/errors';
+import {ERRORS} from '../../../util/errors';
 
-import { STRINGS } from '../../../config';
+import {STRINGS} from '../../../config';
 
-const { InputValidationError } = ERRORS;
+const {InputValidationError} = ERRORS;
 
-const { INVALID_TIME_NORMALIZATION } = STRINGS;
+const {
+  INVALID_TIME_NORMALIZATION,
+  INVALID_TIME_INTERVAL,
+  INVALID_OBSERVATION_OVERLAP,
+} = STRINGS;
 
 describe('models/time-sync: ', () => {
   describe('class TimeSync: ', () => {
@@ -45,6 +49,8 @@ describe('execute(): ', () => {
       invalidStartTimeConfig
     );
 
+    expect.assertions(1);
+
     try {
       await timeModel.execute([
         {
@@ -73,8 +79,10 @@ describe('execute(): ', () => {
     };
     const timeModel = await new TimeSyncModel().configure(invalidEndTimeConfig);
 
+    expect.assertions(1);
+
     try {
-      timeModel.execute([
+      await timeModel.execute([
         {
           timestamp: '2023-12-12T00:00:00.000Z',
           duration: 10,
@@ -87,7 +95,7 @@ describe('execute(): ', () => {
         },
       ]);
     } catch (error) {
-      expect(error).toEqual(
+      expect(error).toStrictEqual(
         new InputValidationError(INVALID_TIME_NORMALIZATION)
       );
     }
@@ -104,6 +112,8 @@ describe('execute(): ', () => {
       invalidIntervalConfig
     );
 
+    expect.assertions(1);
+
     try {
       await timeModel.execute([
         {
@@ -119,11 +129,10 @@ describe('execute(): ', () => {
       ]);
     } catch (error) {
       expect(error).toStrictEqual(
-        new InputValidationError('Interval is missing.')
+        new InputValidationError(INVALID_TIME_INTERVAL)
       );
     }
   });
-
 
   it('throws error if timesteps overlap.', async () => {
     const basicConfig = {
@@ -132,9 +141,7 @@ describe('execute(): ', () => {
       interval: 5,
     };
 
-    const timeModel = await new TimeSyncModel().configure(
-      basicConfig
-    );
+    const timeModel = await new TimeSyncModel().configure(basicConfig);
 
     try {
       await timeModel.execute([
@@ -163,9 +170,7 @@ describe('execute(): ', () => {
       interval: 5,
     };
 
-    const timeModel = await new TimeSyncModel().configure(
-      basicConfig
-    );
+    const timeModel = await new TimeSyncModel().configure(basicConfig);
 
     try {
       await timeModel.execute([
@@ -194,9 +199,7 @@ describe('execute(): ', () => {
       interval: 5,
     };
 
-    const timeModel = await new TimeSyncModel().configure(
-      basicConfig
-    );
+    const timeModel = await new TimeSyncModel().configure(basicConfig);
 
     try {
       await timeModel.execute([
@@ -213,7 +216,7 @@ describe('execute(): ', () => {
       ]);
     } catch (error) {
       expect(error).toStrictEqual(
-        new InputValidationError('Observation timestamps overlap.')
+        new InputValidationError(INVALID_OBSERVATION_OVERLAP)
       );
     }
   });
@@ -225,10 +228,9 @@ describe('execute(): ', () => {
       interval: 1,
     };
 
-    const timeModel = await new TimeSyncModel().configure(
-      basicConfig
-    );
-    await expect(timeModel.execute([
+    const timeModel = await new TimeSyncModel().configure(basicConfig);
+
+    const result = await timeModel.execute([
       {
         timestamp: '2023-12-12T00:00:00.000Z',
         duration: 5,
@@ -239,61 +241,61 @@ describe('execute(): ', () => {
         duration: 5,
         'cpu-util': 10,
       },
-    ])).resolves.toStrictEqual(
-      [
-        {
-          'cpu-util': 10,
-          "duration": 1,
-          "timestamp": "2023-12-12T00:00:00.000Z"
-        },
-        {
-          'cpu-util': 10,
-          "duration": 1,
-          "timestamp": "2023-12-12T00:00:01.000Z"
-        },
-        {
-          'cpu-util': 10,
-          "duration": 1,
-          "timestamp": "2023-12-12T00:00:02.000Z"
-        },
-        {
-          'cpu-util': 10,
-          "duration": 1,
-          "timestamp": "2023-12-12T00:00:03.000Z"
-        },
-        {
-          'cpu-util': 10,
-          "duration": 1,
-          "timestamp": "2023-12-12T00:00:04.000Z"
-        },
-        {
-          'cpu-util': 10,
-          "duration": 1,
-          "timestamp": "2023-12-12T00:00:05.000Z"
-        },
-        {
-          'cpu-util': 10,
-          "duration": 1,
-          "timestamp": "2023-12-12T00:00:06.000Z"
-        },
-        {
-          'cpu-util': 10,
-          "duration": 1,
-          "timestamp": "2023-12-12T00:00:07.000Z"
-        },
-        {
-          'cpu-util': 10,
-          "duration": 1,
-          "timestamp": "2023-12-12T00:00:08.000Z"
-        },
-        {
-          'cpu-util': 10,
-          "duration": 1,
-          "timestamp": "2023-12-12T00:00:09.000Z"
-        },
-      ]
-    );
-  })
+    ]);
 
+    const expectedResult = [
+      {
+        'cpu-util': 10,
+        duration: 1,
+        timestamp: '2023-12-12T00:00:00.000Z',
+      },
+      {
+        'cpu-util': 10,
+        duration: 1,
+        timestamp: '2023-12-12T00:00:01.000Z',
+      },
+      {
+        'cpu-util': 10,
+        duration: 1,
+        timestamp: '2023-12-12T00:00:02.000Z',
+      },
+      {
+        'cpu-util': 10,
+        duration: 1,
+        timestamp: '2023-12-12T00:00:03.000Z',
+      },
+      {
+        'cpu-util': 10,
+        duration: 1,
+        timestamp: '2023-12-12T00:00:04.000Z',
+      },
+      {
+        'cpu-util': 10,
+        duration: 1,
+        timestamp: '2023-12-12T00:00:05.000Z',
+      },
+      {
+        'cpu-util': 10,
+        duration: 1,
+        timestamp: '2023-12-12T00:00:06.000Z',
+      },
+      {
+        'cpu-util': 10,
+        duration: 1,
+        timestamp: '2023-12-12T00:00:07.000Z',
+      },
+      {
+        'cpu-util': 10,
+        duration: 1,
+        timestamp: '2023-12-12T00:00:08.000Z',
+      },
+      {
+        'cpu-util': 10,
+        duration: 1,
+        timestamp: '2023-12-12T00:00:09.000Z',
+      },
+    ];
 
+    expect(result).toStrictEqual(expectedResult);
+  });
 });
