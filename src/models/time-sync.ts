@@ -130,7 +130,14 @@ export class TimeSyncModel implements ModelPluginInterface {
       }
 
       const method = this.dealer.askToGiveMethodFor(metric);
-      acc[metric] = method === 'avg' || method === 'sum' ? 0 : input[metric];
+
+      if (method === 'avg' || method === 'sum') {
+        acc[metric] = 0;
+
+        return acc;
+      }
+
+      acc[metric] = input[metric];
 
       return acc;
     }, {} as ModelParams);
@@ -144,6 +151,7 @@ export class TimeSyncModel implements ModelPluginInterface {
       moment(inputs[0].timestamp).diff(moment(this.startTime)) / 1000;
 
     const lastInput = inputs[inputs.length - 1];
+
     const endDiffInSeconds =
       moment(lastInput.timestamp)
         .add(lastInput.duration, 'seconds')
@@ -206,8 +214,6 @@ export class TimeSyncModel implements ModelPluginInterface {
     return inputs.reduce((acc, _input, index, inputs) => {
       const frameStart = index * this.interval;
       const frameEnd = (index + 1) * this.interval;
-      console.log(frameStart);
-      console.log(frameEnd);
       const inputsFrame = inputs.slice(frameStart, frameEnd);
 
       const resampledInput = this.resampleInputFrame(inputsFrame);
