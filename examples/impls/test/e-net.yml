@@ -1,0 +1,21 @@
+name: sci-e-demo
+description:
+tags:
+initialize:
+  models:
+    - name: e-net
+      model: ENetModel
+      path: '@grnsft/if-models'
+graph:
+  children:
+    child:
+      pipeline:
+        - e-net
+      config:
+        e-net:
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          data-in: 1
+          data-out: 2
+          network-energy-coefficient: 0.02
