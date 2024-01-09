@@ -22,10 +22,10 @@ const {
 } = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
-  startTime: string | undefined;
-  endTime: string | undefined;
-  dealer!: UnitsDealerUsage;
-  interval = 1;
+  private startTime!: string;
+  private endTime!: string;
+  private dealer!: UnitsDealerUsage;
+  private interval = 1;
 
   /**
    * Setups basic configuration.
@@ -130,7 +130,14 @@ export class TimeSyncModel implements ModelPluginInterface {
       }
 
       const method = this.dealer.askToGiveMethodFor(metric);
-      acc[metric] = method === 'avg' || method === 'sum' ? 0 : input[metric];
+
+      if (method === 'avg' || method === 'sum') {
+        acc[metric] = 0;
+
+        return acc;
+      }
+
+      acc[metric] = input[metric];
 
       return acc;
     }, {} as ModelParams);
@@ -144,6 +151,7 @@ export class TimeSyncModel implements ModelPluginInterface {
       moment(inputs[0].timestamp).diff(moment(this.startTime)) / 1000;
 
     const lastInput = inputs[inputs.length - 1];
+
     const endDiffInSeconds =
       moment(lastInput.timestamp)
         .add(lastInput.duration, 'seconds')
@@ -179,8 +187,20 @@ export class TimeSyncModel implements ModelPluginInterface {
           return;
         }
 
-        /** divide each metric by the timeslot length, so that their sum yields the timeslot average.*/
-        if (index === inputsInTimeslot.length - 1) {
+        if (method === 'none') {
+          acc[metric] = input[metric];
+
+          return;
+        }
+
+        /**
+         * If timeslot contains records more than one, then divide each metric by the timeslot length,
+         *  so that their sum yields the timeslot average.
+         */
+        if (
+          inputsInTimeslot.length > 1 &&
+          index === inputsInTimeslot.length - 1
+        ) {
           acc[metric] /= inputsInTimeslot.length;
 
           return;
@@ -303,7 +323,7 @@ export class TimeSyncModel implements ModelPluginInterface {
         );
 
         const timelineGapSize = currentMoment.diff(compareableTime, 'second');
-        //console.log(currentMoment, timelineGapSize)
+
         /** Checks if there is gap in timeline. */
         if (timelineGapSize > 1) {
           for (
