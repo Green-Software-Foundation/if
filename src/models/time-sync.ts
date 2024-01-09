@@ -179,8 +179,14 @@ export class TimeSyncModel implements ModelPluginInterface {
           return;
         }
 
-        /** Divide each metric by the timeslot length, so that their sum yields the timeslot average. */
-        if (index === inputsInTimeslot.length - 1) {
+        /**
+         * If timeslot contains records more than one, then divide each metric by the timeslot length,
+         *  so that their sum yields the timeslot average.
+         */
+        if (
+          inputsInTimeslot.length > 1 &&
+          index === inputsInTimeslot.length - 1
+        ) {
           acc[metric] /= inputsInTimeslot.length;
 
           return;
@@ -200,6 +206,8 @@ export class TimeSyncModel implements ModelPluginInterface {
     return inputs.reduce((acc, _input, index, inputs) => {
       const frameStart = index * this.interval;
       const frameEnd = (index + 1) * this.interval;
+      console.log(frameStart);
+      console.log(frameEnd);
       const inputsFrame = inputs.slice(frameStart, frameEnd);
 
       const resampledInput = this.resampleInputFrame(inputsFrame);
@@ -334,6 +342,8 @@ export class TimeSyncModel implements ModelPluginInterface {
     const sortedInputs = flattenInputs.sort((a, b) =>
       moment(a.timestamp).diff(moment(b.timestamp))
     );
+
+    // return sortedInputs;
 
     return this.resampleInputs(sortedInputs);
   }
