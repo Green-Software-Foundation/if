@@ -783,4 +783,78 @@ describe('execute(): ', () => {
 
     expect(result).toStrictEqual(expectedResult);
   });
+
+  it('checks that metric (carbon) with aggregation-method == sum is properly spread over interpolated time points.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:10.000Z',
+      interval: 1,
+    };
+
+    const timeModel = await new TimeSyncModel().configure(basicConfig);
+
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 10,
+        carbon: 10,
+      }
+    ]);
+
+    const expectedResult = [
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 1,
+        carbon: 1,
+      },
+      {
+        timestamp: '2023-12-12T00:00:01.000Z',
+        duration: 1,
+        carbon: 1,
+      },
+      {
+        timestamp: '2023-12-12T00:00:02.000Z',
+        duration: 1,
+        carbon: 1,
+      },
+      {
+        timestamp: '2023-12-12T00:00:03.000Z',
+        duration: 1,
+        carbon: 1,
+      },
+      {
+        timestamp: '2023-12-12T00:00:04.000Z',
+        duration: 1,
+        carbon: 1,
+      },
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 1,
+        carbon: 1,
+      },
+      {
+        timestamp: '2023-12-12T00:00:06.000Z',
+        duration: 1,
+        carbon: 1,
+      },
+      {
+        timestamp: '2023-12-12T00:00:07.000Z',
+        duration: 1,
+        carbon: 1,
+      },
+      {
+        timestamp: '2023-12-12T00:00:08.000Z',
+        duration: 1,
+        carbon: 1,
+      },
+      {
+        timestamp: '2023-12-12T00:00:09.000Z',
+        duration: 1,
+        carbon: 1,
+      }
+    ];
+
+    expect(result).toStrictEqual(expectedResult);
+  });
+
 });
