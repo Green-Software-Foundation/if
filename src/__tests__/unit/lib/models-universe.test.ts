@@ -1,6 +1,7 @@
 import {MockModel} from '../../../__mocks__/model-universe';
 
 import {ModelsUniverse} from '../../../lib/models-universe';
+
 import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
@@ -281,5 +282,27 @@ describe('lib/models-universe: ', () => {
     expect.assertions(1);
 
     expect(model).toBeInstanceOf(MockModel);
+  });
+
+  it('successfully return initialized builtin model.', async () => {
+    const modelsHandbook = new ModelsUniverse();
+    const modelInfo: ImplInitializeModel = {
+      config: {
+        startTime: 'mock-startTime',
+        endTime: 'mock-startTime',
+        interval: 5,
+      },
+      name: 'time-sync',
+      model: 'TimeSyncModel',
+      path: 'builtin',
+    };
+
+    await modelsHandbook.writeDown(modelInfo);
+    const model = await modelsHandbook.getInitializedModel(modelInfo.name, {});
+
+    expect.assertions(2);
+
+    expect(model).toHaveProperty('execute');
+    expect(model).toHaveProperty('configure');
   });
 });
