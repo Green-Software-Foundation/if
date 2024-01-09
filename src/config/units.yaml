@@ -105,7 +105,7 @@ timestamp:
 time-reserved:
   description: time reserved for a component
   unit: seconds
-  aggregation: none
+  aggregation: avg
 total-resources:
   description: total resources available
   unit: count
