@@ -14,7 +14,7 @@ const getUnitsFile = () =>
   openYamlFileAsObject<Units>(
     path.normalize(`${__dirname}/../config/units.yaml`)
   ).catch((error: Error) => {
-    throw FileNotFoundError(error.message);
+    throw new FileNotFoundError(error.message);
   });
 
 /**
