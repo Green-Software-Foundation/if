@@ -1,10 +1,10 @@
-import {TimeSyncModel} from '../../../models';
+import { TimeSyncModel } from '../../../models';
 
-import {ERRORS} from '../../../util/errors';
+import { ERRORS } from '../../../util/errors';
 
-import {STRINGS} from '../../../config';
+import { STRINGS } from '../../../config';
 
-const {InputValidationError} = ERRORS;
+const { InputValidationError } = ERRORS;
 
 const {
   INVALID_TIME_NORMALIZATION,
@@ -665,6 +665,120 @@ describe('execute(): ', () => {
         'time-reserved': 10,
         'total-resources': 4,
       },
+    ];
+
+    expect(result).toStrictEqual(expectedResult);
+  });
+
+  it('checks if time series is trimmed when global timeframe is smaller than observed timeframe.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:05.000Z',
+      'end-time': '2023-12-12T00:00:10.000Z',
+      interval: 1,
+    };
+
+    const timeModel = await new TimeSyncModel().configure(basicConfig);
+
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 2,
+        'cpu-util': 10,
+        carbon: 20,
+        'time-reserved': 10,
+        'total-resources': 4,
+      },
+      {
+        timestamp: '2023-12-12T00:00:02.000Z',
+        duration: 2,
+        'cpu-util': 10,
+        carbon: 20,
+        'time-reserved': 10,
+        'total-resources': 4,
+      },
+      {
+        timestamp: '2023-12-12T00:00:04.000Z',
+        duration: 2,
+        'cpu-util': 10,
+        carbon: 20,
+        'time-reserved': 10,
+        'total-resources': 4,
+      },
+      {
+        timestamp: '2023-12-12T00:00:06.000Z',
+        duration: 2,
+        'cpu-util': 10,
+        carbon: 20,
+        'time-reserved': 10,
+        'total-resources': 4,
+      },
+      {
+        timestamp: '2023-12-12T00:00:08.000Z',
+        duration: 2,
+        'cpu-util': 10,
+        carbon: 20,
+        'time-reserved': 10,
+        'total-resources': 4,
+      },
+      {
+        timestamp: '2023-12-12T00:00:010.000Z',
+        duration: 2,
+        'cpu-util': 10,
+        carbon: 20,
+        'time-reserved': 10,
+        'total-resources': 4,
+      },
+      {
+        timestamp: '2023-12-12T00:00:012.000Z',
+        duration: 2,
+        'cpu-util': 10,
+        carbon: 20,
+        'time-reserved': 10,
+        'total-resources': 4,
+      }
+    ]);
+
+    const expectedResult = [
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 1,
+        'cpu-util': 10,
+        carbon: 10,
+        'time-reserved': 10,
+        'total-resources': 4,
+      },
+      {
+        timestamp: '2023-12-12T00:00:06.000Z',
+        duration: 1,
+        'cpu-util': 10,
+        carbon: 10,
+        'time-reserved': 10,
+        'total-resources': 4,
+      },
+      {
+        timestamp: '2023-12-12T00:00:07.000Z',
+        duration: 1,
+        'cpu-util': 10,
+        carbon: 10,
+        'time-reserved': 10,
+        'total-resources': 4,
+      },
+      {
+        timestamp: '2023-12-12T00:00:08.000Z',
+        duration: 1,
+        'cpu-util': 10,
+        carbon: 10,
+        'time-reserved': 10,
+        'total-resources': 4,
+      },
+      {
+        timestamp: '2023-12-12T00:00:09.000Z',
+        duration: 1,
+        'cpu-util': 10,
+        carbon: 10,
+        'time-reserved': 10,
+        'total-resources': 4,
+      }
     ];
 
     expect(result).toStrictEqual(expectedResult);
