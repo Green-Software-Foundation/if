@@ -1,10 +1,10 @@
-import { TimeSyncModel } from '../../../models';
+import {TimeSyncModel} from '../../../models';
 
-import { ERRORS } from '../../../util/errors';
+import {ERRORS} from '../../../util/errors';
 
-import { STRINGS } from '../../../config';
+import {STRINGS} from '../../../config';
 
-const { InputValidationError } = ERRORS;
+const {InputValidationError} = ERRORS;
 
 const {
   INVALID_TIME_NORMALIZATION,
@@ -735,7 +735,7 @@ describe('execute(): ', () => {
         carbon: 20,
         'time-reserved': 10,
         'total-resources': 4,
-      }
+      },
     ]);
 
     const expectedResult = [
@@ -778,7 +778,7 @@ describe('execute(): ', () => {
         carbon: 10,
         'time-reserved': 10,
         'total-resources': 4,
-      }
+      },
     ];
 
     expect(result).toStrictEqual(expectedResult);
@@ -798,7 +798,7 @@ describe('execute(): ', () => {
         timestamp: '2023-12-12T00:00:00.000Z',
         duration: 10,
         carbon: 10,
-      }
+      },
     ]);
 
     const expectedResult = [
@@ -851,7 +851,7 @@ describe('execute(): ', () => {
         timestamp: '2023-12-12T00:00:09.000Z',
         duration: 1,
         carbon: 1,
-      }
+      },
     ];
 
     expect(result).toStrictEqual(expectedResult);
@@ -876,7 +876,7 @@ describe('execute(): ', () => {
         timestamp: '2023-12-12T00:00:05.000Z',
         duration: 3,
         'cpu-util': 10,
-      }
+      },
     ]);
 
     /**In each 5 second interval, 60% of the time cpu-util = 10, 40% of the time it is 0, so cpu-util in the averaged result be 6 */
@@ -890,7 +890,7 @@ describe('execute(): ', () => {
         timestamp: '2023-12-12T00:00:05.000Z',
         duration: 5,
         'cpu-util': 6,
-      }
+      },
     ];
 
     expect(result).toStrictEqual(expectedResult);
@@ -914,8 +914,8 @@ describe('execute(): ', () => {
       {
         timestamp: '2023-12-12T00:00:05.000Z',
         duration: 3,
-        'total-resources': 10
-      }
+        'total-resources': 10,
+      },
     ]);
 
     /**In each 5 second interval, 60% of the time cpu-util = 10, 40% of the time it is 0, so cpu-util in the averaged result be 6 */
@@ -929,10 +929,9 @@ describe('execute(): ', () => {
         timestamp: '2023-12-12T00:00:05.000Z',
         duration: 5,
         'total-resources': 10,
-      }
+      },
     ];
 
     expect(result).toStrictEqual(expectedResult);
   });
-
 });
