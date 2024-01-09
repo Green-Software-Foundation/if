@@ -857,4 +857,44 @@ describe('execute(): ', () => {
     expect(result).toStrictEqual(expectedResult);
   });
 
+  it('checks that metric (cpu-util) with aggregation-method == avg is properly spread over interpolated time points.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:09.000Z',
+      interval: 5,
+    };
+
+    const timeModel = await new TimeSyncModel().configure(basicConfig);
+
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 3,
+        'cpu-util': 10,
+      },
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 3,
+        'cpu-util': 10,
+      }
+    ]);
+
+    /**In each 5 second interval, 60% of the time cpu-util = 10, 40% of the time it is 0, so cpu-util in the averaged result be 6 */
+    const expectedResult = [
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 5,
+        'cpu-util': 6,
+      },
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 5,
+        'cpu-util': 6,
+      }
+    ];
+
+    expect(result).toStrictEqual(expectedResult);
+  });
+
+
 });
