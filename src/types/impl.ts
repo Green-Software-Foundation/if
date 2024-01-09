@@ -25,7 +25,7 @@ export type Children = {
     pipeline: string[];
     config: Config;
     inputs: ModelParams[];
-    children: Children;
+    children?: Children;
     outputs?: ModelParams[];
     'aggregated-outputs'?: AggregationResult;
   };

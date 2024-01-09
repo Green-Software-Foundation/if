@@ -98,52 +98,37 @@ export class Supercomputer {
   }
 
   /**
-   * If child is top level, then initializes `this.olderChild`.
-   * If `children` object contains `children` property, it means inputs are nested (calls compute again).
+   * If `children` object contains `children` property, it means inputs are nested (calls computeChildren again).
    * Otherwise enriches inputs, passes them to Observatory.
    * For each model from pipeline Observatory gathers inputs. Then results are stored.
    */
   private async calculateOutputsForChild(
     childrenObject: Children,
-    params: any
+    childName: string
   ) {
-    const {childName, areChildrenNested} = params;
+    const {pipeline, config: parentConfig} = this.olderChild.info;
+    const childObject = childrenObject[childName];
 
-    if (!areChildrenNested) {
-      this.olderChild = {
-        name: childName,
-        info: this.impl.graph.children[childName],
-      };
+    if ('children' in childObject) {
+      return this.computeChildren(childObject.children);
     }
 
-    const {pipeline, inputs, config} = this.olderChild.info;
-
-    if ('children' in childrenObject[childName]) {
-      return this.compute(childrenObject[childName].children);
-    }
-
-    if (!('inputs' in childrenObject[childName])) {
+    if (!('inputs' in childObject)) {
       throw new ImplValidationError(STRUCTURE_MALFORMED(childName));
     }
 
     this.childAmount++;
 
-    const specificInputs = areChildrenNested
-      ? childrenObject[childName].inputs
-      : inputs;
-
-    const childrenConfig = childrenObject[childName].config || {};
-
     const enrichedInputs = this.enrichInputs(
-      specificInputs,
-      config,
-      childrenConfig
+      childObject.inputs,
+      parentConfig,
+      childObject.config
     );
 
     const observatory = new Observatory(enrichedInputs);
 
     for (const modelName of pipeline) {
-      const params = config && config[modelName];
+      const params = parentConfig && parentConfig[modelName];
       const modelInstance = await this.modelsHandbook.getInitializedModel(
         modelName,
         params
@@ -165,43 +150,42 @@ export class Supercomputer {
 
       this.aggregatedImpacts.push(aggregatedImpactsPerChild);
 
-      if (areChildrenNested) {
-        this.impl.graph.children[this.olderChild.name].children[childName][
-          'aggregated-outputs'
-        ] = aggregatedImpactsPerChild;
-      } else {
-        this.impl.graph.children[this.olderChild.name]['aggregated-outputs'] =
-          aggregatedImpactsPerChild;
-      }
+      childObject['aggregated-outputs'] = aggregatedImpactsPerChild;
     }
 
-    if (areChildrenNested) {
-      this.impl.graph.children[this.olderChild.name].children[
-        childName
-      ].outputs = outputs;
-    } else {
-      this.impl.graph.children[this.olderChild.name].outputs = outputs;
-    }
+    childObject.outputs = outputs;
 
     return;
   }
 
   /**
-   * Checks if object is top level children or nested, then runs through all children and calculates outputs.
+   * Computes top level children, runs through each child and calculates outputs.
+   * Initializes `this.olderChild` for each top-level child, to be used for all nested children calcucations.
    */
-  public async compute(childrenObject?: any) {
-    const implOrChildren = childrenObject || this.impl;
-    const areChildrenNested = !!childrenObject;
-    const children: Children = areChildrenNested
-      ? implOrChildren
-      : implOrChildren.graph.children;
+  public async compute() {
+    const children = this.impl.graph.children;
     const childrenNames = Object.keys(children);
 
     for (const childName of childrenNames) {
-      await this.calculateOutputsForChild(children, {
-        childName,
-        areChildrenNested,
-      });
+      this.olderChild = {
+        name: childName,
+        info: children[childName],
+      };
+      await this.calculateOutputsForChild(children, childName);
+    }
+
+    return this.impl;
+  }
+
+  /**
+   * Computes non-top level (nested) children.
+   */
+
+  private async computeChildren(children?: any) {
+    const childrenNames = Object.keys(children);
+
+    for (const childName of childrenNames) {
+      await this.calculateOutputsForChild(children, childName);
     }
 
     return this.impl;
