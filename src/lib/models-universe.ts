@@ -6,9 +6,9 @@ import {CONFIG, STRINGS} from '../config';
 
 import {
   ClassContainerParams,
-  GraphOptions,
   ImplInitializeModel,
   InitalizedModels,
+  ModelOptions,
 } from '../types/models-universe';
 
 const {ModelInitializationError, ModelCredentialError} = ERRORS;
@@ -112,10 +112,10 @@ export class ModelsUniverse {
 
     const Model = await this.handModel(model, path);
 
-    const callback = async (graphOptions: GraphOptions) => {
+    const callback = async (options: ModelOptions) => {
       const params = {
         ...config,
-        ...graphOptions,
+        ...options,
       };
 
       const initalizedModel = await new Model().configure(params);

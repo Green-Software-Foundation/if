@@ -721,7 +721,7 @@ describe('execute(): ', () => {
         'total-resources': 4,
       },
       {
-        timestamp: '2023-12-12T00:00:010.000Z',
+        timestamp: '2023-12-12T00:00:10.000Z',
         duration: 2,
         'cpu-util': 10,
         carbon: 20,
@@ -729,7 +729,7 @@ describe('execute(): ', () => {
         'total-resources': 4,
       },
       {
-        timestamp: '2023-12-12T00:00:012.000Z',
+        timestamp: '2023-12-12T00:00:12.000Z',
         duration: 2,
         'cpu-util': 10,
         carbon: 20,
@@ -773,6 +773,14 @@ describe('execute(): ', () => {
       },
       {
         timestamp: '2023-12-12T00:00:09.000Z',
+        duration: 1,
+        'cpu-util': 10,
+        carbon: 10,
+        'time-reserved': 10,
+        'total-resources': 4,
+      },
+      {
+        timestamp: '2023-12-12T00:00:10.000Z',
         duration: 1,
         'cpu-util': 10,
         carbon: 10,
