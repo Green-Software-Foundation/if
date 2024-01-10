@@ -23,7 +23,7 @@ const {DISCLAIMER_MESSAGE, SOMETHING_WRONG} = STRINGS;
  * 4. Initializes requested models.
  * 5. Initializes graph, does computing.
  * 6. Saves processed object as a yaml file.
- * @example run `yarn impact-engine --impl ./test.yml --ompl ./result.yml`
+ * @example run `npm run impact-engine -- --impl ./test.yml --ompl ./result.yml`
  */
 const impactEngine = async () => {
   console.log(DISCLAIMER_MESSAGE);

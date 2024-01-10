@@ -60,7 +60,7 @@ Add and commit:
     
 Commit your changes in logical chunks. Please do not push all changes in one commit.
 
-> Run `yarn fix` before commiting for not having conflict with CI linter.
+> Run `npm run fix` before commiting for not having conflict with CI linter.
 
 Please adhere to these [Commit message guidelines](#commit-message-guidelines)
    or your code is unlikely be merged into the main project.
