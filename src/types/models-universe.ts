@@ -1,9 +1,6 @@
 import {ModelPluginInterface} from '../types/model-interface';
 
-export type GraphOptions = {
-  'core-units': number;
-  'physical-processor': string;
-};
+export type ModelOptions = Record<string, any>;
 
 export type ImplInitializeModel = {
   config?: Record<string, any>;
@@ -13,7 +10,7 @@ export type ImplInitializeModel = {
 };
 
 export type InitalizedModels = {
-  [key: string]: (graphOptions: GraphOptions) => Promise<ModelPluginInterface>;
+  [key: string]: (modelOptions: ModelOptions) => Promise<ModelPluginInterface>;
 };
 
 export type HandModelParams = {
