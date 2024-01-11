@@ -8,9 +8,8 @@ import {Impl} from '../types/impl';
 
 const {ImplValidationError} = ERRORS;
 
-const {AGGREGATION_METRICS, AGGREGATION_METHODS} = CONFIG;
+const {AGGREGATION_METRICS} = CONFIG;
 
-const aggregationMethods = AGGREGATION_METHODS.map(method => z.literal(method));
 const aggregationMetric = AGGREGATION_METRICS.map(metric => z.literal(metric));
 
 /**
@@ -48,8 +47,6 @@ const implValidation = z.object({
       'aggregation-metrics': z.array(
         constructZodLiteralUnionType(aggregationMetric)
       ),
-      'aggregation-method':
-        constructZodLiteralUnionType(aggregationMethods).default('sum'),
     })
     .optional(),
   tags: z
