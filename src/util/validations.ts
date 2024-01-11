@@ -3,6 +3,7 @@ import {ZodIssue, z} from 'zod';
 import {ERRORS} from './errors';
 
 import {Impl} from '../types/impl';
+import {AggregationMethods} from '../types/planet-aggregator';
 import {UnitKeys} from '../types/units';
 
 const {ImplValidationError} = ERRORS;
@@ -39,9 +40,10 @@ const implValidation = z.object({
   description: z.string().nullable(),
   aggregation: z
     .object({
-      'aggregation-metrics': z.array(
+      metrics: z.array(
         constructZodLiteralUnionType(UnitKeys.map(metric => z.literal(metric)))
       ),
+      type: z.enum(AggregationMethods),
     })
     .optional(),
   tags: z
