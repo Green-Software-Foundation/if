@@ -1,50 +1,57 @@
 import {ERRORS} from '../util/errors';
-
-import {
-  AggregationResult,
-  PlanetAggregatorParams,
-} from '../types/planet-aggregator';
-import {ModelParams} from '../types/model-interface';
-import {UnitKeyName} from '../types/units';
 import {UnitsDealer} from '../util/units-dealer';
 
+import {STRINGS} from '../config';
+
+import {ModelParams} from '../types/model-interface';
+import {AggregationResult} from '../types/planet-aggregator';
+import {UnitKeyName} from '../types/units';
+import {UnitsDealerUsage} from '../types/units-dealer';
+
 const {InvalidAggregationParams} = ERRORS;
+const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
 
 /**
- * Aggregates child node level metrics. Uses provided aggregation `params`.
+ * Validates metrics array before applying aggregator.
+ * If aggregation method is `none`, then throws error.
+ */
+const checkIfMetricsAreValid = (
+  metrics: UnitKeyName[],
+  dealer: UnitsDealerUsage
+) => {
+  metrics.forEach(metric => {
+    const method = dealer.askToGiveMethodFor(metric);
+
+    if (method === 'none') {
+      throw new InvalidAggregationParams(INVALID_AGGREGATION_METHOD(method));
+    }
+  });
+};
+
+/**
+ * Aggregates child node level metrics. If metrics arr
  */
 export const planetAggregator = async (
   inputs: ModelParams[],
-  params: PlanetAggregatorParams
+  metrics: UnitKeyName[]
 ) => {
-  if (
-    !params['aggregation-metrics'] ||
-    params['aggregation-metrics'].length === 0
-  ) {
-    throw new InvalidAggregationParams(
-      'Provided aggregation metrics are invalid. Please provide an array of strings.'
-    );
-  }
-
-  const aggregationMetrics = params['aggregation-metrics'] as UnitKeyName[];
   const dealer = await UnitsDealer();
 
+  checkIfMetricsAreValid(metrics, dealer);
+
   return inputs.reduce((acc, input, index) => {
-    for (const metric of aggregationMetrics) {
+    for (const metric of metrics) {
       if (!(metric in input)) {
-        throw new InvalidAggregationParams(
-          `Aggregation metric ${metric} is not found in inputs[${index}].`
-        );
+        throw new InvalidAggregationParams(METRIC_MISSING(metric, index));
       }
 
       const accessKey = `aggregated-${metric}`;
-      const value = parseFloat(input[metric]);
       acc[accessKey] = acc[accessKey] ?? 0;
-      acc[accessKey] += value;
-      const aggregationMethod = dealer.askToGiveMethodFor(metric);
+      acc[accessKey] += parseFloat(input[metric]);
 
+      /** Checks for the last iteration. */
       if (index === inputs.length - 1) {
-        if (aggregationMethod === 'avg') {
+        if (dealer.askToGiveMethodFor(metric) === 'avg') {
           acc[accessKey] /= inputs.length;
         }
       }
@@ -53,7 +60,3 @@ export const planetAggregator = async (
     return acc;
   }, {} as AggregationResult);
 };
-
-// remove aggregation-method functionality from global layer, use units dealer instead
-// leave aggregation-metrics. If metric doesn't exist in units dealer database, throw error
-// vertical aggregation ? how to get easy way to do (cost effective)
