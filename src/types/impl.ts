@@ -1,5 +1,5 @@
 import {ModelParams} from './model-interface';
-import {AggregationResult} from './planet-aggregator';
+import {AggregationMethodsName, AggregationResult} from './planet-aggregator';
 import {UnitKeyName} from './units';
 
 type Tag = {
@@ -39,6 +39,9 @@ export type Impl = {
   graph: {
     children: Children;
   };
-  aggregation?: UnitKeyName[];
+  aggregation?: {
+    metrics: UnitKeyName[];
+    type: AggregationMethodsName;
+  };
   'aggregated-outputs'?: AggregationResult;
 };
