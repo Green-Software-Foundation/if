@@ -2,7 +2,7 @@ import {CONFIG} from '../config';
 import {ModelParams} from './model-interface';
 import {AggregationResult} from './planet-aggregator';
 
-const {AGGREGATION_METHODS, AGGREGATION_METRICS} = CONFIG;
+const {AGGREGATION_METRICS} = CONFIG;
 
 type Tag = {
   kind?: string;
@@ -32,7 +32,6 @@ export type Children = {
 };
 
 export type AggregationMetrics = (typeof AGGREGATION_METRICS)[number];
-export type AggregationMethod = (typeof AGGREGATION_METHODS)[number];
 
 export type Impl = {
   name: string;
@@ -46,7 +45,6 @@ export type Impl = {
   };
   aggregation?: {
     'aggregation-metrics': AggregationMetrics[];
-    'aggregation-method': AggregationMethod;
   };
   'aggregated-outputs'?: AggregationResult;
 };
