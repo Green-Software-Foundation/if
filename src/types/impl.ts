@@ -1,8 +1,6 @@
-import {CONFIG} from '../config';
 import {ModelParams} from './model-interface';
 import {AggregationResult} from './planet-aggregator';
-
-const {AGGREGATION_METRICS} = CONFIG;
+import {UnitKeyName} from './units';
 
 type Tag = {
   kind?: string;
@@ -31,8 +29,6 @@ export type Children = {
   };
 };
 
-export type AggregationMetrics = (typeof AGGREGATION_METRICS)[number];
-
 export type Impl = {
   name: string;
   description: string | null | undefined;
@@ -43,8 +39,6 @@ export type Impl = {
   graph: {
     children: Children;
   };
-  aggregation?: {
-    'aggregation-metrics': AggregationMetrics[];
-  };
+  aggregation?: UnitKeyName[];
   'aggregated-outputs'?: AggregationResult;
 };
