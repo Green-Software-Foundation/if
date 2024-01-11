@@ -8,6 +8,7 @@ import {STRINGS} from '../config';
 import {Children, Config, Impl} from '../types/impl';
 import {ModelParams} from '../types/model-interface';
 import {ChildInformation} from '../types/supercomputer';
+import {planetAggregator} from '../models/planet-aggregator';
 
 const {ImplValidationError} = ERRORS;
 
@@ -89,11 +90,8 @@ export class Supercomputer {
 
     const {pipeline, config} = this.olderChild.info;
     const inputs = childrenObject[childName].inputs;
-
     const childrenConfig = childrenObject[childName].config || {};
-
     const enrichedInputs = this.enrichInputs(inputs, config, childrenConfig);
-
     const observatory = new Observatory(enrichedInputs);
 
     for (const modelName of pipeline) {
@@ -107,8 +105,20 @@ export class Supercomputer {
     }
 
     const outputs = observatory.getOutputs();
-
     childrenObject[childName].outputs = outputs;
+
+    /**
+     * If aggregation is enabled, do horizontal aggregation.
+     */
+    if (this.impl.aggregation) {
+      const aggregatedImpactsPerChild = await planetAggregator(
+        outputs,
+        this.impl.aggregation
+      );
+
+      childrenObject[childName]['aggregated-outputs'] =
+        aggregatedImpactsPerChild;
+    }
 
     return;
   }
