@@ -6,13 +6,14 @@ import {
 } from '../types/planet-aggregator';
 import {ModelParams} from '../types/model-interface';
 import {UnitKeyName} from '../types/units';
+import {UnitsDealer} from '../util/units-dealer';
 
 const {InvalidAggregationParams} = ERRORS;
 
 /**
  * Aggregates child node level metrics. Uses provided aggregation `params`.
  */
-export const planetAggregator = (
+export const planetAggregator = async (
   inputs: ModelParams[],
   params: PlanetAggregatorParams
 ) => {
@@ -26,7 +27,7 @@ export const planetAggregator = (
   }
 
   const aggregationMetrics = params['aggregation-metrics'] as UnitKeyName[];
-  const aggregationMethod = params['aggregation-method'];
+  const dealer = await UnitsDealer();
 
   return inputs.reduce((acc, input, index) => {
     for (const metric of aggregationMetrics) {
@@ -40,6 +41,7 @@ export const planetAggregator = (
       const value = parseFloat(input[metric]);
       acc[accessKey] = acc[accessKey] ?? 0;
       acc[accessKey] += value;
+      const aggregationMethod = dealer.askToGiveMethodFor(metric);
 
       if (index === inputs.length - 1) {
         if (aggregationMethod === 'avg') {
@@ -51,3 +53,7 @@ export const planetAggregator = (
     return acc;
   }, {} as AggregationResult);
 };
+
+// remove aggregation-method functionality from global layer, use units dealer instead
+// leave aggregation-metrics. If metric doesn't exist in units dealer database, throw error
+// vertical aggregation ? how to get easy way to do (cost effective)
