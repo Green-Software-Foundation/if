@@ -18,15 +18,17 @@ type Model = {
 
 export type Config = Record<string, any>;
 
+export type ChildrenContent = {
+  pipeline: string[];
+  config: Config;
+  inputs: ModelParams[];
+  children: Children;
+  outputs?: ModelParams[];
+  'aggregated-outputs'?: AggregationResult;
+};
+
 export type Children = {
-  [key: string]: {
-    pipeline: string[];
-    config: Config;
-    inputs: ModelParams[];
-    children: Children;
-    outputs?: ModelParams[];
-    'aggregated-outputs'?: AggregationResult;
-  };
+  [key: string]: ChildrenContent;
 };
 
 export type Impl = {
