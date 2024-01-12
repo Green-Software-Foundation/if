@@ -5,6 +5,8 @@ const {
   NOT_INITIALIZED_MODEL,
   NOT_CONSTRUCTABLE_MODEL,
   INVALID_MODULE_PATH,
+  INVALID_AGGREGATION_METHOD,
+  METRIC_MISSING,
 } = STRINGS;
 
 describe('config/strings: ', () => {
@@ -45,6 +47,27 @@ describe('config/strings: ', () => {
       const expectedMessage = `Provided module path: '${param}' is invalid.`;
 
       expect(INVALID_MODULE_PATH(param)).toEqual(expectedMessage);
+    });
+  });
+
+  describe('INVALID_AGGREGATION_METHOD(): ', () => {
+    it('successfully appends given param to message.', () => {
+      const param = 'mock-param';
+
+      const expectedMessage = `Aggregation is not possible for given ${param} since method is 'none'.`;
+
+      expect(INVALID_AGGREGATION_METHOD(param)).toEqual(expectedMessage);
+    });
+  });
+
+  describe('METRIC_MISSING(): ', () => {
+    it('successfully appends given param to message.', () => {
+      const metric = 'mock-metric';
+      const index = 0;
+
+      const expectedMessage = `Aggregation metric ${metric} is not found in inputs[${index}].`;
+
+      expect(METRIC_MISSING(metric, index)).toEqual(expectedMessage);
     });
   });
 });
