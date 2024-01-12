@@ -29,7 +29,8 @@ const checkIfMetricsAreValid = (
 };
 
 /**
- * Aggregates child node level metrics. If metrics arr
+ * Aggregates child node level metrics. Validates if metric aggregation type is `none`, then rejects with error.
+ * Otherwise iterates over inputs by aggregating per given `metrics`.
  */
 export const planetAggregator = async (
   inputs: ModelParams[],
