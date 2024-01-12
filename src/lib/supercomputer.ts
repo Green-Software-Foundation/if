@@ -5,9 +5,8 @@ import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
-import {Children, Config, Impl} from '../types/impl';
+import {Children, ChildrenContent, Config, Impl} from '../types/impl';
 import {ModelParams} from '../types/model-interface';
-import {ChildInformation} from '../types/supercomputer';
 import {planetAggregator} from '../models/planet-aggregator';
 
 const {ImplValidationError} = ERRORS;
@@ -18,7 +17,7 @@ const {STRUCTURE_MALFORMED} = STRINGS;
  * Computer for `impl` documents.
  */
 export class Supercomputer {
-  private olderChild: ChildInformation = {name: '', info: {}};
+  private parent!: ChildrenContent;
   private impl: Impl;
   private modelsHandbook: ModelsUniverse;
   private childAmount = 0;
@@ -69,18 +68,13 @@ export class Supercomputer {
     childrenObject: Children,
     childName: string
   ) {
-    const hasNestedChild = 'children' in childrenObject[childName];
-
     if (this.childAmount === 0) {
-      this.olderChild = {
-        name: childName,
-        info: this.impl.graph.children[childName],
-      };
+      this.parent = this.impl.graph.children[childName];
     }
 
     this.childAmount++;
 
-    if (hasNestedChild) {
+    if ('children' in childrenObject[childName]) {
       return this.compute(childrenObject[childName].children);
     }
 
@@ -88,10 +82,11 @@ export class Supercomputer {
       throw new ImplValidationError(STRUCTURE_MALFORMED(childName));
     }
 
-    const {pipeline, config} = this.olderChild.info;
-    const inputs = childrenObject[childName].inputs;
-    const childrenConfig = childrenObject[childName].config || {};
-    const enrichedInputs = this.enrichInputs(inputs, config, childrenConfig);
+    const {pipeline, config} = this.parent;
+    const {inputs} = childrenObject[childName];
+
+    const childConfig = childrenObject[childName].config;
+    const enrichedInputs = this.enrichInputs(inputs, config, childConfig);
     const observatory = new Observatory(enrichedInputs);
 
     for (const modelName of pipeline) {
@@ -107,17 +102,19 @@ export class Supercomputer {
     const outputs = observatory.getOutputs();
     childrenObject[childName].outputs = outputs;
 
-    /**
-     * If aggregation is enabled, do horizontal aggregation.
-     */
+    /** If aggregation is enabled, do horizontal aggregation. */
     if (this.impl.aggregation) {
-      const aggregatedImpactsPerChild = await planetAggregator(
-        outputs,
-        this.impl.aggregation
-      );
+      if (
+        this.impl.aggregation.type === 'horizontal' ||
+        this.impl.aggregation.type === 'both'
+      ) {
+        const aggregation = await planetAggregator(
+          outputs,
+          this.impl.aggregation.metrics
+        );
 
-      childrenObject[childName]['aggregated-outputs'] =
-        aggregatedImpactsPerChild;
+        childrenObject[childName]['aggregated-outputs'] = aggregation;
+      }
     }
 
     return;
