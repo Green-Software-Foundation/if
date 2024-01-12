@@ -10,14 +10,12 @@ graph:
     child:
       pipeline:
         - sampler
-      config:
-        sampler:
-          executable: python3 /usr/local/bin/sampler
       inputs:
-        - timestamp: '2023-11-02T10:35:31.820Z'
+        - timestamp: "2023-11-02T10:35:31.820Z"
           duration: 3600
+          command: "2023-11-02T10:35:31.820Z"
       outputs:
         - duration: 3600
           energy: 1
           executable: python3 /usr/local/bin/sampler
-          timestamp: '2023-11-02T10:35:31.820Z'
+          command: "2023-11-02T10:35:31.820Z"
