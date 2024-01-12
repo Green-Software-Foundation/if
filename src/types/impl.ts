@@ -10,13 +10,16 @@ type Tag = {
 
 type Model = {
   name: string;
-  kind?: string;
   verbose?: boolean;
   path?: string;
   config?: Config;
 };
 
 export type Config = Record<string, any>;
+
+export type Children = {
+  [key: string]: ChildrenContent;
+};
 
 export type ChildrenContent = {
   pipeline: string[];
@@ -25,10 +28,6 @@ export type ChildrenContent = {
   children: Children;
   outputs?: ModelParams[];
   'aggregated-outputs'?: AggregationResult;
-};
-
-export type Children = {
-  [key: string]: ChildrenContent;
 };
 
 export type Impl = {
