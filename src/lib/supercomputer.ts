@@ -1,5 +1,6 @@
 import {ModelsUniverse} from './models-universe';
 import {Observatory} from './observatory';
+import {planetAggregator} from './planet-aggregator';
 
 import {ERRORS} from '../util/errors';
 
@@ -7,7 +8,6 @@ import {STRINGS} from '../config';
 
 import {Children, ChildrenContent, Config, Impl} from '../types/impl';
 import {ModelParams} from '../types/model-interface';
-import {planetAggregator} from '../models/planet-aggregator';
 
 const {ImplValidationError} = ERRORS;
 
