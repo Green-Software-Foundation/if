@@ -10,10 +10,12 @@ graph:
     child:
       pipeline:
         - sampler
+      config:
+        sampler:
+          command: "2023-11-02T10:35:31.820Z"
       inputs:
         - timestamp: "2023-11-02T10:35:31.820Z"
           duration: 3600
-          command: "2023-11-02T10:35:31.820Z"
       outputs:
         - duration: 3600
           energy: 1
