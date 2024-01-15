@@ -12,7 +12,7 @@ graph:
         - sampler
       config:
         sampler:
-          command: "2023-11-02T10:35:31.820Z"
+          command: python3 /usr/local/bin/sampler
       inputs:
         - timestamp: "2023-11-02T10:35:31.820Z"
           duration: 3600
