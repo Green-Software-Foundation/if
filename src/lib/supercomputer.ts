@@ -1,15 +1,13 @@
 import {ModelsUniverse} from './models-universe';
 import {Observatory} from './observatory';
-import {planetAggregator} from './planet-aggregator';
+import {aggregate} from './aggregator';
 
 import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
-import {Children, Config, Impl} from '../types/impl';
+import {Children, ChildrenContent, Config, Impl} from '../types/impl';
 import {ModelParams} from '../types/model-interface';
-import {AggregationResult} from '../types/planet-aggregator';
-import {ChildInformation} from '../types/supercomputer';
 
 const {ImplValidationError} = ERRORS;
 
@@ -19,10 +17,9 @@ const {STRUCTURE_MALFORMED} = STRINGS;
  * Computer for `impl` documents.
  */
 export class Supercomputer {
-  private olderChild: ChildInformation = {name: '', info: {}};
+  private parent!: ChildrenContent;
   private impl: Impl;
   private modelsHandbook: ModelsUniverse;
-  private aggregatedImpacts: AggregationResult[] = [];
   private childAmount = 0;
 
   constructor(impl: Impl, modelsHandbook: ModelsUniverse) {
@@ -31,69 +28,23 @@ export class Supercomputer {
   }
 
   /**
-   * Goes through all aggregations collected from child components, then calculates the average.
-   */
-  public calculateAggregation() {
-    if (!this.impl.aggregation) {
-      throw new ImplValidationError('Aggregation params are not provided.');
-    }
-
-    const method = this.impl.aggregation['aggregation-method'];
-
-    return this.aggregatedImpacts.reduce((acc, impact, index) => {
-      const keys = Object.keys(impact);
-
-      keys.forEach(key => {
-        acc[key] = acc[key] ?? 0;
-        acc[key] += impact[key];
-
-        if (index === this.childAmount - 1) {
-          if (method === 'avg') {
-            acc[key] /= this.childAmount;
-          }
-        }
-      });
-
-      return acc;
-    }, {});
-  }
-
-  /**
    * Flattens config entries.
    */
-  private flattenConfigValues(config: Config) {
-    if (!config) {
-      return {};
-    }
+  private flattenConfigValues(config: Config): ModelParams {
+    const configValues = Object.values(config);
 
-    const configModelNames = Object.keys(config);
-    const values = configModelNames.reduce((acc: any, name: string) => {
-      acc = {
-        ...acc,
-        ...config[name],
-      };
-
-      return acc;
-    }, {});
-
-    return values;
+    return configValues.reduce((acc, value) => ({...acc, ...value}), {});
   }
 
   /**
    * Adds config entries to each obsercation object passed.
    */
-  private enrichInputs(
-    inputs: ModelParams[],
-    config: Config,
-    nestedConfig: Config
-  ) {
+  private enrichInputs(inputs: ModelParams[], config: Config) {
     const configValues = this.flattenConfigValues(config);
-    const nestedConfigValues = this.flattenConfigValues(nestedConfig);
 
     return inputs.map((input: any) => ({
       ...input,
       ...configValues,
-      ...nestedConfigValues,
     }));
   }
 
@@ -105,45 +56,34 @@ export class Supercomputer {
    */
   private async calculateOutputsForChild(
     childrenObject: Children,
-    params: any
+    childName: string
   ) {
-    const {childName, areChildrenNested} = params;
-
-    if (!areChildrenNested) {
-      this.olderChild = {
-        name: childName,
-        info: this.impl.graph.children[childName],
-      };
+    if (this.childAmount === 0) {
+      this.parent = this.impl.graph.children[childName];
     }
 
-    const {pipeline, inputs, config} = this.olderChild.info;
+    this.childAmount++;
 
     if ('children' in childrenObject[childName]) {
-      return this.compute(childrenObject[childName].children);
+      await this.compute(childrenObject[childName].children);
     }
 
     if (!('inputs' in childrenObject[childName])) {
       throw new ImplValidationError(STRUCTURE_MALFORMED(childName));
     }
 
-    this.childAmount++;
+    const {pipeline, config} = this.parent;
+    const {inputs} = childrenObject[childName];
 
-    const specificInputs = areChildrenNested
-      ? childrenObject[childName].inputs
-      : inputs;
-
-    const childrenConfig = childrenObject[childName].config || {};
-
-    const enrichedInputs = this.enrichInputs(
-      specificInputs,
-      config,
-      childrenConfig
-    );
-
+    const childConfig = childrenObject[childName].config;
+    const enrichedInputs = this.enrichInputs(inputs, {
+      ...config,
+      ...childConfig,
+    });
     const observatory = new Observatory(enrichedInputs);
 
     for (const modelName of pipeline) {
-      const params = config && config[modelName];
+      const params = childConfig && childConfig[modelName];
       const modelInstance = await this.modelsHandbook.getInitializedModel(
         modelName,
         params
@@ -153,34 +93,21 @@ export class Supercomputer {
     }
 
     const outputs = observatory.getOutputs();
+    childrenObject[childName].outputs = outputs;
 
-    /**
-     * If aggregation is required, then init `aggregated-outputs`.
-     */
+    /** If aggregation is enabled, do horizontal aggregation. */
     if (this.impl.aggregation) {
-      const aggregatedImpactsPerChild = planetAggregator(
-        outputs,
-        this.impl.aggregation
-      );
+      if (
+        this.impl.aggregation.type === 'horizontal' ||
+        this.impl.aggregation.type === 'both'
+      ) {
+        const aggregation = await aggregate(
+          outputs,
+          this.impl.aggregation.metrics
+        );
 
-      this.aggregatedImpacts.push(aggregatedImpactsPerChild);
-
-      if (areChildrenNested) {
-        this.impl.graph.children[this.olderChild.name].children[childName][
-          'aggregated-outputs'
-        ] = aggregatedImpactsPerChild;
-      } else {
-        this.impl.graph.children[this.olderChild.name]['aggregated-outputs'] =
-          aggregatedImpactsPerChild;
+        childrenObject[childName]['aggregated-outputs'] = aggregation;
       }
-    }
-
-    if (areChildrenNested) {
-      this.impl.graph.children[this.olderChild.name].children[
-        childName
-      ].outputs = outputs;
-    } else {
-      this.impl.graph.children[this.olderChild.name].outputs = outputs;
     }
 
     return;
@@ -190,18 +117,11 @@ export class Supercomputer {
    * Checks if object is top level children or nested, then runs through all children and calculates outputs.
    */
   public async compute(childrenObject?: any) {
-    const implOrChildren = childrenObject || this.impl;
-    const areChildrenNested = !!childrenObject;
-    const children: Children = areChildrenNested
-      ? implOrChildren
-      : implOrChildren.graph.children;
+    const children = childrenObject || this.impl.graph.children;
     const childrenNames = Object.keys(children);
 
     for (const childName of childrenNames) {
-      await this.calculateOutputsForChild(children, {
-        childName,
-        areChildrenNested,
-      });
+      await this.calculateOutputsForChild(children, childName);
     }
 
     return this.impl;

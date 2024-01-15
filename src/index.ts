@@ -34,23 +34,18 @@ const impactEngine = async () => {
     const {inputPath, outputPath} = processParams;
     const rawImpl = await openYamlFileAsObject<Impl>(inputPath);
 
-    // Lifecycle Validation
+    /** Lifecycle Validation */
     const impl = validateImpl(rawImpl);
 
-    // Lifecycle Initialize Models
+    /** Lifecycle Initialize Models */
     const modelsHandbook = new ModelsUniverse();
     for (const model of impl.initialize.models) {
       await modelsHandbook.writeDown(model);
     }
 
-    // Lifecycle Computing
+    /** Lifecycle Computing */
     const engine = new Supercomputer(impl, modelsHandbook);
     const ompl = await engine.compute();
-
-    if (impl.aggregation) {
-      const aggregations = engine.calculateAggregation();
-      ompl['aggregated-outputs'] = aggregations;
-    }
 
     if (!outputPath) {
       console.log(JSON.stringify(ompl));

@@ -2,16 +2,11 @@ import {ZodIssue, z} from 'zod';
 
 import {ERRORS} from './errors';
 
-import {CONFIG} from '../config';
-
 import {Impl} from '../types/impl';
+import {AggregationMethods} from '../types/aggregator';
+import {UnitKeys} from '../types/units';
 
 const {ImplValidationError} = ERRORS;
-
-const {AGGREGATION_METRICS, AGGREGATION_METHODS} = CONFIG;
-
-const aggregationMethods = AGGREGATION_METHODS.map(method => z.literal(method));
-const aggregationMetric = AGGREGATION_METRICS.map(metric => z.literal(metric));
 
 /**
  * Zod literal union validator which checks if members are more than 2.
@@ -45,11 +40,10 @@ const implValidation = z.object({
   description: z.string().nullable(),
   aggregation: z
     .object({
-      'aggregation-metrics': z.array(
-        constructZodLiteralUnionType(aggregationMetric)
+      metrics: z.array(
+        constructZodLiteralUnionType(UnitKeys.map(metric => z.literal(metric)))
       ),
-      'aggregation-method':
-        constructZodLiteralUnionType(aggregationMethods).default('sum'),
+      type: z.enum(AggregationMethods),
     })
     .optional(),
   tags: z

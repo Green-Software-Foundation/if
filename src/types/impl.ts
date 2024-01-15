@@ -1,8 +1,6 @@
-import {CONFIG} from '../config';
 import {ModelParams} from './model-interface';
-import {AggregationResult} from './planet-aggregator';
-
-const {AGGREGATION_METHODS, AGGREGATION_METRICS} = CONFIG;
+import {AggregationMethodsName, AggregationResult} from './aggregator';
+import {UnitKeyName} from './units';
 
 type Tag = {
   kind?: string;
@@ -12,7 +10,6 @@ type Tag = {
 
 type Model = {
   name: string;
-  kind?: string;
   verbose?: boolean;
   path?: string;
   config?: Config;
@@ -21,18 +18,17 @@ type Model = {
 export type Config = Record<string, any>;
 
 export type Children = {
-  [key: string]: {
-    pipeline: string[];
-    config: Config;
-    inputs: ModelParams[];
-    children: Children;
-    outputs?: ModelParams[];
-    'aggregated-outputs'?: AggregationResult;
-  };
+  [key: string]: ChildrenContent;
 };
 
-export type AggregationMetrics = (typeof AGGREGATION_METRICS)[number];
-export type AggregationMethod = (typeof AGGREGATION_METHODS)[number];
+export type ChildrenContent = {
+  pipeline: string[];
+  config: Config;
+  inputs: ModelParams[];
+  children?: Children;
+  outputs?: ModelParams[];
+  'aggregated-outputs'?: AggregationResult;
+};
 
 export type Impl = {
   name: string;
@@ -45,8 +41,8 @@ export type Impl = {
     children: Children;
   };
   aggregation?: {
-    'aggregation-metrics': AggregationMetrics[];
-    'aggregation-method': AggregationMethod;
+    metrics: UnitKeyName[];
+    type: AggregationMethodsName;
   };
   'aggregated-outputs'?: AggregationResult;
 };

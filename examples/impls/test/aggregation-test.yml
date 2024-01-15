@@ -1,8 +1,8 @@
 name: nesting-demo
 description:
 aggregation:
-  aggregation-metrics: ['carbon', 'energy']
-  aggregation-method: 'sum'
+  metrics: ['carbon', 'energy']
+  type: 'horizontal'
 tags:
   kind: web
   complexity: moderate

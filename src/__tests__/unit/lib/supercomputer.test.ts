@@ -12,9 +12,11 @@ import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
 
+import {Impl} from '../../../types/impl';
+
 const {ImplValidationError} = ERRORS;
 
-const {NOT_INITIALIZED_MODEL, STRUCTURE_MALFORMED} = STRINGS;
+const {STRUCTURE_MALFORMED} = STRINGS;
 
 describe('lib/supercomputer: ', () => {
   const impl: any = {
@@ -69,407 +71,268 @@ describe('lib/supercomputer: ', () => {
     it('initializes object with required properties.', () => {
       const impl: any = {};
       const modelsHandbook = new ModelsUniverse();
-      const aterui = new Supercomputer(impl, modelsHandbook);
+      const node = new Supercomputer(impl, modelsHandbook);
 
-      expect(aterui).toHaveProperty('compute');
+      expect(node).toHaveProperty('compute');
     });
   });
 
   describe('compute(): ', () => {
-    const implWithNestedChildren: any = {
-      name: 'ntt-data-on-premise',
-      description:
-        'https://github.com/Green-Software-Foundation/sci-guide/blob/dev/use-case-submissions/nttdatta-On-Premise-Web-system.md',
-      tags: {
-        kind: 'web',
-        complexity: 'moderate',
-        category: 'on-premise',
-      },
-      aggregation: {
-        'aggregation-method': 'avg',
-        'aggregation-metrics': ['carbon'],
-      },
-      initialize: {
-        models: [
-          {
-            name: 'sci-e',
-            kind: 'plugin',
-            verbose: false,
-            path: '',
-          },
-          {
-            name: 'sci-m',
-            kind: 'plugin',
-            verbose: false,
-            path: '',
-          },
-          {
-            name: 'sci-o',
-            kind: 'plugin',
-            verbose: false,
-            path: '',
-          },
-        ],
-      },
-      graph: {
-        children: {
-          'layer-3-switch': {
-            pipeline: ['sci-e', 'sci-m', 'sci-o'],
-            config: {
-              'sci-m': {
-                te: 251000,
-                tir: 3600,
-                el: 126144000,
-                rr: 1,
-                tor: 1,
-              },
-              'sci-o': {
-                'grid-carbon-intensity': 457,
-              },
-            },
-            inputs: [
-              {
-                timestamp: '2023-07-06T00:00',
-                duration: 3600,
-                'five-min-input-rate': 100,
-                'five-min-output-rate': 100,
-                'grid-carbon-intensity': 457,
-                'energy-network': 0.00496,
-                requests: 38032740,
-                carbon: 10,
-              },
-            ],
-          },
-          'layer-2-switch': {
-            pipeline: ['sci-e', 'sci-m', 'sci-o'],
-            config: {
-              'sci-m': {
-                te: 251000,
-                tir: 3600,
-                el: 126144000,
-                rr: 1,
-                tor: 1,
-              },
-              'sci-o': {
-                grid_ci: 457,
-              },
-            },
-            children: {
-              'switch-1': {
-                inputs: [
-                  {
-                    timestamp: '2023-07-06T00:00',
-                    duration: 1,
-                    'energy-network': 0.000811,
-                    'grid-carbon-intensity': 457,
-                    requests: 38032740,
-                    carbon: 10,
-                  },
-                ],
-              },
-              'switch-2': {
-                inputs: [
-                  {
-                    timestamp: '2023-07-06T00:00',
-                    duration: 1,
-                    'energy-network': 0,
-                    'grid-carbon-intensity': 457,
-                    requests: 38032740,
-                    carbon: 10,
-                  },
-                ],
-              },
-              'switch-3': {
-                inputs: [
-                  {
-                    timestamp: '2023-07-06T00:00',
-                    duration: 1,
-                    'energy-network': 0.000955,
-                    'grid-carbon-intensity': 457,
-                    requests: 38032740,
-                    carbon: 10,
-                  },
-                ],
-              },
-              'switch-4': {
-                inputs: [
-                  {
-                    timestamp: '2023-07-06T00:00',
-                    duration: 1,
-                    'energy-network': 1.14e-8,
-                    'grid-carbon-intensity': 457,
-                    requests: 38032740,
-                    carbon: 10,
-                  },
-                ],
-              },
-            },
-          },
-        },
-      },
-    };
-
-    it('rejects with model is not initialized.', async () => {
-      expect.assertions(2);
+    it('should throw error that structure malformed.', async () => {
+      const implCopy: Impl = JSON.parse(JSON.stringify(impl));
+      const childName = 'front-end';
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      delete implCopy.graph.children[childName].inputs;
 
       const modelsHandbook = new ModelsUniverse();
-      const aterui = new Supercomputer(impl, modelsHandbook);
+      for (const model of impl.initialize.models) {
+        await modelsHandbook.writeDown(model);
+      }
 
-      const expectedMessage = NOT_INITIALIZED_MODEL(
-        impl.initialize.models[0].name
-      );
+      const node = new Supercomputer(implCopy, modelsHandbook);
+
+      expect.assertions(1);
 
       try {
-        await aterui.compute();
+        await node.compute();
       } catch (error) {
-        if (error instanceof Error) {
-          expect(error).toBeInstanceOf(Error);
-          expect(error.message).toBe(expectedMessage);
-        }
+        expect(error).toEqual(
+          new ImplValidationError(STRUCTURE_MALFORMED(childName))
+        );
       }
     });
 
-    it('applies computing to given impl.', async () => {
-      expect.assertions(1);
+    it('check if config enrichment is done.', async () => {
+      const implCopy: Impl = JSON.parse(JSON.stringify(impl));
+      const childName = 'front-end';
+      implCopy.graph.children['front-end'].inputs[0].carbon = 10; // for mock
 
       const modelsHandbook = new ModelsUniverse();
-      impl.initialize.models.forEach((model: any) =>
-        modelsHandbook.writeDown(model)
+      for (const model of impl.initialize.models) {
+        await modelsHandbook.writeDown(model);
+      }
+
+      const node = new Supercomputer(implCopy, modelsHandbook);
+
+      const result = await node.compute();
+
+      const nodeConfigKeys = Object.keys(
+        result.graph.children[childName].config['mock-name']
       );
+      const topOutputs = result.graph.children[childName].outputs;
+      const topOutputCount = topOutputs!.length;
 
-      const ateruiComputer = new Supercomputer(impl, modelsHandbook);
-      const ompl = await ateruiComputer.compute();
+      expect.assertions(topOutputCount * 2);
 
-      const children = ompl.graph.children;
-      const childrenNames = Object.keys(children);
+      /** Iterates over all outputs to see if config records where copied to outputs. */
+      nodeConfigKeys.forEach(configKey => {
+        topOutputs!.forEach(output => {
+          const outputKeys = Object.keys(output);
 
-      expect(ompl.graph.children[childrenNames[0]]).toHaveProperty('outputs');
-    });
-
-    it('applies computing to nested children components.', async () => {
-      expect.assertions(4);
-
-      const modelsHandbook = new ModelsUniverse();
-      implWithNestedChildren.initialize.models.forEach((model: any) =>
-        modelsHandbook.writeDown(model)
-      );
-
-      const ateruiComputer = new Supercomputer(
-        implWithNestedChildren,
-        modelsHandbook
-      );
-      const ompl = await ateruiComputer.compute();
-
-      const children = ompl.graph.children;
-      const childrenNames = Object.keys(children);
-      const oneWithNested = childrenNames[1];
-
-      const nestedChildren: any = children[oneWithNested].children;
-
-      Object.keys(nestedChildren).forEach((child: any) => {
-        expect(nestedChildren[child]).toHaveProperty('outputs');
+          expect(outputKeys.includes(configKey)).toBeTruthy();
+        });
       });
     });
 
-    it('applies computing to nested children components if config is empty.', async () => {
-      const implWithoutConfig = {
-        ...impl,
-        graph: {
-          ...impl.graph,
-          children: {
-            ...impl.graph.children,
-            'front-end': {
-              ...impl.graph.children['front-end'],
-              config: null,
+    it('check if config enrichment with nested config is done and overriden.', async () => {
+      const implCopy: Impl = JSON.parse(JSON.stringify(impl));
+      const childName = 'front-end';
+      implCopy.graph.children[childName].inputs[0].carbon = 10; // for mock
+      implCopy.graph.children[childName].children = {
+        'front-end-1': {
+          config: {
+            'mock-name': {
+              'core-units': 10,
+              processor: 'Intel',
             },
           },
+          pipeline: ['mock-name'],
+          inputs: [
+            {
+              timestamp: '2023-07-06T00:00',
+              duration: 3600,
+              'cpu-util': 18.392,
+              carbon: 10,
+            },
+            {
+              timestamp: '2023-07-06T00:00',
+              duration: 3600,
+              'cpu-util': 18.392,
+              carbon: 10,
+            },
+          ],
         },
       };
 
       const modelsHandbook = new ModelsUniverse();
-
-      for (const model of implWithoutConfig.initialize.models) {
-        await modelsHandbook.writeDown(model);
-      }
-
-      const ateruiComputer = new Supercomputer(
-        implWithoutConfig,
-        modelsHandbook
-      );
-
-      const result = await ateruiComputer.compute();
-
-      const expectedOutput = [{data: 'mock-data'}];
-
-      expect(result.graph.children['front-end'].outputs).toEqual(
-        expectedOutput
-      );
-    });
-
-    it('throws `structure malformed` error if nested children component misses `inputs`.', async () => {
-      const jsonObj = JSON.stringify(impl);
-      const implCopy = JSON.parse(jsonObj);
-      delete implCopy.graph.children['front-end'].inputs;
-
-      const modelsHandbook = new ModelsUniverse();
-
       for (const model of implCopy.initialize.models) {
         await modelsHandbook.writeDown(model);
       }
 
-      const ateruiComputer = new Supercomputer(implCopy, modelsHandbook);
+      const node = new Supercomputer(implCopy, modelsHandbook);
+      const result = await node.compute();
 
-      expect.assertions(2);
+      const topConfigKeys = Object.keys(
+        result.graph.children[childName].config['mock-name']
+      );
+      const nestedConfig =
+        implCopy.graph.children[childName].children['front-end-1'].config[
+          'mock-name'
+        ];
+      const topOutputs = result.graph.children[childName].outputs;
+      const topOutputCount = topOutputs!.length;
+      const nestedOutputs =
+        implCopy.graph.children['front-end'].children!['front-end-1'].outputs;
 
-      try {
-        await ateruiComputer.compute();
-      } catch (error) {
-        expect(error).toBeInstanceOf(ImplValidationError);
-        if (error instanceof ImplValidationError) {
-          expect(error.message).toEqual(STRUCTURE_MALFORMED('front-end'));
-        }
-      }
+      expect.assertions(topOutputCount * 6);
+
+      topConfigKeys.forEach(topConfigKey => {
+        topOutputs!.forEach(output => {
+          const outputKeys = Object.keys(output);
+
+          expect(outputKeys.includes(topConfigKey)).toBeTruthy();
+        });
+
+        /** Check if nested config is applied over the top one */
+        nestedOutputs!.forEach(output => {
+          const outputKeys = Object.keys(output);
+
+          if (outputKeys.includes(topConfigKey)) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            expect(output[topConfigKey]).toEqual(nestedConfig[topConfigKey]);
+          }
+
+          expect(outputKeys.includes(topConfigKey)).toBeTruthy();
+        });
+      });
     });
 
-    it('throws error if aggregation', async () => {
-      const aggregationImpl = {
-        ...impl,
-      };
+    it('check if config enrichment with nested config is done without override.', async () => {
+      const implCopy: Impl = JSON.parse(JSON.stringify(impl));
+      const childName = 'front-end';
+      implCopy.graph.children[childName].inputs[0].carbon = 10; // for mock
 
-      const modelsHandbook = new ModelsUniverse();
-
-      for (const model of aggregationImpl.initialize.models) {
-        await modelsHandbook.writeDown(model);
-      }
-
-      const engine = new Supercomputer(aggregationImpl, modelsHandbook);
-      const expectedMessage = 'Aggregation params are not provided.';
-
-      try {
-        engine.calculateAggregation();
-      } catch (error) {
-        expect(error).toBeInstanceOf(Error);
-
-        if (error instanceof Error) {
-          expect(error.message).toEqual(expectedMessage);
-        }
-      }
-    });
-
-    it('throws error if aggregation data is missing.', async () => {
-      const aggregationImpl = {
-        ...impl,
-        aggregation: {
-          'aggregation-method': 'sum',
-          'aggregation-metrics': ['mock'],
+      implCopy.graph.children[childName].children = {
+        'front-end-1': {
+          config: {},
+          pipeline: ['mock-name'],
+          inputs: [
+            {
+              timestamp: '2023-07-06T00:00',
+              duration: 3600,
+              'cpu-util': 18.392,
+              carbon: 10,
+            },
+            {
+              timestamp: '2023-07-06T00:00',
+              duration: 3600,
+              'cpu-util': 18.392,
+              carbon: 10,
+            },
+          ],
         },
       };
-      aggregationImpl.graph.children['front-end'].inputs[0].carbon = 10;
-      aggregationImpl.graph.children['front-end'].inputs[1].carbon = 10;
 
       const modelsHandbook = new ModelsUniverse();
-
-      for (const model of aggregationImpl.initialize.models) {
+      for (const model of implCopy.initialize.models) {
         await modelsHandbook.writeDown(model);
       }
 
-      const engine = new Supercomputer(aggregationImpl, modelsHandbook);
+      const node = new Supercomputer(implCopy, modelsHandbook);
 
-      const expectedMessage = `Aggregation metric ${aggregationImpl.aggregation['aggregation-metrics'][0]} is not found in inputs[0].`;
+      const result = await node.compute();
 
-      expect.assertions(2);
+      const topConfig = result.graph.children[childName].config['mock-name'];
+      const topConfigKeys = Object.keys(topConfig);
+      const topOutputs = result.graph.children[childName].outputs;
+      const topOutputsCount = result.graph.children[childName].outputs!.length;
 
-      try {
-        await engine.compute();
-      } catch (error) {
-        expect(error).toBeInstanceOf(Error);
+      expect.assertions(topOutputsCount * 6);
 
-        if (error instanceof Error) {
-          expect(error.message).toEqual(expectedMessage);
-        }
-      }
+      topConfigKeys.forEach(topConfigKey => {
+        topOutputs!.forEach(output => {
+          const outputKeys = Object.keys(output);
+
+          expect(outputKeys.includes(topConfigKey)).toBeTruthy();
+        });
+
+        /** Check if nested config is applied over the top one */
+        implCopy.graph.children['front-end'].children![
+          'front-end-1'
+        ].outputs!.forEach(output => {
+          const outputKeys = Object.keys(output);
+
+          if (outputKeys.includes(topConfigKey)) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            expect(output[topConfigKey]).toEqual(topConfig[topConfigKey]);
+          }
+
+          expect(outputKeys.includes(topConfigKey)).toBeTruthy();
+        });
+      });
     });
 
-    it('calculates sum aggregation.', async () => {
-      const aggregationImpl = {
-        ...impl,
-        aggregation: {
-          'aggregation-method': 'sum',
-          'aggregation-metrics': ['carbon'],
-        },
+    it('checks if aggregation is `horizontal`, then applies aggregation.', async () => {
+      const implCopy: Impl = JSON.parse(JSON.stringify(impl));
+      const childName = 'front-end';
+      implCopy.graph.children[childName].inputs[0].carbon = 10;
+      implCopy.graph.children[childName].inputs[1].carbon = 10;
+
+      implCopy.aggregation = {
+        type: 'horizontal',
+        metrics: ['carbon'],
       };
-      aggregationImpl.graph.children['front-end'].inputs[0].carbon = 10;
-      aggregationImpl.graph.children['front-end'].inputs[1].carbon = 10;
 
       const modelsHandbook = new ModelsUniverse();
-
-      for (const model of aggregationImpl.initialize.models) {
+      for (const model of implCopy.initialize.models) {
         await modelsHandbook.writeDown(model);
       }
 
-      const engine = new Supercomputer(aggregationImpl, modelsHandbook);
+      const node = new Supercomputer(implCopy, modelsHandbook);
 
-      await engine.compute();
+      const result = await node.compute();
+      const expectedAggregatedCarbon = implCopy.graph.children[
+        childName
+      ].inputs.reduce((acc, input) => (acc += input.carbon), 0);
 
-      const response = engine.calculateAggregation();
-
-      expect.assertions(1);
-
-      const expectedValue =
-        aggregationImpl.graph.children['front-end'].inputs[0].carbon +
-        aggregationImpl.graph.children['front-end'].inputs[1].carbon;
-
-      expect(response['aggregated-carbon']).toEqual(expectedValue);
+      expect(
+        result.graph.children['front-end']['aggregated-outputs']![
+          'aggregated-carbon'
+        ]
+      ).toEqual(expectedAggregatedCarbon);
     });
 
-    it('calculates average aggregation.', async () => {
-      const aggregationImpl = {
-        ...impl,
-        aggregation: {
-          'aggregation-method': 'avg',
-          'aggregation-metrics': ['carbon'],
-        },
+    it('checks if aggregation is `both`, then applies aggregation.', async () => {
+      const implCopy: Impl = JSON.parse(JSON.stringify(impl));
+      const childName = 'front-end';
+      implCopy.graph.children[childName].inputs[0].carbon = 10;
+      implCopy.graph.children[childName].inputs[1].carbon = 10;
+
+      implCopy.aggregation = {
+        type: 'both',
+        metrics: ['carbon'],
       };
-      aggregationImpl.graph.children['front-end'].inputs[0].carbon = 10;
-      aggregationImpl.graph.children['front-end'].inputs[1].carbon = 10;
 
       const modelsHandbook = new ModelsUniverse();
-
-      for (const model of aggregationImpl.initialize.models) {
+      for (const model of implCopy.initialize.models) {
         await modelsHandbook.writeDown(model);
       }
 
-      const engine = new Supercomputer(aggregationImpl, modelsHandbook);
+      const node = new Supercomputer(implCopy, modelsHandbook);
 
-      await engine.compute();
+      const result = await node.compute();
+      const expectedAggregatedCarbon = implCopy.graph.children[
+        childName
+      ].inputs.reduce((acc, input) => (acc += input.carbon), 0);
 
-      const response = engine.calculateAggregation();
-
-      expect.assertions(1);
-
-      const expectedValue =
-        (aggregationImpl.graph.children['front-end'].inputs[0].carbon +
-          aggregationImpl.graph.children['front-end'].inputs[1].carbon) /
-        aggregationImpl.graph.children['front-end'].inputs.length;
-
-      expect(response['aggregated-carbon']).toEqual(expectedValue);
-    });
-
-    it('calculates sum aggregation iterating over.', async () => {
-      const modelsHandbook = new ModelsUniverse();
-
-      for (const model of implWithNestedChildren.initialize.models) {
-        await modelsHandbook.writeDown(model);
-      }
-
-      const engine = new Supercomputer(implWithNestedChildren, modelsHandbook);
-      await engine.compute();
-
-      const response = engine.calculateAggregation();
-
-      const expectedValue = 10;
-
-      expect(response['aggregated-carbon']).toEqual(expectedValue);
+      expect(
+        result.graph.children['front-end']['aggregated-outputs']![
+          'aggregated-carbon'
+        ]
+      ).toEqual(expectedAggregatedCarbon);
     });
   });
 });
