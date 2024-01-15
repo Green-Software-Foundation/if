@@ -19,5 +19,5 @@ graph:
       outputs:
         - duration: 3600
           energy: 1
-          executable: python3 /usr/local/bin/sampler
-          command: "2023-11-02T10:35:31.820Z"
+          command: python3 /usr/local/bin/sampler
+          timestamp: "2023-11-02T10:35:31.820Z"
