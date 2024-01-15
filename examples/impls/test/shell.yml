@@ -1,5 +1,5 @@
-name: ccf-demo
-description: example impl invoking CCF model
+name: shell-demo
+description: example impl invoking shell model
 tags:
 initialize:
   models:
@@ -13,7 +13,7 @@ graph:
         - sampler
       config:
         sampler:
-          executable: python3 /usr/local/bin/sampler
+          command: python3 /usr/local/bin/sampler
       inputs:
-          - timestamp: '2023-11-02T10:35:31.820Z'
-            duration: 3600
+        - timestamp: "2023-11-02T10:35:31.820Z"
+          duration: 3600
