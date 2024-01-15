@@ -1,6 +1,6 @@
 import {ModelsUniverse} from './models-universe';
 import {Observatory} from './observatory';
-import {planetAggregator} from './planet-aggregator';
+import {aggregate} from './aggregator';
 
 import {ERRORS} from '../util/errors';
 
@@ -101,7 +101,7 @@ export class Supercomputer {
         this.impl.aggregation.type === 'horizontal' ||
         this.impl.aggregation.type === 'both'
       ) {
-        const aggregation = await planetAggregator(
+        const aggregation = await aggregate(
           outputs,
           this.impl.aggregation.metrics
         );
