@@ -4,7 +4,7 @@ import {UnitsDealer} from '../util/units-dealer';
 import {STRINGS} from '../config';
 
 import {ModelParams} from '../types/model-interface';
-import {AggregationResult} from '../types/planet-aggregator';
+import {AggregationResult} from '../types/aggregator';
 import {UnitKeyName} from '../types/units';
 import {UnitsDealerUsage} from '../types/units-dealer';
 
@@ -32,7 +32,7 @@ const checkIfMetricsAreValid = (
  * Aggregates child node level metrics. Validates if metric aggregation type is `none`, then rejects with error.
  * Otherwise iterates over inputs by aggregating per given `metrics`.
  */
-export const planetAggregator = async (
+export const aggregate = async (
   inputs: ModelParams[],
   metrics: UnitKeyName[]
 ) => {
