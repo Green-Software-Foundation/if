@@ -1,4 +1,4 @@
-import {planetAggregator} from '../../../lib/planet-aggregator';
+import {aggregate} from '../../../lib/aggregator';
 
 import {STRINGS} from '../../../config';
 
@@ -10,8 +10,8 @@ const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
 
 const {InvalidAggregationParams} = ERRORS;
 
-describe('lib/planet-aggregator: ', () => {
-  describe('planetAggregator(): ', () => {
+describe('lib/aggregator: ', () => {
+  describe('aggregate(): ', () => {
     it('throws error if aggregation method is none.', async () => {
       const inputs = [{}];
       const metrics = ['total-resources'] as UnitKeyName[];
@@ -21,7 +21,7 @@ describe('lib/planet-aggregator: ', () => {
       expect.assertions(1);
 
       try {
-        await planetAggregator(inputs, metrics);
+        await aggregate(inputs, metrics);
       } catch (error) {
         expect(error).toEqual(new InvalidAggregationParams(expectedMessage));
       }
@@ -40,7 +40,7 @@ describe('lib/planet-aggregator: ', () => {
       expect.assertions(1);
 
       try {
-        await planetAggregator(inputs, metrics);
+        await aggregate(inputs, metrics);
       } catch (error) {
         expect(error).toEqual(new InvalidAggregationParams(expectedMessage));
       }
@@ -63,7 +63,7 @@ describe('lib/planet-aggregator: ', () => {
         [`${expectedKey}`]: expectedValue,
       };
 
-      const aggregatedResult = await planetAggregator(inputs, metrics);
+      const aggregatedResult = await aggregate(inputs, metrics);
 
       expect(aggregatedResult).toEqual(expectedResult);
     });
@@ -85,7 +85,7 @@ describe('lib/planet-aggregator: ', () => {
         [`${expectedKey}`]: expectedValue,
       };
 
-      const aggregatedResult = await planetAggregator(inputs, metrics);
+      const aggregatedResult = await aggregate(inputs, metrics);
 
       expect(aggregatedResult).toEqual(expectedResult);
     });
