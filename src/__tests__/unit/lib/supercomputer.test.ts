@@ -86,9 +86,7 @@ describe('lib/supercomputer: ', () => {
       delete implCopy.graph.children[childName].inputs;
 
       const modelsHandbook = new ModelsUniverse();
-      for (const model of impl.initialize.models) {
-        await modelsHandbook.writeDown(model);
-      }
+      await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
 
       const node = new Supercomputer(implCopy, modelsHandbook);
 
@@ -109,9 +107,7 @@ describe('lib/supercomputer: ', () => {
       implCopy.graph.children['front-end'].inputs[0].carbon = 10; // for mock
 
       const modelsHandbook = new ModelsUniverse();
-      for (const model of impl.initialize.models) {
-        await modelsHandbook.writeDown(model);
-      }
+      await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
 
       const node = new Supercomputer(implCopy, modelsHandbook);
 
@@ -166,9 +162,7 @@ describe('lib/supercomputer: ', () => {
       };
 
       const modelsHandbook = new ModelsUniverse();
-      for (const model of implCopy.initialize.models) {
-        await modelsHandbook.writeDown(model);
-      }
+      await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
 
       const node = new Supercomputer(implCopy, modelsHandbook);
       const result = await node.compute();
@@ -236,9 +230,7 @@ describe('lib/supercomputer: ', () => {
       };
 
       const modelsHandbook = new ModelsUniverse();
-      for (const model of implCopy.initialize.models) {
-        await modelsHandbook.writeDown(model);
-      }
+      await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
 
       const node = new Supercomputer(implCopy, modelsHandbook);
 
@@ -287,9 +279,7 @@ describe('lib/supercomputer: ', () => {
       };
 
       const modelsHandbook = new ModelsUniverse();
-      for (const model of implCopy.initialize.models) {
-        await modelsHandbook.writeDown(model);
-      }
+      await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
 
       const node = new Supercomputer(implCopy, modelsHandbook);
 
@@ -317,9 +307,7 @@ describe('lib/supercomputer: ', () => {
       };
 
       const modelsHandbook = new ModelsUniverse();
-      for (const model of implCopy.initialize.models) {
-        await modelsHandbook.writeDown(model);
-      }
+      await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
 
       const node = new Supercomputer(implCopy, modelsHandbook);
 
