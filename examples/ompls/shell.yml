@@ -17,6 +17,7 @@ graph:
         - timestamp: "2023-11-02T10:35:31.820Z"
           duration: 3600
       outputs:
-        - duration: 3600
+        - timestamp: "2023-11-02T10:35:31.820Z"
+          duration: 3600
           energy: 1
-          timestamp: "2023-11-02T10:35:31.820Z"
+          
