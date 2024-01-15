@@ -1,5 +1,5 @@
 import {ModelParams} from './model-interface';
-import {AggregationMethodsName, AggregationResult} from './planet-aggregator';
+import {AggregationMethodsName, AggregationResult} from './aggregator';
 import {UnitKeyName} from './units';
 
 type Tag = {
