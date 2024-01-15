@@ -1,5 +1,5 @@
-name: ccf-demo
-description: example impl invoking CCF model
+name: shell-demo
+description: example impl invoking shell model
 tags:
 initialize:
   models:
