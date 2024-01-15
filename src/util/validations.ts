@@ -3,7 +3,7 @@ import {ZodIssue, z} from 'zod';
 import {ERRORS} from './errors';
 
 import {Impl} from '../types/impl';
-import {AggregationMethods} from '../types/planet-aggregator';
+import {AggregationMethods} from '../types/aggregator';
 import {UnitKeys} from '../types/units';
 
 const {ImplValidationError} = ERRORS;
