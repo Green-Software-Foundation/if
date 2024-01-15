@@ -31,30 +31,20 @@ export class Supercomputer {
    * Flattens config entries.
    */
   private flattenConfigValues(config: Config): ModelParams {
-    if (config) {
-      const configValues = Object.values(config);
+    const configValues = Object.values(config);
 
-      return configValues.reduce((acc, value) => ({...acc, ...value}), {});
-    }
-
-    return {};
+    return configValues.reduce((acc, value) => ({...acc, ...value}), {});
   }
 
   /**
    * Adds config entries to each obsercation object passed.
    */
-  private enrichInputs(
-    inputs: ModelParams[],
-    config: Config,
-    nestedConfig: Config
-  ) {
+  private enrichInputs(inputs: ModelParams[], config: Config) {
     const configValues = this.flattenConfigValues(config);
-    const nestedConfigValues = this.flattenConfigValues(nestedConfig);
 
     return inputs.map((input: any) => ({
       ...input,
       ...configValues,
-      ...nestedConfigValues,
     }));
   }
 
@@ -75,7 +65,7 @@ export class Supercomputer {
     this.childAmount++;
 
     if ('children' in childrenObject[childName]) {
-      return this.compute(childrenObject[childName].children);
+      await this.compute(childrenObject[childName].children);
     }
 
     if (!('inputs' in childrenObject[childName])) {
@@ -86,11 +76,14 @@ export class Supercomputer {
     const {inputs} = childrenObject[childName];
 
     const childConfig = childrenObject[childName].config;
-    const enrichedInputs = this.enrichInputs(inputs, config, childConfig);
+    const enrichedInputs = this.enrichInputs(inputs, {
+      ...config,
+      ...childConfig,
+    });
     const observatory = new Observatory(enrichedInputs);
 
     for (const modelName of pipeline) {
-      const params = config && config[modelName];
+      const params = childConfig && childConfig[modelName];
       const modelInstance = await this.modelsHandbook.getInitializedModel(
         modelName,
         params
