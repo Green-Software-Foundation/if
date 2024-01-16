@@ -59,15 +59,18 @@ export class Supercomputer {
     childrenObject: Children,
     childName: string
   ) {
-    this.childAmount++;
+    const itHasChildren = 'children' in childrenObject[childName];
+    const itHasInputs = 'inputs' in childrenObject[childName];
 
-    if ('children' in childrenObject[childName]) {
-      await this.compute(childrenObject[childName].children);
+    if (itHasChildren) {
+      return this.compute(childrenObject[childName].children);
     }
 
-    if (!('inputs' in childrenObject[childName])) {
+    if (!(itHasChildren || itHasInputs)) {
       throw new ImplValidationError(STRUCTURE_MALFORMED(childName));
     }
+
+    this.childAmount++;
 
     const {pipeline, config} = this.parent;
     const {inputs} = childrenObject[childName];
