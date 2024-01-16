@@ -54,13 +54,13 @@ export class Supercomputer {
    * Otherwise enriches inputs, passes them to Observatory.
    * For each model from pipeline Observatory gathers inputs. Then results are stored.
    */
-  private async calculateOutputsForChild(childen: Children, name: string) {
-    const pointer = childen[name];
-    const itHasChildren = 'children' in pointer;
-    const itHasInputs = 'inputs' in pointer;
+  private async calculateOutputsFor(childen: Children, name: string) {
+    const pointedChild = childen[name];
+    const itHasChildren = 'children' in pointedChild;
+    const itHasInputs = 'inputs' in pointedChild;
 
     if (itHasChildren) {
-      return this.compute(pointer.children);
+      return this.compute(pointedChild.children);
     }
 
     if (!(itHasChildren || itHasInputs)) {
@@ -69,18 +69,17 @@ export class Supercomputer {
 
     this.childAmount++;
 
-    const {pipeline, config} = this.parent;
-    const {inputs} = pointer;
+    const {pipeline} = this.parent;
+    const {inputs, config} = pointedChild;
 
-    const childConfig = pointer.config;
     const enrichedInputs = this.enrichInputs(inputs, {
+      ...this.parent.config,
       ...config,
-      ...childConfig,
     });
     const observatory = new Observatory(enrichedInputs);
 
     for (const modelName of pipeline) {
-      const params = childConfig && childConfig[modelName];
+      const params = config && config[modelName];
       const modelInstance = await this.modelsHandbook.getInitializedModel(
         modelName,
         params
@@ -90,7 +89,7 @@ export class Supercomputer {
     }
 
     const outputs = observatory.getOutputs();
-    pointer.outputs = outputs;
+    pointedChild.outputs = outputs;
 
     /** If aggregation is enabled, do horizontal aggregation. */
     if (this.impl.aggregation) {
@@ -98,7 +97,7 @@ export class Supercomputer {
 
       if (type === 'horizontal' || type === 'both') {
         const aggregation = await aggregate(outputs, metrics);
-        pointer['aggregated-outputs'] = aggregation;
+        pointedChild['aggregated-outputs'] = aggregation;
 
         this.aggregatedValues.push(aggregation);
       }
@@ -108,7 +107,8 @@ export class Supercomputer {
   }
 
   /**
-   * Checks if children argument is present. If it's not, then iteration is on parent level so stores the parent.
+   * Checks if children argument is present.
+   * If it's not, then iteration is on parent level so stores the parent.
    * Otherwise iterates over child components.
    */
   public async compute(children?: Children) {
@@ -120,7 +120,7 @@ export class Supercomputer {
         this.parent = pointedChildren[name];
       }
 
-      await this.calculateOutputsForChild(pointedChildren, name);
+      await this.calculateOutputsFor(pointedChildren, name);
     }
 
     return this.impl;
