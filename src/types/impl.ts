@@ -18,10 +18,10 @@ type Model = {
 export type Config = Record<string, any>;
 
 export type Children = {
-  [key: string]: ChildrenContent;
+  [key: string]: ChildContent;
 };
 
-export type ChildrenContent = {
+export type ChildContent = {
   pipeline: string[];
   config: Config;
   inputs: ModelParams[];
