@@ -1,62 +1,113 @@
 name: nesting-demo
-description:
+description: null
 tags:
   kind: web
   complexity: moderate
   category: on-premise
 initialize:
   models:
-    - name: teads-curve
-      model: TeadsCurveModel
-      path: "@grnsft/if-unofficial-models"
     - name: sci-e
+      path: '@grnsft/if-models'
       model: SciEModel
-      path: "@grnsft/if-models"
-    - name: sci-m
-      path: "@grnsft/if-models"
-      model: SciMModel
-    - name: sci-o
-      model: SciOModel
-      path: "@grnsft/if-models"
-    - name: sci
-      model: SciModel
-      path: "@grnsft/if-models"
 graph:
   children:
-    child: # an advanced grouping node
+    child-0:
       pipeline:
-        - teads-curve
         - sci-e
-        - sci-m
-        - sci-o
-        - sci
-      config:
-        teads-curve:
-          thermal-design-power: 65
-        sci-m:
-          total-embodied-emissions: 251000 # gCO2eq
-          time-reserved: 3600 # 1 hour in s
-          expected-lifespan: 126144000 # 4 years in seconds    
-          resources-reserved: 1 
-          total-resources: 1 
-        sci-o:
-          grid-carbon-intensity: 457 # gCO2/kwh
-        sci:
-          functional-unit-duration: 1 
-          functional-duration-time: ''
-          functional-unit: requests # factor to convert per time to per f.unit
       children:
-        child-1:
+        child-0-1:
+          pipeline:
+            - sci-e
+          config: null
           inputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 50
-              e-net: 0.000811 #kwh     
-              requests: 380
-        child-2:
-          inputs: 
+              energy-network: 0.000811
+          outputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
-              cpu-util: 33
-              e-net: 0.000811 #kwh     
-              requests: 380
+              cpu-util: 50
+              energy-network: 0.000811
+              energy: 0.000811
+        child-0-2:
+          children:
+            child-0-2-1:
+              pipeline:
+                - sci-e
+              config: null
+              inputs:
+                - timestamp: 2023-07-06T00:00
+                  duration: 10
+                  cpu-util: 50
+                  energy-network: 0.000811
+              outputs:
+                - timestamp: 2023-07-06T00:00
+                  duration: 10
+                  cpu-util: 50
+                  energy-network: 0.000811
+                  energy: 0.000811
+            child-0-2-2:
+              children:
+                child-1-2-1:
+                  pipeline:
+                    - sci-e
+                  config: null
+                  inputs:
+                    - timestamp: 2023-07-06T00:00
+                      duration: 10
+                      cpu-util: 50
+                      energy-network: 0.000811
+                  outputs:
+                    - timestamp: 2023-07-06T00:00
+                      duration: 10
+                      cpu-util: 50
+                      energy-network: 0.000811
+                      energy: 0.000811
+                child-1-2-2:
+                  children:
+                    child-1-2-2-1:
+                      pipeline:
+                        - sci-e
+                      config: null
+                      inputs:
+                        - timestamp: 2023-07-06T00:00
+                          duration: 10
+                          cpu-util: 50
+                          energy-network: 0.000811
+                      outputs:
+                        - timestamp: 2023-07-06T00:00
+                          duration: 10
+                          cpu-util: 50
+                          energy-network: 0.000811
+                          energy: 0.000811
+                    child-1-2-2-2:
+                      pipeline:
+                        - sci-e
+                      config: null
+                      inputs:
+                        - timestamp: 2023-07-06T00:00
+                          duration: 10
+                          cpu-util: 50
+                          energy-network: 0.000811
+                      outputs:
+                        - timestamp: 2023-07-06T00:00
+                          duration: 10
+                          cpu-util: 50
+                          energy-network: 0.000811
+                          energy: 0.000811
+                    child-1-2-2-3:
+                      pipeline:
+                        - sci-e
+                      config: null
+                      inputs:
+                        - timestamp: 2023-07-06T00:00
+                          duration: 10
+                          cpu-util: 50
+                          energy-network: 0.000811
+                      outputs:
+                        - timestamp: 2023-07-06T00:00
+                          duration: 10
+                          cpu-util: 50
+                          energy-network: 0.000811
+                          energy: 0.000811
