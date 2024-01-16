@@ -19,6 +19,7 @@ const {STRUCTURE_MALFORMED} = STRINGS;
 export class Supercomputer {
   private parent!: ChildrenContent;
   private impl: Impl;
+  private aggregatedValues: ModelParams[] = [];
   private modelsHandbook: ModelsUniverse;
   private childAmount = 0;
 
@@ -58,10 +59,6 @@ export class Supercomputer {
     childrenObject: Children,
     childName: string
   ) {
-    if (this.childAmount === 0) {
-      this.parent = this.impl.graph.children[childName];
-    }
-
     this.childAmount++;
 
     if ('children' in childrenObject[childName]) {
@@ -107,6 +104,8 @@ export class Supercomputer {
         );
 
         childrenObject[childName]['aggregated-outputs'] = aggregation;
+
+        this.aggregatedValues.push(aggregation);
       }
     }
 
@@ -121,6 +120,10 @@ export class Supercomputer {
     const childrenNames = Object.keys(children);
 
     for (const childName of childrenNames) {
+      if (!childrenObject) {
+        this.parent = children[childName];
+      }
+
       await this.calculateOutputsForChild(children, childName);
     }
 
