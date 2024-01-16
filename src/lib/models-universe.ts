@@ -97,9 +97,20 @@ export class ModelsUniverse {
   }
 
   /**
+   * Registers all models from `impl`.`initalize` property.
+   */
+  public async bulkWriteDown(modelsToInitalize: ImplInitializeModel[]) {
+    for (const model of modelsToInitalize) {
+      await this.writeDownSingleModel(model);
+    }
+
+    return this;
+  }
+
+  /**
    * Initializes and registers model.
    */
-  public async writeDown(modelToInitalize: ImplInitializeModel) {
+  private async writeDownSingleModel(modelToInitalize: ImplInitializeModel) {
     const {model, path, config, name} = modelToInitalize;
 
     if (!model) {

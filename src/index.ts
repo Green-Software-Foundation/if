@@ -38,14 +38,12 @@ const impactEngine = async () => {
     const impl = validateImpl(rawImpl);
 
     /** Lifecycle Initialize Models */
-    const modelsHandbook = new ModelsUniverse();
-    for (const model of impl.initialize.models) {
-      await modelsHandbook.writeDown(model);
-    }
+    const modelsHandbook = await new ModelsUniverse().bulkWriteDown(
+      impl.initialize.models
+    );
 
     /** Lifecycle Computing */
-    const engine = new Supercomputer(impl, modelsHandbook);
-    const ompl = await engine.compute();
+    const ompl = await new Supercomputer(impl, modelsHandbook).compute();
 
     if (!outputPath) {
       console.log(JSON.stringify(ompl));

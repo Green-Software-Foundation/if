@@ -47,8 +47,8 @@ export class ModelsUniverse {
   /**
    * Initializes and registers model.
    */
-  public writeDown(model: ImplInitializeModel) {
-    const {name} = model;
+  public bulkWriteDown(models: ImplInitializeModel[]) {
+    const {name} = models[0];
 
     const Model = this.handModelByCriteria();
 

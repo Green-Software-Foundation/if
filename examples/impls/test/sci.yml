@@ -3,7 +3,7 @@ description: example invoking sci model
 tags:
 initialize:
   models:
-    - name: sci 
+    - name: sci
       kind: plugin
       model: SciModel
       path: "@grnsft/if-models"
@@ -14,8 +14,8 @@ graph:
         - sci
       config:
         sci:
-          functional-unit-duration: 1 
-          functional-unit-time: 'minutes'
+          functional-unit-duration: 1
+          functional-unit-time: "1 minute"
           functional-unit: requests # factor to convert per time to per f.unit
       inputs:
         - timestamp: 2023-07-06T00:00

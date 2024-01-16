@@ -27,7 +27,7 @@ describe('lib/models-universe: ', () => {
 
       expect(typeof modelsHandbook.getInitializedModel).toBe('function');
       expect(typeof modelsHandbook.initalizedModels).toBe('object');
-      expect(typeof modelsHandbook.writeDown).toBe('function');
+      expect(typeof modelsHandbook.bulkWriteDown).toBe('function');
       expect(modelsHandbook.initalizedModels).toEqual({});
     });
   });
@@ -40,13 +40,15 @@ describe('lib/models-universe: ', () => {
 
     it('throws `missing classname` error in case if classname/model is missing.', async () => {
       const modelsHandbook = new ModelsUniverse();
-      const modelInfo: ImplInitializeModel = {
-        config: {},
-        name: 'test',
-      };
+      const modelsInfo: ImplInitializeModel[] = [
+        {
+          config: {},
+          name: 'test',
+        },
+      ];
 
       try {
-        await modelsHandbook.writeDown(modelInfo);
+        await modelsHandbook.bulkWriteDown(modelsInfo);
       } catch (error) {
         if (error instanceof Error) {
           expect(error.message).toEqual(MISSING_CLASSNAME);
@@ -56,19 +58,21 @@ describe('lib/models-universe: ', () => {
 
     it('throws `missing path parameter` error while registration of `plugin` model.', async () => {
       const modelsHandbook = new ModelsUniverse();
-      const modelInfo: ImplInitializeModel = {
-        config: {
-          allocation: 'mock-allocation',
-          verbose: true,
+      const modelsInfo: ImplInitializeModel[] = [
+        {
+          config: {
+            allocation: 'mock-allocation',
+            verbose: true,
+          },
+          name: 'mock-name',
+          model: 'MockaviztaModel',
         },
-        name: 'mock-name',
-        model: 'MockaviztaModel',
-      };
+      ];
 
       expect.assertions(2);
 
       try {
-        await modelsHandbook.writeDown(modelInfo);
+        await modelsHandbook.bulkWriteDown(modelsInfo);
       } catch (error) {
         if (error instanceof Error) {
           expect(error).toBeInstanceOf(Error);
@@ -95,28 +99,29 @@ describe('lib/models-universe: ', () => {
       console.log = mockLog;
 
       const modelsHandbook = new ModelsUniverse();
-      const modelInfo: ImplInitializeModel = {
-        config: {
-          allocation: 'mock-allocation',
-          verbose: true,
+      const modelsInfo: ImplInitializeModel[] = [
+        {
+          config: {
+            allocation: 'mock-allocation',
+            verbose: true,
+          },
+          name: 'mock-name',
+          model: 'MockaviztaModel',
+          path: 'https://github.com/mock/mockavizta-model',
         },
-        name: 'mock-name',
-        model: 'MockaviztaModel',
-        path: 'https://github.com/mock/mockavizta-model',
-      };
+      ];
 
-      const modelsList = await modelsHandbook.writeDown(modelInfo);
-      const model = modelsList[modelInfo.name];
+      const currentModel = modelsInfo[0];
+      await modelsHandbook.bulkWriteDown(modelsInfo);
+      const model = await modelsHandbook.getInitializedModel(
+        currentModel.name,
+        currentModel.config
+      );
 
       expect.assertions(2);
 
-      const response = await model({
-        'core-units': 1,
-        'physical-processor': 'intel',
-      });
-
       expect(mockLog).toHaveBeenCalledWith(NOT_NATIVE_MODEL);
-      expect(response).toBeInstanceOf(MockModel);
+      expect(model).toBeInstanceOf(MockModel);
 
       console.log = originalLog;
     });
@@ -132,25 +137,26 @@ describe('lib/models-universe: ', () => {
       );
 
       const modelsHandbook = new ModelsUniverse();
-      const modelInfo: ImplInitializeModel = {
-        config: {
-          allocation: 'mock-allocation',
-          verbose: true,
+      const modelsInfo: ImplInitializeModel[] = [
+        {
+          config: {
+            allocation: 'mock-allocation',
+            verbose: true,
+          },
+          name: 'mock-name',
+          model: 'MockaviztaModel',
+          path: 'https://github.com/mock/mockavizta-model',
         },
-        name: 'mock-name',
-        model: 'MockaviztaModel',
-        path: 'https://github.com/mock/mockavizta-model',
-      };
+      ];
       expect.assertions(2);
 
+      const currentModel = modelsInfo[0];
       try {
-        const modelsList = await modelsHandbook.writeDown(modelInfo);
-        const model = modelsList[modelInfo.name];
-
-        await model({
-          'core-units': 1,
-          'physical-processor': 'intel',
-        });
+        await modelsHandbook.bulkWriteDown(modelsInfo);
+        modelsHandbook.getInitializedModel(
+          currentModel.name,
+          currentModel.config
+        );
       } catch (error) {
         expect(error).toBeInstanceOf(ModelInitializationError);
 
@@ -171,32 +177,36 @@ describe('lib/models-universe: ', () => {
       );
 
       const modelsHandbook = new ModelsUniverse();
-      const modelInfo = {
-        config: {
-          allocation: 'mock-allocation',
-          verbose: true,
+      const modelsInfo = [
+        {
+          config: {
+            allocation: 'mock-allocation',
+            verbose: true,
+          },
+          name: 'mock-name',
+          model: 'MockaviztaModel',
+          path: 'https://github.com/mock/mockavizta-model',
         },
-        name: 'mock-name',
-        model: 'MockaviztaModel',
-        path: 'https://github.com/mock/mockavizta-model',
-      };
+      ];
       expect.assertions(2);
+
+      const currentModel = modelsInfo[0];
 
       /**
        * Parses module from github repo.
        */
-      const parts = modelInfo.path.split('/');
+      const parts = currentModel.path.split('/');
       const path = parts[parts.length - 1];
 
       try {
-        await modelsHandbook.writeDown(modelInfo);
+        await modelsHandbook.bulkWriteDown(modelsInfo);
       } catch (error) {
         expect(error).toBeInstanceOf(ModelInitializationError);
 
         if (error instanceof ModelInitializationError) {
           expect(error.message).toEqual(
             NOT_CONSTRUCTABLE_MODEL({
-              model: modelInfo.model,
+              model: currentModel.model,
               path,
             })
           );
@@ -206,25 +216,29 @@ describe('lib/models-universe: ', () => {
 
     it('should throw `invalid module path` error if provided path is invalid.', async () => {
       const modelsHandbook = new ModelsUniverse();
-      const modelInfo = {
-        config: {
-          allocation: 'mock-allocation',
-          verbose: true,
+      const modelsInfo = [
+        {
+          config: {
+            allocation: 'mock-allocation',
+            verbose: true,
+          },
+          name: 'mock-name',
+          model: 'MockaviztaModel',
+          path: 'mock-module',
         },
-        name: 'mock-name',
-        model: 'MockaviztaModel',
-        path: 'mock-module',
-      };
+      ];
       expect.assertions(2);
+
+      const currentModel = modelsInfo[0];
 
       /**
        * Parses module from github repo.
        */
-      const parts = modelInfo.path.split('/');
+      const parts = currentModel.path.split('/');
       const path = parts[parts.length - 1];
 
       try {
-        await modelsHandbook.writeDown(modelInfo);
+        await modelsHandbook.bulkWriteDown(modelsInfo);
       } catch (error) {
         expect(error).toBeInstanceOf(ModelInitializationError);
 
@@ -266,18 +280,25 @@ describe('lib/models-universe: ', () => {
     );
 
     const modelsHandbook = new ModelsUniverse();
-    const modelInfo: ImplInitializeModel = {
-      config: {
-        allocation: 'mock-allocation',
-        verbose: true,
+    const modelsInfo: ImplInitializeModel[] = [
+      {
+        config: {
+          allocation: 'mock-allocation',
+          verbose: true,
+        },
+        name: 'mock-name',
+        model: 'MockaviztaModel',
+        path: 'https://github.com/mock/mockavizta-model',
       },
-      name: 'mock-name',
-      model: 'MockaviztaModel',
-      path: 'https://github.com/mock/mockavizta-model',
-    };
+    ];
 
-    await modelsHandbook.writeDown(modelInfo);
-    const model = await modelsHandbook.getInitializedModel(modelInfo.name, {});
+    const currentModel = modelsInfo[0];
+
+    await modelsHandbook.bulkWriteDown(modelsInfo);
+    const model = await modelsHandbook.getInitializedModel(
+      currentModel.name,
+      {}
+    );
 
     expect.assertions(1);
 
@@ -286,19 +307,25 @@ describe('lib/models-universe: ', () => {
 
   it('successfully return initialized builtin model.', async () => {
     const modelsHandbook = new ModelsUniverse();
-    const modelInfo: ImplInitializeModel = {
-      config: {
-        startTime: 'mock-startTime',
-        endTime: 'mock-startTime',
-        interval: 5,
+    const modelsInfo: ImplInitializeModel[] = [
+      {
+        config: {
+          startTime: 'mock-startTime',
+          endTime: 'mock-startTime',
+          interval: 5,
+        },
+        name: 'time-sync',
+        model: 'TimeSyncModel',
+        path: 'builtin',
       },
-      name: 'time-sync',
-      model: 'TimeSyncModel',
-      path: 'builtin',
-    };
+    ];
+    const currentModel = modelsInfo[0];
 
-    await modelsHandbook.writeDown(modelInfo);
-    const model = await modelsHandbook.getInitializedModel(modelInfo.name, {});
+    await modelsHandbook.bulkWriteDown(modelsInfo);
+    const model = await modelsHandbook.getInitializedModel(
+      currentModel.name,
+      {}
+    );
 
     expect.assertions(2);
 
