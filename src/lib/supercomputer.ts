@@ -6,7 +6,16 @@ import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
-import {Children, ChildContent, Config, Impl} from '../types/impl';
+import {
+  Config,
+  ChildStructure,
+  ParentNode,
+  ParentStructure,
+  Impl,
+  isNodeParent,
+  hasChildren,
+  hasInputs,
+} from '../types/impl';
 import {ModelParams} from '../types/model-interface';
 
 const {ImplValidationError} = ERRORS;
@@ -17,7 +26,7 @@ const {STRUCTURE_MALFORMED} = STRINGS;
  * Computer for `impl` documents.
  */
 export class Supercomputer {
-  private parent!: ChildContent;
+  private parent!: ParentNode;
   private impl: Impl;
   private aggregatedValues: ModelParams[] = [];
   private modelsHandbook: ModelsUniverse;
@@ -54,16 +63,17 @@ export class Supercomputer {
    * Otherwise enriches inputs, passes them to Observatory.
    * For each model from pipeline Observatory gathers inputs. Then results are stored.
    */
-  private async calculateOutputsFor(childen: Children, name: string) {
+  private async calculateOutputsFor(
+    childen: ChildStructure | ParentStructure,
+    name: string
+  ) {
     const pointedChild = childen[name];
-    const itHasChildren = 'children' in pointedChild;
-    const itHasInputs = 'inputs' in pointedChild;
 
-    if (itHasChildren) {
+    if (hasChildren(pointedChild)) {
       return this.compute(pointedChild.children);
     }
 
-    if (!(itHasChildren || itHasInputs)) {
+    if (!(hasChildren(pointedChild) || hasInputs(pointedChild))) {
       throw new ImplValidationError(STRUCTURE_MALFORMED(name));
     }
 
@@ -111,12 +121,12 @@ export class Supercomputer {
    * If it's not, then iteration is on parent level so stores the parent.
    * Otherwise iterates over child components.
    */
-  public async compute(children?: Children) {
+  public async compute(children?: ChildStructure) {
     const pointedChildren = children || this.impl.graph.children;
     const childrensNames = Object.keys(pointedChildren);
 
     for (const name of childrensNames) {
-      if (!children) {
+      if (!children && isNodeParent(pointedChildren, children)) {
         this.parent = pointedChildren[name];
       }
 
