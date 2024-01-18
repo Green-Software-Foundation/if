@@ -11,18 +11,14 @@ const {ImplValidationError} = ERRORS;
 /**
  * Zod literal union validator which checks if members are more than 2.
  */
-function isValidZodLiteralUnion<T extends z.ZodLiteral<unknown>>(
+const isValidZodLiteralUnion = <T extends z.ZodLiteral<unknown>>(
   literals: T[]
-): literals is [T, T, ...T[]] {
-  return literals.length >= 2;
-}
+): literals is [T, T, ...T[]] => literals.length >= 2;
 
 /**
  * Literal union type helper.
  */
-function constructZodLiteralUnionType<T extends z.ZodLiteral<unknown>>(
-  literals: T[]
-) {
+const createUnionType = <T extends z.ZodLiteral<unknown>>(literals: T[]) => {
   if (!isValidZodLiteralUnion(literals)) {
     throw new Error(
       'Literals passed do not meet the criteria for constructing a union schema, the minimum length is 2.'
@@ -30,7 +26,7 @@ function constructZodLiteralUnionType<T extends z.ZodLiteral<unknown>>(
   }
 
   return z.union(literals);
-}
+};
 
 /**
  * Validation schema for impl files.
@@ -41,7 +37,7 @@ const implValidation = z.object({
   aggregation: z
     .object({
       metrics: z.array(
-        constructZodLiteralUnionType(UnitKeys.map(metric => z.literal(metric)))
+        createUnionType(UnitKeys.map(metric => z.literal(metric)))
       ),
       type: z.enum(AggregationMethods),
     })
@@ -57,9 +53,8 @@ const implValidation = z.object({
     models: z.array(
       z.object({
         name: z.string(),
-        kind: z.string().optional(),
-        path: z.string().optional(),
-        model: z.string().optional(),
+        path: z.string(),
+        model: z.string(),
         config: z.record(z.string(), z.any()).optional(),
       })
     ),

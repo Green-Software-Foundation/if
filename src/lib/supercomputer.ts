@@ -6,7 +6,16 @@ import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
-import {Children, ChildrenContent, Config, Impl} from '../types/impl';
+import {
+  Config,
+  ChildStructure,
+  ParentNode,
+  ParentStructure,
+  Impl,
+  isNodeParent,
+  hasChildren,
+  hasInputs,
+} from '../types/impl';
 import {ModelParams} from '../types/model-interface';
 
 const {ImplValidationError} = ERRORS;
@@ -17,8 +26,9 @@ const {STRUCTURE_MALFORMED} = STRINGS;
  * Computer for `impl` documents.
  */
 export class Supercomputer {
-  private parent!: ChildrenContent;
+  private parent!: ParentNode;
   private impl: Impl;
+  private aggregatedValues: ModelParams[] = [];
   private modelsHandbook: ModelsUniverse;
   private childAmount = 0;
 
@@ -49,41 +59,37 @@ export class Supercomputer {
   }
 
   /**
-   * If child is top level, then initializes `this.olderChild`.
-   * If `children` object contains `children` property, it means inputs are nested (calls compute again).
+   * If `children` object contains `children` property, it means inputs are nested (calls compute recursively).
    * Otherwise enriches inputs, passes them to Observatory.
    * For each model from pipeline Observatory gathers inputs. Then results are stored.
    */
-  private async calculateOutputsForChild(
-    childrenObject: Children,
-    childName: string
+  private async calculateOutputsFor(
+    childen: ChildStructure | ParentStructure,
+    name: string
   ) {
-    if (this.childAmount === 0) {
-      this.parent = this.impl.graph.children[childName];
+    const pointedChild = childen[name];
+
+    if (hasChildren(pointedChild)) {
+      return this.compute(pointedChild.children);
+    }
+
+    if (!(hasChildren(pointedChild) || hasInputs(pointedChild))) {
+      throw new ImplValidationError(STRUCTURE_MALFORMED(name));
     }
 
     this.childAmount++;
 
-    if ('children' in childrenObject[childName]) {
-      await this.compute(childrenObject[childName].children);
-    }
+    const {pipeline} = this.parent;
+    const {inputs, config} = pointedChild;
 
-    if (!('inputs' in childrenObject[childName])) {
-      throw new ImplValidationError(STRUCTURE_MALFORMED(childName));
-    }
-
-    const {pipeline, config} = this.parent;
-    const {inputs} = childrenObject[childName];
-
-    const childConfig = childrenObject[childName].config;
     const enrichedInputs = this.enrichInputs(inputs, {
+      ...this.parent.config,
       ...config,
-      ...childConfig,
     });
     const observatory = new Observatory(enrichedInputs);
 
     for (const modelName of pipeline) {
-      const params = childConfig && childConfig[modelName];
+      const params = config && config[modelName];
       const modelInstance = await this.modelsHandbook.getInitializedModel(
         modelName,
         params
@@ -93,20 +99,17 @@ export class Supercomputer {
     }
 
     const outputs = observatory.getOutputs();
-    childrenObject[childName].outputs = outputs;
+    pointedChild.outputs = outputs;
 
     /** If aggregation is enabled, do horizontal aggregation. */
     if (this.impl.aggregation) {
-      if (
-        this.impl.aggregation.type === 'horizontal' ||
-        this.impl.aggregation.type === 'both'
-      ) {
-        const aggregation = await aggregate(
-          outputs,
-          this.impl.aggregation.metrics
-        );
+      const {type, metrics} = this.impl.aggregation;
 
-        childrenObject[childName]['aggregated-outputs'] = aggregation;
+      if (type === 'horizontal' || type === 'both') {
+        const aggregation = await aggregate(outputs, metrics);
+        pointedChild['aggregated-outputs'] = aggregation;
+
+        this.aggregatedValues.push(aggregation);
       }
     }
 
@@ -114,14 +117,20 @@ export class Supercomputer {
   }
 
   /**
-   * Checks if object is top level children or nested, then runs through all children and calculates outputs.
+   * Checks if children argument is present.
+   * If it's not, then iteration is on parent level so stores the parent.
+   * Otherwise iterates over child components.
    */
-  public async compute(childrenObject?: any) {
-    const children = childrenObject || this.impl.graph.children;
-    const childrenNames = Object.keys(children);
+  public async compute(children?: ChildStructure) {
+    const pointedChildren = children || this.impl.graph.children;
+    const childrensNames = Object.keys(pointedChildren);
 
-    for (const childName of childrenNames) {
-      await this.calculateOutputsForChild(children, childName);
+    for (const name of childrensNames) {
+      if (!children && isNodeParent(pointedChildren, children)) {
+        this.parent = pointedChildren[name];
+      }
+
+      await this.calculateOutputsFor(pointedChildren, name);
     }
 
     return this.impl;

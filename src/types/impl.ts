@@ -11,24 +11,84 @@ type Tag = {
 type Model = {
   name: string;
   verbose?: boolean;
-  path?: string;
+  path: string;
   config?: Config;
+  model: string;
 };
 
 export type Config = Record<string, any>;
 
-export type Children = {
-  [key: string]: ChildrenContent;
+/**
+ * Appends given `T` type to nested property.
+ */
+type StructureManager<T> = {
+  [key: string]: T;
 };
 
-export type ChildrenContent = {
-  pipeline: string[];
-  config: Config;
-  inputs: ModelParams[];
-  children?: Children;
+/**
+ * Base interface for graph contents.
+ */
+interface NodeBase {
+  pipeline?: string[];
+  config?: Config;
   outputs?: ModelParams[];
   'aggregated-outputs'?: AggregationResult;
+}
+
+/**
+ * Setup modifiers.
+ */
+type WithInputs = {
+  inputs: ModelParams[];
 };
+type WithChildren = {
+  children: ChildStructure;
+};
+
+/**
+ * Child node interface.
+ */
+type ChildBase = NodeBase;
+
+/**
+ * Setup parent graph node type.
+ */
+interface ParentBase extends NodeBase {
+  pipeline: string[];
+  config: Config;
+}
+
+/**
+ * Node definitions.
+ */
+export type ParentNode = ParentBase & (WithInputs | WithChildren);
+export type ChildNode = ChildBase & (WithInputs | WithChildren);
+
+/**
+ * Structure definitions.
+ */
+export type ParentStructure = StructureManager<ParentNode>;
+export type ChildStructure = StructureManager<ChildNode>;
+
+/**
+ * Type guard for inputs.
+ */
+export const hasInputs = <T>(object: any): object is T & WithInputs =>
+  'inputs' in object;
+
+/**
+ * Type guard for children.
+ */
+export const hasChildren = <T>(object: any): object is T & WithChildren =>
+  'children' in object;
+
+/**
+ * Parent guard for children.
+ */
+export const isNodeParent = (
+  _object: any,
+  state: ChildStructure | undefined
+): _object is ParentStructure => !state;
 
 export type Impl = {
   name: string;
@@ -38,7 +98,7 @@ export type Impl = {
     models: Model[];
   };
   graph: {
-    children: Children;
+    children: ParentStructure;
   };
   aggregation?: {
     metrics: UnitKeyName[];

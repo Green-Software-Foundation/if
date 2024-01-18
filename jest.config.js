@@ -10,5 +10,5 @@ module.exports = {
       },
     ],
   },
-  modulePathIgnorePatterns: ['./build'],
+  modulePathIgnorePatterns: ['./build', './src/__tests__/unit/lib/impls'],
 };
