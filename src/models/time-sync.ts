@@ -26,6 +26,7 @@ export class TimeSyncModel implements ModelPluginInterface {
   private endTime!: string;
   private dealer!: UnitsDealerUsage;
   private interval = 1;
+  errorOnPadding = false;
 
   /**
    * Setups basic configuration.
@@ -34,8 +35,8 @@ export class TimeSyncModel implements ModelPluginInterface {
     this.startTime = params['start-time'];
     this.endTime = params['end-time'];
     this.interval = params.interval;
+    this.errorOnPadding = params['error-on-padding'];
     this.dealer = await UnitsDealer();
-
     return this;
   }
 
@@ -141,6 +142,14 @@ export class TimeSyncModel implements ModelPluginInterface {
 
       return acc;
     }, {} as ModelParams);
+  }
+
+  private errorOnPaddingIfNeeded(pad: PaddingReceipt): void {
+    if (this.errorOnPadding && (pad.start || pad.end)) {
+      const paddingDescription =
+        pad.start && pad.end ? 'start and end' : pad.start ? 'start' : 'end';
+      throw new Error('avoiding padding at ' + paddingDescription);
+    }
   }
 
   /**
@@ -298,6 +307,7 @@ export class TimeSyncModel implements ModelPluginInterface {
     this.validateParams();
 
     const pad = this.checkForPadding(inputs);
+    this.errorOnPaddingIfNeeded(pad);
     const paddedInputs = this.padInputs(inputs, pad);
 
     const flattenInputs = paddedInputs.reduce((acc, input, index) => {
@@ -326,6 +336,9 @@ export class TimeSyncModel implements ModelPluginInterface {
 
         /** Checks if there is gap in timeline. */
         if (timelineGapSize > 1) {
+          if (this.errorOnPadding) {
+            throw new Error('avoiding padding on timeline gap');
+          }
           for (
             let missingTimestamp = compareableTime.valueOf();
             missingTimestamp <= currentMoment.valueOf() - 1000;

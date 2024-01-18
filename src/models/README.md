@@ -10,6 +10,7 @@ The following should be defined in the model initialization:
 - `start-time`: global start time as ISO 8061 string
 - `stop`: global end time as ISO 8061 string
 - `interval`: temporal resolution in seconds
+- `error-on-padding`: avoid zero/'zeroish' padding (if needed) and error out instead. `False` by defult.
 
 ### Inputs:
 
@@ -114,6 +115,7 @@ The end result of this gap-filling is that we have continuous 1 second resolutio
     {timestamp: 2023-12-12T00:00:09.000Z, duration: 1, cpu-util: 12, carbon: 2.5, energy: 5, grid-carbon-intensity: 471}
 ]
 ```
+Note that when `error-on-padding` is `true` no gap-filling is performed and the model will error out instead.
 
 #### Trimming and padding
 
@@ -149,7 +151,7 @@ For example, for `startTime = 2023-12-12T00:00:00.000Z` and `endTime = 2023-12-1
 
 ]
 ```
-
+Note that when `error-on-padding` is `true` no padding is performed and the model will error out instead.
 
 #### Resampling rules
 
