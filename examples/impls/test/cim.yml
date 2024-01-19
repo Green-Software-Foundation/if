@@ -1,0 +1,19 @@
+name: cloud-instance-metadata
+description: example impl invoking Cloud Instance Metadata model
+tags:
+initialize:
+  models:
+    - name: cloud-instance-metadata
+      model: CloudInstanceMetadataModel
+      path: "@grnsft/if-models"
+graph:
+  children:
+    child:
+      pipeline:
+        - cloud-instance-metadata
+      config:
+      inputs:
+        - timestamp: '2021-01-01T00:00:00Z'
+          duration: 5
+          cloud-instance-type: "m5n.large"
+          cloud-vendor: "aws"
