@@ -13,12 +13,12 @@ graph:
         - cloud-instance-metadata
       config: null
       inputs:
-        - timestamp: 2023-07-06T00:00
+        - timestamp: '2021-01-01T00:00:00Z'
           duration: 5
           cloud-instance-type: m5n.large
           cloud-vendor: aws
       outputs:
-        - timestamp: 2023-07-06T00:00
+        - timestamp: '2021-01-01T00:00:00Z'
           duration: 5
           cloud-instance-type: m5n.large
           cloud-vendor: aws
