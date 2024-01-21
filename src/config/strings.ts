@@ -33,6 +33,8 @@ https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=fee
     `Provided module path: '${path}' is invalid.`,
   INVALID_TIME_NORMALIZATION: 'Start time or end time is missing.',
   INVALID_TIME_INTERVAL: 'Interval is missing.',
+  AVOIDING_PADDING: (description: string) =>
+    `Avoiding padding at ${description}`,
   INVALID_OBSERVATION_OVERLAP: 'Observation timestamps overlap.',
   INVALID_AGGREGATION_METHOD: (metric: string) =>
     `Aggregation is not possible for given ${metric} since method is 'none'.`,

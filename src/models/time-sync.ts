@@ -19,6 +19,7 @@ const {
   INVALID_TIME_NORMALIZATION,
   INVALID_TIME_INTERVAL,
   INVALID_OBSERVATION_OVERLAP,
+  AVOIDING_PADDING,
 } = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
@@ -144,11 +145,11 @@ export class TimeSyncModel implements ModelPluginInterface {
     }, {} as ModelParams);
   }
 
-  private errorOnPaddingIfNeeded(pad: PaddingReceipt): void {
+  private validatePadding(pad: PaddingReceipt): void {
     if (this.errorOnPadding && (pad.start || pad.end)) {
       const paddingDescription =
         pad.start && pad.end ? 'start and end' : pad.start ? 'start' : 'end';
-      throw new Error('avoiding padding at ' + paddingDescription);
+      throw new InputValidationError(AVOIDING_PADDING(paddingDescription));
     }
   }
 
@@ -307,7 +308,7 @@ export class TimeSyncModel implements ModelPluginInterface {
     this.validateParams();
 
     const pad = this.checkForPadding(inputs);
-    this.errorOnPaddingIfNeeded(pad);
+    this.validatePadding(pad);
     const paddedInputs = this.padInputs(inputs, pad);
 
     const flattenInputs = paddedInputs.reduce((acc, input, index) => {
@@ -337,7 +338,7 @@ export class TimeSyncModel implements ModelPluginInterface {
         /** Checks if there is gap in timeline. */
         if (timelineGapSize > 1) {
           if (this.errorOnPadding) {
-            throw new Error('avoiding padding on timeline gap');
+            throw new InputValidationError(AVOIDING_PADDING('timeline gap'));
           }
           for (
             let missingTimestamp = compareableTime.valueOf();
