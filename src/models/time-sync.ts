@@ -20,7 +20,7 @@ const {
   INVALID_TIME_INTERVAL,
   INVALID_OBSERVATION_OVERLAP,
   AVOIDING_PADDING,
-  AVOIDING_PADDING_BY_EDGES: AVOIDING_PADDING_PER_RECEIPT,
+  AVOIDING_PADDING_BY_EDGES,
 } = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
@@ -28,7 +28,7 @@ export class TimeSyncModel implements ModelPluginInterface {
   private endTime!: string;
   private dealer!: UnitsDealerUsage;
   private interval = 1;
-  private errorOnPadding = false;
+  private allowPadding = true;
 
   /**
    * Setups basic configuration.
@@ -37,7 +37,7 @@ export class TimeSyncModel implements ModelPluginInterface {
     this.startTime = params['start-time'];
     this.endTime = params['end-time'];
     this.interval = params.interval;
-    this.errorOnPadding = params['error-on-padding'];
+    this.allowPadding = params['allow-padding'];
     this.dealer = await UnitsDealer();
     return this;
   }
@@ -152,8 +152,8 @@ export class TimeSyncModel implements ModelPluginInterface {
   private validatePadding(pad: PaddingReceipt): void {
     const {start, end} = pad;
     const isPaddingNeeded = start || end;
-    if (this.errorOnPadding && isPaddingNeeded) {
-      throw new InputValidationError(AVOIDING_PADDING_PER_RECEIPT(start, end));
+    if (!this.allowPadding && isPaddingNeeded) {
+      throw new InputValidationError(AVOIDING_PADDING_BY_EDGES(start, end));
     }
   }
 
@@ -341,7 +341,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
         /** Checks if there is gap in timeline. */
         if (timelineGapSize > 1) {
-          if (this.errorOnPadding) {
+          if (!this.allowPadding) {
             throw new InputValidationError(AVOIDING_PADDING('timeline gap'));
           }
           for (

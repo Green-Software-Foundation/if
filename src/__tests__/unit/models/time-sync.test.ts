@@ -27,7 +27,7 @@ const basicConfig = {
   'start-time': '2023-12-12T00:00:00.000Z',
   'end-time': '2023-12-12T00:01:00.000Z',
   interval: 5,
-  'error-on-padding': false,
+  'allow-padding': true,
 };
 
 describe('configure(): ', () => {
@@ -44,7 +44,7 @@ describe('execute(): ', () => {
       'start-time': '',
       'end-time': '2023-12-12T00:01:00.000Z',
       interval: 5,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(
@@ -78,7 +78,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:01:00.000Z',
       'end-time': '',
       interval: 5,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
     const timeModel = await new TimeSyncModel().configure(invalidEndTimeConfig);
 
@@ -109,7 +109,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:01:00.000Z',
       interval: 0,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(
@@ -143,7 +143,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:01:00.000Z',
       interval: 5,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -173,7 +173,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:00:10.000Z',
       'end-time': '2023-12-12T00:00:00.000Z',
       interval: 5,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -203,7 +203,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:10.000Z',
       interval: 5,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -233,7 +233,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:10.000Z',
       interval: 1,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -312,7 +312,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:20.000Z',
       interval: 1,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -495,7 +495,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:20.000Z',
       interval: 5,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -563,7 +563,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:10.000Z',
       interval: 1,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -686,7 +686,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:00:05.000Z',
       'end-time': '2023-12-12T00:00:10.000Z',
       interval: 1,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -809,7 +809,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:10.000Z',
       interval: 1,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -883,7 +883,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:09.000Z',
       interval: 5,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -923,7 +923,7 @@ describe('execute(): ', () => {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:09.000Z',
       interval: 5,
-      'error-on-padding': false,
+      'allow-padding': true,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -958,12 +958,12 @@ describe('execute(): ', () => {
     expect(result).toStrictEqual(expectedResult);
   });
 
-  it('throws error if padding is required at start while error-on-padding = true.', async () => {
+  it('throws error if padding is required at start while allow-padding = false.', async () => {
     const basicConfig = {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:10.000Z',
       interval: 5,
-      'error-on-padding': true,
+      'allow-padding': false,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -988,12 +988,12 @@ describe('execute(): ', () => {
     }
   });
 
-  it('throws error if padding is required at end while error-on-padding = true.', async () => {
+  it('throws error if padding is required at end while allow-padding = false.', async () => {
     const basicConfig = {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:10.000Z',
       interval: 5,
-      'error-on-padding': true,
+      'allow-padding': false,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -1018,12 +1018,12 @@ describe('execute(): ', () => {
     }
   });
 
-  it('throws error if padding is required at start and end while error-on-padding = true.', async () => {
+  it('throws error if padding is required at start and end while allow-padding = false.', async () => {
     const basicConfig = {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:10.000Z',
       interval: 5,
-      'error-on-padding': true,
+      'allow-padding': false,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
@@ -1048,12 +1048,12 @@ describe('execute(): ', () => {
     }
   });
 
-  it('throws error if padding is required on timeline gap while error-on-padding = true.', async () => {
+  it('throws error if padding is required on timeline gap while allow-padding = false.', async () => {
     const basicConfig = {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:10.000Z',
       interval: 5,
-      'error-on-padding': true,
+      'allow-padding': false,
     };
 
     const timeModel = await new TimeSyncModel().configure(basicConfig);
