@@ -35,6 +35,10 @@ https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=fee
   INVALID_TIME_INTERVAL: 'Interval is missing.',
   AVOIDING_PADDING: (description: string) =>
     `Avoiding padding at ${description}`,
+  AVOIDING_PADDING_BY_EDGES: (start: boolean, end: boolean) =>
+    `Avoiding padding at ${
+      start && end ? 'start and end' : start ? 'start' : 'end'
+    }`,
   INVALID_OBSERVATION_OVERLAP: 'Observation timestamps overlap.',
   INVALID_AGGREGATION_METHOD: (metric: string) =>
     `Aggregation is not possible for given ${metric} since method is 'none'.`,

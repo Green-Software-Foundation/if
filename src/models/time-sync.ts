@@ -20,6 +20,7 @@ const {
   INVALID_TIME_INTERVAL,
   INVALID_OBSERVATION_OVERLAP,
   AVOIDING_PADDING,
+  AVOIDING_PADDING_BY_EDGES: AVOIDING_PADDING_PER_RECEIPT,
 } = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
@@ -27,7 +28,7 @@ export class TimeSyncModel implements ModelPluginInterface {
   private endTime!: string;
   private dealer!: UnitsDealerUsage;
   private interval = 1;
-  errorOnPadding = false;
+  private errorOnPadding = false;
 
   /**
    * Setups basic configuration.
@@ -145,11 +146,14 @@ export class TimeSyncModel implements ModelPluginInterface {
     }, {} as ModelParams);
   }
 
+  /**
+   * Checks if `error on padding` is enabled and padding is needed. If so, then throws error.
+   */
   private validatePadding(pad: PaddingReceipt): void {
-    if (this.errorOnPadding && (pad.start || pad.end)) {
-      const paddingDescription =
-        pad.start && pad.end ? 'start and end' : pad.start ? 'start' : 'end';
-      throw new InputValidationError(AVOIDING_PADDING(paddingDescription));
+    const {start, end} = pad;
+    const isPaddingNeeded = start || end;
+    if (this.errorOnPadding && isPaddingNeeded) {
+      throw new InputValidationError(AVOIDING_PADDING_PER_RECEIPT(start, end));
     }
   }
 
