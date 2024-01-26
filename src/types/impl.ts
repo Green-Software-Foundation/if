@@ -8,12 +8,12 @@ type Tag = {
   category?: string;
 };
 
-type Model = {
+type Plugin = {
   name: string;
   verbose?: boolean;
   path: string;
   config?: Config;
-  model: string;
+  plugin: string;
 };
 
 export type Config = Record<string, any>;
@@ -95,7 +95,7 @@ export type Impl = {
   description: string | null | undefined;
   tags: Tag | null | undefined;
   initialize: {
-    models: Model[];
+    plugins: Plugin[];
   };
   graph: {
     children: ParentStructure;

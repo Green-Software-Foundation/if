@@ -5,7 +5,7 @@ export type ModelOptions = Record<string, any>;
 export type ImplInitializeModel = {
   config?: Record<string, any>;
   name: string;
-  model?: string;
+  plugin?: string;
   path?: string;
 };
 
@@ -15,11 +15,11 @@ export type InitalizedModels = {
 
 export type HandModelParams = {
   name: string;
-  model?: string;
+  plugin?: string;
   path?: string;
 };
 
 export type ClassContainerParams = {
-  model: string;
+  plugin: string;
   path: string;
 };
