@@ -13,7 +13,7 @@ export const readFile = async (_filePath: string, _format: string) => {
     complexity: moderate
     category: cloud
   initialize:
-    models:
+    plugins:
       - name: boavizta-cpu
         kind: builtin
         config:
