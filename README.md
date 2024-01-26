@@ -43,14 +43,14 @@ Read the [specification and design docs](https://if.greensoftware.foundation) to
 
 ## Get started
 
-The first thing to understand is that IF is a framework for running model plugins. This means that in order to do some calculations, you need to load some models from some external resource. We provide a [standard library of models](https://github.com/Green-Software-Foundation/if-models) and a repository of [community models](https://github.com/Green-Software-Foundation/if-unofficial-models) to get you started. 
+The first thing to understand is that IF is a framework for running model plugins. This means that in order to do some calculations, you need to load some plugins from some external resource. We provide a [standard library of plugins](https://github.com/Green-Software-Foundation/if-models) and a repository of [community plugins](https://github.com/Green-Software-Foundation/if-unofficial-models) to get you started. 
 
 Start by installing framework itself:
 
 ```sh
 npm install -g "@grnsft/if"
 ```
-Then installing some models:
+Then installing some plugins:
 
 ```sh
 npm install -g "@grnsft/if-models"
@@ -70,7 +70,7 @@ You can also add an optional savepath for your output yaml (if you do not provid
 impact-engine --impl <path-to-your-impl-file> --ompl <your-savepath>
 ```
 
-The `impact-engine` CLI tool will configure and run the models defined in your input `yaml` (`impl`) and return the results as an output `yaml` (`ompl`).
+The `impact-engine` CLI tool will configure and run the plugins defined in your input `yaml` (`impl`) and return the results as an output `yaml` (`ompl`).
 
 
 ## Documentation

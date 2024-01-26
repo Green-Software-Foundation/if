@@ -5,7 +5,7 @@ Time sync standardizes the start time, end time and temporal resolution of all o
 ## Parameters
 
 ### Model config
-The following should be defined in the model initialization:
+The following should be defined in the plugin initialization:
 
 - `start-time`: global start time as ISO 8061 string
 - `stop`: global end time as ISO 8061 string
@@ -25,7 +25,7 @@ The following should be defined in the model initialization:
 
 ### Overview
 
-A manifest file for a graph might contain many nodes each representing some different part of an application's stack or even different applications running on different machines. It is therefore common to have time series data in each component that is not directly comparable to other components either because the temporal resolution of the data is different, they cover different periods, or there are gaps in some records (e.g. some apps might burst but then go dormant, while others run continuously). This makes post-hoc visualization, analysis and aggregation of data from groups of nodes difficult to achieve. To address this, we created a time synchronization model that takes in non-uniform times series and snaps them all to a regular timeline with uniform start time, end time and temporal resolution. 
+A manifest file for a graph might contain many nodes each representing some different part of an application's stack or even different applications running on different machines. It is therefore common to have time series data in each component that is not directly comparable to other components either because the temporal resolution of the data is different, they cover different periods, or there are gaps in some records (e.g. some apps might burst but then go dormant, while others run continuously). This makes post-hoc visualization, analysis and aggregation of data from groups of nodes difficult to achieve. To address this, we created a time synchronization plugin that takes in non-uniform times series and snaps them all to a regular timeline with uniform start time, end time and temporal resolution. 
 
 We do this by implementing the following logic:
 
@@ -58,7 +58,7 @@ This looks as follows:
 ]
 ```
 
-Each `observation` actually includes many key-value pairs. The precise content of the `observation` is not known until runtime because it depends on which models have been included in the pipeline. Different values have to be treated differently when we upsample in time. The method we use to upsample depends on the `aggregation-method` defined for each key in `units.yml`. 
+Each `observation` actually includes many key-value pairs. The precise content of the `observation` is not known until runtime because it depends on which plugins have been included in the pipeline. Different values have to be treated differently when we upsample in time. The method we use to upsample depends on the `aggregation-method` defined for each key in `units.yml`. 
 
 If the right way to aggregate a value is to sum it, then the right way to upsample it is to divide by `duration`, effectively spreading the total out evenly across the new, higher resolution, `observations` so that the total across the same bucket of time is unchanged (i.e. if the total for some value is 10 when there is one entry with `duration = 10s`, then the total should still be 10 when there are 10 entries each witch `duration = 1s`).
 
@@ -115,7 +115,7 @@ The end result of this gap-filling is that we have continuous 1 second resolutio
     {timestamp: 2023-12-12T00:00:09.000Z, duration: 1, cpu-util: 12, carbon: 2.5, energy: 5, grid-carbon-intensity: 471}
 ]
 ```
-Note that when `error-on-padding` is `true` no gap-filling is performed and the model will error out instead.
+Note that when `error-on-padding` is `true` no gap-filling is performed and the plugin will error out instead.
 
 #### Trimming and padding
 
@@ -151,7 +151,7 @@ For example, for `startTime = 2023-12-12T00:00:00.000Z` and `endTime = 2023-12-1
 
 ]
 ```
-Note that when `error-on-padding` is `true` no padding is performed and the model will error out instead.
+Note that when `error-on-padding` is `true` no padding is performed and the plugin will error out instead.
 
 #### Resampling rules
 
@@ -167,7 +167,7 @@ To do time synchronization, we assume:
 
 ## Typescript implementation
 
-To run the model, you must first create an instance of `SciModel` and call
+To run the plugin, you must first create an instance of `SciModel` and call
 its `configure()` method. Then, you can call `execute()` to return `sci`.
 
 ```typescript
@@ -199,8 +199,8 @@ const results = timeSyncModel.execute([
 
 ## Example impl
 
-IEF users will typically call the model as part of a pipeline defined in an `impl`
-file. In this case, instantiating and configuring the model is handled by
+IEF users will typically call the plugin as part of a pipeline defined in an `impl`
+file. In this case, instantiating and configuring the plugin is handled by
 `impact-engine` and does not have to be done explicitly by the user.
 The following is an example `impl` that calls `time-sync`:
 
@@ -209,21 +209,21 @@ name: time-sync-demo
 description: impl with 2 levels of nesting with non-uniform timing of observations
 tags:
 initialize:
-  models:
+  plugins:
     - name: teads-curve
-      model: TeadsCurveModel
+      plugin: TeadsCurveModel
       path: "@grnsft/if-unofficial-models"
     - name: sci-e
-      model: SciEModel
+      plugin: SciEModel
       path: "@grnsft/if-models"
     - name: sci-m
       path: "@grnsft/if-models"
-      model: SciMModel
+      plugin: SciMModel
     - name: sci-o
-      model: SciOModel
+      plugin: SciOModel
       path: "@grnsft/if-models"
     - name: time-synchronization
-      model: TimeSyncModel
+      plugin: TimeSyncModel
       path: builtin
       config: 
         start-time: 2023-12-12T00:00:00.000Z # ISO timestamp

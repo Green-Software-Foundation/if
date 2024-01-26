@@ -44,7 +44,7 @@
     "greensoftware",
     "if",
     "impact",
-    "models"
+    "plugins"
   ],
   "license": "MIT",
   "main": "build/index.js",
