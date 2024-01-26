@@ -9,10 +9,10 @@ export const impl: Impl = {
     category: 'cloud',
   },
   initialize: {
-    models: [
+    plugins: [
       {
         name: 'mock-name',
-        model: 'MockaviztaModel',
+        plugin: 'MockaviztaModel',
         path: 'mock-path',
         config: {
           allocation: 'LINEAR',

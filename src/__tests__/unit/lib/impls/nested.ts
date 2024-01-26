@@ -9,10 +9,10 @@ export const implNested: Impl = {
     category: 'on-premise',
   },
   initialize: {
-    models: [
+    plugins: [
       {
         name: 'mockavizta',
-        model: 'MockaviztaModel',
+        plugin: 'MockaviztaModel',
         path: 'mock-path',
         config: {
           allocation: 'LINEAR',
@@ -85,10 +85,10 @@ export const implNestedNoConfig: Impl = {
     category: 'on-premise',
   },
   initialize: {
-    models: [
+    plugins: [
       {
         name: 'mockavizta',
-        model: 'MockaviztaModel',
+        plugin: 'MockaviztaModel',
         path: 'mock-path',
         config: {
           allocation: 'LINEAR',

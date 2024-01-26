@@ -26,7 +26,7 @@ describe('config/strings: ', () => {
     it('successfully appends given param to message.', () => {
       const param = 'mock-message';
 
-      const expectedMessage = `You're trying to use not initalized model: ${param}.`;
+      const expectedMessage = `You're trying to use not initalized plugin: ${param}.`;
 
       expect(NOT_INITIALIZED_MODEL(param)).toEqual(expectedMessage);
     });
@@ -34,9 +34,9 @@ describe('config/strings: ', () => {
 
   describe('NOT_CONSTRUCTABLE_MODEL(): ', () => {
     it('successfully appends given param to message.', () => {
-      const params = {model: 'mock-model', path: 'mock-path'};
+      const params = {plugin: 'mock-plugin', path: 'mock-path'};
 
-      const expectedMessage = `Provided model '${params.model}' is not constructable or does not belong to given plugin '${params.path}'.`;
+      const expectedMessage = `Provided plugin '${params.plugin}' is not constructable or does not belong to given plugin '${params.path}'.`;
 
       expect(NOT_CONSTRUCTABLE_MODEL(params)).toEqual(expectedMessage);
     });

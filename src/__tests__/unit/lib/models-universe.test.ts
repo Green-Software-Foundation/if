@@ -65,7 +65,7 @@ describe('lib/models-universe: ', () => {
             verbose: true,
           },
           name: 'mock-name',
-          model: 'MockaviztaModel',
+          plugin: 'MockaviztaModel',
         },
       ];
 
@@ -106,7 +106,7 @@ describe('lib/models-universe: ', () => {
             verbose: true,
           },
           name: 'mock-name',
-          model: 'MockaviztaModel',
+          plugin: 'MockaviztaModel',
           path: 'https://github.com/mock/mockavizta-model',
         },
       ];
@@ -144,7 +144,7 @@ describe('lib/models-universe: ', () => {
             verbose: true,
           },
           name: 'mock-name',
-          model: 'MockaviztaModel',
+          plugin: 'MockaviztaModel',
           path: 'https://github.com/mock/mockavizta-model',
         },
       ];
@@ -184,7 +184,7 @@ describe('lib/models-universe: ', () => {
             verbose: true,
           },
           name: 'mock-name',
-          model: 'MockaviztaModel',
+          plugin: 'MockaviztaModel',
           path: 'https://github.com/mock/mockavizta-model',
         },
       ];
@@ -206,7 +206,7 @@ describe('lib/models-universe: ', () => {
         if (error instanceof ModelInitializationError) {
           expect(error.message).toEqual(
             NOT_CONSTRUCTABLE_MODEL({
-              model: currentModel.model,
+              plugin: currentModel.plugin,
               path,
             })
           );
@@ -223,7 +223,7 @@ describe('lib/models-universe: ', () => {
             verbose: true,
           },
           name: 'mock-name',
-          model: 'MockaviztaModel',
+          plugin: 'MockaviztaModel',
           path: 'mock-module',
         },
       ];
@@ -287,7 +287,7 @@ describe('lib/models-universe: ', () => {
           verbose: true,
         },
         name: 'mock-name',
-        model: 'MockaviztaModel',
+        plugin: 'MockaviztaModel',
         path: 'https://github.com/mock/mockavizta-model',
       },
     ];
@@ -315,7 +315,7 @@ describe('lib/models-universe: ', () => {
           interval: 5,
         },
         name: 'time-sync',
-        model: 'TimeSyncModel',
+        plugin: 'TimeSyncModel',
         path: 'builtin',
       },
     ];

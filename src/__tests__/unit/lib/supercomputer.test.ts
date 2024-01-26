@@ -42,7 +42,7 @@ describe('lib/supercomputer: ', () => {
       delete implCopy.graph.children[childName].inputs;
 
       const modelsHandbook = new ModelsUniverse();
-      await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
+      await modelsHandbook.bulkWriteDown(implCopy.initialize.plugins);
 
       expect.assertions(1);
 
@@ -64,7 +64,7 @@ describe('lib/supercomputer: ', () => {
       }
 
       const modelsHandbook = new ModelsUniverse();
-      await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
+      await modelsHandbook.bulkWriteDown(implCopy.initialize.plugins);
 
       const node = new Supercomputer(implCopy, modelsHandbook);
 
@@ -90,7 +90,7 @@ describe('lib/supercomputer: ', () => {
 
     it('check if config enrichment with nested config is done with override.', async () => {
       const modelsHandbook = new ModelsUniverse();
-      await modelsHandbook.bulkWriteDown(implNested.initialize.models);
+      await modelsHandbook.bulkWriteDown(implNested.initialize.plugins);
 
       const result = await new Supercomputer(
         implNested,
@@ -150,7 +150,7 @@ describe('lib/supercomputer: ', () => {
 
     it('check if config enrichment with nested config is done without override.', async () => {
       const modelsHandbook = new ModelsUniverse();
-      await modelsHandbook.bulkWriteDown(implNestedNoConfig.initialize.models);
+      await modelsHandbook.bulkWriteDown(implNestedNoConfig.initialize.plugins);
 
       const result = await new Supercomputer(
         implNestedNoConfig,
@@ -223,7 +223,7 @@ describe('lib/supercomputer: ', () => {
         };
 
         const modelsHandbook = new ModelsUniverse();
-        await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
+        await modelsHandbook.bulkWriteDown(implCopy.initialize.plugins);
 
         const node = new Supercomputer(implCopy, modelsHandbook);
 
@@ -256,7 +256,7 @@ describe('lib/supercomputer: ', () => {
         };
 
         const modelsHandbook = new ModelsUniverse();
-        await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
+        await modelsHandbook.bulkWriteDown(implCopy.initialize.plugins);
 
         const node = new Supercomputer(implCopy, modelsHandbook);
 
