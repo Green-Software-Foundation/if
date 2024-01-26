@@ -20,7 +20,7 @@ const {DISCLAIMER_MESSAGE, SOMETHING_WRONG} = STRINGS;
  * 1. Parses yml input/output process arguments.
  * 2. Opens yaml file as an object.
  * 3. Validates given impl to match basic structure.
- * 4. Initializes requested models.
+ * 4. Initializes requested plugins.
  * 5. Initializes graph, does computing.
  * 6. Saves processed object as a yaml file.
  * @example run `npm run impact-engine -- --impl ./test.yml --ompl ./result.yml`
@@ -39,7 +39,7 @@ const impactEngine = async () => {
 
     /** Lifecycle Initialize Models */
     const modelsHandbook = await new ModelsUniverse().bulkWriteDown(
-      impl.initialize.models
+      impl.initialize.plugins
     );
 
     /** Lifecycle Computing */

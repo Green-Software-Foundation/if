@@ -43,15 +43,15 @@ This will:
 - will add "_MY_SUFFIX" suffix to ALL columns in the new CSV data.
 
 
-## Integrating the script in your IMPL as a shell model
+## Integrating the script in your IMPL as a shell model plugin
 
 
     initialize:
-        models:
+        plugins:
         ...
         ...
         - name: yaml-to-csv
-          model: ShellModel
+          plugin: ShellModel
           path: "@grnsft/if-models"
 
     graph:

@@ -3,14 +3,14 @@ import {ClassContainerParams} from '../types/models-universe';
 export const STRINGS = {
   FILE_IS_NOT_YAML: 'Provided impl file is not in yaml format.',
   IMPL_IS_MISSING: 'Impl file is missing.',
-  MISSING_CLASSNAME: "Initalization param 'model' is missing.",
+  MISSING_CLASSNAME: "Initalization param 'plugin' is missing.",
   MISSING_PATH: "Initalization param 'path' is missing.",
   NOT_MODEL_PLUGIN_EXTENSION:
-    "Provided model does not extend 'ModelPluginInterface'.",
+    "Provided plugin does not extend 'ModelPluginInterface'.",
   STRUCTURE_MALFORMED: (childName: string) =>
     `Graph is malformed: graph.children.${childName} is not valid.`,
   NOT_INITIALIZED_MODEL: (className: string) =>
-    `You're trying to use not initalized model: ${className}.`,
+    `You're trying to use not initalized plugin: ${className}.`,
   DISCLAIMER_MESSAGE: `
 [!important] Incubation Project
 
@@ -20,7 +20,7 @@ Incubation projects are experimental, offer no support guarantee, have minimal g
   NOT_NATIVE_MODEL: `
 [!important]
 
-You are using models that are not part of the Impact Framework standard library. You should do your own research to ensure the models are up to date and accurate. They may not be actively maintained.  
+You are using plugins that are not part of the Impact Framework standard library. You should do your own research to ensure the plugins are up to date and accurate. They may not be actively maintained.  
 `,
   SOMETHING_WRONG: 'Something wrong with cli arguments. Please check docs.',
   ISSUE_TEMPLATE: `
@@ -28,7 +28,7 @@ Impact Framework is an alpha release from the Green Software Foundation and is r
 https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+
 `,
   NOT_CONSTRUCTABLE_MODEL: (params: ClassContainerParams) =>
-    `Provided model '${params.model}' is not constructable or does not belong to given plugin '${params.path}'.`,
+    `Provided plugin '${params.plugin}' is not constructable or does not belong to given plugin '${params.path}'.`,
   INVALID_MODULE_PATH: (path: string) =>
     `Provided module path: '${path}' is invalid.`,
   INVALID_TIME_NORMALIZATION: 'Start time or end time is missing.',

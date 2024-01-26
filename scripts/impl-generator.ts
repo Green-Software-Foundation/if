@@ -3,8 +3,8 @@ import * as fs from 'fs';
 
 const savepath = 'examples/impls/auto-generated-impl.yml';
 const frontmatter =
-  'name: nesting-demo\ndescription:\ntags:\nkind:\ninitialize:\n  models:\n';
-const models = ['teads-curve', 'sci-e', 'sci-m', 'sci-o', 'sci'];
+  'name: nesting-demo\ndescription:\ntags:\nkind:\ninitialize:\n  plugins:\n';
+const plugins = ['teads-curve', 'sci-e', 'sci-m', 'sci-o', 'sci'];
 const classes = [
   'TeadsCurveModel',
   'SciEModel',
@@ -27,17 +27,17 @@ let pipeline = '';
 let child = '';
 
 let graph = 'graph:\n  children:\n    child:\n      pipeline:\n';
-for (let i = 0; i < models.length; i++) {
+for (let i = 0; i < plugins.length; i++) {
   let path = '';
-  if (models[i].includes('sci')) {
+  if (plugins[i].includes('sci')) {
     path = '@grnsft/if-models';
   } else {
     path = '@grnsft/if-unofficial-models';
   }
   pipeline =
     pipeline +
-    `    - name: ${models[i]}\n      model: ${classes[i]}\n      path: "${path}"\n`;
-  graph = graph + `        - ${models[i]}\n`;
+    `    - name: ${plugins[i]}\n      plugin: ${classes[i]}\n      path: "${path}"\n`;
+  graph = graph + `        - ${plugins[i]}\n`;
 }
 
 for (let i: any = 0; i <= n_nodes; i++) {

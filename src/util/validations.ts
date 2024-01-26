@@ -50,11 +50,11 @@ const implValidation = z.object({
     })
     .nullable(),
   initialize: z.object({
-    models: z.array(
+    plugins: z.array(
       z.object({
         name: z.string(),
         path: z.string(),
-        model: z.string(),
+        plugin: z.string(),
         config: z.record(z.string(), z.any()).optional(),
       })
     ),

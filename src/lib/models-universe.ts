@@ -34,7 +34,7 @@ export class ModelsUniverse {
   public initalizedModels: InitalizedModels = {};
 
   /**
-   * Checks if model is instance of `IOutputModelInterface`.
+   * Checks if plugin is instance of `IOutputModelInterface`.
    */
   private instanceOfModel(ClassContainer: any, params: ClassContainerParams) {
     try {
@@ -64,22 +64,22 @@ export class ModelsUniverse {
   /**
    * Imports `module` from given `path`, then checks if it's `ModelPluginInterface` extension.
    */
-  private async importAndVerifyModule(model: string, path: string) {
+  private async importAndVerifyModule(plugin: string, path: string) {
     const pluginModule = await this.importModuleFrom(path);
 
-    if (!this.instanceOfModel(pluginModule[model], {model, path})) {
+    if (!this.instanceOfModel(pluginModule[plugin], {plugin, path})) {
       throw new ModelInitializationError(NOT_MODEL_PLUGIN_EXTENSION);
     }
 
-    return pluginModule[model];
+    return pluginModule[plugin];
   }
 
   /**
-   * Returns plugin model. Checks if model is missing then rejects with error.
+   * Returns plugin model. Checks if plugin is missing then rejects with error.
    * Then checks if `path` is starting with github, then grabs the repository name.
    * Imports module, then checks if it's a class which implements input model interface.
    */
-  private async handModel(model: string, path: string) {
+  private async handModel(plugin: string, path: string) {
     if (path === 'builtin') {
       path = pathLib.normalize(`${__dirname}/../models`);
     } else {
@@ -93,27 +93,27 @@ export class ModelsUniverse {
       }
     }
 
-    return this.importAndVerifyModule(model, path);
+    return this.importAndVerifyModule(plugin, path);
   }
 
   /**
-   * Registers all models from `impl`.`initalize` property.
+   * Registers all plugins from `impl`.`initalize` property.
    */
-  public async bulkWriteDown(modelsToInitalize: ImplInitializeModel[]) {
-    for (const model of modelsToInitalize) {
-      await this.writeDownSingleModel(model);
+  public async bulkWriteDown(pluginsToInitalize: ImplInitializeModel[]) {
+    for (const plugin of pluginsToInitalize) {
+      await this.writeDownSingleModel(plugin);
     }
 
     return this;
   }
 
   /**
-   * Initializes and registers model.
+   * Initializes and registers plugin.
    */
-  private async writeDownSingleModel(modelToInitalize: ImplInitializeModel) {
-    const {model, path, config, name} = modelToInitalize;
+  private async writeDownSingleModel(pluginToInitalize: ImplInitializeModel) {
+    const {plugin, path, config, name} = pluginToInitalize;
 
-    if (!model) {
+    if (!plugin) {
       throw new ModelCredentialError(MISSING_CLASSNAME);
     }
 
@@ -121,7 +121,7 @@ export class ModelsUniverse {
       throw new ModelCredentialError(MISSING_PATH);
     }
 
-    const Model = await this.handModel(model, path);
+    const Model = await this.handModel(plugin, path);
 
     const callback = async (options: ModelOptions) => {
       const params = {
@@ -143,13 +143,13 @@ export class ModelsUniverse {
   }
 
   /**
-   * Returns existing model by `name`.
+   * Returns existing plugin by `name`.
    */
-  public async getInitializedModel(modelName: string, config: any) {
-    if (this.initalizedModels[modelName]) {
-      return this.initalizedModels[modelName](config);
+  public async getInitializedModel(pluginName: string, config: any) {
+    if (this.initalizedModels[pluginName]) {
+      return this.initalizedModels[pluginName](config);
     }
 
-    throw new ModelInitializationError(NOT_INITIALIZED_MODEL(modelName));
+    throw new ModelInitializationError(NOT_INITIALIZED_MODEL(pluginName));
   }
 }
