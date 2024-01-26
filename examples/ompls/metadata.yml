@@ -2,7 +2,7 @@ name: sci-m
 description: simple demo invoking metadata lookup
 tags: null
 initialize:
-  models:
+  plugins:
     - name: cloud-instance-metadata
       kind: builtin
 graph:

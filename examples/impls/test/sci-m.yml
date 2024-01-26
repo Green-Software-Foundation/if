@@ -2,9 +2,9 @@ name: sci-m
 description: simple demo invoking sci-m
 tags:
 initialize:
-  models:
+  plugins:
     - name: sci-m # a model that calculates m from te, tir, el, rr and rtor
-      model: SciMModel
+      plugin: SciMModel
       verbose: false
       path: "@grnsft/if-models"
 graph:

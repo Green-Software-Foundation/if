@@ -2,7 +2,7 @@ name: sci-e-demo
 description: null
 tags: null
 initialize:
-  models:
+  plugins:
     - name: sci-e
       kind: builtin
 graph:

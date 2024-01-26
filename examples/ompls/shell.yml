@@ -2,7 +2,7 @@ name: shell-demo
 description: example impl invoking shell model
 tags: null
 initialize:
-  models:
+  plugins:
     - name: sampler
       kind: shell
 graph:

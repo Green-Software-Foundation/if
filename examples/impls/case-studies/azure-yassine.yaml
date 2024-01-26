@@ -2,7 +2,7 @@ name: azure-metrics
 description: "https://github.com/yelghali/imapct-engine-framework/blob/main/src/lib/components/azure-vm.py"
 tags:
 initialize:
-  models:
+  plugins:
     - name: metrics-exporter # model that grabs Azure metrics and uses them to enrich confg and obs in impl 
       kind: plugin
       verbose: false

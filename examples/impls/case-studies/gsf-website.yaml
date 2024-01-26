@@ -5,7 +5,7 @@ tags:
   complexity: moderate
   category: cloud
 initialize:
-  models:
+  plugins:
     - name: sci-coefficient # a model that receives a carbon value and normalizes to R.
       kind: builtin
       path: ''

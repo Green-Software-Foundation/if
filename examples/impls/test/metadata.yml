@@ -2,9 +2,9 @@ name: cloud-instance-metadata
 description: simple demo invoking metadata lookup
 tags: null
 initialize:
-  models:
+  plugins:
     - name: cloud-instance-metadata
-      model: CloudInstanceMetadataModel
+      plugin: CloudInstanceMetadataModel
       path: "@grnsft/if-models"
 graph:
   children:

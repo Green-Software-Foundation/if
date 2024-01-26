@@ -2,9 +2,9 @@ name: ccf-demo
 description: example impl invoking CCF model
 tags:
 initialize:
-  models:
+  plugins:
     - name: ccf
-      model: CloudCarbonFootprint
+      plugin: CloudCarbonFootprint
       path: "@grnsft/if-unofficial-models"
 graph:
   children:

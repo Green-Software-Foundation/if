@@ -2,10 +2,10 @@ name: sci-demo
 description: example invoking sci model
 tags:
 initialize:
-  models:
+  plugins:
     - name: sci
       kind: plugin
-      model: SciModel
+      plugin: SciModel
       path: "@grnsft/if-models"
 graph:
   children:

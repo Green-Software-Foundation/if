@@ -2,10 +2,10 @@ name: e-mem
 description: null
 tags: null
 initialize:
-  models:
+  plugins:
     - name: e-mem
       path: "@grnsft/if-models"
-      model: EMemModel
+      plugin: EMemModel
 graph:
   children:
     child:

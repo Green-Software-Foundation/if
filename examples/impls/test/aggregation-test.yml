@@ -8,21 +8,21 @@ tags:
   complexity: moderate
   category: on-premise
 initialize:
-  models:
+  plugins:
     - name: teads-curve
-      model: TeadsCurveModel
+      plugin: TeadsCurveModel
       path: "@grnsft/if-unofficial-models"
     - name: sci-e
-      model: SciEModel
+      plugin: SciEModel
       path: "@grnsft/if-models"
     - name: sci-m
       path: "@grnsft/if-models"
-      model: SciMModel
+      plugin: SciMModel
     - name: sci-o
-      model: SciOModel
+      plugin: SciOModel
       path: "@grnsft/if-models"
     - name: sci
-      model: SciModel
+      plugin: SciModel
       path: "@grnsft/if-models"
 graph:
   children:

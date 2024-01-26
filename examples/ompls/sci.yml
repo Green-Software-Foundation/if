@@ -2,7 +2,7 @@ name: sci-demo
 description: example invoking sci model
 tags: null
 initialize:
-  models:
+  plugins:
     - name: sci
       kind: builtin
       path: ""

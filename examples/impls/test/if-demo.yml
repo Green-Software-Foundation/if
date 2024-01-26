@@ -2,30 +2,30 @@ name: if-demo
 description: demo pipeline
 tags:
 initialize:
-  models:
+  plugins:
     - name: azure-importer
-      model: AzureImporterModel
+      plugin: AzureImporterModel
       path: "@grnsft/if-unofficial-models"
     - name: cloud-instance-metadata
-      model: CloudInstanceMetadataModel
+      plugin: CloudInstanceMetadataModel
       path: "@grnsft/if-models"
     - name: teads-curve
-      model: TeadsCurveModel
+      plugin: TeadsCurveModel
       path: "@grnsft/if-unofficial-models"
     - name: sci-e
-      model: SciEModel
+      plugin: SciEModel
       path: "@grnsft/if-models"
     - name: sci-o
-      model: SciOModel
+      plugin: SciOModel
       path: "@grnsft/if-models"
     - name: sci-e
-      model: SciEModel
+      plugin: SciEModel
       path: "@grnsft/if-models"
     - name: sci-m
-      model: SciMModel
+      plugin: SciMModel
       path: "@grnsft/if-models"
     - name: sci
-      model: SciModel
+      plugin: SciModel
       path: "@grnsft/if-models"
 graph:
   children:

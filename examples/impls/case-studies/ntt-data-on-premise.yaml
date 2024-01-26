@@ -5,7 +5,7 @@ tags:
   complexity: moderate
   category: on-premise
 initialize:
-  models:
+  plugins:
     - name: sci-e
       kind: builtin
       verbose: false

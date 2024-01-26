@@ -2,7 +2,7 @@ name: sci-o-demo
 description: null
 tags: null
 initialize:
-  models:
+  plugins:
     - name: sci-e
       kind: builtin
     - name: sci-o

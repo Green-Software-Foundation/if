@@ -2,11 +2,11 @@ name: sci-e-demo
 description:
 tags:
 initialize:
-  models:
+  plugins:
     - name: sci-e
       kind: plugin
       verbose: false
-      model: SciEModel
+      plugin: SciEModel
       path: "@grnsft/if-models"
 graph:
   children:

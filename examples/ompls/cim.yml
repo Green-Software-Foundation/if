@@ -2,10 +2,10 @@ name: cloud-instance-metadata
 description: example impl invoking Cloud Instance Metadata model
 tags: null
 initialize:
-  models:
+  plugins:
     - name: cloud-instance-metadata
       path: "@grnsft/if-models"
-      model: CloudInstanceMetadataModel
+      plugin: CloudInstanceMetadataModel
 graph:
   children:
     child:

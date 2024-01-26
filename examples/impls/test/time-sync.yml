@@ -2,21 +2,21 @@ name: nesting-demo
 description: impl with 2 levels of nesting with non-uniform timing of observations
 tags:
 initialize:
-  models:
+  plugins:
     - name: teads-curve
-      model: TeadsCurveModel
+      plugin: TeadsCurveModel
       path: "@grnsft/if-unofficial-models"
     - name: sci-e
-      model: SciEModel
+      plugin: SciEModel
       path: "@grnsft/if-models"
     - name: sci-m
       path: "@grnsft/if-models"
-      model: SciMModel
+      plugin: SciMModel
     - name: sci-o
-      model: SciOModel
+      plugin: SciOModel
       path: "@grnsft/if-models"
     - name: time-synchronization
-      model: TimeSyncModel
+      plugin: TimeSyncModel
       path: builtin
       config: 
         start-time: 2023-12-12T00:00:00.000Z # ISO timestamp

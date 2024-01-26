@@ -5,10 +5,10 @@ tags:
   complexity: moderate
   category: on-premise
 initialize:
-  models:
+  plugins:
     - name: sci-e
       path: '@grnsft/if-models'
-      model: SciEModel
+      plugin: SciEModel
 graph:
   children:
     child-0:

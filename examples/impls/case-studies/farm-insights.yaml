@@ -5,16 +5,16 @@ tags:
   complexity: simple
   category: device
 initialize:
-  models:
+  plugins:
     - name: sci-o # takes in total e and outputs operational emissions
       kind: plugin
-      model: SciOModel
+      plugin: SciOModel
       path: if-models
       verbose: false
     - name: sci # a model that sums sci-o + sci-m and applies functional unit
       kind: plugin
       verbose: false
-      model: SciModel
+      plugin: SciModel
       path: if-models
 graph:
   children: 

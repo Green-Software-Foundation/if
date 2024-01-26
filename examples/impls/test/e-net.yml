@@ -2,9 +2,9 @@ name: sci-e-demo
 description:
 tags:
 initialize:
-  models:
+  plugins:
     - name: e-net
-      model: ENetModel
+      plugin: ENetModel
       path: '@grnsft/if-models'
 graph:
   children:

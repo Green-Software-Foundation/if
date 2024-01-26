@@ -2,10 +2,10 @@ name: ccf-demo
 description: example impl invoking CCF model
 tags: null
 initialize:
-  models:
+  plugins:
     - name: azure-importer
       path: if-models
-      model: AzureImporterModel
+      plugin: AzureImporterModel
       kind: plugin
 graph:
   children:

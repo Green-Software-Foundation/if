@@ -2,9 +2,9 @@ name: shell-demo
 description: example impl invoking shell model
 tags:
 initialize:
-  models:
+  plugins:
     - name: sampler
-      model: ShellModel
+      plugin: ShellModel
       path: "@grnsft/if-models"
 graph:
   children:

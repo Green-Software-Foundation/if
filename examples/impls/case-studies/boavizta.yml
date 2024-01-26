@@ -2,7 +2,7 @@ name: boavizta-demo
 description: calls boavizta api
 tags:
 initialize:
-  models:
+  plugins:
     - name: boavizta-cpu
       kind: builtin
       config:

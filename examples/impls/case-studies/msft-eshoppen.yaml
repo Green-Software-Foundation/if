@@ -5,7 +5,7 @@ tags:
   complexity: moderate
   category: cloud
 initialize:
-  models:
+  plugins:
     - name: eshoppen-cpu # calculates e due to memory util ((mem-util * mem-allocated * mem-energy)/1000 = energy-memory)
       kind: energy-cpu
       path: false

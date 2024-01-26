@@ -2,7 +2,7 @@ name: full-sci
 description: example executing a full pipeline from teads --> sci
 tags: null
 initialize:
-  models:
+  plugins:
     - name: teads-curve
       kind: builtin
     - name: sci-m

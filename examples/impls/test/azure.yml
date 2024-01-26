@@ -2,10 +2,10 @@ name: ccf-demo
 description: example impl invoking CCF model
 tags:
 initialize:
-  models:
+  plugins:
     - name: azure-importer
       path: "@grnsft/if-unofficial-models"
-      model: AzureImporterModel
+      plugin: AzureImporterModel
       kind: plugin
 graph:
   children:

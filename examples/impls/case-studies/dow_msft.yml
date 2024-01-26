@@ -5,7 +5,7 @@ tags:
   complexity: simple
   category: cloud
 initialize:
-  models:
+  plugins:
     - name: teads-curve # a model that returns an embodied value given the sci embodied attribution equation.
       kind: builtin
       verbose: false

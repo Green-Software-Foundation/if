@@ -5,7 +5,7 @@ tags:
   complexity: simple
   category: cloud
 initialize:
-  models:
+  plugins:
     - name: sci-o # a model that given e, i and m calculates a carbon value (e * i) + m
       kind: builtin
       verbose: false

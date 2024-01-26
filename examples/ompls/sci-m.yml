@@ -2,7 +2,7 @@ name: sci-m
 description: simple demo invoking sci-m
 tags: null
 initialize:
-  models:
+  plugins:
     - name: sci-m
       kind: builtin
       verbose: false
