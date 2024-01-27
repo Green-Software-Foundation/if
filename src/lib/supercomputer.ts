@@ -19,6 +19,7 @@ import {
   hasInputs,
 } from '../types/impl';
 import { ModelParams } from '../types/model-interface';
+import { warn } from 'console';
 
 const { ImplValidationError } = ERRORS;
 
@@ -43,23 +44,25 @@ export class Supercomputer {
 
   async synchronizeParameters() {
     const params: Object = await this.getUnitsFile();
-
-
-    console.log(this.parameters)
     const implParams = this.impl.params as Parameter[];
-
     implParams.forEach(param => {
       let name = param.name;
-      let obj = { [name]: { description: param.description, unit: param.unit, aggregation: "sum" } }
-      Object.assign(params, obj);
+      if (!(params.hasOwnProperty(name))) {
+        let obj: any = {}
+        obj[name] = { description: param.description, unit: param.unit, aggregation: "sum" }
+        Object.assign(params, obj);
+      } else {
+        warn(`Rejecting overriding of canonical parameter: ${name}.`)
+      }
     }
     )
-    this.parameters = params;
+    Object.assign(this.parameters, params);
+    console.log(this.parameters)
   }
 
   async getUnitsFile() {
     const params = await openYamlFileAsObject<any>(
-      path.normalize(`${__dirname}/../config/units.yaml`)
+      path.normalize(`${__dirname} /../config/units.yaml`)
     ).catch((error: Error) => {
       throw new FileNotFoundError(error.message);
     });
@@ -71,7 +74,6 @@ export class Supercomputer {
    */
   private flattenConfigValues(config: Config): ModelParams {
     const configValues = Object.values(config);
-    console.log(this.parameters)
     return configValues.reduce((acc, value) => ({ ...acc, ...value }), {});
   }
 
@@ -151,7 +153,6 @@ export class Supercomputer {
    * Otherwise iterates over child components.
    */
   public async compute(children?: ChildStructure) {
-    await this.synchronizeParameters();
     const pointedChildren = children || this.impl.graph.children;
     const childrensNames = Object.keys(pointedChildren);
 

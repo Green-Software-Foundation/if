@@ -5,7 +5,7 @@ tags:
   complexity: moderate
   category: on-premise
 params:
-  - name: test-key-1
+  - name: special-carbon
     description: dummy
     aggregation: sum
     unit: MT

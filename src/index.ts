@@ -43,14 +43,16 @@ const impactEngine = async () => {
     );
 
     /** Lifecycle Computing */
-    const ompl = await new Supercomputer(impl, modelsHandbook).compute();
+    const computeInstance = await new Supercomputer(impl, modelsHandbook);
+    await computeInstance.synchronizeParameters();
+    const outputData = await computeInstance.compute();
 
     if (!outputPath) {
-      console.log(JSON.stringify(ompl));
+      console.log(JSON.stringify(outputData));
       return;
     }
 
-    await saveYamlFileAs(ompl, outputPath);
+    await saveYamlFileAs(outputData, outputPath);
 
     return;
   }
