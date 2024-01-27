@@ -30,6 +30,7 @@ export const UnitKeys = [
   'timestamp',
   'time-reserved',
   'total-resources',
+  'test-key-1'
 ] as const;
 
 type UnitFields = {
@@ -43,3 +44,11 @@ export type UnitKeyName = (typeof UnitKeys)[number];
 export type Units = {
   [K in UnitKeyName]: UnitFields;
 };
+
+export type Parameter = {
+  name: string;
+  unit: string;
+  description: string;
+  aggregation: string;
+
+}

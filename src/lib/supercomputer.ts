@@ -1,10 +1,12 @@
-import {ModelsUniverse} from './models-universe';
-import {Observatory} from './observatory';
-import {aggregate} from './aggregator';
-
-import {ERRORS} from '../util/errors';
-
-import {STRINGS} from '../config';
+import { ModelsUniverse } from './models-universe';
+import { Observatory } from './observatory';
+import { aggregate } from './aggregator';
+import { ERRORS } from '../util/errors';
+import { STRINGS } from '../config';
+import { Parameter } from '../types/units';
+import { openYamlFileAsObject } from '../util/yaml';
+import path = require('path');
+const { FileNotFoundError } = ERRORS;
 
 import {
   Config,
@@ -16,11 +18,11 @@ import {
   hasChildren,
   hasInputs,
 } from '../types/impl';
-import {ModelParams} from '../types/model-interface';
+import { ModelParams } from '../types/model-interface';
 
-const {ImplValidationError} = ERRORS;
+const { ImplValidationError } = ERRORS;
 
-const {STRUCTURE_MALFORMED} = STRINGS;
+const { STRUCTURE_MALFORMED } = STRINGS;
 
 /**
  * Computer for `impl` documents.
@@ -31,10 +33,37 @@ export class Supercomputer {
   private aggregatedValues: ModelParams[] = [];
   private modelsHandbook: ModelsUniverse;
   private childAmount = 0;
+  private parameters: Object = {};
 
   constructor(impl: Impl, modelsHandbook: ModelsUniverse) {
     this.impl = impl;
     this.modelsHandbook = modelsHandbook;
+  }
+
+
+  async synchronizeParameters() {
+    const params: Object = await this.getUnitsFile();
+
+
+    console.log(this.parameters)
+    const implParams = this.impl.params as Parameter[];
+
+    implParams.forEach(param => {
+      let name = param.name;
+      let obj = { [name]: { description: param.description, unit: param.unit, aggregation: "sum" } }
+      Object.assign(params, obj);
+    }
+    )
+    this.parameters = params;
+  }
+
+  async getUnitsFile() {
+    const params = await openYamlFileAsObject<any>(
+      path.normalize(`${__dirname}/../config/units.yaml`)
+    ).catch((error: Error) => {
+      throw new FileNotFoundError(error.message);
+    });
+    return params
   }
 
   /**
@@ -42,8 +71,8 @@ export class Supercomputer {
    */
   private flattenConfigValues(config: Config): ModelParams {
     const configValues = Object.values(config);
-
-    return configValues.reduce((acc, value) => ({...acc, ...value}), {});
+    console.log(this.parameters)
+    return configValues.reduce((acc, value) => ({ ...acc, ...value }), {});
   }
 
   /**
@@ -79,8 +108,8 @@ export class Supercomputer {
 
     this.childAmount++;
 
-    const {pipeline} = this.parent;
-    const {inputs, config} = pointedChild;
+    const { pipeline } = this.parent;
+    const { inputs, config } = pointedChild;
 
     const enrichedInputs = this.enrichInputs(inputs, {
       ...this.parent.config,
@@ -103,7 +132,7 @@ export class Supercomputer {
 
     /** If aggregation is enabled, do horizontal aggregation. */
     if (this.impl.aggregation) {
-      const {type, metrics} = this.impl.aggregation;
+      const { type, metrics } = this.impl.aggregation;
 
       if (type === 'horizontal' || type === 'both') {
         const aggregation = await aggregate(outputs, metrics);
@@ -122,6 +151,7 @@ export class Supercomputer {
    * Otherwise iterates over child components.
    */
   public async compute(children?: ChildStructure) {
+    await this.synchronizeParameters();
     const pointedChildren = children || this.impl.graph.children;
     const childrensNames = Object.keys(pointedChildren);
 
