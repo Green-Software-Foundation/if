@@ -8,8 +8,11 @@
     "alwaysStrict": true,
     "declaration": true,
     "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
     "lib": [
-      "es2020", "DOM"
+      "es2020",
+      "DOM"
     ],
     "module": "CommonJS",
     "noEmitOnError": true,

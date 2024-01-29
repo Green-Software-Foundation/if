@@ -4,9 +4,7 @@ import { aggregate } from './aggregator';
 import { ERRORS } from '../util/errors';
 import { STRINGS } from '../config';
 import { Parameter } from '../types/units';
-import { openYamlFileAsObject } from '../util/yaml';
-import path = require('path');
-const { FileNotFoundError } = ERRORS;
+import parameters from '../config/units.json';
 
 import {
   Config,
@@ -43,30 +41,20 @@ export class Supercomputer {
 
 
   async synchronizeParameters() {
-    const params: Object = await this.getUnitsFile();
     const implParams = this.impl.params as Parameter[];
     implParams.forEach(param => {
       let name = param.name;
-      if (!(params.hasOwnProperty(name))) {
+      if (!(parameters.hasOwnProperty(name))) {
         let obj: any = {}
         obj[name] = { description: param.description, unit: param.unit, aggregation: "sum" }
-        Object.assign(params, obj);
+        Object.assign(parameters, obj);
       } else {
         warn(`Rejecting overriding of canonical parameter: ${name}.`)
       }
     }
     )
-    Object.assign(this.parameters, params);
+    Object.assign(this.parameters, parameters);
     console.log(this.parameters)
-  }
-
-  async getUnitsFile() {
-    const params = await openYamlFileAsObject<any>(
-      path.normalize(`${__dirname} /../config/units.yaml`)
-    ).catch((error: Error) => {
-      throw new FileNotFoundError(error.message);
-    });
-    return params
   }
 
   /**
