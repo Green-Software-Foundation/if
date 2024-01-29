@@ -15,8 +15,7 @@
   "dependencies": {
     "copyfiles": "^2.4.1",
     "js-yaml": "^4.1.0",
-    "moment": "^2.29.4",
-    "moment-range": "^4.0.2",
+    "luxon": "^3.4.4",
     "ts-command-line-args": "^2.5.1",
     "typescript": "^5.1.6",
     "zod": "^3.22.4"
@@ -27,6 +26,7 @@
     "@jest/globals": "^29.6.1",
     "@types/jest": "^29.5.7",
     "@types/js-yaml": "^4.0.5",
+    "@types/luxon": "^3.4.2",
     "@types/node": "^20.8.9",
     "fixpack": "^4.0.0",
     "gts": "^5.0.0",

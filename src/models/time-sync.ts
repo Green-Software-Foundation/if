@@ -1,4 +1,4 @@
-import {extendMoment} from 'moment-range';
+import {DateTime, Interval} from 'luxon';
 
 import {STRINGS, PARAMETERS} from '../config';
 
@@ -7,9 +7,6 @@ import {getAggregationMethod} from '../util/param-selectors';
 
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
 import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
-
-const moment = require('moment');
-const momentRange = extendMoment(moment);
 
 const {InputValidationError} = ERRORS;
 
@@ -65,11 +62,9 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Normalize time per given second.
    */
   private normalizeTimePerSecond = (currentRoundMoment: string, i: number) => {
-    const thisMoment = moment(currentRoundMoment).milliseconds(0);
-
-    return thisMoment.add(i, 'second');
+    const thisMoment = DateTime.fromISO(currentRoundMoment).startOf('second');
+    return thisMoment.plus({seconds: i});
   };
-
   /**
    * Barkes down input per minimal time unit.
    */
@@ -81,7 +76,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
       if (key === 'timestamp') {
         const perSecond = this.normalizeTimePerSecond(input.timestamp, i);
-        acc[key] = moment(perSecond).milliseconds(0).toISOString();
+        acc[key] = perSecond.toUTC().toISO();
 
         return acc;
       }
@@ -110,7 +105,10 @@ export class TimeSyncModel implements ModelPluginInterface {
 
     return metrics.reduce((acc, metric) => {
       if (metric === 'timestamp') {
-        acc[metric] = moment(missingTimestamp).milliseconds(0).toISOString();
+        acc[metric] = DateTime.fromMillis(missingTimestamp)
+          .startOf('second')
+          .toUTC()
+          .toISO();
 
         return acc;
       }
@@ -157,15 +155,16 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Checks if padding is needed either at start of the timeline or the end and returns status.
    */
   private checkForPadding(inputs: ModelParams[]): PaddingReceipt {
-    const startDiffInSeconds =
-      moment(inputs[0].timestamp).diff(moment(this.startTime)) / 1000;
+    const startDiffInSeconds = DateTime.fromISO(inputs[0].timestamp)
+      .diff(DateTime.fromISO(this.startTime))
+      .as('seconds');
 
     const lastInput = inputs[inputs.length - 1];
 
-    const endDiffInSeconds =
-      moment(lastInput.timestamp)
-        .add(lastInput.duration, 'seconds')
-        .diff(moment(this.endTime)) / 1000;
+    const endDiffInSeconds = DateTime.fromISO(lastInput.timestamp)
+      .plus({second: lastInput.duration})
+      .diff(DateTime.fromISO(this.endTime))
+      .as('seconds');
 
     return {
       start: startDiffInSeconds > 0,
@@ -251,15 +250,16 @@ export class TimeSyncModel implements ModelPluginInterface {
     const paddedFromBeginning = [];
 
     if (start) {
-      const dateRange = momentRange.range(
-        moment(this.startTime),
-        moment(inputs[0].timestamp).subtract(1, 'second')
+      const dateRange = Interval.fromDateTimes(
+        DateTime.fromISO(this.startTime),
+        DateTime.fromISO(inputs[0].timestamp)
       );
-
-      /** Checks if converting to value of is needed. */
-      for (const second of dateRange.by('second')) {
+      for (const interval of dateRange.splitBy({second: 1})) {
         paddedFromBeginning.push(
-          this.fillWithZeroishInput(inputs[0], second.valueOf())
+          // as far as I can tell, start will never be null
+          // because if we pass an invalid start/endDate to
+          // Interval, we get a zero length array as the range
+          this.fillWithZeroishInput(inputs[0], interval.start?.toMillis() || 0)
         );
       }
     }
@@ -268,14 +268,19 @@ export class TimeSyncModel implements ModelPluginInterface {
 
     if (end) {
       const lastInput = inputs[inputs.length - 1];
-      const dateRange = momentRange.range(
-        moment(lastInput.timestamp).add(lastInput.duration, 'seconds'),
-        moment(this.endTime)
+      const lastInputEnd = DateTime.fromISO(lastInput.timestamp).plus({
+        seconds: lastInput.duration,
+      });
+      const dateRange = Interval.fromDateTimes(
+        lastInputEnd,
+        DateTime.fromISO(this.endTime).plus({seconds: 1})
       );
-
-      for (const second of dateRange.by('second')) {
+      for (const interval of dateRange.splitBy({second: 1})) {
         paddedArray.push(
-          this.fillWithZeroishInput(lastInput, second.valueOf())
+          // as far as I can tell, start will never be null
+          // because if we pass an invalid start/endDate to
+          // Interval, we get a zero length array as the range
+          this.fillWithZeroishInput(lastInput, interval.start?.toMillis() || 0)
         );
       }
     }
@@ -291,8 +296,8 @@ export class TimeSyncModel implements ModelPluginInterface {
       const {timestamp} = item;
 
       if (
-        moment(timestamp).isSameOrAfter(moment(this.startTime)) &&
-        moment(timestamp).isSameOrBefore(moment(this.endTime))
+        DateTime.fromISO(timestamp) >= DateTime.fromISO(this.startTime) &&
+        DateTime.fromISO(timestamp) <= DateTime.fromISO(this.endTime)
       ) {
         acc.push(item);
       }
@@ -313,34 +318,37 @@ export class TimeSyncModel implements ModelPluginInterface {
 
     const flattenInputs = paddedInputs.reduce(
       (acc: ModelParams[], input, index) => {
-        const currentMoment = moment(input.timestamp);
+        const currentMoment = DateTime.fromISO(input.timestamp);
 
         /** Checks if not the first input, then check consistency with previous ones. */
         if (index > 0) {
           const previousInput = paddedInputs[index - 1];
-          const previousInputTimestamp = moment(previousInput.timestamp);
+          const previousInputTimestamp = DateTime.fromISO(
+            previousInput.timestamp
+          );
 
           /** Checks for timestamps overlap. */
           if (
-            moment(previousInput.timestamp)
-              .add(previousInput.duration, 'seconds')
-              .isAfter(currentMoment)
+            DateTime.fromISO(previousInput.timestamp).plus({
+              seconds: previousInput.duration,
+            }) > currentMoment
           ) {
             throw new InputValidationError(INVALID_OBSERVATION_OVERLAP);
           }
 
-          const compareableTime = previousInputTimestamp.add(
-            previousInput.duration,
-            'second'
-          );
+          const compareableTime = previousInputTimestamp.plus({
+            seconds: previousInput.duration,
+          });
 
-          const timelineGapSize = currentMoment.diff(compareableTime, 'second');
+          const timelineGapSize = currentMoment
+            .diff(compareableTime)
+            .as('seconds');
 
           /** Checks if there is gap in timeline. */
           if (timelineGapSize > 1) {
             for (
-              let missingTimestamp = compareableTime.valueOf();
-              missingTimestamp <= currentMoment.valueOf() - 1000;
+              let missingTimestamp = compareableTime.toMillis();
+              missingTimestamp <= currentMoment.toMillis() - 1000;
               missingTimestamp += 1000
             ) {
               const filledGap = this.fillWithZeroishInput(
@@ -366,7 +374,9 @@ export class TimeSyncModel implements ModelPluginInterface {
     );
 
     const sortedInputs = flattenInputs.sort((a, b) =>
-      moment(a.timestamp).diff(moment(b.timestamp))
+      DateTime.fromISO(a.timestamp)
+        .diff(DateTime.fromISO(b.timestamp))
+        .as('seconds')
     );
 
     return this.resampleInputs(sortedInputs);
