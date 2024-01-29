@@ -104,6 +104,94 @@ describe('execute(): ', () => {
     }
   });
 
+  it('silently fails if `start-time` is not a valid ISO date.', async () => {
+    const invalidStartTimeConfig = {
+      'start-time': '0023-X',
+      'end-time': '2023-12-12T00:01:00.000Z',
+      interval: 5,
+      'allow-padding': true,
+    };
+    const timeModel = await new TimeSyncModel().configure(
+      invalidStartTimeConfig
+    );
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 10,
+        'cpu-util': 10,
+      },
+    ]);
+    expect(result).toStrictEqual([]);
+  });
+
+  it('silently fails if `end-time` is not a valid ISO date.', async () => {
+    const invalidEndTimeConfig = {
+      'start-time': '2023-12-12T00:01:00.000Z',
+      'end-time': '20XX',
+      interval: 5,
+      'allow-padding': true,
+    };
+    const timeModel = await new TimeSyncModel().configure(invalidEndTimeConfig);
+
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 10,
+        'cpu-util': 10,
+      },
+    ]);
+    expect(result).toStrictEqual([]);
+  });
+
+  it('silently fails and drops records if `timestamp` is not a valid ISO date.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:04.000Z',
+      interval: 1,
+      'allow-padding': true,
+    };
+    const timeModel = await new TimeSyncModel().configure(basicConfig);
+
+    expect.assertions(1);
+
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:01.000Z',
+        duration: 1,
+        'cpu-util': 10,
+      },
+      {
+        timestamp: '2023-12-13x',
+        duration: 1,
+        'cpu-util': 10,
+      },
+      {
+        timestamp: '2023-12-12T00:00:04.000Z',
+        duration: 1,
+        'cpu-util': 10,
+      },
+    ]);
+    const expectedResult = [
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        'cpu-util': 0,
+        duration: 1,
+      },
+      {
+        timestamp: '2023-12-12T00:00:01.000Z',
+        'cpu-util': 10,
+        duration: 1,
+      },
+      {
+        timestamp: '2023-12-12T00:00:04.000Z',
+        'cpu-util': 10,
+        duration: 1,
+      },
+    ];
+
+    expect(result).toStrictEqual(expectedResult);
+  });
+
   it('throws error if interval is invalid.', async () => {
     const invalidIntervalConfig = {
       'start-time': '2023-12-12T00:00:00.000Z',
@@ -228,7 +316,91 @@ describe('execute(): ', () => {
     }
   });
 
-  it('checks braking down observations case, if padding and zeroish objects are not needed.', async () => {
+  it('converts non-UTC inputs to UTC.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000+01:00',
+      'end-time': '2023-12-12T00:00:10.000+01:00',
+      interval: 1,
+      'allow-padding': true,
+    };
+
+    const timeModel = await new TimeSyncModel().configure(basicConfig);
+
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000+01:00',
+        duration: 2,
+        'cpu-util': 10,
+      },
+      {
+        timestamp: '2023-12-12T00:00:05.000+01:00',
+        duration: 2,
+        'cpu-util': 10,
+      },
+    ]);
+
+    const expectedResult = [
+      {
+        timestamp: '2023-12-11T23:00:00.000Z',
+        duration: 1,
+        'cpu-util': 10,
+      },
+      {
+        timestamp: '2023-12-11T23:00:01.000Z',
+        duration: 1,
+        'cpu-util': 10,
+      },
+      {
+        timestamp: '2023-12-11T23:00:02.000Z',
+        duration: 1,
+        'cpu-util': 0,
+      },
+      {
+        timestamp: '2023-12-11T23:00:03.000Z',
+        duration: 1,
+        'cpu-util': 0,
+      },
+      {
+        timestamp: '2023-12-11T23:00:04.000Z',
+        duration: 1,
+        'cpu-util': 0,
+      },
+      {
+        timestamp: '2023-12-11T23:00:05.000Z',
+        duration: 1,
+        'cpu-util': 10,
+      },
+      {
+        timestamp: '2023-12-11T23:00:06.000Z',
+        duration: 1,
+        'cpu-util': 10,
+      },
+      {
+        timestamp: '2023-12-11T23:00:07.000Z',
+        duration: 1,
+        'cpu-util': 0,
+      },
+      {
+        timestamp: '2023-12-11T23:00:08.000Z',
+        duration: 1,
+        'cpu-util': 0,
+      },
+      {
+        timestamp: '2023-12-11T23:00:09.000Z',
+        duration: 1,
+        'cpu-util': 0,
+      },
+      {
+        timestamp: '2023-12-11T23:00:10.000Z',
+        duration: 1,
+        'cpu-util': 0,
+      },
+    ];
+
+    expect(result).toStrictEqual(expectedResult);
+  });
+
+  it('checks breaking down observations case, if padding and zeroish objects are not needed.', async () => {
     const basicConfig = {
       'start-time': '2023-12-12T00:00:00.000Z',
       'end-time': '2023-12-12T00:00:10.000Z',
