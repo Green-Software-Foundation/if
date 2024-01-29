@@ -5,6 +5,7 @@ import { ERRORS } from '../util/errors';
 import { STRINGS } from '../config';
 import { Parameter } from '../types/units';
 import parameters from '../config/units.json';
+import fs from 'fs';
 
 import {
   Config,
@@ -33,14 +34,22 @@ export class Supercomputer {
   private modelsHandbook: ModelsUniverse;
   private childAmount = 0;
   private parameters: Object = {};
+  private overrideParamsPath: string | undefined;
 
-  constructor(impl: Impl, modelsHandbook: ModelsUniverse) {
+  constructor(impl: Impl, modelsHandbook: ModelsUniverse, overrideParams?: string | undefined) {
     this.impl = impl;
     this.modelsHandbook = modelsHandbook;
+    this.overrideParamsPath = overrideParams
   }
 
 
   async synchronizeParameters() {
+
+    if (!(this.overrideParamsPath === undefined)) {
+      var newParams = JSON.parse(fs.readFileSync(this.overrideParamsPath, 'utf-8'))
+      this.parameters = newParams
+    }
+
     const implParams = this.impl.params as Parameter[];
     implParams.forEach(param => {
       let name = param.name;

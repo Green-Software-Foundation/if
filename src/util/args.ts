@@ -1,19 +1,19 @@
 import * as path from 'path';
-import {parse} from 'ts-command-line-args';
+import { parse } from 'ts-command-line-args';
 
-import {checkIfFileIsYaml} from './yaml';
-import {ERRORS} from './errors';
+import { checkIfFileIsYaml } from './yaml';
+import { ERRORS } from './errors';
 
-import {CONFIG, STRINGS} from '../config';
+import { CONFIG, STRINGS } from '../config';
 
-import {impactProcessArgs} from '../types/process-args';
+import { impactProcessArgs } from '../types/process-args';
 
-const {CliInputError} = ERRORS;
+const { CliInputError } = ERRORS;
 
-const {impact} = CONFIG;
-const {ARGS, HELP} = impact;
+const { impact } = CONFIG;
+const { ARGS, HELP } = impact;
 
-const {FILE_IS_NOT_YAML, IMPL_IS_MISSING} = STRINGS;
+const { FILE_IS_NOT_YAML, IMPL_IS_MISSING } = STRINGS;
 
 /**
  * Validates process arguments
@@ -46,7 +46,7 @@ const prependFullFilePath = (filePath: string) => {
  * Otherwise throws error.
  */
 export const parseProcessArgument = () => {
-  const {impl, ompl, help} = validateAndParseProcessArgs();
+  const { impl, ompl, overrideParams, help } = validateAndParseProcessArgs();
 
   if (help) {
     console.log(HELP);
@@ -55,9 +55,14 @@ export const parseProcessArgument = () => {
 
   if (impl) {
     if (checkIfFileIsYaml(impl)) {
+      let paramPath = undefined;
+      if (overrideParams !== undefined) {
+        paramPath = overrideParams;
+      }
       return {
         inputPath: prependFullFilePath(impl),
-        ...(ompl && {outputPath: prependFullFilePath(ompl)}),
+        ...(ompl && { outputPath: prependFullFilePath(ompl) }),
+        paramPath
       };
     }
 

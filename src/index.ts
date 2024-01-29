@@ -31,7 +31,7 @@ const impactEngine = async () => {
   const processParams = parseProcessArgument();
 
   if (processParams) {
-    const { inputPath, outputPath } = processParams;
+    const { paramPath, inputPath, outputPath } = processParams;
     const impl = await openYamlFileAsObject<Impl>(inputPath);
 
     /** Lifecycle Validation */
@@ -44,7 +44,7 @@ const impactEngine = async () => {
     );
 
     /** Lifecycle Computing */
-    const computeInstance = await new Supercomputer(impl, modelsHandbook);
+    const computeInstance = await new Supercomputer(impl, modelsHandbook, paramPath);
     await computeInstance.synchronizeParameters();
     const outputData = await computeInstance.compute();
 
@@ -52,7 +52,6 @@ const impactEngine = async () => {
       console.log(JSON.stringify(outputData));
       return;
     }
-
     await saveYamlFileAs(outputData, outputPath);
 
     return;
