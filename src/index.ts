@@ -35,6 +35,7 @@ const impactEngine = async () => {
     const impl = await openYamlFileAsObject<Impl>(inputPath);
 
     /** Lifecycle Validation */
+    /** @todo refactor validation method to account for new rules */
     //const impl = validateImpl(rawImpl);
 
     /** Lifecycle Initialize Models */

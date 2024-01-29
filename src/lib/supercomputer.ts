@@ -54,7 +54,7 @@ export class Supercomputer {
     }
     )
     Object.assign(this.parameters, parameters);
-    console.log(this.parameters)
+    //console.log(this.parameters)
   }
 
   /**
