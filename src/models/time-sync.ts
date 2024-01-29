@@ -1,4 +1,4 @@
-import {DateTime, Interval} from 'luxon';
+import {DateTime, DateTimeMaybeValid, Interval} from 'luxon';
 
 import {STRINGS, PARAMETERS} from '../config';
 
@@ -250,18 +250,13 @@ export class TimeSyncModel implements ModelPluginInterface {
     const paddedFromBeginning = [];
 
     if (start) {
-      const dateRange = Interval.fromDateTimes(
-        DateTime.fromISO(this.startTime),
-        DateTime.fromISO(inputs[0].timestamp)
+      paddedFromBeginning.push(
+        ...this.getZeroishInputPerSecondBetweenRange(
+          DateTime.fromISO(this.startTime),
+          DateTime.fromISO(inputs[0].timestamp),
+          inputs[0]
+        )
       );
-      for (const interval of dateRange.splitBy({second: 1})) {
-        paddedFromBeginning.push(
-          // as far as I can tell, start will never be null
-          // because if we pass an invalid start/endDate to
-          // Interval, we get a zero length array as the range
-          this.fillWithZeroishInput(inputs[0], interval.start?.toMillis() || 0)
-        );
-      }
     }
 
     const paddedArray = paddedFromBeginning.concat(inputs);
@@ -271,21 +266,36 @@ export class TimeSyncModel implements ModelPluginInterface {
       const lastInputEnd = DateTime.fromISO(lastInput.timestamp).plus({
         seconds: lastInput.duration,
       });
-      const dateRange = Interval.fromDateTimes(
-        lastInputEnd,
-        DateTime.fromISO(this.endTime).plus({seconds: 1})
+      paddedArray.push(
+        ...this.getZeroishInputPerSecondBetweenRange(
+          lastInputEnd,
+          DateTime.fromISO(this.endTime).plus({seconds: 1}),
+          lastInput
+        )
       );
-      for (const interval of dateRange.splitBy({second: 1})) {
-        paddedArray.push(
+    }
+    return paddedArray;
+  }
+
+  private getZeroishInputPerSecondBetweenRange(
+    startDate: DateTimeMaybeValid,
+    endDate: DateTimeMaybeValid,
+    templateInput: ModelParams
+  ) {
+    const array: ModelParams[] = [];
+    const dateRange = Interval.fromDateTimes(startDate, endDate);
+    for (const interval of dateRange.splitBy({second: 1})) {
+      array.push(
+        this.fillWithZeroishInput(
+          templateInput,
           // as far as I can tell, start will never be null
           // because if we pass an invalid start/endDate to
           // Interval, we get a zero length array as the range
-          this.fillWithZeroishInput(lastInput, interval.start?.toMillis() || 0)
-        );
-      }
+          interval.start?.toMillis() || 0
+        )
+      );
     }
-
-    return paddedArray;
+    return array;
   }
 
   /*
