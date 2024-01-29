@@ -100,15 +100,15 @@ export class TimeSyncModel implements ModelPluginInterface {
   /**
    * Populates object to fill the gaps in observational timeline using zeroish values.
    */
-  private fillWithZeroishInput(input: ModelParams, missingTimestamp: number) {
+  private fillWithZeroishInput(
+    input: ModelParams,
+    missingTimestamp: DateTimeMaybeValid
+  ) {
     const metrics = Object.keys(input);
 
     return metrics.reduce((acc, metric) => {
       if (metric === 'timestamp') {
-        acc[metric] = DateTime.fromMillis(missingTimestamp)
-          .startOf('second')
-          .toUTC()
-          .toISO();
+        acc[metric] = missingTimestamp.startOf('second').toUTC().toISO();
 
         return acc;
       }
@@ -291,7 +291,7 @@ export class TimeSyncModel implements ModelPluginInterface {
           // as far as I can tell, start will never be null
           // because if we pass an invalid start/endDate to
           // Interval, we get a zero length array as the range
-          interval.start?.toMillis() || 0
+          interval.start || DateTime.invalid('not expected - start is null')
         )
       );
     }
@@ -356,21 +356,15 @@ export class TimeSyncModel implements ModelPluginInterface {
 
           /** Checks if there is gap in timeline. */
           if (timelineGapSize > 1) {
-            for (
-              let missingTimestamp = compareableTime.toMillis();
-              missingTimestamp <= currentMoment.toMillis() - 1000;
-              missingTimestamp += 1000
-            ) {
-              const filledGap = this.fillWithZeroishInput(
-                input,
-                missingTimestamp
-              );
-
-              acc.push(filledGap);
-            }
+            acc.push(
+              ...this.getZeroishInputPerSecondBetweenRange(
+                compareableTime,
+                currentMoment,
+                input
+              )
+            );
           }
         }
-
         /** Break down current observation. */
         for (let i = 0; i < input.duration; i++) {
           const normalizedInput = this.breakDownInput(input, i);
