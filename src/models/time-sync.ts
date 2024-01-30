@@ -1,15 +1,15 @@
-import {extendMoment} from 'moment-range';
-import {STRINGS} from '../config';
-import {ERRORS} from '../util/errors';
-import {UnitsDealer} from '../util/units-dealer';
-import {ModelParams, ModelPluginInterface} from '../types/model-interface';
-import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
-import {UnitsDealerUsage} from '../types/units-dealer';
-import {UnitKeyName} from '../types/units';
+import { extendMoment } from 'moment-range';
+import { STRINGS } from '../config';
+import { ERRORS } from '../util/errors';
+import { UnitsDealer } from '../util/units-dealer';
+import { ModelParams, ModelPluginInterface } from '../types/model-interface';
+import { PaddingReceipt, TimeNormalizerConfig } from '../types/time-sync';
+import { UnitsDealerUsage } from '../types/units-dealer';
+
 const moment = require('moment');
 const momentRange = extendMoment(moment);
 
-const {InputValidationError} = ERRORS;
+const { InputValidationError } = ERRORS;
 
 const {
   INVALID_TIME_NORMALIZATION,
@@ -71,7 +71,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Barkes down input per minimal time unit.
    */
   private breakDownInput(input: ModelParams, i: number) {
-    const inputKeys = Object.keys(input) as UnitKeyName[];
+    const inputKeys = Object.keys(input);
 
     return inputKeys.reduce((acc, key) => {
       const method = this.dealer.askToGiveMethodFor(key);
@@ -103,7 +103,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Populates object to fill the gaps in observational timeline using zeroish values.
    */
   private fillWithZeroishInput(input: ModelParams, missingTimestamp: number) {
-    const metrics = Object.keys(input) as UnitKeyName[];
+    const metrics = Object.keys(input);
 
     return metrics.reduce((acc, metric) => {
       if (metric === 'timestamp') {
@@ -165,7 +165,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    */
   private resampleInputFrame = (inputsInTimeslot: ModelParams[]) => {
     return inputsInTimeslot.reduce((acc, input, index, inputs) => {
-      const metrics = Object.keys(input) as UnitKeyName[];
+      const metrics = Object.keys(input);
 
       metrics.forEach(metric => {
         const method = this.dealer.askToGiveMethodFor(metric);
@@ -213,7 +213,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Takes each array frame with interval length, then aggregating them together as from units.yaml file.
    */
   private resampleInputs(inputs: ModelParams[]) {
-    return inputs.reduce((acc, _input, index, inputs) => {
+    return inputs.reduce((acc: ModelParams[], _input, index, inputs) => {
       const frameStart = index * this.interval;
       const frameEnd = (index + 1) * this.interval;
       const inputsFrame = inputs.slice(frameStart, frameEnd);
@@ -233,7 +233,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Pads zeroish inputs from the beginning or at the end of the inputs if needed.
    */
   private padInputs(inputs: ModelParams[], pad: PaddingReceipt): ModelParams[] {
-    const {start, end} = pad;
+    const { start, end } = pad;
     const paddedFromBeginning = [];
 
     if (start) {
@@ -273,8 +273,8 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Checks if input's timestamp is included in global specified period then leaves it, otherwise.
    */
   private trimInputsByGlobalTimeline(inputs: ModelParams[]): ModelParams[] {
-    return inputs.reduce((acc, item) => {
-      const {timestamp} = item;
+    return inputs.reduce((acc: ModelParams[], item) => {
+      const { timestamp } = item;
 
       if (
         moment(timestamp).isSameOrAfter(moment(this.startTime)) &&
@@ -296,7 +296,7 @@ export class TimeSyncModel implements ModelPluginInterface {
     const pad = this.checkForPadding(inputs);
     const paddedInputs = this.padInputs(inputs, pad);
 
-    const flattenInputs = paddedInputs.reduce((acc, input, index) => {
+    const flattenInputs = paddedInputs.reduce((acc: ModelParams[], input, index) => {
       const currentMoment = moment(input.timestamp);
 
       /** Checks if not the first input, then check consistency with previous ones. */

@@ -1,26 +1,25 @@
-import {ModelsUniverse as MockModelUniverse} from '../../../__mocks__/model-universe';
+import { ModelsUniverse as MockModelUniverse } from '../../../__mocks__/model-universe';
 
 jest.mock('../../../lib/models-universe', () => ({
   __esModule: true,
   ModelsUniverse: MockModelUniverse,
 }));
 
-import {Supercomputer} from '../../../lib/supercomputer';
-import {ModelsUniverse} from '../../../lib/models-universe';
+import { Supercomputer } from '../../../lib/supercomputer';
+import { ModelsUniverse } from '../../../lib/models-universe';
 
-import {ERRORS} from '../../../util/errors';
+import { ERRORS } from '../../../util/errors';
 
-import {STRINGS} from '../../../config';
+import { STRINGS } from '../../../config';
 
-import {impl} from './impls/basic';
-import {implNested, implNestedNoConfig} from './impls/nested';
+import { impl } from './impls/basic';
+import { implNested, implNestedNoConfig } from './impls/nested';
 
-import {Impl, hasChildren, hasInputs} from '../../../types/impl';
-import {UnitKeyName} from '../../../types/units';
+import { Impl, hasChildren, hasInputs } from '../../../types/impl';
 
-const {ImplValidationError} = ERRORS;
+const { ImplValidationError } = ERRORS;
 
-const {STRUCTURE_MALFORMED} = STRINGS;
+const { STRUCTURE_MALFORMED } = STRINGS;
 
 describe('lib/supercomputer: ', () => {
   describe('init Supercomputer: ', () => {
@@ -99,7 +98,7 @@ describe('lib/supercomputer: ', () => {
 
       const parentNode = result.graph.children['child-0'];
       const parentConfig = parentNode.config['mockavizta'];
-      const parentNodeConfigKeys = Object.keys(parentConfig) as UnitKeyName[];
+      const parentNodeConfigKeys = Object.keys(parentConfig);
 
       if (hasChildren(result.graph.children['child-0'])) {
         if (
@@ -107,13 +106,13 @@ describe('lib/supercomputer: ', () => {
         ) {
           const firstNestedChild =
             result.graph.children['child-0'].children['child-0-1'].children[
-              'child-0-1-1'
+            'child-0-1-1'
             ];
           const firstNestedChildOutput = firstNestedChild.outputs;
 
           const secondNestedChild =
             result.graph.children['child-0'].children['child-0-1'].children[
-              'child-0-1-2'
+            'child-0-1-2'
             ];
 
           if (hasChildren(secondNestedChild)) {
@@ -123,7 +122,7 @@ describe('lib/supercomputer: ', () => {
             const thirdLevelNestedOutputs = thirdLevelNestedChild.outputs;
 
             /** Checks if `child-0` config is applied to `child-0-1-1` outputs. */
-            parentNodeConfigKeys.forEach((parentConfigKey: UnitKeyName) => {
+            parentNodeConfigKeys.forEach((parentConfigKey: string) => {
               firstNestedChildOutput!.forEach(output => {
                 const outputKeys = Object.keys(output);
 
@@ -159,7 +158,7 @@ describe('lib/supercomputer: ', () => {
 
       const parentNode = result.graph.children['child-0'];
       const parentConfig = parentNode.config['mockavizta'];
-      const parentNodeConfigKeys = Object.keys(parentConfig) as UnitKeyName[];
+      const parentNodeConfigKeys = Object.keys(parentConfig);
 
       if (hasChildren(result.graph.children['child-0'])) {
         if (
@@ -167,13 +166,13 @@ describe('lib/supercomputer: ', () => {
         ) {
           const firstNestedChild =
             result.graph.children['child-0'].children['child-0-1'].children[
-              'child-0-1-1'
+            'child-0-1-1'
             ];
           const firstNestedChildOutput = firstNestedChild.outputs;
 
           const secondNestedChild =
             result.graph.children['child-0'].children['child-0-1'].children[
-              'child-0-1-2'
+            'child-0-1-2'
             ];
 
           if (hasChildren(secondNestedChild)) {
@@ -183,7 +182,7 @@ describe('lib/supercomputer: ', () => {
             const thirdLevelNestedOutputs = thirdLevelNestedChild.outputs;
 
             /** Checks if `child-0` config is applied to `child-0-1-1` outputs. */
-            parentNodeConfigKeys.forEach((parentConfigKey: UnitKeyName) => {
+            parentNodeConfigKeys.forEach((parentConfigKey: string) => {
               firstNestedChildOutput!.forEach(output => {
                 const outputKeys = Object.keys(output);
 
@@ -234,7 +233,7 @@ describe('lib/supercomputer: ', () => {
 
         expect(
           result.graph.children['front-end']['aggregated-outputs']![
-            'aggregated-carbon'
+          'aggregated-carbon'
           ]
         ).toEqual(expectedAggregatedCarbon);
       }
@@ -267,7 +266,7 @@ describe('lib/supercomputer: ', () => {
 
         expect(
           result.graph.children['front-end']['aggregated-outputs']![
-            'aggregated-carbon'
+          'aggregated-carbon'
           ]
         ).toEqual(expectedAggregatedCarbon);
       }

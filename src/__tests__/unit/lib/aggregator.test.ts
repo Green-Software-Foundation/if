@@ -1,20 +1,19 @@
-import {aggregate} from '../../../lib/aggregator';
+import { aggregate } from '../../../lib/aggregator';
 
-import {STRINGS} from '../../../config';
+import { STRINGS } from '../../../config';
 
-import {ERRORS} from '../../../util/errors';
+import { ERRORS } from '../../../util/errors';
 
-import {UnitKeyName} from '../../../types/units';
 
-const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
+const { INVALID_AGGREGATION_METHOD, METRIC_MISSING } = STRINGS;
 
-const {InvalidAggregationParams} = ERRORS;
+const { InvalidAggregationParams } = ERRORS;
 
 describe('lib/aggregator: ', () => {
   describe('aggregate(): ', () => {
     it('throws error if aggregation method is none.', async () => {
       const inputs = [{}];
-      const metrics = ['total-resources'] as UnitKeyName[];
+      const metrics = ['total-resources'];
 
       const expectedMessage = INVALID_AGGREGATION_METHOD('none');
 
@@ -33,7 +32,7 @@ describe('lib/aggregator: ', () => {
           'ram-util': 10,
         },
       ];
-      const metrics = ['cpu-util'] as UnitKeyName[];
+      const metrics = ['cpu-util'];
 
       const expectedMessage = METRIC_MISSING(metrics[0], 0);
 
@@ -55,7 +54,7 @@ describe('lib/aggregator: ', () => {
           'cpu-util': 20,
         },
       ];
-      const metrics = ['cpu-util'] as UnitKeyName[];
+      const metrics = ['cpu-util'];
 
       const expectedKey = `aggregated-${Object.keys(inputs[0])[0]}`;
       const expectedValue = (inputs[0]['cpu-util'] + inputs[1]['cpu-util']) / 2;
@@ -77,7 +76,7 @@ describe('lib/aggregator: ', () => {
           'disk-io': 20,
         },
       ];
-      const metrics = ['disk-io'] as UnitKeyName[];
+      const metrics = ['disk-io'];
 
       const expectedKey = `aggregated-${Object.keys(inputs[0])[0]}`;
       const expectedValue = inputs[0]['disk-io'] + inputs[1]['disk-io'];
