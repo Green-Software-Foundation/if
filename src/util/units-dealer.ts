@@ -1,4 +1,4 @@
-import { parameters } from '../config/params';
+import {parameters} from '../config/params';
 
 /**
  * Units dealer 😎 .
