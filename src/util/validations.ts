@@ -4,29 +4,28 @@ import { ERRORS } from './errors';
 
 import { Impl } from '../types/impl';
 import { AggregationMethods } from '../types/aggregator';
-import { UnitKeys } from '../types/units';
 
 const { ImplValidationError } = ERRORS;
 
-/**
- * Zod literal union validator which checks if members are more than 2.
- */
-const isValidZodLiteralUnion = <T extends z.ZodLiteral<unknown>>(
-  literals: T[]
-): literals is [T, T, ...T[]] => literals.length >= 2;
+// /**
+//  * Zod literal union validator which checks if members are more than 2.
+//  */
+// const isValidZodLiteralUnion = <T extends z.ZodLiteral<unknown>>(
+//   literals: T[]
+// ): literals is [T, T, ...T[]] => literals.length >= 2;
 
-/**
- * Literal union type helper.
- */
-const createUnionType = <T extends z.ZodLiteral<unknown>>(literals: T[]) => {
-  if (!isValidZodLiteralUnion(literals)) {
-    throw new Error(
-      'Literals passed do not meet the criteria for constructing a union schema, the minimum length is 2.'
-    );
-  }
+// /**
+//  * Literal union type helper.
+//  */
+// const createUnionType = <T extends z.ZodLiteral<unknown>>(literals: T[]) => {
+//   if (!isValidZodLiteralUnion(literals)) {
+//     throw new Error(
+//       'Literals passed do not meet the criteria for constructing a union schema, the minimum length is 2.'
+//     );
+//   }
 
-  return z.union(literals);
-};
+//   return z.union(literals);
+// };
 
 /**
  * Validation schema for impl files.
@@ -37,7 +36,7 @@ const implValidation = z.object({
   aggregation: z
     .object({
       metrics: z.array(
-        createUnionType(UnitKeys.map(metric => z.literal(metric)))
+        z.string()
       ),
       type: z.enum(AggregationMethods),
     })

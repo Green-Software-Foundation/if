@@ -1,6 +1,5 @@
 import { ModelParams } from './model-interface';
 import { AggregationMethodsName, AggregationResult } from './aggregator';
-import { UnitKeyName } from './units';
 
 type Tag = {
   kind?: string;
@@ -103,7 +102,7 @@ export type Impl = {
     children: ParentStructure;
   };
   aggregation?: {
-    metrics: UnitKeyName[];
+    metrics: string[];
     type: AggregationMethodsName;
   };
   'aggregated-outputs'?: AggregationResult;

@@ -1,11 +1,11 @@
 import path = require('path');
 
-import {openYamlFileAsObject} from './yaml';
-import {ERRORS} from './errors';
+import { openYamlFileAsObject } from './yaml';
+import { ERRORS } from './errors';
 
-import {Units, UnitKeyName} from '../types/units';
+import { Units } from '../types/units';
 
-const {FileNotFoundError} = ERRORS;
+const { FileNotFoundError } = ERRORS;
 
 /**
  * Gets units file as an object.
@@ -27,7 +27,7 @@ export const UnitsDealer = async () => {
     /**
      * Returns aggregation method for given `unitName`. If doesn't exist then returns value `sum`.
      */
-    askToGiveMethodFor: (unitName: UnitKeyName) => {
+    askToGiveMethodFor: (unitName: string) => {
       if (unitsStack[unitName]) {
         return unitsStack[unitName].aggregation;
       }

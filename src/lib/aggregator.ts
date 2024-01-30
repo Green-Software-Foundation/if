@@ -1,22 +1,21 @@
-import {ERRORS} from '../util/errors';
-import {UnitsDealer} from '../util/units-dealer';
+import { ERRORS } from '../util/errors';
+import { UnitsDealer } from '../util/units-dealer';
 
-import {STRINGS} from '../config';
+import { STRINGS } from '../config';
 
-import {ModelParams} from '../types/model-interface';
-import {AggregationResult} from '../types/aggregator';
-import {UnitKeyName} from '../types/units';
-import {UnitsDealerUsage} from '../types/units-dealer';
+import { ModelParams } from '../types/model-interface';
+import { AggregationResult } from '../types/aggregator';
+import { UnitsDealerUsage } from '../types/units-dealer';
 
-const {InvalidAggregationParams} = ERRORS;
-const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
+const { InvalidAggregationParams } = ERRORS;
+const { INVALID_AGGREGATION_METHOD, METRIC_MISSING } = STRINGS;
 
 /**
  * Validates metrics array before applying aggregator.
  * If aggregation method is `none`, then throws error.
  */
 const checkIfMetricsAreValid = (
-  metrics: UnitKeyName[],
+  metrics: string[],
   dealer: UnitsDealerUsage
 ) => {
   metrics.forEach(metric => {
@@ -34,7 +33,7 @@ const checkIfMetricsAreValid = (
  */
 export const aggregate = async (
   inputs: ModelParams[],
-  metrics: UnitKeyName[]
+  metrics: string[]
 ) => {
   const dealer = await UnitsDealer();
 
