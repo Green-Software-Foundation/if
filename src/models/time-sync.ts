@@ -1,15 +1,15 @@
-import { extendMoment } from 'moment-range';
-import { STRINGS } from '../config';
-import { ERRORS } from '../util/errors';
-import { UnitsDealer } from '../util/units-dealer';
-import { ModelParams, ModelPluginInterface } from '../types/model-interface';
-import { PaddingReceipt, TimeNormalizerConfig } from '../types/time-sync';
-import { UnitsDealerUsage } from '../types/units-dealer';
+import {extendMoment} from 'moment-range';
+import {STRINGS} from '../config';
+import {ERRORS} from '../util/errors';
+import {UnitsDealer} from '../util/units-dealer';
+import {ModelParams, ModelPluginInterface} from '../types/model-interface';
+import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
+import {UnitsDealerUsage} from '../types/units-dealer';
 
 const moment = require('moment');
 const momentRange = extendMoment(moment);
 
-const { InputValidationError } = ERRORS;
+const {InputValidationError} = ERRORS;
 
 const {
   INVALID_TIME_NORMALIZATION,
@@ -145,7 +145,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Checks if `error on padding` is enabled and padding is needed. If so, then throws error.
    */
   private validatePadding(pad: PaddingReceipt): void {
-    const { start, end } = pad;
+    const {start, end} = pad;
     const isPaddingNeeded = start || end;
     if (!this.allowPadding && isPaddingNeeded) {
       throw new InputValidationError(AVOIDING_PADDING_BY_EDGES(start, end));
@@ -246,7 +246,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Pads zeroish inputs from the beginning or at the end of the inputs if needed.
    */
   private padInputs(inputs: ModelParams[], pad: PaddingReceipt): ModelParams[] {
-    const { start, end } = pad;
+    const {start, end} = pad;
     const paddedFromBeginning = [];
 
     if (start) {
@@ -287,7 +287,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    */
   private trimInputsByGlobalTimeline(inputs: ModelParams[]): ModelParams[] {
     return inputs.reduce((acc: ModelParams[], item) => {
-      const { timestamp } = item;
+      const {timestamp} = item;
 
       if (
         moment(timestamp).isSameOrAfter(moment(this.startTime)) &&
