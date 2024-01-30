@@ -1,24 +1,12 @@
 import {UnitsDealer} from '../../../util/units-dealer';
-import {ERRORS} from '../../../util/errors';
 
-jest.mock('../../../util/yaml.ts', () => {
-  return {
-    __esModule: true,
-    openYamlFileAsObject: () => {
-      if (process.env.REJECT_READ === 'true') {
-        return Promise.reject(new Error('mock-error'));
-      }
-
-      return Promise.resolve({
-        'cpu-util': {
-          aggregation: 'avg',
-        },
-      });
+jest.mock('../../../types/units', () => {
+  return Promise.resolve({
+    'cpu-util': {
+      aggregation: 'avg',
     },
-  };
+  });
 });
-
-const {FileNotFoundError} = ERRORS;
 
 describe('util/units-dealer: ', () => {
   const originalEnv = process.env;
@@ -32,19 +20,6 @@ describe('util/units-dealer: ', () => {
         expect.assertions(1);
 
         expect(dealer).toHaveProperty('askToGiveMethodFor');
-      });
-
-      it('fails to init, if units file is not reachable.', async () => {
-        process.env.REJECT_READ = 'true';
-
-        expect.assertions(1);
-        const message = 'mock-error';
-
-        try {
-          await UnitsDealer();
-        } catch (error) {
-          expect(error).toEqual(new FileNotFoundError(message));
-        }
       });
     });
 
