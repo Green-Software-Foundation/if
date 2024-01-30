@@ -4,7 +4,7 @@ import { aggregate } from './aggregator';
 import { ERRORS } from '../util/errors';
 import { STRINGS } from '../config';
 import { Parameter } from '../types/units';
-import parameters from '../config/units.json';
+import { parameters } from '../config/params';
 import fs from 'fs';
 
 import {

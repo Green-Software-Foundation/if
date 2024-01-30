@@ -1,4 +1,4 @@
-{
+export const parameters = {
     "carbon": {
         "description": "an amount of carbon emitted into the atmosphere",
         "unit": "gCO2e",
