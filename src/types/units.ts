@@ -49,5 +49,4 @@ export type Parameter = {
   unit: string;
   description: string;
   aggregation: string;
-
-}
+};

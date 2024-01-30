@@ -1,6 +1,6 @@
-import { ArgumentConfig } from 'ts-command-line-args';
+import {ArgumentConfig} from 'ts-command-line-args';
 
-import { impactProcessArgs } from '../types/process-args';
+import {impactProcessArgs} from '../types/process-args';
 
 export const CONFIG = {
   impact: {
@@ -20,8 +20,7 @@ export const CONFIG = {
       overrideParams: {
         type: String,
         optional: true,
-        description:
-          'Path to a parameter file that overrides our defaults.',
+        description: 'Path to a parameter file that overrides our defaults.',
       },
       format: {
         type: String,

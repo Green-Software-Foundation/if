@@ -13,6 +13,8 @@
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
   },
   "dependencies": {
+    "@grnsft/if-models": "^0.1.3",
+    "@grnsft/if-unofficial-models": "^0.1.3",
     "copyfiles": "^2.4.1",
     "js-yaml": "^4.1.0",
     "moment": "^2.29.4",

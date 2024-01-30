@@ -1,16 +1,12 @@
-import moment = require('moment');
 import {extendMoment} from 'moment-range';
-
 import {STRINGS} from '../config';
-
 import {ERRORS} from '../util/errors';
 import {UnitsDealer} from '../util/units-dealer';
-
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
 import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
 import {UnitsDealerUsage} from '../types/units-dealer';
 import {UnitKeyName} from '../types/units';
-
+const moment = require('moment');
 const momentRange = extendMoment(moment);
 
 const {InputValidationError} = ERRORS;

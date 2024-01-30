@@ -5,10 +5,6 @@ tags:
   complexity: moderate
   category: on-premise
 params: 
-  - name: carbon
-    description: dummy
-    aggregation: sum
-    unit: MT
 aggregation:
   type: both
   metrics: 
