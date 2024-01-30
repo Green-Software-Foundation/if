@@ -5,7 +5,7 @@ import { ERRORS } from '../util/errors';
 import { STRINGS } from '../config';
 import { Parameter } from '../types/units';
 import { parameters } from '../config/params';
-import fs from 'fs';
+const fs = require('fs');
 
 import {
   Config,
