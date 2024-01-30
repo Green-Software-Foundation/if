@@ -56,17 +56,16 @@ export class Supercomputer {
     if (!(this.impl.params === undefined || this.impl.params === null)) {
       const implParams = this.impl.params as Parameter[];
       implParams.forEach(param => {
-        const name = param.name;
-        if (!Object.prototype.hasOwnProperty.call(parameters, name)) {
+        if (!Object.prototype.hasOwnProperty.call(parameters, param.name)) {
           const obj: any = {};
-          obj[name] = {
+          obj[param.name] = {
             description: param.description,
             unit: param.unit,
             aggregation: 'sum',
           };
           Object.assign(parameters, obj);
         } else {
-          warn(`Rejecting overriding of canonical parameter: ${name}.`);
+          warn(`Rejecting overriding of canonical parameter: ${param.name}.`);
         }
       });
       Object.assign(this.parameters, parameters);
