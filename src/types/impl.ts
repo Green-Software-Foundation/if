@@ -94,7 +94,7 @@ export type Impl = {
   name: string;
   description: string | null | undefined;
   tags: Tag | null | undefined;
-  params: Object[];
+  params?: Object[] | undefined | null;
 
   initialize: {
     models: Model[];

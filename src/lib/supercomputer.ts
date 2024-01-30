@@ -36,34 +36,42 @@ export class Supercomputer {
   private parameters: Object = {};
   private overrideParamsPath: string | undefined;
 
-  constructor(impl: Impl, modelsHandbook: ModelsUniverse, overrideParams?: string | undefined) {
+  constructor(
+    impl: Impl,
+    modelsHandbook: ModelsUniverse,
+    overrideParams?: string | undefined
+  ) {
     this.impl = impl;
     this.modelsHandbook = modelsHandbook;
-    this.overrideParamsPath = overrideParams
+    this.overrideParamsPath = overrideParams;
   }
 
-
   async synchronizeParameters() {
-
     if (!(this.overrideParamsPath === undefined)) {
-      var newParams = JSON.parse(fs.readFileSync(this.overrideParamsPath, 'utf-8'))
-      this.parameters = newParams
+      const newParams = JSON.parse(
+        fs.readFileSync(this.overrideParamsPath, 'utf-8')
+      );
+      this.parameters = newParams;
     }
-
-    const implParams = this.impl.params as Parameter[];
-    implParams.forEach(param => {
-      let name = param.name;
-      if (!(parameters.hasOwnProperty(name))) {
-        let obj: any = {}
-        obj[name] = { description: param.description, unit: param.unit, aggregation: "sum" }
-        Object.assign(parameters, obj);
-      } else {
-        warn(`Rejecting overriding of canonical parameter: ${name}.`)
-      }
+    if (!(this.impl.params === undefined || this.impl.params === null)) {
+      const implParams = this.impl.params as Parameter[];
+      implParams.forEach(param => {
+        const name = param.name;
+        if (!Object.prototype.hasOwnProperty.call(parameters, name)) {
+          const obj: any = {};
+          obj[name] = {
+            description: param.description,
+            unit: param.unit,
+            aggregation: 'sum',
+          };
+          Object.assign(parameters, obj);
+        } else {
+          warn(`Rejecting overriding of canonical parameter: ${name}.`);
+        }
+      });
+      Object.assign(this.parameters, parameters);
+      console.log(this.parameters)
     }
-    )
-    Object.assign(this.parameters, parameters);
-    //console.log(this.parameters)
   }
 
   /**
