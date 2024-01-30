@@ -5,7 +5,7 @@ type UnitFields = {
 };
 
 export type Units = {
-  [key: string]: UnitFields;
+  [key: string]: UnitFields | undefined;
 };
 
 export type Parameter = {
