@@ -1,12 +1,12 @@
-import {ZodIssue, z} from 'zod';
+import { ZodIssue, z } from 'zod';
 
-import {ERRORS} from './errors';
+import { ERRORS } from './errors';
 
-import {Impl} from '../types/impl';
-import {AggregationMethods} from '../types/aggregator';
-import {UnitKeys} from '../types/units';
+import { Impl } from '../types/impl';
+import { AggregationMethods } from '../types/aggregator';
+import { UnitKeys } from '../types/units';
 
-const {ImplValidationError} = ERRORS;
+const { ImplValidationError } = ERRORS;
 
 /**
  * Zod literal union validator which checks if members are more than 2.
@@ -33,6 +33,7 @@ const createUnionType = <T extends z.ZodLiteral<unknown>>(literals: T[]) => {
  */
 const implValidation = z.object({
   name: z.string(),
+  'if-version': z.string().optional().nullable(),
   description: z.string().nullable(),
   aggregation: z
     .object({
@@ -77,7 +78,7 @@ export const validateImpl = (impl: Impl) => {
       const issuesArray = JSON.parse(issues);
 
       return issuesArray.map((issue: ZodIssue) => {
-        const {code, path, message} = issue;
+        const { code, path, message } = issue;
         const flattenPath = path.map(part =>
           typeof part === 'number' ? `[${part}]` : part
         );
