@@ -1,13 +1,12 @@
-import { aggregate } from '../../../lib/aggregator';
+import {aggregate} from '../../../lib/aggregator';
 
-import { STRINGS } from '../../../config';
+import {STRINGS} from '../../../config';
 
-import { ERRORS } from '../../../util/errors';
+import {ERRORS} from '../../../util/errors';
 
+const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
 
-const { INVALID_AGGREGATION_METHOD, METRIC_MISSING } = STRINGS;
-
-const { InvalidAggregationParams } = ERRORS;
+const {InvalidAggregationParams} = ERRORS;
 
 describe('lib/aggregator: ', () => {
   describe('aggregate(): ', () => {

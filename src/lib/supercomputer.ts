@@ -1,10 +1,10 @@
-import { ModelsUniverse } from './models-universe';
-import { Observatory } from './observatory';
-import { aggregate } from './aggregator';
-import { ERRORS } from '../util/errors';
-import { STRINGS } from '../config';
-import { Parameter } from '../types/units';
-import { parameters } from '../config/params';
+import {ModelsUniverse} from './models-universe';
+import {Observatory} from './observatory';
+import {aggregate} from './aggregator';
+import {ERRORS} from '../util/errors';
+import {STRINGS} from '../config';
+import {Parameter} from '../types/units';
+import {parameters} from '../config/params';
 const fs = require('fs');
 
 import {
@@ -17,12 +17,12 @@ import {
   hasChildren,
   hasInputs,
 } from '../types/impl';
-import { ModelParams } from '../types/model-interface';
-import { warn } from 'console';
+import {ModelParams} from '../types/model-interface';
+import {warn} from 'console';
 
-const { ImplValidationError } = ERRORS;
+const {ImplValidationError} = ERRORS;
 
-const { STRUCTURE_MALFORMED } = STRINGS;
+const {STRUCTURE_MALFORMED} = STRINGS;
 
 /**
  * Computer for `impl` documents.
@@ -69,7 +69,7 @@ export class Supercomputer {
         }
       });
       Object.assign(this.parameters, parameters);
-      console.log(this.parameters)
+      console.log(this.parameters);
     }
   }
 
@@ -78,7 +78,7 @@ export class Supercomputer {
    */
   private flattenConfigValues(config: Config): ModelParams {
     const configValues = Object.values(config);
-    return configValues.reduce((acc, value) => ({ ...acc, ...value }), {});
+    return configValues.reduce((acc, value) => ({...acc, ...value}), {});
   }
 
   /**
@@ -114,8 +114,8 @@ export class Supercomputer {
 
     this.childAmount++;
 
-    const { pipeline } = this.parent;
-    const { inputs, config } = pointedChild;
+    const {pipeline} = this.parent;
+    const {inputs, config} = pointedChild;
 
     const enrichedInputs = this.enrichInputs(inputs, {
       ...this.parent.config,
@@ -138,7 +138,7 @@ export class Supercomputer {
 
     /** If aggregation is enabled, do horizontal aggregation. */
     if (this.impl.aggregation) {
-      const { type, metrics } = this.impl.aggregation;
+      const {type, metrics} = this.impl.aggregation;
 
       if (type === 'horizontal' || type === 'both') {
         const aggregation = await aggregate(outputs, metrics);

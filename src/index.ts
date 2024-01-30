@@ -1,20 +1,20 @@
 #!/usr/bin/env node
-import { ModelsUniverse } from './lib/models-universe';
-import { Supercomputer } from './lib/supercomputer';
+import {ModelsUniverse} from './lib/models-universe';
+import {Supercomputer} from './lib/supercomputer';
 
-import { parseProcessArgument } from './util/args';
-import { ERRORS } from './util/errors';
-import { andHandle } from './util/helpers';
-import { validateImpl } from './util/validations';
-import { openYamlFileAsObject, saveYamlFileAs } from './util/yaml';
+import {parseProcessArgument} from './util/args';
+import {ERRORS} from './util/errors';
+import {andHandle} from './util/helpers';
+import {validateImpl} from './util/validations';
+import {openYamlFileAsObject, saveYamlFileAs} from './util/yaml';
 
-import { STRINGS } from './config';
+import {STRINGS} from './config';
 
-import { Impl } from './types/impl';
+import {Impl} from './types/impl';
 
-const { CliInputError } = ERRORS;
+const {CliInputError} = ERRORS;
 
-const { DISCLAIMER_MESSAGE, OVERRIDE_WARNING, SOMETHING_WRONG } = STRINGS;
+const {DISCLAIMER_MESSAGE, OVERRIDE_WARNING, SOMETHING_WRONG} = STRINGS;
 
 /**
  * 1. Parses yml input/output process arguments.
@@ -31,9 +31,9 @@ const impactEngine = async () => {
   const processParams = parseProcessArgument();
 
   if (processParams) {
-    const { paramPath, inputPath, outputPath } = processParams;
+    const {paramPath, inputPath, outputPath} = processParams;
     const rawImpl = await openYamlFileAsObject<Impl>(inputPath);
-    if (!(paramPath == null || paramPath === undefined)) {
+    if (!(paramPath === null || paramPath === undefined)) {
       console.log(OVERRIDE_WARNING);
     }
 

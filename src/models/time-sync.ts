@@ -1,15 +1,15 @@
-import { extendMoment } from 'moment-range';
-import { STRINGS } from '../config';
-import { ERRORS } from '../util/errors';
-import { UnitsDealer } from '../util/units-dealer';
-import { ModelParams, ModelPluginInterface } from '../types/model-interface';
-import { PaddingReceipt, TimeNormalizerConfig } from '../types/time-sync';
-import { UnitsDealerUsage } from '../types/units-dealer';
+import {extendMoment} from 'moment-range';
+import {STRINGS} from '../config';
+import {ERRORS} from '../util/errors';
+import {UnitsDealer} from '../util/units-dealer';
+import {ModelParams, ModelPluginInterface} from '../types/model-interface';
+import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
+import {UnitsDealerUsage} from '../types/units-dealer';
 
 const moment = require('moment');
 const momentRange = extendMoment(moment);
 
-const { InputValidationError } = ERRORS;
+const {InputValidationError} = ERRORS;
 
 const {
   INVALID_TIME_NORMALIZATION,
@@ -233,7 +233,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Pads zeroish inputs from the beginning or at the end of the inputs if needed.
    */
   private padInputs(inputs: ModelParams[], pad: PaddingReceipt): ModelParams[] {
-    const { start, end } = pad;
+    const {start, end} = pad;
     const paddedFromBeginning = [];
 
     if (start) {
@@ -274,7 +274,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    */
   private trimInputsByGlobalTimeline(inputs: ModelParams[]): ModelParams[] {
     return inputs.reduce((acc: ModelParams[], item) => {
-      const { timestamp } = item;
+      const {timestamp} = item;
 
       if (
         moment(timestamp).isSameOrAfter(moment(this.startTime)) &&
@@ -296,56 +296,59 @@ export class TimeSyncModel implements ModelPluginInterface {
     const pad = this.checkForPadding(inputs);
     const paddedInputs = this.padInputs(inputs, pad);
 
-    const flattenInputs = paddedInputs.reduce((acc: ModelParams[], input, index) => {
-      const currentMoment = moment(input.timestamp);
+    const flattenInputs = paddedInputs.reduce(
+      (acc: ModelParams[], input, index) => {
+        const currentMoment = moment(input.timestamp);
 
-      /** Checks if not the first input, then check consistency with previous ones. */
-      if (index > 0) {
-        const previousInput = paddedInputs[index - 1];
-        const previousInputTimestamp = moment(previousInput.timestamp);
+        /** Checks if not the first input, then check consistency with previous ones. */
+        if (index > 0) {
+          const previousInput = paddedInputs[index - 1];
+          const previousInputTimestamp = moment(previousInput.timestamp);
 
-        /** Checks for timestamps overlap. */
-        if (
-          moment(previousInput.timestamp)
-            .add(previousInput.duration, 'seconds')
-            .isAfter(currentMoment)
-        ) {
-          throw new InputValidationError(INVALID_OBSERVATION_OVERLAP);
-        }
-
-        const compareableTime = previousInputTimestamp.add(
-          previousInput.duration,
-          'second'
-        );
-
-        const timelineGapSize = currentMoment.diff(compareableTime, 'second');
-
-        /** Checks if there is gap in timeline. */
-        if (timelineGapSize > 1) {
-          for (
-            let missingTimestamp = compareableTime.valueOf();
-            missingTimestamp <= currentMoment.valueOf() - 1000;
-            missingTimestamp += 1000
+          /** Checks for timestamps overlap. */
+          if (
+            moment(previousInput.timestamp)
+              .add(previousInput.duration, 'seconds')
+              .isAfter(currentMoment)
           ) {
-            const filledGap = this.fillWithZeroishInput(
-              input,
-              missingTimestamp
-            );
+            throw new InputValidationError(INVALID_OBSERVATION_OVERLAP);
+          }
 
-            acc.push(filledGap);
+          const compareableTime = previousInputTimestamp.add(
+            previousInput.duration,
+            'second'
+          );
+
+          const timelineGapSize = currentMoment.diff(compareableTime, 'second');
+
+          /** Checks if there is gap in timeline. */
+          if (timelineGapSize > 1) {
+            for (
+              let missingTimestamp = compareableTime.valueOf();
+              missingTimestamp <= currentMoment.valueOf() - 1000;
+              missingTimestamp += 1000
+            ) {
+              const filledGap = this.fillWithZeroishInput(
+                input,
+                missingTimestamp
+              );
+
+              acc.push(filledGap);
+            }
           }
         }
-      }
 
-      /** Break down current observation. */
-      for (let i = 0; i < input.duration; i++) {
-        const normalizedInput = this.breakDownInput(input, i);
+        /** Break down current observation. */
+        for (let i = 0; i < input.duration; i++) {
+          const normalizedInput = this.breakDownInput(input, i);
 
-        acc.push(normalizedInput);
-      }
+          acc.push(normalizedInput);
+        }
 
-      return this.trimInputsByGlobalTimeline(acc);
-    }, [] as ModelParams[]);
+        return this.trimInputsByGlobalTimeline(acc);
+      },
+      [] as ModelParams[]
+    );
 
     const sortedInputs = flattenInputs.sort((a, b) =>
       moment(a.timestamp).diff(moment(b.timestamp))

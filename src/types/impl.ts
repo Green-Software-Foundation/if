@@ -1,5 +1,5 @@
-import { ModelParams } from './model-interface';
-import { AggregationMethodsName, AggregationResult } from './aggregator';
+import {ModelParams} from './model-interface';
+import {AggregationMethodsName, AggregationResult} from './aggregator';
 
 type Tag = {
   kind?: string;

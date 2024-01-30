@@ -1,11 +1,11 @@
-import { ZodIssue, z } from 'zod';
+import {ZodIssue, z} from 'zod';
 
-import { ERRORS } from './errors';
+import {ERRORS} from './errors';
 
-import { Impl } from '../types/impl';
-import { AggregationMethods } from '../types/aggregator';
+import {Impl} from '../types/impl';
+import {AggregationMethods} from '../types/aggregator';
 
-const { ImplValidationError } = ERRORS;
+const {ImplValidationError} = ERRORS;
 
 // /**
 //  * Zod literal union validator which checks if members are more than 2.
@@ -35,20 +35,21 @@ const implValidation = z.object({
   description: z.string().nullable(),
   aggregation: z
     .object({
-      metrics: z.array(
-        z.string()
-      ),
+      metrics: z.array(z.string()),
       type: z.enum(AggregationMethods),
     })
     .optional(),
-  params: z.array(
-    z.object({
-      name: z.string(),
-      description: z.string(),
-      aggregation: z.string(),
-      unit: z.string(),
-    })
-  ).optional().nullable(),
+  params: z
+    .array(
+      z.object({
+        name: z.string(),
+        description: z.string(),
+        aggregation: z.string(),
+        unit: z.string(),
+      })
+    )
+    .optional()
+    .nullable(),
   tags: z
     .object({
       kind: z.string().optional(),
@@ -84,7 +85,7 @@ export const validateImpl = (impl: Impl) => {
       const issuesArray = JSON.parse(issues);
 
       return issuesArray.map((issue: ZodIssue) => {
-        const { code, path, message } = issue;
+        const {code, path, message} = issue;
         const flattenPath = path.map(part =>
           typeof part === 'number' ? `[${part}]` : part
         );

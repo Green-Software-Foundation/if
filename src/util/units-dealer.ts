@@ -1,11 +1,11 @@
 import path = require('path');
 
-import { openYamlFileAsObject } from './yaml';
-import { ERRORS } from './errors';
+import {openYamlFileAsObject} from './yaml';
+import {ERRORS} from './errors';
 
-import { Units } from '../types/units';
+import {Units} from '../types/units';
 
-const { FileNotFoundError } = ERRORS;
+const {FileNotFoundError} = ERRORS;
 
 /**
  * Gets units file as an object.
