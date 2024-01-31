@@ -1,16 +1,14 @@
-type UnitFields = {
-  description: string;
-  unit: string;
-  aggregation: 'sum' | 'none' | 'avg';
-};
+import {parameters} from '../config/params';
+
+export type ParameterKey = keyof typeof parameters;
 
 export type Units = {
-  [key: string]: UnitFields | undefined;
+  [key: string]: Parameter | undefined;
 };
 
 export type Parameter = {
   name: string;
   unit: string;
   description: string;
-  aggregation: string;
+  aggregation: 'sum' | 'none' | 'avg';
 };
