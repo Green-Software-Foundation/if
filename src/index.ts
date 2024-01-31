@@ -12,7 +12,7 @@ import {STRINGS} from './config';
 
 import {Impl} from './types/impl';
 
-const pkg_json = require('../package.json');
+const packageJson = require('../package.json');
 
 const {CliInputError} = ERRORS;
 
@@ -46,7 +46,7 @@ const impactEngine = async () => {
 
     /** Lifecycle Computing */
     const ompl = await new Supercomputer(impl, modelsHandbook).compute();
-    ompl['if-version'] = pkg_json.version;
+    ompl['if-version'] = packageJson.version;
 
     if (!outputPath) {
       console.log(JSON.stringify(ompl));
