@@ -12,7 +12,6 @@ export const UnitKeys = [
   'energy-network',
   'expected-lifespan',
   'functional-unit',
-  'functional-unit-duration',
   'functional-unit-time',
   'gpu-util',
   'grid-carbon-intensity',

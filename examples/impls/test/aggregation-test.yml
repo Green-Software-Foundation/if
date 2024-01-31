@@ -45,7 +45,6 @@ graph:
         sci-o:
           grid-carbon-intensity: 457 # gCO2/kwh
         sci:
-          functional-unit-duration: 1 
           functional-duration-time: ''
           functional-unit: requests # factor to convert per time to per f.unit
       children:
