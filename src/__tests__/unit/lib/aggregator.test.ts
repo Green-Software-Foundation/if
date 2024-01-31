@@ -1,9 +1,9 @@
 import {aggregate} from '../../../lib/aggregator';
 
-import {STRINGS} from '../../../config';
+import {STRINGS, PARAMETERS} from '../../../config';
 
 import {ERRORS} from '../../../util/errors';
-import {ParameterKey} from '../../../types/units';
+import {ParameterKey, Parameters} from '../../../types/units';
 
 const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
 
@@ -20,7 +20,7 @@ describe('lib/aggregator: ', () => {
       expect.assertions(1);
 
       try {
-        aggregate(inputs, metrics);
+        aggregate(inputs, metrics, PARAMETERS as Parameters);
       } catch (error) {
         expect(error).toEqual(new InvalidAggregationParams(expectedMessage));
       }
@@ -39,7 +39,7 @@ describe('lib/aggregator: ', () => {
       expect.assertions(1);
 
       try {
-        aggregate(inputs, metrics);
+        aggregate(inputs, metrics, PARAMETERS as Parameters);
       } catch (error) {
         expect(error).toEqual(new InvalidAggregationParams(expectedMessage));
       }
@@ -62,7 +62,11 @@ describe('lib/aggregator: ', () => {
         [`${expectedKey}`]: expectedValue,
       };
 
-      const aggregatedResult = aggregate(inputs, metrics);
+      const aggregatedResult = aggregate(
+        inputs,
+        metrics,
+        PARAMETERS as Parameters
+      );
 
       expect(aggregatedResult).toEqual(expectedResult);
     });
@@ -84,7 +88,11 @@ describe('lib/aggregator: ', () => {
         [`${expectedKey}`]: expectedValue,
       };
 
-      const aggregatedResult = aggregate(inputs, metrics);
+      const aggregatedResult = aggregate(
+        inputs,
+        metrics,
+        PARAMETERS as Parameters
+      );
 
       expect(aggregatedResult).toEqual(expectedResult);
     });

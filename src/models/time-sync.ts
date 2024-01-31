@@ -1,13 +1,13 @@
 import {extendMoment} from 'moment-range';
 
-import {STRINGS} from '../config';
+import {STRINGS, PARAMETERS} from '../config';
 
 import {ERRORS} from '../util/errors';
 import {getAggregationMethod} from '../util/param-selectors';
 
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
 import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
-import {ParameterKey} from '../types/units';
+import {ParameterKey, Parameters} from '../types/units';
 
 const moment = require('moment');
 const momentRange = extendMoment(moment);
@@ -78,7 +78,7 @@ export class TimeSyncModel implements ModelPluginInterface {
     const inputKeys = Object.keys(input) as ParameterKey[];
 
     return inputKeys.reduce((acc, key) => {
-      const method = getAggregationMethod(key);
+      const method = getAggregationMethod(key, PARAMETERS as Parameters);
 
       if (key === 'timestamp') {
         const perSecond = this.normalizeTimePerSecond(input.timestamp, i);
@@ -129,7 +129,7 @@ export class TimeSyncModel implements ModelPluginInterface {
         return acc;
       }
 
-      const method = getAggregationMethod(metric);
+      const method = getAggregationMethod(metric, PARAMETERS as Parameters);
 
       if (method === 'avg' || method === 'sum') {
         acc[metric] = 0;
@@ -183,7 +183,7 @@ export class TimeSyncModel implements ModelPluginInterface {
       const metrics = Object.keys(input) as ParameterKey[];
 
       metrics.forEach(metric => {
-        const method = getAggregationMethod(metric);
+        const method = getAggregationMethod(metric, PARAMETERS as Parameters);
         acc[metric] = acc[metric] ?? 0;
 
         if (metric === 'timestamp') {
