@@ -39,37 +39,44 @@ export class Supercomputer {
   constructor(
     impl: Impl,
     modelsHandbook: ModelsUniverse,
-    overrideParams?: string | undefined
+    overrideParams?: string
   ) {
     this.impl = impl;
     this.modelsHandbook = modelsHandbook;
     this.overrideParamsPath = overrideParams;
   }
 
-  async synchronizeParameters() {
-    if (!(this.overrideParamsPath === undefined)) {
+  /**
+   * Checks if override params path is passed, then reads that file.
+   * Then checks if param is new, then appends it to existing parameters.
+   * Otherwise warns user about rejected overriding.
+   */
+  public async synchronizeParameters() {
+    if (this.overrideParamsPath) {
       const newParams = JSON.parse(
         fs.readFileSync(this.overrideParamsPath, 'utf-8')
       );
       this.parameters = newParams;
     }
-    if (!(this.impl.params === undefined || this.impl.params === null)) {
+
+    if (this.impl.params) {
       const implParams = this.impl.params as Parameter[];
+
       implParams.forEach(param => {
-        if (!Object.prototype.hasOwnProperty.call(parameters, param.name)) {
-          const obj: any = {};
-          obj[param.name] = {
+        if (`${param.name}` in parameters) {
+          warn(`Rejecting overriding of canonical parameter: ${param.name}.`);
+          return;
+        }
+
+        this.parameters = {
+          ...this.parameters,
+          [`${param.name}`]: {
             description: param.description,
             unit: param.unit,
             aggregation: 'sum',
-          };
-          Object.assign(parameters, obj);
-        } else {
-          warn(`Rejecting overriding of canonical parameter: ${param.name}.`);
-        }
+          },
+        };
       });
-      Object.assign(this.parameters, parameters);
-      console.log(this.parameters);
     }
   }
 
