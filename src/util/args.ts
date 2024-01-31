@@ -55,14 +55,10 @@ export const parseProcessArgument = () => {
 
   if (impl) {
     if (checkIfFileIsYaml(impl)) {
-      let paramPath = undefined;
-      if (overrideParams !== undefined) {
-        paramPath = overrideParams;
-      }
       return {
         inputPath: prependFullFilePath(impl),
         ...(ompl && {outputPath: prependFullFilePath(ompl)}),
-        paramPath,
+        ...(overrideParams && {paramPath: overrideParams}),
       };
     }
 
