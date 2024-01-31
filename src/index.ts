@@ -34,8 +34,8 @@ const impactEngine = async () => {
   if (processParams) {
     const {paramPath, inputPath, outputPath} = processParams;
     const rawImpl = await openYamlFileAsObject<Impl>(inputPath);
-    if (!(paramPath === null || paramPath === undefined)) {
-      console.log(OVERRIDE_WARNING);
+    if (paramPath) {
+      console.warn(OVERRIDE_WARNING);
     }
 
     /** Lifecycle Validation */
@@ -68,7 +68,7 @@ const impactEngine = async () => {
     const outputData = await computeInstance.compute();
 
     if (!outputPath) {
-      console.log(JSON.stringify(outputData));
+      console.log(JSON.stringify(outputData), null, 4);
       return;
     }
     await saveYamlFileAs(outputData, outputPath);
