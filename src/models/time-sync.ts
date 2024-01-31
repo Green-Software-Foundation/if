@@ -1,10 +1,13 @@
 import {extendMoment} from 'moment-range';
+
 import {STRINGS} from '../config';
+
 import {ERRORS} from '../util/errors';
-import {UnitsDealer} from '../util/units-dealer';
+import {getAggregationMethod} from '../util/param-selectors';
+
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
 import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
-import {UnitsDealerUsage} from '../types/units-dealer';
+import {ParameterKey} from '../types/units';
 
 const moment = require('moment');
 const momentRange = extendMoment(moment);
@@ -21,7 +24,6 @@ const {
 export class TimeSyncModel implements ModelPluginInterface {
   private startTime!: string;
   private endTime!: string;
-  private dealer!: UnitsDealerUsage;
   private interval = 1;
   private allowPadding = true;
 
@@ -33,7 +35,7 @@ export class TimeSyncModel implements ModelPluginInterface {
     this.endTime = params['end-time'];
     this.interval = params.interval;
     this.allowPadding = params['allow-padding'];
-    this.dealer = await UnitsDealer();
+
     return this;
   }
 
@@ -73,10 +75,10 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Barkes down input per minimal time unit.
    */
   private breakDownInput(input: ModelParams, i: number) {
-    const inputKeys = Object.keys(input);
+    const inputKeys = Object.keys(input) as ParameterKey[];
 
     return inputKeys.reduce((acc, key) => {
-      const method = this.dealer.askToGiveMethodFor(key);
+      const method = getAggregationMethod(key);
 
       if (key === 'timestamp') {
         const perSecond = this.normalizeTimePerSecond(input.timestamp, i);
@@ -105,7 +107,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Populates object to fill the gaps in observational timeline using zeroish values.
    */
   private fillWithZeroishInput(input: ModelParams, missingTimestamp: number) {
-    const metrics = Object.keys(input);
+    const metrics = Object.keys(input) as ParameterKey[];
 
     return metrics.reduce((acc, metric) => {
       if (metric === 'timestamp') {
@@ -127,7 +129,7 @@ export class TimeSyncModel implements ModelPluginInterface {
         return acc;
       }
 
-      const method = this.dealer.askToGiveMethodFor(metric);
+      const method = getAggregationMethod(metric);
 
       if (method === 'avg' || method === 'sum') {
         acc[metric] = 0;
@@ -178,10 +180,10 @@ export class TimeSyncModel implements ModelPluginInterface {
    */
   private resampleInputFrame = (inputsInTimeslot: ModelParams[]) => {
     return inputsInTimeslot.reduce((acc, input, index, inputs) => {
-      const metrics = Object.keys(input);
+      const metrics = Object.keys(input) as ParameterKey[];
 
       metrics.forEach(metric => {
-        const method = this.dealer.askToGiveMethodFor(metric);
+        const method = getAggregationMethod(metric);
         acc[metric] = acc[metric] ?? 0;
 
         if (metric === 'timestamp') {
