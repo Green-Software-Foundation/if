@@ -1,5 +1,6 @@
-import {ParameterKey} from '../../../types/units';
+import {ParameterKey, Parameters} from '../../../types/units';
 import {getAggregationMethod} from '../../../util/param-selectors';
+import {PARAMETERS} from '../../../config';
 
 describe('util/param-selector: ', () => {
   describe('getAggregationMethod(): ', () => {
@@ -7,14 +8,18 @@ describe('util/param-selector: ', () => {
       const nonExistantMetric = 'mock' as ParameterKey;
       const expectedResult = 'sum';
 
-      expect(getAggregationMethod(nonExistantMetric)).toBe(expectedResult);
+      expect(
+        getAggregationMethod(nonExistantMetric, PARAMETERS as Parameters)
+      ).toBe(expectedResult);
     });
 
     it('returns aggregation method for `cpu-util`.', () => {
       const metric = 'cpu-util' as ParameterKey;
       const expectedResult = 'avg';
 
-      expect(getAggregationMethod(metric)).toBe(expectedResult);
+      expect(getAggregationMethod(metric, PARAMETERS as Parameters)).toBe(
+        expectedResult
+      );
     });
   });
 });

@@ -1,6 +1,6 @@
 import {ZodIssue, z} from 'zod';
 
-import {parameters} from '../config/params';
+import {PARAMETERS} from '../config/params';
 
 import {ERRORS} from './errors';
 
@@ -10,7 +10,7 @@ import {ParameterKey} from '../types/units';
 
 const {ImplValidationError} = ERRORS;
 
-const ParameterKeys = Object.keys(parameters) as ParameterKey[];
+const ParameterKeys = Object.keys(PARAMETERS) as ParameterKey[];
 
 /**
  * Zod literal union validator which checks if members are more than 2.

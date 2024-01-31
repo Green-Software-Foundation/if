@@ -5,7 +5,7 @@ import {STRINGS} from '../config';
 
 import {ModelParams} from '../types/model-interface';
 import {AggregationResult} from '../types/aggregator';
-import {ParameterKey} from '../types/units';
+import {ParameterKey, Parameters} from '../types/units';
 
 const {InvalidAggregationParams} = ERRORS;
 const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
@@ -14,9 +14,12 @@ const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
  * Validates metrics array before applying aggregator.
  * If aggregation method is `none`, then throws error.
  */
-const checkIfMetricsAreValid = (metrics: ParameterKey[]) => {
+const checkIfMetricsAreValid = (
+  metrics: ParameterKey[],
+  parameters: Parameters
+) => {
   metrics.forEach(metric => {
-    const method = getAggregationMethod(metric);
+    const method = getAggregationMethod(metric, parameters);
 
     if (method === 'none') {
       throw new InvalidAggregationParams(INVALID_AGGREGATION_METHOD(method));
@@ -28,8 +31,12 @@ const checkIfMetricsAreValid = (metrics: ParameterKey[]) => {
  * Aggregates child node level metrics. Validates if metric aggregation type is `none`, then rejects with error.
  * Otherwise iterates over inputs by aggregating per given `metrics`.
  */
-export const aggregate = (inputs: ModelParams[], metrics: ParameterKey[]) => {
-  checkIfMetricsAreValid(metrics);
+export const aggregate = (
+  inputs: ModelParams[],
+  metrics: ParameterKey[],
+  parameters: Parameters
+) => {
+  checkIfMetricsAreValid(metrics, parameters);
 
   return inputs.reduce((acc, input, index) => {
     for (const metric of metrics) {
@@ -43,7 +50,7 @@ export const aggregate = (inputs: ModelParams[], metrics: ParameterKey[]) => {
 
       /** Checks for the last iteration. */
       if (index === inputs.length - 1) {
-        if (getAggregationMethod(metric) === 'avg') {
+        if (getAggregationMethod(metric, parameters) === 'avg') {
           acc[accessKey] /= inputs.length;
         }
       }

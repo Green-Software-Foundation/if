@@ -3,9 +3,12 @@ import {Observatory} from './observatory';
 import {aggregate} from './aggregator';
 import {ERRORS} from '../util/errors';
 import {STRINGS} from '../config';
-import {Parameter} from '../types/units';
-import {parameters} from '../config/params';
-const fs = require('fs');
+import {
+  Parameter,
+  ParameterFields,
+  ParameterKey,
+  Parameters,
+} from '../types/units';
 
 import {
   Config,
@@ -18,7 +21,6 @@ import {
   hasInputs,
 } from '../types/impl';
 import {ModelParams} from '../types/model-interface';
-import {warn} from 'console';
 
 const {ImplValidationError} = ERRORS;
 
@@ -33,47 +35,36 @@ export class Supercomputer {
   private aggregatedValues: ModelParams[] = [];
   private modelsHandbook: ModelsUniverse;
   private childAmount = 0;
-  private parameters: Object = {};
-  private overrideParamsPath: string | undefined;
+  private parameters;
 
   constructor(
     impl: Impl,
     modelsHandbook: ModelsUniverse,
-    overrideParams?: string
+    parameters: Parameters
   ) {
     this.impl = impl;
     this.modelsHandbook = modelsHandbook;
-    this.overrideParamsPath = overrideParams;
+    this.parameters = parameters;
   }
 
-  /**
-   * Checks if override params path is passed, then reads that file.
-   * Then checks if param is new, then appends it to existing parameters.
-   * Otherwise warns user about rejected overriding.
-   */
-  public async synchronizeParameters() {
-    if (this.overrideParamsPath) {
-      const newParams = JSON.parse(
-        fs.readFileSync(this.overrideParamsPath, 'utf-8')
-      );
-      this.parameters = newParams;
-    }
-
+  public synchronizeParameters(parameters: Parameters) {
     if (this.impl.params) {
       const implParams = this.impl.params as Parameter[];
 
       implParams.forEach(param => {
         if (`${param.name}` in parameters) {
-          warn(`Rejecting overriding of canonical parameter: ${param.name}.`);
+          console.warn(
+            `Rejecting overriding of canonical parameter: ${param.name}.`
+          );
           return;
         }
 
         this.parameters = {
           ...this.parameters,
-          [`${param.name}`]: {
+          [`${param.name}` as ParameterKey]: {
             description: param.description,
             unit: param.unit,
-            aggregation: 'sum',
+            aggregation: 'sum' as ParameterFields['aggregation'],
           },
         };
       });
@@ -148,7 +139,7 @@ export class Supercomputer {
       const {type, metrics} = this.impl.aggregation;
 
       if (type === 'horizontal' || type === 'both') {
-        const aggregation = await aggregate(outputs, metrics);
+        const aggregation = await aggregate(outputs, metrics, this.parameters);
         pointedChild['aggregated-outputs'] = aggregation;
 
         this.aggregatedValues.push(aggregation);

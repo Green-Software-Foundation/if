@@ -8,9 +8,10 @@ import {andHandle} from './util/helpers';
 import {validateImpl} from './util/validations';
 import {openYamlFileAsObject, saveYamlFileAs} from './util/yaml';
 
-import {STRINGS} from './config';
-
+import {PARAMETERS, STRINGS} from './config';
+import * as fs from 'node:fs';
 import {Impl} from './types/impl';
+import {Parameters} from './types/units';
 
 const {CliInputError} = ERRORS;
 
@@ -39,6 +40,17 @@ const impactEngine = async () => {
 
     /** Lifecycle Validation */
     const impl = validateImpl(rawImpl);
+    let parameters = PARAMETERS as Parameters;
+
+    /**
+     * Checks if override params path is passed, then reads that file.
+     * Then checks if param is new, then appends it to existing parameters.
+     * Otherwise warns user about rejected overriding.
+     */
+    if (paramPath) {
+      const newParams = JSON.parse(fs.readFileSync(paramPath, 'utf-8'));
+      parameters = newParams;
+    }
 
     /** Lifecycle Initialize Models */
     const modelsHandbook = await new ModelsUniverse().bulkWriteDown(
@@ -49,9 +61,10 @@ const impactEngine = async () => {
     const computeInstance = await new Supercomputer(
       impl,
       modelsHandbook,
-      paramPath
+      parameters
     );
-    await computeInstance.synchronizeParameters();
+
+    computeInstance.synchronizeParameters(parameters);
     const outputData = await computeInstance.compute();
 
     if (!outputPath) {
