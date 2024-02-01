@@ -7,7 +7,6 @@ import {getAggregationMethod} from '../util/param-selectors';
 
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
 import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
-import {ParameterKey, Parameters} from '../types/units';
 
 const moment = require('moment');
 const momentRange = extendMoment(moment);
@@ -75,10 +74,10 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Barkes down input per minimal time unit.
    */
   private breakDownInput(input: ModelParams, i: number) {
-    const inputKeys = Object.keys(input) as ParameterKey[];
+    const inputKeys = Object.keys(input);
 
     return inputKeys.reduce((acc, key) => {
-      const method = getAggregationMethod(key, PARAMETERS as Parameters);
+      const method = getAggregationMethod(key, PARAMETERS);
 
       if (key === 'timestamp') {
         const perSecond = this.normalizeTimePerSecond(input.timestamp, i);
@@ -107,7 +106,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Populates object to fill the gaps in observational timeline using zeroish values.
    */
   private fillWithZeroishInput(input: ModelParams, missingTimestamp: number) {
-    const metrics = Object.keys(input) as ParameterKey[];
+    const metrics = Object.keys(input);
 
     return metrics.reduce((acc, metric) => {
       if (metric === 'timestamp') {
@@ -129,7 +128,7 @@ export class TimeSyncModel implements ModelPluginInterface {
         return acc;
       }
 
-      const method = getAggregationMethod(metric, PARAMETERS as Parameters);
+      const method = getAggregationMethod(metric, PARAMETERS);
 
       if (method === 'avg' || method === 'sum') {
         acc[metric] = 0;
@@ -180,10 +179,10 @@ export class TimeSyncModel implements ModelPluginInterface {
    */
   private resampleInputFrame = (inputsInTimeslot: ModelParams[]) => {
     return inputsInTimeslot.reduce((acc, input, index, inputs) => {
-      const metrics = Object.keys(input) as ParameterKey[];
+      const metrics = Object.keys(input);
 
       metrics.forEach(metric => {
-        const method = getAggregationMethod(metric, PARAMETERS as Parameters);
+        const method = getAggregationMethod(metric, PARAMETERS);
         acc[metric] = acc[metric] ?? 0;
 
         if (metric === 'timestamp') {
