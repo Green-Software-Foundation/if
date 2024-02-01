@@ -1,9 +1,10 @@
 import {ModelsUniverse} from './models-universe';
 import {Observatory} from './observatory';
 import {aggregate} from './aggregator';
+
 import {ERRORS} from '../util/errors';
+
 import {STRINGS} from '../config';
-import {ParameterFields, ParameterKey, Parameters} from '../types/units';
 
 import {
   Config,
@@ -16,6 +17,7 @@ import {
   hasInputs,
 } from '../types/impl';
 import {ModelParams} from '../types/model-interface';
+import {Parameters} from '../types/parameters';
 
 const {ImplValidationError} = ERRORS;
 
@@ -30,7 +32,7 @@ export class Supercomputer {
   private aggregatedValues: ModelParams[] = [];
   private modelsHandbook: ModelsUniverse;
   private childAmount = 0;
-  private parameters;
+  private parameters: Parameters;
 
   constructor(
     impl: Impl,
@@ -42,7 +44,10 @@ export class Supercomputer {
     this.parameters = parameters;
   }
 
-  public synchronizeParameters(parameters: Parameters) {
+  /**
+   * Checks if params are provided in manifest file.
+   */
+  public overrideOrAppendParams(parameters: Parameters) {
     if (this.impl.params) {
       const implParams = this.impl.params;
 
@@ -51,16 +56,16 @@ export class Supercomputer {
           console.warn(
             `Rejecting overriding of canonical parameter: ${param.name}.`
           );
+
           return;
         }
 
-        this.parameters = {
-          ...this.parameters,
-          [`${param.name}` as ParameterKey]: {
-            description: param.description,
-            unit: param.unit,
-            aggregation: 'sum' as ParameterFields['aggregation'],
-          },
+        const {description, unit, aggregation, name} = param;
+
+        this.parameters[name] = {
+          description,
+          unit,
+          aggregation,
         };
       });
     }
