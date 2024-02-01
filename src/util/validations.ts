@@ -1,17 +1,12 @@
 import {ZodIssue, z} from 'zod';
 
-import {PARAMETERS} from '../config/params';
-
 import {ERRORS} from './errors';
 
 import {AggregationMethods} from '../types/aggregator';
-import {AGGREGATION_TYPES} from '../types/units';
+import {AGGREGATION_TYPES} from '../types/parameters';
 import {Impl} from '../types/impl';
-import {ParameterKey} from '../types/units';
 
 const {ImplValidationError} = ERRORS;
-
-const ParameterKeys = Object.keys(PARAMETERS) as ParameterKey[];
 
 /**
  * Zod literal union validator which checks if members are more than 2.
@@ -41,9 +36,7 @@ const implValidation = z.object({
   description: z.string().nullable(),
   aggregation: z
     .object({
-      metrics: z.array(
-        createUnionType(ParameterKeys.map(metric => z.literal(metric)))
-      ),
+      metrics: z.array(z.string()),
       type: z.enum(AggregationMethods),
     })
     .optional(),
