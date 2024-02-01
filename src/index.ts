@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import * as fs from 'node:fs';
+
 import {ModelsUniverse} from './lib/models-universe';
 import {Supercomputer} from './lib/supercomputer';
 
@@ -8,13 +10,14 @@ import {andHandle} from './util/helpers';
 import {validateImpl} from './util/validations';
 import {openYamlFileAsObject, saveYamlFileAs} from './util/yaml';
 
-import {STRINGS} from './config';
+import {PARAMETERS, STRINGS} from './config';
 
 import {Impl} from './types/impl';
+import {Parameters} from './types/parameters';
 
 const {CliInputError} = ERRORS;
 
-const {DISCLAIMER_MESSAGE, SOMETHING_WRONG} = STRINGS;
+const {DISCLAIMER_MESSAGE, OVERRIDE_WARNING, SOMETHING_WRONG} = STRINGS;
 
 /**
  * 1. Parses yml input/output process arguments.
@@ -31,11 +34,25 @@ const impactEngine = async () => {
   const processParams = parseProcessArgument();
 
   if (processParams) {
-    const {inputPath, outputPath} = processParams;
+    const {paramPath, inputPath, outputPath} = processParams;
+
     const rawImpl = await openYamlFileAsObject<Impl>(inputPath);
+
+    if (paramPath) {
+      console.warn(OVERRIDE_WARNING);
+    }
 
     /** Lifecycle Validation */
     const impl = validateImpl(rawImpl);
+
+    /**
+     * Checks if override params path is passed, then reads that file.
+     * Then checks if param is new, then appends it to existing parameters.
+     * Otherwise warns user about rejected overriding.
+     */
+    const overridingParams: Parameters =
+      paramPath && JSON.parse(fs.readFileSync(paramPath, 'utf-8'));
+    const parameters = overridingParams || PARAMETERS;
 
     /** Lifecycle Initialize Models */
     const modelsHandbook = await new ModelsUniverse().bulkWriteDown(
@@ -43,14 +60,21 @@ const impactEngine = async () => {
     );
 
     /** Lifecycle Computing */
-    const ompl = await new Supercomputer(impl, modelsHandbook).compute();
+    const computeInstance = await new Supercomputer(
+      impl,
+      modelsHandbook,
+      parameters
+    );
+
+    computeInstance.overrideOrAppendParams(parameters);
+    const outputData = await computeInstance.compute();
 
     if (!outputPath) {
-      console.log(JSON.stringify(ompl));
+      console.log(JSON.stringify(outputData, null, 4));
       return;
     }
 
-    await saveYamlFileAs(ompl, outputPath);
+    await saveYamlFileAs(outputData, outputPath);
 
     return;
   }

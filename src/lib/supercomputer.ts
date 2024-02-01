@@ -17,6 +17,7 @@ import {
   hasInputs,
 } from '../types/impl';
 import {ModelParams} from '../types/model-interface';
+import {Parameters} from '../types/parameters';
 
 const {ImplValidationError} = ERRORS;
 
@@ -31,10 +32,43 @@ export class Supercomputer {
   private aggregatedValues: ModelParams[] = [];
   private modelsHandbook: ModelsUniverse;
   private childAmount = 0;
+  private parameters: Parameters;
 
-  constructor(impl: Impl, modelsHandbook: ModelsUniverse) {
+  constructor(
+    impl: Impl,
+    modelsHandbook: ModelsUniverse,
+    parameters: Parameters
+  ) {
     this.impl = impl;
     this.modelsHandbook = modelsHandbook;
+    this.parameters = parameters;
+  }
+
+  /**
+   * Checks if params are provided in manifest file.
+   */
+  public overrideOrAppendParams(parameters: Parameters) {
+    if (this.impl.params) {
+      const implParams = this.impl.params;
+
+      implParams.forEach(param => {
+        if (`${param.name}` in parameters) {
+          console.warn(
+            `Rejecting overriding of canonical parameter: ${param.name}.`
+          );
+
+          return;
+        }
+
+        const {description, unit, aggregation, name} = param;
+
+        this.parameters[name] = {
+          description,
+          unit,
+          aggregation,
+        };
+      });
+    }
   }
 
   /**
@@ -42,7 +76,6 @@ export class Supercomputer {
    */
   private flattenConfigValues(config: Config): ModelParams {
     const configValues = Object.values(config);
-
     return configValues.reduce((acc, value) => ({...acc, ...value}), {});
   }
 
@@ -106,7 +139,7 @@ export class Supercomputer {
       const {type, metrics} = this.impl.aggregation;
 
       if (type === 'horizontal' || type === 'both') {
-        const aggregation = await aggregate(outputs, metrics);
+        const aggregation = await aggregate(outputs, metrics, this.parameters);
         pointedChild['aggregated-outputs'] = aggregation;
 
         this.aggregatedValues.push(aggregation);
