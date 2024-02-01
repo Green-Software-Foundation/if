@@ -62,11 +62,7 @@ const impactEngine = async () => {
     );
 
     /** Lifecycle Computing */
-    const computer = await new Supercomputer(
-      impl,
-      modelsHandbook,
-      parameters
-    );
+    const computer = await new Supercomputer(impl, modelsHandbook, parameters);
 
     computer.overrideOrAppendParams(parameters);
     const outputData = await computer.compute();
