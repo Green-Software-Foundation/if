@@ -79,13 +79,13 @@ export const PARAMETERS = {
   'instance-type': {
     description: 'Type of Cloud Instance name used in the cloud provider APIs',
     unit: 'None',
-    aggregation: 'None',
+    aggregation: 'none',
   },
   location: {
     description:
       'Geographic location of provider as string (for watt-time model it is provided as latitude and longitude, comma separated, in decimal degrees)',
     unit: 'None (decimal degrees for watt-time model)',
-    aggregation: 'None',
+    aggregation: 'none',
   },
   'operational-carbon': {
     description: 'Operational Emissions of the component',
