@@ -5,6 +5,7 @@ import {PARAMETERS} from '../config/params';
 import {ERRORS} from './errors';
 
 import {AggregationMethods} from '../types/aggregator';
+import {AGGREGATION_TYPES} from '../types/units';
 import {Impl} from '../types/impl';
 import {ParameterKey} from '../types/units';
 
@@ -51,7 +52,9 @@ const implValidation = z.object({
       z.object({
         name: z.string(),
         description: z.string(),
-        aggregation: z.string(),
+        aggregation: createUnionType(
+          AGGREGATION_TYPES.map(type => z.literal(type))
+        ),
         unit: z.string(),
       })
     )
