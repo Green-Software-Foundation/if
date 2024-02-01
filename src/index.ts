@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import * as fs from 'node:fs';
+
 import {ModelsUniverse} from './lib/models-universe';
 import {Supercomputer} from './lib/supercomputer';
 
@@ -9,9 +11,9 @@ import {validateImpl} from './util/validations';
 import {openYamlFileAsObject, saveYamlFileAs} from './util/yaml';
 
 import {PARAMETERS, STRINGS} from './config';
-import * as fs from 'node:fs';
+
 import {Impl} from './types/impl';
-import {Parameters} from './types/units';
+import {Parameters} from './types/parameters';
 
 const {CliInputError} = ERRORS;
 
@@ -64,7 +66,7 @@ const impactEngine = async () => {
       parameters
     );
 
-    computeInstance.synchronizeParameters(parameters);
+    computeInstance.overrideOrAppendParams(parameters);
     const outputData = await computeInstance.compute();
 
     if (!outputPath) {
