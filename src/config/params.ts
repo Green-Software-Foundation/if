@@ -1,4 +1,6 @@
-export const PARAMETERS = {
+import {Parameters} from '../types/parameters';
+
+export const PARAMETERS: Parameters = {
   carbon: {
     description: 'an amount of carbon emitted into the atmosphere',
     unit: 'gCO2e',
