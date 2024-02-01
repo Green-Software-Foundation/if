@@ -1,6 +1,6 @@
 import {ModelParams} from './model-interface';
 import {AggregationMethodsName, AggregationResult} from './aggregator';
-import {ParameterKey} from './units';
+import {Parameter, ParameterKey} from './units';
 
 type Tag = {
   kind?: string;
@@ -94,7 +94,7 @@ export type Impl = {
   name: string;
   description: string | null | undefined;
   tags: Tag | null | undefined;
-  params?: Object[] | undefined | null;
+  params?: Parameter[] | undefined | null;
   initialize: {
     models: Model[];
   };
