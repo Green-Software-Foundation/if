@@ -16,7 +16,6 @@ import {impl} from './impls/basic';
 import {implNested, implNestedNoConfig} from './impls/nested';
 
 import {Impl, hasChildren, hasInputs} from '../../../types/impl';
-import {Parameters} from '../../../types/units';
 
 const {ImplValidationError} = ERRORS;
 
@@ -27,11 +26,7 @@ describe('lib/supercomputer: ', () => {
     it('initializes object with required properties.', () => {
       const impl: any = {};
       const modelsHandbook = new ModelsUniverse();
-      const node = new Supercomputer(
-        impl,
-        modelsHandbook,
-        PARAMETERS as Parameters
-      );
+      const node = new Supercomputer(impl, modelsHandbook, PARAMETERS);
 
       expect(node).toHaveProperty('compute');
     });
@@ -51,11 +46,7 @@ describe('lib/supercomputer: ', () => {
       expect.assertions(1);
 
       try {
-        await new Supercomputer(
-          implCopy,
-          modelsHandbook,
-          PARAMETERS as Parameters
-        ).compute();
+        await new Supercomputer(implCopy, modelsHandbook, PARAMETERS).compute();
       } catch (error) {
         expect(error).toEqual(
           new ImplValidationError(STRUCTURE_MALFORMED(childName))
@@ -74,11 +65,7 @@ describe('lib/supercomputer: ', () => {
       const modelsHandbook = new ModelsUniverse();
       await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
 
-      const node = new Supercomputer(
-        implCopy,
-        modelsHandbook,
-        PARAMETERS as Parameters
-      );
+      const node = new Supercomputer(implCopy, modelsHandbook, PARAMETERS);
 
       const result = await node.compute();
 
@@ -107,7 +94,7 @@ describe('lib/supercomputer: ', () => {
       const result = await new Supercomputer(
         implNested,
         modelsHandbook,
-        PARAMETERS as Parameters
+        PARAMETERS
       ).compute();
 
       const parentNode = result.graph.children['child-0'];
@@ -168,7 +155,7 @@ describe('lib/supercomputer: ', () => {
       const result = await new Supercomputer(
         implNestedNoConfig,
         modelsHandbook,
-        PARAMETERS as Parameters
+        PARAMETERS
       ).compute();
 
       const parentNode = result.graph.children['child-0'];
@@ -239,11 +226,7 @@ describe('lib/supercomputer: ', () => {
         const modelsHandbook = new ModelsUniverse();
         await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
 
-        const node = new Supercomputer(
-          implCopy,
-          modelsHandbook,
-          PARAMETERS as Parameters
-        );
+        const node = new Supercomputer(implCopy, modelsHandbook, PARAMETERS);
 
         const result = await node.compute();
         const expectedAggregatedCarbon = implCopy.graph.children[
@@ -276,11 +259,7 @@ describe('lib/supercomputer: ', () => {
         const modelsHandbook = new ModelsUniverse();
         await modelsHandbook.bulkWriteDown(implCopy.initialize.models);
 
-        const node = new Supercomputer(
-          implCopy,
-          modelsHandbook,
-          PARAMETERS as Parameters
-        );
+        const node = new Supercomputer(implCopy, modelsHandbook, PARAMETERS);
 
         const result = await node.compute();
         const expectedAggregatedCarbon = implCopy.graph.children[
