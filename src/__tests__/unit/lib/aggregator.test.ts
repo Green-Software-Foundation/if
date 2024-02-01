@@ -3,7 +3,6 @@ import {aggregate} from '../../../lib/aggregator';
 import {STRINGS, PARAMETERS} from '../../../config';
 
 import {ERRORS} from '../../../util/errors';
-import {ParameterKey, Parameters} from '../../../types/units';
 
 const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
 
@@ -13,14 +12,14 @@ describe('lib/aggregator: ', () => {
   describe('aggregate(): ', () => {
     it('throws error if aggregation method is none.', () => {
       const inputs = [{}];
-      const metrics = ['total-resources'] as ParameterKey[];
+      const metrics = ['total-resources'];
 
       const expectedMessage = INVALID_AGGREGATION_METHOD('none');
 
       expect.assertions(1);
 
       try {
-        aggregate(inputs, metrics, PARAMETERS as Parameters);
+        aggregate(inputs, metrics, PARAMETERS);
       } catch (error) {
         expect(error).toEqual(new InvalidAggregationParams(expectedMessage));
       }
@@ -32,14 +31,14 @@ describe('lib/aggregator: ', () => {
           'ram-util': 10,
         },
       ];
-      const metrics = ['cpu-util'] as ParameterKey[];
+      const metrics = ['cpu-util'];
 
       const expectedMessage = METRIC_MISSING(metrics[0], 0);
 
       expect.assertions(1);
 
       try {
-        aggregate(inputs, metrics, PARAMETERS as Parameters);
+        aggregate(inputs, metrics, PARAMETERS);
       } catch (error) {
         expect(error).toEqual(new InvalidAggregationParams(expectedMessage));
       }
@@ -54,7 +53,7 @@ describe('lib/aggregator: ', () => {
           'cpu-util': 20,
         },
       ];
-      const metrics = ['cpu-util'] as ParameterKey[];
+      const metrics = ['cpu-util'];
 
       const expectedKey = `aggregated-${Object.keys(inputs[0])[0]}`;
       const expectedValue = (inputs[0]['cpu-util'] + inputs[1]['cpu-util']) / 2;
@@ -62,11 +61,7 @@ describe('lib/aggregator: ', () => {
         [`${expectedKey}`]: expectedValue,
       };
 
-      const aggregatedResult = aggregate(
-        inputs,
-        metrics,
-        PARAMETERS as Parameters
-      );
+      const aggregatedResult = aggregate(inputs, metrics, PARAMETERS);
 
       expect(aggregatedResult).toEqual(expectedResult);
     });
@@ -80,7 +75,7 @@ describe('lib/aggregator: ', () => {
           'disk-io': 20,
         },
       ];
-      const metrics = ['disk-io'] as ParameterKey[];
+      const metrics = ['disk-io'];
 
       const expectedKey = `aggregated-${Object.keys(inputs[0])[0]}`;
       const expectedValue = inputs[0]['disk-io'] + inputs[1]['disk-io'];
@@ -88,11 +83,7 @@ describe('lib/aggregator: ', () => {
         [`${expectedKey}`]: expectedValue,
       };
 
-      const aggregatedResult = aggregate(
-        inputs,
-        metrics,
-        PARAMETERS as Parameters
-      );
+      const aggregatedResult = aggregate(inputs, metrics, PARAMETERS);
 
       expect(aggregatedResult).toEqual(expectedResult);
     });
