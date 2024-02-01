@@ -5,7 +5,7 @@ import {STRINGS} from '../config';
 
 import {ModelParams} from '../types/model-interface';
 import {AggregationResult} from '../types/aggregator';
-import {ParameterKey, Parameters} from '../types/units';
+import {Parameters} from '../types/parameters';
 
 const {InvalidAggregationParams} = ERRORS;
 const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
@@ -14,10 +14,7 @@ const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
  * Validates metrics array before applying aggregator.
  * If aggregation method is `none`, then throws error.
  */
-const checkIfMetricsAreValid = (
-  metrics: ParameterKey[],
-  parameters: Parameters
-) => {
+const checkIfMetricsAreValid = (metrics: string[], parameters: Parameters) => {
   metrics.forEach(metric => {
     const method = getAggregationMethod(metric, parameters);
 
@@ -33,7 +30,7 @@ const checkIfMetricsAreValid = (
  */
 export const aggregate = (
   inputs: ModelParams[],
-  metrics: ParameterKey[],
+  metrics: string[],
   parameters: Parameters
 ) => {
   checkIfMetricsAreValid(metrics, parameters);
