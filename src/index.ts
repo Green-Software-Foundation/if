@@ -15,6 +15,8 @@ import {PARAMETERS, STRINGS} from './config';
 import {Impl} from './types/impl';
 import {Parameters} from './types/parameters';
 
+const packageJson = require('../package.json');
+
 const {CliInputError} = ERRORS;
 
 const {DISCLAIMER_MESSAGE, OVERRIDE_WARNING, SOMETHING_WRONG} = STRINGS;
@@ -60,14 +62,11 @@ const impactEngine = async () => {
     );
 
     /** Lifecycle Computing */
-    const computeInstance = await new Supercomputer(
-      impl,
-      modelsHandbook,
-      parameters
-    );
+    const computer = await new Supercomputer(impl, modelsHandbook, parameters);
 
-    computeInstance.overrideOrAppendParams(parameters);
-    const outputData = await computeInstance.compute();
+    computer.overrideOrAppendParams(parameters);
+    const outputData = await computer.compute();
+    outputData['if-version'] = packageJson.version;
 
     if (!outputPath) {
       console.log(JSON.stringify(outputData, null, 4));

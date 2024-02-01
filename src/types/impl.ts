@@ -92,6 +92,7 @@ export const isNodeParent = (
 
 export type Impl = {
   name: string;
+  'if-version'?: string | null | undefined;
   description: string | null | undefined;
   tags: Tag | null | undefined;
   params?: ManifestParameter[] | undefined | null;

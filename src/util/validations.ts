@@ -13,6 +13,7 @@ const {ImplValidationError} = ERRORS;
  */
 const implValidation = z.object({
   name: z.string(),
+  'if-version': z.string().optional().nullable(),
   description: z.string().nullable(),
   aggregation: z
     .object({
