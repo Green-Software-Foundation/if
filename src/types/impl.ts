@@ -1,6 +1,6 @@
 import {ModelParams} from './model-interface';
-import {AggregationMethodsName, AggregationResult} from './aggregator';
-import {Parameter} from './units';
+import {AggregationMethodsNames, AggregationResult} from './aggregator';
+import {ManifestParameter} from './parameters';
 
 type Tag = {
   kind?: string;
@@ -94,7 +94,7 @@ export type Impl = {
   name: string;
   description: string | null | undefined;
   tags: Tag | null | undefined;
-  params?: Parameter[] | undefined | null;
+  params?: ManifestParameter[] | undefined | null;
   initialize: {
     models: Model[];
   };
@@ -103,7 +103,7 @@ export type Impl = {
   };
   aggregation?: {
     metrics: string[];
-    type: AggregationMethodsName;
+    type: AggregationMethodsNames;
   };
   'aggregated-outputs'?: AggregationResult;
 };
