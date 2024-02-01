@@ -68,7 +68,7 @@ const impactEngine = async () => {
     const outputData = await computeInstance.compute();
 
     if (!outputPath) {
-      console.log(JSON.stringify(outputData), null, 4);
+      console.log(JSON.stringify(outputData, null, 4));
       return;
     }
     await saveYamlFileAs(outputData, outputPath);
