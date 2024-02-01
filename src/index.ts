@@ -33,24 +33,24 @@ const impactEngine = async () => {
 
   if (processParams) {
     const {paramPath, inputPath, outputPath} = processParams;
+
     const rawImpl = await openYamlFileAsObject<Impl>(inputPath);
+
     if (paramPath) {
       console.warn(OVERRIDE_WARNING);
     }
 
     /** Lifecycle Validation */
     const impl = validateImpl(rawImpl);
-    let parameters = PARAMETERS as Parameters;
 
     /**
      * Checks if override params path is passed, then reads that file.
      * Then checks if param is new, then appends it to existing parameters.
      * Otherwise warns user about rejected overriding.
      */
-    if (paramPath) {
-      const newParams = JSON.parse(fs.readFileSync(paramPath, 'utf-8'));
-      parameters = newParams;
-    }
+    const overridingParams: Parameters =
+      paramPath && JSON.parse(fs.readFileSync(paramPath, 'utf-8'));
+    const parameters = overridingParams || PARAMETERS;
 
     /** Lifecycle Initialize Models */
     const modelsHandbook = await new ModelsUniverse().bulkWriteDown(
@@ -71,6 +71,7 @@ const impactEngine = async () => {
       console.log(JSON.stringify(outputData, null, 4));
       return;
     }
+
     await saveYamlFileAs(outputData, outputPath);
 
     return;
