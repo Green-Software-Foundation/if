@@ -2,17 +2,17 @@ export const AGGREGATION_TYPES = ['sum', 'none', 'avg'] as const;
 
 export type AggregationTypes = (typeof AGGREGATION_TYPES)[number];
 
-export type Units = {
-  [key: string]: ParameterFields;
+export type Parameters = {
+  [key: string]: ParameterProps;
 };
 
-export type ParameterFields = {
+export type ParameterProps = {
   unit: string;
   description: string;
   aggregation: AggregationTypes;
 };
 
-export type Parameter = {
+export type ManifestParameter = {
   name: string;
   unit: string;
   description: string;
