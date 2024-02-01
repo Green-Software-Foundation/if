@@ -1,6 +1,6 @@
 import {ModelParams} from './model-interface';
-import {AggregationMethodsName, AggregationResult} from './aggregator';
-import {UnitKeyName} from './units';
+import {AggregationMethodsNames, AggregationResult} from './aggregator';
+import {ManifestParameter} from './parameters';
 
 type Tag = {
   kind?: string;
@@ -95,6 +95,7 @@ export type Impl = {
   'if-version'?: string | null | undefined;
   description: string | null | undefined;
   tags: Tag | null | undefined;
+  params?: ManifestParameter[] | undefined | null;
   initialize: {
     models: Model[];
   };
@@ -102,8 +103,8 @@ export type Impl = {
     children: ParentStructure;
   };
   aggregation?: {
-    metrics: UnitKeyName[];
-    type: AggregationMethodsName;
+    metrics: string[];
+    type: AggregationMethodsNames;
   };
   'aggregated-outputs'?: AggregationResult;
 };

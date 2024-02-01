@@ -1,7 +1,5 @@
-import {UnitKeyName} from './units';
-
 export type ModelParams = {
-  [K in UnitKeyName]?: any;
+  [key: string]: any;
 };
 
 export interface ModelPluginInterface {

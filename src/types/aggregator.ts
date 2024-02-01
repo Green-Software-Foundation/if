@@ -1,5 +1,5 @@
 export type AggregationResult = Record<string, number>;
 
-export const AggregationMethods = ['horizontal', 'vertical', 'both'] as const;
+export const AGGREGATION_METHODS = ['horizontal', 'vertical', 'both'] as const;
 
-export type AggregationMethodsName = (typeof AggregationMethods)[number];
+export type AggregationMethodsNames = (typeof AGGREGATION_METHODS)[number];

@@ -17,6 +17,11 @@ export const CONFIG = {
         description:
           'Path to the output IMPL file where the results as saved, if none is provided it prints to stdout.',
       },
+      'override-params': {
+        type: String,
+        optional: true,
+        description: 'Path to a parameter file that overrides our defaults.',
+      },
       format: {
         type: String,
         optional: true,
