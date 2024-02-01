@@ -1,4 +1,4 @@
-import {Parameters} from '../types/units';
+import {Parameters} from '../types/parameters';
 
 /**
  * Returns aggregation method for given `unitName`. If doesn't exist then returns value `sum`.
