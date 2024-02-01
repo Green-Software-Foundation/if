@@ -3,12 +3,7 @@ import {Observatory} from './observatory';
 import {aggregate} from './aggregator';
 import {ERRORS} from '../util/errors';
 import {STRINGS} from '../config';
-import {
-  Parameter,
-  ParameterFields,
-  ParameterKey,
-  Parameters,
-} from '../types/units';
+import {ParameterFields, ParameterKey, Parameters} from '../types/units';
 
 import {
   Config,
@@ -49,7 +44,7 @@ export class Supercomputer {
 
   public synchronizeParameters(parameters: Parameters) {
     if (this.impl.params) {
-      const implParams = this.impl.params as Parameter[];
+      const implParams = this.impl.params;
 
       implParams.forEach(param => {
         if (`${param.name}` in parameters) {
