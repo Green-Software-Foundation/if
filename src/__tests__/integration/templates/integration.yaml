@@ -1,0 +1,16 @@
+name: integration-template
+description:
+tags:
+initialize:
+  models:
+    - name: ${name}
+      model: ${model}
+      path: ${path}
+graph:
+  children:
+    child:
+      pipeline:
+        - ${name}
+      config:
+      inputs:
+        - ${input}

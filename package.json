@@ -62,7 +62,8 @@
     "impact-engine": "npx ts-node src/index.ts",
     "lint": "gts lint",
     "prepublish": "npm run build",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "test:integration": "jest --verbose --testPathPattern=src/__tests__/integration"
   },
   "stability": "stable",
   "types": "src/index.d.ts"
