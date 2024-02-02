@@ -18,7 +18,7 @@ const configSciM =
   '        sci-m:\n          total-embodied-emissions: 251000\n          time-reserved: 3600\n          expected-lifespan: 126144000\n          resources-reserved: 1\n          total-resources: 1\n';
 const configSciO = '        sci-o:\n          grid-carbon-intensity: 457\n';
 const configSci =
-  '        sci:\n          functional-unit-duration: 1\n          functional-duration-time:\n          functional-unit:\n';
+  '        sci:\n          functional-duration-time:\n          functional-unit:\n';
 const children = '      children: \n';
 const n_nodes = 1000;
 const n_timestamps = 50;
