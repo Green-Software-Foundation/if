@@ -46,7 +46,12 @@ const prependFullFilePath = (filePath: string) => {
  * Otherwise throws error.
  */
 export const parseProcessArgument = () => {
-  const {impl, ompl, help} = validateAndParseProcessArgs();
+  const {
+    impl,
+    ompl,
+    'override-params': overrideParams,
+    help,
+  } = validateAndParseProcessArgs();
 
   if (help) {
     console.log(HELP);
@@ -58,6 +63,7 @@ export const parseProcessArgument = () => {
       return {
         inputPath: prependFullFilePath(impl),
         ...(ompl && {outputPath: prependFullFilePath(ompl)}),
+        ...(overrideParams && {paramPath: overrideParams}),
       };
     }
 

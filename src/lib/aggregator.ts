@@ -1,12 +1,11 @@
 import {ERRORS} from '../util/errors';
-import {UnitsDealer} from '../util/units-dealer';
+import {getAggregationMethod} from '../util/param-selectors';
 
 import {STRINGS} from '../config';
 
 import {ModelParams} from '../types/model-interface';
 import {AggregationResult} from '../types/aggregator';
-import {UnitKeyName} from '../types/units';
-import {UnitsDealerUsage} from '../types/units-dealer';
+import {Parameters} from '../types/parameters';
 
 const {InvalidAggregationParams} = ERRORS;
 const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
@@ -15,12 +14,9 @@ const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
  * Validates metrics array before applying aggregator.
  * If aggregation method is `none`, then throws error.
  */
-const checkIfMetricsAreValid = (
-  metrics: UnitKeyName[],
-  dealer: UnitsDealerUsage
-) => {
+const checkIfMetricsAreValid = (metrics: string[], parameters: Parameters) => {
   metrics.forEach(metric => {
-    const method = dealer.askToGiveMethodFor(metric);
+    const method = getAggregationMethod(metric, parameters);
 
     if (method === 'none') {
       throw new InvalidAggregationParams(INVALID_AGGREGATION_METHOD(method));
@@ -32,13 +28,12 @@ const checkIfMetricsAreValid = (
  * Aggregates child node level metrics. Validates if metric aggregation type is `none`, then rejects with error.
  * Otherwise iterates over inputs by aggregating per given `metrics`.
  */
-export const aggregate = async (
+export const aggregate = (
   inputs: ModelParams[],
-  metrics: UnitKeyName[]
+  metrics: string[],
+  parameters: Parameters
 ) => {
-  const dealer = await UnitsDealer();
-
-  checkIfMetricsAreValid(metrics, dealer);
+  checkIfMetricsAreValid(metrics, parameters);
 
   return inputs.reduce((acc, input, index) => {
     for (const metric of metrics) {
@@ -52,7 +47,7 @@ export const aggregate = async (
 
       /** Checks for the last iteration. */
       if (index === inputs.length - 1) {
-        if (dealer.askToGiveMethodFor(metric) === 'avg') {
+        if (getAggregationMethod(metric, parameters) === 'avg') {
           acc[accessKey] /= inputs.length;
         }
       }
