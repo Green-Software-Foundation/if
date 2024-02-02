@@ -1,0 +1,52 @@
+name: nesting-demo
+description: null
+tags:
+  kind: web
+  complexity: moderate
+  category: on-premise
+params: 
+aggregation:
+  type: both
+  metrics: 
+    - 'cpu-util'
+    - 'energy'
+initialize:
+  models:
+    - name: sci-e
+      path: '@grnsft/if-models'
+      model: SciEModel
+graph:
+  children:
+    child-0:
+      pipeline:
+        - sci-e
+      children:
+        child-0-1:
+          pipeline:
+            - sci-e
+          config: null
+          inputs:
+            - timestamp: 2023-07-06T00:00
+              duration: 10
+              cpu-util: 50
+              energy-network: 1
+        child:0-2:
+          children:
+            child-0-2-1:
+              pipeline:
+                - sci-e
+              config: null
+              inputs:
+                - timestamp: 2023-07-06T00:00
+                  duration: 10
+                  cpu-util: 50
+                  energy-network: 1
+            child-0-2-2:
+              pipeline:
+                - sci-e
+              config: null
+              inputs:
+                - timestamp: 2023-07-06T00:00
+                  duration: 10
+                  cpu-util: 50
+                  energy-network: 1

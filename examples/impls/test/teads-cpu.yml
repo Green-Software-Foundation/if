@@ -1,0 +1,18 @@
+name: teads-cpu
+description: simple demo invoking teads-cpu
+tags:
+initialize:
+  models:
+    - name: teads-cpu
+      model: TeadsCurveModel
+      path: "@grnsft/if-unofficial-models"
+graph:
+  children:
+    child:
+      pipeline:
+        - teads-cpu
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
+          cpu-util: 50
+          thermal-design-power: 300

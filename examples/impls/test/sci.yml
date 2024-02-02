@@ -14,8 +14,8 @@ graph:
         - sci
       config:
         sci:
-          functional-unit-duration: 1
-          functional-unit-time: "1 minute"
+          functional-unit-time: 1 minute
+          functional-duration-time: ""
           functional-unit: requests # factor to convert per time to per f.unit
       inputs:
         - timestamp: 2023-07-06T00:00

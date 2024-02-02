@@ -4,8 +4,9 @@ tags: null
 initialize:
   plugins:
     - name: sci
-      kind: builtin
-      path: ""
+      kind: plugin
+      path: "@grnsft/if-models"
+      model: SciModel
 graph:
   children:
     child:
@@ -13,8 +14,7 @@ graph:
         - sci
       config:
         sci:
-          functional-unit-duration: 1
-          functional-unit-time: "1 minute"
+          functional-unit-time: 1 minute
           functional-unit: requests
       inputs:
         - timestamp: 2023-07-06T00:00
@@ -31,7 +31,7 @@ graph:
           embodied-carbon: 0.02
           requests: 100
           functional-unit-duration: 1
-          functional-unit-time: "1 minute"
+          functional-unit-time: 1 minute
           functional-unit: requests
           carbon: 0.0013944444444444442
           sci: 0.0008366666666666665

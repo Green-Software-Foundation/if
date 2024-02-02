@@ -10,13 +10,12 @@ import {ModelsUniverse} from '../../../lib/models-universe';
 
 import {ERRORS} from '../../../util/errors';
 
-import {STRINGS} from '../../../config';
+import {STRINGS, PARAMETERS} from '../../../config';
 
 import {impl} from './impls/basic';
 import {implNested, implNestedNoConfig} from './impls/nested';
 
 import {Impl, hasChildren, hasInputs} from '../../../types/impl';
-import {UnitKeyName} from '../../../types/units';
 
 const {ImplValidationError} = ERRORS;
 
@@ -27,7 +26,7 @@ describe('lib/supercomputer: ', () => {
     it('initializes object with required properties.', () => {
       const impl: any = {};
       const modelsHandbook = new ModelsUniverse();
-      const node = new Supercomputer(impl, modelsHandbook);
+      const node = new Supercomputer(impl, modelsHandbook, PARAMETERS);
 
       expect(node).toHaveProperty('compute');
     });
@@ -47,7 +46,7 @@ describe('lib/supercomputer: ', () => {
       expect.assertions(1);
 
       try {
-        await new Supercomputer(implCopy, modelsHandbook).compute();
+        await new Supercomputer(implCopy, modelsHandbook, PARAMETERS).compute();
       } catch (error) {
         expect(error).toEqual(
           new ImplValidationError(STRUCTURE_MALFORMED(childName))
@@ -66,7 +65,7 @@ describe('lib/supercomputer: ', () => {
       const modelsHandbook = new ModelsUniverse();
       await modelsHandbook.bulkWriteDown(implCopy.initialize.plugins);
 
-      const node = new Supercomputer(implCopy, modelsHandbook);
+      const node = new Supercomputer(implCopy, modelsHandbook, PARAMETERS);
 
       const result = await node.compute();
 
@@ -94,12 +93,13 @@ describe('lib/supercomputer: ', () => {
 
       const result = await new Supercomputer(
         implNested,
-        modelsHandbook
+        modelsHandbook,
+        PARAMETERS
       ).compute();
 
       const parentNode = result.graph.children['child-0'];
       const parentConfig = parentNode.config['mockavizta'];
-      const parentNodeConfigKeys = Object.keys(parentConfig) as UnitKeyName[];
+      const parentNodeConfigKeys = Object.keys(parentConfig);
 
       if (hasChildren(result.graph.children['child-0'])) {
         if (
@@ -123,7 +123,7 @@ describe('lib/supercomputer: ', () => {
             const thirdLevelNestedOutputs = thirdLevelNestedChild.outputs;
 
             /** Checks if `child-0` config is applied to `child-0-1-1` outputs. */
-            parentNodeConfigKeys.forEach((parentConfigKey: UnitKeyName) => {
+            parentNodeConfigKeys.forEach((parentConfigKey: string) => {
               firstNestedChildOutput!.forEach(output => {
                 const outputKeys = Object.keys(output);
 
@@ -154,12 +154,13 @@ describe('lib/supercomputer: ', () => {
 
       const result = await new Supercomputer(
         implNestedNoConfig,
-        modelsHandbook
+        modelsHandbook,
+        PARAMETERS
       ).compute();
 
       const parentNode = result.graph.children['child-0'];
       const parentConfig = parentNode.config['mockavizta'];
-      const parentNodeConfigKeys = Object.keys(parentConfig) as UnitKeyName[];
+      const parentNodeConfigKeys = Object.keys(parentConfig);
 
       if (hasChildren(result.graph.children['child-0'])) {
         if (
@@ -183,7 +184,7 @@ describe('lib/supercomputer: ', () => {
             const thirdLevelNestedOutputs = thirdLevelNestedChild.outputs;
 
             /** Checks if `child-0` config is applied to `child-0-1-1` outputs. */
-            parentNodeConfigKeys.forEach((parentConfigKey: UnitKeyName) => {
+            parentNodeConfigKeys.forEach((parentConfigKey: string) => {
               firstNestedChildOutput!.forEach(output => {
                 const outputKeys = Object.keys(output);
 
@@ -225,7 +226,7 @@ describe('lib/supercomputer: ', () => {
         const modelsHandbook = new ModelsUniverse();
         await modelsHandbook.bulkWriteDown(implCopy.initialize.plugins);
 
-        const node = new Supercomputer(implCopy, modelsHandbook);
+        const node = new Supercomputer(implCopy, modelsHandbook, PARAMETERS);
 
         const result = await node.compute();
         const expectedAggregatedCarbon = implCopy.graph.children[
@@ -258,7 +259,7 @@ describe('lib/supercomputer: ', () => {
         const modelsHandbook = new ModelsUniverse();
         await modelsHandbook.bulkWriteDown(implCopy.initialize.plugins);
 
-        const node = new Supercomputer(implCopy, modelsHandbook);
+        const node = new Supercomputer(implCopy, modelsHandbook, PARAMETERS);
 
         const result = await node.compute();
         const expectedAggregatedCarbon = implCopy.graph.children[

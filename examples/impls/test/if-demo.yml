@@ -44,7 +44,6 @@ graph:
         sci:
           functional-unit: ''
           functional-unit-time: hour
-          functional-unit-duration: 1
       inputs:
           - timestamp: '2023-11-02T10:35:31.820Z'
             duration: 3600
@@ -58,4 +57,3 @@ graph:
             expected-lifespan: 94348800 # 3 yrs in seconds
             resources-reserved: 1
             total-resources: 64
-
