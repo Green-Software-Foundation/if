@@ -1,8 +1,8 @@
 name: nesting-demo
 description:
 aggregation:
-  metrics: ['carbon', 'energy']
-  type: 'horizontal'
+  metrics: ["carbon", "energy"]
+  type: "horizontal"
 tags:
   kind: web
   complexity: moderate
@@ -39,13 +39,14 @@ graph:
         sci-m:
           total-embodied-emissions: 251000 # gCO2eq
           time-reserved: 3600 # 1 hour in s
-          expected-lifespan: 126144000 # 4 years in seconds    
-          resources-reserved: 1 
-          total-resources: 1 
+          expected-lifespan: 126144000 # 4 years in seconds
+          resources-reserved: 1
+          total-resources: 1
         sci-o:
           grid-carbon-intensity: 457 # gCO2/kwh
         sci:
-          functional-duration-time: ''
+          functional-unit-time: 1 minute
+          functional-duration-time: ""
           functional-unit: requests # factor to convert per time to per f.unit
       children:
         child-1:
@@ -53,56 +54,56 @@ graph:
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 10
-              e-net: 0.000811 #kwh     
+              e-net: 0.000811 #kwh
               requests: 380
             - timestamp: 2023-07-06T00:10
               duration: 10
               cpu-util: 10
-              e-net: 0.000811 #kwh     
+              e-net: 0.000811 #kwh
               requests: 380
             - timestamp: 2023-07-06T00:20
               duration: 10
               cpu-util: 10
-              e-net: 0.000811 #kwh     
+              e-net: 0.000811 #kwh
               requests: 380
             - timestamp: 2023-07-06T00:30
               duration: 10
               cpu-util: 10
-              e-net: 0.000811 #kwh     
+              e-net: 0.000811 #kwh
               requests: 380
         child-2:
           inputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 20
-              e-net: 0.000811 #kwh     
+              e-net: 0.000811 #kwh
               requests: 380
             - timestamp: 2023-07-06T00:10
               duration: 10
               cpu-util: 30
-              e-net: 0.000811 #kwh     
+              e-net: 0.000811 #kwh
               requests: 380
             - timestamp: 2023-07-06T00:20
               duration: 10
               cpu-util: 40
-              e-net: 0.000811 #kwh     
+              e-net: 0.000811 #kwh
               requests: 380
             - timestamp: 2023-07-06T00:30
               duration: 10
               cpu-util: 50
-              e-net: 0.000811 #kwh     
+              e-net: 0.000811 #kwh
               requests: 380
         child-3:
-          inputs: 
+          inputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 10
-              e-net: 0.000811 #kwh     
+              e-net: 0.000811 #kwh
               requests: 380
         child-4:
-          inputs: 
+          inputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
               cpu-util: 10
-              e-net: 0.000811 #kwh     
+              e-net: 0.000811 #kwh
               requests: 380
