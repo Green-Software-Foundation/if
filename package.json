@@ -31,7 +31,8 @@
     "fixpack": "^4.0.0",
     "gts": "^5.0.0",
     "jest": "^29.6.1",
-    "ts-jest": "^29.1.1"
+    "ts-jest": "^29.1.1",
+    "husky": "^8.0.0"
   },
   "engines": {
     "node": ">=18",
@@ -62,7 +63,8 @@
     "impact-engine": "npx ts-node src/index.ts",
     "lint": "gts lint",
     "prepublish": "npm run build",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "prepare": "husky install"
   },
   "stability": "stable",
   "types": "src/index.d.ts"
