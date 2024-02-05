@@ -18,8 +18,8 @@ const {
 } = STRINGS;
 
 export class TimeSyncModel implements ModelPluginInterface {
-  private startTime!: string;
-  private endTime!: string;
+  private startTime!: DateTime;
+  private endTime!: DateTime;
   private interval = 1;
   private allowPadding = true;
 
@@ -27,8 +27,8 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Setups basic configuration.
    */
   async configure(params: TimeNormalizerConfig): Promise<ModelPluginInterface> {
-    this.startTime = params['start-time'];
-    this.endTime = params['end-time'];
+    this.startTime = DateTime.fromISO(params['start-time']);
+    this.endTime = DateTime.fromISO(params['end-time']);
     this.interval = params.interval;
     this.allowPadding = params['allow-padding'];
 
@@ -40,6 +40,14 @@ export class TimeSyncModel implements ModelPluginInterface {
    */
   private validateParams() {
     if (!this.startTime || !this.endTime) {
+      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
+    }
+
+    if (!this.startTime.isValid) {
+      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
+    }
+
+    if (!this.endTime.isValid) {
       throw new InputValidationError(INVALID_TIME_NORMALIZATION);
     }
 
@@ -156,14 +164,14 @@ export class TimeSyncModel implements ModelPluginInterface {
    */
   private checkForPadding(inputs: ModelParams[]): PaddingReceipt {
     const startDiffInSeconds = DateTime.fromISO(inputs[0].timestamp)
-      .diff(DateTime.fromISO(this.startTime))
+      .diff(this.startTime)
       .as('seconds');
 
     const lastInput = inputs[inputs.length - 1];
 
     const endDiffInSeconds = DateTime.fromISO(lastInput.timestamp)
       .plus({second: lastInput.duration})
-      .diff(DateTime.fromISO(this.endTime))
+      .diff(this.endTime)
       .as('seconds');
 
     return {
@@ -252,7 +260,7 @@ export class TimeSyncModel implements ModelPluginInterface {
     if (start) {
       paddedFromBeginning.push(
         ...this.getZeroishInputPerSecondBetweenRange(
-          DateTime.fromISO(this.startTime),
+          this.startTime,
           DateTime.fromISO(inputs[0].timestamp),
           inputs[0]
         )
@@ -269,7 +277,7 @@ export class TimeSyncModel implements ModelPluginInterface {
       paddedArray.push(
         ...this.getZeroishInputPerSecondBetweenRange(
           lastInputEnd,
-          DateTime.fromISO(this.endTime).plus({seconds: 1}),
+          this.endTime.plus({seconds: 1}),
           lastInput
         )
       );
@@ -306,8 +314,8 @@ export class TimeSyncModel implements ModelPluginInterface {
       const {timestamp} = item;
 
       if (
-        DateTime.fromISO(timestamp) >= DateTime.fromISO(this.startTime) &&
-        DateTime.fromISO(timestamp) <= DateTime.fromISO(this.endTime)
+        DateTime.fromISO(timestamp) >= this.startTime &&
+        DateTime.fromISO(timestamp) <= this.endTime
       ) {
         acc.push(item);
       }

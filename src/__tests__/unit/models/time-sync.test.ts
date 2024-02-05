@@ -104,7 +104,7 @@ describe('execute(): ', () => {
     }
   });
 
-  it('silently fails if `start-time` is not a valid ISO date.', async () => {
+  it('fails if `start-time` is not a valid ISO date.', async () => {
     const invalidStartTimeConfig = {
       'start-time': '0023-X',
       'end-time': '2023-12-12T00:01:00.000Z',
@@ -114,17 +114,23 @@ describe('execute(): ', () => {
     const timeModel = await new TimeSyncModel().configure(
       invalidStartTimeConfig
     );
-    const result = await timeModel.execute([
-      {
-        timestamp: '2023-12-12T00:00:00.000Z',
-        duration: 10,
-        'cpu-util': 10,
-      },
-    ]);
-    expect(result).toStrictEqual([]);
+    expect.assertions(1);
+    try {
+      await timeModel.execute([
+        {
+          timestamp: '2023-12-12T00:00:00.000Z',
+          duration: 10,
+          'cpu-util': 10,
+        },
+      ]);
+    } catch (error) {
+      expect(error).toStrictEqual(
+        new InputValidationError(INVALID_TIME_NORMALIZATION)
+      );
+    }
   });
 
-  it('silently fails if `end-time` is not a valid ISO date.', async () => {
+  it('fails if `end-time` is not a valid ISO date.', async () => {
     const invalidEndTimeConfig = {
       'start-time': '2023-12-12T00:01:00.000Z',
       'end-time': '20XX',
@@ -133,14 +139,20 @@ describe('execute(): ', () => {
     };
     const timeModel = await new TimeSyncModel().configure(invalidEndTimeConfig);
 
-    const result = await timeModel.execute([
-      {
-        timestamp: '2023-12-12T00:00:00.000Z',
-        duration: 10,
-        'cpu-util': 10,
-      },
-    ]);
-    expect(result).toStrictEqual([]);
+    expect.assertions(1);
+    try {
+      await timeModel.execute([
+        {
+          timestamp: '2023-12-12T00:00:00.000Z',
+          duration: 10,
+          'cpu-util': 10,
+        },
+      ]);
+    } catch (error) {
+      expect(error).toStrictEqual(
+        new InputValidationError(INVALID_TIME_NORMALIZATION)
+      );
+    }
   });
 
   it('silently fails and drops records if `timestamp` is not a valid ISO date.', async () => {
