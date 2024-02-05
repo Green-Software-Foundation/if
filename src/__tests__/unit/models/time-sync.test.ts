@@ -412,6 +412,45 @@ describe('execute(): ', () => {
     expect(result).toStrictEqual(expectedResult);
   });
 
+  it('converts Date objects to string outputs.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:01.000Z',
+      interval: 1,
+      'allow-padding': false,
+    };
+
+    const timeModel = await new TimeSyncModel().configure(basicConfig);
+
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 1,
+        'cpu-util': 10,
+      },
+      {
+        timestamp: new Date('2023-12-12T00:00:01.000Z'),
+        duration: 1,
+        'cpu-util': 10,
+      },
+    ]);
+
+    const expectedResult = [
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 1,
+        'cpu-util': 10,
+      },
+      {
+        timestamp: '2023-12-12T00:00:01.000Z',
+        duration: 1,
+        'cpu-util': 10,
+      },
+    ];
+
+    expect(result).toStrictEqual(expectedResult);
+  });
+
   it('checks breaking down observations case, if padding and zeroish objects are not needed.', async () => {
     const basicConfig = {
       'start-time': '2023-12-12T00:00:00.000Z',

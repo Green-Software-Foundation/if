@@ -7,6 +7,7 @@ import {getAggregationMethod} from '../util/param-selectors';
 
 import {ModelParams, ModelPluginInterface} from '../types/model-interface';
 import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
+import {isDate} from 'node:util/types';
 
 const {InputValidationError} = ERRORS;
 
@@ -27,12 +28,28 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Setups basic configuration.
    */
   async configure(params: TimeNormalizerConfig): Promise<ModelPluginInterface> {
-    this.startTime = DateTime.fromISO(params['start-time']);
-    this.endTime = DateTime.fromISO(params['end-time']);
+    this.startTime = this.parseDate(params['start-time']);
+    this.endTime = this.parseDate(params['end-time']);
     this.interval = params.interval;
     this.allowPadding = params['allow-padding'];
 
     return this;
+  }
+
+  private parseDate(date: Date | string) {
+    if (!date) return DateTime.invalid('Invalid date');
+    // dates are passed to time-sync.ts both in ISO 8601 format
+    // and as a Date object (from the deserialization of a YAML file)
+    // if the YAML parser fails to identify as a date, it passes as a string
+    if (isDate(date)) {
+      return DateTime.fromJSDate(date);
+    }
+    if (typeof date === 'string') {
+      return DateTime.fromISO(date);
+    }
+    throw new InputValidationError(
+      `Unexpected date datatype: ${typeof date}: ${date}`
+    );
   }
 
   /**
@@ -69,8 +86,11 @@ export class TimeSyncModel implements ModelPluginInterface {
   /**
    * Normalize time per given second.
    */
-  private normalizeTimePerSecond = (currentRoundMoment: string, i: number) => {
-    const thisMoment = DateTime.fromISO(currentRoundMoment).startOf('second');
+  private normalizeTimePerSecond = (
+    currentRoundMoment: Date | string,
+    i: number
+  ) => {
+    const thisMoment = this.parseDate(currentRoundMoment).startOf('second');
     return thisMoment.plus({seconds: i});
   };
   /**
@@ -84,7 +104,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
       if (key === 'timestamp') {
         const perSecond = this.normalizeTimePerSecond(input.timestamp, i);
-        acc[key] = perSecond.toUTC().toISO();
+        acc[key] = perSecond.toUTC().toISO() ?? '';
 
         return acc;
       }
@@ -116,7 +136,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
     return metrics.reduce((acc, metric) => {
       if (metric === 'timestamp') {
-        acc[metric] = missingTimestamp.startOf('second').toUTC().toISO();
+        acc[metric] = missingTimestamp.startOf('second').toUTC().toISO() ?? '';
 
         return acc;
       }
@@ -163,13 +183,13 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Checks if padding is needed either at start of the timeline or the end and returns status.
    */
   private checkForPadding(inputs: ModelParams[]): PaddingReceipt {
-    const startDiffInSeconds = DateTime.fromISO(inputs[0].timestamp)
+    const startDiffInSeconds = this.parseDate(inputs[0].timestamp)
       .diff(this.startTime)
       .as('seconds');
 
     const lastInput = inputs[inputs.length - 1];
 
-    const endDiffInSeconds = DateTime.fromISO(lastInput.timestamp)
+    const endDiffInSeconds = this.parseDate(lastInput.timestamp)
       .plus({second: lastInput.duration})
       .diff(this.endTime)
       .as('seconds');
@@ -261,7 +281,7 @@ export class TimeSyncModel implements ModelPluginInterface {
       paddedFromBeginning.push(
         ...this.getZeroishInputPerSecondBetweenRange(
           this.startTime,
-          DateTime.fromISO(inputs[0].timestamp),
+          this.parseDate(inputs[0].timestamp),
           inputs[0]
         )
       );
@@ -271,7 +291,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
     if (end) {
       const lastInput = inputs[inputs.length - 1];
-      const lastInputEnd = DateTime.fromISO(lastInput.timestamp).plus({
+      const lastInputEnd = this.parseDate(lastInput.timestamp).plus({
         seconds: lastInput.duration,
       });
       paddedArray.push(
@@ -314,8 +334,8 @@ export class TimeSyncModel implements ModelPluginInterface {
       const {timestamp} = item;
 
       if (
-        DateTime.fromISO(timestamp) >= this.startTime &&
-        DateTime.fromISO(timestamp) <= this.endTime
+        this.parseDate(timestamp) >= this.startTime &&
+        this.parseDate(timestamp) <= this.endTime
       ) {
         acc.push(item);
       }
@@ -336,18 +356,18 @@ export class TimeSyncModel implements ModelPluginInterface {
 
     const flattenInputs = paddedInputs.reduce(
       (acc: ModelParams[], input, index) => {
-        const currentMoment = DateTime.fromISO(input.timestamp);
+        const currentMoment = this.parseDate(input.timestamp);
 
         /** Checks if not the first input, then check consistency with previous ones. */
         if (index > 0) {
           const previousInput = paddedInputs[index - 1];
-          const previousInputTimestamp = DateTime.fromISO(
+          const previousInputTimestamp = this.parseDate(
             previousInput.timestamp
           );
 
           /** Checks for timestamps overlap. */
           if (
-            DateTime.fromISO(previousInput.timestamp).plus({
+            this.parseDate(previousInput.timestamp).plus({
               seconds: previousInput.duration,
             }) > currentMoment
           ) {
@@ -386,8 +406,8 @@ export class TimeSyncModel implements ModelPluginInterface {
     );
 
     const sortedInputs = flattenInputs.sort((a, b) =>
-      DateTime.fromISO(a.timestamp)
-        .diff(DateTime.fromISO(b.timestamp))
+      this.parseDate(a.timestamp)
+        .diff(this.parseDate(b.timestamp))
         .as('seconds')
     );
 
