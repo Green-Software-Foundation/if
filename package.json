@@ -64,9 +64,9 @@
     "fix:package": "fixpack",
     "impact-engine": "npx ts-node src/index.ts",
     "lint": "gts lint",
+    "prepare": "husky install",
     "prepublish": "npm run build",
-    "test": "jest --verbose",
-    "prepare": "husky install"
+    "test": "jest --verbose"
   },
   "stability": "stable",
   "types": "src/index.d.ts"
