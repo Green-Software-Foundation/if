@@ -13,6 +13,8 @@
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
   },
   "dependencies": {
+    "@commitlint/cli": "^18.6.0",
+    "@commitlint/config-conventional": "^18.6.0",
     "copyfiles": "^2.4.1",
     "js-yaml": "^4.1.0",
     "moment": "^2.29.4",
@@ -30,6 +32,7 @@
     "@types/node": "^20.8.9",
     "fixpack": "^4.0.0",
     "gts": "^5.0.0",
+    "husky": "^8.0.0",
     "jest": "^29.6.1",
     "ts-jest": "^29.1.1"
   },
@@ -61,6 +64,7 @@
     "fix:package": "fixpack",
     "impact-engine": "npx ts-node src/index.ts",
     "lint": "gts lint",
+    "prepare": "husky install",
     "prepublish": "npm run build",
     "test": "jest --verbose"
   },
