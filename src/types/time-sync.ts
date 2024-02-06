@@ -1,6 +1,6 @@
 export type TimeNormalizerConfig = {
-  'start-time': string;
-  'end-time': string;
+  'start-time': Date | string;
+  'end-time': Date | string;
   interval: number;
   'allow-padding': boolean;
 };
