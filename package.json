@@ -66,7 +66,8 @@
     "lint": "gts lint",
     "prepare": "husky install",
     "prepublish": "npm run build",
-    "test": "jest --verbose"
+    "test": "jest --verbose --testPathPattern=src/__tests__/unit",
+    "test:integration": "jest --verbose --testPathPattern=src/__tests__/integration"
   },
   "stability": "stable",
   "types": "src/index.d.ts"
