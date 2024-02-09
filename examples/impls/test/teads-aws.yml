@@ -1,0 +1,25 @@
+name: teads-aws
+description: simple demo invoking TeadsAWS model
+tags:
+initialize:
+  models:
+    - name: teads-aws
+      model: TeadsAWS
+      path: "@grnsft/if-unofficial-models"
+graph:
+  children:
+    child:
+      pipeline:
+        - teads-aws # duration & config -> embodied
+      config:
+        teads-aws:
+          instance-type: m5n.large
+          interpolation: linear
+          expected-lifespan: 252288000
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          instance-type: m5n.large
+          interpolation: linear
+          expected-lifespan: 252288000
+          duration: 3600
+          cpu-util: 10

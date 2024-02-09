@@ -73,14 +73,16 @@ export type ChildStructure = StructureManager<ChildNode>;
 /**
  * Type guard for inputs.
  */
-export const hasInputs = <T>(object: any): object is T & WithInputs =>
-  'inputs' in object;
+export const hasInputs = <T>(
+  object: any
+): object is T & WithInputs & NodeBase => 'inputs' in object;
 
 /**
  * Type guard for children.
  */
-export const hasChildren = <T>(object: any): object is T & WithChildren =>
-  'children' in object;
+export const hasChildren = <T>(
+  object: any
+): object is T & WithChildren & NodeBase => 'children' in object;
 
 /**
  * Parent guard for children.

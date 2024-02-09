@@ -1,16 +1,16 @@
-name: teads-cpu
-description: simple demo invoking teads-cpu
+name: teads-curve
+description: simple demo invoking teads-curve
 tags:
 initialize:
   models:
-    - name: teads-cpu
+    - name: teads-curve
       model: TeadsCurveModel
       path: "@grnsft/if-unofficial-models"
 graph:
   children:
     child:
       pipeline:
-        - teads-cpu
+        - teads-curve
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600
