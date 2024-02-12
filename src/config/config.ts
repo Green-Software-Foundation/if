@@ -56,5 +56,5 @@ export const CONFIG = {
   `,
   },
   GITHUB_PATH: 'https://github.com',
-  NATIVE_MODEL: 'if-models',
+  NATIVE_PLUGIN: 'if-models',
 };

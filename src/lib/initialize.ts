@@ -8,13 +8,16 @@ import {CONFIG, STRINGS} from '../config';
 import {PluginInterface, PluginParams} from '../types/interface';
 import {PluginsStorage} from '../types/initialize';
 import {GlobalPlugins} from '../types/manifest';
-import {SciEnergy} from '../models/plugin-sample';
 
 const {ModelInitializationError, ModelCredentialError} = ERRORS;
 
-const {GITHUB_PATH, NATIVE_MODEL} = CONFIG;
-const {MISSING_CLASSNAME, MISSING_PATH, NOT_NATIVE_MODEL, INVALID_MODULE_PATH} =
-  STRINGS;
+const {GITHUB_PATH, NATIVE_PLUGIN} = CONFIG;
+const {
+  MISSING_CLASSNAME,
+  MISSING_PATH,
+  NOT_NATIVE_PLUGIN,
+  INVALID_MODULE_PATH,
+} = STRINGS;
 
 /**
  * Imports module by given `path`.
@@ -53,8 +56,8 @@ const handModel = (plugin: string, path: string) => {
       path = parts[parts.length - 1];
     }
 
-    if (!path.includes(NATIVE_MODEL)) {
-      logger.warn(NOT_NATIVE_MODEL);
+    if (!path.includes(NATIVE_PLUGIN)) {
+      logger.warn(NOT_NATIVE_PLUGIN);
     }
   }
 
