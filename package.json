@@ -7,7 +7,7 @@
     "email": "info@gsf.com"
   },
   "bin": {
-    "impact-engine": "./build/index.js"
+    "if": "./build/index.js"
   },
   "bugs": {
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
@@ -20,6 +20,7 @@
     "luxon": "^3.4.4",
     "ts-command-line-args": "^2.5.1",
     "typescript": "^5.1.6",
+    "winston": "^3.11.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -62,7 +63,7 @@
     "coverage": "jest --verbose --coverage",
     "fix": "gts fix",
     "fix:package": "fixpack",
-    "impact-engine": "npx ts-node src/index.ts",
+    "if": "npx ts-node src/index.ts",
     "lint": "gts lint",
     "prepare": "husky install",
     "prepublish": "npm run build",
