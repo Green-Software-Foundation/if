@@ -11,8 +11,8 @@ aggregation:
     - 'cpu-util'
     - 'energy'
 initialize:
-  models:
-    - name: sci-e
+  plugins:
+    'sci-e':
       path: '@grnsft/if-models'
       model: SciEModel
 graph:

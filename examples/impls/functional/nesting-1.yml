@@ -1,0 +1,69 @@
+name: nesting-demo
+description: null
+tags:
+  kind: web
+  complexity: moderate
+  category: on-premise
+params: 
+aggregation:
+  type: both
+  metrics: 
+    - 'carbon'
+    - 'energy'
+initialize:
+  plugins:
+    teads-curve: 
+      path: '@grnsft/if-models'
+      model: TeadsCurve,
+    sci-e: 
+      path: '@grnsft/if-models'
+      model: SciE,
+    sci-m: 
+      path: '@grnsft/if-models'
+      model: SciM, 
+    sci-o:
+      path: '@grnsft/if-models'
+      model: SciO,
+    sci:
+      path: '@grnsft/if-models'
+      model: Sci,
+tree:
+  children:
+    child-0:
+      defaults:
+        - sci-m:
+            total-embodied-emissions: 1533.120 # gCO2eq
+            time-reserved: 3600 # 1hr in seconds
+            expected-lifespan: 94608000 # 3 years in seconds        
+            resources-reserved: 1
+            total-resources: 8
+      pipeline:
+        - teads-curve
+        - sci-e
+        - sci-m
+        - sci-o
+        - sci
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 10
+          cpu-util: 50
+          energy-network: 1
+    child-1:
+      defaults:
+        - sci-m:
+            total-embodied-emissions: 1533.120 # gCO2eq
+            time-reserved: 3600 # 1hr in seconds
+            expected-lifespan: 94608000 # 3 years in seconds        
+            resources-reserved: 1
+            total-resources: 8
+      pipeline:
+        - teads-curve
+        - sci-e
+        - sci-m
+        - sci-o
+        - sci
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 10
+          cpu-util: 30
+          energy-network: 1
