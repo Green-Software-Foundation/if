@@ -86,6 +86,10 @@ Watch this video to learn how to create and run an `impl`.
 
 ## Contributing
 
-To contribute to IF, please fork this repository and raise a pull request from your fork. The same process is also appropriate for updates to `if-docs`, `if-models` and `if-unofficial-models`.
+To contribute to IF, please fork this repository and raise a pull request from your fork. 
+
+You can check our issue board for issues tagged `help-wanted`. These are issues that are not currently, actively being worked on by the core team but are well-scoped enough for someone to pick up. We recommend commenting on the issue to start a chat with the core team, then start working on the issue when you have been assigned to it. This process helps to ensure your work is aligned with our roadmap and makes it much more likely that your changes will get merged compared to unsolicited PRs.
 
 Please read the full contribution guidelines at [if.greensoftware.foundation](https://if.greensoftware.foundation/Contributing)
+
+The same guidelines also apply to `if-docs`, `if-models` and `if-unofficial-models`.
