@@ -5,7 +5,7 @@ import {STRINGS} from '../config';
 
 import {PluginParams} from '../types/interface';
 import {Parameters} from '../types/parameters';
-import {AggregationResult} from '../types/aggregator';
+import {AggregationResult} from '../types/aggregation';
 
 const {InvalidAggregationParams} = ERRORS;
 const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
