@@ -1,6 +1,7 @@
 import {ERRORS} from './errors';
 
 import {STRINGS} from '../config';
+import {logger} from './logger';
 
 const {ISSUE_TEMPLATE} = STRINGS;
 
@@ -10,9 +11,9 @@ const {ISSUE_TEMPLATE} = STRINGS;
 export const andHandle = (error: Error) => {
   const knownErrors = Object.keys(ERRORS);
 
-  console.error(error);
+  logger.error(error);
 
   if (!knownErrors.includes(error.name)) {
-    console.log(ISSUE_TEMPLATE);
+    logger.warn(ISSUE_TEMPLATE);
   }
 };

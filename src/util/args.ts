@@ -45,7 +45,7 @@ const prependFullFilePath = (filePath: string) => {
  * Parses process argument, if it's `yaml` file, then returns it.
  * Otherwise throws error.
  */
-export const parseProcessArgument = () => {
+export const parseArgs = () => {
   const {
     impl,
     ompl,
@@ -54,7 +54,7 @@ export const parseProcessArgument = () => {
   } = validateAndParseProcessArgs();
 
   if (help) {
-    console.log(HELP);
+    console.info(HELP);
     return;
   }
 
