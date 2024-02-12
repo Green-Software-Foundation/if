@@ -2,9 +2,9 @@ import {ZodIssue, z} from 'zod';
 
 import {ERRORS} from './errors';
 
-import {AGGREGATION_METHODS} from '../types/aggregator';
+import {AGGREGATION_METHODS} from '../types/aggregation';
 import {AGGREGATION_TYPES} from '../types/parameters';
-import {Impl} from '../types/impl';
+import {Manifest} from '../types/manifest';
 
 const {ImplValidationError} = ERRORS;
 
@@ -14,7 +14,7 @@ const {ImplValidationError} = ERRORS;
 const implValidation = z.object({
   name: z.string(),
   'if-version': z.string().optional().nullable(),
-  description: z.string().nullable(),
+  description: z.string().nullable().default(''),
   aggregation: z
     .object({
       metrics: z.array(z.string()),
@@ -38,29 +38,25 @@ const implValidation = z.object({
       complexity: z.string().optional(),
       category: z.string().optional(),
     })
-    .nullable(),
+    .nullable()
+    .default({}),
   initialize: z.object({
-    models: z.array(
+    plugins: z.record(
+      z.string(),
       z.object({
-        name: z.string(),
         path: z.string(),
         model: z.string(),
-        config: z.record(z.string(), z.any()).optional(),
       })
     ),
   }),
-  graph: z
-    .object({
-      children: z.record(z.string(), z.any()),
-    })
-    .required(),
+  tree: z.record(z.string(), z.any()),
 });
 
 /**
- * Validates given `impl` object to match pattern.
+ * Validates given `manifest` object to match pattern.
  */
-export const validateImpl = (impl: Impl) => {
-  const validatedImpl = implValidation.safeParse(impl);
+export const validateManifest = (manifest: Manifest) => {
+  const validatedImpl = implValidation.safeParse(manifest);
 
   if (!validatedImpl.success) {
     const prettifyErrorMessage = (issues: string) => {
