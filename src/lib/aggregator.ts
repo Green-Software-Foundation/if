@@ -3,9 +3,9 @@ import {getAggregationMethod} from '../util/param-selectors';
 
 import {STRINGS} from '../config';
 
-import {ModelParams} from '../types/model-interface';
-import {AggregationResult} from '../types/aggregator';
+import {PluginParams} from '../types/interface';
 import {Parameters} from '../types/parameters';
+import {AggregationResult} from '../types/aggregator';
 
 const {InvalidAggregationParams} = ERRORS;
 const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
@@ -29,7 +29,7 @@ const checkIfMetricsAreValid = (metrics: string[], parameters: Parameters) => {
  * Otherwise iterates over inputs by aggregating per given `metrics`.
  */
 export const aggregate = (
-  inputs: ModelParams[],
+  inputs: PluginParams[],
   metrics: string[],
   parameters: Parameters
 ) => {
