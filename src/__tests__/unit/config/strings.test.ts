@@ -3,7 +3,6 @@ import {STRINGS} from '../../../config/strings';
 const {
   STRUCTURE_MALFORMED,
   NOT_INITIALIZED_MODEL,
-  NOT_CONSTRUCTABLE_MODEL,
   INVALID_MODULE_PATH,
   INVALID_AGGREGATION_METHOD,
   METRIC_MISSING,
@@ -32,21 +31,11 @@ describe('config/strings: ', () => {
     });
   });
 
-  describe('NOT_CONSTRUCTABLE_MODEL(): ', () => {
-    it('successfully appends given param to message.', () => {
-      const params = {model: 'mock-model', path: 'mock-path'};
-
-      const expectedMessage = `Provided model '${params.model}' is not constructable or does not belong to given plugin '${params.path}'.`;
-
-      expect(NOT_CONSTRUCTABLE_MODEL(params)).toEqual(expectedMessage);
-    });
-  });
-
   describe('INVALID_MODULE_PATH(): ', () => {
     it('successfully appends given param to message.', () => {
       const param = 'mock-param';
 
-      const expectedMessage = `Provided module path: '${param}' is invalid.`;
+      const expectedMessage = `Provided module path: '${param}' is invalid or not found.`;
 
       expect(INVALID_MODULE_PATH(param)).toEqual(expectedMessage);
     });

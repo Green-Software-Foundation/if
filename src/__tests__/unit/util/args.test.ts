@@ -32,28 +32,26 @@ jest.mock('ts-command-line-args', () => ({
 
 import path = require('path');
 
-import {parseProcessArgument} from '../../../util/args';
+import {parseArgs} from '../../../util/args';
 import {ERRORS} from '../../../util/errors';
 
-import {STRINGS, CONFIG} from '../../../config';
+import {STRINGS} from '../../../config';
 
 const {CliInputError} = ERRORS;
 
-const {impact} = CONFIG;
-const {HELP} = impact;
 const {IMPL_IS_MISSING, FILE_IS_NOT_YAML} = STRINGS;
 
 describe('util/args: ', () => {
   const originalEnv = process.env;
 
-  describe('parseProcessArgument(): ', () => {
+  describe('parseArgs(): ', () => {
     it('throws error if there is no argument passed.', () => {
       expect.assertions(2);
 
       process.env.result = 'error'; // used for mocking
 
       try {
-        parseProcessArgument();
+        parseArgs();
       } catch (error) {
         if (error instanceof Error) {
           expect(error).toBeInstanceOf(CliInputError);
@@ -67,7 +65,7 @@ describe('util/args: ', () => {
 
       process.env.result = 'impl';
 
-      const result = parseProcessArgument();
+      const result = parseArgs();
       const processRunningPath = process.cwd();
 
       const implPath = 'impl-mock.yml';
@@ -83,7 +81,7 @@ describe('util/args: ', () => {
 
       process.env.result = 'impl-ompl';
 
-      const result = parseProcessArgument();
+      const result = parseArgs();
       const processRunningPath = process.cwd();
 
       const implPath = 'impl-mock.yml';
@@ -96,30 +94,13 @@ describe('util/args: ', () => {
       expect(result).toEqual(expectedResult);
     });
 
-    it('logs help.', () => {
-      expect.assertions(3);
-
-      const originalLog = console.log;
-      console.log = jest.fn();
-
-      process.env.result = 'help';
-
-      const result = parseProcessArgument();
-
-      expect(result).toBeUndefined();
-      expect(console.log).toHaveBeenCalledTimes(1);
-      expect(console.log).toHaveBeenCalledWith(HELP);
-
-      console.log = originalLog;
-    });
-
     it('throws error if file is not yaml.', () => {
       expect.assertions(2);
 
       process.env.result = 'not-yaml';
 
       try {
-        parseProcessArgument();
+        parseArgs();
       } catch (error) {
         if (error instanceof Error) {
           expect(error).toBeInstanceOf(CliInputError);
