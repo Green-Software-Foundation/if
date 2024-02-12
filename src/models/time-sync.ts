@@ -5,9 +5,9 @@ import {STRINGS, PARAMETERS} from '../config';
 import {ERRORS} from '../util/errors';
 import {getAggregationMethod} from '../util/param-selectors';
 
-import {ModelParams, ModelPluginInterface} from '../types/model-interface';
-import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
 import {isDate} from 'node:util/types';
+import {PluginParams} from '../types/interface';
+import {PaddingReceipt, TimeNormalizerConfig} from '../types/time-sync';
 
 const {InputValidationError} = ERRORS;
 
@@ -17,6 +17,18 @@ const {
   INVALID_OBSERVATION_OVERLAP,
   AVOIDING_PADDING_BY_EDGES,
 } = STRINGS;
+
+export interface ModelPluginInterface {
+  /**
+   * Configures instance with given params.
+   */
+  configure(params: object | undefined): Promise<ModelPluginInterface>;
+
+  /**
+   * Calculates `output` based on given model's `input`.
+   */
+  execute(inputs: PluginParams[]): Promise<PluginParams[]>;
+}
 
 export class TimeSyncModel implements ModelPluginInterface {
   private startTime!: DateTime;
@@ -96,7 +108,7 @@ export class TimeSyncModel implements ModelPluginInterface {
   /**
    * Barkes down input per minimal time unit.
    */
-  private breakDownInput(input: ModelParams, i: number) {
+  private breakDownInput(input: PluginParams, i: number) {
     const inputKeys = Object.keys(input);
 
     return inputKeys.reduce((acc, key) => {
@@ -122,14 +134,14 @@ export class TimeSyncModel implements ModelPluginInterface {
           : input[key];
 
       return acc;
-    }, {} as ModelParams);
+    }, {} as PluginParams);
   }
 
   /**
    * Populates object to fill the gaps in observational timeline using zeroish values.
    */
   private fillWithZeroishInput(
-    input: ModelParams,
+    input: PluginParams,
     missingTimestamp: DateTimeMaybeValid
   ) {
     const metrics = Object.keys(input);
@@ -165,7 +177,7 @@ export class TimeSyncModel implements ModelPluginInterface {
       acc[metric] = input[metric];
 
       return acc;
-    }, {} as ModelParams);
+    }, {} as PluginParams);
   }
 
   /**
@@ -182,7 +194,7 @@ export class TimeSyncModel implements ModelPluginInterface {
   /**
    * Checks if padding is needed either at start of the timeline or the end and returns status.
    */
-  private checkForPadding(inputs: ModelParams[]): PaddingReceipt {
+  private checkForPadding(inputs: PluginParams[]): PaddingReceipt {
     const startDiffInSeconds = this.parseDate(inputs[0].timestamp)
       .diff(this.startTime)
       .as('seconds');
@@ -204,7 +216,7 @@ export class TimeSyncModel implements ModelPluginInterface {
    * Iterates over given inputs frame, meanwhile checking if aggregation method is `sum`, then calculates it.
    * For methods is `avg` and `none` calculating average of the frame.
    */
-  private resampleInputFrame = (inputsInTimeslot: ModelParams[]) => {
+  private resampleInputFrame = (inputsInTimeslot: PluginParams[]) => {
     return inputsInTimeslot.reduce((acc, input, index, inputs) => {
       const metrics = Object.keys(input);
 
@@ -247,14 +259,14 @@ export class TimeSyncModel implements ModelPluginInterface {
       });
 
       return acc;
-    }, {} as ModelParams);
+    }, {} as PluginParams);
   };
 
   /**
    * Takes each array frame with interval length, then aggregating them together as from units.yaml file.
    */
-  private resampleInputs(inputs: ModelParams[]) {
-    return inputs.reduce((acc: ModelParams[], _input, index, inputs) => {
+  private resampleInputs(inputs: PluginParams[]) {
+    return inputs.reduce((acc: PluginParams[], _input, index, inputs) => {
       const frameStart = index * this.interval;
       const frameEnd = (index + 1) * this.interval;
       const inputsFrame = inputs.slice(frameStart, frameEnd);
@@ -267,13 +279,16 @@ export class TimeSyncModel implements ModelPluginInterface {
       }
 
       return acc;
-    }, [] as ModelParams[]);
+    }, [] as PluginParams[]);
   }
 
   /**
    * Pads zeroish inputs from the beginning or at the end of the inputs if needed.
    */
-  private padInputs(inputs: ModelParams[], pad: PaddingReceipt): ModelParams[] {
+  private padInputs(
+    inputs: PluginParams[],
+    pad: PaddingReceipt
+  ): PluginParams[] {
     const {start, end} = pad;
     const paddedFromBeginning = [];
 
@@ -308,9 +323,9 @@ export class TimeSyncModel implements ModelPluginInterface {
   private getZeroishInputPerSecondBetweenRange(
     startDate: DateTimeMaybeValid,
     endDate: DateTimeMaybeValid,
-    templateInput: ModelParams
+    templateInput: PluginParams
   ) {
-    const array: ModelParams[] = [];
+    const array: PluginParams[] = [];
     const dateRange = Interval.fromDateTimes(startDate, endDate);
     for (const interval of dateRange.splitBy({second: 1})) {
       array.push(
@@ -329,8 +344,8 @@ export class TimeSyncModel implements ModelPluginInterface {
   /*
    * Checks if input's timestamp is included in global specified period then leaves it, otherwise.
    */
-  private trimInputsByGlobalTimeline(inputs: ModelParams[]): ModelParams[] {
-    return inputs.reduce((acc: ModelParams[], item) => {
+  private trimInputsByGlobalTimeline(inputs: PluginParams[]): PluginParams[] {
+    return inputs.reduce((acc: PluginParams[], item) => {
       const {timestamp} = item;
 
       if (
@@ -341,13 +356,13 @@ export class TimeSyncModel implements ModelPluginInterface {
       }
 
       return acc;
-    }, [] as ModelParams[]);
+    }, [] as PluginParams[]);
   }
 
   /**
    * Normalizes provided time window according to time configuration.
    */
-  async execute(inputs: ModelParams[]): Promise<ModelParams[]> {
+  async execute(inputs: PluginParams[]): Promise<PluginParams[]> {
     this.validateParams();
 
     const pad = this.checkForPadding(inputs);
@@ -355,7 +370,7 @@ export class TimeSyncModel implements ModelPluginInterface {
     const paddedInputs = this.padInputs(inputs, pad);
 
     const flattenInputs = paddedInputs.reduce(
-      (acc: ModelParams[], input, index) => {
+      (acc: PluginParams[], input, index) => {
         const currentMoment = this.parseDate(input.timestamp);
 
         /** Checks if not the first input, then check consistency with previous ones. */
@@ -402,7 +417,7 @@ export class TimeSyncModel implements ModelPluginInterface {
 
         return this.trimInputsByGlobalTimeline(acc);
       },
-      [] as ModelParams[]
+      [] as PluginParams[]
     );
 
     const sortedInputs = flattenInputs.sort((a, b) =>
