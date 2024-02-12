@@ -2,7 +2,7 @@ import {STRINGS} from '../../../config/strings';
 
 const {
   STRUCTURE_MALFORMED,
-  NOT_INITIALIZED_MODEL,
+  NOT_INITIALIZED_PLUGIN,
   INVALID_MODULE_PATH,
   INVALID_AGGREGATION_METHOD,
   METRIC_MISSING,
@@ -21,13 +21,13 @@ describe('config/strings: ', () => {
     });
   });
 
-  describe('NOT_INITIALIZED_MODEL(): ', () => {
+  describe('NOT_INITIALIZED_PLUGIN(): ', () => {
     it('successfully appends given param to message.', () => {
       const param = 'mock-message';
 
-      const expectedMessage = `You're trying to use not initalized model: ${param}.`;
+      const expectedMessage = `You're trying to use not initalized plugin: ${param}.`;
 
-      expect(NOT_INITIALIZED_MODEL(param)).toEqual(expectedMessage);
+      expect(NOT_INITIALIZED_PLUGIN(param)).toEqual(expectedMessage);
     });
   });
 
