@@ -17,4 +17,5 @@ export type Node = {
   defaults?: Record<string, any>;
   inputs?: PluginParams[];
   outputs?: PluginParams[];
+  [key: string]: any;
 };
