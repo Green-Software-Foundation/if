@@ -20,7 +20,7 @@ Incubation projects are experimental, offer no support guarantee, have minimal g
   NOT_NATIVE_PLUGIN: `
 [!important]
 
-You are using plugins that are not part of the Impact Framework standard library. You should do your own research to ensure the PLUGINs are up to date and accurate. They may not be actively maintained.  
+You are using plugins that are not part of the Impact Framework standard library. You should do your own research to ensure the plugins are up to date and accurate. They may not be actively maintained.  
 `,
   SOMETHING_WRONG: 'Something wrong with cli arguments. Please check docs.',
   ISSUE_TEMPLATE: `
