@@ -6,17 +6,17 @@ initialize:
     'time-sync':
       model: TimeSync
       path: "builtin"
+      global-config: 
+        start-time: '2023-12-12T00:00:00.000Z'
+        end-time: '2023-12-12T00:01:00.000Z'
+        interval: 5
+        allow-padding: true
 tree:
   children:
     child:
       pipeline:
         - time-sync
       config:
-        time-sync:
-          start-time: '2023-12-12T00:00:00.000Z'
-          end-time: '2023-12-12T00:01:00.000Z'
-          interval: 5
-          allow-padding: true
       inputs:
         - timestamp: '2023-12-12T00:00:00.000Z'
           duration: 1
