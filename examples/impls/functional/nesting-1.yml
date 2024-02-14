@@ -8,13 +8,14 @@ params:
 aggregation:
   type: both
   metrics: 
-    - 'carbon'
     - 'energy'
 initialize:
   plugins:
     teads-curve: 
       path: '@grnsft/if-unofficial-models'
       model: TeadsCurve
+      global-config:
+        interpolation: spline
     sci-e: 
       path: '@grnsft/if-models'
       model: SciE
@@ -27,16 +28,21 @@ initialize:
     sci:
       path: '@grnsft/if-models'
       model: Sci
+      global-config:
+        functional-unit: 'requests'
+        functional-unit-time: '1 minute'
 tree:
   children:
     child-0:
       defaults:
-        - sci-m:
-            total-embodied-emissions: 1533.120 # gCO2eq
-            time-reserved: 3600 # 1hr in seconds
-            expected-lifespan: 94608000 # 3 years in seconds        
-            resources-reserved: 1
-            total-resources: 8
+        thermal-design-power: 100
+        grid-carbon-intensity: 800
+        total-embodied-emissions: 1533.120 # gCO2eq
+        time-reserved: 3600 # 1hr in seconds
+        expected-lifespan: 94608000 # 3 years in seconds        
+        resources-reserved: 1
+        total-resources: 8
+        functional-unit-time: '1 min'
       pipeline:
         - teads-curve
         - sci-e
@@ -50,12 +56,14 @@ tree:
           energy-network: 1
     child-1:
       defaults:
-        - sci-m:
-            total-embodied-emissions: 1533.120 # gCO2eq
-            time-reserved: 3600 # 1hr in seconds
-            expected-lifespan: 94608000 # 3 years in seconds        
-            resources-reserved: 1
-            total-resources: 8
+        thermal-design-power: 100
+        grid-carbon-intensity: 800
+        total-embodied-emissions: 1533.120 # gCO2eq
+        time-reserved: 3600 # 1hr in seconds
+        expected-lifespan: 94608000 # 3 years in seconds        
+        resources-reserved: 1
+        total-resources: 8
+        functional-unit-time: '1 min'
       pipeline:
         - teads-curve
         - sci-e

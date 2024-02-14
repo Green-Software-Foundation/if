@@ -1,0 +1,66 @@
+name: if-refactor-example
+params:
+  - name: cpu/thermal-design-power
+    description: dummy
+    aggregation: avg
+    unit: W
+  - name: cpu/embodied-carbon
+    description: dummy
+    aggregation: sum
+    unit: MT
+aggregation:
+  metrics:
+    - energy
+  type: both
+initialize:
+  plugins:
+    teads-curve:
+      model: TeadsCurveModel
+      path: "@grnsft/if-models"
+      config:
+        interpolation: spline
+tree:
+  pipeline:
+    - teads-curve
+  defaults:
+    cpu/thermal-design-power: 100        
+  config:
+    teads-curve:
+      node-level: config
+      passed-to: execute-function
+      only-applied: to-this-and-child-nodes-if-not-overiden
+  children:
+    application: 
+      children:
+        usa: 
+          children:      
+            server-1:
+              defaults:
+                cpu/thermal-design-power: 90    
+              inputs:
+                - timestamp: 2023-08-06T00:00
+                  duration: 3600
+                  cpu/energy: 0.001
+                - timestamp: 2023-08-06T05:00
+                  duration: 3600
+                  cpu/energy: 0.001
+                - timestamp: 2023-08-06T10:00
+                  duration: 3600
+                  cpu/energy: 0.001
+            server-2:
+              inputs:
+                - timestamp: 2023-08-06T00:00
+                  duration: 3600
+                  cpu/energy: 0.001
+                  cpu/thermal-design-power: 80    
+                - timestamp: 2023-08-06T05:00
+                  duration: 3600
+                  cpu/energy: 0.001
+                  cpu/thermal-design-power: 80    
+                - timestamp: 2023-08-06T10:00
+                  duration: 3600
+                  cpu/energy: 0.001     
+                  cpu/thermal-design-power: 80                 
+
+# Parameters Naming Convention: https://github.com/Green-Software-Foundation/if/issues/410
+# Embedded Parameters PR: https://github.com/Green-Software-Foundation/if/pull/418/files

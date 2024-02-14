@@ -7,14 +7,14 @@ export type Params = {
   context: ManifestCommon;
   pipeline?: string[];
   config?: Record<string, any>;
-  defaults?: Record<string, any>;
+  defaults?: PluginParams[];
 };
 
 export type Node = {
   children?: any;
   pipeline?: string[];
   config?: Record<string, any>;
-  defaults?: Record<string, any>;
+  defaults?: PluginParams[];
   inputs?: PluginParams[];
   outputs?: PluginParams[];
 };
