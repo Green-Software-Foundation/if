@@ -4,7 +4,11 @@ import {ERRORS} from '../util/errors';
 import {getAggregationMethod} from '../util/param-selectors';
 import {isDate} from 'node:util/types';
 import {PluginParams} from '../types/interface';
-import {PaddingReceipt, TimeParams} from '../types/time-sync';
+import {
+  PaddingReceipt,
+  TimeNormalizerConfig,
+  TimeParams,
+} from '../types/time-sync';
 import {PluginInterface} from '../types/interface';
 
 const {InputValidationError} = ERRORS;
@@ -16,20 +20,18 @@ const {
   AVOIDING_PADDING_BY_EDGES,
 } = STRINGS;
 
-export const TimeSync = (): PluginInterface => {
+export const TimeSync = (
+  globalConfig: TimeNormalizerConfig
+): PluginInterface => {
   const metadata = {
     kind: 'execute',
   };
 
-  const configure = (config: Record<string, any>): TimeParams => {
-    console.log('In configure::config = ', config);
-    const startTime = parseDate(config['time-sync']['start-time']);
-    const endTime = parseDate(config['time-sync']['end-time']);
-    const interval = config['time-sync'].interval;
-    const allowPadding = config['time-sync']['allow-padding'];
-    console.log('In configure:: outdata = ');
-    console.log(startTime, endTime, interval, allowPadding);
-
+  const configure = (globalConfig: TimeNormalizerConfig): TimeParams => {
+    const startTime = parseDate(globalConfig['start-time']);
+    const endTime = parseDate(globalConfig['end-time']);
+    const interval = globalConfig.interval;
+    const allowPadding = globalConfig['allow-padding'];
     return {startTime, endTime, interval, allowPadding};
   };
 
@@ -40,11 +42,14 @@ export const TimeSync = (): PluginInterface => {
     inputs: PluginParams[],
     config?: Record<string, any>
   ): PluginParams[] => {
-    if (config === undefined) {
+    if (globalConfig === undefined) {
       throw new InputValidationError(INVALID_TIME_NORMALIZATION);
     }
+    if (config) {
+      throw new InputValidationError('Unexpected node-level config provided');
+    }
 
-    const timeParams = configure(config);
+    const timeParams = configure(globalConfig);
     validateParams(timeParams);
 
     const pad = checkForPadding(inputs, timeParams);
@@ -127,7 +132,6 @@ export const TimeSync = (): PluginInterface => {
    * Validates `startTime`, `endTime` and `interval` params.
    */
   const validateParams = (params: TimeParams) => {
-    console.log(params);
     if (!params.startTime || !params.endTime) {
       throw new InputValidationError(INVALID_TIME_NORMALIZATION);
     }
@@ -166,7 +170,7 @@ export const TimeSync = (): PluginInterface => {
     return thisMoment.plus({seconds: i});
   };
   /**
-   * Barkes down input per minimal time unit.
+   * Breaks down input per minimal time unit.
    */
   const breakDownInput = (input: PluginParams, i: number) => {
     const inputKeys = Object.keys(input);
