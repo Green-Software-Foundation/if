@@ -18,6 +18,7 @@ const {
   INVALID_TIME_INTERVAL,
   INVALID_OBSERVATION_OVERLAP,
   AVOIDING_PADDING_BY_EDGES,
+  UNEXPECTED_TIME_CONFIG,
 } = STRINGS;
 
 export const TimeSync = (
@@ -46,7 +47,7 @@ export const TimeSync = (
       throw new InputValidationError(INVALID_TIME_NORMALIZATION);
     }
     if (config) {
-      throw new InputValidationError('Unexpected node-level config provided');
+      throw new InputValidationError(UNEXPECTED_TIME_CONFIG);
     }
 
     const timeParams = configure(globalConfig);
@@ -54,6 +55,7 @@ export const TimeSync = (
 
     const pad = checkForPadding(inputs, timeParams);
     validatePadding(pad, timeParams);
+
     const paddedInputs = padInputs(inputs, pad, timeParams);
 
     const flattenInputs = paddedInputs.reduce(

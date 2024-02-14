@@ -30,6 +30,8 @@ https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=fee
   INVALID_MODULE_PATH: (path: string) =>
     `Provided module path: '${path}' is invalid or not found.`,
   INVALID_TIME_NORMALIZATION: 'Start time or end time is missing.',
+  UNEXPECTED_TIME_CONFIG:
+    'Unexpected node-level config provided for time-sync model',
   INVALID_TIME_INTERVAL: 'Interval is missing.',
   AVOIDING_PADDING: (description: string) =>
     `Avoiding padding at ${description}`,
