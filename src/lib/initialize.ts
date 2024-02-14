@@ -5,9 +5,9 @@ import {logger} from '../util/logger';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {PluginInterface, PluginParams} from '../types/interface';
+import {PluginInterface} from '../types/interface';
 import {PluginsStorage} from '../types/initialize';
-import {GlobalPlugins} from '../types/manifest';
+import {GlobalPlugins, PluginOptions} from '../types/manifest';
 
 const {ModelInitializationError, ModelCredentialError} = ERRORS;
 
@@ -68,9 +68,9 @@ const handModel = (plugin: string, path: string) => {
  * Initializes plugin with global config.
  */
 const initPlugin = async (
-  pluginParams: PluginParams
+  initPluginParams: PluginOptions
 ): Promise<PluginInterface> => {
-  const {model, path} = pluginParams;
+  const {model, path, 'global-config': globalConfig} = initPluginParams;
 
   if (!model) {
     throw new ModelCredentialError(MISSING_CLASSNAME);
@@ -82,7 +82,7 @@ const initPlugin = async (
 
   const Model = await handModel(model, path);
 
-  return Model();
+  return Model(globalConfig);
 };
 
 /**
