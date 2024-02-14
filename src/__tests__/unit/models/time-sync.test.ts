@@ -9,7 +9,14 @@ const {INVALID_TIME_NORMALIZATION} = STRINGS;
 
 describe('lib/time-sync:', () => {
   describe('time-sync: ', () => {
-    const timeSync = TimeSync();
+    const basicConfig = {
+      'start-time': '2023-12-12T00:01:00.000Z',
+      'end-time': '2023-12-12T00:01:00.000Z',
+      interval: 5,
+      'allow-padding': true,
+    };
+
+    const timeSync = TimeSync(basicConfig);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -23,34 +30,29 @@ describe('lib/time-sync:', () => {
 describe('execute(): ', () => {
   it('throws error if `start-time` is missing.', async () => {
     const invalidStartTimeConfig = {
-      'time-sync': {
-        'start-time': '',
-        'end-time': '2023-12-12T00:01:00.000Z',
-        interval: 5,
-        'allow-padding': true,
-      },
+      'start-time': '',
+      'end-time': '2023-12-12T00:01:00.000Z',
+      interval: 5,
+      'allow-padding': true,
     };
 
-    const timeModel = TimeSync();
+    const timeModel = TimeSync(invalidStartTimeConfig);
 
     expect.assertions(1);
 
     try {
-      await timeModel.execute(
-        [
-          {
-            timestamp: '2023-12-12T00:00:00.000Z',
-            duration: 10,
-            'cpu-util': 10,
-          },
-          {
-            timestamp: '2023-12-12T00:00:10.000Z',
-            duration: 30,
-            'cpu-util': 20,
-          },
-        ],
-        invalidStartTimeConfig
-      );
+      await timeModel.execute([
+        {
+          timestamp: '2023-12-12T00:00:00.000Z',
+          duration: 10,
+          'cpu-util': 10,
+        },
+        {
+          timestamp: '2023-12-12T00:00:10.000Z',
+          duration: 30,
+          'cpu-util': 20,
+        },
+      ]);
     } catch (error) {
       expect(error).toStrictEqual(
         new InputValidationError(INVALID_TIME_NORMALIZATION)
@@ -60,33 +62,28 @@ describe('execute(): ', () => {
 
   it('throws error if `end-time` is missing.', async () => {
     const invalidEndTimeConfig = {
-      'time-sync': {
-        'start-time': '2023-12-12T00:01:00.000Z',
-        'end-time': '',
-        interval: 5,
-        'allow-padding': true,
-      },
+      'start-time': '2023-12-12T00:01:00.000Z',
+      'end-time': '',
+      interval: 5,
+      'allow-padding': true,
     };
-    const timeModel = TimeSync();
+    const timeModel = TimeSync(invalidEndTimeConfig);
 
     expect.assertions(1);
 
     try {
-      await timeModel.execute(
-        [
-          {
-            timestamp: '2023-12-12T00:00:00.000Z',
-            duration: 10,
-            'cpu-util': 10,
-          },
-          {
-            timestamp: '2023-12-12T00:00:10.000Z',
-            duration: 30,
-            'cpu-util': 20,
-          },
-        ],
-        invalidEndTimeConfig
-      );
+      await timeModel.execute([
+        {
+          timestamp: '2023-12-12T00:00:00.000Z',
+          duration: 10,
+          'cpu-util': 10,
+        },
+        {
+          timestamp: '2023-12-12T00:00:10.000Z',
+          duration: 30,
+          'cpu-util': 20,
+        },
+      ]);
     } catch (error) {
       expect(error).toStrictEqual(
         new InputValidationError(INVALID_TIME_NORMALIZATION)
@@ -1019,26 +1016,21 @@ describe('execute(): ', () => {
 
   it('checks that metric (carbon) with aggregation-method == sum is properly spread over interpolated time points.', async () => {
     const basicConfig = {
-      'time-sync': {
-        'start-time': '2023-12-12T00:00:00.000Z',
-        'end-time': '2023-12-12T00:00:10.000Z',
-        interval: 1,
-        'allow-padding': true,
-      },
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:10.000Z',
+      interval: 1,
+      'allow-padding': true,
     };
 
-    const timeModel = TimeSync();
+    const timeModel = TimeSync(basicConfig);
 
-    const result = await timeModel.execute(
-      [
-        {
-          timestamp: '2023-12-12T00:00:00.000Z',
-          duration: 10,
-          carbon: 10,
-        },
-      ],
-      basicConfig
-    );
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 10,
+        carbon: 10,
+      },
+    ]);
 
     const expectedResult = [
       {
