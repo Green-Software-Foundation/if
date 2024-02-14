@@ -11,7 +11,7 @@ type Tags =
   | undefined;
 
 export type PluginOptions = {
-  defaults?: Record<string, any>;
+  'global-config'?: Record<string, any>;
   model: string;
   path: string;
 };
