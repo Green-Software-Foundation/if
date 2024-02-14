@@ -70,7 +70,7 @@ const handModel = (plugin: string, path: string) => {
 const initPlugin = async (
   pluginParams: PluginParams
 ): Promise<PluginInterface> => {
-  const {model, path, defaults} = pluginParams;
+  const {model, path} = pluginParams;
 
   if (!model) {
     throw new ModelCredentialError(MISSING_CLASSNAME);
@@ -82,7 +82,7 @@ const initPlugin = async (
 
   const Model = await handModel(model, path);
 
-  return Model(defaults);
+  return Model();
 };
 
 /**

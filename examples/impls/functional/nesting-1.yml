@@ -13,20 +13,20 @@ aggregation:
 initialize:
   plugins:
     teads-curve: 
-      path: '@grnsft/if-models'
-      model: TeadsCurve,
+      path: '@grnsft/if-unofficial-models'
+      model: TeadsCurve
     sci-e: 
       path: '@grnsft/if-models'
-      model: SciE,
+      model: SciE
     sci-m: 
       path: '@grnsft/if-models'
-      model: SciM, 
+      model: SciM
     sci-o:
       path: '@grnsft/if-models'
-      model: SciO,
+      model: SciO
     sci:
       path: '@grnsft/if-models'
-      model: Sci,
+      model: Sci
 tree:
   children:
     child-0:
