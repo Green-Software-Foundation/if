@@ -57,13 +57,14 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
 
     const plugin = params.plugins[pluginName];
     const {execute, metadata} = plugin;
+    const nodeConfig = config && config[pluginName];
 
     if (metadata.kind === 'execute') {
-      storage = await execute(storage, config);
+      storage = await execute(storage, nodeConfig);
     }
 
     if (metadata.kind === 'groupby') {
-      node.children = await execute(storage, config);
+      node.children = await execute(storage, nodeConfig);
 
       await traverse(node.children, {
         pipeline,
