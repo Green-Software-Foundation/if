@@ -46,7 +46,7 @@ const implValidation = z.object({
       z.object({
         path: z.string(),
         model: z.string(),
-        'global-config': z.record(z.string(), z.any()),
+        'global-config': z.record(z.string(), z.any()).optional(),
       })
     ),
   }),
