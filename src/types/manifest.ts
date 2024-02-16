@@ -20,6 +20,11 @@ export type GlobalPlugins = {
   [key: string]: PluginOptions;
 };
 
+export type AggregationParams = {
+  metrics: string[];
+  type: AggregationMethodsNames;
+};
+
 export type ManifestCommon = {
   name: string;
   description: string | null | undefined;
@@ -28,10 +33,7 @@ export type ManifestCommon = {
   initialize: {
     plugins: GlobalPlugins;
   };
-  aggregation?: {
-    metrics: string[];
-    type: AggregationMethodsNames;
-  };
+  aggregation?: AggregationParams;
 };
 
 export type Manifest = ManifestCommon & {
