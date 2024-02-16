@@ -10,6 +10,7 @@ import {STRINGS} from './config';
 import {initalize} from './lib/initialize';
 import {compute} from './lib/compute';
 import {load} from './lib/load';
+import {aggregate} from './lib/aggregate';
 
 const {CliInputError} = ERRORS;
 
@@ -22,13 +23,14 @@ const impactEngine = async () => {
   if (options) {
     const {inputPath, outputPath} = options;
 
-    const {tree, context, safeManifest} = await load(inputPath);
+    const {tree, context} = await load(inputPath);
     const plugins = await initalize(context.initialize.plugins);
     const computedTree = await compute(tree, context, plugins);
+    const aggregatedTree = aggregate(tree, context.aggregation);
 
     const outputFile = {
-      ...safeManifest,
-      tree: computedTree,
+      ...context,
+      tree: aggregatedTree,
     };
 
     if (!outputPath) {
