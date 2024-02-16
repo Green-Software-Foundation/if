@@ -1,6 +1,7 @@
 import {AggregatorOperations, aggregator} from '../util/aggregation-storage';
 
 import {AggregationParams} from '../types/manifest';
+import {getAggregationMethod} from '../util/param-selectors';
 
 /**
  *
@@ -21,6 +22,21 @@ const verticallyAggregate = (
   }
 
   parentNode.aggregated = storage.get();
+};
+
+const horizontallyAggregate = (node: any) => {
+  if (node.children) {
+    for (const child in node.children) {
+      horizontallyAggregate(node.children[child]);
+    }
+  }
+  const metric = 'energy';
+
+  if (node.outputs) {
+    node[`total-${metric}`] = node.outputs.reduce((acc: any, output: any) => {
+      return acc + output[`${metric}`];
+    }, 0);
+  }
 };
 
 /**
@@ -44,8 +60,8 @@ export const aggregate = (tree: any, aggregationParams?: AggregationParams) => {
   }
 
   if (type === 'horizontal') {
-    // horizontallyAggregte();
-    // return copyOfTree
+    horizontallyAggregate(copyOfTree);
+    return copyOfTree;
   }
 
   return copyOfTree;
