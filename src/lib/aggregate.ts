@@ -1,7 +1,7 @@
 import {AggregatorOperations, aggregator} from '../util/aggregation-storage';
 
 import {AggregationParams} from '../types/manifest';
-import {getAggregationMethod} from '../util/param-selectors';
+// import {getAggregationMethod} from '../util/param-selectors';
 
 /**
  *
@@ -24,21 +24,22 @@ const verticallyAggregate = (
   parentNode.aggregated = storage.get();
 };
 
-const horizontallyAggregate = (node: any) => {
+const horizontallyAggregate = (node: any, metrics: string[]) => {
   if (node.children) {
     for (const child in node.children) {
-      horizontallyAggregate(node.children[child]);
+      horizontallyAggregate(node.children[child], metrics);
     }
   }
-  const metric = 'energy';
 
-  if (node.outputs) {
-    node[`total-${metric}`] = node.outputs.reduce((acc: any, output: any) => {
-      return acc + output[`${metric}`];
-    }, 0);
+  for (let i = 0; i < metrics.length; i++) {
+    if (node.outputs) {
+      const metric = metrics[i];
+      node[`total-${metric}`] = node.outputs.reduce((acc: any, output: any) => {
+        return acc + output[`${metric}`];
+      }, 0);
+    }
   }
 };
-
 /**
  * If aggregation is disabled, then returns given `tree`.
  * Otherwise creates copy of the tree, then applies aggregation to it.
@@ -60,7 +61,7 @@ export const aggregate = (tree: any, aggregationParams?: AggregationParams) => {
   }
 
   if (type === 'horizontal') {
-    horizontallyAggregate(copyOfTree);
+    horizontallyAggregate(copyOfTree, metrics);
     return copyOfTree;
   }
 
