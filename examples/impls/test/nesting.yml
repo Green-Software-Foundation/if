@@ -9,7 +9,7 @@ initialize:
     - name: sci-e
       path: '@grnsft/if-models'
       model: SciEModel
-graph:
+tree:
   children:
     child-0:
       pipeline:
@@ -22,12 +22,12 @@ graph:
           inputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
-              cpu-util: 50
+              cpu-util: 10
               energy-network: 0.000811
           outputs:
             - timestamp: 2023-07-06T00:00
               duration: 10
-              cpu-util: 50
+              cpu-util: 10
               energy-network: 0.000811
               energy: 0.000811
         child-0-2:
@@ -38,76 +38,27 @@ graph:
               config: null
               inputs:
                 - timestamp: 2023-07-06T00:00
-                  duration: 10
-                  cpu-util: 50
+                  duration: 210
+                  cpu-util: 20
                   energy-network: 0.000811
               outputs:
                 - timestamp: 2023-07-06T00:00
                   duration: 10
-                  cpu-util: 50
+                  cpu-util: 20
                   energy-network: 0.000811
                   energy: 0.000811
             child-0-2-2:
-              children:
-                child-1-2-1:
-                  pipeline:
-                    - sci-e
-                  config: null
-                  inputs:
-                    - timestamp: 2023-07-06T00:00
-                      duration: 10
-                      cpu-util: 50
-                      energy-network: 0.000811
-                  outputs:
-                    - timestamp: 2023-07-06T00:00
-                      duration: 10
-                      cpu-util: 50
-                      energy-network: 0.000811
-                      energy: 0.000811
-                child-1-2-2:
-                  children:
-                    child-1-2-2-1:
-                      pipeline:
-                        - sci-e
-                      config: null
-                      inputs:
-                        - timestamp: 2023-07-06T00:00
-                          duration: 10
-                          cpu-util: 50
-                          energy-network: 0.000811
-                      outputs:
-                        - timestamp: 2023-07-06T00:00
-                          duration: 10
-                          cpu-util: 50
-                          energy-network: 0.000811
-                          energy: 0.000811
-                    child-1-2-2-2:
-                      pipeline:
-                        - sci-e
-                      config: null
-                      inputs:
-                        - timestamp: 2023-07-06T00:00
-                          duration: 10
-                          cpu-util: 50
-                          energy-network: 0.000811
-                      outputs:
-                        - timestamp: 2023-07-06T00:00
-                          duration: 10
-                          cpu-util: 50
-                          energy-network: 0.000811
-                          energy: 0.000811
-                    child-1-2-2-3:
-                      pipeline:
-                        - sci-e
-                      config: null
-                      inputs:
-                        - timestamp: 2023-07-06T00:00
-                          duration: 10
-                          cpu-util: 50
-                          energy-network: 0.000811
-                      outputs:
-                        - timestamp: 2023-07-06T00:00
-                          duration: 10
-                          cpu-util: 50
-                          energy-network: 0.000811
-                          energy: 0.000811
+              pipeline:
+                - sci-e
+              config: null
+              inputs:
+                - timestamp: 2023-07-06T00:00
+                  duration: 10
+                  cpu-util: 22
+                  energy-network: 0.000811
+              outputs:
+                - timestamp: 2023-07-06T00:00
+                  duration: 10
+                  cpu-util: 22
+                  energy-network: 0.000811
+                  energy: 0.000811
