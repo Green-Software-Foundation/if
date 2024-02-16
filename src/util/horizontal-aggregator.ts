@@ -1,5 +1,5 @@
-import {ERRORS} from '../util/errors';
-import {getAggregationMethod} from '../util/param-selectors';
+import {ERRORS} from './errors';
+import {getAggregationMethod} from './param-selectors';
 
 import {STRINGS} from '../config';
 
