@@ -1,7 +1,7 @@
 import {AggregatorOperations, aggregator} from '../util/aggregation-storage';
-
+import {PARAMETERS} from '../config';
 import {AggregationParams} from '../types/manifest';
-// import {getAggregationMethod} from '../util/param-selectors';
+import {getAggregationMethod} from '../util/param-selectors';
 
 /**
  *
@@ -24,6 +24,10 @@ const verticallyAggregate = (
   parentNode.aggregated = storage.get();
 };
 
+/**
+ * sum or average values in a time series to give a single
+ * representative value for the observation period
+ */
 const horizontallyAggregate = (node: any, metrics: string[]) => {
   if (node.children) {
     for (const child in node.children) {
@@ -31,15 +35,28 @@ const horizontallyAggregate = (node: any, metrics: string[]) => {
     }
   }
 
-  for (let i = 0; i < metrics.length; i++) {
-    if (node.outputs) {
+  if (node.outputs) {
+    for (let i = 0; i < metrics.length; i++) {
       const metric = metrics[i];
-      node[`total-${metric}`] = node.outputs.reduce((acc: any, output: any) => {
-        return acc + output[`${metric}`];
-      }, 0);
+      const method = getAggregationMethod(metric, PARAMETERS);
+
+      if (method === 'sum') {
+        node[`total-${metric}`] = node.outputs.reduce(
+          (acc: any, output: any) => {
+            return acc + output[`${metric}`];
+          },
+          0
+        );
+      } else {
+        const sum = node.outputs.reduce((acc: any, output: any) => {
+          return acc + output[`${metric}`];
+        }, 0);
+        node[`average-${metric}`] = sum / node.outputs.length;
+      }
     }
   }
 };
+
 /**
  * If aggregation is disabled, then returns given `tree`.
  * Otherwise creates copy of the tree, then applies aggregation to it.
