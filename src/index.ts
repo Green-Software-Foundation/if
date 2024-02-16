@@ -26,7 +26,7 @@ const impactEngine = async () => {
     const {tree, context} = await load(inputPath);
     const plugins = await initalize(context.initialize.plugins);
     const computedTree = await compute(tree, context, plugins);
-    const aggregatedTree = aggregate(tree, context.aggregation);
+    const aggregatedTree = aggregate(computedTree, context.aggregation);
 
     const outputFile = {
       ...context,
