@@ -1,4 +1,4 @@
-import {aggregate} from '../../../lib/aggregator';
+import {aggregate} from '../../../util/horizontal-aggregator';
 
 import {STRINGS, PARAMETERS} from '../../../config';
 
@@ -8,7 +8,7 @@ const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
 
 const {InvalidAggregationParams} = ERRORS;
 
-describe('lib/aggregator: ', () => {
+describe('util/horizontal-aggregator: ', () => {
   describe('aggregate(): ', () => {
     it('throws error if aggregation method is none.', () => {
       const inputs = [{}];
