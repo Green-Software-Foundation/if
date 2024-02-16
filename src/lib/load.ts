@@ -13,7 +13,6 @@ export const load = async (inputPath: string): Promise<ContextTree> => {
     validateManifest(safeManifest); // TODO: should be moved outside as separate call
 
   return {
-    safeManifest,
     tree,
     context: {
       initialize,
