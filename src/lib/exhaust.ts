@@ -1,18 +1,17 @@
-import {ExhaustCsvExporter} from '../models/exhaust-csv-export';
-import {ExhaustPluginInterface} from '../models/exhaust-plugin';
+import {ExhaustExportCsv} from '../models/exhaust-export-csv';
 
 const createExhaustPlugin = (pluginTypeName: string) => {
   switch (pluginTypeName) {
     case 'csv':
-      return new ExhaustCsvExporter();
+      return ExhaustExportCsv;
     default:
       throw new Error(`unkonwn exhaust plugin type: ${pluginTypeName}`);
   }
 };
 
 const initialize = (pipeline: string[]) => {
-  const exhaustPlugins: ExhaustPluginInterface[] = pipeline.map(
-    exhaustPluginName => createExhaustPlugin(exhaustPluginName)
+  const exhaustPlugins: any[] = pipeline.map(exhaustPluginName =>
+    createExhaustPlugin(exhaustPluginName)
   );
   return exhaustPlugins;
 };

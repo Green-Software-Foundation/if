@@ -4,24 +4,12 @@ import {ERRORS} from '../util/errors';
 import {ExhaustPluginInterface} from './exhaust-plugin';
 const {InputValidationError} = ERRORS;
 
-export class ExhaustCsvExporter implements ExhaustPluginInterface {
-  private createCsvContent(tree: any, headers: string[]): string {
-    return [
-      headers.join(','),
-      ...tree.map((row: {[x: string]: any}) =>
-        headers.map(fieldName => row[fieldName]).join(',')
-      ),
-    ].join('\r\n');
-  }
-
-  /**
-   * Export to CSV
-   */
-  async execute(
+export const ExhaustExportCsv = (): ExhaustPluginInterface => {
+  const execute: (
     context: any,
     tree: any,
     basePath: string
-  ): Promise<[any, any, string]> {
+  ) => Promise<[any, any, string]> = async (context, tree, basePath) => {
     // create directory in base path, if doesnt exist
     try {
       await fs.mkdir(basePath, {recursive: true});
@@ -36,7 +24,12 @@ export class ExhaustCsvExporter implements ExhaustPluginInterface {
     const headers = Object.keys(tree[0]);
 
     // create csv content from tree with headers
-    const contents = this.createCsvContent(tree, headers);
+    const contents = [
+      headers.join(','),
+      ...tree.map((row: {[x: string]: any}) =>
+        headers.map(fieldName => row[fieldName]).join(',')
+      ),
+    ].join('\r\n');
 
     // write content to csv file
     const outputPath = path.join(basePath, 'csv-export.csv');
@@ -50,5 +43,7 @@ export class ExhaustCsvExporter implements ExhaustPluginInterface {
     }
 
     return Promise.resolve([context, tree, basePath]);
-  }
-}
+  };
+
+  return {execute};
+};
