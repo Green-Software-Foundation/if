@@ -11,6 +11,7 @@ import {initalize} from './lib/initialize';
 import {compute} from './lib/compute';
 import {load} from './lib/load';
 import {aggregate} from './lib/aggregate';
+import {exhaust} from './lib/exhaust';
 
 const {CliInputError} = ERRORS;
 
@@ -27,6 +28,7 @@ const impactEngine = async () => {
     const plugins = await initalize(context.initialize.plugins);
     const computedTree = await compute(tree, context, plugins);
     const aggregatedTree = aggregate(computedTree, context.aggregation);
+    exhaust(context, aggregatedTree);
 
     const outputFile = {
       ...context,
