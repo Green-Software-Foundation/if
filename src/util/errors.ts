@@ -6,6 +6,7 @@ const CUSTOM_ERRORS = [
   'InvalidAggregationParams',
   'ModelInitializationError',
   'ModelCredentialError',
+  'MakeDirectoryError',
 ] as const;
 
 type CustomErrors = {
