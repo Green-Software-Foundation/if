@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs/promises';
 import {ERRORS} from '../util/errors';
 import {ExhaustPluginInterface} from './exhaust-plugin';
-const {InputValidationError} = ERRORS;
+const {MakeDirectoryError} = ERRORS;
 
 export const ExhaustExportCsv = (): ExhaustPluginInterface => {
   const execute: (
@@ -14,8 +14,7 @@ export const ExhaustExportCsv = (): ExhaustPluginInterface => {
     try {
       await fs.mkdir(basePath, {recursive: true});
     } catch (error) {
-      // TODO PB -- suitable error (originally MakeDirectoryError)
-      throw new InputValidationError(
+      throw new MakeDirectoryError(
         `Failed to write CSV to ${basePath} ${error}`
       );
     }
@@ -36,8 +35,7 @@ export const ExhaustExportCsv = (): ExhaustPluginInterface => {
     try {
       await fs.writeFile(outputPath, contents);
     } catch (error) {
-      // TODO PB -- suitable error (originally WriteFileError)
-      throw new InputValidationError(
+      throw new MakeDirectoryError(
         `Failed to write CSV to ${basePath} ${error}`
       );
     }
