@@ -1,0 +1,22 @@
+name: sci-e-demo
+description:
+tags:
+initialize:
+  plugins:
+    'sci-e':
+      model: SciE
+      path: '@grnsft/if-models'
+exhaust:
+  pipeline: ['yaml', 'csv', 'grafana']
+  basepath: ''
+tree:
+  children:
+    child:
+      pipeline:
+        - sci-e
+      config:
+        sci-e:
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          energy-cpu: 0.001
