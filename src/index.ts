@@ -38,7 +38,7 @@ const impactEngine = async () => {
       return;
     }
 
-    await saveYamlFileAs(computedTree, outputPath);
+    await saveYamlFileAs(outputFile, outputPath);
 
     return;
   }
