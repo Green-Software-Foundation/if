@@ -51,6 +51,10 @@ const manifestValidation = z.object({
     ),
   }),
   tree: z.record(z.string(), z.any()),
+  exhaust: z.object({
+    pipeline: z.array(z.string()),
+    basePath: z.string(),
+  }),
 });
 
 /**
