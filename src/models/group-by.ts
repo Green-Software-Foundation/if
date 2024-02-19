@@ -1,4 +1,13 @@
+import {ERRORS} from '../util/errors';
+
+import {STRINGS} from '../config';
+
 import {PluginParams} from '../types/interface';
+import {GroupByConfig} from '../types/group-by';
+
+const {InvalidGrouping} = ERRORS;
+
+const {INVALID_GROUP_BY} = STRINGS;
 
 /**
  * Plugin for inputs grouping.
@@ -43,20 +52,23 @@ export const GroupBy = () => {
    * Interates over inputs, grabs config-group types values for each one.
    * Based on grouping types, initializes the structure grouped structure.
    */
-  const execute = (inputs: PluginParams[], config: string[]) =>
-    inputs.reduce(
-      (acc, input) => {
-        const groups = config.map(groupType => input[groupType]);
+  const execute = (inputs: PluginParams[], config: GroupByConfig) =>
+    inputs.reduce((acc, input) => {
+      const groups = config.group.map(groupType => {
+        if (!input[groupType]) {
+          throw new InvalidGrouping(INVALID_GROUP_BY(groupType));
+        }
 
-        acc = {
-          ...acc,
-          ...appendGroup(input, acc, groups),
-        };
+        return input[groupType];
+      });
 
-        return acc;
-      },
-      {children: {}} as any
-    );
+      acc = {
+        ...acc,
+        ...appendGroup(input, acc, groups),
+      };
+
+      return acc;
+    }, {} as any).children;
 
   return {metadata, execute};
 };
