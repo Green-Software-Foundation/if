@@ -42,10 +42,10 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
 
   if (node.children) {
     return traverse(node.children, {
+      ...params,
       pipeline,
       defaults,
       config,
-      ...params,
     });
   }
 
@@ -60,23 +60,24 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
     const nodeConfig = config && config[pluginName];
 
     if (metadata.kind === 'execute') {
-      storage = await execute(storage, nodeConfig);
+      node.outputs = await execute(storage, nodeConfig);
     }
 
     if (metadata.kind === 'groupby') {
-      node.children = await execute(storage, nodeConfig);
+      const groupedInput = await execute(storage, nodeConfig);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      node.children = groupedInput;
+      delete node.inputs;
 
       await traverse(node.children, {
+        ...params,
         pipeline,
         defaults,
         config,
-        ...params,
       });
     }
   }
-
-  node.outputs = storage;
-  return;
 };
 
 /**
