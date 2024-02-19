@@ -4,6 +4,7 @@ const CUSTOM_ERRORS = [
   'ImplValidationError',
   'InputValidationError',
   'InvalidAggregationParams',
+  'InvalidGrouping',
   'ModelInitializationError',
   'ModelCredentialError',
 ] as const;
