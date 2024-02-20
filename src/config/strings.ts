@@ -14,7 +14,7 @@ export const STRINGS = {
   DISCLAIMER_MESSAGE: `
 [!important] Incubation Project
 
-This project is an incubation project being run inside the Green Software Foundation; as such, we *DON’T recommend using it in any critical use case. 
+This project is an incubation project being run inside the Green Software Foundation; as such, we \x1b[1;31mDON’T recommend using it in any critical use case. 
 Incubation projects are experimental, offer no support guarantee, have minimal governance and process, and may be retired at any moment. This project may one day graduate, in which case this disclaimer will be removed.
 `,
   NOT_NATIVE_PLUGIN: `
@@ -44,4 +44,5 @@ https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=fee
     `Aggregation is not possible for given ${metric} since method is 'none'.`,
   METRIC_MISSING: (metric: string, index: number) =>
     `Aggregation metric ${metric} is not found in inputs[${index}].`,
+  INVALID_GROUP_BY: (type: string) => `Invalid group ${type}.`,
 };

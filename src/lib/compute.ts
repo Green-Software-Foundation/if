@@ -42,17 +42,18 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
 
   if (node.children) {
     return traverse(node.children, {
+      ...params,
       pipeline,
       defaults,
       config,
-      ...params,
     });
   }
 
   let storage = node.inputs as PluginParams[];
+  const pipelineCopy = structuredClone(pipeline);
 
-  while (pipeline.length !== 0) {
-    const pluginName = pipeline.shift() as string;
+  while (pipelineCopy.length !== 0) {
+    const pluginName = pipelineCopy.shift() as string;
     storage = mergePluginParams(storage, defaults);
 
     const plugin = params.plugins[pluginName];
@@ -60,23 +61,23 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
     const nodeConfig = config && config[pluginName];
 
     if (metadata.kind === 'execute') {
-      storage = await execute(storage, nodeConfig);
+      node.outputs = await execute(storage, nodeConfig);
     }
 
     if (metadata.kind === 'groupby') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       node.children = await execute(storage, nodeConfig);
+      delete node.inputs;
 
       await traverse(node.children, {
-        pipeline,
+        ...params,
+        pipeline: pipelineCopy,
         defaults,
         config,
-        ...params,
       });
     }
   }
-
-  node.outputs = storage;
-  return;
 };
 
 /**
