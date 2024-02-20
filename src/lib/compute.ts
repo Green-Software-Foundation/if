@@ -50,9 +50,10 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
   }
 
   let storage = node.inputs as PluginParams[];
+  const pipelineCopy = structuredClone(pipeline);
 
-  while (pipeline.length !== 0) {
-    const pluginName = pipeline.shift() as string;
+  while (pipelineCopy.length !== 0) {
+    const pluginName = pipelineCopy.shift() as string;
     storage = mergePluginParams(storage, defaults);
 
     const plugin = params.plugins[pluginName];
@@ -64,15 +65,14 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
     }
 
     if (metadata.kind === 'groupby') {
-      const groupedInput = await execute(storage, nodeConfig);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      node.children = groupedInput;
+      node.children = await execute(storage, nodeConfig);
       delete node.inputs;
 
       await traverse(node.children, {
         ...params,
-        pipeline,
+        pipeline: pipelineCopy,
         defaults,
         config,
       });
