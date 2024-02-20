@@ -28,10 +28,7 @@ const checkIfMetricsAreValid = (metrics: string[]) => {
  * Aggregates child node level metrics. Validates if metric aggregation type is `none`, then rejects with error.
  * Otherwise iterates over inputs by aggregating per given `metrics`.
  */
-export const aggregateInputsIntoOne = (
-  inputs: PluginParams[],
-  metrics: string[]
-) => {
+const aggregateInputsIntoOne = (inputs: PluginParams[], metrics: string[]) => {
   checkIfMetricsAreValid(metrics);
 
   return inputs.reduce((acc, input, index) => {
