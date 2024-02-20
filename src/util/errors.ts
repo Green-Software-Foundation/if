@@ -7,7 +7,8 @@ const CUSTOM_ERRORS = [
   'InvalidGrouping',
   'ModuleInitializationError',
   'PluginCredentialError',
-  'PluginInterfaceError'
+  'PluginInterfaceError',
+  'WriteFileError',
 ] as const;
 
 type CustomErrors = {

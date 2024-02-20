@@ -15,6 +15,5 @@ export const load = async (inputPath: string): Promise<ContextTree> => {
   return {
     tree,
     context: {name, description, tags, params, aggregation, initialize},
-      exhaust
   };
 };
