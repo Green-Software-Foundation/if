@@ -6,93 +6,114 @@ const {WriteFileError} = ERRORS;
 // TODO PB -- need a way for the user to configure the file name, maybe add a field to 'exhaust' options in the manifest?
 const OUTPUT_FILE_NAME = 'if-csv-export.csv'; // default
 
-const extractIdHelper = (key: string): string => {
-  const parts = key.split('.');
-  parts.pop();
-  return parts.join('.');
-};
+export const ExhaustExportCsv = (): ExhaustPluginInterface => {
+  const handleLeafValue = (
+    value: any,
+    fullPath: string,
+    key: any,
+    flatMap: {[key: string]: any},
+    headers: Set<string>
+  ) => {
+    if (fullPath.includes('outputs')) {
+      headers.add(key);
+      flatMap[fullPath] = value;
+    }
+  };
 
-const getCsvString = (
-  dict: {[key: string]: any},
-  headers: Set<string>,
-  ids: Set<string>
-): string => {
-  const csvRows: string[] = [];
-  csvRows.push(['id', ...headers].join(','));
-  ids.forEach(id => {
-    const rowData = [id];
-    headers.forEach(header => {
-      const value = dict[`${id}.${header}`] ?? '';
-      rowData.push(value.toString());
-    });
-    csvRows.push(rowData.join(','));
-  });
-  return csvRows.join('\n');
-};
-
-const writeOutputFile = async (csvString: string, basePath: string) => {
-  const csvPath = path.join(basePath, OUTPUT_FILE_NAME);
-  try {
-    await fs.writeFile(csvPath, csvString);
-  } catch (error) {
-    throw new WriteFileError(`Failed to write CSV to ${csvPath}: ${error}`);
-  }
-};
-
-const extractFlatDictAndHeaders = (
-  obj: any,
-  prefix = ''
-): [{[key: string]: any}, Set<string>] => {
-  const headers: Set<string> = new Set();
-  const flatDict: {[key: string]: any} = [];
-  for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      const value = obj[key];
-      const fullPath = prefix ? `${prefix}.${key}` : key;
-      if (typeof value === 'object' && value !== null) {
-        const [subFlatDict, subHeaders] = extractFlatDictAndHeaders(
-          value,
-          fullPath
-        );
-        if (Object.keys(subFlatDict).length > 0) {
-          for (const subKey in subFlatDict) {
-            if (Object.prototype.hasOwnProperty.call(subFlatDict, subKey)) {
-              flatDict[subKey] = subFlatDict[subKey];
-            }
-          }
-          subHeaders.forEach(subHeader => headers.add(subHeader));
+  const handleNodeValue = (
+    value: any,
+    fullPath: string,
+    flatMap: {[key: string]: any},
+    headers: Set<string>
+  ) => {
+    const [subFlatMap, subHeaders] = extractFlatMapAndHeaders(
+      value,
+      fullPath
+    );
+    if (Object.keys(subFlatMap).length > 0) {
+      Object.entries(subFlatMap).forEach(([subKey, value]) => {
+        if (subKey in subFlatMap) {
+          flatMap[subKey] = value;
         }
-      } else {
-        if (fullPath.includes('outputs')) {
-          headers.add(key);
-          flatDict[fullPath] = value;
-        }
+      });
+      subHeaders.forEach(subHeader => headers.add(subHeader));
+    }
+  };
+
+  const handleKey = (
+    value: any,
+    key: any,
+    prefix: string,
+    flatMap: {[key: string]: any},
+    headers: Set<string>
+  ) => {
+    const fullPath = prefix ? `${prefix}.${key}` : key;
+    if (value !== null && typeof value === 'object') {
+      handleNodeValue(value, fullPath, flatMap, headers);
+    } else {
+      handleLeafValue(value, fullPath, key, flatMap, headers);
+    }
+  };
+
+  const extractFlatMapAndHeaders = (
+    tree: any,
+    prefix = ''
+  ): [{[key: string]: any}, Set<string>] => {
+    const headers: Set<string> = new Set();
+    const flatMap: {[key: string]: any} = [];
+    for (const key in tree) {
+      if (key in tree) {
+        handleKey(tree[key], key, prefix, flatMap, headers);
       }
     }
-  }
-  return [flatDict, headers];
-};
+    return [flatMap, headers];
+  };
 
-export const ExhaustExportCsv = (): ExhaustPluginInterface => {
-  const execute: (
-    context: any,
-    tree: any,
-    basePath: string
-  ) => Promise<[any, any, string]> = async (
-    context,
+  const extractIdHelper = (key: string): string => {
+    const parts = key.split('.');
+    parts.pop();
+    return parts.join('.');
+  };
+
+  const getCsvString = (
+    map: {[key: string]: any},
+    headers: Set<string>,
+    ids: Set<string>
+  ): string => {
+    const csvRows: string[] = [];
+    csvRows.push(['id', ...headers].join(','));
+    ids.forEach(id => {
+      const rowData = [id];
+      headers.forEach(header => {
+        const value = map[`${id}.${header}`] ?? '';
+        rowData.push(value.toString());
+      });
+      csvRows.push(rowData.join(','));
+    });
+    return csvRows.join('\n');
+  };
+
+  const writeOutputFile = async (csvString: string, basePath: string) => {
+    const csvPath = path.join(basePath, OUTPUT_FILE_NAME);
+    try {
+      await fs.writeFile(csvPath, csvString);
+    } catch (error) {
+      throw new WriteFileError(`Failed to write CSV to ${csvPath}: ${error}`);
+    }
+  };
+
+  const execute: (tree: any, basePath: string) => void = async (
     aggregatedTree,
     basePath
   ) => {
     // TODO PB -- need a way for the user to configure the headers (projection), maybe add a field to 'exhaust' options in the manifest?
-    const [extractredFlatDict, extractedHeaders] =
-      extractFlatDictAndHeaders(aggregatedTree);
+    const [extractredFlatMap, extractedHeaders] =
+      extractFlatMapAndHeaders(aggregatedTree);
     const ids = new Set(
-      Object.keys(extractredFlatDict).map(key => extractIdHelper(key))
+      Object.keys(extractredFlatMap).map(key => extractIdHelper(key))
     );
-    const csvString = getCsvString(extractredFlatDict, extractedHeaders, ids);
+    const csvString = getCsvString(extractredFlatMap, extractedHeaders, ids);
     writeOutputFile(csvString, basePath);
-    // TODO PB -- is what we want to return?
-    return Promise.resolve([context, aggregatedTree, basePath]);
   };
   return {execute};
 };
