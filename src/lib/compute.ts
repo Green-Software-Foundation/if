@@ -19,10 +19,12 @@ const mergePluginParams = (
   inputs: PluginParams[],
   defaults: PluginParams[] | undefined
 ) =>
-  inputs.map(input => ({
-    ...input,
-    ...defaults,
-  }));
+  inputs
+    ? inputs.map(input => ({
+        ...input,
+        ...defaults,
+      }))
+    : [];
 
 /**
  * 1. If the node has it's own pipeline, defaults or config then use that,
@@ -61,7 +63,8 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
     const nodeConfig = config && config[pluginName];
 
     if (metadata.kind === 'execute') {
-      node.outputs = await execute(storage, nodeConfig);
+      storage = await execute(storage, nodeConfig);
+      node.outputs = storage;
     }
 
     if (metadata.kind === 'groupby') {
