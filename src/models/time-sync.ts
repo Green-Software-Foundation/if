@@ -1,8 +1,11 @@
+import {isDate} from 'node:util/types';
 import {DateTime, DateTimeMaybeValid, Interval} from 'luxon';
-import {STRINGS, PARAMETERS} from '../config';
+
 import {ERRORS} from '../util/errors';
 import {getAggregationMethod} from '../util/param-selectors';
-import {isDate} from 'node:util/types';
+
+import {STRINGS} from '../config';
+
 import {PluginParams} from '../types/interface';
 import {
   PaddingReceipt,
@@ -178,7 +181,7 @@ export const TimeSync = (
     const inputKeys = Object.keys(input);
 
     return inputKeys.reduce((acc, key) => {
-      const method = getAggregationMethod(key, PARAMETERS);
+      const method = getAggregationMethod(key);
 
       if (key === 'timestamp') {
         const perSecond = normalizeTimePerSecond(input.timestamp, i);
@@ -232,7 +235,7 @@ export const TimeSync = (
         return acc;
       }
 
-      const method = getAggregationMethod(metric, PARAMETERS);
+      const method = getAggregationMethod(metric);
 
       if (method === 'avg' || method === 'sum') {
         acc[metric] = 0;
@@ -290,7 +293,7 @@ export const TimeSync = (
       const metrics = Object.keys(input);
 
       metrics.forEach(metric => {
-        const method = getAggregationMethod(metric, PARAMETERS);
+        const method = getAggregationMethod(metric);
         acc[metric] = acc[metric] ?? 0;
 
         if (metric === 'timestamp') {
