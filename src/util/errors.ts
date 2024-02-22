@@ -5,8 +5,9 @@ const CUSTOM_ERRORS = [
   'InputValidationError',
   'InvalidAggregationParams',
   'InvalidGrouping',
-  'ModelInitializationError',
-  'ModelCredentialError',
+  'ModuleInitializationError',
+  'PluginCredentialError',
+  'PluginInterfaceError',
 ] as const;
 
 type CustomErrors = {
