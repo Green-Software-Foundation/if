@@ -15,7 +15,7 @@ export const CONFIG = {
         type: String,
         optional: true,
         description:
-          'Path to the output manifest file where the results as saved, if none is provided it prints to stdout.',
+          'Path to the output file where the results as saved, if none is provided it prints to stdout.',
       },
       'override-params': {
         type: String,

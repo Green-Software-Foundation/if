@@ -79,7 +79,7 @@ Please read our documentation at [if.greensoftware.foundation](https://if.greens
 
 ## Video walk-through
 
-Watch this video to learn how to create and run an `manifest`.
+Watch this video to learn how to create and run a `manifest`.
 
 [![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/GW37Qd4AQbU)
 
