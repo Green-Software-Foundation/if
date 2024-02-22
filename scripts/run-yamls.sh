@@ -1,8 +1,8 @@
 #!/bin/bash
-echo 'Running all impls'   
+echo 'Running all manifests'   
 
 
 for f in ./examples/impls/test/*.yml; do 
   echo "Processing $f file..."; 
-  npm run impact-engine -- --impl $f 
+  npm run if -- --manigest $f 
   done
