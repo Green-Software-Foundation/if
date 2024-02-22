@@ -4,7 +4,7 @@ tags:
 initialize:
   plugins:
     'sci-e':
-      model: SciE
+      method: SciE
       path: "@grnsft/if-models"
 tree:
   children:

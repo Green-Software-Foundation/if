@@ -4,7 +4,7 @@ initialize:
   plugins:
     group-by: 
       path: 'builtin'
-      model: GroupBy
+      method: GroupBy
 tree:
   children:
     my-app:

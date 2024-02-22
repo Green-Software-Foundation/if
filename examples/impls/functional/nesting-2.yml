@@ -14,7 +14,7 @@ initialize:
   plugins:
     'sci-e':
       path: '@grnsft/if-models'
-      model: SciE
+      method: SciE
 tree:
   children:
     child-0:
