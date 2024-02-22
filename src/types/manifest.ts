@@ -12,7 +12,7 @@ type Tags =
 
 export type PluginOptions = {
   'global-config'?: Record<string, any>;
-  model: string;
+  method: string;
   path: string;
 };
 
