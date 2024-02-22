@@ -11,7 +11,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "lib": [
-      "es2020",
+      "ES2021",
       "DOM"
     ],
     "module": "CommonJS",
@@ -22,7 +22,6 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
