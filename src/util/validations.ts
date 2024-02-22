@@ -49,12 +49,9 @@ const manifestValidation = z.object({
         'global-config': z.record(z.string(), z.any()).optional(),
       })
     ),
+    outputs: z.record(z.string(), z.record(z.string(), z.any()).optional()),
   }),
   tree: z.record(z.string(), z.any()),
-  exhaust: z.object({
-    pipeline: z.array(z.string()),
-    basePath: z.string(),
-  }),
 });
 
 /**

@@ -1,19 +1,19 @@
-name: sci-e-demo
+name: exhaust-csv-export demo
 description:
 tags:
 initialize:
   plugins:
     'time-sync':
       model: TimeSync
-      path: "builtin"
-      global-config: 
+      path: 'builtin'
+      global-config:
         start-time: '2023-12-12T00:00:00.000Z'
         end-time: '2023-12-12T00:01:00.000Z'
         interval: 5
         allow-padding: true
-exhaust:
-  pipeline: ['csv']
-  basePath: 'C:\dev\'
+  outputs:
+    'csv':
+      output-path: 'C:\dev\demo-exhaust-csv-export.csv'
 tree:
   children:
     child1:
@@ -24,6 +24,7 @@ tree:
         - timestamp: '2023-12-12T00:00:00.000Z'
           duration: 1
           energy-cpu: 0.001
+          custom-metric: 0.001
         - timestamp: '2023-12-12T00:00:01.000Z'
           duration: 5
           energy-cpu: 0.001
@@ -33,6 +34,7 @@ tree:
         - timestamp: '2023-12-12T00:00:13.000Z'
           duration: 30
           energy-cpu: 0.001
+          custom-metric: 0.002
     child2:
       pipeline:
         - time-sync
@@ -44,6 +46,7 @@ tree:
         - timestamp: '2023-12-12T00:00:01.000Z'
           duration: 5
           energy-cpu: 0.001
+          custom-metric: 0.003
         - timestamp: '2023-12-12T00:00:06.000Z'
           duration: 7
           energy-cpu: 0.001

@@ -24,7 +24,9 @@ const {
   UNEXPECTED_TIME_CONFIG,
 } = STRINGS;
 
-export const TimeSync = (globalConfig: TimeNormalizerConfig): PluginInterface => {
+export const TimeSync = (
+  globalConfig: TimeNormalizerConfig
+): PluginInterface => {
   const metadata = {
     kind: 'execute',
   };

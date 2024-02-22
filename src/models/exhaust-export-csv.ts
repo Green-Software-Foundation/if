@@ -1,12 +1,19 @@
-import * as path from 'path';
 import * as fs from 'fs/promises';
 import {ERRORS} from '../util/errors';
-import {ExhaustPluginInterface} from './exhaust-plugin';
-const {WriteFileError} = ERRORS;
-// TODO PB -- need a way for the user to configure the file name, maybe add a field to 'exhaust' options in the manifest?
-const OUTPUT_FILE_NAME = 'if-csv-export.csv'; // default
+import {ExhaustPluginInterface} from './exhaust-plugin-interface';
+const {InputValidationError, WriteFileError} = ERRORS;
 
-export const ExhaustExportCsv = (): ExhaustPluginInterface => {
+export const ExhaustExportCsv = (config: any): ExhaustPluginInterface => {
+  const extractConfigParams = () => {
+    const outputPath: string =
+      'output-path' in config
+        ? config['output-path']
+        : (() => {
+            throw new InputValidationError("Config does not have 'outputPath'");
+          })();
+    return [outputPath];
+  };
+
   const handleLeafValue = (
     value: any,
     fullPath: string,
@@ -26,17 +33,14 @@ export const ExhaustExportCsv = (): ExhaustPluginInterface => {
     flatMap: {[key: string]: any},
     headers: Set<string>
   ) => {
-    const [subFlatMap, subHeaders] = extractFlatMapAndHeaders(
-      value,
-      fullPath
-    );
+    const [subFlatMap, subHeaders] = extractFlatMapAndHeaders(value, fullPath);
     if (Object.keys(subFlatMap).length > 0) {
       Object.entries(subFlatMap).forEach(([subKey, value]) => {
-        if (subKey in subFlatMap) {
-          flatMap[subKey] = value;
-        }
+        flatMap[subKey] = value;
       });
-      subHeaders.forEach(subHeader => headers.add(subHeader));
+      subHeaders.forEach(subHeader => {
+        headers.add(subHeader);
+      });
     }
   };
 
@@ -93,27 +97,25 @@ export const ExhaustExportCsv = (): ExhaustPluginInterface => {
     return csvRows.join('\n');
   };
 
-  const writeOutputFile = async (csvString: string, basePath: string) => {
-    const csvPath = path.join(basePath, OUTPUT_FILE_NAME);
+  const writeOutputFile = async (csvString: string, outputPath: string) => {
     try {
-      await fs.writeFile(csvPath, csvString);
+      await fs.writeFile(outputPath, csvString);
     } catch (error) {
-      throw new WriteFileError(`Failed to write CSV to ${csvPath}: ${error}`);
+      throw new WriteFileError(
+        `Failed to write CSV to ${outputPath}: ${error}`
+      );
     }
   };
 
-  const execute: (tree: any, basePath: string) => void = async (
-    aggregatedTree,
-    basePath
-  ) => {
-    // TODO PB -- need a way for the user to configure the headers (projection), maybe add a field to 'exhaust' options in the manifest?
+  const execute: (tree: any) => void = async aggregatedTree => {
+    const [outputPath] = extractConfigParams();
     const [extractredFlatMap, extractedHeaders] =
       extractFlatMapAndHeaders(aggregatedTree);
     const ids = new Set(
       Object.keys(extractredFlatMap).map(key => extractIdHelper(key))
     );
     const csvString = getCsvString(extractredFlatMap, extractedHeaders, ids);
-    writeOutputFile(csvString, basePath);
+    writeOutputFile(csvString, outputPath);
   };
   return {execute};
 };

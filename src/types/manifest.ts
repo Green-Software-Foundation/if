@@ -10,11 +10,6 @@ type Tags =
   | null
   | undefined;
 
-export type ExhaustOptions = {
-  pipeline: string[];
-  basePath: string;
-};
-
 export type PluginOptions = {
   'global-config'?: Record<string, any>;
   method: string;
@@ -37,9 +32,9 @@ export type ManifestCommon = {
   params?: ManifestParameter[] | undefined | null;
   initialize: {
     plugins: GlobalPlugins;
+    outputs: {[key: string]: any};
   };
   aggregation?: AggregationParams;
-  exhaust: ExhaustOptions;
 };
 
 export type Manifest = ManifestCommon & {
