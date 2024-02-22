@@ -45,7 +45,7 @@ const manifestValidation = z.object({
       z.string(),
       z.object({
         path: z.string(),
-        model: z.string(),
+        method: z.string(),
         'global-config': z.record(z.string(), z.any()).optional(),
       })
     ),
