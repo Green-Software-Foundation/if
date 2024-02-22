@@ -1,7 +1,7 @@
 const CUSTOM_ERRORS = [
   'CliInputError',
   'FileNotFoundError',
-  'ImplValidationError',
+  'ManifestValidationError',
   'InputValidationError',
   'InvalidAggregationParams',
   'InvalidGrouping',
