@@ -201,8 +201,8 @@ const results = timeSyncModel.execute([
 
 IEF users will typically call the model as part of a pipeline defined in an `impl`
 file. In this case, instantiating and configuring the model is handled by
-`impact-engine` and does not have to be done explicitly by the user.
-The following is an example `impl` that calls `time-sync`:
+`if` and does not have to be done explicitly by the user.
+The following is an example `manifest` that calls `time-sync`:
 
 ```yaml
 name: time-sync-demo

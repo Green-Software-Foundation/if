@@ -1,6 +1,6 @@
-import {Impl} from '../../../../types/impl';
+import {Manifest} from '../../../../types/manifest';
 
-export const implNested: Impl = {
+export const manifestNested: Manifest = {
   name: 'nesting-demo',
   description: null,
   tags: {
@@ -9,19 +9,18 @@ export const implNested: Impl = {
     category: 'on-premise',
   },
   initialize: {
-    models: [
-      {
-        name: 'mockavizta',
+    plugins: {
+      mockavizta: {
         model: 'MockaviztaModel',
         path: 'mock-path',
-        config: {
+        'global-config': {
           allocation: 'LINEAR',
           verbose: true,
         },
       },
-    ],
+    },
   },
-  graph: {
+  tree: {
     children: {
       'child-0': {
         config: {
@@ -76,7 +75,7 @@ export const implNested: Impl = {
   },
 };
 
-export const implNestedNoConfig: Impl = {
+export const manifestNestedNoConfig: Manifest = {
   name: 'nesting-demo',
   description: null,
   tags: {
@@ -85,19 +84,18 @@ export const implNestedNoConfig: Impl = {
     category: 'on-premise',
   },
   initialize: {
-    models: [
-      {
-        name: 'mockavizta',
+    plugins: {
+      mockavizta: {
         model: 'MockaviztaModel',
         path: 'mock-path',
-        config: {
+        'global-config': {
           allocation: 'LINEAR',
           verbose: true,
         },
       },
-    ],
+    },
   },
-  graph: {
+  tree: {
     children: {
       'child-0': {
         config: {

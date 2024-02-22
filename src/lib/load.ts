@@ -10,7 +10,7 @@ import {ContextTree} from '../types/load';
 export const load = async (inputPath: string): Promise<ContextTree> => {
   const safeManifest = await openYamlFileAsObject<Manifest>(inputPath);
   const {initialize, aggregation, params, tags, description, name, tree} =
-    validateManifest(safeManifest); // TODO: should be moved outside as separate call
+    validateManifest(safeManifest);
 
   return {
     tree,
