@@ -1,6 +1,6 @@
 export const STRINGS = {
-  FILE_IS_NOT_YAML: 'Provided impl file is not in yaml format.',
-  IMPL_IS_MISSING: 'Impl file is missing.',
+  FILE_IS_NOT_YAML: 'Provided manifest is not in yaml format.',
+  MANIFEST_IS_MISSING: 'Manifest is missing.',
   MISSING_CLASSNAME: "Initalization param 'model' is missing.",
   MISSING_PATH: "Initalization param 'path' is missing.",
   OVERRIDE_WARNING:

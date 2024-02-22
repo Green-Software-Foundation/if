@@ -1,21 +1,21 @@
 import {ArgumentConfig} from 'ts-command-line-args';
 
-import {impactProcessArgs} from '../types/process-args';
+import {ManifestProcessArgs} from '../types/process-args';
 
 export const CONFIG = {
   impact: {
     ARGS: {
-      impl: {
+      manifest: {
         type: String,
         optional: true,
         alias: 'i',
-        description: 'Path to an input IMPL file.',
+        description: 'Path to an input manifest file.',
       },
-      ompl: {
+      output: {
         type: String,
         optional: true,
         description:
-          'Path to the output IMPL file where the results as saved, if none is provided it prints to stdout.',
+          'Path to the output manifest file where the results as saved, if none is provided it prints to stdout.',
       },
       'override-params': {
         type: String,
@@ -41,15 +41,15 @@ export const CONFIG = {
         alias: 'h',
         description: 'Prints this usage guide.',
       },
-    } as ArgumentConfig<impactProcessArgs>,
+    } as ArgumentConfig<ManifestProcessArgs>,
     HELP: `impact 
-  -impl [path to the input impl file]
-  -ompl [path to the output impl file]
+  -manifest [path to the input file]
+  -output [path to the output file]
   -format [yaml|csv] 
   -verbose
   -help 
-  impl: path to an input IMPL file
-  ompl: path to the output IMPL file where the results as saved, if none is provided it prints to stdout.
+  manifest: path to an input manifest
+  output: path to the output file where the results as saved, if none is provided it prints to stdout.
   format: the output file format. default to yaml but if csv is specified then it formats the outputs as a csv file for loading into another program.
   verbose: how much information to output about the calculation to aid investigation and debugging.
   help: prints out the above help instruction.
