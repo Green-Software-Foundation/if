@@ -36,6 +36,10 @@ const validateAndParseProcessArgs = () => {
 const prependFullFilePath = (filePath: string) => {
   const processRunningPath = process.cwd();
 
+  if (path.isAbsolute(filePath)) {
+    return filePath;
+  }
+
   return path.normalize(`${processRunningPath}/${filePath}`);
 };
 
