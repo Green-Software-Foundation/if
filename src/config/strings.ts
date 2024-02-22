@@ -1,16 +1,12 @@
 export const STRINGS = {
   FILE_IS_NOT_YAML: 'Provided manifest is not in yaml format.',
   MANIFEST_IS_MISSING: 'Manifest is missing.',
-  MISSING_CLASSNAME: "Initalization param 'model' is missing.",
+  MISSING_METHOD: "Initalization param 'method' is missing.",
   MISSING_PATH: "Initalization param 'path' is missing.",
+  UNSUPPORTED_PLUGIN:
+    "Plugin interface doesn't implement 'execute' or 'metadata' methods.",
   OVERRIDE_WARNING:
     '\n**WARNING**: You are overriding the IF default parameters file. Please be extremely careful of unintended side-effects in your plugin pipeline!\n',
-  NOT_PLUGIN_PLUGIN_EXTENSION:
-    "Provided plugin does not extend 'PluginInterface'.",
-  STRUCTURE_MALFORMED: (childName: string) =>
-    `Graph is malformed: graph.children.${childName} is not valid.`,
-  NOT_INITIALIZED_PLUGIN: (className: string) =>
-    `You're trying to use not initalized plugin: ${className}.`,
   DISCLAIMER_MESSAGE: `
 [!important] Incubation Project
 
@@ -31,7 +27,7 @@ https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=fee
     `Provided module path: '${path}' is invalid or not found.`,
   INVALID_TIME_NORMALIZATION: 'Start time or end time is missing.',
   UNEXPECTED_TIME_CONFIG:
-    'Unexpected node-level config provided for time-sync model',
+    'Unexpected node-level config provided for time-sync plugin.',
   INVALID_TIME_INTERVAL: 'Interval is missing.',
   AVOIDING_PADDING: (description: string) =>
     `Avoiding padding at ${description}`,
