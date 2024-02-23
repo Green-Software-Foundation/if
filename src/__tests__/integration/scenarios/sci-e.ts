@@ -60,6 +60,7 @@ describe('integration/sci-e', () => {
     expect(path.energy).toEqual(sum);
   });
 
+  //after
   afterAll(() => {
     return npmUninstallPackage('@grnsft/if-models');
   }, 15000);
