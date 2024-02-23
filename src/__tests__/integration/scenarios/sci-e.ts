@@ -35,19 +35,19 @@ describe('integration/sci-e', () => {
       await execPromise(`npm run if -- --manifest ${relativeImplPath}`)
     ).stdout; // exec promise uses relative path
 
-    const finalOmplParsed = getJSONFromText(response);
+    const finalOutputParsed = getJSONFromText(response);
 
     // assertions
-    const path = finalOmplParsed.tree.children['child'].outputs![0];
+    const path = finalOutputParsed.tree.children['child'].outputs![0];
     const impPath = file.tree.children['child'].inputs[0];
 
     // assert timestamp
-    expect(finalOmplParsed.tree.children['child'].inputs[0].timestamp).toEqual(
-      file.tree.children['child'].inputs[0].timestamp
-    );
+    expect(
+      finalOutputParsed.tree.children['child'].inputs[0].timestamp
+    ).toEqual(file.tree.children['child'].inputs[0].timestamp);
 
     // assert duration
-    expect(finalOmplParsed.tree.children['child'].inputs[0].duration).toEqual(
+    expect(finalOutputParsed.tree.children['child'].inputs[0].duration).toEqual(
       file.tree.children['child'].inputs[0].duration
     );
 
