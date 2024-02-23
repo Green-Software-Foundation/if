@@ -9,8 +9,8 @@ import {sciEInputData} from '../test-data/sci-e';
 
 describe('integration/sci-e', () => {
   const modelName = 'sci-e';
-  const absoluteImplPath = `${__dirname}/../manifest/sci-e.yaml`;
-  const relativeImplPath = 'src/__tests__/integration/manifest/sci-e.yaml';
+  const absoluteManifestPath = `${__dirname}/../manifest/sci-e.yaml`;
+  const relativeManifestPath = 'src/__tests__/integration/manifest/sci-e.yaml';
   const implTemplatePath = `${__dirname}/../templates/integration.yaml`;
 
   beforeAll(() => {
@@ -30,16 +30,16 @@ describe('integration/sci-e', () => {
     file.tree.children.child.config[modelName] = {};
     file.tree.children.child.inputs = sciEInputData['success-3-params'];
 
-    await saveYamlFileAs(file, absoluteImplPath); // save yaml uses absolute path
+    await saveYamlFileAs(file, absoluteManifestPath); // save yaml uses absolute path
     const response = (
-      await execPromise(`npm run if -- --manifest ${relativeImplPath}`)
+      await execPromise(`npm run if -- --manifest ${relativeManifestPath}`)
     ).stdout; // exec promise uses relative path
 
     const finalOutputParsed = getJSONFromText(response);
 
     // assertions
     const path = finalOutputParsed.tree.children['child'].outputs![0];
-    const impPath = file.tree.children['child'].inputs[0];
+    const manifestPath = file.tree.children['child'].inputs[0];
 
     // assert timestamp
     expect(
@@ -53,9 +53,9 @@ describe('integration/sci-e', () => {
 
     // assert total energy
     const sum =
-      impPath['cpu/energy'] +
-      impPath['memory/energy'] +
-      impPath['network/energy'];
+      manifestPath['cpu/energy'] +
+      manifestPath['memory/energy'] +
+      manifestPath['network/energy'];
 
     expect(path.energy).toEqual(sum);
   });
