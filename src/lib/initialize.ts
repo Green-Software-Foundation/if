@@ -9,17 +9,11 @@ import {PluginInterface} from '../types/interface';
 import {PluginsStorage} from '../types/initialize';
 import {GlobalPlugins, PluginOptions} from '../types/manifest';
 
-const {ModuleInitializationError, PluginCredentialError, PluginInterfaceError} =
-  ERRORS;
+const {ModuleInitializationError, PluginCredentialError} = ERRORS;
 
 const {GITHUB_PATH, NATIVE_PLUGIN} = CONFIG;
-const {
-  MISSING_METHOD,
-  MISSING_PATH,
-  NOT_NATIVE_PLUGIN,
-  INVALID_MODULE_PATH,
-  UNSUPPORTED_PLUGIN,
-} = STRINGS;
+const {MISSING_METHOD, MISSING_PATH, NOT_NATIVE_PLUGIN, INVALID_MODULE_PATH} =
+  STRINGS;
 
 /**
  * Imports module by given `path`.
@@ -39,12 +33,6 @@ const importModuleFrom = async (path: string) => {
  */
 const importAndVerifyModule = async (method: string, path: string) => {
   const pluginModule = await importModuleFrom(path);
-  const plugin = pluginModule[method];
-
-  const pluginSample = plugin();
-  if (!('metadata' in pluginSample) || !('execute' in pluginSample)) {
-    throw new PluginInterfaceError(UNSUPPORTED_PLUGIN);
-  }
 
   return pluginModule[method];
 };
