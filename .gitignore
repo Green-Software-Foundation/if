@@ -10,3 +10,4 @@ yarn-error.log
 build
 coverage
 .env
+src/__tests__/integration/manifest

@@ -3,9 +3,9 @@ export const sciEInputData = {
     {
       timestamp: '2023-08-06T00:00',
       duration: 3600,
-      'energy-cpu': 10,
-      'energy-memory': 100,
-      'energy-network': 100,
+      'cpu/energy': 10,
+      'memory/energy': 100,
+      'network/energy': 100,
     },
   ],
 };
