@@ -81,7 +81,7 @@ Add and commit with your commit message:
 
 ```bash
 $ git add my/changed/files
-$ git commit m "<my-commit-message>"
+$ git commit -m "<type-of-commit>(<my-optional-scope>): <my-commit-message>"
 ```  
 
 ### Step 5: Push
