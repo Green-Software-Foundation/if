@@ -4,7 +4,7 @@ tags:
 initialize:
   plugins:
     'time-sync':
-      model: TimeSync
+      method: TimeSync
       path: 'builtin'
       global-config:
         start-time: '2023-12-12T00:00:00.000Z'

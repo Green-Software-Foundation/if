@@ -1,9 +1,14 @@
 import * as fs from 'fs/promises';
 import {ERRORS} from '../util/errors';
-import {ExhaustPluginInterface} from './exhaust-plugin-interface';
+import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
 const {InputValidationError, WriteFileError} = ERRORS;
 
-export const ExhaustExportCsv = (config: any): ExhaustPluginInterface => {
+export const ExportCsv = (config: {
+  [key: string]: string;
+}): ExhaustPluginInterface => {
+  /**
+   * extract config parameters from config
+   */
   const extractConfigParams = () => {
     const outputPath: string =
       'output-path' in config
@@ -14,6 +19,10 @@ export const ExhaustExportCsv = (config: any): ExhaustPluginInterface => {
     return [outputPath];
   };
 
+  /**
+   * handle a tree leaf, where there are no child nodes, by adding it as key->value pair to the flat map
+   * and capturing key as a header
+   */
   const handleLeafValue = (
     value: any,
     fullPath: string,
@@ -27,6 +36,9 @@ export const ExhaustExportCsv = (config: any): ExhaustPluginInterface => {
     }
   };
 
+  /**
+   * handle a tree node, recursively traverse the children and append their results to the flat map and captured headers
+   */
   const handleNodeValue = (
     value: any,
     fullPath: string,
@@ -44,6 +56,9 @@ export const ExhaustExportCsv = (config: any): ExhaustPluginInterface => {
     }
   };
 
+  /**
+   * handle a key at the top level of the tree
+   */
   const handleKey = (
     value: any,
     key: any,
@@ -59,6 +74,9 @@ export const ExhaustExportCsv = (config: any): ExhaustPluginInterface => {
     }
   };
 
+  /**
+   * qrecursively extract a flat map and headers from the hierarcial tree
+   */
   const extractFlatMapAndHeaders = (
     tree: any,
     prefix = ''
@@ -73,12 +91,19 @@ export const ExhaustExportCsv = (config: any): ExhaustPluginInterface => {
     return [flatMap, headers];
   };
 
+  /**
+   * extract the id of the key, that is removing the last token (which is the index).
+   * in this manner, multiple keys that identical besides their index share the same id.
+   */
   const extractIdHelper = (key: string): string => {
     const parts = key.split('.');
     parts.pop();
     return parts.join('.');
   };
 
+  /**
+   * generate a CSV formatted string based on a flat key->value map, headers and ids
+   */
   const getCsvString = (
     map: {[key: string]: any},
     headers: Set<string>,
@@ -97,9 +122,12 @@ export const ExhaustExportCsv = (config: any): ExhaustPluginInterface => {
     return csvRows.join('\n');
   };
 
-  const writeOutputFile = async (csvString: string, outputPath: string) => {
+  /**
+   * write the given string content to a file at the provided path
+   */
+  const writeOutputFile = async (content: string, outputPath: string) => {
     try {
-      await fs.writeFile(outputPath, csvString);
+      await fs.writeFile(outputPath, content);
     } catch (error) {
       throw new WriteFileError(
         `Failed to write CSV to ${outputPath}: ${error}`
@@ -107,6 +135,9 @@ export const ExhaustExportCsv = (config: any): ExhaustPluginInterface => {
     }
   };
 
+  /**
+   * export the provided tree content to a CSV file, represented in a flat structure
+   */
   const execute: (tree: any) => void = async aggregatedTree => {
     const [outputPath] = extractConfigParams();
     const [extractredFlatMap, extractedHeaders] =
