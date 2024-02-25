@@ -1,9 +1,10 @@
 ---
 name: Dev-ticket
-about: General developer ticket 
-title: "Dev ticket - "
-labels: dev-ticket
+about: General developer ticket
+title: 'Dev ticket - '
+labels: ''
 assignees: ''
+
 ---
 
 <!--- Provide a general summary of the issue in the Title above -->
@@ -34,7 +35,7 @@ assignees: ''
 ## What does "done" look like?
 <!--- Explain what needs to happen in order for this to be considered complete -->
 
-## Does this require updaes to documentation or other materials??
+## Does this require updates to documentation or other materials??
 <!--- Are there documentation, website or other media changes required after this change is implemented?. -->
 
 ## What testing is required?

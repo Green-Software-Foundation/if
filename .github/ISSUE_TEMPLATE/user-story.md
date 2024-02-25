@@ -2,7 +2,7 @@
 name: User story
 about: This describes a user story for IEF
 title: "[User story] ...."
-labels: user-story
+labels: ''
 assignees: ''
 
 ---

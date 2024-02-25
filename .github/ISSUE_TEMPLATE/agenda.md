@@ -1,7 +1,7 @@
 ---
 name: Agenda
 about: The standard agenda template for Impact Framework
-title: "GSF IEF Meeting Agenda yyyy-mm-dd"
+title: GSF IEF Meeting Agenda yyyy-mm-dd
 labels: agenda
 assignees: ''
 
