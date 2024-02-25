@@ -1,9 +1,10 @@
 ---
 name: Dev-ticket
-about: General developer ticket 
-title: "Dev ticket - "
-labels: dev-ticket
+about: General developer ticket
+title: 'Dev ticket - '
+labels: ''
 assignees: ''
+
 ---
 
 <!--- Provide a general summary of the issue in the Title above -->

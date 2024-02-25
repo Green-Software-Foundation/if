@@ -1,9 +1,10 @@
 ---
 name: Feedback
 about: Submiting feedback on the IEF implementation
-title: "Feedback - "
-labels: feedback
+title: 'Feedback - '
+labels: ''
 assignees: ''
+
 ---
 
 ## Scope

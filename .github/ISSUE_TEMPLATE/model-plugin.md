@@ -1,9 +1,10 @@
 ---
 name: Model Plugin
 about: Submiting a request to create a model plugin
-title: "Model Plugin - "
+title: 'Model Plugin - '
 labels: model
 assignees: ''
+
 ---
 
 - **What**: 

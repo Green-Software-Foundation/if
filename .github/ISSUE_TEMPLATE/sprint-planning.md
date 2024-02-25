@@ -1,8 +1,8 @@
 ---
 name: Sprint planning
 about: The standard template for IF sprint planning
-title: "GSF IEF Sprint planning yyyy-mm-dd"
-labels: sprint planning
+title: GSF IEF Sprint planning yyyy-mm-dd
+labels: ''
 assignees: ''
 
 ---
@@ -36,4 +36,4 @@ Who will work on which issue? What are the deadlines?
 What opportunities are there to raise concerns, resize, course correct, ask for support during the coming sprint?
 
 ### Discussions and AOB
-- [ ] 
+- [ ]
