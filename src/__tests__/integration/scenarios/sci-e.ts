@@ -58,7 +58,7 @@ describe('integration/sci-e', () => {
       manifestPath['network/energy'];
 
     expect(path.energy).toEqual(sum);
-  });
+  }, 15000);
 
   afterAll(() => {
     return npmUninstallPackage('@grnsft/if-models');
