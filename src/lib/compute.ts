@@ -21,8 +21,8 @@ const mergePluginParams = (
 ) =>
   inputs
     ? inputs.map(input => ({
-        ...input,
         ...defaults,
+        ...input,
       }))
     : [];
 
