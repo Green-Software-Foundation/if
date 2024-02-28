@@ -1,8 +1,6 @@
 import {STRINGS} from '../../../config/strings';
 
 const {
-  STRUCTURE_MALFORMED,
-  NOT_INITIALIZED_PLUGIN,
   INVALID_MODULE_PATH,
   INVALID_AGGREGATION_METHOD,
   METRIC_MISSING,
@@ -11,26 +9,6 @@ const {
 } = STRINGS;
 
 describe('config/strings: ', () => {
-  describe('STRUCTURE_MALFORMED(): ', () => {
-    it('successfully appends given param to message.', () => {
-      const param = 'mock-message';
-
-      const expectedMessage = `Graph is malformed: graph.children.${param} is not valid.`;
-
-      expect(STRUCTURE_MALFORMED(param)).toEqual(expectedMessage);
-    });
-  });
-
-  describe('NOT_INITIALIZED_PLUGIN(): ', () => {
-    it('successfully appends given param to message.', () => {
-      const param = 'mock-message';
-
-      const expectedMessage = `You're trying to use not initalized plugin: ${param}.`;
-
-      expect(NOT_INITIALIZED_PLUGIN(param)).toEqual(expectedMessage);
-    });
-  });
-
   describe('INVALID_MODULE_PATH(): ', () => {
     it('successfully appends given param to message.', () => {
       const param = 'mock-param';

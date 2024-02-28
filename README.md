@@ -56,21 +56,21 @@ Then installing some models:
 npm install -g "@grnsft/if-models"
 ```
 
-Then create an `impl` file that describes your application (see our docs for a detailed explanation).
+Then create an `manifest` file that describes your application (see our docs for a detailed explanation).
 
-Then, run `impact-engine` using the following command:
+Then, run `if` using the following command:
 
 ```sh
-impact-engine --impl <path-to-your-impl-file>
+if --manifest <path-to-your-manifest-file>
 ```
 
 You can also add an optional savepath for your output yaml (if you do not provide one, the output will be printed to the console):
 
 ```sh
-impact-engine --impl <path-to-your-impl-file> --ompl <your-savepath>
+if --manifest <path-to-your-manifest-file> --output <your-savepath>
 ```
 
-The `impact-engine` CLI tool will configure and run the models defined in your input `yaml` (`impl`) and return the results as an output `yaml` (`ompl`).
+The `if` CLI tool will configure and run the models defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
 
 
 ## Documentation
@@ -79,7 +79,7 @@ Please read our documentation at [if.greensoftware.foundation](https://if.greens
 
 ## Video walk-through
 
-Watch this video to learn how to create and run an `impl`.
+Watch this video to learn how to create and run a `manifest`.
 
 [![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/GW37Qd4AQbU)
 

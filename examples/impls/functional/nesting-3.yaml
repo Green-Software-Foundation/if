@@ -15,7 +15,7 @@ aggregation:
 initialize:
   plugins:
     teads-curve:
-      model: TeadsCurveModel
+      method: TeadsCurveModel
       path: "@grnsft/if-models"
       config:
         interpolation: spline

@@ -9,14 +9,16 @@ import {PluginInterface} from '../types/interface';
 import {PluginsStorage} from '../types/initialize';
 import {GlobalPlugins, PluginOptions} from '../types/manifest';
 
-const {ModelInitializationError, ModelCredentialError} = ERRORS;
+const {ModuleInitializationError, PluginCredentialError, PluginInterfaceError} =
+  ERRORS;
 
 const {GITHUB_PATH, NATIVE_PLUGIN} = CONFIG;
 const {
-  MISSING_CLASSNAME,
+  MISSING_METHOD,
   MISSING_PATH,
   NOT_NATIVE_PLUGIN,
   INVALID_MODULE_PATH,
+  UNSUPPORTED_PLUGIN,
 } = STRINGS;
 
 /**
@@ -28,26 +30,31 @@ const importModuleFrom = async (path: string) => {
 
     return module;
   } catch (error) {
-    throw new ModelInitializationError(INVALID_MODULE_PATH(path));
+    throw new ModuleInitializationError(INVALID_MODULE_PATH(path));
   }
 };
 
 /**
  * Imports `module` from given `path`, then checks if it's `ModelPluginInterface` extension.
  */
-const importAndVerifyModule = async (model: string, path: string) => {
+const importAndVerifyModule = async (method: string, path: string) => {
   const pluginModule = await importModuleFrom(path);
-  // check for plugin interface props here
+  const plugin = pluginModule[method];
 
-  return pluginModule[model];
+  const pluginSample = plugin();
+  if (!('metadata' in pluginSample) || !('execute' in pluginSample)) {
+    throw new PluginInterfaceError(UNSUPPORTED_PLUGIN);
+  }
+
+  return pluginModule[method];
 };
 
 /**
- * Returns plugin model. Checks if model is missing then rejects with error.
+ * Checks if plugin is missing then rejects with error.
  * Then checks if `path` is starting with github, then grabs the repository name.
- * Imports module, then checks if it's a class which implements input model interface.
+ * Imports module, then checks if it's a valid plugin.
  */
-const handModel = (plugin: string, path: string) => {
+const handModule = (method: string, path: string) => {
   if (path === 'builtin') {
     path = pathLib.normalize(`${__dirname}/../models`);
   } else {
@@ -61,7 +68,7 @@ const handModel = (plugin: string, path: string) => {
     }
   }
 
-  return importAndVerifyModule(plugin, path);
+  return importAndVerifyModule(method, path);
 };
 
 /**
@@ -70,19 +77,19 @@ const handModel = (plugin: string, path: string) => {
 const initPlugin = async (
   initPluginParams: PluginOptions
 ): Promise<PluginInterface> => {
-  const {model, path, 'global-config': globalConfig} = initPluginParams;
+  const {method, path, 'global-config': globalConfig} = initPluginParams;
 
-  if (!model) {
-    throw new ModelCredentialError(MISSING_CLASSNAME);
+  if (!method) {
+    throw new PluginCredentialError(MISSING_METHOD);
   }
 
   if (!path) {
-    throw new ModelCredentialError(MISSING_PATH);
+    throw new PluginCredentialError(MISSING_PATH);
   }
 
-  const Model = await handModel(model, path);
+  const plugin = await handModule(method, path);
 
-  return Model(globalConfig);
+  return plugin(globalConfig);
 };
 
 /**

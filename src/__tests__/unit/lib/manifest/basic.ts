@@ -1,6 +1,6 @@
-import {Impl} from '../../../../types/impl';
+import {Manifest} from '../../../../types/manifest';
 
-export const impl: Impl = {
+export const manifest: Manifest = {
   name: 'gsf-demo',
   description: 'Hello',
   tags: {
@@ -9,19 +9,18 @@ export const impl: Impl = {
     category: 'cloud',
   },
   initialize: {
-    models: [
-      {
-        name: 'mock-name',
+    plugins: {
+      'mock-name': {
         model: 'MockaviztaModel',
         path: 'mock-path',
-        config: {
+        'global-config': {
           allocation: 'LINEAR',
           verbose: true,
         },
       },
-    ],
+    },
   },
-  graph: {
+  tree: {
     children: {
       'front-end': {
         pipeline: ['mock-name'],

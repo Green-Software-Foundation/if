@@ -4,14 +4,14 @@ jest.mock('ts-command-line-args', () => ({
     switch (process.env.result) {
       case 'error':
         return {};
-      case 'impl':
+      case 'manifest':
         return {
-          impl: 'impl-mock.yml',
+          manifest: 'manifest-mock.yml',
         };
-      case 'impl-ompl':
+      case 'manifest-output':
         return {
-          impl: 'impl-mock.yml',
-          ompl: 'ompl-mock.yml',
+          manifest: 'manifest-mock.yml',
+          output: 'output-mock.yml',
         };
       case 'help':
         return {
@@ -19,12 +19,12 @@ jest.mock('ts-command-line-args', () => ({
         };
       case 'not-yaml':
         return {
-          impl: 'mock.notyaml',
+          manifest: 'mock.notyaml',
         };
       default:
         return {
-          impl: 'mock-impl.yaml',
-          ompl: 'mock-ompl',
+          manifest: 'mock-manifest.yaml',
+          output: 'mock-output',
         };
     }
   },
@@ -39,7 +39,7 @@ import {STRINGS} from '../../../config';
 
 const {CliInputError} = ERRORS;
 
-const {IMPL_IS_MISSING, FILE_IS_NOT_YAML} = STRINGS;
+const {MANIFEST_IS_MISSING, FILE_IS_NOT_YAML} = STRINGS;
 
 describe('util/args: ', () => {
   const originalEnv = process.env;
@@ -55,40 +55,40 @@ describe('util/args: ', () => {
       } catch (error) {
         if (error instanceof Error) {
           expect(error).toBeInstanceOf(CliInputError);
-          expect(error.message).toEqual(IMPL_IS_MISSING);
+          expect(error.message).toEqual(MANIFEST_IS_MISSING);
         }
       }
     });
 
-    it('returns impl path.', () => {
+    it('returns manifest path.', () => {
       expect.assertions(1);
 
-      process.env.result = 'impl';
+      process.env.result = 'manifest';
 
       const result = parseArgs();
       const processRunningPath = process.cwd();
 
-      const implPath = 'impl-mock.yml';
+      const manifestPath = 'manifest-mock.yml';
       const expectedResult = {
-        inputPath: path.normalize(`${processRunningPath}/${implPath}`),
+        inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
       };
 
       expect(result).toEqual(expectedResult);
     });
 
-    it('returns impl and ompl path.', () => {
+    it('returns manifest and output path.', () => {
       expect.assertions(1);
 
-      process.env.result = 'impl-ompl';
+      process.env.result = 'manifest-output';
 
       const result = parseArgs();
       const processRunningPath = process.cwd();
 
-      const implPath = 'impl-mock.yml';
-      const omplPath = 'ompl-mock.yml';
+      const manifestPath = 'manifest-mock.yml';
+      const outputPath = 'output-mock.yml';
       const expectedResult = {
-        inputPath: path.normalize(`${processRunningPath}/${implPath}`),
-        outputPath: path.normalize(`${processRunningPath}/${omplPath}`),
+        inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
+        outputPath: path.normalize(`${processRunningPath}/${outputPath}`),
       };
 
       expect(result).toEqual(expectedResult);

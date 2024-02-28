@@ -12,7 +12,7 @@ type Tags =
 
 export type PluginOptions = {
   'global-config'?: Record<string, any>;
-  model: string;
+  method: string;
   path: string;
 };
 
@@ -32,6 +32,7 @@ export type ManifestCommon = {
   params?: ManifestParameter[] | undefined | null;
   initialize: {
     plugins: GlobalPlugins;
+    outputs: {[key: string]: any};
   };
   aggregation?: AggregationParams;
 };

@@ -12,7 +12,7 @@ module.exports = {
   },
   modulePathIgnorePatterns: [
     './build',
-    './src/__tests__/unit/lib/impls',
+    './src/__tests__/unit/lib/manifest',
     './src/__tests__/integration/helpers',
     './src/__tests__/integration/test-data',
   ],

@@ -13,21 +13,21 @@ initialize:
   plugins:
     teads-curve: 
       path: '@grnsft/if-unofficial-models'
-      model: TeadsCurve
+      method: TeadsCurve
       global-config:
         interpolation: spline
     sci-e: 
       path: '@grnsft/if-models'
-      model: SciE
+      method: SciE
     sci-m: 
       path: '@grnsft/if-models'
-      model: SciM
+      method: SciM
     sci-o:
       path: '@grnsft/if-models'
-      model: SciO
+      method: SciO
     sci:
       path: '@grnsft/if-models'
-      model: Sci
+      method: Sci
       global-config:
         functional-unit: 'requests'
         functional-unit-time: '1 minute'

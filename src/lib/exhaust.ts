@@ -1,31 +1,39 @@
-import {ExhaustExportCsv} from '../models/exhaust-export-csv';
+import {ExportCsv} from '../models/export-csv';
+import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
 
-const createExhaustPlugin = (pluginTypeName: string) => {
+/**
+ * create exhaust plugins based on the provided config
+ */
+const createExhaustPlugins = (exhaustPluginConfigs: any) => {
+  return Object.keys(exhaustPluginConfigs).map((key: string) =>
+    createExhaustPlugin(key, exhaustPluginConfigs[key])
+  );
+};
+
+/**
+ * factory method for exhaust plugins
+ */
+const createExhaustPlugin = (
+  pluginTypeName: string,
+  pluginConfigItems: {[key: string]: string}
+): ExhaustPluginInterface => {
   switch (pluginTypeName) {
     case 'csv':
-      return ExhaustExportCsv;
+      return ExportCsv(pluginConfigItems);
     default:
       throw new Error(`unkonwn exhaust plugin type: ${pluginTypeName}`);
   }
 };
 
-const initialize = (pipeline: string[]) => {
-  const exhaustPlugins: any[] = pipeline.map(exhaustPluginName =>
-    createExhaustPlugin(exhaustPluginName)
-  );
-  return exhaustPlugins;
-};
-
-export const exhaust = (context: any, tree: any) => {
-  const pipe =
-    (...fns: any[]) =>
-    (x: any) =>
-      fns.reduce((v, f) => f(v), x);
-
-  if (context && context.exhaust) {
-    const pipeline = context.exhaust.pipeline;
-    const basePath = context.exhaust.basePath;
-    const importedModels = initialize(pipeline);
-    return pipe(importedModels)({context, tree, basePath});
+/**
+ * execute exhaust functionality
+ */
+export const exhaust = (tree: any, outputs: any) => {
+  if (outputs) {
+    const exhaustPlugins: ExhaustPluginInterface[] =
+      createExhaustPlugins(outputs);
+    exhaustPlugins.forEach(plugin => {
+      plugin.execute(tree);
+    });
   }
 };

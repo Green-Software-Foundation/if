@@ -6,12 +6,12 @@ import {AGGREGATION_METHODS} from '../types/aggregation';
 import {AGGREGATION_TYPES} from '../types/parameters';
 import {Manifest} from '../types/manifest';
 
-const {ImplValidationError} = ERRORS;
+const {ManifestValidationError} = ERRORS;
 
 /**
- * Validation schema for impl files.
+ * Validation schema for manifests.
  */
-const implValidation = z.object({
+const manifestValidation = z.object({
   name: z.string(),
   'if-version': z.string().optional().nullable(),
   description: z.string().nullable().default(''),
@@ -45,10 +45,11 @@ const implValidation = z.object({
       z.string(),
       z.object({
         path: z.string(),
-        model: z.string(),
+        method: z.string(),
         'global-config': z.record(z.string(), z.any()).optional(),
       })
     ),
+    outputs: z.record(z.string(), z.record(z.string(), z.any()).optional()),
   }),
   tree: z.record(z.string(), z.any()),
 });
@@ -57,9 +58,9 @@ const implValidation = z.object({
  * Validates given `manifest` object to match pattern.
  */
 export const validateManifest = (manifest: Manifest) => {
-  const validatedImpl = implValidation.safeParse(manifest);
+  const safeManifest = manifestValidation.safeParse(manifest);
 
-  if (!validatedImpl.success) {
+  if (!safeManifest.success) {
     const prettifyErrorMessage = (issues: string) => {
       const issuesArray = JSON.parse(issues);
 
@@ -74,10 +75,10 @@ export const validateManifest = (manifest: Manifest) => {
       });
     };
 
-    throw new ImplValidationError(
-      prettifyErrorMessage(validatedImpl.error.message)
+    throw new ManifestValidationError(
+      prettifyErrorMessage(safeManifest.error.message)
     );
   }
 
-  return validatedImpl.data;
+  return safeManifest.data;
 };

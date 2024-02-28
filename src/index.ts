@@ -28,7 +28,7 @@ const impactEngine = async () => {
     const plugins = await initalize(context.initialize.plugins);
     const computedTree = await compute(tree, context, plugins);
     const aggregatedTree = aggregate(computedTree, context.aggregation);
-    exhaust(context, aggregatedTree);
+    exhaust(aggregatedTree, context.initialize.outputs);
 
     const outputFile = {
       ...context,
@@ -40,7 +40,7 @@ const impactEngine = async () => {
       return;
     }
 
-    await saveYamlFileAs(computedTree, outputPath);
+    await saveYamlFileAs(outputFile, outputPath);
 
     return;
   }
