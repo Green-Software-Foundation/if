@@ -15,14 +15,26 @@ const traverse = async (children: any, params: Params) => {
  */
 const mergeDefaults = (
   inputs: PluginParams[],
-  defaults: PluginParams[] | undefined
-) =>
-  inputs
-    ? inputs.map(input => ({
-        ...defaults,
-        ...input,
-      }))
-    : [];
+  defaults: PluginParams | undefined
+) => {
+  if (inputs) {
+    if (!defaults) {
+      return inputs;
+    }
+
+    return inputs.map(input => {
+      const keys = Object.keys(input);
+
+      return keys.reduce((acc, key) => {
+        acc[key] = input[key] !== null ? input[key] : defaults[key];
+
+        return acc;
+      }, {} as PluginParams);
+    });
+  }
+
+  return [];
+};
 
 /**
  * 1. If the node has it's own pipeline, defaults or config then use that,
