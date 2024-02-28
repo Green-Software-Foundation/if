@@ -43,7 +43,7 @@ graph:
           grid-carbon-intensity: 951
         sci:
           functional-unit: ''
-          functional-unit-time: hour
+          functional-unit-time: 1-hour
       inputs:
           - timestamp: '2023-11-02T10:35:31.820Z'
             duration: 3600
