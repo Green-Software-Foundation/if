@@ -11,14 +11,14 @@ export type Params = {
   context: Context;
   pipeline?: string[];
   config?: NodeConfig;
-  defaults?: PluginParams[];
+  defaults?: PluginParams;
 };
 
 export type Node = {
   children?: any;
   pipeline?: string[];
   config?: NodeConfig;
-  defaults?: PluginParams[];
+  defaults?: PluginParams;
   inputs?: PluginParams[];
   outputs?: PluginParams[];
 };
