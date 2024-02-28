@@ -1,8 +1,9 @@
 import {isDate} from 'node:util/types';
 import {DateTime, DateTimeMaybeValid, Interval} from 'luxon';
 
+import {parameterize} from '../lib/parameterize';
+
 import {ERRORS} from '../util/errors';
-import {getAggregationMethod} from '../util/param-selectors';
 
 import {STRINGS} from '../config';
 
@@ -36,6 +37,7 @@ export const TimeSync = (
     const endTime = parseDate(globalConfig['end-time']);
     const interval = globalConfig.interval;
     const allowPadding = globalConfig['allow-padding'];
+
     return {startTime, endTime, interval, allowPadding};
   };
 
@@ -49,6 +51,7 @@ export const TimeSync = (
     if (globalConfig === undefined) {
       throw new InputValidationError(INVALID_TIME_NORMALIZATION);
     }
+
     if (config) {
       throw new InputValidationError(UNEXPECTED_TIME_CONFIG);
     }
@@ -181,7 +184,7 @@ export const TimeSync = (
     const inputKeys = Object.keys(input);
 
     return inputKeys.reduce((acc, key) => {
-      const method = getAggregationMethod(key);
+      const method = parameterize.getAggregationMethod(key);
 
       if (key === 'timestamp') {
         const perSecond = normalizeTimePerSecond(input.timestamp, i);
@@ -235,7 +238,7 @@ export const TimeSync = (
         return acc;
       }
 
-      const method = getAggregationMethod(metric);
+      const method = parameterize.getAggregationMethod(metric);
 
       if (method === 'avg' || method === 'sum') {
         acc[metric] = 0;
@@ -293,7 +296,7 @@ export const TimeSync = (
       const metrics = Object.keys(input);
 
       metrics.forEach(metric => {
-        const method = getAggregationMethod(metric);
+        const method = parameterize.getAggregationMethod(metric);
         acc[metric] = acc[metric] ?? 0;
 
         if (metric === 'timestamp') {

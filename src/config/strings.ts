@@ -1,3 +1,5 @@
+import {ManifestParameter} from '../types/parameters';
+
 export const STRINGS = {
   FILE_IS_NOT_YAML: 'Provided manifest is not in yaml format.',
   MANIFEST_IS_MISSING: 'Manifest is missing.',
@@ -41,4 +43,6 @@ https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=fee
   METRIC_MISSING: (metric: string, index: number) =>
     `Aggregation metric ${metric} is not found in inputs[${index}].`,
   INVALID_GROUP_BY: (type: string) => `Invalid group ${type}.`,
+  REJECTING_OVERRIDE: (param: ManifestParameter) =>
+    `Rejecting overriding of canonical parameter: ${param.name}.`,
 };

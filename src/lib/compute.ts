@@ -1,7 +1,5 @@
-import {Node, Params} from '../types/compute';
-import {PluginsStorage} from '../types/initialize';
+import {ComputeParams, Node, Params} from '../types/compute';
 import {PluginParams} from '../types/interface';
-import {ManifestCommon} from '../types/manifest';
 
 /**
  * Traverses all child nodes based on children grouping.
@@ -15,7 +13,7 @@ const traverse = async (children: any, params: Params) => {
 /**
  * Appends `default` values to `inputs`.
  */
-const mergePluginParams = (
+const mergeDefaults = (
   inputs: PluginParams[],
   defaults: PluginParams[] | undefined
 ) =>
@@ -56,7 +54,7 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
 
   while (pipelineCopy.length !== 0) {
     const pluginName = pipelineCopy.shift() as string;
-    storage = mergePluginParams(storage, defaults);
+    storage = mergeDefaults(storage, defaults);
 
     const plugin = params.plugins[pluginName];
     const {execute, metadata} = plugin;
@@ -86,16 +84,10 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
 /**
  * Creates copy of existing tree, then applies computing strategy.
  */
-export const compute = async (
-  tree: any,
-  context: ManifestCommon,
-  plugins: PluginsStorage
-) => {
+export const compute = async (tree: any, params: ComputeParams) => {
   const copyOfTree = structuredClone(tree);
-  await computeNode(copyOfTree, {
-    plugins,
-    context,
-  });
+
+  await computeNode(copyOfTree, params);
 
   return copyOfTree;
 };

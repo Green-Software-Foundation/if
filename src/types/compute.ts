@@ -1,6 +1,6 @@
 import {PluginsStorage} from './initialize';
 import {PluginParams} from './interface';
-import {ManifestCommon} from './manifest';
+import {Context} from './manifest';
 
 export type NodeConfig = {
   [key: string]: Record<string, any>;
@@ -8,7 +8,7 @@ export type NodeConfig = {
 
 export type Params = {
   plugins: PluginsStorage;
-  context: ManifestCommon;
+  context: Context;
   pipeline?: string[];
   config?: NodeConfig;
   defaults?: PluginParams[];
@@ -21,4 +21,9 @@ export type Node = {
   defaults?: PluginParams[];
   inputs?: PluginParams[];
   outputs?: PluginParams[];
+};
+
+export type ComputeParams = {
+  context: Context;
+  plugins: PluginsStorage;
 };
