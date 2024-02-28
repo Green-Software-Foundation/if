@@ -76,6 +76,7 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
       // @ts-ignore
       node.children = await execute(storage, nodeConfig);
       delete node.inputs;
+      delete node.outputs;
 
       await traverse(node.children, {
         ...params,
