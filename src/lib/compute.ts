@@ -1,3 +1,5 @@
+import {mergeObjects} from '../util/helpers';
+
 import {ComputeParams, Node, Params} from '../types/compute';
 import {PluginParams} from '../types/interface';
 
@@ -18,19 +20,11 @@ const mergeDefaults = (
   defaults: PluginParams | undefined
 ) => {
   if (inputs) {
-    if (!defaults) {
-      return inputs;
-    }
+    const response = defaults
+      ? inputs.map(input => mergeObjects(input, defaults))
+      : inputs;
 
-    return inputs.map(input => {
-      const keys = Object.keys(input);
-
-      return keys.reduce((acc, key) => {
-        acc[key] = input[key] !== null ? input[key] : defaults[key];
-
-        return acc;
-      }, {} as PluginParams);
-    });
+    return response;
   }
 
   return [];
