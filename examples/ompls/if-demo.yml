@@ -43,8 +43,7 @@ graph:
           grid-carbon-intensity: 951
         sci:
           functional-unit: ''
-          functional-unit-time: 1-hour
-          functional-unit-duration: 1
+          functional-unit-time: 1-hour          
       inputs:
         - timestamp: '2023-11-02T10:35:31.820Z'
           duration: 3600
@@ -82,7 +81,6 @@ graph:
           grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: 1-hour
-          functional-unit-duration: 1
           vcpus-allocated: '1'
           vcpus-total: '64'
           physical-processor: >-
@@ -120,7 +118,6 @@ graph:
           grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: 1-hour
-          functional-unit-duration: 1
           vcpus-allocated: '1'
           vcpus-total: '64'
           physical-processor: >-
@@ -158,7 +155,6 @@ graph:
           grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: 1-hour
-          functional-unit-duration: 1
           vcpus-allocated: '1'
           vcpus-total: '64'
           physical-processor: >-
@@ -196,7 +192,6 @@ graph:
           grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: 1-hour
-          functional-unit-duration: 1
           vcpus-allocated: '1'
           vcpus-total: '64'
           physical-processor: >-
@@ -234,7 +229,6 @@ graph:
           grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: 1-hour
-          functional-unit-duration: 1
           vcpus-allocated: '1'
           vcpus-total: '64'
           physical-processor: >-
@@ -272,7 +266,6 @@ graph:
           grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: 1-hour
-          functional-unit-duration: 1
           vcpus-allocated: '1'
           vcpus-total: '64'
           physical-processor: >-
@@ -310,7 +303,6 @@ graph:
           grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: 1-hour
-          functional-unit-duration: 1
           vcpus-allocated: '1'
           vcpus-total: '64'
           physical-processor: >-
@@ -348,7 +340,6 @@ graph:
           grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: 1-hour
-          functional-unit-duration: 1
           vcpus-allocated: '1'
           vcpus-total: '64'
           physical-processor: >-
@@ -386,7 +377,6 @@ graph:
           grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: 1-hour
-          functional-unit-duration: 1
           vcpus-allocated: '1'
           vcpus-total: '64'
           physical-processor: >-
@@ -424,7 +414,6 @@ graph:
           grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: 1-hour
-          functional-unit-duration: 1
           vcpus-allocated: '1'
           vcpus-total: '64'
           physical-processor: >-
@@ -462,7 +451,6 @@ graph:
           grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: 1-hour
-          functional-unit-duration: 1
           vcpus-allocated: '1'
           vcpus-total: '64'
           physical-processor: >-
@@ -500,7 +488,6 @@ graph:
           grid-carbon-intensity: 951
           functional-unit: ''
           functional-unit-time: 1-hour
-          functional-unit-duration: 1
           vcpus-allocated: '1'
           vcpus-total: '64'
           physical-processor: >-
@@ -515,3 +502,4 @@ graph:
           embodied-carbon: 0.00007616949023199022
           carbon: 0.00928015128032383
           sci: 33.40854460916579
+if-version: v0.1.9
