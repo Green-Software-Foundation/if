@@ -1,4 +1,4 @@
-name: pipeline-demo
+name: pipeline-with-generics-demo
 description:
 tags:
 aggregation:

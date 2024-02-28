@@ -29,7 +29,7 @@ initialize:
         # username: ENV_WATT_TIME_USERNAME
         # password: ENV_WATT_TIME_PASSWORD        
         username: <username>
-        password: <password>       
+        password: <password>     
 tree:
   children:
     application:

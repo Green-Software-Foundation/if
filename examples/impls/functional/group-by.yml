@@ -1,4 +1,4 @@
-name: if-demo
+name: groupby-demo
 description: demo pipeline
 initialize:
   plugins:
