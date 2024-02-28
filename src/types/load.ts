@@ -1,6 +1,8 @@
-import {ManifestCommon} from './manifest';
+import {Context} from './manifest';
+import {Parameters} from './parameters';
 
-export type ContextTree = {
+export type ContextTreeParams = {
   tree: any;
-  context: ManifestCommon;
+  context: Context;
+  parameters: Parameters;
 };

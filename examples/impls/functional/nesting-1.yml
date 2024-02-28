@@ -4,11 +4,12 @@ tags:
   kind: web
   complexity: moderate
   category: on-premise
-params: 
 aggregation:
-  type: both
-  metrics: 
+  metrics:
+    - 'carbon'
     - 'energy'
+  type: 'both'
+params: 
 initialize:
   plugins:
     teads-curve: 
@@ -16,9 +17,14 @@ initialize:
       method: TeadsCurve
       global-config:
         interpolation: spline
-    sci-e: 
-      path: '@grnsft/if-models'
-      method: SciE
+    sum:
+      path: "@grnsft/if-models"
+      method: Sum
+      global-config:
+        input-parameters: 
+          - cpu/energy
+          - network/energy
+        output-parameter: energy 
     sci-m: 
       path: '@grnsft/if-models'
       method: SciM
@@ -31,47 +37,179 @@ initialize:
       global-config:
         functional-unit: 'requests'
         functional-unit-time: '1 minute'
+    time-sync:
+      method: TimeSync
+      path: "builtin"
+      global-config:
+        start-time: "2023-12-12T00:00:00.000Z"
+        end-time: "2023-12-12T00:01:00.000Z"
+        interval: 5
+        allow-padding: true
 tree:
   children:
     child-0:
       defaults:
-        thermal-design-power: 100
-        grid-carbon-intensity: 800
-        total-embodied-emissions: 1533.120 # gCO2eq
+        cpu/thermal-design-power: 100
+        grid/carbon-intensity: 800
+        device/emissions-embodied: 1533.120 # gCO2eq
         time-reserved: 3600 # 1hr in seconds
-        expected-lifespan: 94608000 # 3 years in seconds        
+        device/expected-lifespan: 94608000 # 3 years in seconds
         resources-reserved: 1
-        total-resources: 8
-        functional-unit-time: '1 min'
+        resources-total: 8
       pipeline:
         - teads-curve
-        - sci-e
+        - sum
         - sci-m
         - sci-o
+        - time-sync
         - sci
       inputs:
-        - timestamp: 2023-07-06T00:00
-          duration: 10
-          cpu-util: 50
-          energy-network: 1
+        - timestamp: "2023-12-12T00:00:00.000Z"
+          instance-type: A1 
+          region: uk-west
+          duration: 1
+          cpu/utilization: 50
+          network/energy: 0.000001
+        - timestamp: "2023-12-12T00:00:01.000Z"
+          duration: 5
+          cpu/utilization: 20
+          instance-type: A1 
+          region: uk-west
+          network/energy: 0.000001
+        - timestamp: "2023-12-12T00:00:06.000Z"
+          duration: 7
+          cpu/utilization: 15
+          instance-type: A1 
+          region: uk-west
+          network/energy: 0.000001
+        - timestamp: "2023-12-12T00:00:13.000Z"
+          duration: 30
+          instance-type: A1 
+          region: uk-west
+          cpu/utilization: 15
+          network/energy: 0.000001
     child-1:
       defaults:
-        thermal-design-power: 100
-        grid-carbon-intensity: 800
-        total-embodied-emissions: 1533.120 # gCO2eq
+        cpu/thermal-design-power: 100
+        grid/carbon-intensity: 800
+        device/emissions-embodied: 1533.120 # gCO2eq
         time-reserved: 3600 # 1hr in seconds
-        expected-lifespan: 94608000 # 3 years in seconds        
+        device/expected-lifespan: 94608000 # 3 years in seconds
         resources-reserved: 1
-        total-resources: 8
-        functional-unit-time: '1 min'
+        resources-total: 8
       pipeline:
         - teads-curve
-        - sci-e
+        - sum
         - sci-m
         - sci-o
+        - time-sync
         - sci
       inputs:
-        - timestamp: 2023-07-06T00:00
-          duration: 10
-          cpu-util: 30
-          energy-network: 1
+        - timestamp: "2023-12-12T00:00:00.000Z"
+          instance-type: A1 
+          region: uk-west
+          duration: 1
+          cpu/utilization: 50
+          network/energy: 0.000001
+        - timestamp: "2023-12-12T00:00:01.000Z"
+          duration: 5
+          cpu/utilization: 20
+          instance-type: A1 
+          region: uk-west
+          network/energy: 0.000001
+        - timestamp: "2023-12-12T00:00:06.000Z"
+          duration: 7
+          cpu/utilization: 15
+          instance-type: A1 
+          region: uk-west
+          network/energy: 0.000001
+        - timestamp: "2023-12-12T00:00:13.000Z"
+          duration: 30
+          instance-type: A1 
+          region: uk-west
+          cpu/utilization: 15
+          network/energy: 0.000001
+    child-2:
+      children:
+        child-2-0:
+          defaults:
+            cpu/thermal-design-power: 100
+            grid/carbon-intensity: 800
+            device/emissions-embodied: 1533.120 # gCO2eq
+            time-reserved: 3600 # 1hr in seconds
+            device/expected-lifespan: 94608000 # 3 years in seconds
+            resources-reserved: 1
+            resources-total: 8
+          pipeline:
+            - teads-curve
+            - sum
+            - sci-m
+            - sci-o
+            - time-sync
+            - sci
+          inputs:
+            - timestamp: "2023-12-12T00:00:00.000Z"
+              instance-type: A1 
+              region: uk-west
+              duration: 1
+              cpu/utilization: 50
+              network/energy: 0.000001
+            - timestamp: "2023-12-12T00:00:01.000Z"
+              duration: 5
+              cpu/utilization: 20
+              instance-type: A1 
+              region: uk-west
+              network/energy: 0.000001
+            - timestamp: "2023-12-12T00:00:06.000Z"
+              duration: 7
+              cpu/utilization: 15
+              instance-type: A1 
+              region: uk-west
+              network/energy: 0.000001
+            - timestamp: "2023-12-12T00:00:13.000Z"
+              duration: 30
+              instance-type: A1 
+              region: uk-west
+              cpu/utilization: 15
+              network/energy: 0.000001
+        child-2-1:
+          defaults:
+            cpu/thermal-design-power: 100
+            grid/carbon-intensity: 800
+            device/emissions-embodied: 1533.120 # gCO2eq
+            time-reserved: 3600 # 1hr in seconds
+            device/expected-lifespan: 94608000 # 3 years in seconds
+            resources-reserved: 1
+            resources-total: 8
+          pipeline:
+            - teads-curve
+            - sum
+            - sci-m
+            - sci-o
+            - time-sync
+            - sci
+          inputs:
+            - timestamp: "2023-12-12T00:00:00.000Z"
+              instance-type: A1 
+              region: uk-west
+              duration: 1
+              cpu/utilization: 50
+              network/energy: 0.000001
+            - timestamp: "2023-12-12T00:00:01.000Z"
+              duration: 5
+              cpu/utilization: 20
+              instance-type: A1 
+              region: uk-west
+              network/energy: 0.000001
+            - timestamp: "2023-12-12T00:00:06.000Z"
+              duration: 7
+              cpu/utilization: 15
+              instance-type: A1 
+              region: uk-west
+              network/energy: 0.000001
+            - timestamp: "2023-12-12T00:00:13.000Z"
+              duration: 30
+              instance-type: A1 
+              region: uk-west
+              cpu/utilization: 15
+              network/energy: 0.000001

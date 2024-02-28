@@ -1,4 +1,5 @@
-import winston from 'winston';
+import * as winston from 'winston';
+
 const {combine, timestamp, printf, colorize, align} = winston.format;
 
 /**

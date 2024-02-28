@@ -25,7 +25,7 @@ export type AggregationParams = {
   type: AggregationMethodsNames;
 };
 
-export type ManifestCommon = {
+export type Context = {
   name: string;
   description: string | null | undefined;
   tags: Tags;
@@ -37,7 +37,7 @@ export type ManifestCommon = {
   aggregation?: AggregationParams;
 };
 
-export type Manifest = ManifestCommon & {
+export type Manifest = Context & {
   tree: {
     children: any;
   };

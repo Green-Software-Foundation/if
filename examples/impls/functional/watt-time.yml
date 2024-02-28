@@ -1,0 +1,47 @@
+name: watt-time-demo
+description: null
+tags: null
+initialize:
+  plugins:
+    mock-observations:
+      path: '@grnsft/if-models'
+      method: MockObservations
+      global-config:
+        timestamp-from: 2024-02-26T00:00
+        timestamp-to: 2024-02-26T00:10
+        duration: 60
+        components:
+          - cloud/instance-type: Standard_A1_v2
+          - cloud/instance-type: Standard_A2_v2
+        generators:
+          common:
+            cloud/vendor: azure          
+            cloud/region: uk-west
+            geolocation: 37.7749,-122.4194
+          randint:
+            cpu/utilization:
+              min: 1
+              max: 99
+    watttime:
+      path: '@grnsft/if-unofficial-models'           
+      method: WattTimeGridEmissions
+      global-config:
+        # username: ENV_WATT_TIME_USERNAME
+        # password: ENV_WATT_TIME_PASSWORD        
+        username: <username>
+        password: <password>     
+tree:
+  children:
+    application:
+      pipeline:
+        - mock-observations
+        - watttime
+      config:
+      inputs:
+        - timestamp: '2024-02-26 00:00:00'
+          duration: 60
+          cloud/instance-type: Standard_A1_v2
+          cloud/vendor: azure
+          cloud/region: uk-west
+          geolocation: 37.7749,-122.4194
+          cpu/utilization: 15

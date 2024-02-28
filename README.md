@@ -56,7 +56,7 @@ Then installing some models:
 npm install -g "@grnsft/if-models"
 ```
 
-Then create an `manifest` file that describes your application (see our docs for a detailed explanation).
+Then create a `manifest` file that describes your application (see our docs for a detailed explanation).
 
 Then, run `if` using the following command:
 
