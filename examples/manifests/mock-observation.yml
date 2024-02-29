@@ -1,0 +1,33 @@
+name: mock-observation-demo
+description: example invoking mock-observation plugin
+tags:
+initialize:
+  plugins:
+    mock-observations:
+      kind: plugin
+      method: MockObservations
+      path: "@grnsft/if-models"
+      global-config:
+        timestamp-from: 2023-07-06T00:00
+        timestamp-to: 2023-07-06T00:10
+        duration: 60
+        components:
+          - instance-type: A1
+          - instance-type: B1
+        generators:
+          common:
+            region: uk-west
+            common-key: common-val
+          randint:
+            cpu/utilization:
+              min: 1
+              max: 99
+            memory/utilization:
+              min: 1
+              max: 99
+tree:
+  children:
+    child:
+      pipeline:
+        - mock-observations
+      inputs:

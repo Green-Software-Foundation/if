@@ -1,0 +1,23 @@
+name: multiply-demo
+description:
+tags:
+initialize:
+  plugins:
+    multiply:
+      method: Multiply
+      path: "@grnsft/if-models"
+      global-config:
+        input-parameters: ["cpu/energy", "network/energy"]
+        output-parameter: "energy-product"
+tree:
+  children:
+    child:
+      pipeline:
+        - multiply
+      config:
+        sum:
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          cpu/energy: 0.001
+          network/energy: 0.002

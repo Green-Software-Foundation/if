@@ -1,0 +1,30 @@
+name: co2js-demo
+description: example impl invoking CO2.JS model
+tags:
+initialize:
+  plugins:
+    co2js:
+      method: Co2js
+      path: "@grnsft/if-unofficial-models"
+      global-config:
+        options:
+          dataReloadRatio: 0.6
+          firstVisitPercentage: 0.9
+          returnVisitPercentage: 0.1
+          gridIntensity:
+            device: 560.98
+            dataCenter:
+              country: "TWN"
+tree:
+  children:
+    child:
+      pipeline:
+        - co2js
+      config:
+        co2js:
+          type: swd
+          green-web-host: true
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 1
+          network/data/bytes: 1000000
