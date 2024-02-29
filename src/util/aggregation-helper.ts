@@ -44,9 +44,14 @@ export const aggregateInputsIntoOne = (
       /** Checks if metric is timestamp or duration, then adds to aggregated value. */
       if (AGGREGATION_ADDITIONAL_PARAMS.includes(metric)) {
         /** Checks if the input for aggregation is temporal. */
-        if (index > 0 && input[metric] === inputs[index - 1][metric]) {
+        const temporalAggregation =
+          index === 1 && input['timestamp'] === inputs[index - 1]['timestamp'];
+
+        if (temporalAggregation) {
           acc[metric] = input[metric];
         }
+
+        return acc;
       }
 
       acc[metric] = acc[metric] ?? 0;
