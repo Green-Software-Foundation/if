@@ -13,7 +13,7 @@ tree:
         - csv-exporter
       config:
         csv-exporter:
-          output-path: ./csv-test.csv
+          output-path: ./examples/outputs/csv-test.csv
           headers:
             - timestamp
             - duration
