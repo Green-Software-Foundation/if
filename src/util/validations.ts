@@ -1,4 +1,4 @@
-import {ZodIssue, z} from 'zod';
+import {ZodIssue, ZodSchema, z} from 'zod';
 
 import {ERRORS} from './errors';
 
@@ -6,7 +6,7 @@ import {AGGREGATION_METHODS} from '../types/aggregation';
 import {AGGREGATION_TYPES} from '../types/parameters';
 import {Manifest} from '../types/manifest';
 
-const {ManifestValidationError} = ERRORS;
+const {ManifestValidationError, InputValidationError} = ERRORS;
 
 /**
  * Validation schema for manifests.
@@ -57,27 +57,41 @@ const manifestValidation = z.object({
  * Validates given `manifest` object to match pattern.
  */
 export const validateManifest = (manifest: Manifest) => {
-  const safeManifest = manifestValidation.safeParse(manifest);
+  return validate(manifestValidation, manifest, ManifestValidationError);
+};
 
-  if (!safeManifest.success) {
-    const prettifyErrorMessage = (issues: string) => {
-      const issuesArray = JSON.parse(issues);
+/**
+ * Validates given `object` with given `schema`.
+ */
+export const validate = <T>(
+  schema: ZodSchema<T>,
+  object: any,
+  errorConstructor: ErrorConstructor = InputValidationError
+) => {
+  const validationResult = schema.safeParse(object);
 
-      return issuesArray.map((issue: ZodIssue) => {
-        const {code, path, message} = issue;
-        const flattenPath = path.map(part =>
-          typeof part === 'number' ? `[${part}]` : part
-        );
-        const fullPath = flattenPath.join('.');
-
-        return `"${fullPath}" parameter is ${message.toLowerCase()}. Error code: ${code}.`;
-      });
-    };
-
-    throw new ManifestValidationError(
-      prettifyErrorMessage(safeManifest.error.message)
+  if (!validationResult.success) {
+    throw new errorConstructor(
+      prettifyErrorMessage(validationResult.error.message)
     );
   }
 
-  return safeManifest.data;
+  return validationResult.data;
+};
+
+const prettifyErrorMessage = (issues: string) => {
+  const issuesArray = JSON.parse(issues);
+
+  return issuesArray.map((issue: ZodIssue) => {
+    const {code, path, message} = issue;
+    const flattenPath = path.map(part =>
+      typeof part === 'number' ? `[${part}]` : part
+    );
+    const fullPath = flattenPath.join('.');
+
+    if (code === 'custom') {
+      return `${message.toLowerCase()}. Error code: ${code}.`;
+    }
+    return `"${fullPath}" parameter is ${message.toLowerCase()}. Error code: ${code}.`;
+  });
 };
