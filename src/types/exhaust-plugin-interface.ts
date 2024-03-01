@@ -1,6 +1,8 @@
+import {Context} from './manifest';
+
 export interface ExhaustPluginInterface {
   /**
-   * execute exhaust based on context and tree, produce output to a file in basePath
+   * Execute exhaust based on `context` and `tree`, produce output to a file in `outputPath`.
    */
-  execute(tree: any): void;
+  execute(tree: any, context: Context, outputPath?: string): void;
 }
