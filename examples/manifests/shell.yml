@@ -7,7 +7,7 @@ initialize:
       method: Shell
       path: "@grnsft/if-models"
       global-config:
-        command: python3 /Users/manushak/Documents/Projects/Green-Software/if-models/src/lib/shell/sampler
+        command: python3 /usr/local/bin/sampler
 tree:
   children:
     child:
