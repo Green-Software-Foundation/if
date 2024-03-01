@@ -1,24 +1,13 @@
 import * as fs from 'fs/promises';
+
 import {ERRORS} from '../util/errors';
+
 import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
-const {InputValidationError, WriteFileError} = ERRORS;
+import {Context} from '../types/manifest';
 
-export const ExportCsv = (config: {
-  [key: string]: string;
-}): ExhaustPluginInterface => {
-  /**
-   * extract config parameters from config
-   */
-  const extractConfigParams = () => {
-    const outputPath: string =
-      'output-path' in config
-        ? config['output-path']
-        : (() => {
-            throw new InputValidationError("Config does not have 'outputPath'");
-          })();
-    return [outputPath];
-  };
+const {WriteFileError, CliInputError} = ERRORS;
 
+export const ExportCsv = (): ExhaustPluginInterface => {
   /**
    * handle a tree leaf, where there are no child nodes, by adding it as key->value pair to the flat map
    * and capturing key as a header
@@ -42,14 +31,16 @@ export const ExportCsv = (config: {
   const handleNodeValue = (
     value: any,
     fullPath: string,
-    flatMap: {[key: string]: any},
+    flatMap: Record<string, any>,
     headers: Set<string>
   ) => {
     const [subFlatMap, subHeaders] = extractFlatMapAndHeaders(value, fullPath);
+
     if (Object.keys(subFlatMap).length > 0) {
       Object.entries(subFlatMap).forEach(([subKey, value]) => {
         flatMap[subKey] = value;
       });
+
       subHeaders.forEach(subHeader => {
         headers.add(subHeader);
       });
@@ -57,21 +48,22 @@ export const ExportCsv = (config: {
   };
 
   /**
-   * handle a key at the top level of the tree
+   * Handles a key at the top level of the tree
    */
   const handleKey = (
     value: any,
     key: any,
     prefix: string,
-    flatMap: {[key: string]: any},
+    flatMap: Record<string, any>,
     headers: Set<string>
   ) => {
     const fullPath = prefix ? `${prefix}.${key}` : key;
+
     if (value !== null && typeof value === 'object') {
-      handleNodeValue(value, fullPath, flatMap, headers);
-    } else {
-      handleLeafValue(value, fullPath, key, flatMap, headers);
+      return handleNodeValue(value, fullPath, flatMap, headers);
     }
+
+    return handleLeafValue(value, fullPath, key, flatMap, headers);
   };
 
   /**
@@ -80,14 +72,16 @@ export const ExportCsv = (config: {
   const extractFlatMapAndHeaders = (
     tree: any,
     prefix = ''
-  ): [{[key: string]: any}, Set<string>] => {
+  ): [Record<string, any>, Set<string>] => {
     const headers: Set<string> = new Set();
-    const flatMap: {[key: string]: any} = [];
+    const flatMap: Record<string, any> = [];
+
     for (const key in tree) {
       if (key in tree) {
         handleKey(tree[key], key, prefix, flatMap, headers);
       }
     }
+
     return [flatMap, headers];
   };
 
@@ -98,6 +92,7 @@ export const ExportCsv = (config: {
   const extractIdHelper = (key: string): string => {
     const parts = key.split('.');
     parts.pop();
+
     return parts.join('.');
   };
 
@@ -111,14 +106,17 @@ export const ExportCsv = (config: {
   ): string => {
     const csvRows: string[] = [];
     csvRows.push(['id', ...headers].join(','));
+
     ids.forEach(id => {
       const rowData = [id];
+
       headers.forEach(header => {
         const value = map[`${id}.${header}`] ?? '';
         rowData.push(value.toString());
       });
       csvRows.push(rowData.join(','));
     });
+
     return csvRows.join('\n');
   };
 
@@ -138,15 +136,20 @@ export const ExportCsv = (config: {
   /**
    * export the provided tree content to a CSV file, represented in a flat structure
    */
-  const execute: (tree: any) => void = async aggregatedTree => {
-    const [outputPath] = extractConfigParams();
+  const execute = async (tree: any, _context: Context, outputPath: string) => {
+    if (!outputPath) {
+      throw new CliInputError('Output path is required.');
+    }
+
     const [extractredFlatMap, extractedHeaders] =
-      extractFlatMapAndHeaders(aggregatedTree);
+      extractFlatMapAndHeaders(tree);
     const ids = new Set(
       Object.keys(extractredFlatMap).map(key => extractIdHelper(key))
     );
     const csvString = getCsvString(extractredFlatMap, extractedHeaders, ids);
+
     writeOutputFile(csvString, outputPath);
   };
+
   return {execute};
 };
