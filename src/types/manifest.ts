@@ -32,6 +32,7 @@ export type Context = {
   params?: ManifestParameter[] | undefined | null;
   initialize: {
     plugins: GlobalPlugins;
+    outputs?: string[];
   };
   aggregation?: AggregationParams;
 };

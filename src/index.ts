@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import {aggregate} from './lib/aggregate';
 import {compute} from './lib/compute';
+import {exhaust} from './lib/exhaust';
 import {initalize} from './lib/initialize';
 import {load} from './lib/load';
 import {parameterize} from './lib/parameterize';
@@ -9,7 +10,6 @@ import {parseArgs} from './util/args';
 import {ERRORS} from './util/errors';
 import {andHandle} from './util/helpers';
 import {logger} from './util/logger';
-import {saveYamlFileAs} from './util/yaml';
 
 import {STRINGS} from './config';
 
@@ -29,18 +29,7 @@ const impactEngine = async () => {
     const plugins = await initalize(context.initialize.plugins);
     const computedTree = await compute(tree, {context, plugins});
     const aggregatedTree = aggregate(computedTree, context.aggregation);
-
-    const outputFile = {
-      ...context,
-      tree: aggregatedTree,
-    };
-
-    if (!outputPath) {
-      logger.info(JSON.stringify(outputFile, null, 2));
-      return;
-    }
-
-    await saveYamlFileAs(outputFile, outputPath);
+    exhaust(aggregatedTree, context, outputPath);
 
     return;
   }

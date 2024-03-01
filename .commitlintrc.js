@@ -30,7 +30,9 @@ module.exports = {
         'examples',
         '.github',
         '.husky',
-        'scripts'
+        'scripts',
+        'models',
+        'plugins'
       ]
     ],
     'scope-empty': [
