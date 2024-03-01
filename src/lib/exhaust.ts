@@ -1,39 +1,55 @@
+/**
+ * @todo This is temporary solution, will be refactored to support dynamic plugins.
+ */
 import {ExportCsv} from '../models/export-csv';
+import {ExportLog} from '../models/export-log';
+import {ExportYaml} from '../models/export-yaml';
+
+import {ERRORS} from '../util/errors';
+
+import {STRINGS} from '../config';
+
 import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
+import {Context} from '../types/manifest';
+
+const {ModuleInitializationError} = ERRORS;
+const {INVALID_EXHAUST_PLUGIN} = STRINGS;
 
 /**
- * create exhaust plugins based on the provided config
+ * Initialize exhaust plugins based on the provided config
  */
-const createExhaustPlugins = (exhaustPluginConfigs: any) => {
-  return Object.keys(exhaustPluginConfigs).map((key: string) =>
-    createExhaustPlugin(key, exhaustPluginConfigs[key])
-  );
-};
+const initializeExhaustPlugins = (plugins: string[]) =>
+  plugins.map(initializeExhaustPlugin);
 
 /**
  * factory method for exhaust plugins
  */
-const createExhaustPlugin = (
-  pluginTypeName: string,
-  pluginConfigItems: {[key: string]: string}
-): ExhaustPluginInterface => {
-  switch (pluginTypeName) {
+const initializeExhaustPlugin = (name: string): ExhaustPluginInterface => {
+  switch (name) {
+    case 'yaml':
+      return ExportYaml();
     case 'csv':
-      return ExportCsv(pluginConfigItems);
+      return ExportCsv();
+    case 'log':
+      return ExportLog();
     default:
-      throw new Error(`unkonwn exhaust plugin type: ${pluginTypeName}`);
+      throw new ModuleInitializationError(INVALID_EXHAUST_PLUGIN(name));
   }
 };
 
 /**
- * execute exhaust functionality
+ * Output manager - Exhaust.
+ * Grabs output plugins from context, executes every.
  */
-export const exhaust = (tree: any, outputs: any) => {
-  if (outputs) {
-    const exhaustPlugins: ExhaustPluginInterface[] =
-      createExhaustPlugins(outputs);
-    exhaustPlugins.forEach(plugin => {
-      plugin.execute(tree);
-    });
+export const exhaust = (tree: any, context: Context, outputPath?: string) => {
+  const outputPlugins = context.initialize.outputs;
+
+  if (!outputPlugins) {
+    ExportLog().execute(tree, context);
+
+    return;
   }
+
+  const exhaustPlugins = initializeExhaustPlugins(outputPlugins);
+  exhaustPlugins.forEach(plugin => plugin.execute(tree, context, outputPath));
 };
