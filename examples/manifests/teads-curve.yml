@@ -1,0 +1,20 @@
+name: teads-curve
+description: simple demo invoking teads-curve
+tags:
+initialize:
+  plugins:
+    teads-curve:
+      method: TeadsCurve
+      path: "@grnsft/if-unofficial-models"
+      global-config:
+        interpolation: spline
+tree:
+  children:
+    child:
+      pipeline:
+        - teads-curve
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
+          cpu/utilization: 50
+          cpu/thermal-design-power: 100
