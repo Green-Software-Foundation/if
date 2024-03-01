@@ -26,7 +26,7 @@ export const mergeObjects = (object1: any, object2: any) => {
 
   const keys1 = Object.keys(object1);
   keys1.forEach(key1 => {
-    merged[key1] = object2[key1] || object1[key1];
+    merged[key1] = object1[key1] || object2[key1];
   });
 
   const keys2 = Object.keys(object2);
