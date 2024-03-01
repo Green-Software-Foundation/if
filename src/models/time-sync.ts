@@ -1,5 +1,6 @@
 import {isDate} from 'node:util/types';
 import {DateTime, DateTimeMaybeValid, Interval} from 'luxon';
+import {z} from 'zod';
 
 import {parameterize} from '../lib/parameterize';
 
@@ -14,15 +15,14 @@ import {
   TimeParams,
 } from '../types/time-sync';
 import {PluginInterface} from '../types/interface';
+import {validate} from '../util/validations';
 
 const {InputValidationError} = ERRORS;
 
 const {
   INVALID_TIME_NORMALIZATION,
-  INVALID_TIME_INTERVAL,
   INVALID_OBSERVATION_OVERLAP,
   AVOIDING_PADDING_BY_EDGES,
-  UNEXPECTED_TIME_CONFIG,
 } = STRINGS;
 
 export const TimeSync = (
@@ -32,32 +32,17 @@ export const TimeSync = (
     kind: 'execute',
   };
 
-  const configure = (globalConfig: TimeNormalizerConfig): TimeParams => {
-    const startTime = parseDate(globalConfig['start-time']);
-    const endTime = parseDate(globalConfig['end-time']);
-    const interval = globalConfig.interval;
-    const allowPadding = globalConfig['allow-padding'];
-
-    return {startTime, endTime, interval, allowPadding};
-  };
-
   /**
    * Take input array and return time-synchronized input array.
    */
-  const execute = (
-    inputs: PluginParams[],
-    config?: Record<string, any>
-  ): PluginParams[] => {
-    if (globalConfig === undefined) {
-      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
-    }
-
-    if (config) {
-      throw new InputValidationError(UNEXPECTED_TIME_CONFIG);
-    }
-
-    const timeParams = configure(globalConfig);
-    validateParams(timeParams);
+  const execute = (inputs: PluginParams[]): PluginParams[] => {
+    const validatedConfig = validateGlobalConfig();
+    const timeParams = {
+      startTime: DateTime.fromISO(validatedConfig['start-time']),
+      endTime: DateTime.fromISO(validatedConfig['end-time']),
+      interval: validatedConfig.interval,
+      allowPadding: validatedConfig['allow-padding'],
+    };
 
     const pad = checkForPadding(inputs, timeParams);
     validatePadding(pad, timeParams);
@@ -66,7 +51,8 @@ export const TimeSync = (
 
     const flattenInputs = paddedInputs.reduce(
       (acc: PluginParams[], input, index) => {
-        const currentMoment = parseDate(input.timestamp);
+        const safeInput = Object.assign({}, input, validateInput(input, index));
+        const currentMoment = parseDate(safeInput.timestamp);
 
         /** Checks if not the first input, then check consistency with previous ones. */
         if (index > 0) {
@@ -96,14 +82,14 @@ export const TimeSync = (
               ...getZeroishInputPerSecondBetweenRange(
                 compareableTime,
                 currentMoment,
-                input
+                safeInput
               )
             );
           }
         }
         /** Break down current observation. */
-        for (let i = 0; i < input.duration; i++) {
-          const normalizedInput = breakDownInput(input, i);
+        for (let i = 0; i < safeInput.duration; i++) {
+          const normalizedInput = breakDownInput(safeInput, i);
 
           acc.push(normalizedInput);
         }
@@ -137,28 +123,44 @@ export const TimeSync = (
   };
 
   /**
-   * Validates `startTime`, `endTime` and `interval` params.
+   * Validates input parameters.
    */
-  const validateParams = (params: TimeParams) => {
-    if (!params.startTime || !params.endTime) {
+  const validateInput = (input: PluginParams, index: number) => {
+    const schema = z.object({
+      timestamp: z
+        .string({
+          required_error: `required in input[${index}]`,
+        })
+        .datetime({
+          message: `invalid datetime in input[${index}]`,
+        })
+        .or(z.date()),
+      duration: z.number(),
+    });
+
+    return validate<z.infer<typeof schema>>(schema, input);
+  };
+
+  /**
+   * Validates global config parameters.
+   */
+  const validateGlobalConfig = () => {
+    if (globalConfig === undefined) {
       throw new InputValidationError(INVALID_TIME_NORMALIZATION);
     }
 
-    if (!params.startTime.isValid) {
-      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
-    }
+    const schema = z
+      .object({
+        'start-time': z.string().datetime(),
+        'end-time': z.string().datetime(),
+        interval: z.number(),
+        'allow-padding': z.boolean(),
+      })
+      .refine(data => data['start-time'] < data['end-time'], {
+        message: '`start-time` should be lower than `end-time`',
+      });
 
-    if (!params.endTime.isValid) {
-      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
-    }
-
-    if (params.startTime > params.endTime) {
-      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
-    }
-
-    if (!params.interval) {
-      throw new InputValidationError(INVALID_TIME_INTERVAL);
-    }
+    return validate<z.infer<typeof schema>>(schema, globalConfig);
   };
 
   /**
