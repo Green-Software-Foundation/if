@@ -11,7 +11,7 @@ default_join_keys = 'timestamp,duration'
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Impact Framework yaml-to-csv parser')
-    parser.add_argument('-y', '--yml', type=str, help='Path to input yml file (ompl)')
+    parser.add_argument('-y', '--yml', type=str, help='Path to input yml file')
     parser.add_argument('-c', '--csv', type=str, help='Path to output csv file')
     parser.add_argument('-p', '--project', type=str, default=default_projection_list, help=f'Comma separated (no spaces!) names of fields to project from input yml to output CSV as columns. Default ={default_projection_list}')
     parser.add_argument('-j', '--join', action='store_true', help='Join the resulting CSV data to existing CSV file')
