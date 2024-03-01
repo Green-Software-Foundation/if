@@ -1,11 +1,12 @@
 const CUSTOM_ERRORS = [
   'CliInputError',
   'FileNotFoundError',
+  'MakeDirectoryError',
   'ManifestValidationError',
+  'ModuleInitializationError',
   'InputValidationError',
   'InvalidAggregationParams',
   'InvalidGrouping',
-  'ModuleInitializationError',
   'PluginCredentialError',
   'PluginInterfaceError',
   'WriteFileError',
