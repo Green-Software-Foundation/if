@@ -13,11 +13,12 @@
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
   },
   "dependencies": {
+    "@commander-js/extra-typings": "^12.0.1",
     "@commitlint/cli": "^18.6.0",
     "@commitlint/config-conventional": "^18.6.0",
+    "commander": "^12.0.0",
     "js-yaml": "^4.1.0",
     "luxon": "^3.4.4",
-    "ts-command-line-args": "^2.5.1",
     "typescript": "^5.1.6",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
