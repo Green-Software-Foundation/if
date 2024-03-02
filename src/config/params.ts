@@ -6,12 +6,12 @@ export const PARAMETERS: Parameters = {
     unit: 'gCO2e',
     aggregation: 'sum',
   },
-  'core-units': {
+  'cpu/number-cores': {
     description: 'number of cores available',
     unit: 'cores',
     aggregation: 'none',
   },
-  'cpu-util': {
+  'cpu/utilization': {
     description: 'refers to CPU utilization.',
     unit: 'percentage',
     aggregation: 'avg',
@@ -31,27 +31,27 @@ export const PARAMETERS: Parameters = {
     unit: 'kWh',
     aggregation: 'sum',
   },
-  'energy-cpu': {
+  'cpu/energy': {
     description: 'Energy consumed by the CPU of the component',
     unit: 'kWh',
     aggregation: 'sum',
   },
-  'expected-lifespan': {
+  'device/expected-lifespan': {
     description: 'Total Expected Lifespan of the Component in Seconds',
     unit: 'seconds',
     aggregation: 'sum',
   },
-  'energy-memory': {
+  'memory/energy': {
     description: 'Energy consumed by the Memory of the component',
     unit: 'kWh',
     aggregation: 'sum',
   },
-  'embodied-carbon': {
+  'carbon-embodied': {
     description: 'Embodied Emissions of the component',
     unit: 'gCO2e',
     aggregation: 'sum',
   },
-  'energy-network': {
+  'network/energy': {
     description: 'Energy consumed by the Network of the component',
     unit: 'kWh',
     aggregation: 'sum',
@@ -73,33 +73,33 @@ export const PARAMETERS: Parameters = {
     unit: 'percentage',
     aggregation: 'avg',
   },
-  'grid-carbon-intensity': {
+  'grid/carbon-intensity': {
     description: 'Carbon intensity for the grid',
     unit: 'gCO2eq/kWh',
     aggregation: 'avg',
   },
-  'instance-type': {
+  'cloud/instance-type': {
     description: 'Type of Cloud Instance name used in the cloud provider APIs',
     unit: 'None',
     aggregation: 'none',
   },
-  location: {
+  geolocation: {
     description:
       'Geographic location of provider as string (for watt-time model it is provided as latitude and longitude, comma separated, in decimal degrees)',
     unit: 'None (decimal degrees for watt-time model)',
     aggregation: 'none',
   },
-  'operational-carbon': {
+  'carbon-operational': {
     description: 'Operational Emissions of the component',
     unit: 'gCO2e',
     aggregation: 'sum',
   },
-  'physical-processor': {
+  'cpu/name': {
     description: 'Name of the physical processor',
     unit: 'None',
     aggregation: 'none',
   },
-  vendor: {
+  'cloud/vendor': {
     description:
       'Name of the cloud service provider in the ccf model. Can be aws, gcp or azure',
     unit: 'None',
@@ -120,12 +120,12 @@ export const PARAMETERS: Parameters = {
     unit: 'count',
     aggregation: 'none',
   },
-  'thermal-design-power': {
+  'cpu/thermal-design-power': {
     description: 'thermal design power for a processor',
     unit: 'kwh',
     aggregation: 'avg',
   },
-  'total-embodied-emissions': {
+  'device/emissions-embodied': {
     description: 'total embodied emissions of some component',
     unit: 'gCO2e',
     aggregation: 'sum',
@@ -140,7 +140,7 @@ export const PARAMETERS: Parameters = {
     unit: 'seconds',
     aggregation: 'avg',
   },
-  'total-resources': {
+  'resources-total': {
     description: 'total resources available',
     unit: 'count',
     aggregation: 'none',
