@@ -4,7 +4,7 @@ tags:
 initialize:
   plugins:
     teads-curve: 
-      path: '@grnsft/if-unofficial-models'
+      path: '@grnsft/if-unofficial-plugins'
       method: TeadsCurve
       global-config:
         interpolation: spline

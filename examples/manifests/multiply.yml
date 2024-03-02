@@ -5,7 +5,7 @@ initialize:
   plugins:
     multiply:
       method: Multiply
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       global-config:
         input-parameters: ["cpu/energy", "network/energy"]
         output-parameter: "energy-product"

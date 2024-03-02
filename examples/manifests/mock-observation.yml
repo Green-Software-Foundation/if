@@ -6,7 +6,7 @@ initialize:
     mock-observations:
       kind: plugin
       method: MockObservations
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       global-config:
         timestamp-from: 2023-07-06T00:00
         timestamp-to: 2023-07-06T00:10

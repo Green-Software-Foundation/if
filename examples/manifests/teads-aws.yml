@@ -5,7 +5,7 @@ initialize:
   plugins:
     teads-aws:
       method: TeadsAWS
-      path: "@grnsft/if-unofficial-models"
+      path: "@grnsft/if-unofficial-plugins"
       global-config:
         interpolation: linear
 tree:

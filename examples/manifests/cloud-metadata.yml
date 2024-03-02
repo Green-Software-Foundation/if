@@ -4,13 +4,13 @@ tags: null
 initialize:
   plugins:
     teads-curve:
-      path: '@grnsft/if-unofficial-models'
+      path: '@grnsft/if-unofficial-plugins'
       method: TeadsCurve
       global-config:
         interpolation: spline
     cloud-instance-metadata:
       method: CloudInstanceMetadata
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
 tree:
   children:
     child-0:

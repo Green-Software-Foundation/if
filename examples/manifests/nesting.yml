@@ -13,12 +13,12 @@ params:
 initialize:
   plugins:
     teads-curve:
-      path: "@grnsft/if-unofficial-models"
+      path: "@grnsft/if-unofficial-plugins"
       method: TeadsCurve
       global-config:
         interpolation: spline
     sum:
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       method: Sum
       global-config:
         input-parameters:
@@ -26,13 +26,13 @@ initialize:
           - network/energy
         output-parameter: energy
     sci-m:
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       method: SciM
     sci-o:
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       method: SciO
     sci:
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       method: Sci
       global-config:
         functional-unit: "requests"

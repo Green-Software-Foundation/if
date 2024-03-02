@@ -12,18 +12,18 @@ aggregation:
 initialize:
   plugins:
     teads-curve:
-      path: "@grnsft/if-unofficial-models"
+      path: "@grnsft/if-unofficial-plugins"
       method: TeadsCurve
       global-config:
         interpolation: spline
     sci-e:
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       method: SciE
     sci-m:
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       method: SciM
     sci-o:
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       method: SciO
     "time-sync":
       method: TimeSync
@@ -34,7 +34,7 @@ initialize:
         interval: 5
         allow-padding: true
     sci:
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       method: Sci
       global-config:
         functional-unit: "requests"

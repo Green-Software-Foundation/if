@@ -5,7 +5,7 @@ initialize:
   plugins:
     tdp-finder: # a model that returns an embodied value given the sci embodied attribution equation.
       method: TdpFinder
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
 tree:
   children:
     child:

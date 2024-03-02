@@ -5,7 +5,7 @@ initialize:
   plugins:
     ccf:
       method: CloudCarbonFootprint
-      path: "@grnsft/if-unofficial-models"
+      path: "@grnsft/if-unofficial-plugins"
 tree:
   children:
     child:

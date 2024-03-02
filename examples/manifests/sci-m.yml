@@ -6,7 +6,7 @@ initialize:
     "sci-m": # a model that calculates m from te, tir, el, rr and rtor
       method: SciM
       verbose: false
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
 tree:
   children:
     child:

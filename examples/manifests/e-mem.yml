@@ -5,7 +5,7 @@ initialize:
   plugins:
     e-mem:
       method: EMem
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       global-config:
         energy-per-gb: 0.002
 tree:

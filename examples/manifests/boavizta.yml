@@ -5,7 +5,7 @@ initialize:
   plugins:
     "boavizta-cpu":
       method: BoaviztaCpuOutput
-      path: "@grnsft/if-unofficial-models"
+      path: "@grnsft/if-unofficial-plugins"
       global-config:
         allocation: LINEAR
         verbose: true

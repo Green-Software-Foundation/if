@@ -4,7 +4,7 @@ tags: null
 initialize:
   plugins:
     mock-observations:
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       method: MockObservations
       global-config:
         timestamp-from: 2024-02-26T00:00
@@ -23,7 +23,7 @@ initialize:
               min: 1
               max: 99
     teads-curve:
-      path: "@grnsft/if-unofficial-models"
+      path: "@grnsft/if-unofficial-plugins"
       method: TeadsCurve
       global-config:
         interpolation: spline
@@ -32,15 +32,15 @@ initialize:
       method: GroupBy
     cloud-metadata:
       method: CloudInstanceMetadata
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
     operational-carbon:
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       method: Multiply
       global-config:
         input-parameters: ["cpu/energy", "grid/carbon-intensity"]
         output-parameter: "cpu/carbon"
     watttime:
-      path: "@grnsft/if-unofficial-models"
+      path: "@grnsft/if-unofficial-plugins"
       method: WattTimeGridEmissions
       global-config:
         # username: ENV_WATT_TIME_USERNAME

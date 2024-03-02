@@ -4,7 +4,7 @@ tags:
 initialize:
   plugins:
     azure-importer:
-      path: "@grnsft/if-unofficial-models"
+      path: "@grnsft/if-unofficial-plugins"
       method: AzureImporter
       kind: plugin
 tree:

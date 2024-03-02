@@ -5,7 +5,7 @@ initialize:
   plugins:
     e-net:
       method: ENet
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       global-config:
         energy-per-gb: 0.02
 tree:

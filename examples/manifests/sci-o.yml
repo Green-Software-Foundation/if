@@ -6,11 +6,11 @@ initialize:
     sci-e:
       kind: plugin
       method: SciE
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
     sci-o:
       verbose: false
       method: SciO
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
 tree:
   children:
     child:

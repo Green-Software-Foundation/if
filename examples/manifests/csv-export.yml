@@ -5,7 +5,7 @@ initialize:
   plugins:
     csv-exporter:
       method: CsvExport
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
 tree:
   children:
     child:

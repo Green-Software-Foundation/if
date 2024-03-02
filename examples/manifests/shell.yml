@@ -5,7 +5,7 @@ initialize:
   plugins:
     shell:
       method: Shell
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       global-config:
         command: python3 /usr/local/bin/sampler
 tree:
