@@ -212,16 +212,16 @@ initialize:
   models:
     - name: teads-curve
       model: TeadsCurveModel
-      path: "@grnsft/if-unofficial-models"
+      path: "@grnsft/if-unofficial-plugins"
     - name: sci-e
       model: SciEModel
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
     - name: sci-m
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
       model: SciMModel
     - name: sci-o
       model: SciOModel
-      path: "@grnsft/if-models"
+      path: "@grnsft/if-plugins"
     - name: time-synchronization
       model: TimeSyncModel
       path: builtin
