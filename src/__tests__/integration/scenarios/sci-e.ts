@@ -14,7 +14,7 @@ describe('integration/sci-e', () => {
   const implTemplatePath = `${__dirname}/../templates/integration.yaml`;
 
   beforeAll(() => {
-    return npmInstallPackage('@grnsft/if-models');
+    return npmInstallPackage('@grnsft/if-plugins');
   }, 15000);
 
   it('output creation without ompl path.', async () => {
@@ -22,7 +22,7 @@ describe('integration/sci-e', () => {
 
     file.initialize.plugins[modelName] = {
       method: 'SciE',
-      path: '@grnsft/if-models',
+      path: '@grnsft/if-plugins',
     };
 
     file.tree.children.child.pipeline = [modelName];
@@ -61,6 +61,6 @@ describe('integration/sci-e', () => {
   }, 15000);
 
   afterAll(() => {
-    return npmUninstallPackage('@grnsft/if-models');
+    return npmUninstallPackage('@grnsft/if-plugins');
   }, 15000);
 });
