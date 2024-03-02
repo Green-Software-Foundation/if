@@ -34,7 +34,7 @@
 
 Modern applications are composed of many smaller pieces of software (components) running on many different environments, for example, private cloud, public cloud, bare-metal, virtualized, containerized, mobile, laptops, and desktops.
 
-Every environment requires a different model of measurement, and there is no single solution you can use to calculate the environmental impacts for all components across all environments.      
+Every environment requires a different plugin of measurement, and there is no single solution you can use to calculate the environmental impacts for all components across all environments.      
 
 The friction to measuring software emissions isn't that we need to know how, it's that we run software on many things and each thing has several different ways to measure.
 
@@ -43,17 +43,17 @@ Read the [specification and design docs](https://if.greensoftware.foundation) to
 
 ## Get started
 
-The first thing to understand is that IF is a framework for running model plugins. This means that in order to do some calculations, you need to load some models from some external resource. We provide a [standard library of models](https://github.com/Green-Software-Foundation/if-models) and a repository of [community models](https://github.com/Green-Software-Foundation/if-unofficial-models) to get you started. 
+The first thing to understand is that IF is a framework for running plugins. This means that in order to do some calculations, you need to load some plugins from some external resource. We provide a [standard library of plugins](https://github.com/Green-Software-Foundation/if-plugins) and a repository of [community plugins](https://github.com/Green-Software-Foundation/if-unofficial-plugins) to get you started. 
 
 Start by installing framework itself:
 
 ```sh
 npm install -g "@grnsft/if"
 ```
-Then installing some models:
+Then installing some plugins:
 
 ```sh
-npm install -g "@grnsft/if-models"
+npm install -g "@grnsft/if-plugins"
 ```
 
 Then create a `manifest` file that describes your application (see our docs for a detailed explanation).
@@ -70,7 +70,7 @@ You can also add an optional savepath for your output yaml (if you do not provid
 if --manifest <path-to-your-manifest-file> --output <your-savepath>
 ```
 
-The `if` CLI tool will configure and run the models defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
+The `if` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
 
 
 ## Documentation
@@ -92,4 +92,4 @@ You can check our issue board for issues tagged `help-wanted`. These are issues 
 
 Please read the full contribution guidelines at [if.greensoftware.foundation](https://if.greensoftware.foundation/Contributing)
 
-The same guidelines also apply to `if-docs`, `if-models` and `if-unofficial-models`.
+The same guidelines also apply to `if-docs`, `if-plugins` and `if-unofficial-plugins`.
