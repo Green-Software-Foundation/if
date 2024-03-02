@@ -1,13 +1,13 @@
 {
   "name": "@grnsft/if",
   "description": "Impact Framework",
-  "version": "v0.1.9",
+  "version": "v0.2.0",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
   },
   "bin": {
-    "impact-engine": "./build/index.js"
+    "if": "./build/index.js"
   },
   "bugs": {
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
@@ -15,11 +15,11 @@
   "dependencies": {
     "@commitlint/cli": "^18.6.0",
     "@commitlint/config-conventional": "^18.6.0",
-    "copyfiles": "^2.4.1",
     "js-yaml": "^4.1.0",
     "luxon": "^3.4.4",
     "ts-command-line-args": "^2.5.1",
     "typescript": "^5.1.6",
+    "winston": "^3.11.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -58,11 +58,11 @@
     "url": "https://github.com/Green-Software-Foundation/if"
   },
   "scripts": {
-    "build": "rm -rf build && tsc --project tsconfig.build.json && copyfiles -u 2 src/config/units.yaml build/config",
+    "build": "rm -rf build && tsc --project tsconfig.build.json",
     "coverage": "jest --verbose --coverage",
     "fix": "gts fix",
     "fix:package": "fixpack",
-    "impact-engine": "npx ts-node src/index.ts",
+    "if": "npx ts-node src/index.ts",
     "lint": "gts lint",
     "prepare": "husky install",
     "prepublish": "npm run build",

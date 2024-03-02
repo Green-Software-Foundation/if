@@ -1,0 +1,24 @@
+name: azure-importer
+description: example impl invoking Azure Importer model
+tags:
+initialize:
+  plugins:
+    azure-importer:
+      path: "@grnsft/if-unofficial-plugins"
+      method: AzureImporter
+      kind: plugin
+tree:
+  children:
+    child:
+      pipeline:
+        - azure-importer
+      config:
+        azure-importer:
+          azure-observation-window: 5 min # value and unit must be space separated
+          azure-observation-aggregation: "average"
+          azure-subscription-id: 42a3c589-87ce-4478-8ed6-9adc11b81965
+          azure-resource-group: Group1
+          azure-vm-name: VM1
+      inputs:
+        - timestamp: "2023-11-02T10:35:31.820Z"
+          duration: 3600

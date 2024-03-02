@@ -2,11 +2,11 @@ name: integration-template
 description:
 tags:
 initialize:
-  models:
-    - name: ${name}
-      model: ${model}
-      path: ${path}
-graph:
+  plugins:
+     'sci-e':
+        model: ${model}
+        path: ${path}
+tree:
   children:
     child:
       pipeline:

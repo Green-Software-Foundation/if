@@ -1,11 +1,15 @@
 const CUSTOM_ERRORS = [
   'CliInputError',
   'FileNotFoundError',
-  'ImplValidationError',
+  'MakeDirectoryError',
+  'ManifestValidationError',
+  'ModuleInitializationError',
   'InputValidationError',
   'InvalidAggregationParams',
-  'ModelInitializationError',
-  'ModelCredentialError',
+  'InvalidGrouping',
+  'PluginCredentialError',
+  'PluginInterfaceError',
+  'WriteFileError',
 ] as const;
 
 type CustomErrors = {

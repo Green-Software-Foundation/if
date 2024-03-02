@@ -1,79 +1,35 @@
 #!/usr/bin/env node
-import * as fs from 'node:fs';
+import {aggregate} from './lib/aggregate';
+import {compute} from './lib/compute';
+import {exhaust} from './lib/exhaust';
+import {initalize} from './lib/initialize';
+import {load} from './lib/load';
+import {parameterize} from './lib/parameterize';
 
-import {ModelsUniverse} from './lib/models-universe';
-import {Supercomputer} from './lib/supercomputer';
-
-import {parseProcessArgument} from './util/args';
+import {parseArgs} from './util/args';
 import {ERRORS} from './util/errors';
 import {andHandle} from './util/helpers';
-import {validateImpl} from './util/validations';
-import {openYamlFileAsObject, saveYamlFileAs} from './util/yaml';
+import {logger} from './util/logger';
 
-import {PARAMETERS, STRINGS} from './config';
-
-import {Impl} from './types/impl';
-import {Parameters} from './types/parameters';
-
-const packageJson = require('../package.json');
+import {STRINGS} from './config';
 
 const {CliInputError} = ERRORS;
 
-const {DISCLAIMER_MESSAGE, OVERRIDE_WARNING, SOMETHING_WRONG} = STRINGS;
+const {DISCLAIMER_MESSAGE, SOMETHING_WRONG} = STRINGS;
 
-/**
- * 1. Parses yml input/output process arguments.
- * 2. Opens yaml file as an object.
- * 3. Validates given impl to match basic structure.
- * 4. Initializes requested models.
- * 5. Initializes graph, does computing.
- * 6. Saves processed object as a yaml file.
- * @example run `npm run impact-engine -- --impl ./test.yml --ompl ./result.yml`
- */
 const impactEngine = async () => {
-  console.log(DISCLAIMER_MESSAGE);
+  logger.info(DISCLAIMER_MESSAGE);
+  const options = parseArgs();
 
-  const processParams = parseProcessArgument();
+  if (options) {
+    const {inputPath, outputPath, paramPath} = options;
 
-  if (processParams) {
-    const {paramPath, inputPath, outputPath} = processParams;
-
-    const rawImpl = await openYamlFileAsObject<Impl>(inputPath);
-
-    if (paramPath) {
-      console.warn(OVERRIDE_WARNING);
-    }
-
-    /** Lifecycle Validation */
-    const impl = validateImpl(rawImpl);
-
-    /**
-     * Checks if override params path is passed, then reads that file.
-     * Then checks if param is new, then appends it to existing parameters.
-     * Otherwise warns user about rejected overriding.
-     */
-    const overridingParams: Parameters =
-      paramPath && JSON.parse(fs.readFileSync(paramPath, 'utf-8'));
-    const parameters = overridingParams || PARAMETERS;
-
-    /** Lifecycle Initialize Models */
-    const modelsHandbook = await new ModelsUniverse().bulkWriteDown(
-      impl.initialize.models
-    );
-
-    /** Lifecycle Computing */
-    const computer = await new Supercomputer(impl, modelsHandbook, parameters);
-
-    computer.overrideOrAppendParams(parameters);
-    const outputData = await computer.compute();
-    outputData['if-version'] = packageJson.version;
-
-    if (!outputPath) {
-      console.log(JSON.stringify(outputData, null, 4));
-      return;
-    }
-
-    await saveYamlFileAs(outputData, outputPath);
+    const {tree, context, parameters} = await load(inputPath, paramPath);
+    parameterize.combine(context.params, parameters);
+    const plugins = await initalize(context.initialize.plugins);
+    const computedTree = await compute(tree, {context, plugins});
+    const aggregatedTree = aggregate(computedTree, context.aggregation);
+    exhaust(aggregatedTree, context, outputPath);
 
     return;
   }

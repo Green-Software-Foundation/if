@@ -1,0 +1,22 @@
+name: teads-aws
+description: simple demo invoking TeadsAWS model
+tags:
+initialize:
+  plugins:
+    teads-aws:
+      method: TeadsAWS
+      path: "@grnsft/if-unofficial-plugins"
+      global-config:
+        interpolation: linear
+tree:
+  children:
+    child:
+      pipeline:
+        - teads-aws # duration & config -> embodied
+      defaults:
+        cloud/instance-type: m5n.large
+        cpu/expected-lifespan: 252288000
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
+          cpu/utilization: 10

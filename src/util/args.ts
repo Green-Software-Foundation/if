@@ -6,22 +6,21 @@ import {ERRORS} from './errors';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {impactProcessArgs} from '../types/process-args';
+import {ManifestProcessArgs} from '../types/process-args';
 
 const {CliInputError} = ERRORS;
 
 const {impact} = CONFIG;
 const {ARGS, HELP} = impact;
 
-const {FILE_IS_NOT_YAML, IMPL_IS_MISSING} = STRINGS;
+const {FILE_IS_NOT_YAML, MANIFEST_IS_MISSING} = STRINGS;
 
 /**
  * Validates process arguments
- * @private
  */
 const validateAndParseProcessArgs = () => {
   try {
-    return parse<impactProcessArgs>(ARGS);
+    return parse<ManifestProcessArgs>(ARGS);
   } catch (error) {
     if (error instanceof Error) {
       throw new CliInputError(error.message);
@@ -32,37 +31,43 @@ const validateAndParseProcessArgs = () => {
 };
 
 /**
- * Prepends process path to fiven `filePath`.
- * @private
+ * Prepends process path to given `filePath`.
  */
 const prependFullFilePath = (filePath: string) => {
   const processRunningPath = process.cwd();
+
+  if (path.isAbsolute(filePath)) {
+    return filePath;
+  }
 
   return path.normalize(`${processRunningPath}/${filePath}`);
 };
 
 /**
- * Parses process argument, if it's `yaml` file, then returns it.
- * Otherwise throws error.
+ * 1. Parses process arguments like `manifest`, `output`, `override-params` and `help`.
+ * 2. Checks if `help` param is provided, then logs help message and exits.
+ * 3. Otherwise checks if `manifest` param is there, then processes with checking if it's a yaml file.
+ *    If it is, then returns object containing full path.
+ * 4. If params are missing or invalid, then rejects with `CliInputError`.
  */
-export const parseProcessArgument = () => {
+export const parseArgs = () => {
   const {
-    impl,
-    ompl,
+    manifest,
+    output,
     'override-params': overrideParams,
     help,
   } = validateAndParseProcessArgs();
 
   if (help) {
-    console.log(HELP);
+    console.info(HELP);
     return;
   }
 
-  if (impl) {
-    if (checkIfFileIsYaml(impl)) {
+  if (manifest) {
+    if (checkIfFileIsYaml(manifest)) {
       return {
-        inputPath: prependFullFilePath(impl),
-        ...(ompl && {outputPath: prependFullFilePath(ompl)}),
+        inputPath: prependFullFilePath(manifest),
+        ...(output && {outputPath: prependFullFilePath(output)}),
         ...(overrideParams && {paramPath: overrideParams}),
       };
     }
@@ -70,5 +75,5 @@ export const parseProcessArgument = () => {
     throw new CliInputError(FILE_IS_NOT_YAML);
   }
 
-  throw new CliInputError(IMPL_IS_MISSING);
+  throw new CliInputError(MANIFEST_IS_MISSING);
 };
