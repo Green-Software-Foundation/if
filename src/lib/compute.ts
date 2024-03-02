@@ -56,11 +56,11 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
   }
 
   let storage = node.inputs as PluginParams[];
+  storage = mergeDefaults(storage, defaults);
   const pipelineCopy = structuredClone(pipeline);
 
   while (pipelineCopy.length !== 0) {
     const pluginName = pipelineCopy.shift() as string;
-    storage = mergeDefaults(storage, defaults);
 
     const plugin = params.plugins[pluginName];
     const {execute, metadata} = plugin;
