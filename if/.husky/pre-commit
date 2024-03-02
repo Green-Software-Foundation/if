@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx --no-install commitlint --edit "$1"
+cd if
+npm run lint
+npm test
+npm run fix:package

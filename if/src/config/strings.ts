@@ -2,7 +2,6 @@ import {ManifestParameter} from '../types/parameters';
 
 export const STRINGS = {
   FILE_IS_NOT_YAML: 'Provided manifest is not in yaml format.',
-  MANIFEST_IS_MISSING: 'Manifest is missing.',
   MISSING_METHOD: "Initalization param 'method' is missing.",
   MISSING_PATH: "Initalization param 'path' is missing.",
   UNSUPPORTED_PLUGIN:
@@ -20,7 +19,6 @@ Incubation projects are experimental, offer no support guarantee, have minimal g
 
 You are using plugins that are not part of the Impact Framework standard library. You should do your own research to ensure the plugins are up to date and accurate. They may not be actively maintained.  
 `,
-  SOMETHING_WRONG: 'Something wrong with cli arguments. Please check docs.',
   ISSUE_TEMPLATE: `
 Impact Framework is an alpha release from the Green Software Foundation and is released to capture early feedback. If you'd like to offer some feedback, please use this issue template: 
 https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+
@@ -47,4 +45,17 @@ https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=fee
     `Rejecting overriding of canonical parameter: ${param.name}.`,
   INVALID_EXHAUST_PLUGIN: (pluginName: string) =>
     `Invalid exhaust plugin: ${pluginName}.`,
+  CLI_MESSAGES: {
+    version: 'Output the current version.',
+    run: {
+      description: 'Run the impact engine.',
+      impl: 'Path to an input IMPL file.',
+      ompl: 'Path to the output IMPL file where the results as saved, if none is provided it prints to stdout.',
+      overrideParams: 'Path to a parameter file that overrides our defaults.',
+    },
+    add: 'Add plugin packages to the impact engine. E.g. `ie add @grnsft/if-models`',
+    list: 'List all added plugins.',
+    remove:
+      'Remove plugin packages to the impact engine. E.g. `ie remove @grnsft/if-models`',
+  },
 };

@@ -1,14 +1,3 @@
-src/**/*.js
-src/**/*.d.ts
-lib/**/*.js
-lib/**/*.d.ts
-node_modules
 .idea
-*.tsbuildinfo
-dist
-yarn-error.log
-build
-coverage
-.env
-src/__tests__/integration/manifest
-examples/outputs
+plugins/*
+!plugins/README.md

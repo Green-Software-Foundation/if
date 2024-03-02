@@ -8,10 +8,12 @@ import {CONFIG, STRINGS} from '../config';
 import {PluginInterface} from '../types/interface';
 import {PluginsStorage} from '../types/initialize';
 import {GlobalPlugins, PluginOptions} from '../types/manifest';
+import {resolve} from 'path';
+import {getPluginsDirectoryPath} from '../util/helpers';
 
 const {ModuleInitializationError, PluginCredentialError} = ERRORS;
 
-const {GITHUB_PATH, NATIVE_PLUGIN} = CONFIG;
+const {GITHUB_PATH, NATIVE_PLUGINS} = CONFIG;
 const {MISSING_METHOD, MISSING_PATH, NOT_NATIVE_PLUGIN, INVALID_MODULE_PATH} =
   STRINGS;
 
@@ -19,12 +21,24 @@ const {MISSING_METHOD, MISSING_PATH, NOT_NATIVE_PLUGIN, INVALID_MODULE_PATH} =
  * Imports module by given `path`.
  */
 const importModuleFrom = async (path: string) => {
+  const absoluteModulePath = resolve(
+    getPluginsDirectoryPath(),
+    'node_modules',
+    path
+  );
+  if (
+    !absoluteModulePath.startsWith(
+      resolve(getPluginsDirectoryPath(), 'node_modules')
+    )
+  ) {
+    throw new ModuleInitializationError(INVALID_MODULE_PATH(`${path}`));
+  }
   try {
-    const module = await import(path);
+    const module = require(absoluteModulePath);
 
     return module;
   } catch (error) {
-    throw new ModuleInitializationError(INVALID_MODULE_PATH(path));
+    throw new ModuleInitializationError(INVALID_MODULE_PATH(`${path}`));
   }
 };
 
@@ -51,7 +65,7 @@ const handModule = (method: string, path: string) => {
       path = parts[parts.length - 1];
     }
 
-    if (!path.includes(NATIVE_PLUGIN)) {
+    if (!NATIVE_PLUGINS.some(nativePlugin => path.includes(nativePlugin))) {
       logger.warn(NOT_NATIVE_PLUGIN);
     }
   }
