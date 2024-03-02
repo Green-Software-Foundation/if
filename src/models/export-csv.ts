@@ -125,7 +125,7 @@ export const ExportCsv = (): ExhaustPluginInterface => {
    */
   const writeOutputFile = async (content: string, outputPath: string) => {
     try {
-      await fs.writeFile(outputPath, content);
+      await fs.writeFile(`${outputPath}.csv`, content);
     } catch (error) {
       throw new WriteFileError(
         `Failed to write CSV to ${outputPath}: ${error}`

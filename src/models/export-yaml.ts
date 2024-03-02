@@ -20,7 +20,7 @@ export const ExportYaml = () => {
       tree,
     };
 
-    await saveYamlFileAs(outputFile, outputPath);
+    await saveYamlFileAs(outputFile, `${outputPath}.yaml`);
   };
 
   return {execute};
