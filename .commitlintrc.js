@@ -32,7 +32,9 @@ module.exports = {
         '.husky',
         'scripts',
         'models',
-        'plugins'
+        'plugins',
+        'integration',
+        'doc'
       ]
     ],
     'scope-empty': [
