@@ -72,7 +72,7 @@ feat(lib): initial commit for time-sync logic
 or 
 
 ```
-test(teads-curve): add unit test to check that error is raised on missing tdp param 
+test(lib): in teads-curve add unit test to check that error is raised on missing tdp param 
 ```
 
 Run `npm run fix` before commiting. If your commit message does not conform to the conventional commit specification or if you have not run `npm run fix` your commit will not satisfy the commitlint check.
@@ -133,7 +133,7 @@ Global constants can be given capitalized names, such as `TIME_UNITS_IN_SECONDS`
 
 #### Documentation
 
-Every logical unit (`Class, function, method`) should be covered with appropriate documentation. For documenting such, multi-line comment style is used.
+Every logical unit (`function, method`) should be covered with appropriate documentation. For documenting such, multi-line comment style is used.
 
 ```ts
 ❌ const a = (message: string) => console.log(message)
@@ -143,16 +143,6 @@ Every logical unit (`Class, function, method`) should be covered with appropriat
  * Logs given `message` to console.
  **/
 const logMessage = (message: string) => console.log(message)
-```
-
-For documenting variable, expression, single line comments can be used after declaration.
-
-```ts
-class MockClass {
-     // this is a mock field
-  ❌ private mockField: string = "mock-field"
-  ✅ private mockField: string = "mock-field" // Single line documenting style is used.
-}
 ```
 
 ### Writing tests

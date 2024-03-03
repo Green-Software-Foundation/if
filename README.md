@@ -61,16 +61,16 @@ Then create a `manifest` file that describes your application (see our docs for 
 Then, run `if` using the following command:
 
 ```sh
-if --manifest <path-to-your-manifest-file>
+ie --manifest <path-to-your-manifest-file>
 ```
 
 You can also add an optional savepath for your output yaml (if you do not provide one, the output will be printed to the console):
 
 ```sh
-if --manifest <path-to-your-manifest-file> --output <your-savepath>
+ie --manifest <path-to-your-manifest-file> --output <your-savepath>
 ```
 
-The `if` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
+The `ie` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
 
 
 ## Documentation
