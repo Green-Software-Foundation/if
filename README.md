@@ -27,7 +27,7 @@
 [Impact Framework](https://greensoftwarefoundation.atlassian.net/wiki/spaces/~612dd45e45cd76006a84071a/pages/17072136/Opensource+Impact+Engine+Framework) (IF) is an [Incubation](https://oc.greensoftware.foundation/project-lifecycle.html#incubation) project from the [Open Source Working Group](https://greensoftwarefoundation.atlassian.net/wiki/spaces/~612dd45e45cd76006a84071a/pages/852049/Open+Source+Working+Group) in the [Green Software Foundation](https://greensoftware.foundation/).
 
 
-**Our documentation is online at [if.greensoftware.foundation]([if.greensoftware.foundation](https://if.greensoftware.foundation/))**
+**Our documentation is online at [if.greensoftware.foundation](https://if.greensoftware.foundation/)**
 
 
 **IF** is a framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environmental impacts of software
