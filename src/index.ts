@@ -1,40 +1,77 @@
 #!/usr/bin/env node
-import {aggregate} from './lib/aggregate';
-import {compute} from './lib/compute';
-import {exhaust} from './lib/exhaust';
-import {initalize} from './lib/initialize';
-import {load} from './lib/load';
-import {parameterize} from './lib/parameterize';
-
-import {parseArgs} from './util/args';
-import {ERRORS} from './util/errors';
-import {andHandle} from './util/helpers';
-import {logger} from './util/logger';
+import {exec} from 'child_process';
+import {Command} from '@commander-js/extra-typings';
+import {resolve} from 'path';
 
 import {STRINGS} from './config';
+import {andHandle} from './util/helpers';
+import {run} from './run';
+const packageJson = require('../package.json');
 
-const {CliInputError} = ERRORS;
+const {CLI_MESSAGES} = STRINGS;
 
-const {DISCLAIMER_MESSAGE, SOMETHING_WRONG} = STRINGS;
+const rootDirectory = resolve(__dirname, '..');
+const pluginDirectory = resolve(rootDirectory, 'plugins');
 
-const impactEngine = async () => {
-  logger.info(DISCLAIMER_MESSAGE);
-  const options = parseArgs();
+async function main() {
+  const impactEngine = new Command();
 
-  if (options) {
-    const {inputPath, outputPath, paramPath} = options;
+  impactEngine.version(
+    packageJson.version,
+    '-v, --version',
+    CLI_MESSAGES.version
+  );
 
-    const {tree, context, parameters} = await load(inputPath, paramPath);
-    parameterize.combine(context.params, parameters);
-    const plugins = await initalize(context.initialize.plugins);
-    const computedTree = await compute(tree, {context, plugins});
-    const aggregatedTree = aggregate(computedTree, context.aggregation);
-    exhaust(aggregatedTree, context, outputPath);
+  impactEngine
+    .command('run', {isDefault: true})
+    .description(CLI_MESSAGES.run.description)
+    .requiredOption('--manifest <path>', CLI_MESSAGES.run.impl)
+    .option('--output <path>', CLI_MESSAGES.run.ompl)
+    .option('--override-params <path>', CLI_MESSAGES.run.overrideParams)
+    .action(options => {
+      run(options.manifest, options.output, options.overrideParams).catch(
+        andHandle
+      );
+    });
 
-    return;
-  }
+  impactEngine
+    .command('add')
+    .alias('a')
+    .description(CLI_MESSAGES.add)
+    .argument('<plugins...>')
+    .action(plugins => handle('add', plugins));
 
-  return Promise.reject(new CliInputError(SOMETHING_WRONG));
-};
+  impactEngine
+    .command('remove')
+    .alias('r')
+    .description(CLI_MESSAGES.remove)
+    .argument('<plugins...>')
+    .action(plugins => handle('remove', plugins));
 
-impactEngine().catch(andHandle);
+  impactEngine
+    .command('list')
+    .alias('l')
+    .description(CLI_MESSAGES.list)
+    .action(() => handle('list'));
+  await impactEngine.parseAsync(process.argv);
+}
+
+function handle(command: 'add' | 'remove' | 'list', plugins?: string[]): void {
+  const npmCommand = `npm ${command} ${
+    plugins ? plugins : ''
+  } --workspace=${pluginDirectory} --prefix=${rootDirectory}`;
+  const errorPrefix = `Error ${command}ing plugins`;
+  exec(npmCommand, (err, stdout, stderr) => {
+    if (err) {
+      console.error(`${errorPrefix}: ${err}`);
+      return;
+    }
+
+    console.log(`${stdout}`);
+    if (stderr) {
+      console.log(`Stderr: ${stderr}`);
+    }
+  });
+}
+
+main();

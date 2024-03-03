@@ -1,0 +1,22 @@
+{
+  "name": "plugins",
+  "version": "0.2.0",
+  "description": "Container for installation of impact framework models.",
+  "author": {
+    "name": "Green Software Foundation",
+    "email": "info@gsf.com"
+  },
+  "license": "MIT",
+  "homepage": "https://greensoftware.foundation",
+  "keywords": [
+    "engine",
+    "green software foundation",
+    "greensoftware",
+    "if",
+    "impact",
+    "models"
+  ],
+  "bugs": {
+    "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
+  }
+}

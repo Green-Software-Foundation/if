@@ -12,3 +12,4 @@ coverage
 .env
 src/__tests__/integration/manifest
 examples/outputs
+plugins/package.json

@@ -13,11 +13,12 @@
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
   },
   "dependencies": {
+    "@commander-js/extra-typings": "^12.0.1",
     "@commitlint/cli": "^18.6.0",
     "@commitlint/config-conventional": "^18.6.0",
+    "commander": "^12.0.0",
     "js-yaml": "^4.1.0",
     "luxon": "^3.4.4",
-    "ts-command-line-args": "^2.5.1",
     "typescript": "^5.1.6",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
@@ -64,11 +65,15 @@
     "fix:package": "fixpack",
     "ie": "npx ts-node src/index.ts",
     "lint": "gts lint",
+    "preinstall": "cp plugins.package.json plugins/package.json",
     "prepare": "husky install",
     "prepublish": "npm run build",
     "test": "jest --verbose --testPathPattern=src/__tests__/unit",
     "test:integration": "jest --verbose --testPathPattern=src/__tests__/integration"
   },
   "stability": "stable",
-  "types": "src/index.d.ts"
+  "types": "src/index.d.ts",
+  "workspaces": [
+    "plugins"
+  ]
 }
