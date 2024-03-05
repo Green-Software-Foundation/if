@@ -13,6 +13,8 @@ import {logger} from './util/logger';
 
 import {STRINGS} from './config';
 
+import packageJson from '../package.json';
+
 const {CliInputError} = ERRORS;
 
 const {DISCLAIMER_MESSAGE, SOMETHING_WRONG} = STRINGS;
@@ -29,6 +31,7 @@ const impactEngine = async () => {
     const plugins = await initalize(context.initialize.plugins);
     const computedTree = await compute(tree, {context, plugins});
     const aggregatedTree = aggregate(computedTree, context.aggregation);
+    context['if-version'] = packageJson.version;
     exhaust(aggregatedTree, context, outputPath);
 
     return;
