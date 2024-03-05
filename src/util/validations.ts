@@ -19,6 +19,7 @@ export const manifestSchema = z.object({
       complexity: z.string().optional().nullable(),
       category: z.string().optional().nullable(),
     })
+    .optional()
     .nullable(),
   aggregation: z
     .object({
