@@ -1,7 +1,7 @@
 import {aggregateInputsIntoOne} from '../util/aggregation-helper';
 
 import {PluginParams} from '../types/interface';
-import {AggregationParams} from '../types/manifest';
+import {AggregationParams, AggregationParamsSure} from '../types/manifest';
 
 /**
  * Gets `i`th element from all children outputs and collects them in single array.
@@ -43,8 +43,9 @@ const temporalAggregation = (node: any, metrics: string[]) => {
  *    The outputs of the grouping node are the aggregated time bucketed outputs of it's children.
  * 5. Now a grouping node has it's own outputs, it can horizotnally aggregate them.
  */
-const aggregateNode = (node: any, aggregationParams: AggregationParams) => {
-  const {metrics, type} = aggregationParams;
+const aggregateNode = (node: any, aggregationParams: AggregationParamsSure) => {
+  const metrics = aggregationParams!.metrics;
+  const type = aggregationParams!.type;
 
   if (node.children) {
     for (const child in node.children) {
@@ -69,7 +70,7 @@ const aggregateNode = (node: any, aggregationParams: AggregationParams) => {
  * If aggregation is disabled, then returns given `tree`.
  * Otherwise creates copy of the tree, then applies aggregation to it.
  */
-export const aggregate = (tree: any, aggregationParams?: AggregationParams) => {
+export const aggregate = (tree: any, aggregationParams: AggregationParams) => {
   if (!aggregationParams || !aggregationParams.type) {
     return tree;
   }
