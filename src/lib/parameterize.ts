@@ -2,7 +2,7 @@ import {logger} from '../util/logger';
 
 import {STRINGS, PARAMETERS} from '../config';
 
-import {ManifestParameter} from '../types/parameters';
+import {ManifestParameter} from '../types/manifest';
 
 const {REJECTING_OVERRIDE} = STRINGS;
 
@@ -33,7 +33,7 @@ const Parametrize = () => {
     parameters: any
   ) => {
     if (contextParameters) {
-      contextParameters.forEach((param: any) => {
+      contextParameters.forEach(param => {
         if (`${param.name}` in parameters) {
           logger.warn(REJECTING_OVERRIDE);
 
