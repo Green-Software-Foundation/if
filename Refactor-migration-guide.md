@@ -94,7 +94,7 @@ There have also been some changes to the structure of manifest files. Some of th
     initialize:
       plugins:
         - name: ccf
-          method: CloudCarbonFootprint
+          model: CloudCarbonFootprint
           path: if-plugins
     ```
 
