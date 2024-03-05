@@ -4,23 +4,29 @@ import {ERRORS} from './errors';
 
 import {AGGREGATION_METHODS} from '../types/aggregation';
 import {AGGREGATION_TYPES} from '../types/parameters';
-import {Manifest} from '../types/manifest';
 
 const {ManifestValidationError, InputValidationError} = ERRORS;
 
 /**
  * Validation schema for manifests.
  */
-const manifestValidation = z.object({
+export const manifestSchema = z.object({
   name: z.string(),
-  'if-version': z.string().optional().nullable(),
-  description: z.string().nullable().default(''),
+  description: z.string().optional().nullable(),
+  tags: z
+    .object({
+      kind: z.string().optional().nullable(),
+      complexity: z.string().optional().nullable(),
+      category: z.string().optional().nullable(),
+    })
+    .nullable(),
   aggregation: z
     .object({
       metrics: z.array(z.string()),
       type: z.enum(AGGREGATION_METHODS),
     })
-    .optional(),
+    .optional()
+    .nullable(),
   params: z
     .array(
       z.object({
@@ -32,14 +38,6 @@ const manifestValidation = z.object({
     )
     .optional()
     .nullable(),
-  tags: z
-    .object({
-      kind: z.string().optional(),
-      complexity: z.string().optional(),
-      category: z.string().optional(),
-    })
-    .nullable()
-    .default({}),
   initialize: z.object({
     plugins: z.record(
       z.string(),
@@ -52,14 +50,14 @@ const manifestValidation = z.object({
     outputs: z.array(z.string()).optional(),
   }),
   tree: z.record(z.string(), z.any()),
+  'if-version': z.string().optional().nullable(),
 });
 
 /**
  * Validates given `manifest` object to match pattern.
  */
-export const validateManifest = (manifest: Manifest) => {
-  return validate(manifestValidation, manifest, ManifestValidationError);
-};
+export const validateManifest = (manifest: any) =>
+  validate(manifestSchema, manifest, ManifestValidationError);
 
 /**
  * Validates given `object` with given `schema`.
@@ -80,6 +78,9 @@ export const validate = <T>(
   return validationResult.data;
 };
 
+/**
+ * Beautify error message from zod issue.
+ */
 const prettifyErrorMessage = (issues: string) => {
   const issuesArray = JSON.parse(issues);
 
@@ -93,6 +94,7 @@ const prettifyErrorMessage = (issues: string) => {
     if (code === 'custom') {
       return `${message.toLowerCase()}. Error code: ${code}.`;
     }
+
     return `"${fullPath}" parameter is ${message.toLowerCase()}. Error code: ${code}.`;
   });
 };
