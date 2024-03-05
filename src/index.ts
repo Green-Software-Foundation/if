@@ -13,7 +13,7 @@ import {logger} from './util/logger';
 
 import {STRINGS} from './config';
 
-import packageJson from '../package.json';
+const packageJson = require('../package.json');
 
 const {CliInputError} = ERRORS;
 
