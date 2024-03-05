@@ -8,26 +8,26 @@ If you are a IF user or developer, there are some changes you must be aware of r
 
 There have been some name changes to the CLI, specifically:
 
-- `impact-engine` --> `if`
-    The command line tool has been renamed from `impact-engine` to simply `if`. This means that to invoke the Impact Framework on the command line you simply use 
+- `impact-engine` --> `ie`
+    The command line tool has been renamed from `impact-engine` to simply `ie`. This means that to invoke the Impact Framework on the command line you simply use 
 
     ```
-    if ...
+    ie ...
     ```
 -  `impl` --> `manifest` 
     We have deprecated the original `impl` and `ompl` terminology across all our repositories and on the command line. Now, to pass a manifest file to IF, you use the `--manifest` command, as follows:
 
     ```sh
-    if --manifest <path-to-manifest>
+    ie --manifest <path-to-manifest>
     ```
 
 
 - `ompl` --> `output`
  
-    We have deprecated the original `impl` and `ompl` terminology across all our repositories and on the command line. Now, todefine a savepath for your output file, you use the `--output` command, as follows:
+    We have deprecated the original `impl` and `ompl` terminology across all our repositories and on the command line. Now, to define a savepath for your output file, you use the `--output` command, as follows:
 
     ```sh
-    if --manifest <path-to-manifest> --output <savepath>
+    ie --manifest <path-to-manifest> --output <savepath>
     ```
 
 ## Outputs
@@ -55,13 +55,13 @@ npm i @grnsft/if
 Then run IF using the following command:
 
 ```sh
-if --manifest <path-to-manifest>
+ie --manifest <path-to-manifest>
 ```
 
 This will dump the output to the console. If you want to save the output to a yaml file, provide a savepath to the `--output` command:
 
 ```sh
-if --manifest <path-to-manifest> --output <savepath>
+ie --manifest <path-to-manifest> --output <savepath>
 ```
 
 
