@@ -1,4 +1,4 @@
-import {ManifestParameter} from '../types/parameters';
+import {ManifestParameter} from '../types/manifest';
 
 export const STRINGS = {
   FILE_IS_NOT_YAML: 'Provided manifest is not in yaml format.',
