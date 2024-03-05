@@ -3,7 +3,7 @@ import * as winston from 'winston';
 const {combine, timestamp, printf, colorize, align} = winston.format;
 
 /**
- * Winston logger
+ * Winston logger instance.
  */
 export const logger = winston.createLogger({
   format: combine(
