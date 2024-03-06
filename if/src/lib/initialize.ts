@@ -9,7 +9,7 @@ import {PluginInterface} from '../types/interface';
 import {PluginsStorage} from '../types/initialize';
 import {GlobalPlugins, PluginOptions} from '../types/manifest';
 import {resolve} from 'path';
-import {getPluginsDirectoryPath} from '../util/helpers';
+import {getPluginsDirectoryPath} from '../register';
 
 const {ModuleInitializationError, PluginCredentialError} = ERRORS;
 

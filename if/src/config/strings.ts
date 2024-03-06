@@ -49,12 +49,16 @@ https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=fee
     version: 'Output the current version.',
     run: {
       description: 'Run the impact engine.',
-      impl: 'Path to an input IMPL file.',
-      ompl: 'Path to the output IMPL file where the results as saved, if none is provided it prints to stdout.',
+      manifest: 'Path to a manifest file.',
+      output:
+        'Path for saving the output file. If none is provided, it prints to stdout.',
       overrideParams: 'Path to a parameter file that overrides our defaults.',
     },
     add: 'Add plugin packages to the impact engine. E.g. `ie add @grnsft/if-models`',
-    list: 'List all added plugins.',
+    list: {
+      description: 'List all added plugins.',
+      source: 'List installation sources of plugins',
+    },
     remove:
       'Remove plugin packages to the impact engine. E.g. `ie remove @grnsft/if-models`',
   },

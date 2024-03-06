@@ -10,11 +10,11 @@ import {validateOptions} from './util/args';
 
 const {DISCLAIMER_MESSAGE} = STRINGS;
 
-export async function run(
+export const run = async (
   manifest: string,
   output: string | undefined,
   overrideParams: string | undefined
-) {
+) => {
   logger.info(DISCLAIMER_MESSAGE);
   const {inputPath, outputPath, paramPath} = validateOptions(
     manifest,
@@ -30,4 +30,4 @@ export async function run(
   exhaust(aggregatedTree, context, outputPath);
 
   return;
-}
+};

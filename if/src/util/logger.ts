@@ -14,9 +14,9 @@ export const logger = winston.createLogger({
     align(),
     printf(
       (info: any) =>
-        `[${info.timestamp}] ${info.level}: ${info.message}
-
-${info.stack || ''}`
+        `[${info.timestamp}] ${info.level}: ${info.message} ${
+          info.stack ? '\n\n' : ''
+        } ${info.stack || ''}`
     )
   ),
   transports: [new winston.transports.Console()],

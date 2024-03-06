@@ -2,7 +2,6 @@ import {ERRORS} from './errors';
 
 import {STRINGS} from '../config';
 import {logger} from './logger';
-import {resolve} from 'path';
 
 const {ISSUE_TEMPLATE} = STRINGS;
 
@@ -38,8 +37,4 @@ export const mergeObjects = (object1: any, object2: any) => {
   });
 
   return merged;
-};
-
-export const getPluginsDirectoryPath = () => {
-  return resolve(__dirname, '../../../plugins');
 };
