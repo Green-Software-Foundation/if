@@ -9,7 +9,7 @@ import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
-import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
+import {ExhaustPluginInterface} from '../types/interface';
 import {Context} from '../types/manifest';
 
 const {ModuleInitializationError} = ERRORS;
