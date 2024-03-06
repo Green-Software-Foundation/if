@@ -1,49 +1,16 @@
-import {AggregationMethodsNames, AggregationResult} from './aggregation';
-import {ManifestParameter} from './parameters';
+import {z} from 'zod';
 
-type Tags =
-  | {
-      kind?: string;
-      complexity?: string;
-      category?: string;
-    }
-  | null
-  | undefined;
+import {manifestSchema} from '../util/validations';
 
-export type PluginOptions = {
-  'global-config'?: Record<string, any>;
-  method: string;
-  path: string;
-};
+type Manifest = z.infer<typeof manifestSchema>;
 
-export type GlobalPlugins = {
-  [key: string]: PluginOptions;
-};
+export type GlobalPlugins = Manifest['initialize']['plugins'];
 
-export type AggregationParams = {
-  metrics: string[];
-  type: AggregationMethodsNames;
-};
+export type PluginOptions = GlobalPlugins[string];
 
-export type Context = {
-  name: string;
-  description: string | null | undefined;
-  tags: Tags;
-  params?: ManifestParameter[] | undefined | null;
-  initialize: {
-    plugins: GlobalPlugins;
-    outputs?: string[];
-  };
-  aggregation?: AggregationParams;
-};
+export type AggregationParams = Manifest['aggregation'];
+export type AggregationParamsSure = Extract<Manifest['aggregation'], {}>;
 
-export type Manifest = Context & {
-  tree: {
-    children: any;
-  };
-};
+export type Context = Omit<Manifest, 'tree'>;
 
-export type OutputManifest = Manifest & {
-  'aggregated-outputs'?: AggregationResult;
-  'if-version'?: string | null | undefined;
-};
+export type ManifestParameter = Extract<Manifest['params'], {}>[number];
