@@ -26,7 +26,7 @@ const temporalAggregation = (node: any, metrics: string[]) => {
 
   for (let i = 0; i < values[0].outputs.length; i++) {
     const ithSliceOfOutputs = getIthElementsFromChildren(node.children, i);
-    outputs.push(aggregateInputsIntoOne(ithSliceOfOutputs, metrics));
+    outputs.push(aggregateInputsIntoOne(ithSliceOfOutputs, metrics, true));
   }
 
   return outputs;
