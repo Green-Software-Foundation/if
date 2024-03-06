@@ -2,7 +2,10 @@
 import {aggregate} from './lib/aggregate';
 import {compute} from './lib/compute';
 import {exhaust} from './lib/exhaust';
-import {initalizePipelinePlugins} from './lib/initialize';
+import {
+  initalizeExhaustPlugins,
+  initalizePipelinePlugins,
+} from './lib/initialize';
 import {load} from './lib/load';
 import {parameterize} from './lib/parameterize';
 
@@ -28,11 +31,19 @@ const impactEngine = async () => {
 
     const {tree, context, parameters} = await load(inputPath, paramPath);
     parameterize.combine(context.params, parameters);
-    const plugins = await initalizePipelinePlugins(context.initialize.plugins);
-    const computedTree = await compute(tree, {context, plugins});
+    const pipelinePluginsStorage = await initalizePipelinePlugins(
+      context.initialize.plugins
+    );
+    const exhaustPlugins = await initalizeExhaustPlugins(
+      context.initialize.exhaustPlugins
+    );
+    const computedTree = await compute(tree, {
+      context,
+      plugins: pipelinePluginsStorage,
+    });
     const aggregatedTree = aggregate(computedTree, context.aggregation);
     context['if-version'] = packageJson.version;
-    exhaust(aggregatedTree, context, outputPath);
+    exhaust(aggregatedTree, exhaustPlugins, context, outputPath);
 
     return;
   }

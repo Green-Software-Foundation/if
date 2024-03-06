@@ -6,7 +6,7 @@ import {logger} from '../util/logger';
 import {CONFIG, STRINGS} from '../config';
 
 import {ExhaustPluginInterface, PluginInterface} from '../types/interface';
-import {ExhaustPluginsStorage, PluginsStorage} from '../types/initialize';
+import {PluginsStorage} from '../types/initialize';
 import {GlobalPlugins, PluginOptions} from '../types/manifest';
 
 const {ModuleInitializationError, PluginCredentialError} = ERRORS;
@@ -59,7 +59,8 @@ const handModule = (method: string, path: string) => {
   return importAndVerifyModule(method, path);
 };
 
-// TODO PB -- from this point on code should be re-written with generics. after that's done, need to assess readabilty cost vs benefit of less code duplication
+/**
+ * @todo PB -- from this point on code should be re-written with generics. after that's done, need to assess readabilty cost vs benefit of less code duplication
 
 /**
  * Initializes a pipeline plugin with global config.
@@ -120,12 +121,12 @@ export const initalizePipelinePlugins = async (
  */
 export const initalizeExhaustPlugins = async (
   plugins: GlobalPlugins
-): Promise<ExhaustPluginsStorage> => {
-  const storage: ExhaustPluginsStorage = {};
+): Promise<ExhaustPluginInterface[]> => {
+  const exhaustPlugins: ExhaustPluginInterface[] = [];
 
   for await (const pluginName of Object.keys(plugins)) {
-    storage[pluginName] = await initExhaustPlugin(plugins[pluginName]);
+    exhaustPlugins.push(await initExhaustPlugin(plugins[pluginName]));
   }
 
-  return storage;
+  return exhaustPlugins;
 };
