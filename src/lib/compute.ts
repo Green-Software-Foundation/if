@@ -84,6 +84,8 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
         defaults,
         config,
       });
+
+      break;
     }
   }
 };
