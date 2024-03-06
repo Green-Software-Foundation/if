@@ -4,6 +4,6 @@ export type PluginsStorage = {
   [key: string]: PluginInterface;
 };
 
-export type ExhaustPluginStorage = {
+export type ExhaustPluginsStorage = {
   [key: string]: ExhaustPluginInterface;
 };

@@ -5,8 +5,8 @@ import {logger} from '../util/logger';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {PluginInterface} from '../types/interface';
-import {PluginsStorage} from '../types/initialize';
+import {ExhaustPluginInterface, PluginInterface} from '../types/interface';
+import {ExhaustPluginsStorage, PluginsStorage} from '../types/initialize';
 import {GlobalPlugins, PluginOptions} from '../types/manifest';
 
 const {ModuleInitializationError, PluginCredentialError} = ERRORS;
@@ -59,6 +59,26 @@ const handModule = (method: string, path: string) => {
   return importAndVerifyModule(method, path);
 };
 
+// TODO PB -- from this point on code should be re-written with generics. after that's done, need to assess readabilty cost vs benefit of less code duplication
+
+/**
+ * Initializes a pipeline plugin with global config.
+ */
+const initPipeLinePlugin = async (
+  initPluginParams: PluginOptions
+): Promise<PluginInterface> => {
+  return initPlugin(initPluginParams);
+};
+
+/**
+ * Initializes exhaust plugin with global config.
+ */
+const initExhaustPlugin = async (
+  initPluginParams: PluginOptions
+): Promise<ExhaustPluginInterface> => {
+  return initPlugin(initPluginParams);
+};
+
 /**
  * Initializes plugin with global config.
  */
@@ -83,13 +103,28 @@ const initPlugin = async (
 /**
  * Registers all plugins from `manifest`.`initalize` property.
  */
-export const initalize = async (
+export const initalizePipelinePlugins = async (
   plugins: GlobalPlugins
 ): Promise<PluginsStorage> => {
   const storage: PluginsStorage = {};
 
   for await (const pluginName of Object.keys(plugins)) {
-    storage[pluginName] = await initPlugin(plugins[pluginName]);
+    storage[pluginName] = await initPipeLinePlugin(plugins[pluginName]);
+  }
+
+  return storage;
+};
+
+/**
+ * Registers all exhaust plugins
+ */
+export const initalizeExhaustPlugins = async (
+  plugins: GlobalPlugins
+): Promise<ExhaustPluginsStorage> => {
+  const storage: ExhaustPluginsStorage = {};
+
+  for await (const pluginName of Object.keys(plugins)) {
+    storage[pluginName] = await initExhaustPlugin(plugins[pluginName]);
   }
 
   return storage;
