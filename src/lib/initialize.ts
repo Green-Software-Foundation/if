@@ -5,7 +5,7 @@ import {logger} from '../util/logger';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {PluginInterface} from '../types/interface';
+import {PluginInterface, PluginType} from '../types/interface';
 import {PluginsStorage} from '../types/initialize';
 import {GlobalPlugins, PluginOptions} from '../types/manifest';
 
@@ -62,9 +62,9 @@ const handModule = (method: string, path: string) => {
 /**
  * Initializes plugin with global config.
  */
-const initPlugin = async (
+const initPlugin = async <T extends PluginType>(
   initPluginParams: PluginOptions
-): Promise<PluginInterface> => {
+): Promise<PluginInterface<T>> => {
   const {method, path, 'global-config': globalConfig} = initPluginParams;
 
   if (!method) {
@@ -83,10 +83,10 @@ const initPlugin = async (
 /**
  * Registers all plugins from `manifest`.`initalize` property.
  */
-export const initalize = async (
+export const initalize = async <T extends PluginType>(
   plugins: GlobalPlugins
-): Promise<PluginsStorage> => {
-  const storage: PluginsStorage = {};
+): Promise<PluginsStorage<T>> => {
+  const storage: PluginsStorage<T> = {};
 
   for await (const pluginName of Object.keys(plugins)) {
     storage[pluginName] = await initPlugin(plugins[pluginName]);
