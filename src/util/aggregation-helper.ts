@@ -43,8 +43,10 @@ export const aggregateInputsIntoOne = (
       }
 
       /** Checks if metric is timestamp or duration, then adds to aggregated value. */
-      if (AGGREGATION_ADDITIONAL_PARAMS.includes(metric) && isTemporal) {
-        acc[metric] = input[metric];
+      if (AGGREGATION_ADDITIONAL_PARAMS.includes(metric)) {
+        if (isTemporal) {
+          acc[metric] = input[metric];
+        }
       } else {
         acc[metric] = acc[metric] ?? 0;
         acc[metric] += parseFloat(input[metric]);
