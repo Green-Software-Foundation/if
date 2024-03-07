@@ -1,6 +1,7 @@
+import {PluginInterface} from '../types/interface';
 import {Context} from '../types/manifest';
 
-export const ExportLog = () => {
+export const ExportLog = (): PluginInterface<'exhaust'> => {
   /**
    * Logs output manifest in console.
    */
@@ -13,5 +14,10 @@ export const ExportLog = () => {
     console.log(JSON.stringify(outputFile, null, 2));
   };
 
-  return {execute};
+  return {
+    metadata: {
+      kind: 'exhaust',
+    },
+    execute,
+  };
 };
