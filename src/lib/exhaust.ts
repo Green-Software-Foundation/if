@@ -9,7 +9,6 @@ import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
-import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
 import {Context} from '../types/manifest';
 
 const {ModuleInitializationError} = ERRORS;
@@ -24,7 +23,7 @@ const initializeExhaustPlugins = (plugins: string[]) =>
 /**
  * factory method for exhaust plugins
  */
-const initializeExhaustPlugin = (name: string): ExhaustPluginInterface => {
+const initializeExhaustPlugin = (name: string) => {
   switch (name) {
     case 'yaml':
       return ExportYaml();
