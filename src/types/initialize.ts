@@ -1,5 +1,5 @@
-import {PluginInterface} from './interface';
+import {PluginInterface, PluginType} from './interface';
 
-export type PluginsStorage = {
-  [key: string]: PluginInterface;
+export type PluginsStorage<T extends PluginType> = {
+  [key: string]: PluginInterface<T>;
 };
