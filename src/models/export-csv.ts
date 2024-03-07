@@ -2,12 +2,12 @@ import * as fs from 'fs/promises';
 
 import {ERRORS} from '../util/errors';
 
-import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
+import {PluginInterface} from '../types/interface';
 import {Context} from '../types/manifest';
 
 const {WriteFileError, CliInputError} = ERRORS;
 
-export const ExportCsv = (): ExhaustPluginInterface => {
+export const ExportCsv = (): PluginInterface<'exhaust'> => {
   /**
    * handle a tree leaf, where there are no child nodes, by adding it as key->value pair to the flat map
    * and capturing key as a header
@@ -136,7 +136,7 @@ export const ExportCsv = (): ExhaustPluginInterface => {
   /**
    * export the provided tree content to a CSV file, represented in a flat structure
    */
-  const execute = async (tree: any, _context: Context, outputPath: string) => {
+  const execute = async (tree: any, _context: Context, outputPath?: string) => {
     if (!outputPath) {
       throw new CliInputError('Output path is required.');
     }
@@ -151,5 +151,5 @@ export const ExportCsv = (): ExhaustPluginInterface => {
     writeOutputFile(csvString, outputPath);
   };
 
-  return {execute};
+  return {execute, metadata: {kind: 'exhaust'}};
 };
