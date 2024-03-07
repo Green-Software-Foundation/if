@@ -48,14 +48,16 @@ export const manifestSchema = z.object({
         'global-config': z.record(z.string(), z.any()).optional(),
       })
     ),
-    exhaustPlugins: z.record(
-      z.string(),
-      z.object({
-        path: z.string(),
-        method: z.string(),
-        'global-config': z.record(z.string(), z.any()).optional(),
-      })
-    ),
+    exhaustPlugins: z
+      .record(
+        z.string(),
+        z.object({
+          path: z.string(),
+          method: z.string(),
+          'global-config': z.record(z.string(), z.any()).optional(),
+        })
+      )
+      .optional(),
   }),
   tree: z.record(z.string(), z.any()),
   'if-version': z.string().optional().nullable(),

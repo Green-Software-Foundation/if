@@ -60,9 +60,6 @@ const handModule = (method: string, path: string) => {
 };
 
 /**
- * @todo PB -- from this point on code should be re-written with generics. after that's done, need to assess readabilty cost vs benefit of less code duplication
-
-/**
  * Initializes a pipeline plugin with global config.
  */
 const initPipeLinePlugin = async (
@@ -120,12 +117,14 @@ export const initalizePipelinePlugins = async (
  * Registers all exhaust plugins
  */
 export const initalizeExhaustPlugins = async (
-  plugins: GlobalPlugins
+  plugins?: GlobalPlugins
 ): Promise<ExhaustPluginInterface[]> => {
   const exhaustPlugins: ExhaustPluginInterface[] = [];
 
-  for await (const pluginName of Object.keys(plugins)) {
-    exhaustPlugins.push(await initExhaustPlugin(plugins[pluginName]));
+  if (plugins) {
+    for await (const pluginName of Object.keys(plugins)) {
+      exhaustPlugins.push(await initExhaustPlugin(plugins[pluginName]));
+    }
   }
 
   return exhaustPlugins;
