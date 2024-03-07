@@ -27,11 +27,7 @@ const {
 
 export const TimeSync = (
   globalConfig: TimeNormalizerConfig
-): PluginInterface => {
-  const metadata = {
-    kind: 'execute',
-  };
-
+): PluginInterface<'execute'> => {
   /**
    * Take input array and return time-synchronized input array.
    */
@@ -440,5 +436,5 @@ export const TimeSync = (
     }, [] as PluginParams[]);
   };
 
-  return {metadata, execute};
+  return {metadata: {kind: 'execute'}, execute};
 };
