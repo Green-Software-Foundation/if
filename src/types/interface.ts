@@ -2,7 +2,7 @@ import {Context} from './manifest';
 
 export type PluginParams = Record<string, any>;
 
-type PluginType = 'execute' | 'groupby' | 'exhaust';
+export type PluginType = 'execute' | 'groupby' | 'exhaust';
 
 export interface PluginInterface<T extends PluginType> {
   execute: T extends 'execute'
