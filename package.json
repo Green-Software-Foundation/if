@@ -15,7 +15,6 @@
   "dependencies": {
     "@commitlint/cli": "^18.6.0",
     "@commitlint/config-conventional": "^18.6.0",
-    "@grnsft/if-unofficial-plugins": "^0.2.0",
     "js-yaml": "^4.1.0",
     "luxon": "^3.4.4",
     "ts-command-line-args": "^2.5.1",
