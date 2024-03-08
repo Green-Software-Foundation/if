@@ -15,7 +15,6 @@ export const logger = winston.createLogger({
     printf(
       (info: any) =>
         `[${info.timestamp}] ${info.level}: ${info.message}
-
 ${info.stack || ''}`
     )
   ),

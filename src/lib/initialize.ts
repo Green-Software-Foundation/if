@@ -52,7 +52,7 @@ const handModule = (method: string, path: string) => {
     }
 
     if (!path.includes(NATIVE_PLUGIN)) {
-      logger.warn(NOT_NATIVE_PLUGIN);
+      logger.warn(NOT_NATIVE_PLUGIN(path));
     }
   }
 

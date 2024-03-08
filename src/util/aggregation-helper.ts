@@ -30,7 +30,8 @@ const checkIfMetricsAreValid = (metrics: string[]) => {
  */
 export const aggregateInputsIntoOne = (
   inputs: PluginParams[],
-  metrics: string[]
+  metrics: string[],
+  isTemporal?: boolean
 ) => {
   checkIfMetricsAreValid(metrics);
   const extendedMetrics = [...metrics, ...AGGREGATION_ADDITIONAL_PARAMS];
@@ -43,24 +44,18 @@ export const aggregateInputsIntoOne = (
 
       /** Checks if metric is timestamp or duration, then adds to aggregated value. */
       if (AGGREGATION_ADDITIONAL_PARAMS.includes(metric)) {
-        /** Checks if the input for aggregation is temporal. */
-        const temporalAggregation =
-          index === 1 && input['timestamp'] === inputs[index - 1]['timestamp'];
-
-        if (temporalAggregation) {
+        if (isTemporal) {
           acc[metric] = input[metric];
         }
+      } else {
+        acc[metric] = acc[metric] ?? 0;
+        acc[metric] += parseFloat(input[metric]);
 
-        return acc;
-      }
-
-      acc[metric] = acc[metric] ?? 0;
-      acc[metric] += parseFloat(input[metric]);
-
-      /** Checks for the last iteration. */
-      if (index === inputs.length - 1) {
-        if (parameterize.getAggregationMethod(metric) === 'avg') {
-          acc[metric] /= inputs.length;
+        /** Checks for the last iteration. */
+        if (index === inputs.length - 1) {
+          if (parameterize.getAggregationMethod(metric) === 'avg') {
+            acc[metric] /= inputs.length;
+          }
         }
       }
     }
