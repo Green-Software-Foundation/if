@@ -34,6 +34,7 @@
     "gts": "^5.0.0",
     "husky": "^8.0.0",
     "jest": "^29.6.1",
+    "rimraf": "^5.0.5",
     "ts-jest": "^29.1.1"
   },
   "engines": {
@@ -58,7 +59,8 @@
     "url": "https://github.com/Green-Software-Foundation/if"
   },
   "scripts": {
-    "build": "rm -rf build && tsc --project tsconfig.build.json",
+    "build": "npm run clean && tsc --project tsconfig.build.json",
+    "clean": "rimraf build/",
     "coverage": "jest --verbose --coverage",
     "fix": "gts fix",
     "fix:package": "fixpack",
