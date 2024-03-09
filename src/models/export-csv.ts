@@ -60,13 +60,16 @@ export const ExportCSV = () => {
             columns.push(output.timestamp);
           }
 
+          const lastRow = matrix[matrix.length - 1];
+
           if (aggregationIsEnabled) {
-            matrix[matrix.length - 1].push(output[criteria]);
+            lastRow.push(output[criteria]);
           } else {
-            if (matrix.length <= 1) {
+            /** Handle without aggregation export strategy. */
+            if (matrix.length === 1 || lastRow.length === columns.length) {
               matrix.push([`${path}.${criteria}`, output[criteria]]);
             } else {
-              matrix[matrix.length - 1].push(output[criteria]);
+              lastRow.push(output[criteria]);
             }
           }
         });
