@@ -16,11 +16,9 @@ export const ExportCSV = () => {
     const output = paths.slice(0, paths.length - 1).join('');
     const criteria = paths[paths.length - 1];
 
-    console.log(paths);
-
     if (paths.length <= 1 || !criteria) {
       throw new CliInputError(
-        'Criteria is not found in output path. Please append it to --output <path>#<> .'
+        'CSV export criteria is not found in output path. Please append it after --output <path>#.'
       );
     }
 
