@@ -60,10 +60,14 @@ export const ExportCSV = () => {
             columns.push(output.timestamp);
           }
 
-          if (aggregationIsEnabled || matrix.length <= 1) {
-            matrix.push([`${path}.${criteria}`, output[criteria]]);
-          } else {
+          if (aggregationIsEnabled) {
             matrix[matrix.length - 1].push(output[criteria]);
+          } else {
+            if (matrix.length <= 1) {
+              matrix.push([`${path}.${criteria}`, output[criteria]]);
+            } else {
+              matrix[matrix.length - 1].push(output[criteria]);
+            }
           }
         });
       }
