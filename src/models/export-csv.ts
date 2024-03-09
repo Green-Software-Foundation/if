@@ -4,6 +4,7 @@ import {stringify} from 'csv-stringify/sync';
 import {ERRORS} from '../util/errors';
 
 import {Context} from '../types/manifest';
+import {PluginParams} from '../types/interface';
 
 const {CliInputError} = ERRORS;
 
@@ -31,10 +32,11 @@ export const ExportCSV = () => {
   /**
    * Grabs output and criteria from cli args, then call tree walker to collect csv data.
    */
-  const execute = async (tree: any, _context: Context, outputPath: string) => {
+  const execute = async (tree: any, context: Context, outputPath: string) => {
     const columns = ['Path'];
     const matrix = [columns];
     const {output, criteria} = parseOutputAndField(outputPath);
+    const aggregationIsEnabled = !!context.aggregation;
 
     /**
      * Walks through all tree branches and leaves, collecting the data
@@ -51,15 +53,18 @@ export const ExportCSV = () => {
 
       /** So it has outputs, whats then? checks if timestamp is not there, adds one. Then appends values to it. */
       if (node.outputs) {
-        node.outputs.forEach((output: any) => {
+        node.outputs.forEach((output: PluginParams) => {
           const {timestamp} = output;
 
           if (!columns.includes(timestamp)) {
             columns.push(output.timestamp);
           }
 
-          const lastRow = matrix[matrix.length - 1];
-          matrix[matrix.length - 1] = [...lastRow, output[criteria]];
+          if (aggregationIsEnabled || matrix.length <= 1) {
+            matrix.push([`${path}.${criteria}`, output[criteria]]);
+          } else {
+            matrix[matrix.length - 1].push(output[criteria]);
+          }
         });
       }
 
