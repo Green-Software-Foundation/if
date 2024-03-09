@@ -7,8 +7,8 @@ jest.mock('../../../util/logger', () => ({
     error: mockError,
   },
 }));
-
 import {andHandle} from '../../../util/helpers';
+import {mergeObjects} from '../../../util/helpers';
 import {ERRORS} from '../../../util/errors';
 
 const {WriteFileError} = ERRORS;
@@ -35,6 +35,118 @@ describe('util/helpers: ', () => {
       andHandle(new WriteFileError(message));
       expect(mockWarn).toHaveBeenCalledTimes(0);
       expect(mockError).toHaveBeenCalledTimes(1);
+    });
+  });
+});
+
+describe('util/helpers: ', () => {
+  describe('mergeObjects(): ', () => {
+    it('does not override input', () => {
+      expect.assertions(1);
+
+      const input = {
+        a: 1,
+        b: false,
+        c: 'testInput',
+      };
+
+      const defaults = {
+        c: 'testDefault',
+      };
+      const result = mergeObjects(defaults, input);
+
+      expect(result).toEqual(input);
+    });
+
+    it('adds only properties missing in input', () => {
+      expect.assertions(1);
+
+      const input = {
+        a: 1,
+        b: false,
+        c: 'testInput',
+      };
+
+      const defaults = {
+        b: true,
+        c: 'testDefault',
+        d: 25,
+      };
+
+      const result = mergeObjects(defaults, input);
+      const expectedResult = {
+        a: 1,
+        b: false,
+        c: 'testInput',
+        d: 25,
+      };
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    it('handles object values correctly', () => {
+      expect.assertions(1);
+
+      const input = {
+        a: 1,
+        b: false,
+        c: 'testInput',
+        d: {
+          e: 1,
+        },
+      };
+
+      const defaults = {
+        b: true,
+        c: 'testDefault1',
+        d: {
+          e: 25,
+          f: 'testDefault2',
+        },
+      };
+
+      const result = mergeObjects(defaults, input);
+      const expectedResult = {
+        a: 1,
+        b: false,
+        c: 'testInput',
+        d: {
+          e: 1,
+          f: 'testDefault2',
+        },
+      };
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    it('handles array values correctly', () => {
+      expect.assertions(1);
+
+      const input = {
+        a: 1,
+        b: false,
+        c: 'testInput1',
+        d: [1, 2, 3, 4],
+        e: 'testInput2',
+      };
+
+      const defaults = {
+        b: true,
+        c: 'testDefault1',
+        d: [5, 6, 7, 8, 9],
+        e: [1, 2, 3],
+      };
+
+      const result = mergeObjects(defaults, input);
+      const expectedResult = {
+        a: 1,
+        b: false,
+        c: 'testInput1',
+        d: [1, 2, 3, 4],
+        e: 'testInput2',
+      };
+
+      expect(result).toEqual(expectedResult);
     });
   });
 });
