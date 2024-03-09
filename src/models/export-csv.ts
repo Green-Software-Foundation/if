@@ -1,155 +1,91 @@
-import * as fs from 'fs/promises';
+import {writeFile} from 'fs/promises';
+import {stringify} from 'csv-stringify/sync';
 
 import {ERRORS} from '../util/errors';
 
-import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
 import {Context} from '../types/manifest';
 
-const {WriteFileError, CliInputError} = ERRORS;
+const {CliInputError} = ERRORS;
 
-export const ExportCsv = (): ExhaustPluginInterface => {
-  /**
-   * handle a tree leaf, where there are no child nodes, by adding it as key->value pair to the flat map
-   * and capturing key as a header
-   */
-  const handleLeafValue = (
-    value: any,
-    fullPath: string,
-    key: any,
-    flatMap: {[key: string]: any},
-    headers: Set<string>
-  ) => {
-    if (fullPath.includes('outputs')) {
-      headers.add(key);
-      flatMap[fullPath] = value;
-    }
-  };
+/**
+ * Extension to IF that outputs the tree in a CSV format.
+ */
+export const ExportCSV = () => {
+  const parseOutputAndField = (outputPath: string) => {
+    const paths = outputPath.split('#');
+    const output = paths.slice(0, paths.length - 1).join('');
+    const criteria = paths[paths.length - 1];
 
-  /**
-   * handle a tree node, recursively traverse the children and append their results to the flat map and captured headers
-   */
-  const handleNodeValue = (
-    value: any,
-    fullPath: string,
-    flatMap: Record<string, any>,
-    headers: Set<string>
-  ) => {
-    const [subFlatMap, subHeaders] = extractFlatMapAndHeaders(value, fullPath);
+    console.log(paths);
 
-    if (Object.keys(subFlatMap).length > 0) {
-      Object.entries(subFlatMap).forEach(([subKey, value]) => {
-        flatMap[subKey] = value;
-      });
-
-      subHeaders.forEach(subHeader => {
-        headers.add(subHeader);
-      });
-    }
-  };
-
-  /**
-   * Handles a key at the top level of the tree
-   */
-  const handleKey = (
-    value: any,
-    key: any,
-    prefix: string,
-    flatMap: Record<string, any>,
-    headers: Set<string>
-  ) => {
-    const fullPath = prefix ? `${prefix}.${key}` : key;
-
-    if (value !== null && typeof value === 'object') {
-      return handleNodeValue(value, fullPath, flatMap, headers);
-    }
-
-    return handleLeafValue(value, fullPath, key, flatMap, headers);
-  };
-
-  /**
-   * qrecursively extract a flat map and headers from the hierarcial tree
-   */
-  const extractFlatMapAndHeaders = (
-    tree: any,
-    prefix = ''
-  ): [Record<string, any>, Set<string>] => {
-    const headers: Set<string> = new Set();
-    const flatMap: Record<string, any> = [];
-
-    for (const key in tree) {
-      if (key in tree) {
-        handleKey(tree[key], key, prefix, flatMap, headers);
-      }
-    }
-
-    return [flatMap, headers];
-  };
-
-  /**
-   * extract the id of the key, that is removing the last token (which is the index).
-   * in this manner, multiple keys that identical besides their index share the same id.
-   */
-  const extractIdHelper = (key: string): string => {
-    const parts = key.split('.');
-    parts.pop();
-
-    return parts.join('.');
-  };
-
-  /**
-   * generate a CSV formatted string based on a flat key->value map, headers and ids
-   */
-  const getCsvString = (
-    map: {[key: string]: any},
-    headers: Set<string>,
-    ids: Set<string>
-  ): string => {
-    const csvRows: string[] = [];
-    csvRows.push(['id', ...headers].join(','));
-
-    ids.forEach(id => {
-      const rowData = [id];
-
-      headers.forEach(header => {
-        const value = map[`${id}.${header}`] ?? '';
-        rowData.push(value.toString());
-      });
-      csvRows.push(rowData.join(','));
-    });
-
-    return csvRows.join('\n');
-  };
-
-  /**
-   * write the given string content to a file at the provided path
-   */
-  const writeOutputFile = async (content: string, outputPath: string) => {
-    try {
-      await fs.writeFile(`${outputPath}.csv`, content);
-    } catch (error) {
-      throw new WriteFileError(
-        `Failed to write CSV to ${outputPath}: ${error}`
+    if (paths.length <= 1 || !criteria) {
+      throw new CliInputError(
+        'Criteria is not found in output path. Please append it to --output <path>#<> .'
       );
     }
+
+    return {
+      output,
+      criteria,
+    };
   };
 
   /**
-   * export the provided tree content to a CSV file, represented in a flat structure
+   * Grabs output and criteria from cli args, then call tree walker to collect csv data.
    */
   const execute = async (tree: any, _context: Context, outputPath: string) => {
-    if (!outputPath) {
-      throw new CliInputError('Output path is required.');
-    }
+    const columns = ['Path'];
+    const matrix = [columns];
+    const {output, criteria} = parseOutputAndField(outputPath);
 
-    const [extractredFlatMap, extractedHeaders] =
-      extractFlatMapAndHeaders(tree);
-    const ids = new Set(
-      Object.keys(extractredFlatMap).map(key => extractIdHelper(key))
-    );
-    const csvString = getCsvString(extractredFlatMap, extractedHeaders, ids);
+    /**
+     * Walks through all tree branches and leaves, collecting the data
+     */
+    const treeWalker = (node: any, criteria: string, path = 'tree') => {
+      /** Hmm aggregated, then checks if it's the first one. If so adds column, pushes the value. */
+      if (node.aggregated) {
+        if (path === 'tree') {
+          columns.push('Aggregated');
+        }
 
-    writeOutputFile(csvString, outputPath);
+        matrix.push([`${path}.${criteria}`, node.aggregated[criteria]]);
+      }
+
+      /** So it has outputs, whats then? checks if timestamp is not there, adds one. Then appends values to it. */
+      if (node.outputs) {
+        node.outputs.forEach((output: any) => {
+          const {timestamp} = output;
+
+          if (!columns.includes(timestamp)) {
+            columns.push(output.timestamp);
+          }
+
+          const lastRow = matrix[matrix.length - 1];
+          matrix[matrix.length - 1] = [...lastRow, output[criteria]];
+        });
+      }
+
+      /** Ohh children? then call every one and execute. */
+      if (node.children) {
+        for (const child in node.children) {
+          treeWalker(
+            node.children[child],
+            criteria,
+            `${path}.children.${child}`
+          );
+        }
+      }
+    };
+
+    treeWalker(tree, criteria);
+
+    await writeFile(`${output}.csv`, stringify(matrix, {columns}));
   };
 
-  return {execute};
+  return {
+    execute,
+    metadata: {
+      kind: 'exhaust',
+    },
+  };
 };
