@@ -24,6 +24,7 @@ describe('integration/sci-e', () => {
       method: 'SciE',
       path: '@grnsft/if-plugins',
     };
+    file.initialize.outputs = ['log'];
 
     file.tree.children.child.pipeline = [modelName];
     file.tree.children.child.config = {};
@@ -32,8 +33,10 @@ describe('integration/sci-e', () => {
 
     await saveYamlFileAs(file, absoluteManifestPath); // save yaml uses absolute path
     const response = (
-      await execPromise(`npm run if -- --manifest ${relativeManifestPath}`)
+      await execPromise(`npm run ie -- --manifest ${relativeManifestPath}`)
     ).stdout; // exec promise uses relative path
+
+    // console.log(response);
 
     const finalOutputParsed = getJSONFromText(response);
 
