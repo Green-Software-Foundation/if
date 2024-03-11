@@ -2,12 +2,14 @@ import pathLib = require('path');
 
 import {ERRORS} from '../util/errors';
 import {logger} from '../util/logger';
+import {memoizedLog} from '../util/log-memoize';
+import {pluginStorage} from '../util/plugin-storage';
 
 import {CONFIG, STRINGS} from '../config';
 
 import {PluginInterface} from '../types/interface';
-import {PluginsStorage} from '../types/initialize';
 import {GlobalPlugins, PluginOptions} from '../types/manifest';
+import {PluginStorageInterface} from '../types/plugin-storage';
 
 const {ModuleInitializationError, PluginCredentialError} = ERRORS;
 
@@ -52,7 +54,7 @@ const handModule = (method: string, path: string) => {
     }
 
     if (!path.includes(NATIVE_PLUGIN)) {
-      logger.warn(NOT_NATIVE_PLUGIN(path));
+      memoizedLog(logger.warn, NOT_NATIVE_PLUGIN(path));
     }
   }
 
@@ -85,11 +87,12 @@ const initPlugin = async (
  */
 export const initalize = async (
   plugins: GlobalPlugins
-): Promise<PluginsStorage> => {
-  const storage: PluginsStorage = {};
+): Promise<PluginStorageInterface> => {
+  const storage = pluginStorage();
 
   for await (const pluginName of Object.keys(plugins)) {
-    storage[pluginName] = await initPlugin(plugins[pluginName]);
+    const plugin = await initPlugin(plugins[pluginName]);
+    storage.set(pluginName, plugin);
   }
 
   return storage;

@@ -1,13 +1,13 @@
-import {PluginsStorage} from './initialize';
 import {PluginParams} from './interface';
 import {Context} from './manifest';
+import {PluginStorageInterface} from './plugin-storage';
 
 export type NodeConfig = {
   [key: string]: Record<string, any>;
 };
 
 export type Params = {
-  plugins: PluginsStorage;
+  plugins: PluginStorageInterface;
   context: Context;
   pipeline?: string[];
   config?: NodeConfig;
@@ -25,5 +25,5 @@ export type Node = {
 
 export type ComputeParams = {
   context: Context;
-  plugins: PluginsStorage;
+  plugins: PluginStorageInterface;
 };
