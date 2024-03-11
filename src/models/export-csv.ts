@@ -6,7 +6,7 @@ import {ERRORS} from '../util/errors';
 import {Context} from '../types/manifest';
 import {PluginParams} from '../types/interface';
 
-const {CliInputError, NotTimeSyncedOutputError} = ERRORS;
+const {CliInputError} = ERRORS;
 
 /**
  * Extension to IF that outputs the tree in a CSV format.
