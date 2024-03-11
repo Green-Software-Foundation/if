@@ -2,7 +2,7 @@ import {z} from 'zod';
 
 import {manifestSchema} from '../util/validations';
 
-type Manifest = z.infer<typeof manifestSchema>;
+export type Manifest = z.infer<typeof manifestSchema>;
 
 export type GlobalPlugins = Manifest['initialize']['plugins'];
 
