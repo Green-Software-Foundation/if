@@ -30,20 +30,6 @@ export const ExportCSV = () => {
   };
 
   /**
-   * Checks if TimeSync plugin is present in pipeline.
-   */
-  const checkIfTimeSynced = (context: Context) => {
-    const {plugins} = context.initialize;
-    const pluginMethods = Object.values(plugins).map(plugin => plugin.method);
-
-    if (!pluginMethods.includes('TimeSync')) {
-      throw new NotTimeSyncedOutputError(
-        'Input data is not time synchronized.'
-      );
-    }
-  };
-
-  /**
    * Grabs output and criteria from cli args, then call tree walker to collect csv data.
    */
   const execute = async (tree: any, context: Context, outputPath: string) => {
@@ -51,8 +37,6 @@ export const ExportCSV = () => {
     const matrix = [columns];
     const {output, criteria} = parseOutputAndField(outputPath);
     const aggregationIsEnabled = !!context.aggregation;
-
-    checkIfTimeSynced(context);
 
     /**
      * Walks through all tree branches and leaves, collecting the data
