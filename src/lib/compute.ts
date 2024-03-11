@@ -62,8 +62,7 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
   while (pipelineCopy.length !== 0) {
     const pluginName = pipelineCopy.shift() as string;
 
-    const plugin = params.plugins[pluginName];
-    const {execute, metadata} = plugin;
+    const {execute, metadata} = params.plugins.get(pluginName);
     const nodeConfig = config && config[pluginName];
 
     if (metadata.kind === 'execute') {
