@@ -2,12 +2,13 @@ import pathLib = require('path');
 
 import {ERRORS} from '../util/errors';
 import {logger} from '../util/logger';
+import {pluginStorage} from '../util/plugin-storage';
 
 import {CONFIG, STRINGS} from '../config';
 
 import {PluginInterface} from '../types/interface';
-import {PluginsStorage} from '../types/initialize';
 import {GlobalPlugins, PluginOptions} from '../types/manifest';
+import {PluginStorageInterface} from '../types/plugin-storage';
 
 const {ModuleInitializationError, PluginCredentialError} = ERRORS;
 
@@ -85,11 +86,12 @@ const initPlugin = async (
  */
 export const initalize = async (
   plugins: GlobalPlugins
-): Promise<PluginsStorage> => {
-  const storage: PluginsStorage = {};
+): Promise<PluginStorageInterface> => {
+  const storage = pluginStorage();
 
   for await (const pluginName of Object.keys(plugins)) {
-    storage[pluginName] = await initPlugin(plugins[pluginName]);
+    const plugin = await initPlugin(plugins[pluginName]);
+    storage.set(pluginName, plugin);
   }
 
   return storage;
