@@ -36,8 +36,6 @@ describe('integration/sci-e', () => {
       await execPromise(`npm run ie -- --manifest ${relativeManifestPath}`)
     ).stdout; // exec promise uses relative path
 
-    // console.log(response);
-
     const finalOutputParsed = getJSONFromText(response);
 
     // assertions
