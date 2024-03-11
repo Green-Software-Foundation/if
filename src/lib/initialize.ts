@@ -2,6 +2,7 @@ import pathLib = require('path');
 
 import {ERRORS} from '../util/errors';
 import {logger} from '../util/logger';
+import {memoizedLog} from '../util/log-memoize';
 import {pluginStorage} from '../util/plugin-storage';
 
 import {CONFIG, STRINGS} from '../config';
@@ -53,7 +54,7 @@ const handModule = (method: string, path: string) => {
     }
 
     if (!path.includes(NATIVE_PLUGIN)) {
-      logger.warn(NOT_NATIVE_PLUGIN(path));
+      memoizedLog(logger.warn, NOT_NATIVE_PLUGIN(path));
     }
   }
 
