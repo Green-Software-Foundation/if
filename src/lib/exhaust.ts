@@ -1,7 +1,8 @@
 /**
  * @todo This is temporary solution, will be refactored to support dynamic plugins.
  */
-import {ExportCsv} from '../models/export-csv';
+import {ExportCSV} from '../models/export-csv';
+import {ExportCSVRaw} from '../models/export-csv-raw';
 import {ExportLog} from '../models/export-log';
 import {ExportYaml} from '../models/export-yaml';
 
@@ -29,7 +30,9 @@ const initializeExhaustPlugin = (name: string): ExhaustPluginInterface => {
     case 'yaml':
       return ExportYaml();
     case 'csv':
-      return ExportCsv();
+      return ExportCSV();
+    case 'csv-raw':
+      return ExportCSVRaw();
     case 'log':
       return ExportLog();
     default:

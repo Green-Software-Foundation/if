@@ -8,7 +8,7 @@ const CUSTOM_ERRORS = [
   'InvalidAggregationParams',
   'InvalidGrouping',
   'PluginCredentialError',
-  'PluginInterfaceError',
+  'PluginInitalizationError',
   'WriteFileError',
 ] as const;
 

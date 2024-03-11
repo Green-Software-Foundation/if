@@ -7,6 +7,9 @@ import {Context} from '../types/manifest';
 const {CliInputError} = ERRORS;
 
 export const ExportYaml = () => {
+  /** Takes string before hashtag. */
+  const stripHashtag = (path: string) => path.split('#')[0];
+
   /**
    * Saves output file in YAML format.
    */
@@ -19,8 +22,9 @@ export const ExportYaml = () => {
       ...context,
       tree,
     };
+    const path = stripHashtag(outputPath);
 
-    await saveYamlFileAs(outputFile, `${outputPath}.yaml`);
+    await saveYamlFileAs(outputFile, `${path}.yaml`);
   };
 
   return {execute};
