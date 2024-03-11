@@ -2,7 +2,7 @@ import * as fs from 'fs/promises';
 
 import {ERRORS} from '../util/errors';
 
-import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
+import {ExhaustPluginInterface} from '../types/interface';
 import {Context} from '../types/manifest';
 
 const {WriteFileError, CliInputError} = ERRORS;

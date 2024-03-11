@@ -5,7 +5,7 @@ import {logger} from '../util/logger';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {PluginInterface} from '../types/interface';
+import {ExhaustPluginInterface, PluginInterface} from '../types/interface';
 import {PluginsStorage} from '../types/initialize';
 import {GlobalPlugins, PluginOptions} from '../types/manifest';
 
@@ -60,6 +60,24 @@ const handModule = (method: string, path: string) => {
 };
 
 /**
+ * Initializes a pipeline plugin with global config.
+ */
+const initPipeLinePlugin = async (
+  initPluginParams: PluginOptions
+): Promise<PluginInterface> => {
+  return initPlugin(initPluginParams);
+};
+
+/**
+ * Initializes exhaust plugin with global config.
+ */
+const initExhaustPlugin = async (
+  initPluginParams: PluginOptions
+): Promise<ExhaustPluginInterface> => {
+  return initPlugin(initPluginParams);
+};
+
+/**
  * Initializes plugin with global config.
  */
 const initPlugin = async (
@@ -83,14 +101,31 @@ const initPlugin = async (
 /**
  * Registers all plugins from `manifest`.`initalize` property.
  */
-export const initalize = async (
+export const initalizePipelinePlugins = async (
   plugins: GlobalPlugins
 ): Promise<PluginsStorage> => {
   const storage: PluginsStorage = {};
 
   for await (const pluginName of Object.keys(plugins)) {
-    storage[pluginName] = await initPlugin(plugins[pluginName]);
+    storage[pluginName] = await initPipeLinePlugin(plugins[pluginName]);
   }
 
   return storage;
+};
+
+/**
+ * Registers all exhaust plugins
+ */
+export const initalizeExhaustPlugins = async (
+  plugins?: GlobalPlugins
+): Promise<ExhaustPluginInterface[]> => {
+  const exhaustPlugins: ExhaustPluginInterface[] = [];
+
+  if (plugins) {
+    for await (const pluginName of Object.keys(plugins)) {
+      exhaustPlugins.push(await initExhaustPlugin(plugins[pluginName]));
+    }
+  }
+
+  return exhaustPlugins;
 };
