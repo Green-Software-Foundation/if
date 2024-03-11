@@ -67,7 +67,7 @@ export const ExportCSVRaw = (): ExhaustPluginInterface => {
   };
 
   /**
-   * qrecursively extract a flat map and headers from the hierarcial tree
+   * Recursively extract a flat map and headers from the hierarcial tree.
    */
   const extractFlatMapAndHeaders = (
     tree: any,
