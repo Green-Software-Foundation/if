@@ -8,8 +8,8 @@ const CUSTOM_ERRORS = [
   'InvalidAggregationParams',
   'InvalidGrouping',
   'PluginCredentialError',
+  'PluginInitalizationError',
   'WriteFileError',
-  'NotTimeSyncedOutputError',
 ] as const;
 
 type CustomErrors = {
