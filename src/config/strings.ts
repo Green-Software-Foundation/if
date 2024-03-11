@@ -45,4 +45,6 @@ https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=fee
     `Rejecting overriding of canonical parameter: ${param.name}.`,
   INVALID_EXHAUST_PLUGIN: (pluginName: string) =>
     `Invalid exhaust plugin: ${pluginName}.`,
+  UNKNOWN_PARAM: (name: string) =>
+    `Unknown parameter: ${name}. Using 'sum' aggregation method.`,
 };

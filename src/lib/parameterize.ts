@@ -3,8 +3,9 @@ import {logger} from '../util/logger';
 import {STRINGS, PARAMETERS} from '../config';
 
 import {ManifestParameter} from '../types/manifest';
+import {memoizedLog} from '../util/log-memoize';
 
-const {REJECTING_OVERRIDE} = STRINGS;
+const {REJECTING_OVERRIDE, UNKNOWN_PARAM} = STRINGS;
 
 /**
  * Parameters manager. Provides get aggregation method and combine functionality.
@@ -19,6 +20,8 @@ const Parametrize = () => {
     if (`${unitName}` in parametersStorage) {
       return PARAMETERS[unitName as keyof typeof PARAMETERS].aggregation;
     }
+
+    memoizedLog(logger.warn, UNKNOWN_PARAM(unitName));
 
     return 'sum';
   };
