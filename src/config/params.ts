@@ -99,9 +99,19 @@ export const PARAMETERS: Parameters = {
     unit: 'None',
     aggregation: 'none',
   },
+  'cloud/region': {
+    description: 'region cloud instance runs in',
+    unit: 'None',
+    aggregation: 'none',
+  },
   'cloud/vendor': {
     description:
       'Name of the cloud service provider in the ccf model. Can be aws, gcp or azure',
+    unit: 'None',
+    aggregation: 'none',
+  },
+  name: {
+    description: 'arbitrary name parameter.',
     unit: 'None',
     aggregation: 'none',
   },
