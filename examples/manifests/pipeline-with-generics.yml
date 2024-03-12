@@ -70,7 +70,7 @@ tree:
         functional-unit-time: "1 min"
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
-          instance-type: A1 
+          cloud/instance-type: A1 
           region: uk-west
           duration: 1
           cpu/utilization: 50
@@ -79,20 +79,20 @@ tree:
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
-          instance-type: A1 
+          cloud/instance-type: A1 
           region: uk-west
           network/energy: 10
           energy: 5
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
-          instance-type: A1 
+          cloud/instance-type: A1 
           region: uk-west
           network/energy: 10
           energy: 5
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
-          instance-type: A1 
+          cloud/instance-type: A1 
           region: uk-west
           cpu/utilization: 15
           network/energy: 10
@@ -120,28 +120,28 @@ tree:
         - timestamp: "2023-12-12T00:00:00.000Z"
           duration: 1
           cpu/utilization: 30
-          instance-type: A1 
+          cloud/instance-type: A1 
           region: uk-west
           network/energy: 10
           energy: 5
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 28
-          instance-type: A1 
+          cloud/instance-type: A1 
           region: uk-west
           network/energy: 10
           energy: 5
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 40
-          instance-type: A1 
+          cloud/instance-type: A1 
           region: uk-west
           network/energy: 10
           energy: 5
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cpu/utilization: 33
-          instance-type: A1 
+          cloud/instance-type: A1 
           region: uk-west
           network/energy: 10
           energy: 5

@@ -50,7 +50,7 @@ tree:
     child-0:
       defaults:
         cpu/thermal-design-power: 100
-        grid/carbon-intensity: 800
+       grid/carbon-intensity: 800
         device/emissions-embodied: 1533.120 # gCO2eq
         time-reserved: 3600 # 1hr in seconds
         device/expected-lifespan: 94608000 # 3 years in seconds
@@ -65,7 +65,7 @@ tree:
         - sci
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
-          instance-type: A1
+          cloud/instance-type: A1
           region: uk-west
           duration: 1
           cpu/utilization: 50
@@ -73,18 +73,18 @@ tree:
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
-          instance-type: A1
+          cloud/instance-type: A1
           region: uk-west
           network/energy: 0.000001
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
-          instance-type: A1
+          cloud/instance-type: A1
           region: uk-west
           network/energy: 0.000001
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
-          instance-type: A1
+          cloud/instance-type: A1
           region: uk-west
           cpu/utilization: 15
           network/energy: 0.000001
@@ -106,7 +106,7 @@ tree:
         - sci
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
-          instance-type: A1
+          cloud/instance-type: A1
           region: uk-west
           duration: 1
           cpu/utilization: 50
@@ -114,18 +114,18 @@ tree:
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
-          instance-type: A1
+          cloud/instance-type: A1
           region: uk-west
           network/energy: 0.000001
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
-          instance-type: A1
+          cloud/instance-type: A1
           region: uk-west
           network/energy: 0.000001
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
-          instance-type: A1
+          cloud/instance-type: A1
           region: uk-west
           cpu/utilization: 15
           network/energy: 0.000001
@@ -149,7 +149,7 @@ tree:
             - sci
           inputs:
             - timestamp: "2023-12-12T00:00:00.000Z"
-              instance-type: A1
+              cloud/instance-type: A1
               region: uk-west
               duration: 1
               cpu/utilization: 50
@@ -157,18 +157,18 @@ tree:
             - timestamp: "2023-12-12T00:00:01.000Z"
               duration: 5
               cpu/utilization: 20
-              instance-type: A1
+              cloud/instance-type: A1
               region: uk-west
               network/energy: 0.000001
             - timestamp: "2023-12-12T00:00:06.000Z"
               duration: 7
               cpu/utilization: 15
-              instance-type: A1
+              cloud/instance-type: A1
               region: uk-west
               network/energy: 0.000001
             - timestamp: "2023-12-12T00:00:13.000Z"
               duration: 30
-              instance-type: A1
+              cloud/instance-type: A1
               region: uk-west
               cpu/utilization: 15
               network/energy: 0.000001
@@ -190,7 +190,7 @@ tree:
             - sci
           inputs:
             - timestamp: "2023-12-12T00:00:00.000Z"
-              instance-type: A1
+              cloud/instance-type: A1
               region: uk-west
               duration: 1
               cpu/utilization: 50
@@ -198,18 +198,18 @@ tree:
             - timestamp: "2023-12-12T00:00:01.000Z"
               duration: 5
               cpu/utilization: 20
-              instance-type: A1
+              cloud/instance-type: A1
               region: uk-west
               network/energy: 0.000001
             - timestamp: "2023-12-12T00:00:06.000Z"
               duration: 7
               cpu/utilization: 15
-              instance-type: A1
+              cloud/instance-type: A1
               region: uk-west
               network/energy: 0.000001
             - timestamp: "2023-12-12T00:00:13.000Z"
               duration: 30
-              instance-type: A1
+              cloud/instance-type: A1
               region: uk-west
               cpu/utilization: 15
               network/energy: 0.000001
