@@ -158,7 +158,7 @@ There have also been some changes to the structure of manifest files. Some of th
             group-by:
               group:
                 - region
-                - instance-type
+                - cloud/instance-type
     ```
 
 - **Defaults**

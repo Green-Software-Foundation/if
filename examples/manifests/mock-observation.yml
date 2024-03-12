@@ -12,8 +12,8 @@ initialize:
         timestamp-to: 2023-07-06T00:10
         duration: 60
         components:
-          - instance-type: A1
-          - instance-type: B1
+          - cloud/instance-type: A1
+          - cloud/instance-type: B1
         generators:
           common:
             region: uk-west
