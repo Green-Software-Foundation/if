@@ -2,7 +2,7 @@ import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
-import {PluginParams} from '../types/interface';
+import {GroupByPlugin, PluginParams} from '../types/interface';
 import {GroupByConfig} from '../types/group-by';
 
 const {InvalidGrouping} = ERRORS;
@@ -12,7 +12,7 @@ const {INVALID_GROUP_BY} = STRINGS;
 /**
  * Plugin for inputs grouping.
  */
-export const GroupBy = () => {
+export const GroupBy = (): GroupByPlugin => {
   const metadata = {
     kind: 'groupby',
   };
