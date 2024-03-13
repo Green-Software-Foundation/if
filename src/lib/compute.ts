@@ -1,7 +1,8 @@
 import {mergeObjects} from '../util/helpers';
 
 import {ComputeParams, Node, Params} from '../types/compute';
-import {PluginParams} from '../types/interface';
+import {PluginParams, isExecute, isGroupBy} from '../types/interface';
+import {GroupByConfig} from '../types/group-by';
 
 /**
  * Traverses all child nodes based on children grouping.
@@ -61,19 +62,19 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
 
   while (pipelineCopy.length !== 0) {
     const pluginName = pipelineCopy.shift() as string;
-
-    const {execute, metadata} = params.plugins.get(pluginName);
+    const plugin = params.plugins.get(pluginName);
     const nodeConfig = config && config[pluginName];
 
-    if (metadata.kind === 'execute') {
-      storage = await execute(storage, nodeConfig);
+    if (isExecute(plugin)) {
+      storage = await plugin.execute(storage, nodeConfig);
       node.outputs = storage;
     }
 
-    if (metadata.kind === 'groupby') {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      node.children = await execute(storage, nodeConfig);
+    if (isGroupBy(plugin)) {
+      node.children = await plugin.execute(
+        storage,
+        nodeConfig as GroupByConfig
+      );
       delete node.inputs;
       delete node.outputs;
 
