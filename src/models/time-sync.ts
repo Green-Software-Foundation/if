@@ -8,13 +8,12 @@ import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
-import {PluginParams} from '../types/interface';
+import {ExecutePlugin, PluginParams} from '../types/interface';
 import {
   PaddingReceipt,
   TimeNormalizerConfig,
   TimeParams,
 } from '../types/time-sync';
-import {PluginInterface} from '../types/interface';
 import {validate} from '../util/validations';
 
 const {InputValidationError} = ERRORS;
@@ -25,9 +24,7 @@ const {
   AVOIDING_PADDING_BY_EDGES,
 } = STRINGS;
 
-export const TimeSync = (
-  globalConfig: TimeNormalizerConfig
-): PluginInterface => {
+export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
   };
