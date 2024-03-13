@@ -155,4 +155,50 @@ export const PARAMETERS: Parameters = {
     unit: 'count',
     aggregation: 'none',
   },
+  'vcpus-allocated': {
+    description: 'number of vcpus allocated to particular resource',
+    unit: 'count',
+    aggregation: 'none',
+  },
+  'vcpus-total': {
+    description: 'total number of vcpus available on a particular resource',
+    unit: 'count',
+    aggregation: 'none',
+  },
+  'memory-available': {
+    description: 'total amount of memory available on a particular resource',
+    unit: 'GB',
+    aggregation: 'none',
+  },
+  'physical-processor': {
+    description:
+      'name of the physical processor being used in a specific instance type',
+    unit: 'None',
+    aggregation: 'none',
+  },
+  'cloud/region-cfe': {
+    description: 'cloud region name in cfe format',
+    unit: 'None',
+    aggregation: 'none',
+  },
+  'cloud/region-em-zone-id': {
+    description: 'cloud region name in electricity maps format',
+    unit: 'None',
+    aggregation: 'none',
+  },
+  'cloud/region-wt-id': {
+    description: 'cloud region name in watt-time format',
+    unit: 'None',
+    aggregation: 'none',
+  },
+  'cloud/region-location': {
+    description: 'cloud region name in our IF format',
+    unit: 'None',
+    aggregation: 'none',
+  },
+  'cloud/region-geolocation': {
+    description: 'location expressed as decimal coordinates (lat/lon)',
+    unit: 'decimal degrees',
+    aggregation: 'none',
+  },
 };
