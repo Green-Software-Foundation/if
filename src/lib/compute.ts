@@ -27,7 +27,7 @@ const mergeDefaults = (
     return response;
   }
 
-  return [];
+  return defaults ? [defaults] : [];
 };
 
 /**
