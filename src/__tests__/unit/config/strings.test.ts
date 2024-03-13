@@ -13,7 +13,7 @@ describe('config/strings: ', () => {
     it('successfully appends given param to message.', () => {
       const param = 'mock-param';
 
-      const expectedMessage = `Provided module path: '${param}' is invalid or not found.`;
+      const expectedMessage = `Provided module: '${param}' is invalid or not found.`;
 
       expect(INVALID_MODULE_PATH(param)).toEqual(expectedMessage);
     });

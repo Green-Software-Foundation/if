@@ -26,6 +26,7 @@ const importModuleFrom = async (path: string) => {
 
     return module;
   } catch (error) {
+    logger.error(error);
     throw new ModuleInitializationError(INVALID_MODULE_PATH(path));
   }
 };
