@@ -31,15 +31,12 @@ module.exports = {
         '.github',
         '.husky',
         'scripts',
-        'models',
+        'builtins',
         'plugins',
         'integration',
-        'doc'
-      ]
+        'doc',
+      ],
     ],
-    'scope-empty': [
-      2, 
-      'never'
-    ]
+    'scope-empty': [2, 'never'],
   },
 };

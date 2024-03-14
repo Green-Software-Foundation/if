@@ -47,7 +47,7 @@ const importAndVerifyModule = async (method: string, path: string) => {
  */
 const handModule = (method: string, path: string) => {
   if (path === 'builtin') {
-    path = pathLib.normalize(`${__dirname}/../models`);
+    path = pathLib.normalize(`${__dirname}/../builtins`);
   } else {
     if (path?.startsWith(GITHUB_PATH)) {
       const parts = path.split('/');

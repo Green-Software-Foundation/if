@@ -1,4 +1,4 @@
-import {TimeSync} from '../../../models/time-sync';
+import {TimeSync} from '../../../builtins/time-sync';
 import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';

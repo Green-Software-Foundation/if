@@ -1,10 +1,10 @@
 /**
  * @todo This is temporary solution, will be refactored to support dynamic plugins.
  */
-import {ExportCSV} from '../models/export-csv';
-import {ExportCSVRaw} from '../models/export-csv-raw';
-import {ExportLog} from '../models/export-log';
-import {ExportYaml} from '../models/export-yaml';
+import {ExportCSV} from '../builtins/export-csv';
+import {ExportCSVRaw} from '../builtins/export-csv-raw';
+import {ExportLog} from '../builtins/export-log';
+import {ExportYaml} from '../builtins/export-yaml';
 
 import {ERRORS} from '../util/errors';
 
