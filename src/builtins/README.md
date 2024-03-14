@@ -129,7 +129,7 @@ Note that when `error-on-padding` is `true` no gap-filling is performed and the 
 
 ##### Trimming and padding
 
-To ensure parity across all the components in a tree, we need to synchronize the start and end times for all time series. To do this, we pass the `time-sync` plugin plugin some global config: `startTime`, `endTime` and `interval`. The `startTime` is the timestamp where *all* input arrays across the entire tree should begin, and `endTime` is the timestamp where *all* input arrays across the entire tree should end. `interval` is the time resolution we ultimately want to resample to.
+To ensure parity across all the components in a tree, we need to synchronize the start and end times for all time series. To do this, we pass the `time-sync` plugin some global config: `startTime`, `endTime` and `interval`. The `startTime` is the timestamp where *all* input arrays across the entire tree should begin, and `endTime` is the timestamp where *all* input arrays across the entire tree should end. `interval` is the time resolution we ultimately want to resample to.
 
 To synchronize the time series start and end we check the first element of `inputs` for each node in the tree and determine whether it is earlier, later or equal to the global start time. If it is equal then no action is required. If the `input` start time is earlier than the global start time, we simply discard entries from the front of the array until the start times are aligned. If the `input` start time is after the global start time, then we pad with our "zero-observation" object - one for every second separating the global start time from the `input` start time. The same process is repeated for the end time - we either trim away `input` data or pad it out with "zero-observation" objects.
 
@@ -165,7 +165,7 @@ Note that when `error-on-padding` is `true` no padding is performed and the plug
 
 ##### Resampling rules
 
-Now we have synchronized, continuous, high resolution time series data, we can resample. To achieve this, we use `interval`, which sets the global temporal resolution for the final, processed time series. `intervalk` is expressed in units of seconds, which means we can simply batch `observations` together in groups of size `interval`. For each value in each object we either sum, average or copy the values into one single summary object representing each time bucket of size `interval` depending on their `aggregation-method` defined in `units.yaml`. The returned array is the final, synchronized time series at the desired temporal resolution.
+Now we have synchronized, continuous, high-resolution time series data, we can resample. To achieve this, we use `interval`, which sets the global temporal resolution for the final, processed time series. `interval` is expressed in units of seconds, which means we can simply batch `observations` together in groups of size `interval`. For each value in each object we either sum, average or copy the values into one single summary object representing each time bucket of size `interval` depending on their `aggregation-method` defined in `units.yaml`. The returned array is the final, synchronized time series at the desired temporal resolution.
 
 #### Assumptions and limitations
 
