@@ -31,7 +31,7 @@ initialize:
       path: "builtin"
       method: GroupBy
     cloud-metadata:
-      method: CloudInstanceMetadata
+      method: CloudMetadata
       path: "@grnsft/if-plugins"
     operational-carbon:
       path: "@grnsft/if-plugins"

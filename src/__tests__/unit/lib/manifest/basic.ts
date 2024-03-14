@@ -34,12 +34,12 @@ export const manifest: Manifest = {
           {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
-            'cpu-util': 18.392,
+            'cpu/utilization': 18.392,
           },
           {
             timestamp: '2023-08-06T00:00',
             duration: 3600,
-            'cpu-util': 16,
+            'cpu/utilization': 16,
           },
         ],
       },

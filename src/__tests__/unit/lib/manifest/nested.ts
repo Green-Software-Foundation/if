@@ -39,7 +39,7 @@ export const manifestNested: Manifest = {
                   {
                     timestamp: '2023-07-06T00:00',
                     duration: 10,
-                    'cpu-util': 50,
+                    'cpu/utilization': 50,
                     'energy-network': 0.000811,
                     carbon: 10,
                   },
@@ -59,7 +59,7 @@ export const manifestNested: Manifest = {
                       {
                         timestamp: '2023-07-06T00:00',
                         duration: 10,
-                        'cpu-util': 50,
+                        'cpu/utilization': 50,
                         'energy-network': 0.000811,
                         carbon: 10,
                       },
@@ -114,7 +114,7 @@ export const manifestNestedNoConfig: Manifest = {
                   {
                     timestamp: '2023-07-06T00:00',
                     duration: 10,
-                    'cpu-util': 50,
+                    'cpu/utilization': 50,
                     'energy-network': 0.000811,
                     carbon: 10,
                   },
@@ -129,7 +129,7 @@ export const manifestNestedNoConfig: Manifest = {
                       {
                         timestamp: '2023-07-06T00:00',
                         duration: 10,
-                        'cpu-util': 50,
+                        'cpu/utilization': 50,
                         'energy-network': 0.000811,
                         carbon: 10,
                       },

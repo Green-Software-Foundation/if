@@ -31,10 +31,10 @@ export const readFile = async (_filePath: string, _format: string) => {
         inputs:
           - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
             duration: 3600 # Secs
-            cpu-util: 18.392
+            cpu/utilization: 18.392
           - timestamp: 2023-08-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
             duration: 3600 # Secs
-            cpu-util: 16`;
+            cpu/utilization: 16`;
 };
 
 export const mkdir = (dirPath: string, _object: any) => dirPath;
