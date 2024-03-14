@@ -23,7 +23,7 @@ Impact Framework is an alpha release from the Green Software Foundation and is r
 https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+
 `,
   INVALID_MODULE_PATH: (path: string) =>
-    `Provided module path: '${path}' is invalid or not found.`,
+    `Provided module: '${path}' is invalid or not found.`,
   INVALID_TIME_NORMALIZATION: 'Start time or end time is missing.',
   UNEXPECTED_TIME_CONFIG:
     'Unexpected node-level config provided for time-sync plugin.',
