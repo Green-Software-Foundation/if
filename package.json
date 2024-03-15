@@ -1,7 +1,7 @@
 {
   "name": "@grnsft/if",
   "description": "Impact Framework",
-  "version": "v0.2.1",
+  "version": "v0.3.0",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
@@ -62,7 +62,7 @@
   "scripts": {
     "build": "npm run clean && tsc --project tsconfig.build.json",
     "clean": "rimraf build/",
-    "coverage": "jest --verbose --coverage",
+    "coverage": "jest --verbose --coverage --testPathPattern=src/__tests__/unit",
     "fix": "gts fix",
     "fix:package": "fixpack",
     "ie": "npx ts-node src/index.ts",
