@@ -13,6 +13,10 @@ const {CliInputError} = ERRORS;
  */
 export const ExportCSV = () => {
   const parseOutputAndField = (outputPath: string) => {
+    if (!outputPath) {
+      throw new CliInputError('Output path is required.');
+    }
+
     const paths = outputPath.split('#');
     const output = paths.slice(0, paths.length - 1).join('');
     const criteria = paths[paths.length - 1];
