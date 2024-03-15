@@ -1,0 +1,20 @@
+name: boavizta cloud demo
+description: calls boavizta api
+tags:
+initialize:
+  plugins:
+    "boavizta-cloud":
+      method: BoaviztaCloudOutput
+      path: "@grnsft/if-unofficial-plugins"
+tree:
+  children:
+    child:
+      pipeline:
+        - boavizta-cloud
+      defaults:
+        instance-type: r6g.medium
+        provider: aws
+      inputs:
+        - timestamp: "2021-01-01T00:00:00Z"
+          duration: 15 # Secs
+          cpu/utilization: 34

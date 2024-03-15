@@ -50,7 +50,7 @@ tree:
     child-0:
       defaults:
         cpu/thermal-design-power: 100
-       grid/carbon-intensity: 800
+        grid/carbon-intensity: 800
         device/emissions-embodied: 1533.120 # gCO2eq
         time-reserved: 3600 # 1hr in seconds
         device/expected-lifespan: 94608000 # 3 years in seconds
