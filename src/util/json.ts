@@ -1,4 +1,4 @@
-import fs from 'node:fs/promises';
+import * as fs from 'fs/promises';
 
 /**
  * Reads and parses json file.

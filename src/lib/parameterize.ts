@@ -11,7 +11,7 @@ const {REJECTING_OVERRIDE, UNKNOWN_PARAM} = STRINGS;
  * Parameters manager. Provides get aggregation method and combine functionality.
  */
 const Parametrize = () => {
-  let parametersStorage = {};
+  let parametersStorage = PARAMETERS;
 
   /**
    * Returns aggregation method for given `unitName`. If doesn't exist then returns value `sum`.

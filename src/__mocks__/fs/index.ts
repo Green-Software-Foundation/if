@@ -1,9 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {expect} from '@jest/globals';
-
 import * as YAML from 'js-yaml';
 
-export const readFile = async (_filePath: string, _format: string) => {
+export const readFile = async (filePath: string, _format: string) => {
+  /** mock for util/json */
+  if (filePath.includes('json-reject')) {
+    return Promise.reject(new Error('rejected'));
+  }
+  if (filePath.includes('json')) {
+    return JSON.stringify(filePath);
+  }
+
+  /** mock for util/yaml */
   return `
   name: gsf-demo
   description: 
@@ -14,12 +20,8 @@ export const readFile = async (_filePath: string, _format: string) => {
     category: cloud
   initialize:
     models:
-      - name: boavizta-cpu
-        kind: builtin
-        config:
-          allocation: LINEAR
-          verbose: true
-  graph:
+      boavizta-cpu:
+  tree:
     children:
       front-end:
         pipeline: 
@@ -29,10 +31,10 @@ export const readFile = async (_filePath: string, _format: string) => {
             core-units: 24
             processor: Intel® Core™ i7-1185G7
         inputs:
-          - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+          - timestamp: 2023-07-06T00:00
             duration: 3600 # Secs
             cpu/utilization: 18.392
-          - timestamp: 2023-08-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+          - timestamp: 2023-08-06T00:00
             duration: 3600 # Secs
             cpu/utilization: 16`;
 };

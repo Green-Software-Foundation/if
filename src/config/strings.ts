@@ -46,4 +46,6 @@ https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=fee
     `Invalid exhaust plugin: ${pluginName}.`,
   UNKNOWN_PARAM: (name: string) =>
     `Unknown parameter: ${name}. Using 'sum' aggregation method.`,
+  NOT_INITALIZED_PLUGIN: (name: string) =>
+    `Not initalized plugin: ${name}. Check if ${name} is in 'manifest.initalize.plugins'.`,
 };

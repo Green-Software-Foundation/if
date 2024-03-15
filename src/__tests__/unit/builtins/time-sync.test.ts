@@ -45,12 +45,12 @@ describe('execute(): ', () => {
         {
           timestamp: '2023-12-12T00:00:00.000Z',
           duration: 10,
-          'cpu/utilizaition': 10,
+          'cpu/utilization': 10,
         },
         {
           timestamp: '2023-12-12T00:00:10.000Z',
           duration: 30,
-          'cpu/utilizaition': 20,
+          'cpu/utilization': 20,
         },
       ]);
     } catch (error) {
@@ -80,12 +80,12 @@ describe('execute(): ', () => {
         {
           timestamp: '2023-12-12T00:00:00.000Z',
           duration: 10,
-          'cpu/utilizaition': 10,
+          'cpu/utilization': 10,
         },
         {
           timestamp: '2023-12-12T00:00:10.000Z',
           duration: 30,
-          'cpu/utilizaition': 20,
+          'cpu/utilization': 20,
         },
       ]);
     } catch (error) {
@@ -134,7 +134,7 @@ describe('execute(): ', () => {
         {
           timestamp: '2023-12-12T00:00:00.000Z',
           duration: 10,
-          'cpu/utilizaition': 10,
+          'cpu/utilization': 10,
         },
       ]);
     } catch (error) {
@@ -163,12 +163,12 @@ describe('execute(): ', () => {
         {
           timestamp: '2023-12-12T00:00:00.000Z',
           duration: 15,
-          'cpu/utilizaition': 10,
+          'cpu/utilization': 10,
         },
         {
           timestamp: '2023-12-12T00:00:10.000Z',
           duration: 30,
-          'cpu/utilizaition': 20,
+          'cpu/utilization': 20,
         },
       ]);
     } catch (error) {
@@ -193,12 +193,12 @@ describe('execute(): ', () => {
         {
           timestamp: '2023-12-12T00:00:00.000Z',
           duration: 15,
-          'cpu/utilizaition': 10,
+          'cpu/utilization': 10,
         },
         {
           timestamp: '2023-12-12T00:00:10.000Z',
           duration: 30,
-          'cpu/utilizaition': 20,
+          'cpu/utilization': 20,
         },
       ]);
     } catch (error) {
@@ -223,12 +223,12 @@ describe('execute(): ', () => {
         {
           timestamp: '2023-12-12T00:00:00.000Z',
           duration: 15,
-          'cpu/utilizaition': 10,
+          'cpu/utilization': 10,
         },
         {
           timestamp: '2023-12-12T00:00:10.000Z',
           duration: 30,
-          'cpu/utilizaition': 20,
+          'cpu/utilization': 20,
         },
       ]);
     } catch (error) {
@@ -254,12 +254,12 @@ describe('execute(): ', () => {
       {
         timestamp: '2023-12-12T00:00:00.000Z',
         duration: 1,
-        'cpu/utilizaition': 10,
+        'cpu/utilization': 10,
       },
       {
         timestamp: new Date('2023-12-12T00:00:01.000Z'),
         duration: 1,
-        'cpu/utilizaition': 10,
+        'cpu/utilization': 10,
       },
     ]);
 
@@ -267,12 +267,12 @@ describe('execute(): ', () => {
       {
         timestamp: '2023-12-12T00:00:00.000Z',
         duration: 1,
-        'cpu/utilizaition': 10,
+        'cpu/utilization': 10,
       },
       {
         timestamp: '2023-12-12T00:00:01.000Z',
         duration: 1,
-        'cpu/utilizaition': 10,
+        'cpu/utilization': 10,
       },
     ];
 
@@ -367,26 +367,26 @@ describe('execute(): ', () => {
       {
         timestamp: '2023-12-12T00:00:00.000Z',
         duration: 3,
-        'total-resources': 10,
+        'resources-total': 10,
       },
       {
         timestamp: '2023-12-12T00:00:05.000Z',
         duration: 3,
-        'total-resources': 10,
+        'resources-total': 10,
       },
     ]);
 
-    /**In each 5 second interval, 60% of the time cpu/utilizaition = 10, 40% of the time it is 0, so cpu/utilizaition in the averaged result be 6 */
+    /**In each 5 second interval, 60% of the time cpu/utilization = 10, 40% of the time it is 0, so cpu/utilization in the averaged result be 6 */
     const expectedResult = [
       {
         timestamp: '2023-12-12T00:00:00.000Z',
         duration: 5,
-        'total-resources': 10,
+        'resources-total': 10,
       },
       {
         timestamp: '2023-12-12T00:00:05.000Z',
         duration: 5,
-        'total-resources': 10,
+        'resources-total': 10,
       },
     ];
 
@@ -408,12 +408,12 @@ describe('execute(): ', () => {
         {
           timestamp: '2023-12-12T00:00:02.000Z',
           duration: 15,
-          'cpu/utilizaition': 10,
+          'cpu/utilization': 10,
         },
         {
           timestamp: '2023-12-12T00:00:10.000Z',
           duration: 30,
-          'cpu/utilizaition': 20,
+          'cpu/utilization': 20,
         },
       ]);
     } catch (error) {
@@ -438,12 +438,12 @@ describe('execute(): ', () => {
         {
           timestamp: '2023-12-12T00:00:00.000Z',
           duration: 10,
-          'cpu/utilizaition': 10,
+          'cpu/utilization': 10,
         },
         {
           timestamp: '2023-12-12T00:00:10.000Z',
           duration: 30,
-          'cpu/utilizaition': 20,
+          'cpu/utilization': 20,
         },
       ]);
     } catch (error) {
@@ -468,12 +468,12 @@ describe('execute(): ', () => {
         {
           timestamp: '2023-12-12T00:00:02.000Z',
           duration: 10,
-          'cpu/utilizaition': 10,
+          'cpu/utilization': 10,
         },
         {
           timestamp: '2023-12-12T00:00:08.000Z',
           duration: 1,
-          'cpu/utilizaition': 20,
+          'cpu/utilization': 20,
         },
       ]);
     } catch (error) {

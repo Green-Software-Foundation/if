@@ -1,9 +1,11 @@
 import {ERRORS} from '../util/errors';
+import {STRINGS} from '../config';
 
 import {PluginInterface} from '../types/interface';
 import {PluginStorage} from '../types/plugin-storage';
 
 const {PluginInitalizationError} = ERRORS;
+const {NOT_INITALIZED_PLUGIN} = STRINGS;
 
 /**
  * Storage for maintaining plugins.
@@ -19,9 +21,7 @@ export const pluginStorage = () => {
       const plugin = storage[name];
 
       if (!plugin) {
-        throw new PluginInitalizationError(
-          `Not initalized plugin: ${name}. Check if ${name} is in 'manifest.initalize.plugins'.`
-        );
+        throw new PluginInitalizationError(NOT_INITALIZED_PLUGIN(name));
       }
 
       return plugin;
