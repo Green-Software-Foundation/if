@@ -246,7 +246,7 @@ tree:
           time-reserved: 3600 # 1 hour in s
           expected-lifespan: 126144000 # 4 years in seconds    
           resources-reserved: 1 
-          total-resources: 1 
+          resources-total: 1 
         sci-o:
           grid/carbon-intensity: 457 # gCO2/kwh
       children:
