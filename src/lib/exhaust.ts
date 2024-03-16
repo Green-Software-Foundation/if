@@ -1,9 +1,9 @@
 /**
  * @todo This is temporary solution, will be refactored to support dynamic plugins.
  */
-import {ExportCsv} from '../models/export-csv';
-import {ExportLog} from '../models/export-log';
-import {ExportYaml} from '../models/export-yaml';
+import {ExportCsv} from '../plugins/export-csv';
+import {ExportLog} from '../plugins/export-log';
+import {ExportYaml} from '../plugins/export-yaml';
 
 import {ERRORS} from '../util/errors';
 

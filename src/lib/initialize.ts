@@ -42,9 +42,9 @@ const importAndVerifyModule = async (method: string, path: string) => {
  * Then checks if `path` is starting with github, then grabs the repository name.
  * Imports module, then checks if it's a valid plugin.
  */
-const handModule = (method: string, path: string) => {
+const handleModule = (method: string, path: string) => {
   if (path === 'builtin') {
-    path = pathLib.normalize(`${__dirname}/../models`);
+    path = pathLib.normalize(`${__dirname}/../plugins`);
   } else {
     if (path?.startsWith(GITHUB_PATH)) {
       const parts = path.split('/');
@@ -75,7 +75,7 @@ const initPlugin = async (
     throw new PluginCredentialError(MISSING_PATH);
   }
 
-  const plugin = await handModule(method, path);
+  const plugin = await handleModule(method, path);
 
   return plugin(globalConfig);
 };

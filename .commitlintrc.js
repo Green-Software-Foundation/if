@@ -31,14 +31,13 @@ module.exports = {
         '.github',
         '.husky',
         'scripts',
-        'models',
         'plugins',
         'integration',
         'doc'
       ]
     ],
     'scope-empty': [
-      2, 
+      2,
       'never'
     ]
   },
