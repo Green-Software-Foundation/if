@@ -1,6 +1,6 @@
 import * as YAML from 'js-yaml';
 
-export const readFile = async (filePath: string, _format: string) => {
+export const readFile = async (filePath: string) => {
   /** mock for util/json */
   if (filePath.includes('json-reject')) {
     return Promise.reject(new Error('rejected'));
@@ -39,7 +39,7 @@ export const readFile = async (filePath: string, _format: string) => {
             cpu/utilization: 16`;
 };
 
-export const mkdir = (dirPath: string, _object: any) => dirPath;
+export const mkdir = (dirPath: string) => dirPath;
 
 export const writeFile = async (pathToFile: string, content: string) => {
   if (pathToFile === 'reject') {
