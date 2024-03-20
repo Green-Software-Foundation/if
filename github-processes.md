@@ -9,7 +9,7 @@
 - [`if-unofficial-plugins`](https://github.com/Green-Software-Foundation/if-unofficial-plugins)
     - source code for plugins relying on third party data/APIs
     - intended to be deprecated and removed in mid-term future
-    - plugins int his repo should be handed over to relevant orgs to maintain
+    - plugins in this repo should be handed over to relevant orgs to maintain
 - [`if-plugin-template`](https://github.com/Green-Software-Foundation/if-plugin-template)
     - template for new plugins
     - intended for builders to bootstrap IF-compatible plugin development
@@ -50,7 +50,7 @@ Here are the rules applied to each branch:
 ### `if-plugin-template` 
 
 - we only maintain a single branch: `main`
-- PRs to `main` can be mrged after one approval from core team
+- PRs to `main` can be merged after one approval from core team
 - Pushing directly to `main` is possible but discouraged
 
 
