@@ -140,4 +140,4 @@ help-wanted
 good-first-issue
 ```
 
-Each PR is expected to have one label from each category assigned to it at all times.
+Each PR is expected to have one label from each category (except `other`) assigned to it at all times.
