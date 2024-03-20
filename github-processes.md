@@ -131,6 +131,13 @@ low-priority
 abandoned 
 blocked 
 backlogged
+
+// other labels
+project-management
+agenda
+discussion
+help-wanted
+good-first-issue
 ```
 
 Each PR is expected to have one label from each category assigned to it at all times.
