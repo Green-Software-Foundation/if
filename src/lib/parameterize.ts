@@ -1,9 +1,10 @@
 import {logger} from '../util/logger';
+import {memoizedLog} from '../util/log-memoize';
 
 import {STRINGS, PARAMETERS} from '../config';
 
 import {ManifestParameter} from '../types/manifest';
-import {memoizedLog} from '../util/log-memoize';
+import {Parameters} from '../types/parameters';
 
 const {REJECTING_OVERRIDE, UNKNOWN_PARAM} = STRINGS;
 
@@ -18,7 +19,7 @@ const Parametrize = () => {
    */
   const getAggregationMethod = (unitName: string) => {
     if (`${unitName}` in parametersStorage) {
-      return PARAMETERS[unitName as keyof typeof PARAMETERS].aggregation;
+      return parametersStorage[unitName as keyof typeof PARAMETERS].aggregation;
     }
 
     memoizedLog(logger.warn, UNKNOWN_PARAM(unitName));
@@ -33,7 +34,7 @@ const Parametrize = () => {
    */
   const combine = (
     contextParameters: ManifestParameter[] | null | undefined,
-    parameters: any
+    parameters: Parameters
   ) => {
     if (contextParameters) {
       contextParameters.forEach(param => {
