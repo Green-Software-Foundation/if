@@ -5,7 +5,7 @@ import {STRINGS} from '../config';
 import {GroupByPlugin, PluginParams} from '../types/interface';
 import {GroupByConfig} from '../types/group-by';
 
-const {InvalidGrouping} = ERRORS;
+const {InvalidGroupingError} = ERRORS;
 
 const {INVALID_GROUP_BY} = STRINGS;
 
@@ -56,7 +56,7 @@ export const GroupBy = (): GroupByPlugin => {
     inputs.reduce((acc, input) => {
       const groups = config.group.map(groupType => {
         if (!input[groupType]) {
-          throw new InvalidGrouping(INVALID_GROUP_BY(groupType));
+          throw new InvalidGroupingError(INVALID_GROUP_BY(groupType));
         }
 
         return input[groupType];
