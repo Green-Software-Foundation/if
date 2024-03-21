@@ -5,9 +5,9 @@ import {STRINGS} from '../../../config';
 
 const {InputValidationError} = ERRORS;
 
-const {INVALID_OBSERVATION_OVERLAP} = STRINGS;
+const {INVALID_OBSERVATION_OVERLAP, INVALID_TIME_NORMALIZATION} = STRINGS;
 
-describe('lib/time-sync:', () => {
+describe('builtins/time-sync:', () => {
   describe('time-sync: ', () => {
     const basicConfig = {
       'start-time': '2023-12-12T00:01:00.000Z',
@@ -146,6 +146,32 @@ describe('execute(): ', () => {
     }
   });
 
+  it('throws error on missing global config.', async () => {
+    const config = undefined;
+    const timeModel = TimeSync(config!);
+
+    expect.assertions(1);
+
+    try {
+      await timeModel.execute([
+        {
+          timestamp: '2023-12-12T00:00:00.000Z',
+          duration: 15,
+          'cpu/utilization': 10,
+        },
+        {
+          timestamp: '2023-12-12T00:00:10.000Z',
+          duration: 30,
+          'cpu/utilization': 20,
+        },
+      ]);
+    } catch (error) {
+      expect(error).toStrictEqual(
+        new InputValidationError(INVALID_TIME_NORMALIZATION)
+      );
+    }
+  });
+
   it('throws error if interval is invalid.', async () => {
     const invalidIntervalConfig = {
       'start-time': '2023-12-12T00:00:00.000Z',
@@ -204,6 +230,33 @@ describe('execute(): ', () => {
     } catch (error) {
       expect(error).toStrictEqual(
         new InputValidationError(INVALID_OBSERVATION_OVERLAP)
+      );
+    }
+  });
+
+  it('throws an error if the `timestamp` is not valid date.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:01:00.000Z',
+      interval: 10,
+      'allow-padding': true,
+    };
+
+    const timeModel = TimeSync(basicConfig);
+    expect.assertions(2);
+
+    try {
+      await timeModel.execute([
+        {
+          timestamp: 45,
+          duration: 10,
+          'cpu/utilization': 10,
+        },
+      ]);
+    } catch (error) {
+      expect(error).toBeInstanceOf(InputValidationError);
+      expect(error).toStrictEqual(
+        new InputValidationError('Unexpected date datatype: number: 45')
       );
     }
   });
@@ -377,6 +430,88 @@ describe('execute(): ', () => {
     ]);
 
     /**In each 5 second interval, 60% of the time cpu/utilization = 10, 40% of the time it is 0, so cpu/utilization in the averaged result be 6 */
+    const expectedResult = [
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 5,
+        'resources-total': 10,
+      },
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 5,
+        'resources-total': 10,
+      },
+    ];
+
+    expect(result).toStrictEqual(expectedResult);
+  });
+
+  it('returns a result when `time-reserved` persists.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:09.000Z',
+      interval: 5,
+      'allow-padding': true,
+    };
+
+    const timeModel = TimeSync(basicConfig);
+
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 3,
+        'time-reserved': 5,
+        'resources-total': 10,
+      },
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 3,
+        'time-reserved': 5,
+        'resources-total': 10,
+      },
+    ]);
+
+    const expectedResult = [
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 5,
+        'resources-total': 10,
+        'time-reserved': 3.2,
+      },
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 5,
+        'resources-total': 10,
+        'time-reserved': 3.2,
+      },
+    ];
+
+    expect(result).toStrictEqual(expectedResult);
+  });
+
+  it('returns a result when the first timestamp in the input has time padding.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:09.000Z',
+      interval: 5,
+      'allow-padding': true,
+    };
+
+    const timeModel = TimeSync(basicConfig);
+
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 3,
+        'resources-total': 10,
+      },
+      {
+        timestamp: '2023-12-12T00:00:10.000Z',
+        duration: 3,
+        'resources-total': 10,
+      },
+    ]);
+
     const expectedResult = [
       {
         timestamp: '2023-12-12T00:00:00.000Z',
