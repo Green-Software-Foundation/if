@@ -39,7 +39,7 @@ const Parametrize = () => {
     if (contextParameters) {
       contextParameters.forEach(param => {
         if (`${param.name}` in parameters) {
-          logger.warn(REJECTING_OVERRIDE);
+          logger.warn(REJECTING_OVERRIDE(param));
 
           return;
         }
