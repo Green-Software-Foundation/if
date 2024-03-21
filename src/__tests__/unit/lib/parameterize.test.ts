@@ -3,11 +3,26 @@ const mockLog = jest.fn();
 jest.mock('../../../util/log-memoize', () => ({
   memoizedLog: mockLog,
 }));
+jest.mock('../../../util/logger', () => ({
+  logger: {
+    warn: mockLog,
+  },
+}));
 
+import {PARAMETERS} from '../../../config';
 import {parameterize} from '../../../lib/parameterize';
+
+import {STRINGS} from '../../../config';
+
 import {ManifestParameter} from '../../../types/manifest';
 
+const {REJECTING_OVERRIDE} = STRINGS;
+
 describe('lib/parameterize: ', () => {
+  afterEach(() => {
+    mockLog.mockReset();
+  });
+
   describe('getAggregationMethod(): ', () => {
     it('returns method for average aggregation method metric.', () => {
       const metric = 'cpu/utilization';
@@ -60,6 +75,26 @@ describe('lib/parameterize: ', () => {
       const method = parameterize.getAggregationMethod(params[0].name);
 
       expect(method).toEqual(params[0].aggregation);
+    });
+
+    it('rejects on default param override.', () => {
+      const params = [
+        {
+          name: 'carbon',
+          description: 'mock-description',
+          unit: 'mock/co',
+          aggregation: 'none',
+        },
+      ] as ManifestParameter[];
+
+      parameterize.combine(params, PARAMETERS);
+      const method = parameterize.getAggregationMethod(params[0].name);
+
+      const expectedMethodName = 'sum';
+      const expectedMessage = REJECTING_OVERRIDE(params[0]);
+
+      expect(method).toEqual(expectedMethodName);
+      expect(mockLog).toHaveBeenCalledWith(expectedMessage);
     });
   });
 });
