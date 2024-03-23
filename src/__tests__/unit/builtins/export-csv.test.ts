@@ -19,7 +19,7 @@ jest.mock('fs/promises', () => ({
   writeFile: jest.fn<() => Promise<void>>().mockResolvedValue(),
 }));
 
-describe('builtins//export-csv: ', () => {
+describe('builtins/export-csv: ', () => {
   describe('ExportCSV: ', () => {
     const exportCSV = ExportCSV();
 
