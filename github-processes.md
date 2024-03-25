@@ -7,9 +7,9 @@
     - source code for standard library of plugins
     - IF core team commit to maintaining these plugins 
 - [`if-unofficial-plugins`](https://github.com/Green-Software-Foundation/if-unofficial-plugins)
-    - source code for plugins relying on third party data/APIs
+    - source code for plugins relying on third-party data/APIs
     - intended to be deprecated and removed in mid-term future
-    - plugins in this repo should be handed over to relevant orgs to maintain
+    - plugins in this repo should be handed over to relevant organizations to maintain
 - [`if-plugin-template`](https://github.com/Green-Software-Foundation/if-plugin-template)
     - template for new plugins
     - intended for builders to bootstrap IF-compatible plugin development
@@ -57,24 +57,24 @@ Here are the rules applied to each branch:
 ### `if-docs`
 
 - we only maintain a single branch - `main`
-- PRs to `main` can be mrged after one approval from core team
+- PRs to `main` can be merged after one approval from core team
 - Pushing directly to `main` is possible but discouraged
 
 ### When can we break our rules?
 
 - `release` branches have the strictest rules. We should never override the process outlined above for `release` branches in any repository.
 - On `main` we can be slightly more flexible. It is acceptable to skip QA for PRs that only change typos, documentation or comments. Any changes to source code or tests should be QA approved before merge.
-- In emergency scenarios where an urgent hotfix is required it might be required to skip QA review on `main`branches - this should only happen with QA authorization so QA can retroactively test as soon as possible.
+- In emergency scenarios where an urgent hotfix is required it might be required to skip QA review on `main` branches - this should only happen with QA authorization so QA can retroactively test as soon as possible.
 
 ## DCO
 
-We require contributors to conform to the DCO agreement on our repositories. This means either signing commits or explicitly adding a DCO commit message. This ensures all contributors agree to the conditions imposed by our licenses and adhere to our expected practises. The DCO must be satisfied in order to PRs to be merged.
+We require contributors to conform to the DCO agreement on our repositories. This means either signing commits or explicitly adding a DCO commit message. This ensures all contributors agree to the conditions imposed by our licenses and adhere to our expected practices. The DCO must be satisfied in order to PRs to be merged.
 
 ## Commits
 
 Commits are expected to conform to the [conventional-commits](https://www.conventionalcommits.org/en/v1.0.0/) syntax.
-Commits are expected to be signed, and have descriptive commit messages.
-We might ask people to provide new messages in some circumstances, or to break their PRs into smaller logical units.
+Commits are expected to be signed and have descriptive commit messages.
+We might ask people to provide new messages in some circumstances or to break their PRs into smaller logical units.
 
 ## PR triage
 
@@ -91,7 +91,7 @@ Some reasons why a PR might not pass triage:
 - PR description is too short, vague or imprecise
 - PR would for some other reason take too long for core team to assess
 - PR makes changes that do not conform to our license
-- PR makes use of a third party API or dataset in an illegitimate way (e.g. exposing data that should be paywalled)
+- PR makes use of a third-party API or dataset in an illegitimate way (e.g. exposing data that should be paywalled)
 
 After a PR has passed triage, it can be assigned to a core team member to review. Developer review precedes QA review. Community PRs (PRs raised from outside the core team) will *always* go through a full QA vetting procedure before being merged.
 
@@ -149,16 +149,10 @@ We aim to release fortnightly, every other Tuesday. We release npm packages for 
 
 ## Hotfixes
 
-We will hotfix by raising PRs into `release` when necessary. These PRs require sign off by a core developer and our QA engineer. 
+We will hotfix by raising PRs into `release` when necessary. These PRs require sign-off by a core developer and our QA engineer. 
 
 If more than two hotfixes are required on a particular release, the team will call a spike meeting to determine the causes of the bugs, identify any changes required to our QA process and determine next steps for fixing the release. 
 
 Hotfixes on release can be merged back into `main` when they have been fully QA tested.
 
 We intend for hotfixes to be as infrequent as possible.
-
-
-## Schematic
-
-Our Github branch management process is summarized in the foillowing schematic
-
