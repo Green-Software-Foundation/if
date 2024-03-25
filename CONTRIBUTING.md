@@ -1,5 +1,7 @@
 ## Contribution Guidelines <!-- omit from toc -->
 
+> **HACKATHON PARTICIPANTS**: please note that these contribution guidelines are intended for community contributions to IF, and NOT hackathon submissions. If you are building plugins, tooling or other add-ons to IF, please maintain them in your own repositories and submit links to the hackathon judges.**
+
 
 First off, thanks for taking the time to contribute! 🎉
 
@@ -7,6 +9,7 @@ The following document is a rule set of guidelines for contributing.
 
 ## Table of Contents <!-- omit from toc -->
 
+- [What and when to contribute](#what-and-when-to-contribute)
 - [Code Contributions](#code-contributions)
   - [Step 1: Fork](#step-1-fork)
   - [Step 2: Branch](#step-2-branch)
@@ -19,6 +22,11 @@ The following document is a rule set of guidelines for contributing.
   - [Naming conventions](#naming-conventions)
     - [Documentation](#documentation)
   - [Writing tests](#writing-tests)
+
+## What and when to contribute
+
+You can contribute anything to the IF, but we are likely to close out unsolicited PRs without merging them. Our issue board is completely open and we have tags (`help-wanted`, `good-first-issue`) to help contributors to choose tasks to work on. We recommend speaking to the core team on Github before starting working on an issue. You can do this by raising an issue or commenting on an existing issue. This helps us to direct your energy is directions that are aligned with our roadmap, prevent multiple people working on the same task, and better manage our board. This all makes it much more likely that your work will get merged.
+
 
 ## Code Contributions
 
