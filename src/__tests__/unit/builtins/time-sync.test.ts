@@ -634,7 +634,6 @@ describe('execute(): ', () => {
         carbon: 1,
       },
     ]);
-    console.log(DateTime.fromISO(result[0].timestamp).zone.valueOf());
     expect(
       DateTime.fromISO(result[0].timestamp).zone.valueOf() ===
         'FixedOffsetZone { fixed: 0 }'
