@@ -141,3 +141,24 @@ good-first-issue
 ```
 
 Each PR is expected to have one label from each category (except `other`) assigned to it at all times.
+
+
+## Releases
+
+We aim to release fortnightly, every other Tuesday. We release npm packages for `if`, `if-plugins`, `if-unofficial-plugins`, and `if-plugin-template`.
+
+## Hotfixes
+
+We will hotfix by raising PRs into `release` when necessary. These PRs require sign off by a core developer and our QA engineer. 
+
+If more than two hotfixes are required on a particular release, the team will call a spike meeting to determine the causes of the bugs, identify any changes required to our QA process and determine next steps for fixing the release. 
+
+Hotfixes on release can be merged back into `main` when they have been fully QA tested.
+
+We intend for hotfixes to be as infrequent as possible.
+
+
+## Schematic
+
+Our Github branch management process is summarized in the foillowing schematic
+
