@@ -1,24 +1,24 @@
-import { isDate } from 'node:util/types';
-import { Settings, DateTime, DateTimeMaybeValid, Interval } from 'luxon';
-import { z } from 'zod';
+import {isDate} from 'node:util/types';
+import {Settings, DateTime, DateTimeMaybeValid, Interval} from 'luxon';
+import {z} from 'zod';
 
-import { parameterize } from '../lib/parameterize';
+import {parameterize} from '../lib/parameterize';
 
-import { ERRORS } from '../util/errors';
+import {ERRORS} from '../util/errors';
 
-import { STRINGS } from '../config';
+import {STRINGS} from '../config';
 
-import { ExecutePlugin, PluginParams } from '../types/interface';
+import {ExecutePlugin, PluginParams} from '../types/interface';
 import {
   PaddingReceipt,
   TimeNormalizerConfig,
   TimeParams,
 } from '../types/time-sync';
-import { validate } from '../util/validations';
+import {validate} from '../util/validations';
 
-Settings.defaultZone = "utc";
+Settings.defaultZone = 'utc';
 
-const { InputValidationError } = ERRORS;
+const {InputValidationError} = ERRORS;
 
 const {
   INVALID_TIME_NORMALIZATION,
@@ -176,7 +176,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
     i: number
   ) => {
     const thisMoment = parseDate(currentRoundMoment).startOf('second');
-    return thisMoment.plus({ seconds: i });
+    return thisMoment.plus({seconds: i});
   };
   /**
    * Breaks down input per minimal time unit.
@@ -257,7 +257,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
    * Checks if `error on padding` is enabled and padding is needed. If so, then throws error.
    */
   const validatePadding = (pad: PaddingReceipt, params: TimeParams): void => {
-    const { start, end } = pad;
+    const {start, end} = pad;
     const isPaddingNeeded = start || end;
     if (!params.allowPadding && isPaddingNeeded) {
       throw new InputValidationError(AVOIDING_PADDING_BY_EDGES(start, end));
@@ -278,7 +278,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
     const lastInput = inputs[inputs.length - 1];
 
     const endDiffInSeconds = parseDate(lastInput.timestamp)
-      .plus({ second: lastInput.duration })
+      .plus({second: lastInput.duration})
       .diff(params.endTime)
       .as('seconds');
 
@@ -366,7 +366,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
     pad: PaddingReceipt,
     params: TimeParams
   ): PluginParams[] => {
-    const { start, end } = pad;
+    const {start, end} = pad;
     const paddedFromBeginning = [];
 
     if (start) {
@@ -389,7 +389,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
       paddedArray.push(
         ...getZeroishInputPerSecondBetweenRange(
           lastInputEnd,
-          params.endTime.plus({ seconds: 1 }),
+          params.endTime.plus({seconds: 1}),
           lastInput
         )
       );
@@ -404,7 +404,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
   ) => {
     const array: PluginParams[] = [];
     const dateRange = Interval.fromDateTimes(startDate, endDate);
-    for (const interval of dateRange.splitBy({ second: 1 })) {
+    for (const interval of dateRange.splitBy({second: 1})) {
       array.push(
         fillWithZeroishInput(
           templateInput,
@@ -426,7 +426,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
     params: TimeParams
   ): PluginParams[] => {
     return inputs.reduce((acc: PluginParams[], item) => {
-      const { timestamp } = item;
+      const {timestamp} = item;
 
       if (
         parseDate(timestamp) >= params.startTime &&
@@ -439,5 +439,5 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
     }, [] as PluginParams[]);
   };
 
-  return { metadata, execute };
+  return {metadata, execute};
 };
