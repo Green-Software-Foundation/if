@@ -1,5 +1,4 @@
 import {ExportLog} from '../../../builtins/export-log';
-// import {ERRORS} from '../../../util/errors';
 
 import {tree, context} from '../../../__mocks__/builtins/export-csv';
 
