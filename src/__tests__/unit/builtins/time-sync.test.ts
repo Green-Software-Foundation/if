@@ -1,8 +1,8 @@
 import {TimeSync} from '../../../builtins/time-sync';
 import {ERRORS} from '../../../util/errors';
-
+import {Settings, DateTime} from 'luxon';
 import {STRINGS} from '../../../config';
-
+Settings.defaultZone = 'utc';
 const {InputValidationError} = ERRORS;
 
 const {INVALID_OBSERVATION_OVERLAP, INVALID_TIME_NORMALIZATION} = STRINGS;
@@ -616,5 +616,29 @@ describe('execute(): ', () => {
         new InputValidationError('Avoiding padding at start and end')
       );
     }
+  });
+
+  it('checks that timestamps in return object are ISO 8061 and timezone UTC.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:03.000Z',
+      interval: 1,
+      'allow-padding': true,
+    };
+
+    const timeModel = TimeSync(basicConfig);
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 1,
+        carbon: 1,
+      },
+    ]);
+    console.log(DateTime.fromISO(result[0].timestamp).zone.valueOf());
+    expect(
+      DateTime.fromISO(result[0].timestamp).zone.valueOf() ===
+        'FixedOffsetZone { fixed: 0 }'
+    );
+    expect(DateTime.fromISO(result[0].timestamp).offset === 0);
   });
 });
