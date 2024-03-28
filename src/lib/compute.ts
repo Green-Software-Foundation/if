@@ -16,13 +16,13 @@ const traverse = async (children: any, params: Params) => {
 /**
  * Appends `default` values to `inputs`.
  */
-const mergeDefaults = (
+export const mergeDefaults = (
   inputs: PluginParams[],
   defaults: PluginParams | undefined
 ) => {
   if (inputs) {
     const response = defaults
-      ? inputs.map(input => mergeObjects(input, defaults))
+      ? inputs.map(input => mergeObjects({...defaults}, input))
       : inputs;
 
     return response;

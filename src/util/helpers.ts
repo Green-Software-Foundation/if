@@ -1,6 +1,5 @@
-import {ERRORS} from './errors';
-
 import {STRINGS} from '../config';
+import {ERRORS} from './errors';
 import {logger} from './logger';
 
 const {ISSUE_TEMPLATE} = STRINGS;
@@ -19,22 +18,20 @@ export const andHandle = (error: Error) => {
 };
 
 /**
- * Mergers two objects, omitting null values.
+ * Append entries from defaults which are missing from inputs.
  */
-export const mergeObjects = (object1: any, object2: any) => {
-  const merged: Record<string, any> = {};
+export const mergeObjects = (defaults: any, input: any) => {
+  const merged: Record<string, any> = {...input};
 
-  const keys1 = Object.keys(object1);
-  keys1.forEach(key1 => {
-    merged[key1] = object1[key1] || object2[key1];
-  });
-
-  const keys2 = Object.keys(object2);
-  keys2.forEach(key2 => {
-    if (!keys1.includes(key2)) {
-      merged[key2] = object2[key2];
+  for (const key in defaults) {
+    if (Array.isArray(defaults[key])) {
+      merged[key] = input[key] !== undefined ? input[key] : defaults[key];
     }
-  });
+
+    if (!(key in input)) {
+      merged[key] = defaults[key];
+    }
+  }
 
   return merged;
 };
