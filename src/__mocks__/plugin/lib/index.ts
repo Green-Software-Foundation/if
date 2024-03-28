@@ -1,0 +1,1 @@
+export {Mockavizta} from './mockavizta';
