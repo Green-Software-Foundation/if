@@ -1,5 +1,3 @@
-import {mergeWith} from 'lodash';
-
 import {STRINGS} from '../config';
 import {ERRORS} from './errors';
 import {logger} from './logger';
@@ -20,15 +18,20 @@ export const andHandle = (error: Error) => {
 };
 
 /**
- * Merge destination and source recursively.
+ * Append entries from defaults which are missing from inputs.
  */
-export const mergeObjects = (destination: any, source: any) => {
-  const handleArrays = (objValue: any, srcValue: any) => {
-    if (Array.isArray(objValue) && Array.isArray(srcValue)) {
-      return srcValue;
-    }
-    return;
-  };
+export const mergeObjects = (defaults: any, input: any) => {
+  const merged: Record<string, any> = {...input};
 
-  return mergeWith(destination, source, handleArrays);
+  for (const key in defaults) {
+    if (Array.isArray(defaults[key])) {
+      merged[key] = input[key] !== undefined ? input[key] : defaults[key];
+    }
+
+    if (!(key in input)) {
+      merged[key] = defaults[key];
+    }
+  }
+
+  return merged;
 };
