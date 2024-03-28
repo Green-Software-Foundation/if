@@ -58,7 +58,7 @@ describe('util/helpers: ', () => {
       expect(result).toEqual(input);
     });
 
-    it('adds only properties missing in input', () => {
+    it('adds only properties missing in input.', () => {
       expect.assertions(1);
 
       const input = {
@@ -84,7 +84,7 @@ describe('util/helpers: ', () => {
       expect(result).toEqual(expectedResult);
     });
 
-    it('handles object values correctly', () => {
+    it('keeps values from input in case of nested objects.', () => {
       expect.assertions(1);
 
       const input = {
@@ -112,14 +112,13 @@ describe('util/helpers: ', () => {
         c: 'testInput',
         d: {
           e: 1,
-          f: 'testDefault2',
         },
       };
 
       expect(result).toEqual(expectedResult);
     });
 
-    it('handles array values correctly', () => {
+    it('keeps value from input in case of arrays.', () => {
       expect.assertions(1);
 
       const input = {
