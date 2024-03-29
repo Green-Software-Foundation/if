@@ -16,7 +16,7 @@ jest.mock('luxon', () => {
       fromDateTimes: jest.fn((start, end) => ({
         start,
         end,
-        splitBy: jest.fn(_options => {
+        splitBy: jest.fn(() => {
           const intervals = [];
           let current = start;
 
