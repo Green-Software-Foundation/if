@@ -28,8 +28,8 @@ const impactEngine = async () => {
 
     const {tree, context, parameters} = await load(inputPath, paramPath);
     parameterize.combine(context.params, parameters);
-    const plugins = await initalize(context.initialize.plugins);
-    const computedTree = await compute(tree, {context, plugins});
+    const pluginStorage = await initalize(context.initialize.plugins);
+    const computedTree = await compute(tree, {context, pluginStorage});
     const aggregatedTree = aggregate(computedTree, context.aggregation);
     context['if-version'] = packageJson.version;
     exhaust(aggregatedTree, context, outputPath);
