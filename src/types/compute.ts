@@ -7,7 +7,7 @@ export type NodeConfig = {
 };
 
 export type Params = {
-  plugins: PluginStorageInterface;
+  pluginStorage: PluginStorageInterface;
   context: Context;
   pipeline?: string[];
   config?: NodeConfig;
@@ -25,5 +25,5 @@ export type Node = {
 
 export type ComputeParams = {
   context: Context;
-  plugins: PluginStorageInterface;
+  pluginStorage: PluginStorageInterface;
 };
