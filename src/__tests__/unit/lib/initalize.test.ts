@@ -33,7 +33,7 @@ describe('lib/initalize: ', () => {
       expect(typeof response.set).toEqual('function');
     });
 
-    it('checks if plugin is initalized, warning is logged and has module has execute and metadata props.', async () => {
+    it('checks if plugin is initalized, warning is logged and plugin has execute and metadata props.', async () => {
       const plugins: GlobalPlugins = {
         mockavizta: {
           path: 'mockavizta',
@@ -147,7 +147,7 @@ describe('lib/initalize: ', () => {
       expect(module).toHaveProperty('metadata');
     });
 
-    it('', async () => {
+    it('throws error if plugin path is invalid.', async () => {
       const plugins: GlobalPlugins = {
         mockavizta: {
           path: 'failing-mock',
