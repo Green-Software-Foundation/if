@@ -40,7 +40,7 @@ describe('util/helpers: ', () => {
 
 describe('util/helpers: ', () => {
   describe('mergeObjects(): ', () => {
-    it('does not override input', () => {
+    it('does not override input.', () => {
       expect.assertions(1);
 
       const input = {
@@ -55,6 +55,34 @@ describe('util/helpers: ', () => {
       const result = mergeObjects(defaults, input);
 
       expect(result).toEqual(input);
+    });
+
+    it('overrides null/undefined inputs.', () => {
+      expect.assertions(1);
+
+      const input = {
+        a: 1,
+        b: false,
+        c: 'testInput',
+        d: null,
+        e: undefined,
+      };
+
+      const defaults = {
+        c: 'testDefault',
+        d: 'testDefault',
+        e: 'testDefault',
+      };
+      const result = mergeObjects(defaults, input);
+      const expectedResult = {
+        a: 1,
+        b: false,
+        c: 'testInput',
+        d: 'testDefault',
+        e: 'testDefault',
+      };
+
+      expect(result).toEqual(expectedResult);
     });
 
     it('adds only properties missing in input.', () => {
