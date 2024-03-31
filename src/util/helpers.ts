@@ -20,18 +20,7 @@ export const andHandle = (error: Error) => {
 /**
  * Append entries from defaults which are missing from inputs.
  */
-export const mergeObjects = (defaults: any, input: any) => {
-  const merged: Record<string, any> = {...input};
-
-  for (const key in defaults) {
-    if (Array.isArray(defaults[key])) {
-      merged[key] = input[key] !== undefined ? input[key] : defaults[key];
-    }
-
-    if (!(key in input)) {
-      merged[key] = defaults[key];
-    }
-  }
-
-  return merged;
-};
+export const mergeObjects = (defaults: any, input: any) => ({
+  ...defaults,
+  ...input,
+});
