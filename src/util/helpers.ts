@@ -21,7 +21,7 @@ export const andHandle = (error: Error) => {
  * Append entries from defaults which are missing from inputs.
  */
 export const mergeObjects = (defaults: any, input: any) => {
-  const merged: Record<string, any> = {...input};
+  const merged: Record<string, any> = structuredClone(input);
 
   for (const key in defaults) {
     if (!(key in input)) {
