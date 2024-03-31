@@ -22,7 +22,7 @@ const mergeDefaults = (
 ) => {
   if (inputs) {
     const response = defaults
-      ? inputs.map(input => mergeObjects(input, defaults))
+      ? inputs.map(input => mergeObjects(defaults, input))
       : inputs;
 
     return response;
