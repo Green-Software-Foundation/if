@@ -7,8 +7,7 @@ jest.mock('../../../util/logger', () => ({
     error: mockError,
   },
 }));
-import {andHandle} from '../../../util/helpers';
-import {mergeObjects} from '../../../util/helpers';
+import {andHandle, mergeObjects} from '../../../util/helpers';
 import {ERRORS} from '../../../util/errors';
 
 const {WriteFileError} = ERRORS;
