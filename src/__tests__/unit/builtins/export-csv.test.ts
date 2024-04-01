@@ -26,7 +26,7 @@ describe('builtins/export-csv: ', () => {
     describe('init GroupBy: ', () => {
       it('initalizes object with properties.', async () => {
         expect(exportCSV).toMatchObject({metadata: {kind: 'exhaust'}});
-        expect(exportCSV).toHaveProperty('execute');
+        expect(exportCSV).toHaveProperty('executeExhaust');
       });
     });
 
@@ -63,7 +63,11 @@ describe('builtins/export-csv: ', () => {
           },
         });
 
-        await exportCSV.execute(reformedTree, reformedContext, outputPath);
+        await exportCSV.executeExhaust(
+          reformedTree,
+          reformedContext,
+          outputPath
+        );
 
         expect(fs.writeFile).toHaveBeenCalledWith(
           'output.csv',
@@ -103,7 +107,7 @@ describe('builtins/export-csv: ', () => {
           },
         });
 
-        await exportCSV.execute(reformedTree, context, outputPath);
+        await exportCSV.executeExhaust(reformedTree, context, outputPath);
 
         expect.assertions(1);
 
@@ -151,7 +155,11 @@ describe('builtins/export-csv: ', () => {
           },
         });
 
-        await exportCSV.execute(reformedTree, reformedContext, outputPath);
+        await exportCSV.executeExhaust(
+          reformedTree,
+          reformedContext,
+          outputPath
+        );
 
         expect.assertions(1);
         expect(fs.writeFile).toHaveBeenCalledWith(
@@ -180,7 +188,7 @@ describe('builtins/export-csv: ', () => {
 
         const reformedContext = Object.assign({}, context, {outputs});
 
-        await exportCSV.execute(tree, reformedContext, outputPath);
+        await exportCSV.executeExhaust(tree, reformedContext, outputPath);
 
         expect.assertions(1);
         expect(fs.writeFile).toHaveBeenCalledWith(
@@ -195,7 +203,7 @@ describe('builtins/export-csv: ', () => {
         context.initialize = Object.assign({}, context.initialize, outputs);
 
         try {
-          await exportCSV.execute(tree, context, outputPath);
+          await exportCSV.executeExhaust(tree, context, outputPath);
         } catch (error) {
           expect(error).toBeInstanceOf(CliInputError);
           expect(error).toEqual(new CliInputError('Output path is required.'));
@@ -208,7 +216,7 @@ describe('builtins/export-csv: ', () => {
         context.initialize = Object.assign({}, context.initialize, outputs);
 
         try {
-          await exportCSV.execute(tree, context, outputPath);
+          await exportCSV.executeExhaust(tree, context, outputPath);
         } catch (error) {
           expect(error).toBeInstanceOf(CliInputError);
           expect(error).toEqual(
@@ -223,7 +231,7 @@ describe('builtins/export-csv: ', () => {
         context.initialize = Object.assign({}, context.initialize, outputs);
 
         try {
-          await exportCSV.execute(tree, context, outputPath);
+          await exportCSV.executeExhaust(tree, context, outputPath);
         } catch (error) {
           expect(error).toBeInstanceOf(CliInputError);
           expect(error).toEqual(

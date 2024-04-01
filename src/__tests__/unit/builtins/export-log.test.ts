@@ -6,7 +6,7 @@ describe('builtins/export-log:', () => {
   describe('ExportLog: ', () => {
     it('successfully logs output manifest in console.', async () => {
       const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
-      await ExportLog().execute(tree, context);
+      await ExportLog().executeExhaust(tree, context);
 
       expect(mockConsoleLog).toHaveBeenCalled();
       expect(mockConsoleLog).toHaveBeenCalledWith(
@@ -18,7 +18,7 @@ describe('builtins/export-log:', () => {
 
     it('successfully logs output manifest if tree is an empty object.', async () => {
       const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
-      await ExportLog().execute({}, context);
+      await ExportLog().executeExhaust({}, context);
 
       expect(mockConsoleLog).toHaveBeenCalled();
       expect(mockConsoleLog).toHaveBeenCalledWith(

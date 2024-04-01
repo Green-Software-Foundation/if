@@ -2,8 +2,8 @@ import * as fs from 'fs/promises';
 
 import {ERRORS} from '../util/errors';
 
-import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
 import {Context} from '../types/manifest';
+import {ExhaustPluginInterface} from '../types/interface';
 
 const {WriteFileError, CliInputError} = ERRORS;
 
@@ -136,7 +136,11 @@ export const ExportCSVRaw = (): ExhaustPluginInterface => {
   /**
    * export the provided tree content to a CSV file, represented in a flat structure
    */
-  const execute = async (tree: any, _context: Context, outputPath: string) => {
+  const executeExhaust = async (
+    tree: any,
+    _context: Context,
+    outputPath: string
+  ) => {
     if (!outputPath) {
       throw new CliInputError('Output path is required.');
     }
@@ -151,5 +155,5 @@ export const ExportCSVRaw = (): ExhaustPluginInterface => {
     await writeOutputFile(csvString, outputPath);
   };
 
-  return {execute};
+  return {executeExhaust};
 };

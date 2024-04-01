@@ -1,4 +1,5 @@
 import {GroupByConfig} from './group-by';
+import {Context} from './manifest';
 
 export type PluginParams = Record<string, any>;
 
@@ -28,3 +29,10 @@ export const isExecute = (plugin: PluginInterface): plugin is ExecutePlugin =>
 
 export const isGroupBy = (plugin: PluginInterface): plugin is GroupByPlugin =>
   (plugin as GroupByPlugin).metadata.kind === 'groupby';
+
+export interface ExhaustPluginInterface {
+  /**
+   * Execute exhaust based on `context` and `tree`, produce output to a file in `outputPath`.
+   */
+  executeExhaust(tree: any, context: Context, outputPath?: string): void;
+}

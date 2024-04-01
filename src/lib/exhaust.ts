@@ -10,8 +10,8 @@ import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 
-import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
 import {Context} from '../types/manifest';
+import {ExhaustPluginInterface} from '../types/interface';
 
 const {ModuleInitializationError} = ERRORS;
 const {INVALID_EXHAUST_PLUGIN} = STRINGS;
@@ -48,11 +48,13 @@ export const exhaust = (tree: any, context: Context, outputPath?: string) => {
   const outputPlugins = context.initialize.outputs;
 
   if (!outputPlugins) {
-    ExportLog().execute(tree, context);
+    ExportLog().executeExhaust(tree, context);
 
     return;
   }
 
   const exhaustPlugins = initializeExhaustPlugins(outputPlugins);
-  exhaustPlugins.forEach(plugin => plugin.execute(tree, context, outputPath));
+  exhaustPlugins.forEach(plugin =>
+    plugin.executeExhaust(tree, context, outputPath)
+  );
 };

@@ -49,7 +49,11 @@ export const ExportCSV = () => {
   /**
    * Grabs output and criteria from cli args, then call tree walker to collect csv data.
    */
-  const execute = async (tree: any, context: Context, outputPath: string) => {
+  const executeExhaust = async (
+    tree: any,
+    context: Context,
+    outputPath: string
+  ) => {
     const columns = ['Path'];
     const matrix = [columns];
     const {output, criteria} = parseOutputAndField(outputPath);
@@ -110,7 +114,7 @@ export const ExportCSV = () => {
   };
 
   return {
-    execute,
+    executeExhaust,
     metadata: {
       kind: 'exhaust',
     },

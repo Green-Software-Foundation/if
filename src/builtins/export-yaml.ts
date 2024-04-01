@@ -13,7 +13,11 @@ export const ExportYaml = () => {
   /**
    * Saves output file in YAML format.
    */
-  const execute = async (tree: any, context: Context, outputPath: string) => {
+  const executeExhaust = async (
+    tree: any,
+    context: Context,
+    outputPath: string
+  ) => {
     if (!outputPath) {
       throw new CliInputError('Output path is required.');
     }
@@ -27,5 +31,5 @@ export const ExportYaml = () => {
     await saveYamlFileAs(outputFile, `${path}.yaml`);
   };
 
-  return {execute};
+  return {executeExhaust};
 };

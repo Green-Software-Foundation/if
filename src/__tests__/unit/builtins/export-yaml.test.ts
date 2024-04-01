@@ -16,7 +16,7 @@ describe('builtins/export-yaml: ', () => {
 
     describe('init ExportYaml: ', () => {
       it('initalizes object with properties.', async () => {
-        expect(exportYaml).toHaveProperty('execute');
+        expect(exportYaml).toHaveProperty('executeExhaust');
       });
     });
 
@@ -24,7 +24,7 @@ describe('builtins/export-yaml: ', () => {
       it('returns result with correct arguments', async () => {
         const outputPath = 'outputPath.yaml';
 
-        await exportYaml.execute(tree, context, outputPath);
+        await exportYaml.executeExhaust(tree, context, outputPath);
 
         expect(saveYamlFileAs).toHaveBeenCalledWith(
           {...context, tree},
@@ -36,7 +36,7 @@ describe('builtins/export-yaml: ', () => {
         expect.assertions(2);
 
         try {
-          await exportYaml.execute({}, context, '');
+          await exportYaml.executeExhaust({}, context, '');
         } catch (error) {
           expect(error).toBeInstanceOf(CliInputError);
           expect(error).toEqual(new CliInputError('Output path is required.'));
