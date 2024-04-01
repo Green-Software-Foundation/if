@@ -156,6 +156,7 @@ export const context: Context = {
         },
       },
     },
+    exhaustPlugins: {},
   },
 };
 
