@@ -3,14 +3,14 @@ description:
 tags:
 aggregation:
   metrics:
-    - 'carbon'
-  type: 'both'
+    - "carbon"
+  type: "both"
 initialize:
   plugins:
     mock-observations:
       kind: plugin
       method: MockObservations
-      path: '@grnsft/if-plugins'
+      path: "@grnsft/if-plugins"
       global-config:
         timestamp-from: 2023-07-06T00:00
         timestamp-to: 2023-07-06T00:10
@@ -19,7 +19,7 @@ initialize:
           - cloud/instance-type: A1
         generators:
           common:
-            region: uk-west
+            cloud/region: uk-west
             common-key: common-val
           randint:
             cpu/utilization:
@@ -53,7 +53,7 @@ initialize:
         end-time: "2023-12-12T00:01:00.000Z"
         interval: 5
         allow-padding: true
-    'group-by':
+    "group-by":
       path: builtin
       method: GroupBy
 tree:
@@ -69,7 +69,7 @@ tree:
       config:
         group-by:
           group:
-            - region
+            - cloud/region
             - instance-type
       defaults:
         cpu/thermal-design-power: 100
@@ -82,24 +82,24 @@ tree:
         functional-unit-time: "1 min"
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
           duration: 1
           cpu/utilization: 10
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
           cpu/utilization: 15
     child-2:
       pipeline:
@@ -112,7 +112,7 @@ tree:
       config:
         group-by:
           group:
-            - region
+            - cloud/region
             - cloud/instance-type
       defaults:
         cpu/thermal-design-power: 100
@@ -127,20 +127,20 @@ tree:
         - timestamp: "2023-12-12T00:00:00.000Z"
           duration: 1
           cpu/utilization: 30
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 28
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 40
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cpu/utilization: 33
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west

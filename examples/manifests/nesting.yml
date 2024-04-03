@@ -66,7 +66,7 @@ tree:
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
-          region: uk-west
+          cloud/region: uk-west
           duration: 1
           cpu/utilization: 50
           network/energy: 0.000001
@@ -74,18 +74,18 @@ tree:
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
-          region: uk-west
+          cloud/region: uk-west
           network/energy: 0.000001
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
-          region: uk-west
+          cloud/region: uk-west
           network/energy: 0.000001
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cloud/instance-type: A1
-          region: uk-west
+          cloud/region: uk-west
           cpu/utilization: 15
           network/energy: 0.000001
     child-1:
@@ -107,7 +107,7 @@ tree:
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
-          region: uk-west
+          cloud/region: uk-west
           duration: 1
           cpu/utilization: 50
           network/energy: 0.000001
@@ -115,18 +115,18 @@ tree:
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
-          region: uk-west
+          cloud/region: uk-west
           network/energy: 0.000001
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
-          region: uk-west
+          cloud/region: uk-west
           network/energy: 0.000001
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cloud/instance-type: A1
-          region: uk-west
+          cloud/region: uk-west
           cpu/utilization: 15
           network/energy: 0.000001
     child-2:
@@ -150,7 +150,7 @@ tree:
           inputs:
             - timestamp: "2023-12-12T00:00:00.000Z"
               cloud/instance-type: A1
-              region: uk-west
+              cloud/region: uk-west
               duration: 1
               cpu/utilization: 50
               network/energy: 0.000001
@@ -158,18 +158,18 @@ tree:
               duration: 5
               cpu/utilization: 20
               cloud/instance-type: A1
-              region: uk-west
+              cloud/region: uk-west
               network/energy: 0.000001
             - timestamp: "2023-12-12T00:00:06.000Z"
               duration: 7
               cpu/utilization: 15
               cloud/instance-type: A1
-              region: uk-west
+              cloud/region: uk-west
               network/energy: 0.000001
             - timestamp: "2023-12-12T00:00:13.000Z"
               duration: 30
               cloud/instance-type: A1
-              region: uk-west
+              cloud/region: uk-west
               cpu/utilization: 15
               network/energy: 0.000001
         child-2-1:
@@ -191,7 +191,7 @@ tree:
           inputs:
             - timestamp: "2023-12-12T00:00:00.000Z"
               cloud/instance-type: A1
-              region: uk-west
+              cloud/region: uk-west
               duration: 1
               cpu/utilization: 50
               network/energy: 0.000001
@@ -199,17 +199,17 @@ tree:
               duration: 5
               cpu/utilization: 20
               cloud/instance-type: A1
-              region: uk-west
+              cloud/region: uk-west
               network/energy: 0.000001
             - timestamp: "2023-12-12T00:00:06.000Z"
               duration: 7
               cpu/utilization: 15
               cloud/instance-type: A1
-              region: uk-west
+              cloud/region: uk-west
               network/energy: 0.000001
             - timestamp: "2023-12-12T00:00:13.000Z"
               duration: 30
               cloud/instance-type: A1
-              region: uk-west
+              cloud/region: uk-west
               cpu/utilization: 15
               network/energy: 0.000001
