@@ -56,6 +56,7 @@ export const parseArgs = () => {
     output,
     'override-params': overrideParams,
     help,
+    stdout,
   } = validateAndParseProcessArgs();
 
   if (help) {
@@ -67,7 +68,10 @@ export const parseArgs = () => {
     if (checkIfFileIsYaml(manifest)) {
       return {
         inputPath: prependFullFilePath(manifest),
-        ...(output && {outputPath: prependFullFilePath(output)}),
+        outputOptions: {
+          ...(output && {outputPath: prependFullFilePath(output)}),
+          stdout,
+        },
         ...(overrideParams && {paramPath: overrideParams}),
       };
     }

@@ -35,6 +35,11 @@ export const CONFIG = {
         description:
           'How much information to output about the calculation to aid investigation and debugging.',
       },
+      stdout: {
+        type: Boolean,
+        optional: true,
+        description: 'Prints output to the console.',
+      },
       help: {
         type: Boolean,
         optional: true,
@@ -47,12 +52,14 @@ export const CONFIG = {
   -output [path to the output file]
   -format [yaml|csv] 
   -verbose
+  --stdout
   -help 
   manifest: path to an input manifest
   output: path to the output file where the results as saved, if none is provided it prints to stdout.
   format: the output file format. default to yaml but if csv is specified then it formats the outputs as a csv file for loading into another program.
   verbose: how much information to output about the calculation to aid investigation and debugging.
   help: prints out the above help instruction.
+  stdout: Prints output to the console.
   `,
   },
   GITHUB_PATH: 'https://github.com',

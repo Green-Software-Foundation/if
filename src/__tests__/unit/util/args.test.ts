@@ -71,6 +71,9 @@ describe('util/args: ', () => {
       const manifestPath = 'manifest-mock.yml';
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
+        outputOptions: {
+          stdout: undefined,
+        },
       };
 
       expect(result).toEqual(expectedResult);
@@ -88,7 +91,10 @@ describe('util/args: ', () => {
       const outputPath = 'output-mock.yml';
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
-        outputPath: path.normalize(`${processRunningPath}/${outputPath}`),
+        outputOptions: {
+          outputPath: path.normalize(`${processRunningPath}/${outputPath}`),
+          stdout: undefined,
+        },
       };
 
       expect(result).toEqual(expectedResult);
