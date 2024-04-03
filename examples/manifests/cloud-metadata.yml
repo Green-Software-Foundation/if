@@ -1,15 +1,15 @@
-name: coud-instanmce-metadata-demo
+name: cloud-metadata-demo
 description: null
 tags: null
 initialize:
   plugins:
     teads-curve:
-      path: '@grnsft/if-unofficial-plugins'
+      path: "@grnsft/if-unofficial-plugins"
       method: TeadsCurve
       global-config:
         interpolation: spline
-    cloud-instance-metadata:
-      method: CloudInstanceMetadata
+    cloud-metadata:
+      method: CloudMetadata
       path: "@grnsft/if-plugins"
 tree:
   children:
@@ -20,7 +20,7 @@ tree:
         cloud/instance-type: m5n.large
       pipeline:
         - teads-curve
-        - cloud-instance-metadata
+        - cloud-metadata
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 10
