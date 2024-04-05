@@ -32,7 +32,7 @@ const impactEngine = async () => {
     const computedTree = await compute(tree, {context, plugins});
     const aggregatedTree = aggregate(computedTree, context.aggregation);
     context['if-version'] = packageJson.version;
-    exhaust(aggregatedTree, context, outputPath);
+    await exhaust(aggregatedTree, context, outputPath);
 
     return;
   }
