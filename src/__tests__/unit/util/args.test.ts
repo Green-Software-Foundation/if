@@ -5,7 +5,7 @@ jest.mock('ts-command-line-args', () => ({
   parse: () => {
     switch (process.env.result) {
       case 'throw-error-object':
-        throw new CliInputError(MANIFEST_IS_MISSING);
+        throw new Error(MANIFEST_IS_MISSING);
       case 'error':
         throw MANIFEST_IS_MISSING;
       case 'manifest-is-missing':
