@@ -148,7 +148,7 @@ export const ExportCSVRaw = (): ExhaustPluginInterface => {
     );
     const csvString = getCsvString(extractredFlatMap, extractedHeaders, ids);
 
-    writeOutputFile(csvString, outputPath);
+    await writeOutputFile(csvString, outputPath);
   };
 
   return {execute};

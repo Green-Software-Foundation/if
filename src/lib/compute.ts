@@ -22,7 +22,7 @@ const mergeDefaults = (
 ) => {
   if (inputs) {
     const response = defaults
-      ? inputs.map(input => mergeObjects(input, defaults))
+      ? inputs.map(input => mergeObjects(defaults, input))
       : inputs;
 
     return response;
@@ -56,23 +56,23 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
     });
   }
 
-  let storage = node.inputs as PluginParams[];
-  storage = mergeDefaults(storage, defaults);
+  let inputStorage = structuredClone(node.inputs) as PluginParams[];
+  inputStorage = mergeDefaults(inputStorage, defaults);
   const pipelineCopy = structuredClone(pipeline);
 
   while (pipelineCopy.length !== 0) {
     const pluginName = pipelineCopy.shift() as string;
-    const plugin = params.plugins.get(pluginName);
+    const plugin = params.pluginStorage.get(pluginName);
     const nodeConfig = config && config[pluginName];
 
     if (isExecute(plugin)) {
-      storage = await plugin.execute(storage, nodeConfig);
-      node.outputs = storage;
+      inputStorage = await plugin.execute(inputStorage, nodeConfig);
+      node.outputs = inputStorage;
     }
 
     if (isGroupBy(plugin)) {
       node.children = await plugin.execute(
-        storage,
+        inputStorage,
         nodeConfig as GroupByConfig
       );
       delete node.inputs;

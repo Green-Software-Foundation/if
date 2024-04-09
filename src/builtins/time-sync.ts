@@ -1,5 +1,5 @@
 import {isDate} from 'node:util/types';
-import {DateTime, DateTimeMaybeValid, Interval} from 'luxon';
+import {Settings, DateTime, DateTimeMaybeValid, Interval} from 'luxon';
 import {z} from 'zod';
 
 import {parameterize} from '../lib/parameterize';
@@ -15,6 +15,8 @@ import {
   TimeParams,
 } from '../types/time-sync';
 import {validate} from '../util/validations';
+
+Settings.defaultZone = 'utc';
 
 const {InputValidationError} = ERRORS;
 

@@ -13,11 +13,9 @@ const {CliInputError} = ERRORS;
  */
 export const ExportCSV = () => {
   const parseOutputAndField = (outputPath: string) => {
-    if (!outputPath) {
-      throw new CliInputError('Output path is required.');
-    }
+    const validatedPath = validateOutputPath(outputPath);
 
-    const paths = outputPath.split('#');
+    const paths = validatedPath.split('#');
     const output = paths.slice(0, paths.length - 1).join('');
     const criteria = paths[paths.length - 1];
 
@@ -31,6 +29,21 @@ export const ExportCSV = () => {
       output,
       criteria,
     };
+  };
+
+  /**
+   * Validates output path.
+   */
+  const validateOutputPath = (outputPath: string) => {
+    if (!outputPath) {
+      throw new CliInputError('Output path is required.');
+    }
+
+    if (!outputPath.includes('#')) {
+      throw new CliInputError('Output path should contains `#`.');
+    }
+
+    return outputPath;
   };
 
   /**

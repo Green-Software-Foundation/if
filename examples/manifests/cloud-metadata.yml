@@ -1,41 +1,20 @@
-name: coud-instanmce-metadata-demo
-description: null
-tags: null
+name: cloud-metadata
+description: example impl invoking Cloud Metadata plugin
+tags:
 initialize:
   plugins:
-    teads-curve:
-      path: '@grnsft/if-unofficial-plugins'
-      method: TeadsCurve
-      global-config:
-        interpolation: spline
-    cloud-instance-metadata:
-      method: CloudInstanceMetadata
+    cloud-metadata:
+      method: CloudMetadata
       path: "@grnsft/if-plugins"
 tree:
   children:
-    child-0:
-      defaults:
-        cpu/thermal-design-power: 100
-        cloud/vendor: aws
-        cloud/instance-type: m5n.large
+    child:
       pipeline:
-        - teads-curve
-        - cloud-instance-metadata
+        - cloud-metadata
+      config:
       inputs:
-        - timestamp: 2023-07-06T00:00
-          duration: 10
-          cpu/utilization: 80
-        - timestamp: 2023-07-06T00:01
-          duration: 10
-          cpu/utilization: 80
-      outputs:
-        - timestamp: 2023-07-06T00:00
-          duration: 10
-          cpu/utilization: 80
-          cpu/thermal-design-power: 100
-          cpu/energy: 0.00025568089430894314
-        - timestamp: 2023-07-06T00:01
-          duration: 10
-          cpu/utilization: 80
-          cpu/thermal-design-power: 100
-          cpu/energy: 0.00025568089430894314
+        - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+          cloud/vendor: aws
+          cloud/instance-type: m5n.large
+          duration: 100
+          cpu/utilization: 10

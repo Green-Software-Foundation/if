@@ -1,13 +1,42 @@
 import {TimeSync} from '../../../builtins/time-sync';
 import {ERRORS} from '../../../util/errors';
-
+import {Settings, DateTime} from 'luxon';
 import {STRINGS} from '../../../config';
-
+Settings.defaultZone = 'utc';
 const {InputValidationError} = ERRORS;
 
-const {INVALID_OBSERVATION_OVERLAP} = STRINGS;
+const {INVALID_OBSERVATION_OVERLAP, INVALID_TIME_NORMALIZATION} = STRINGS;
 
-describe('lib/time-sync:', () => {
+jest.mock('luxon', () => {
+  const originalModule = jest.requireActual('luxon');
+  return {
+    ...originalModule,
+    Interval: {
+      ...originalModule.Interval,
+      fromDateTimes: jest.fn((start, end) => ({
+        start,
+        end,
+        splitBy: jest.fn(() => {
+          const intervals = [];
+          let current = start;
+
+          while (current < end) {
+            intervals.push({
+              start: process.env.MOCK_INTERVAL === 'true' ? null : current,
+              end: current.plus({seconds: 1}),
+            });
+
+            current = current.plus({seconds: 1});
+          }
+
+          return intervals;
+        }),
+      })),
+    },
+  };
+});
+
+describe('builtins/time-sync:', () => {
   describe('time-sync: ', () => {
     const basicConfig = {
       'start-time': '2023-12-12T00:01:00.000Z',
@@ -146,6 +175,32 @@ describe('execute(): ', () => {
     }
   });
 
+  it('throws error on missing global config.', async () => {
+    const config = undefined;
+    const timeModel = TimeSync(config!);
+
+    expect.assertions(1);
+
+    try {
+      await timeModel.execute([
+        {
+          timestamp: '2023-12-12T00:00:00.000Z',
+          duration: 15,
+          'cpu/utilization': 10,
+        },
+        {
+          timestamp: '2023-12-12T00:00:10.000Z',
+          duration: 30,
+          'cpu/utilization': 20,
+        },
+      ]);
+    } catch (error) {
+      expect(error).toStrictEqual(
+        new InputValidationError(INVALID_TIME_NORMALIZATION)
+      );
+    }
+  });
+
   it('throws error if interval is invalid.', async () => {
     const invalidIntervalConfig = {
       'start-time': '2023-12-12T00:00:00.000Z',
@@ -204,6 +259,98 @@ describe('execute(): ', () => {
     } catch (error) {
       expect(error).toStrictEqual(
         new InputValidationError(INVALID_OBSERVATION_OVERLAP)
+      );
+    }
+  });
+
+  it('throws error if `timestamp` is missing.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:01:00.000Z',
+      interval: 5,
+      'allow-padding': true,
+    };
+
+    const timeModel = TimeSync(basicConfig);
+
+    try {
+      await timeModel.execute([
+        {
+          duration: 15,
+          'cpu/utilization': 10,
+        },
+        {
+          timestamp: '2023-12-12T00:00:10.000Z',
+          duration: 30,
+          'cpu/utilization': 20,
+        },
+      ]);
+    } catch (error) {
+      expect(error).toBeInstanceOf(InputValidationError);
+      expect(error).toStrictEqual(
+        new InputValidationError(
+          '"timestamp" parameter is invalid input. Error code: invalid_union.'
+        )
+      );
+    }
+  });
+
+  it('throws error if the seconds `timestamp` is above 60.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:01:00.000Z',
+      interval: 5,
+      'allow-padding': true,
+    };
+
+    const timeModel = TimeSync(basicConfig);
+
+    try {
+      await timeModel.execute([
+        {
+          timestamp: '2023-12-12T00:00:90.000Z',
+          duration: 15,
+          'cpu/utilization': 10,
+        },
+        {
+          timestamp: '2023-12-12T00:00:10.000Z',
+          duration: 30,
+          'cpu/utilization': 20,
+        },
+      ]);
+    } catch (error) {
+      expect(error).toBeInstanceOf(InputValidationError);
+      expect(error).toStrictEqual(
+        new InputValidationError(
+          '"timestamp" parameter is invalid input. Error code: invalid_union.'
+        )
+      );
+    }
+  });
+
+  it('throws an error if the `timestamp` is not valid date.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:01:00.000Z',
+      interval: 10,
+      'allow-padding': true,
+    };
+
+    const timeModel = TimeSync(basicConfig);
+    expect.assertions(2);
+
+    try {
+      await timeModel.execute([
+        {
+          timestamp: 45,
+          duration: 10,
+          'cpu/utilization': 10,
+        },
+      ]);
+    } catch (error) {
+      expect(error).toBeInstanceOf(InputValidationError);
+      expect(error).toStrictEqual(
+        new InputValidationError('Unexpected date datatype: number: 45')
       );
     }
   });
@@ -393,6 +540,118 @@ describe('execute(): ', () => {
     expect(result).toStrictEqual(expectedResult);
   });
 
+  it('returns a result when `time-reserved` persists.', async () => {
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:09.000Z',
+      interval: 5,
+      'allow-padding': true,
+    };
+
+    const timeModel = TimeSync(basicConfig);
+
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 3,
+        'time-reserved': 5,
+        'resources-total': 10,
+      },
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 3,
+        'time-reserved': 5,
+        'resources-total': 10,
+      },
+    ]);
+
+    const expectedResult = [
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 5,
+        'resources-total': 10,
+        'time-reserved': 3.2,
+      },
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 5,
+        'resources-total': 10,
+        'time-reserved': 3.2,
+      },
+    ];
+
+    expect(result).toStrictEqual(expectedResult);
+  });
+
+  it('throws an error when `start-time` is wrong.', async () => {
+    process.env.MOCK_INTERVAL = 'true';
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:90.000Z',
+      'end-time': '2023-12-12T00:01:09.000Z',
+      interval: 5,
+      'allow-padding': true,
+    };
+
+    const timeModel = TimeSync(basicConfig);
+
+    try {
+      await timeModel.execute([
+        {
+          timestamp: '2023-12-12T00:00:00.000Z',
+          duration: 30,
+          'cpu/utilization': 20,
+        },
+      ]);
+    } catch (error) {
+      expect(error).toBeInstanceOf(InputValidationError);
+      expect(error).toStrictEqual(
+        new InputValidationError(
+          '"timestamp" parameter is invalid datetime in input[1]. Error code: invalid_string.'
+        )
+      );
+    }
+  });
+
+  it('returns a result when the first timestamp in the input has time padding.', async () => {
+    process.env.MOCK_INTERVAL = 'false';
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:09.000Z',
+      interval: 5,
+      'allow-padding': true,
+    };
+
+    const timeModel = TimeSync(basicConfig);
+
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 3,
+        'resources-total': 10,
+      },
+      {
+        timestamp: '2023-12-12T00:00:10.000Z',
+        duration: 3,
+        'resources-total': 10,
+      },
+    ]);
+
+    const expectedResult = [
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 5,
+        'resources-total': 10,
+      },
+      {
+        timestamp: '2023-12-12T00:00:05.000Z',
+        duration: 5,
+        'resources-total': 10,
+      },
+    ];
+
+    expect(result).toStrictEqual(expectedResult);
+  });
+
   it('throws error if padding is required at start while allow-padding = false.', async () => {
     const basicConfig = {
       'start-time': '2023-12-12T00:00:00.000Z',
@@ -481,5 +740,29 @@ describe('execute(): ', () => {
         new InputValidationError('Avoiding padding at start and end')
       );
     }
+  });
+
+  it('checks that timestamps in return object are ISO 8061 and timezone UTC.', async () => {
+    process.env.MOCK_INTERVAL = 'false';
+    const basicConfig = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:00:03.000Z',
+      interval: 1,
+      'allow-padding': true,
+    };
+
+    const timeModel = TimeSync(basicConfig);
+    const result = await timeModel.execute([
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 1,
+        carbon: 1,
+      },
+    ]);
+    expect(
+      DateTime.fromISO(result[0].timestamp).zone.valueOf() ===
+        'FixedOffsetZone { fixed: 0 }'
+    );
+    expect(DateTime.fromISO(result[0].timestamp).offset === 0);
   });
 });

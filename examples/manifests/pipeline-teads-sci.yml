@@ -12,10 +12,10 @@ initialize:
       path: "@grnsft/if-plugins"
       method: Sum
       global-config:
-        input-parameters: 
+        input-parameters:
           - cpu/energy
           - network/energy
-        output-parameter: energy 
+        output-parameter: energy
     "sci-m":
       path: "@grnsft/if-plugins"
       method: SciM
@@ -26,8 +26,8 @@ initialize:
       path: "@grnsft/if-plugins"
       method: Sci
       global-config:
-        functional-unit: ''
-        functional-unit-time: '1-day'
+        functional-unit: ""
+        functional-unit-time: "1-day"
     "time-sync":
       method: TimeSync
       path: "builtin"
@@ -57,26 +57,26 @@ tree:
         resources-total: 8
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
           duration: 1
           cpu/utilization: 50
           network/energy: 0.000001
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
           network/energy: 0.000001
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
           network/energy: 0.000001
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
           cpu/utilization: 15
           network/energy: 0.000001

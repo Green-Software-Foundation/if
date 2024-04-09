@@ -1,11 +1,14 @@
-import {ERRORS} from '../util/errors';
+import {z} from 'zod';
 
 import {STRINGS} from '../config';
 
 import {GroupByPlugin, PluginParams} from '../types/interface';
 import {GroupByConfig} from '../types/group-by';
 
-const {InvalidGroupingError} = ERRORS;
+import {ERRORS} from '../util/errors';
+import {validate} from '../util/validations';
+
+const {InvalidGroupingError, InputValidationError} = ERRORS;
 
 const {INVALID_GROUP_BY} = STRINGS;
 
@@ -54,7 +57,8 @@ export const GroupBy = (): GroupByPlugin => {
    */
   const execute = (inputs: PluginParams[], config: GroupByConfig) =>
     inputs.reduce((acc, input) => {
-      const groups = config.group.map(groupType => {
+      const validatedConfig = validateConfig(config);
+      const groups = validatedConfig.group.map(groupType => {
         if (!input[groupType]) {
           throw new InvalidGroupingError(INVALID_GROUP_BY(groupType));
         }
@@ -69,6 +73,21 @@ export const GroupBy = (): GroupByPlugin => {
 
       return acc;
     }, {} as any).children;
+
+  /**
+   * Validates config parameter.
+   */
+  const validateConfig = (config: GroupByConfig) => {
+    if (!config) {
+      throw new InputValidationError('Config is not provided.');
+    }
+
+    const schema = z.object({
+      group: z.array(z.string()).min(1),
+    });
+
+    return validate<z.infer<typeof schema>>(schema, config);
+  };
 
   return {metadata, execute};
 };
