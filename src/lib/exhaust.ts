@@ -49,9 +49,11 @@ export const exhaust = (
   outputOptions: Options
 ) => {
   const outputPlugins = context.initialize.outputs;
+
   if (outputOptions.stdout) {
     ExportLog().execute(tree, context);
   }
+
   if (!outputPlugins) {
     return;
   }
