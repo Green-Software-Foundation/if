@@ -1,7 +1,7 @@
 import pathLib = require('path');
 
 import {ERRORS} from '../util/errors';
-import {logger} from '../util/logger';
+import {Logger} from '../util/logger';
 import {memoizedLog} from '../util/log-memoize';
 import {pluginStorage} from '../util/plugin-storage';
 
@@ -16,6 +16,8 @@ const {ModuleInitializationError, PluginCredentialError} = ERRORS;
 const {GITHUB_PATH, NATIVE_PLUGIN} = CONFIG;
 const {MISSING_METHOD, MISSING_PATH, NOT_NATIVE_PLUGIN, INVALID_MODULE_PATH} =
   STRINGS;
+
+const logger = Logger('Manifest');
 
 /**
  * Imports module by given `path`.
