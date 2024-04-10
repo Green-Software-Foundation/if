@@ -1,8 +1,15 @@
+import {ERRORS} from '../util/errors';
 import {mergeObjects} from '../util/helpers';
+
+import {Logger} from '../util/logger';
 
 import {ComputeParams, Node, Params} from '../types/compute';
 import {PluginParams, isExecute, isGroupBy} from '../types/interface';
 import {GroupByConfig} from '../types/group-by';
+
+const pluginLogger = Logger('Plugin');
+
+const {PluginError} = ERRORS;
 
 /**
  * Traverses all child nodes based on children grouping.
@@ -29,6 +36,15 @@ const mergeDefaults = (
   }
 
   return defaults ? [defaults] : [];
+};
+
+/**
+ * Logs plugin error and re-throws to stop the execution.
+ */
+const pluginErrorHandler = (error: Error) => {
+  pluginLogger.error(error);
+
+  throw new PluginError(error.message);
 };
 
 /**
@@ -66,15 +82,17 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
     const nodeConfig = config && config[pluginName];
 
     if (isExecute(plugin)) {
-      inputStorage = await plugin.execute(inputStorage, nodeConfig);
+      inputStorage = await plugin
+        .execute(inputStorage, nodeConfig)
+        .catch(pluginErrorHandler);
+
       node.outputs = inputStorage;
     }
 
     if (isGroupBy(plugin)) {
-      node.children = await plugin.execute(
-        inputStorage,
-        nodeConfig as GroupByConfig
-      );
+      node.children = await plugin
+        .execute(inputStorage, nodeConfig as GroupByConfig)
+        .catch(pluginErrorHandler);
       delete node.inputs;
       delete node.outputs;
 
