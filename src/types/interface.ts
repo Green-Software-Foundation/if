@@ -6,7 +6,7 @@ export type ExecutePlugin = {
   execute: (
     inputs: PluginParams[],
     config?: Record<string, any>
-  ) => PluginParams[];
+  ) => Promise<PluginParams[]>;
   metadata: {
     kind: string;
   };
@@ -14,7 +14,10 @@ export type ExecutePlugin = {
 };
 
 export type GroupByPlugin = {
-  execute: (inputs: PluginParams[], config: GroupByConfig) => {children: any};
+  execute: (
+    inputs: PluginParams[],
+    config: GroupByConfig
+  ) => Promise<{children: any}>;
   metadata: {
     kind: string;
   };
