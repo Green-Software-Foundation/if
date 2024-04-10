@@ -24,9 +24,13 @@ const impactEngine = async () => {
   const options = parseArgs();
 
   if (options) {
+    if (Object.keys(options).length === 0) {
+      return;
+    }
+
     const {inputPath, outputPath, paramPath} = options;
 
-    const {tree, context, parameters} = await load(inputPath, paramPath);
+    const {tree, context, parameters} = await load(inputPath!, paramPath);
     parameterize.combine(context.params, parameters);
     const pluginStorage = await initalize(context.initialize.plugins);
     const computedTree = await compute(tree, {context, pluginStorage});
