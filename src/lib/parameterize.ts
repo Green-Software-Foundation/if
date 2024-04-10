@@ -1,4 +1,4 @@
-import {logger} from '../util/logger';
+import {Logger} from '../util/logger';
 import {memoizedLog} from '../util/log-memoize';
 
 import {STRINGS, PARAMETERS} from '../config';
@@ -7,6 +7,8 @@ import {ManifestParameter} from '../types/manifest';
 import {Parameters} from '../types/parameters';
 
 const {REJECTING_OVERRIDE, UNKNOWN_PARAM} = STRINGS;
+
+const logger = Logger('Manifest');
 
 /**
  * Parameters manager. Provides get aggregation method and combine functionality.
