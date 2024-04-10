@@ -3,7 +3,7 @@ import {parse} from 'ts-command-line-args';
 
 import {checkIfFileIsYaml} from './yaml';
 import {ERRORS} from './errors';
-import {logger} from './logger';
+import {Logger} from './logger';
 
 import {CONFIG, STRINGS} from '../config';
 
@@ -60,6 +60,7 @@ export const parseArgs = () => {
     help,
     stdout,
   } = validateAndParseProcessArgs();
+  const logger = Logger('CLI');
 
   if (help) {
     console.info(HELP);
