@@ -4,9 +4,9 @@ jest.mock('../../../util/log-memoize', () => ({
   memoizedLog: mockLog,
 }));
 jest.mock('../../../util/logger', () => ({
-  logger: {
+  Logger: () => ({
     warn: mockLog,
-  },
+  }),
 }));
 
 import {PARAMETERS} from '../../../config';

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-properties */
 import {compute} from '../../../lib/compute';
 
 import {ComputeParams} from '../../../types/compute';
@@ -8,7 +9,7 @@ describe('lib/compute: ', () => {
    * Mock plugins.
    */
   const mockExecutePlugin = () => ({
-    execute: (inputs: any) =>
+    execute: async (inputs: any) =>
       inputs.map((input: any) => {
         input.newField = 'mock-newField';
 
@@ -19,7 +20,7 @@ describe('lib/compute: ', () => {
     },
   });
   const mockGroupByPlugin = () => ({
-    execute: (inputs: any) => ({children: inputs}),
+    execute: async (inputs: any) => ({children: inputs}),
     metadata: {
       kind: 'groupby',
     },
@@ -71,7 +72,8 @@ describe('lib/compute: ', () => {
       };
 
       const response = await compute(tree, paramsExecute);
-      const expectedResult = mockExecutePlugin().execute(
+
+      const expectedResult = await mockExecutePlugin().execute(
         tree.children.mockChild.inputs
       );
 
@@ -91,7 +93,7 @@ describe('lib/compute: ', () => {
         },
       };
       const response = await compute(tree, params);
-      const expectedResult = mockGroupByPlugin().execute(
+      const expectedResult = await mockGroupByPlugin().execute(
         tree.children.mockChild.inputs
       );
 
@@ -114,7 +116,7 @@ describe('lib/compute: ', () => {
         },
       };
       const response = await compute(tree, paramsExecute);
-      const expectedResult = mockExecutePlugin().execute(
+      const expectedResult = await mockExecutePlugin().execute(
         tree.children.mockChild.inputs.map((input: any) => {
           input['cpu/name'] = 'Intel CPU';
 
@@ -161,10 +163,10 @@ describe('lib/compute: ', () => {
 
         return input;
       };
-      const expectedResult1 = mockExecutePlugin().execute(
+      const expectedResult1 = await mockExecutePlugin().execute(
         tree.children.mockChild1.inputs.map(mapper)
       );
-      const expectedResult21 = mockExecutePlugin().execute(
+      const expectedResult21 = await mockExecutePlugin().execute(
         tree.children.mockChild2.children.mockChild21.inputs.map(mapper)
       );
 
@@ -224,7 +226,7 @@ describe('lib/compute: ', () => {
         },
       };
       const response = await compute(tree, paramsExecute);
-      const expectedResult = mockExecutePlugin().execute(
+      const expectedResult = await mockExecutePlugin().execute(
         tree.children.mockChild.inputs
       );
 

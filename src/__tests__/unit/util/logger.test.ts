@@ -1,11 +1,13 @@
 import {Logger} from 'winston';
 
-import {logger} from '../../../util/logger';
+import {Logger as LoggerUtil} from '../../../util/logger';
 
 describe('util/logger: ', () => {
   describe('logger(): ', () => {
     it('is instance of winston logger.', () => {
-      expect(logger).toBeInstanceOf(Logger);
+      const localLogger = LoggerUtil('CLI');
+
+      expect(localLogger).toBeInstanceOf(Logger);
     });
   });
 });

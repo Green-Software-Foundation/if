@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {pluginStorage} from '../../../util/plugin-storage';
 import {ERRORS} from '../../../util/errors';
 
@@ -40,6 +41,7 @@ describe('util/pluginStorage: ', () => {
 
       it('gets data if there is stored one.', () => {
         const storage = pluginStorage();
+        //@ts-ignore
         storage.set(pluginName, pluginBody);
 
         const plugin = storage.get(pluginName);
@@ -51,6 +53,7 @@ describe('util/pluginStorage: ', () => {
     describe('set(): ', () => {
       it('returns storage instance.', () => {
         const storage = pluginStorage();
+        //@ts-ignore
         const instance = storage.set(pluginName, pluginBody);
 
         expect(instance).toEqual(storage);
@@ -58,6 +61,7 @@ describe('util/pluginStorage: ', () => {
 
       it('stores given data.', () => {
         const storage = pluginStorage();
+        //@ts-ignore
         const instance = storage.set(pluginName, pluginBody);
 
         expect(instance.get(pluginName)).toEqual(pluginBody);

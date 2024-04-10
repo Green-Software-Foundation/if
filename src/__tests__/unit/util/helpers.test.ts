@@ -2,10 +2,10 @@ const mockWarn = jest.fn();
 const mockError = jest.fn();
 
 jest.mock('../../../util/logger', () => ({
-  logger: {
+  Logger: () => ({
     warn: mockWarn,
     error: mockError,
-  },
+  }),
 }));
 import {andHandle, mergeObjects} from '../../../util/helpers';
 import {ERRORS} from '../../../util/errors';
