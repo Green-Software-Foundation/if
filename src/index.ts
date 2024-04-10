@@ -9,7 +9,7 @@ import {parameterize} from './lib/parameterize';
 import {parseArgs} from './util/args';
 import {ERRORS} from './util/errors';
 import {andHandle} from './util/helpers';
-import {logger} from './util/logger';
+import {Logger} from './util/logger';
 import {STRINGS} from './config';
 
 const packageJson = require('../package.json');
@@ -17,6 +17,8 @@ const packageJson = require('../package.json');
 const {CliInputError} = ERRORS;
 
 const {DISCLAIMER_MESSAGE, SOMETHING_WRONG} = STRINGS;
+
+const logger = Logger('CLI');
 
 const impactEngine = async () => {
   logger.info(DISCLAIMER_MESSAGE);
