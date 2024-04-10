@@ -146,7 +146,7 @@ describe('util/args: ', () => {
       const result = parseArgs();
 
       expect(info).toHaveBeenCalledWith(HELP);
-      expect(result).toEqual(undefined);
+      expect(result).toEqual({});
     });
 
     it('returns manifest and output path.', () => {
