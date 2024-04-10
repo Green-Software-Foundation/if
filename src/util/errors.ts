@@ -9,6 +9,7 @@ const CUSTOM_ERRORS = [
   'InvalidGroupingError',
   'PluginCredentialError',
   'PluginInitalizationError',
+  'PluginError',
   'WriteFileError',
 ] as const;
 
