@@ -1,6 +1,6 @@
 import {STRINGS} from '../config';
 import {ERRORS} from './errors';
-import {logger} from './logger';
+import {Logger} from './logger';
 
 const {ISSUE_TEMPLATE} = STRINGS;
 
@@ -10,6 +10,11 @@ const {ISSUE_TEMPLATE} = STRINGS;
 export const andHandle = (error: Error) => {
   const knownErrors = Object.keys(ERRORS);
 
+  if (error.name === 'PluginError') {
+    return;
+  }
+
+  const logger = Logger('Plugin');
   logger.error(error);
 
   if (!knownErrors.includes(error.name)) {
