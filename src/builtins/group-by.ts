@@ -2,7 +2,7 @@ import {z} from 'zod';
 
 import {STRINGS} from '../config';
 
-import {GroupByPlugin, PluginParams} from '../types/interface';
+import {PluginParams} from '../types/interface';
 import {GroupByConfig} from '../types/group-by';
 
 import {ERRORS} from '../util/errors';
@@ -15,7 +15,7 @@ const {INVALID_GROUP_BY} = STRINGS;
 /**
  * Plugin for inputs grouping.
  */
-export const GroupBy = (): GroupByPlugin => {
+export const GroupBy = () => {
   const metadata = {
     kind: 'groupby',
   };

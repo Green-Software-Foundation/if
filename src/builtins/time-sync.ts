@@ -34,7 +34,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
   /**
    * Take input array and return time-synchronized input array.
    */
-  const execute = (inputs: PluginParams[]): PluginParams[] => {
+  const execute = async (inputs: PluginParams[]) => {
     const validatedConfig = validateGlobalConfig();
     const timeParams = {
       startTime: DateTime.fromISO(validatedConfig['start-time']),
