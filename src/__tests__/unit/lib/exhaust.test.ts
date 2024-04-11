@@ -18,7 +18,7 @@ describe('lib/exhaust: ', () => {
       spy.mockReset();
     });
 
-    it('returns void if no exhaust plugin selected, log should be called.', async () => {
+    it('returns void if no exhaust plugin selected.', async () => {
       const tree = {};
       const context = {
         initialize: {
@@ -27,23 +27,19 @@ describe('lib/exhaust: ', () => {
       };
 
       // @ts-ignore
-      const result = await exhaust(tree, context);
+      const result = await exhaust(tree, context, {});
 
       expect(result).toBeUndefined();
-      expect(spy).toHaveBeenCalledTimes(1);
-      spy.mockReset();
     });
 
     it('uses log exhaust plugin as export.', async () => {
       const tree = {};
       const context = {
-        initialize: {
-          outputs: ['log'],
-        },
+        initialize: {},
       };
 
       // @ts-ignore
-      await exhaust(tree, context);
+      await exhaust(tree, context, {stdout: true});
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -60,7 +56,7 @@ describe('lib/exhaust: ', () => {
 
       try {
         // @ts-ignore
-        await exhaust(tree, context);
+        await exhaust(tree, context, {});
       } catch (error) {
         expect(error).toBeInstanceOf(CliInputError);
 
@@ -85,7 +81,7 @@ describe('lib/exhaust: ', () => {
 
       try {
         // @ts-ignore
-        await exhaust(tree, context);
+        await exhaust(tree, context, {});
       } catch (error) {
         expect(error).toBeInstanceOf(ModuleInitializationError);
 

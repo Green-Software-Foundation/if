@@ -9,7 +9,6 @@ import {parameterize} from './lib/parameterize';
 import {parseArgs} from './util/args';
 import {andHandle} from './util/helpers';
 import {logger} from './util/logger';
-
 import {STRINGS} from './config';
 
 const packageJson = require('../package.json');
@@ -24,7 +23,7 @@ const impactEngine = async () => {
   }
 
   logger.info(DISCLAIMER_MESSAGE);
-  const {inputPath, outputPath, paramPath} = options;
+  const {inputPath, paramPath, outputOptions} = options;
 
   const {tree, context, parameters} = await load(inputPath!, paramPath);
   parameterize.combine(context.params, parameters);
@@ -32,7 +31,7 @@ const impactEngine = async () => {
   const computedTree = await compute(tree, {context, pluginStorage});
   const aggregatedTree = aggregate(computedTree, context.aggregation);
   context['if-version'] = packageJson.version;
-  exhaust(aggregatedTree, context, outputPath);
+  exhaust(aggregatedTree, context, outputOptions);
 
   return;
 };

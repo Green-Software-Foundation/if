@@ -71,6 +71,11 @@ Then, run `if` using the following command:
 ie --manifest <path-to-your-manifest-file>
 ```
 
+Note that above command will not print the final output. In order to print the final output to the console, run `if` using the optional stdout argument:
+```sh
+ie --manifest <path-to-your-manifest-file> --stdout
+```
+
 You can also add an optional savepath for your output yaml (if you do not provide one, the output will be printed to the console):
 
 ```sh

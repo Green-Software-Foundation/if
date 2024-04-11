@@ -12,6 +12,7 @@ import {STRINGS} from '../config';
 
 import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
 import {Context} from '../types/manifest';
+import {Options} from '../types/process-args';
 
 const {ModuleInitializationError} = ERRORS;
 const {INVALID_EXHAUST_PLUGIN} = STRINGS;
@@ -33,8 +34,6 @@ const initializeExhaustPlugin = (name: string): ExhaustPluginInterface => {
       return ExportCSV();
     case 'csv-raw':
       return ExportCSVRaw();
-    case 'log':
-      return ExportLog();
     default:
       throw new ModuleInitializationError(INVALID_EXHAUST_PLUGIN(name));
   }
@@ -47,19 +46,21 @@ const initializeExhaustPlugin = (name: string): ExhaustPluginInterface => {
 export const exhaust = async (
   tree: any,
   context: Context,
-  outputPath?: string
+  outputOptions: Options
 ) => {
   const outputPlugins = context.initialize.outputs;
 
-  if (!outputPlugins) {
+  if (outputOptions.stdout) {
     ExportLog().execute(tree, context);
+  }
 
+  if (!outputPlugins) {
     return;
   }
 
   const exhaustPlugins = initializeExhaustPlugins(outputPlugins);
 
   for await (const plugin of exhaustPlugins) {
-    await plugin.execute(tree, context, outputPath);
+    await plugin.execute(tree, context, outputOptions.outputPath);
   }
 };

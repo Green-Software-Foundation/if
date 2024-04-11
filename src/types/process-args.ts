@@ -3,10 +3,19 @@ export interface ManifestProcessArgs {
   output?: string;
   'override-params'?: string;
   help?: boolean;
+  stdout?: boolean;
+}
+
+export interface Options {
+  outputPath?: string;
+  stdout?: boolean;
 }
 
 export interface ProcessArgsOutputs {
   inputPath?: string;
-  outputPath?: string;
+  outputOptions: {
+    outputPath?: string;
+    stdout?: boolean;
+  };
   paramPath?: string;
 }

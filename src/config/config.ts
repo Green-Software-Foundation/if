@@ -35,6 +35,11 @@ export const CONFIG = {
         description:
           'How much information to output about the calculation to aid investigation and debugging.',
       },
+      stdout: {
+        type: Boolean,
+        optional: true,
+        description: 'Prints output to the console.',
+      },
       help: {
         type: Boolean,
         optional: true,
@@ -47,13 +52,20 @@ export const CONFIG = {
   -output [path to the output file]
   -format [yaml|csv] 
   -verbose
+  --stdout
   -help 
   manifest: path to an input manifest
   output: path to the output file where the results as saved, if none is provided it prints to stdout.
   format: the output file format. default to yaml but if csv is specified then it formats the outputs as a csv file for loading into another program.
   verbose: how much information to output about the calculation to aid investigation and debugging.
   help: prints out the above help instruction.
+  stdout: Prints output to the console.
   `,
+    NO_OUTPUT: `
+You have not selected an output method. To see your output data, you can choose from:
+--stdout: this will print your output data to the console
+--output <savepath>: this will save your output data to the given filepath (do not provide file extension)
+Note that for the '--output' option you also need to define the output type in your manifest file. See https://if.greensoftware.foundation/major-concepts/manifest-file#initialize`,
   },
   GITHUB_PATH: 'https://github.com',
   NATIVE_PLUGIN: 'if-plugins',
