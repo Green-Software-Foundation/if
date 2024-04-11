@@ -17,13 +17,13 @@ const packageJson = require('../package.json');
 const {DISCLAIMER_MESSAGE} = STRINGS;
 
 const impactEngine = async () => {
-  logger.info(DISCLAIMER_MESSAGE);
   const options = parseArgs();
 
-  if (Object.keys(options).length === 0) {
+  if (!options) {
     return;
   }
 
+  logger.info(DISCLAIMER_MESSAGE);
   const {inputPath, outputPath, paramPath} = options;
 
   const {tree, context, parameters} = await load(inputPath!, paramPath);
