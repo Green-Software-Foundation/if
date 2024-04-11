@@ -23,7 +23,7 @@ const initializeExhaustPlugins = (plugins: string[]) =>
   plugins.map(initializeExhaustPlugin);
 
 /**
- * factory method for exhaust plugins
+ * Factory method for exhaust plugins.
  */
 const initializeExhaustPlugin = (name: string): ExhaustPluginInterface => {
   switch (name) {
@@ -44,7 +44,11 @@ const initializeExhaustPlugin = (name: string): ExhaustPluginInterface => {
  * Output manager - Exhaust.
  * Grabs output plugins from context, executes every.
  */
-export const exhaust = (tree: any, context: Context, outputPath?: string) => {
+export const exhaust = async (
+  tree: any,
+  context: Context,
+  outputPath?: string
+) => {
   const outputPlugins = context.initialize.outputs;
 
   if (!outputPlugins) {
@@ -54,5 +58,8 @@ export const exhaust = (tree: any, context: Context, outputPath?: string) => {
   }
 
   const exhaustPlugins = initializeExhaustPlugins(outputPlugins);
-  exhaustPlugins.forEach(plugin => plugin.execute(tree, context, outputPath));
+
+  for await (const plugin of exhaustPlugins) {
+    await plugin.execute(tree, context, outputPath);
+  }
 };
