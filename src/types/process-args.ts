@@ -4,3 +4,9 @@ export interface ManifestProcessArgs {
   'override-params'?: string;
   help?: boolean;
 }
+
+export interface ProcessArgsOutputs {
+  inputPath?: string;
+  outputPath?: string;
+  paramPath?: string;
+}

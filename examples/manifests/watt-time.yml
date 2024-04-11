@@ -7,17 +7,17 @@ initialize:
       path: "@grnsft/if-plugins"
       method: MockObservations
       global-config:
-        timestamp-from: 2024-02-26T00:00
-        timestamp-to: 2024-02-26T00:10
+        timestamp-from: "2024-03-05T00:00:00.000Z"
+        timestamp-to: "2024-03-05T00:10:00.000Z"
         duration: 60
         components:
-          - cloud/instance-type: Standard_A1_v2
-          - cloud/instance-type: Standard_A2_v2
+          - cloud/instance-type: Standard_E64_v3
+          - cloud/instance-type: Standard_E64_v4
         generators:
           common:
             cloud/vendor: azure
-            cloud/region: uk-west
-            geolocation: 37.7749,-122.4194
+            cloud/region: westus
+            cloud/region-wt-id: CAISO_NORTH
           randint:
             cpu/utilization:
               min: 1
@@ -33,10 +33,3 @@ tree:
         - watttime
       config:
       inputs:
-        - timestamp: "2024-02-26 00:00:00"
-          duration: 60
-          cloud/instance-type: Standard_A1_v2
-          cloud/vendor: azure
-          cloud/region: uk-west
-          geolocation: 37.7749,-122.4194
-          cpu/utilization: 15

@@ -4,7 +4,7 @@ tags:
 initialize:
   plugins:
     teads-curve:
-      path: '@grnsft/if-unofficial-plugins'
+      path: "@grnsft/if-unofficial-plugins"
       method: TeadsCurve
       global-config:
         interpolation: spline
@@ -12,10 +12,10 @@ initialize:
       path: "@grnsft/if-plugins"
       method: Sum
       global-config:
-        input-parameters: 
+        input-parameters:
           - cpu/energy
           - network/energy
-        output-parameter: energy-sum 
+        output-parameter: energy-sum
     "coefficient":
       path: "@grnsft/if-plugins"
       method: Coefficient
@@ -24,11 +24,11 @@ initialize:
         coefficient: 2
         output-parameter: energy-doubled
     "multiply":
-      path: '@grnsft/if-plugins'
+      path: "@grnsft/if-plugins"
       method: Multiply
       global-config:
-        input-parameters: ['cpu/utilization', 'duration']
-        output-parameter: 'cpu-times-duration'
+        input-parameters: ["cpu/utilization", "duration"]
+        output-parameter: "cpu-times-duration"
 tree:
   children:
     child-1:
@@ -42,8 +42,8 @@ tree:
         cpu/thermal-design-power: 100
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
           duration: 1
           cpu/utilization: 50
           network/energy: 10
@@ -51,21 +51,21 @@ tree:
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
           network/energy: 10
           energy: 5
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
           network/energy: 10
           energy: 5
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
-          cloud/instance-type: A1 
-          region: uk-west
+          cloud/instance-type: A1
+          cloud/region: uk-west
           cpu/utilization: 15
           network/energy: 10
           energy: 5
