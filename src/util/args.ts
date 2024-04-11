@@ -7,7 +7,7 @@ import {logger} from './logger';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {ManifestProcessArgs} from '../types/process-args';
+import {ManifestProcessArgs, ProcessArgsOutputs} from '../types/process-args';
 
 const {CliInputError} = ERRORS;
 
@@ -52,7 +52,7 @@ const prependFullFilePath = (filePath: string) => {
  *    If it is, then returns object containing full path.
  * 4. If params are missing or invalid, then rejects with `CliInputError`.
  */
-export const parseArgs = () => {
+export const parseArgs = (): ProcessArgsOutputs | undefined => {
   const {
     manifest,
     output,
