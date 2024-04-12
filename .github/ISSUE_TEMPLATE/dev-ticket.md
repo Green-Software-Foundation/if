@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 ## User story
-<!--- Describe the user persona this issue affects and how they benefiot from the proposed changes -->
+<!--- Describe the user persona this issue affects and how they benefit from the proposed changes -->
 
 ## Rationale/context
 <!--- Explain any relevant background and describe why the proposed changes are needed -->
