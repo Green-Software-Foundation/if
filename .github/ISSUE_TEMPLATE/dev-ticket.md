@@ -7,35 +7,38 @@ assignees: ''
 
 ---
 
-<!--- Provide a general summary of the issue in the Title above -->
+## User story
+<!--- Describe the user persona this issue affects and how they benefiot from the proposed changes -->
 
-## Rationale
-<!--- Provide the relevant background information to udnerstand why this change is needed -->
-<!--- This is where you can provide more details thathelp the reader understand why you want to make this change -->
+## Rationale/context
+<!--- Explain any relevant background and describe why the proposed changes are needed -->
 
-## Implementation details
-<!--- Explain the steps you will take to implement this change. If you do not have specific steps yet, write your implementation ideas or outline general approach -->
+## Implementation details:
+<!--- what specific steps will be taken to address the aims of the ticket? -->
 
-## Priority
-<!--- How urgent is this issue, and why? -->
-<!--- Explain in writing or give a numerical value from 1 (nice-to-have) to 5 (critical) -->
-
-## Scope
-<!--- Which parts of the project/codebase does this affect? -->
-<!--- What are the possibel downstream impacts or side-effects of this change?? -->
+## What does done look like?
+<!--- list the specific tasks that need to be completed in order to achieve the aims of this ticket. Please use checkboxes! -->
 
 ## Size
-<!--- How long do you expect this to take? -->
-<!--- How many people/person-hours are required? -->
+<!--- how long will this take (t-shirt sizing XS, S, M, L, XL) -->
 
-## What does "done" look like?
-<!--- Explain what needs to happen in order for this to be considered complete -->
+## Prerequisites/resources
+<!--- does anything else need to happen to enable this work to be completed? -->
 
-## Does this require updates to documentation or other materials??
-<!--- Are there documentation, website or other media changes required after this change is implemented?. -->
+## Updates to documentation
+<!--- enumerate specific changes required to the documentation, formatted as checkboxes with associated urls -->
 
-## Deadline
-<!--- Does this need to happen by a specific date? -->
+## Testing
+<!--- what tests are required for the changes to get merged? Please use checkboxes!-->
 
-## Acceptance criteria
-<!--- What has to be true for this to get merged? What threshold of testing is acceptable? -->
+## Reviewer
+<!--- assign a reviewer who can make this ticket READY -->
+
+## Manifest
+<!--- Only for issues relating to features/plugins -->
+<!--- provide a draft manifest that should run when this task is completed -->
+
+
+<!--- ADDITIONAL-->
+<!--- is the ticket assigned to someone? -->
+<!--- please label appropriately, including one label from each of the following types: type, size, urgency, status-->
