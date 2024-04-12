@@ -18,6 +18,8 @@ assignees: ''
 
 ## What does done look like?
 <!--- list the specific tasks that need to be completed in order to achieve the aims of this ticket. Please use checkboxes! -->
+- [ ] ...
+- [ ] ...
 
 ## Size
 <!--- how long will this take (t-shirt sizing XS, S, M, L, XL) -->
@@ -27,9 +29,13 @@ assignees: ''
 
 ## Updates to documentation
 <!--- enumerate specific changes required to the documentation, formatted as checkboxes with associated urls -->
+- [ ] ...
+- [ ] ...
 
 ## Testing
 <!--- what tests are required for the changes to get merged? Please use checkboxes!-->
+- [ ] ...
+- [ ] ...
 
 ## Reviewer
 <!--- assign a reviewer who can make this ticket READY -->
