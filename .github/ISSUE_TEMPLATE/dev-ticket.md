@@ -33,7 +33,3 @@ assignees: ''
 <!--- if the change relates to IF code or plugin code, provide a manifest that should run when these changes are compelted -->
 - [ ] ...
 - [ ] ...
-
-
-**Reviewer**
-<!--- assign a reviewer who can make this ticket READY -->
