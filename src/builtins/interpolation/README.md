@@ -176,7 +176,5 @@ tree:
 You can execute this by passing it to `ie`. Run the impact using the following command from the project root:
 
 ```sh
-npm i -g @grnsft/if
-npm i -g @grnsft/if-unofficial-plugins
 ie --manifest ./examples/manifests/interpolation.yml --output ./examples/outputs/interpolation.yml
 ```
