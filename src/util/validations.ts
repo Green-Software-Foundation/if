@@ -58,7 +58,7 @@ export const manifestSchema = z.object({
  * Validates given `manifest` object to match pattern.
  */
 export const validateManifest = (manifest: any) =>
-  validate(manifestSchema, manifest, ManifestValidationError);
+  validate(manifestSchema, manifest, undefined, ManifestValidationError);
 
 /**
  * Validates given `object` with given `schema`.
@@ -66,13 +66,14 @@ export const validateManifest = (manifest: any) =>
 export const validate = <T>(
   schema: ZodSchema<T>,
   object: any,
+  index?: number,
   errorConstructor: ErrorConstructor = InputValidationError
 ) => {
   const validationResult = schema.safeParse(object);
 
   if (!validationResult.success) {
     throw new errorConstructor(
-      prettifyErrorMessage(validationResult.error.message)
+      prettifyErrorMessage(validationResult.error.message, index)
     );
   }
 
@@ -82,7 +83,7 @@ export const validate = <T>(
 /**
  * Beautify error message from zod issue.
  */
-const prettifyErrorMessage = (issues: string) => {
+const prettifyErrorMessage = (issues: string, index?: number) => {
   const issuesArray = JSON.parse(issues);
 
   return issuesArray.map((issue: ZodIssue) => {
@@ -91,11 +92,12 @@ const prettifyErrorMessage = (issues: string) => {
       typeof part === 'number' ? `[${part}]` : part
     );
     const fullPath = flattenPath.join('.');
+    const indexErrorMessage = index !== undefined ? ` at index ${index}` : '';
 
     if (code === 'custom') {
       return `${message.toLowerCase()}. Error code: ${code}.`;
     }
 
-    return `"${fullPath}" parameter is ${message.toLowerCase()}. Error code: ${code}.`;
+    return `"${fullPath}" parameter is ${message.toLowerCase()}${indexErrorMessage}. Error code: ${code}.`;
   });
 };
