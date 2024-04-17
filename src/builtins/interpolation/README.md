@@ -81,8 +81,6 @@ The plugin conducts input validation using the `zod` library and may throw error
 ### TypeScript Usage
 
 ```ts
-import {Interpolation} from './Interpolation';
-
 const globalConfig = {
   method: 'linear',
   x: [0, 10, 50, 100],
