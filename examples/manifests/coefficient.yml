@@ -5,7 +5,7 @@ initialize:
   plugins:
     coefficient:
       method: Coefficient
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       global-config:
         input-parameter: "carbon"
         coefficient: 3
