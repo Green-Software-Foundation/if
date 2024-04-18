@@ -35,11 +35,10 @@ assignees: ''
 <!--- list the specific tasks that need to be completed in order to achieve the aims of this ticket. Please use checkboxes!
 
 Please use the given-when-then format to describe the acceptance criteria:
-
-Given (Setup): Describes the initial state of the system or the preconditions for a change.
-
-When (Action): Describes the specific action or behavior that is being tested/changed.
-
-Then (Assertion): Defines the expected outcome or behavior of the system after the action in the "When" step is performed.
-
 -->
+
+**Given** (Setup): Describes the initial state of the system or the preconditions for a change.
+
+**When** (Action): Describes the specific action or behavior that is being tested/changed.
+
+**Then** (Assertion): Defines the expected outcome or behavior of the system after the action in the "When" step is performed.
