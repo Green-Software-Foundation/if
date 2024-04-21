@@ -7,35 +7,38 @@ assignees: ''
 
 ---
 
-<!--- Provide a general summary of the issue in the Title above -->
+**What**
+<!--- Describe the deliverable -->
 
-## Rationale
-<!--- Provide the relevant background information to udnerstand why this change is needed -->
-<!--- This is where you can provide more details thathelp the reader understand why you want to make this change -->
+**Why**
+<!--- Describe why the proposed changes are needed -->
 
-## Implementation details
-<!--- Explain the steps you will take to implement this change. If you do not have specific steps yet, write your implementation ideas or outline general approach -->
+**Context**
+<!--- Explain any relevant background -->
 
-## Priority
-<!--- How urgent is this issue, and why? -->
-<!--- Explain in writing or give a numerical value from 1 (nice-to-have) to 5 (critical) -->
+**Prerequisites/resources**
+<!--- does anything else need to happen to enable this work to be completed? -->
 
-## Scope
-<!--- Which parts of the project/codebase does this affect? -->
-<!--- What are the possibel downstream impacts or side-effects of this change?? -->
+**SoW (scope of work)**
+<!--- what specific steps will be taken to address the aims of the ticket? -->
+<!--- Include: -->
+<!--- details of files to add/update -->
+<!--- any documentation updates required-->
+<!--- any tests that need adding/updating>
+<!--- -->
+- [ ] documentation updated
+- [ ] test cases added
 
-## Size
-<!--- How long do you expect this to take? -->
-<!--- How many people/person-hours are required? -->
 
-## What does "done" look like?
-<!--- Explain what needs to happen in order for this to be considered complete -->
+**Acceptance criteria**
 
-## Does this require updates to documentation or other materials??
-<!--- Are there documentation, website or other media changes required after this change is implemented?. -->
+<!--- list the specific tasks that need to be completed in order to achieve the aims of this ticket. Please use checkboxes!
 
-## Deadline
-<!--- Does this need to happen by a specific date? -->
+Please use the given-when-then format to describe the acceptance criteria:
+-->
 
-## Acceptance criteria
-<!--- What has to be true for this to get merged? What threshold of testing is acceptable? -->
+**Given** (Setup): Describes the initial state of the system or the preconditions for a change.
+
+**When** (Action): Describes the specific action or behavior that is being tested/changed.
+
+**Then** (Assertion): Defines the expected outcome or behavior of the system after the action in the "When" step is performed.

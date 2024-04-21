@@ -24,7 +24,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@babel/core": "7.22.10",
+    "@babel/core": "^7.22.10",
     "@babel/preset-typescript": "^7.22.5",
     "@jest/globals": "^29.6.1",
     "@types/jest": "^29.5.7",
