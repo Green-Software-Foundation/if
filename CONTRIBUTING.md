@@ -168,4 +168,23 @@ describe('util/args: ', () => {
 })
 ```
 
+### How to report issues (bugs)
+
+Bug report should contain all the information required to reproduce a bug and to make it as easy as possible to fix. This includes providing the following information
+
+- a description of the error,
+- a description of the expected behaviour,
+- a description of the actual behaviour,
+- steps to reproduce
+
+As an additional info, you can also provide either a Stackblitz link, OR
+
+- the manifest file that generated the error,
+- links to any code (e.g. your own plugin code), it must be available online,
+- runtime information such as OS, node version, package.json, IF version
+
+Reported bugs should pass the triage stage and be prioritized (low, medium or high).Then the issues will be fixed in the next available opportunity post-triage. 
+
+Community members are welcome to report any issue they face and also work on fixing the low priority bugs.
+
 *[⬅️ back to the root](/README.md#ief)*
