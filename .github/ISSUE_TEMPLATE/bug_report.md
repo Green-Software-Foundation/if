@@ -2,26 +2,38 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: 'bug'
+labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+---
+name: Bug report
+about: Create a report to help us improve
+labels: 'bug'
+---
+<!--- Please provide us the following info -->
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## Descriotion of the Error
+<!--- Tell us what happened -->
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+## Expected Behaviour
+<!--- Tell us what should happen -->
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+## Actual Behaviour
+<!--- Tell us what happens instead of the expected behavior -->
 
-**Additional context**
-Add any other context about the problem here.
+## Steps to Reproduce
+<!--- A set of specific instructions to reproduce the bug. Include code, if relevant -->
+
+##  And As Additional Info
+### EITHER a Stackblitz link
+<!--- Replicating the issue -->
+
+### OR Manifest File That Generated the Error
+
+### Links to Any Additional Code
+<!--- E.g. your plugin code, it must be available online -->
+
+### Runtime Info
+<!--- Such as OS, node version, package.json, IF version -->
