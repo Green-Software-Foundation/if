@@ -1,5 +1,5 @@
-name: realistic-pipeline-demo
-description:
+name: pipeline-with-aggregate
+description: a full pipeline with the aggregate feature enabled
 tags:
 aggregation:
   metrics:
