@@ -1,0 +1,19 @@
+name: tdp-finder
+description: demo
+tags:
+initialize:
+  outputs: ['yaml']
+  plugins:
+    tdp-finder: # a model that returns an embodied value given the sci embodied attribution equation.
+      method: TdpFinder
+      path: "@grnsft/if-plugins"
+tree:
+  children:
+    child:
+      pipeline:
+        - tdp-finder
+      config:
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 300
+          physical-processor: AMD 3020e

@@ -1,0 +1,21 @@
+name: shell-demo
+description: example impl invoking shell model
+tags:
+initialize:
+  outputs: ['yaml']
+  plugins:
+    shell:
+      method: Shell
+      path: "@grnsft/if-plugins"
+      global-config:
+        command: python3 /usr/local/bin/sampler
+tree:
+  children:
+    child:
+      pipeline:
+        - shell
+      inputs:
+        - timestamp: "2023-11-02T10:35:31.820Z"
+          duration: 3600
+          cpu/energy: 0.002
+          memory/energy: 0.000005
