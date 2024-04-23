@@ -177,14 +177,17 @@ Bug report should contain all the information required to reproduce a bug and to
 - a description of the actual behaviour,
 - steps to reproduce
 
-As an additional info, you can also provide either a Stackblitz link, OR
+To help us to diagnose and debug your issue, please provide either a [Stackblitz](https://stackblitz.com/) link that captures your local environment and failing manifest file, OR:
 
 - the manifest file that generated the error,
 - links to any code (e.g. your own plugin code), it must be available online,
 - runtime information such as OS, node version, package.json, IF version
 
-Reported bugs should pass the triage stage and be prioritized (low, medium or high).Then the issues will be fixed in the next available opportunity post-triage. 
+Reported bugs will be discussed among the team in a weekly bug triage and be assigned a severity (low, medium or high). 
 
+High severity bugs will be fixed as soon as possible, whereas medium and low severity bug fixes will likely be backlogged for attention in the next available sprint. 
+
+In some cases, we might decide not to fix certain bugs if they are low severity, either because we anticipate fixes coming soon as part of already-scheduled upgrades or because we think the fixes make "good first issues" for community contributors.
 Community members are welcome to report any issue they face and also work on fixing the low priority bugs.
 
 *[⬅️ back to the root](/README.md#ief)*
