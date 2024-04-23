@@ -5,7 +5,7 @@ labels: 'bug'
 ---
 <!--- Please provide us the following info -->
 
-## Descriotion of the Error
+## Description of the Error
 <!--- Tell us what happened -->
 
 ## Expected Behaviour
