@@ -1,0 +1,21 @@
+name: basic
+description: a minimal manifest executing a single plugin on a single component for a single timestep
+tags:
+initialize:
+  plugins:
+    teads-curve: 
+      path: '@grnsft/if-unofficial-plugins'
+      method: TeadsCurve
+      global-config:
+        interpolation: spline
+  outputs: ['yaml']
+tree:
+  children:
+    child-0:
+      defaults:
+        cpu/thermal-design-power: 100
+      pipeline:
+        - teads-curve
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          cpu/utilization: 20
