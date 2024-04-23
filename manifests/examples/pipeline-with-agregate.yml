@@ -1,0 +1,128 @@
+name: realistic-pipeline-demo
+description:
+tags:
+aggregation:
+  metrics:
+    - "carbon"
+  type: "both"
+initialize:
+  plugins:
+    "teads-curve":
+      path: "@grnsft/if-unofficial-plugins"
+      method: TeadsCurve
+      global-config:
+        interpolation: spline
+    "sci-e":
+      path: "@grnsft/if-plugins"
+      method: SciE
+    "sci-m":
+      path: "@grnsft/if-plugins"
+      method: SciM
+    "sci-o":
+      path: "@grnsft/if-plugins"
+      method: SciO
+    "sci":
+      path: "@grnsft/if-plugins"
+      method: Sci
+      global-config:
+        functional-unit: "requests"
+        functional-unit-time: "1 minute"
+    "time-sync":
+      method: TimeSync
+      path: "builtin"
+      global-config:
+        start-time: "2023-12-12T00:00:00.000Z"
+        end-time: "2023-12-12T00:01:00.000Z"
+        interval: 5
+        allow-padding: true
+    "group-by":
+      path: builtin
+      method: GroupBy
+tree:
+  children:
+    child-1:
+      pipeline:
+        - teads-curve
+        - sci-e
+        - sci-m
+        - sci-o
+        - time-sync
+        - sci
+      config:
+        group-by:
+          group:
+            - cloud/region
+            - cloud/instance-type
+      defaults:
+        cpu/thermal-design-power: 100
+        grid/carbon-intensity: 800
+        device/emissions-embodied: 1533.120 # gCO2eq
+        time-reserved: 3600 # 1hr in seconds
+        device/expected-lifespan: 94608000 # 3 years in seconds
+        resources-reserved: 1
+        resources-total: 8
+        functional-unit-time: "1 min"
+      inputs:
+        - timestamp: "2023-12-12T00:00:00.000Z"
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          duration: 1
+          cpu/utilization: 10
+        - timestamp: "2023-12-12T00:00:01.000Z"
+          duration: 5
+          cpu/utilization: 20
+          cloud/instance-type: A1
+          cloud/region: uk-west
+        - timestamp: "2023-12-12T00:00:06.000Z"
+          duration: 7
+          cpu/utilization: 15
+          cloud/instance-type: A1
+          cloud/region: uk-west
+        - timestamp: "2023-12-12T00:00:13.000Z"
+          duration: 30
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          cpu/utilization: 15
+    child-2:
+      pipeline:
+        - teads-curve
+        - sci-e
+        - sci-m
+        - sci-o
+        - time-sync
+        - sci
+      config:
+        group-by:
+          group:
+            - cloud/region
+            - cloud/instance-type
+      defaults:
+        cpu/thermal-design-power: 100
+        grid/carbon-intensity: 800
+        device/emissions-embodied: 1533.120 # gCO2eq
+        time-reserved: 3600 # 1hr in seconds
+        device/expected-lifespan: 94608000 # 3 years in seconds
+        resources-reserved: 1
+        resources-total: 8
+        functional-unit-time: "1 min"
+      inputs:
+        - timestamp: "2023-12-12T00:00:00.000Z"
+          duration: 1
+          cpu/utilization: 30
+          cloud/instance-type: A1
+          cloud/region: uk-west
+        - timestamp: "2023-12-12T00:00:01.000Z"
+          duration: 5
+          cpu/utilization: 28
+          cloud/instance-type: A1
+          cloud/region: uk-west
+        - timestamp: "2023-12-12T00:00:06.000Z"
+          duration: 7
+          cpu/utilization: 40
+          cloud/instance-type: A1
+          cloud/region: uk-west
+        - timestamp: "2023-12-12T00:00:13.000Z"
+          duration: 30
+          cpu/utilization: 33
+          cloud/instance-type: A1
+          cloud/region: uk-west
