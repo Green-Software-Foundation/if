@@ -1,5 +1,5 @@
-name: sci-demo
-description: example invoking sci model
+name: sci
+description: a manifest demonstrating how to use the SCI feature
 tags:
 initialize:
   outputs: ['yaml']

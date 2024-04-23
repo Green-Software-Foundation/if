@@ -1,5 +1,5 @@
 name: tdp-finder
-description: demo
+description: a manifest demonstrating how to use the tdp-finder feature
 tags:
 initialize:
   outputs: ['yaml']

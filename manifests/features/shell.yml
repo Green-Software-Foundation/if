@@ -1,5 +1,5 @@
-name: shell-demo
-description: example impl invoking shell model
+name: shell
+description: a manifest demonstrating how to use the shell feature
 tags:
 initialize:
   outputs: ['yaml']

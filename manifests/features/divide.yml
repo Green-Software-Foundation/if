@@ -1,5 +1,5 @@
-name: divide-demo
-description:
+name: divide
+description: a manifest demonstrating how to use the divide feature
 tags:
 initialize:
   outputs: ['yaml']

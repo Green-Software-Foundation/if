@@ -1,5 +1,5 @@
-name: time-sync-demo
-description:
+name: time-sync
+description: a manifest demonstrating how to use the time-sync feature
 tags:
 initialize:
   output:

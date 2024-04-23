@@ -1,5 +1,5 @@
-name: regex-demo
-description:
+name: regex
+description: a manifest demonstrating how to use the regex feature
 tags:
 initialize:
   outputs: ['yaml']

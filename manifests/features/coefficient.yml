@@ -1,5 +1,5 @@
 name: coefficient-demo
-description:
+description: a manifest demonstrating how to use the coefficient feature
 tags:
 initialize:
   outputs: ['yaml']

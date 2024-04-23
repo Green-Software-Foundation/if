@@ -1,5 +1,5 @@
-name: groupby-demo
-description: demo pipeline
+name: groupby
+description: a manifest demonstrating how to use the groupby feature
 initialize:
   outputs: ['yaml']
   plugins:

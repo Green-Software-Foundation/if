@@ -1,5 +1,5 @@
-name: sci-e-demo
-description:
+name: sum
+description: a manifest demonstrating how to use the sum feature
 tags:
 initialize:
   outputs: ['yaml']

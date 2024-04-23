@@ -1,5 +1,5 @@
-name: multiply-demo
-description:
+name: multiply
+description: a manifest demonstrating how to use the multiply feature
 tags:
 initialize:
   outputs: ['yaml']

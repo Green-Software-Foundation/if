@@ -1,5 +1,5 @@
-name: nesting-demo
-description: null
+name: nesting
+description: a manifest that includes nested child components
 tags:
   kind: web
   complexity: moderate
