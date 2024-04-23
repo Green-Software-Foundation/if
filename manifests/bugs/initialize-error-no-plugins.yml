@@ -1,5 +1,5 @@
-name: basic
-description: a minimal manifest executing a single plugin on a single component for a single timestep
+name: initialize-error-no-path
+description: a negative test case that fails becuase no plugins are included in the initialize block
 tags:
 initialize:
   plugins:

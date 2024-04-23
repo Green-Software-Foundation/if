@@ -1,5 +1,5 @@
-name: realistic-pipeline-demo
-description:
+name: aggregation-error-wrong-metric
+description: a negative test case that fails due to the aggregation feature being passed an incorrect metric
 tags:
 aggregation:
   metrics:

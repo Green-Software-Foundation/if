@@ -1,5 +1,5 @@
-name: basic
-description: a minimal manifest executing a single plugin on a single component for a single timestep
+name: pipeline-error-naming-mismatch
+description: a negative test case that fails due to the plugin name in the pipeline not matching the name given in initialize 
 tags:
 initialize:
   plugins:

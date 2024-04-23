@@ -1,5 +1,5 @@
-name: basic
-description: a minimal manifest executing a single plugin on a single component for a single timestep
+name: input-error-missing-duration
+description: a negative test case that fails due to the required `duration` field being omitted from input data
 tags:
 initialize:
   plugins:

@@ -1,5 +1,5 @@
-name: pipeline-teads-sci
-description: a full pipeline seeded with some hardcoded input data and yielding an SCI score
+name: pipeline-ordering-error
+description: a negative test case that fails because sci-o is invoked too early in the pipeline (before its inputs are generated)
 tags:
 initialize:
   plugins:

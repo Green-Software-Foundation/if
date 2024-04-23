@@ -1,5 +1,5 @@
-name: basic
-description: a minimal manifest with a deliberate error in the initialize block (missing path)
+name: initialize-error-no-config
+description: a negative test case that fails due to plugin initialization missing some required config 
 tags:
 initialize:
   plugins:

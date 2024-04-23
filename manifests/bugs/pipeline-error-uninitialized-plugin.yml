@@ -1,5 +1,5 @@
-name: basic
-description: a minimal manifest executing a single plugin on a single component for a single timestep
+name: pipeline-uninitialized-plugin-error
+description: a negative test case that fails due to an uninitialized plugin being invoked in a pipeline
 tags:
 initialize:
   plugins:
