@@ -66,6 +66,16 @@ Here are the rules applied to each branch:
 - On `main` we can be slightly more flexible. It is acceptable to skip QA for PRs that only change typos, documentation or comments. Any changes to source code or tests should be QA approved before merge.
 - In emergency scenarios where an urgent hotfix is required it might be required to skip QA review on `main` branches - this should only happen with QA authorization so QA can retroactively test as soon as possible.
 
+### How to create a release
+
+Creating a release of `if`, `if-plugins` or `if-unofficial-plugins` is achieved by following these steps:
+
+1) core team member creates a tagged release on `main`
+2) new tagged release triggers automatic commit to be pushed to `main` that updates package and lock files that include new version numbers
+3) `main` branch is manually merged into `release` by core team member
+4) merging into release triggers automatic new release to be created on npm
+
+
 ## DCO
 
 We require contributors to conform to the DCO agreement on our repositories. This means either signing commits or explicitly adding a DCO commit message. This ensures all contributors agree to the conditions imposed by our licenses and adhere to our expected practices. The DCO must be satisfied in order to PRs to be merged.
