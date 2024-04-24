@@ -39,7 +39,7 @@ We appreciate bug reports! If you experience an issue with IF or one of our plug
 
 The more detailed information you provide int hen bug report, the easier it will be for us to diagnose, triage and resolve your issue. We ask for some simple information about your issue, including a description of the error, the expected behaviour, the actual behaviour and the stepos we cna take to reproduce the error in our local environments. We also then prompt you to provide a link to [Stackblitz](https://stackblitz.com/) or a similar online environemnt where we can run your mnaifest and observe the error. If you prefer *not* to send a link, we would appreciate a copy of the manifest file that you ran to produce the error, information about your runtime environment and any additional code that's required to reproduce the error. This is all designed to enable us to reproduce the same error and debug it for you as quickly as possible.
 
-Once a suitably detailed bug report exists, we will triage it. We hold weekly triage calls on Tuesdays. In most cases, the triage call will be the core team's first interaction with the bug, although in some cases we may enagge asynchronously in advance of the call. Triage means that the core team will examine the issue and assign an urgency label - either Low, Medium or High. 
+Once a suitably detailed bug report exists, we will triage it. We hold weekly triage calls on Tuesdays. In most cases, the triage call will be the core team's first interaction with the bug, although in some cases we may engage asynchronously in advance of the call. Triage means that the core team will examine the issue and assign an urgency label - either Low, Medium or High. 
 
 The assessment rubric is as follows:
 
