@@ -37,9 +37,11 @@ We appreciate bug reports! If you experience an issue with IF or one of our plug
 3. Click on `Create New Issue` and select the `Bug Report` template.
 4. Fill out the requested information.
 
-The more detailed information you provide int hen bug report, the easier it will be for us to diagnose, triage and resolve your issue. We ask for some simple information about your issue, including a description of the error, the expected behaviour, the actual behaviour and the stepos we cna take to reproduce the error in our local environments. We also then prompt you to provide a link to [Stackblitz]() or a similar online environemnt where we can run your mnaifest and observe the error. If you prefer *not* to send a link, we would appreciate the a copy of the manifest file that you ran to produce the error, information about your runtime environment and any additional code that's required to reproduce. This is all designed to enable us to reproduce the same error and debug it for you.
+The more detailed information you provide int hen bug report, the easier it will be for us to diagnose, triage and resolve your issue. We ask for some simple information about your issue, including a description of the error, the expected behaviour, the actual behaviour and the stepos we cna take to reproduce the error in our local environments. We also then prompt you to provide a link to [Stackblitz](https://stackblitz.com/) or a similar online environemnt where we can run your mnaifest and observe the error. If you prefer *not* to send a link, we would appreciate a copy of the manifest file that you ran to produce the error, information about your runtime environment and any additional code that's required to reproduce the error. This is all designed to enable us to reproduce the same error and debug it for you as quickly as possible.
 
-Once a suitably detailed bug report exists, we will triage it. Triage means that the core team will assign an urgency label to your bug report - either Low, Medium or High. The assessment rubric is as follows:
+Once a suitably detailed bug report exists, we will triage it. We hold weekly triage calls on Tuesdays. In most cases, the triage call will be the core team's first interaction with the bug, although in some cases we may enagge asynchronously in advance of the call. Triage means that the core team will examine the issue and assign an urgency label - either Low, Medium or High. 
+
+The assessment rubric is as follows:
 
 |                                                                                                                        | Consequence                                                                              | Severity |
 | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------- |
@@ -68,7 +70,7 @@ The mapping of severity to label is as follows:
 | 4        | H     |
 | 5        | H     |
 
-During the bug triage we will also discuss a remediation plan for the bug. This will be communicated in the comments on the bug report. For high urgency bugs, the fix wilkl be implemented as soon as possible, maybe reorganizing our current work to accommodate the fix. For medium priority bugs, we will schedule the fix in the next available sprint. Low priority bugs will be backlogged and addressed when there is developer time available. Low priority bugs will also be tagged `help-wanted` so that they can be addressed by community members.
+During the bug triage we will also discuss a remediation plan for the bug. This will be communicated in the comments on the bug report. For high urgency bugs, the fix will be implemented as soon as possible, maybe reorganizing our current work to accommodate it. For medium priority bugs, we will schedule the fix in the next available sprint. Low priority bugs will be backlogged and addressed when there is developer time available. Low priority bugs will also be tagged `help-wanted` so that they can be addressed by community members.
 
 Not every bug will be fixed. We may decide *not* to fix a bug in cases such as:
 
@@ -78,8 +80,6 @@ Not every bug will be fixed. We may decide *not* to fix a bug in cases such as:
 - the bug is contentious for some reason and there is reputational or community risks associated with the fix
 
 The bug will be labelled `fix-now`, `fix-later` or `wont-fix` to reflect our remediation plan and details will be provided in issue comments.
-
-
 
 
 ## Code Contributions
