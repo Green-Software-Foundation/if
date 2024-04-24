@@ -19,7 +19,7 @@ labels: 'bug'
 
 
 ### Link to online environment
-<!--- Please provide a link to Stackblitz or similar tool that allows us to reproduce your error in a preconfigured online environemnt -->
+<!--- Please provide a link to Stackblitz or similar tool that allows us to reproduce your error in a preconfigured online environment -->
  
 <!--- If you provided a link to Stackblitz or similar, you can ignore the remaining fields. 
 Otherwise, please provide the following information -->
