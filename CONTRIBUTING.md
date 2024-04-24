@@ -1,8 +1,5 @@
 ## Contribution Guidelines <!-- omit from toc -->
 
-> **HACKATHON PARTICIPANTS**: please note that these contribution guidelines are intended for community contributions to IF, and NOT hackathon submissions. If you are building plugins, tooling or other add-ons to IF, please maintain them in your own repositories and submit links to the hackathon judges.**
-
-
 First off, thanks for taking the time to contribute! 🎉
 
 The following document is a rule set of guidelines for contributing.
