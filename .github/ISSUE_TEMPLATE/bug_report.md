@@ -17,11 +17,14 @@ labels: 'bug'
 ## Steps to Reproduce
 <!--- A set of specific instructions to reproduce the bug. Include code, if relevant -->
 
-##  And As Additional Info
-### EITHER a Stackblitz link
-<!--- Replicating the issue -->
 
-### OR Manifest File That Generated the Error
+### Link to online environment
+<!--- Please provide a link to Stackblitz or similar tool that allows us to reproduce your error in a preconfigured online environemnt -->
+ 
+<!--- If you provided a link to Stackblitz or similar, you can ignore the remaining fields. 
+Otherwise, please provide the following information -->
+
+### Manifest File That Generated the Error
 
 ### Links to Any Additional Code
 <!--- E.g. your plugin code, it must be available online -->
