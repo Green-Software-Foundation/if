@@ -35,6 +35,8 @@ module.exports = {
         'plugins',
         'integration',
         'doc',
+        'release',
+        '.commitlint'
       ],
     ],
     'scope-empty': [2, 'never'],

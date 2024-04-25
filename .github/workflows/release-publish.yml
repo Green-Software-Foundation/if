@@ -1,0 +1,56 @@
+name: Release publish NPM
+on:
+  push:
+    branches:
+      - release
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm ci
+      # - run: npm test
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: master
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: npm ci
+      - name: Initalize git user email
+        run: git config --global user.email "${{env.RELEASE_USER_EMAIL}}"
+      - name: Initalize git user name
+        run: git config --global user.name "Release publish workflow"
+
+      - name: Initialize npm config
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+        env:
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+      - name: Check if release is a pre-release
+        id: check_pre_release
+        run: echo "{name}=${{github.event.release.prerelease}}" >> $GITHUB_OUTPUT
+        
+      - name: Publish to npm
+        if: steps.check_pre_release.outputs.is_pre_release == 'true'
+        run: npm publish --tag beta
+        env:
+          GITHUB_TOKEN: ${{secrets.github_token}}
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+      - name: Publish to npm
+        if: steps.check_pre_release.outputs.is_pre_release != 'true'
+        run: npm publish
+        env:
+          GITHUB_TOKEN: ${{secrets.github_token}}
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
