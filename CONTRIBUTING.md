@@ -45,9 +45,9 @@ The assessment rubric is as follows:
 
 |                                                                                                                        | Consequence                                                                              | Severity |
 | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------- |
-| Bugs in IF core                                                                                                        | unusable framework, incorrect calculations                                               | 5        |
-| Bugs in if-plugins                                                                                                     | core pathways fail, IF very limited in functionality                                     | 5        |
-| Bugs in if-unofficial                                                                                                  | Third party plugins harder to use, limits IF to standard lib                             | 3        |
+| Bugs in IF core leading to incorrect calculations                                                                      | unusable framework                                                                       | 5        |
+| Bugs in if-plugins leading to incorrect calculations                                                                   | core pathways fail, IF very limited in functionality                                     | 5        |
+| Bugs in if-unofficial-pluginsd leading to incorrect calculations                                                       | Third party plugins harder to use, limits IF to standard lib                             | 3        |
 | Bugs in template                                                                                                       | Harder to build plugins, ecosystem growth is impacted                                    | 2        |
 | Bugs in docs                                                                                                           | product does not match expectation, hard to debug, frustration, loss of adoption         | 2        |
 | Security flaw: privacy related                                                                                         | leak user data, unlikely to achieve adoption in serious orgs                             | 5        |
