@@ -81,3 +81,9 @@ You can check our issue board for issues tagged `help-wanted`. These are issues 
 Please read the full contribution guidelines at [if.greensoftware.foundation](https://if.greensoftware.foundation/Contributing)
 
 The same guidelines also apply to `if-docs`, `if-plugins` and `if-unofficial-plugins`.
+
+## Bug reports
+
+To report bugs please use our bug report template. You can do this by opening a new issue and selecting `Bug Report` when you are prompted to pick a template. The more information you provide,.the quicker we will be able to reproduce, diagnose and triage your issue.
+
+To read about our bug reporting and triage process, please see [our contribution guidelines](contributing.md#reporting-bugs).
