@@ -1,34 +1,10 @@
-<div id="header" align="center">
-<img style=”margin: 0px” src=hack-banner.png alt=”banner” height=”500" />
-</div>
-
-----------------------------
-
-**Welcome to [CarbonHack 24](https://grnsft.org/hack/github) from the Green Software Foundation.**
-
-> From Monday, 18th March - Monday, 8th April 2024, participants will compete to showcase their best application of IF in measuring the environmental impacts of software. 
-> 
-> Carbon Hack is a dynamic competition that combines healthy rivalry with collaborative innovation. Hackers will push the limits of the framework, uncover potential weaknesses, and create innovations to enhance the tool.
-> 
-> CarbonHack is open to all, including software practitioners and those with a passion for Green Software.
->
-> Find out more about CarbonHack 2024 on the [CarbonHack website](https://grnsft.org/hack/github). Check out the [FAQ on GitHub](https://grnsft.org/hack/faq).
-> 
-> Registration opens 15th January!
->
-> **PLEASE NOTE** hackathon projects are not supposed to be raised as pull requests to this rpeository! Please keep your hackathon plugins in your own repositories and submit links instead of raising PRs!
-----------------------------
-
-
-
 # Impact Framework
 
 
 > [!IMPORTANT]
 > Incubation Project: This project is an incubation project being run inside the Green Software Foundation; as such, we DON’T recommend using it in any critical use case. Incubation projects are experimental, offer no support guarantee, have minimal governance and process, and may be retired at any moment. This project may one day Graduate, in which case this disclaimer will be removed.
 
-**Note** We have recently refactored the IF codebase and introduced some changes affecting both users and developers. You can read our migration guide [HERE](./Refactor-migration-guide.md) to help you update to the latest version!
-
+**Note** We have recently (March 2024) refactored the IF codebase and introduced some changes affecting both users and developers. You can read our migration guide [HERE](./Refactor-migration-guide.md) to help you update to the latest version!
 
 
 [Impact Framework](https://greensoftwarefoundation.atlassian.net/wiki/spaces/~612dd45e45cd76006a84071a/pages/17072136/Opensource+Impact+Engine+Framework) (IF) is an [Incubation](https://oc.greensoftware.foundation/project-lifecycle.html#incubation) project from the [Open Source Working Group](https://greensoftwarefoundation.atlassian.net/wiki/spaces/~612dd45e45cd76006a84071a/pages/852049/Open+Source+Working+Group) in the [Green Software Foundation](https://greensoftware.foundation/).
