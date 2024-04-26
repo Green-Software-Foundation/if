@@ -1,0 +1,26 @@
+name: sci-o-demo
+description:
+tags:
+initialize:
+  plugins:
+    sci-e:
+      kind: plugin
+      method: SciE
+      path: "@grnsft/if-plugins"
+    sci-o:
+      verbose: false
+      method: SciO
+      path: "@grnsft/if-plugins"
+tree:
+  children:
+    child:
+      pipeline:
+        - sci-e
+        - sci-o
+      config:
+        sci-e:
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          cpu/energy: 0.001
+          grid/carbon-intensity: 800
