@@ -1,5 +1,5 @@
 name: cloud-metadata
-description: example impl invoking Cloud Metadata plugin
+description: successful path
 tags:
 initialize:
   outputs: ['yaml']

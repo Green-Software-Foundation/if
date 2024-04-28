@@ -1,5 +1,5 @@
 name: sci
-description: a manifest demonstrating how to use the SCI feature
+description: failure with `config.sci.functional-unit` value being number
 tags:
 initialize:
   outputs: ['yaml']
@@ -18,7 +18,7 @@ tree:
       config:
         sci:
           functional-unit-time: 1 sec
-          functional-unit: requests # factor to convert per time to per f.unit
+          functional-unit: 999 # factor to convert per time to per f.unit
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600

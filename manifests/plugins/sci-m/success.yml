@@ -1,5 +1,5 @@
 name: sci-m
-description: a manifest demonstrating how to use the sci-m feature
+description: successful path
 tags:
 initialize:
   outputs: ['yaml']

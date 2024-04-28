@@ -1,5 +1,5 @@
 name: divide
-description: a manifest demonstrating how to use the divide feature
+description: success path
 tags:
 initialize:
   outputs: ['yaml']

@@ -1,0 +1,24 @@
+name: coefficient-demo
+description: successful path
+tags:
+initialize:
+  outputs: ['yaml']
+  plugins:
+    coefficient:
+      method: Coefficient
+      path: "@grnsft/if-plugins"
+      global-config:
+        input-parameter: "carbon"
+        coefficient: 3
+        output-parameter: "carbon-product"
+tree:
+  children:
+    child:
+      pipeline:
+        - coefficient
+      config:
+        sum:
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          carbon: 30

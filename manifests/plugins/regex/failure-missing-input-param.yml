@@ -1,5 +1,5 @@
 name: regex
-description: a manifest demonstrating how to use the regex feature
+description: failure with missing `physical-processor` field from `inputs`
 tags:
 initialize:
   outputs: ['yaml']
@@ -21,4 +21,4 @@ tree:
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
-          physical-processor: Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz
+          physical: Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz

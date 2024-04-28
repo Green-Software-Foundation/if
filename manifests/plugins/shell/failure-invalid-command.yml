@@ -1,5 +1,5 @@
 name: shell
-description: a manifest demonstrating how to use the shell feature
+description: falure with `global-config.command` being number instead od string
 tags:
 initialize:
   outputs: ['yaml']
@@ -8,7 +8,7 @@ initialize:
       method: Shell
       path: "@grnsft/if-plugins"
       global-config:
-        command: python3 /usr/local/bin/sampler
+        command: 1000
 tree:
   children:
     child:

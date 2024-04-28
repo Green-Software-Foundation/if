@@ -1,5 +1,5 @@
 name: coefficient-demo
-description: a manifest demonstrating how to use the coefficient feature
+description: failure with ivalid `global-config.input-parameter`
 tags:
 initialize:
   outputs: ['yaml']
@@ -8,7 +8,7 @@ initialize:
       method: Coefficient
       path: "@grnsft/if-plugins"
       global-config:
-        input-parameter: "carbon"
+        input-parameter: 4
         coefficient: 3
         output-parameter: "carbon-product"
 tree:
