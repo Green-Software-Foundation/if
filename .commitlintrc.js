@@ -35,6 +35,7 @@ module.exports = {
         'plugins',
         'integration',
         'doc',
+        'manifests'
       ],
     ],
     'scope-empty': [2, 'never'],
