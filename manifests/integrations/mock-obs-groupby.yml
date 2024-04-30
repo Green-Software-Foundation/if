@@ -1,5 +1,5 @@
 name: Mock observations + Group by
-description: Integration of mock observations + groupby plugins
+description: Integration of `mock observations` + `groupby plugins`
 initialize: 
   plugins: 
     mock-observations:
