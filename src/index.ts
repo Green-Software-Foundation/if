@@ -13,8 +13,6 @@ import {logger} from './util/logger';
 
 import {STRINGS} from './config';
 
-const packageJson = require('../package.json');
-
 const {DISCLAIMER_MESSAGE} = STRINGS;
 
 const impactEngine = async () => {
@@ -33,7 +31,6 @@ const impactEngine = async () => {
   const pluginStorage = await initalize(context.initialize.plugins);
   const computedTree = await compute(tree, {context, pluginStorage});
   const aggregatedTree = aggregate(computedTree, context.aggregation);
-  context['if-version'] = packageJson.version;
   exhaust(aggregatedTree, context, outputOptions);
 
   return;
