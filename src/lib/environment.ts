@@ -6,6 +6,8 @@ import {Context, ContextWithExec} from '../types/manifest';
 import {NpmListResponse, PackageDependency} from '../types/environment';
 import {osInfo} from '../util/os-checker';
 
+const packageJson = require('../../package.json');
+
 /**
  * 1. Gets the high-resolution real time when the application starts.
  * 2. Converts the high-resolution time to milliseconds.
@@ -65,6 +67,7 @@ export const injectEnvironment = async (context: Context) => {
     execution: {
       command: process.argv.join(' '),
       environment: {
+        'if-version': packageJson.version,
         os: info.os,
         'os-version': info['os-version'],
         'node-version': process.versions.node,
