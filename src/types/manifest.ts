@@ -16,6 +16,7 @@ export type ContextWithExec = Omit<Manifest, 'tree'> & {
   execution: {
     command: string;
     environment: {
+      'if-version': string;
       os: string;
       'os-version': string;
       'node-version': string;
