@@ -1,0 +1,39 @@
+name: Mock observations + Group by
+description: Integration of mock observations + groupby plugins
+initialize: 
+  plugins: 
+    mock-observations:
+      path: '@grnsft/if-plugins'
+      method: MockObservations
+      global-config:
+        timestamp-from: '2024-03-05T00:00:00.000Z'
+        timestamp-to: '2024-03-05T00:01:00.000Z'
+        duration: 10
+        components:
+          - name: server-1
+            cloud/instance-type: Standard_E64_v3
+            cloud/region: westus3
+          - name: server-2
+            cloud/instance-type: Standard_E64_v3
+            cloud/region: france            
+        generators:
+          common:
+            cloud/vendor: azure
+          randint:
+            cpu/utilization:
+              min: 1
+              max: 99
+    group-by: 
+      path: 'builtin'
+      method: GroupBy          
+tree: 
+  pipeline:
+    - mock-observations
+    - group-by
+  defaults:
+  config:
+    group-by:
+      group:
+        - cloud/region
+        - name
+  inputs: null
