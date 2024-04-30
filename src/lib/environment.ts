@@ -1,13 +1,10 @@
-import {exec} from 'node:child_process';
-import {release, platform} from 'node:os';
-import {promisify} from 'node:util';
-
 import {DateTime} from 'luxon';
+
+import {execPromise} from '../util/helpers';
 
 import {Context, ContextWithExec} from '../types/manifest';
 import {NpmListResponse, PackageDependency} from '../types/environment';
-
-const execPromise = promisify(exec);
+import {osInfo} from '../util/os-checker';
 
 /**
  * 1. Gets the high-resolution real time when the application starts.
@@ -61,14 +58,15 @@ const listDependencies = async () => {
  */
 export const injectEnvironment = async (context: Context) => {
   const dependencies = await listDependencies();
+  const info = await osInfo();
 
   const contextWithExec: ContextWithExec = {
     ...context,
     execution: {
       command: process.argv.join(' '),
       environment: {
-        os: platform(),
-        'os-version': release(),
+        os: info.os,
+        'os-version': info['os-version'],
         'node-version': process.versions.node,
         'date-time': getProcessStartingTimestamp(),
         dependencies,
