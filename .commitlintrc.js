@@ -35,6 +35,7 @@ module.exports = {
         'plugins',
         'integration',
         'doc',
+        'manifests',
         'release',
         '.commitlint'
       ],

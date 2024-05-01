@@ -1,0 +1,82 @@
+name: pipeline-teads-sci
+description: a full pipeline seeded with some hardcoded input data and yielding an SCI score
+tags:
+initialize:
+  plugins:
+    "teads-curve":
+      path: "@grnsft/if-unofficial-plugins"
+      method: TeadsCurve
+      global-config:
+        interpolation: spline
+    "sum":
+      path: "@grnsft/if-plugins"
+      method: Sum
+      global-config:
+        input-parameters:
+          - cpu/energy
+          - network/energy
+        output-parameter: energy
+    "sci-m":
+      path: "@grnsft/if-plugins"
+      method: SciM
+    "sci-o":
+      path: "@grnsft/if-plugins"
+      method: SciO
+    "sci":
+      path: "@grnsft/if-plugins"
+      method: Sci
+      global-config:
+        functional-unit: ""
+        functional-unit-time: "1-day"
+    "time-sync":
+      method: TimeSync
+      path: "builtin"
+      global-config:
+        start-time: "2023-12-12T00:00:00.000Z"
+        end-time: "2023-12-12T00:01:00.000Z"
+        interval: 5
+        allow-padding: true
+tree:
+  children:
+    child-1:
+      pipeline:
+        - teads-curve
+        - sum
+        - sci-m
+        - sci-o
+        - time-sync
+        - sci
+      config:
+      defaults:
+        cpu/thermal-design-power: 100
+        grid/carbon-intensity: 800
+        device/emissions-embodied: 1533.120 # gCO2eq
+        time-reserved: 3600 # 1hr in seconds
+        device/expected-lifespan: 94608000 # 3 years in seconds
+        resources-reserved: 1
+        resources-total: 8
+      inputs:
+        - timestamp: "2023-12-12T00:00:00.000Z"
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          duration: 1
+          cpu/utilization: 50
+          network/energy: 0.000001
+        - timestamp: "2023-12-12T00:00:01.000Z"
+          duration: 5
+          cpu/utilization: 20
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          network/energy: 0.000001
+        - timestamp: "2023-12-12T00:00:06.000Z"
+          duration: 7
+          cpu/utilization: 15
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          network/energy: 0.000001
+        - timestamp: "2023-12-12T00:00:13.000Z"
+          duration: 30
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          cpu/utilization: 15
+          network/energy: 0.000001
