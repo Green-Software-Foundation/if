@@ -65,6 +65,7 @@ export const injectEnvironment = async (context: Context) => {
   const contextWithExec: ContextWithExec = {
     ...context,
     execution: {
+      status: 'success',
       command: process.argv.join(' '),
       environment: {
         'if-version': packageJson.version,
