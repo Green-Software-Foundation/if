@@ -23,6 +23,8 @@ export type ContextWithExec = Omit<Manifest, 'tree'> & {
       'date-time': string;
       dependencies: string[];
     };
+    status: 'success' | 'fail';
+    error?: string;
   };
 };
 
