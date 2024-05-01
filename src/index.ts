@@ -3,7 +3,7 @@ import {aggregate} from './lib/aggregate';
 import {compute} from './lib/compute';
 import {injectEnvironment} from './lib/environment';
 import {exhaust} from './lib/exhaust';
-import {initalize} from './lib/initialize';
+import {initialize} from './lib/initialize';
 import {load} from './lib/load';
 import {parameterize} from './lib/parameterize';
 
@@ -27,13 +27,21 @@ const impactEngine = async () => {
 
   const {tree, rawContext, parameters} = await load(inputPath!, paramPath);
   const context = await injectEnvironment(rawContext);
-  parameterize.combine(context.params, parameters);
-  const pluginStorage = await initalize(context.initialize.plugins);
-  const computedTree = await compute(tree, {context, pluginStorage});
-  const aggregatedTree = aggregate(computedTree, context.aggregation);
-  exhaust(aggregatedTree, context, outputOptions);
 
-  return;
+  try {
+    parameterize.combine(context.params, parameters);
+    const pluginStorage = await initialize(context.initialize.plugins);
+    const computedTree = await compute(tree, {context, pluginStorage});
+    const aggregatedTree = aggregate(computedTree, context.aggregation);
+    exhaust(aggregatedTree, context, outputOptions);
+  } catch (error) {
+    if (error instanceof Error) {
+      context.execution.status = 'fail';
+      context.execution.error = error.toString();
+      logger.error(error);
+      exhaust(tree, context, outputOptions);
+    }
+  }
 };
 
 impactEngine().catch(andHandle);
