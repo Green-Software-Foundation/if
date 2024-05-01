@@ -36,8 +36,11 @@ const flattenDependencies = (dependencies: [string, PackageDependency][]) =>
   dependencies.map(dependency => {
     const [packageName, versionInfo] = dependency;
     const {version, extraneous, resolved} = versionInfo;
+    const ifExtraneous = extraneous ? ` extraneous -> ${resolved}` : '';
+    const ifFromGithub =
+      resolved && resolved.startsWith('git') ? ` (${resolved})` : '';
     const formattedString = `${packageName}@${version}${
-      extraneous ? ` extraneous -> ${resolved}` : ''
+      ifExtraneous || ifFromGithub
     }`;
 
     return formattedString;
