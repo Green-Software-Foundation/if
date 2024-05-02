@@ -75,7 +75,7 @@ Creating a release of `if`, `if-plugins` or `if-unofficial-plugins` is achieved 
 3) `main` branch is manually merged into `release` by core team member
 4) merging into release triggers automatic new release to be created on npm
 
-
+We use [semantic versioning](https://semver.org/) to number our releases. 
 ## DCO
 
 We require contributors to conform to the DCO agreement on our repositories. This means either signing commits or explicitly adding a DCO commit message. This ensures all contributors agree to the conditions imposed by our licenses and adhere to our expected practices. The DCO must be satisfied in order to PRs to be merged.
