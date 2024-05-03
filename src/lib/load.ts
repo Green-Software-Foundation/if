@@ -11,7 +11,7 @@ import {Parameters} from '../types/parameters';
  */
 export const load = async (inputPath: string, paramPath?: string) => {
   const rawManifest = await openYamlFileAsObject<any>(inputPath);
-  const {tree, ...context} = validateManifest(rawManifest);
+  const {tree, ...rawContext} = validateManifest(rawManifest);
   const parametersFromCli =
     paramPath &&
     (await readAndParseJson<Parameters>(paramPath)); /** @todo validate json */
@@ -21,7 +21,7 @@ export const load = async (inputPath: string, paramPath?: string) => {
 
   return {
     tree,
-    context,
+    rawContext,
     parameters,
   };
 };

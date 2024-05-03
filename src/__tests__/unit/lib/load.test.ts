@@ -53,7 +53,7 @@ describe('lib/load: ', () => {
             },
           },
         },
-        context: {
+        rawContext: {
           name: 'gsf-demo',
           description: 'Hello',
           tags: {
@@ -120,7 +120,7 @@ describe('lib/load: ', () => {
             },
           },
         },
-        context: {
+        rawContext: {
           name: 'gsf-demo',
           description: 'Hello',
           tags: {
