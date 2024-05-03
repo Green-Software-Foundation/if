@@ -64,6 +64,7 @@ const listDependencies = async () => {
 export const injectEnvironment = async (context: Context) => {
   const dependencies = await listDependencies();
   const info = await osInfo();
+  const dateTime = `${getProcessStartingTimestamp()} (UTC)`;
 
   const contextWithExec: ContextWithExec = {
     ...context,
@@ -74,7 +75,7 @@ export const injectEnvironment = async (context: Context) => {
         os: info.os,
         'os-version': info['os-version'],
         'node-version': process.versions.node,
-        'date-time': getProcessStartingTimestamp(),
+        'date-time': dateTime,
         dependencies,
       },
     },
