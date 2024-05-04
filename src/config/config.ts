@@ -8,36 +8,25 @@ export const CONFIG = {
       manifest: {
         type: String,
         optional: true,
-        alias: 'i',
+        alias: 'm',
         description: 'Path to an input manifest file.',
       },
       output: {
         type: String,
         optional: true,
-        description:
-          'Path to the output file where the results as saved, if none is provided it prints to stdout.',
+        alias: 'o',
+        description: 'Path to the output file where the results as saved.',
       },
       'override-params': {
         type: String,
         optional: true,
+        alias: 'op',
         description: 'Path to a parameter file that overrides our defaults.',
-      },
-      format: {
-        type: String,
-        optional: true,
-        description:
-          'The output file format. default to yaml but if csv is specified then it formats the outputs as a csv file for loading into another program.',
-        defaultValue: 'yaml',
-      },
-      verbose: {
-        type: Boolean,
-        optional: true,
-        description:
-          'How much information to output about the calculation to aid investigation and debugging.',
       },
       stdout: {
         type: Boolean,
         optional: true,
+        alias: 's',
         description: 'Prints output to the console.',
       },
       help: {
@@ -48,16 +37,12 @@ export const CONFIG = {
       },
     } as ArgumentConfig<ManifestProcessArgs>,
     HELP: `impact 
-  -manifest [path to the input file]
-  -output [path to the output file]
-  -format [yaml|csv] 
-  -verbose
+  --manifest [path to the input file]
+  --output [path to the output file]
   --stdout
-  -help 
+  --help
   manifest: path to an input manifest
   output: path to the output file where the results as saved, if none is provided it prints to stdout.
-  format: the output file format. default to yaml but if csv is specified then it formats the outputs as a csv file for loading into another program.
-  verbose: how much information to output about the calculation to aid investigation and debugging.
   help: prints out the above help instruction.
   stdout: Prints output to the console.
   `,
