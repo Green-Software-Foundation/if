@@ -52,7 +52,7 @@ const prependFullFilePath = (filePath: string) => {
  *    If it is, then returns object containing full path.
  * 4. If params are missing or invalid, then rejects with `CliInputError`.
  */
-export const parseArgs = (): ProcessArgsOutputs | undefined => {
+export const parseArgs = (): ProcessArgsOutputs => {
   const {
     manifest,
     output,
