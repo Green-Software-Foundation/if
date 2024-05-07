@@ -11,17 +11,17 @@ import {ManifestProcessArgs, ProcessArgsOutputs} from '../types/process-args';
 
 const {CliInputError} = ERRORS;
 
-const {impact} = CONFIG;
-const {ARGS, HELP, NO_OUTPUT} = impact;
+const {IE} = CONFIG;
+const {ARGS, HELP} = IE;
 
-const {FILE_IS_NOT_YAML, MANIFEST_IS_MISSING} = STRINGS;
+const {FILE_IS_NOT_YAML, MANIFEST_IS_MISSING, NO_OUTPUT} = STRINGS;
 
 /**
  * Validates process arguments
  */
 const validateAndParseProcessArgs = () => {
   try {
-    return parse<ManifestProcessArgs>(ARGS);
+    return parse<ManifestProcessArgs>(ARGS, HELP);
   } catch (error) {
     if (error instanceof Error) {
       throw new CliInputError(error.message);
@@ -57,14 +57,8 @@ export const parseArgs = (): ProcessArgsOutputs | undefined => {
     manifest,
     output,
     'override-params': overrideParams,
-    help,
     stdout,
   } = validateAndParseProcessArgs();
-
-  if (help) {
-    console.info(HELP);
-    return;
-  }
 
   if (!output && !stdout) {
     logger.warn(NO_OUTPUT);
