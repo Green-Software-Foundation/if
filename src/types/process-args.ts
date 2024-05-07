@@ -11,7 +11,7 @@ export interface Options {
 }
 
 export interface ProcessArgsOutputs {
-  inputPath?: string;
+  inputPath: string;
   outputOptions: {
     outputPath?: string;
     stdout?: boolean;
