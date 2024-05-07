@@ -18,14 +18,10 @@ const {DISCLAIMER_MESSAGE} = STRINGS;
 const impactEngine = async () => {
   const options = parseArgs();
 
-  if (!options) {
-    return;
-  }
-
   logger.info(DISCLAIMER_MESSAGE);
   const {inputPath, paramPath, outputOptions} = options;
 
-  const {tree, rawContext, parameters} = await load(inputPath!, paramPath);
+  const {tree, rawContext, parameters} = await load(inputPath, paramPath);
   const context = await injectEnvironment(rawContext);
   parameterize.combine(context.params, parameters);
   const pluginStorage = await initalize(context.initialize.plugins);
