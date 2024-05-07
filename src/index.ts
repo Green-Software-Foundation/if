@@ -28,8 +28,6 @@ const impactEngine = async () => {
   const computedTree = await compute(tree, {context, pluginStorage});
   const aggregatedTree = aggregate(computedTree, context.aggregation);
   exhaust(aggregatedTree, context, outputOptions);
-
-  return;
 };
 
 impactEngine().catch(andHandle);
