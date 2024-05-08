@@ -19,14 +19,10 @@ const {DISCLAIMER_MESSAGE} = STRINGS;
 const impactEngine = async () => {
   const options = parseArgs();
 
-  if (!options) {
-    return;
-  }
-
   logger.info(DISCLAIMER_MESSAGE);
   const {inputPath, paramPath, outputOptions} = options;
 
-  const {rawManifest, parameters} = await load(inputPath!, paramPath);
+  const {rawManifest, parameters} = await load(inputPath, paramPath);
   const envManifest = await injectEnvironment(rawManifest);
 
   try {

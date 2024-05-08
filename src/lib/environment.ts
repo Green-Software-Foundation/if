@@ -36,8 +36,11 @@ const flattenDependencies = (dependencies: [string, PackageDependency][]) =>
   dependencies.map(dependency => {
     const [packageName, versionInfo] = dependency;
     const {version, extraneous, resolved} = versionInfo;
+    const ifExtraneous = extraneous ? ` extraneous -> ${resolved}` : '';
+    const ifFromGithub =
+      resolved && resolved.startsWith('git') ? ` (${resolved})` : '';
     const formattedString = `${packageName}@${version}${
-      extraneous ? ` extraneous -> ${resolved}` : ''
+      ifExtraneous || ifFromGithub
     }`;
 
     return formattedString;
@@ -63,6 +66,7 @@ export const injectEnvironment = async (
 ): Promise<Manifest> => {
   const dependencies = await listDependencies();
   const info = await osInfo();
+  const dateTime = `${getProcessStartingTimestamp()} (UTC)`;
 
   return {
     ...manifest,
@@ -74,7 +78,7 @@ export const injectEnvironment = async (
         os: info.os,
         'os-version': info['os-version'],
         'node-version': process.versions.node,
-        'date-time': getProcessStartingTimestamp(),
+        'date-time': dateTime,
         dependencies,
       },
     },

@@ -16,7 +16,6 @@ import {execPromise} from './helpers';
  */
 const getLinuxInfo = async () => {
   const {stdout} = await execPromise('lsb_release -a');
-  console.log('mrstdout: ', stdout);
 
   const parseLinuxVersion = (lsbReleaseResponse: string) => {
     const regex =
