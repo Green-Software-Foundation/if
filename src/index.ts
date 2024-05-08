@@ -31,14 +31,17 @@ const impactEngine = async () => {
     const pluginStorage = await initialize(context.initialize.plugins);
     const computedTree = await compute(tree, {context, pluginStorage});
     const aggregatedTree = aggregate(computedTree, context.aggregation);
-    exhaust(aggregatedTree, context, outputOptions);
+    await exhaust(aggregatedTree, context, outputOptions);
   } catch (error) {
     if (error instanceof Error) {
       envManifest.execution.status = 'fail';
       envManifest.execution.error = error.toString();
       logger.error(error);
       const {tree, ...context} = envManifest;
-      exhaust(tree, context, outputOptions);
+
+      if (error.name !== 'ExhaustError') {
+        exhaust(tree, context, outputOptions);
+      }
     }
   }
 };
