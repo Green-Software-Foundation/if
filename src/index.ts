@@ -10,6 +10,7 @@ import {parameterize} from './lib/parameterize';
 import {parseArgs} from './util/args';
 import {andHandle} from './util/helpers';
 import {logger} from './util/logger';
+import {validateManifest} from './util/validations';
 
 import {STRINGS} from './config';
 
@@ -25,10 +26,11 @@ const impactEngine = async () => {
   logger.info(DISCLAIMER_MESSAGE);
   const {inputPath, paramPath, outputOptions} = options;
 
-  const {tree, rawContext, parameters} = await load(inputPath!, paramPath);
-  const context = await injectEnvironment(rawContext);
+  const {rawManifest, parameters} = await load(inputPath!, paramPath);
+  const envManifest = await injectEnvironment(rawManifest);
 
   try {
+    const {tree, ...context} = validateManifest(envManifest);
     parameterize.combine(context.params, parameters);
     const pluginStorage = await initialize(context.initialize.plugins);
     const computedTree = await compute(tree, {context, pluginStorage});
@@ -36,9 +38,10 @@ const impactEngine = async () => {
     exhaust(aggregatedTree, context, outputOptions);
   } catch (error) {
     if (error instanceof Error) {
-      context.execution.status = 'fail';
-      context.execution.error = error.toString();
+      envManifest.execution.status = 'fail';
+      envManifest.execution.error = error.toString();
       logger.error(error);
+      const {tree, ...context} = envManifest;
       exhaust(tree, context, outputOptions);
     }
   }
