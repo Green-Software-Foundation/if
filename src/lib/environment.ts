@@ -2,7 +2,7 @@ import {DateTime} from 'luxon';
 
 import {execPromise} from '../util/helpers';
 
-import {Context, ContextWithExec} from '../types/manifest';
+import {Manifest} from '../types/manifest';
 import {NpmListResponse, PackageDependency} from '../types/environment';
 import {osInfo} from '../util/os-checker';
 
@@ -56,14 +56,16 @@ const listDependencies = async () => {
 };
 
 /**
- * Injects execution information (command, environment) to existing context.
+ * Injects execution information (command, environment) to existing manifest.
  */
-export const injectEnvironment = async (context: Context) => {
+export const injectEnvironment = async (
+  manifest: Manifest
+): Promise<Manifest> => {
   const dependencies = await listDependencies();
   const info = await osInfo();
 
-  const contextWithExec: ContextWithExec = {
-    ...context,
+  return {
+    ...manifest,
     execution: {
       status: 'success',
       command: process.argv.join(' '),
@@ -77,6 +79,4 @@ export const injectEnvironment = async (context: Context) => {
       },
     },
   };
-
-  return contextWithExec;
 };
