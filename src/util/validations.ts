@@ -50,21 +50,19 @@ export const manifestSchema = z.object({
     ),
     outputs: z.array(z.string()).optional(),
   }),
-  execution: z
-    .object({
-      command: z.string(),
-      environment: z.object({
-        'if-version': z.string(),
-        os: z.string(),
-        'os-version': z.string(),
-        'node-version': z.string(),
-        'date-time': z.string(),
-        dependencies: z.array(z.string()),
-      }),
-      status: z.string(),
-      error: z.string().optional(),
-    })
-    .optional(),
+  execution: z.object({
+    command: z.string(),
+    environment: z.object({
+      'if-version': z.string(),
+      os: z.string(),
+      'os-version': z.string(),
+      'node-version': z.string(),
+      'date-time': z.string(),
+      dependencies: z.array(z.string()),
+    }),
+    status: z.string(),
+    error: z.string().optional(),
+  }),
   tree: z.record(z.string(), z.any()),
 });
 
