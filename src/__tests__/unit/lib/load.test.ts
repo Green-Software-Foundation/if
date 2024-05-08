@@ -28,32 +28,7 @@ describe('lib/load: ', () => {
       const result = await load(inputPath, paramPath);
 
       const expectedValue = {
-        tree: {
-          children: {
-            'front-end': {
-              pipeline: ['boavizta-cpu'],
-              config: {
-                'boavizta-cpu': {
-                  'core-units': 24,
-                  processor: 'Intel® Core™ i7-1185G7',
-                },
-              },
-              inputs: [
-                {
-                  timestamp: '2023-07-06T00:00',
-                  duration: 3600,
-                  'cpu/utilization': 18.392,
-                },
-                {
-                  timestamp: '2023-08-06T00:00',
-                  duration: 3600,
-                  'cpu/utilization': 16,
-                },
-              ],
-            },
-          },
-        },
-        rawContext: {
+        rawManifest: {
           name: 'gsf-demo',
           description: 'Hello',
           tags: {
@@ -69,9 +44,36 @@ describe('lib/load: ', () => {
               },
             },
           },
+          tree: {
+            children: {
+              'front-end': {
+                pipeline: ['boavizta-cpu'],
+                config: {
+                  'boavizta-cpu': {
+                    'core-units': 24,
+                    processor: 'Intel® Core™ i7-1185G7',
+                  },
+                },
+                inputs: [
+                  {
+                    timestamp: '2023-07-06T00:00',
+                    duration: 3600,
+                    'cpu/utilization': 18.392,
+                  },
+                  {
+                    timestamp: '2023-08-06T00:00',
+                    duration: 3600,
+                    'cpu/utilization': 16,
+                  },
+                ],
+              },
+            },
+          },
         },
         parameters: PARAMETERS,
       };
+
+      console.log(JSON.stringify(result));
 
       expect(result).toEqual(expectedValue);
     });
@@ -82,45 +84,8 @@ describe('lib/load: ', () => {
 
       const result = await load(inputPath, paramPath);
 
-      const expectedParameters = {
-        'mock-carbon': {
-          description: 'an amount of carbon emitted into the atmosphere',
-          unit: 'gCO2e',
-          aggregation: 'sum',
-        },
-        'mock-cpu': {
-          description: 'number of cores available',
-          unit: 'cores',
-          aggregation: 'none',
-        },
-      };
       const expectedValue = {
-        tree: {
-          children: {
-            'front-end': {
-              pipeline: ['boavizta-cpu'],
-              config: {
-                'boavizta-cpu': {
-                  'core-units': 24,
-                  processor: 'Intel® Core™ i7-1185G7',
-                },
-              },
-              inputs: [
-                {
-                  timestamp: '2023-07-06T00:00',
-                  duration: 3600,
-                  'cpu/utilization': 18.392,
-                },
-                {
-                  timestamp: '2023-08-06T00:00',
-                  duration: 3600,
-                  'cpu/utilization': 16,
-                },
-              ],
-            },
-          },
-        },
-        rawContext: {
+        rawManifest: {
           name: 'gsf-demo',
           description: 'Hello',
           tags: {
@@ -136,8 +101,44 @@ describe('lib/load: ', () => {
               },
             },
           },
+          tree: {
+            children: {
+              'front-end': {
+                pipeline: ['boavizta-cpu'],
+                config: {
+                  'boavizta-cpu': {
+                    'core-units': 24,
+                    processor: 'Intel® Core™ i7-1185G7',
+                  },
+                },
+                inputs: [
+                  {
+                    timestamp: '2023-07-06T00:00',
+                    duration: 3600,
+                    'cpu/utilization': 18.392,
+                  },
+                  {
+                    timestamp: '2023-08-06T00:00',
+                    duration: 3600,
+                    'cpu/utilization': 16,
+                  },
+                ],
+              },
+            },
+          },
         },
-        parameters: expectedParameters,
+        parameters: {
+          'mock-carbon': {
+            description: 'an amount of carbon emitted into the atmosphere',
+            unit: 'gCO2e',
+            aggregation: 'sum',
+          },
+          'mock-cpu': {
+            description: 'number of cores available',
+            unit: 'cores',
+            aggregation: 'none',
+          },
+        },
       };
 
       expect(result).toEqual(expectedValue);
