@@ -13,7 +13,7 @@ import {
   aggregation,
 } from '../../../__mocks__/builtins/export-csv';
 
-const {CliInputError} = ERRORS;
+const {ExhaustError} = ERRORS;
 
 jest.mock('fs/promises', () => ({
   writeFile: jest.fn<() => Promise<void>>().mockResolvedValue(),
@@ -197,8 +197,8 @@ describe('builtins/export-csv: ', () => {
         try {
           await exportCSV.execute(tree, context, outputPath);
         } catch (error) {
-          expect(error).toBeInstanceOf(CliInputError);
-          expect(error).toEqual(new CliInputError('Output path is required.'));
+          expect(error).toBeInstanceOf(ExhaustError);
+          expect(error).toEqual(new ExhaustError('Output path is required.'));
         }
       });
 
@@ -210,9 +210,9 @@ describe('builtins/export-csv: ', () => {
         try {
           await exportCSV.execute(tree, context, outputPath);
         } catch (error) {
-          expect(error).toBeInstanceOf(CliInputError);
+          expect(error).toBeInstanceOf(ExhaustError);
           expect(error).toEqual(
-            new CliInputError('Output path should contains `#`.')
+            new ExhaustError('Output path should contain `#`.')
           );
         }
       });
@@ -225,9 +225,9 @@ describe('builtins/export-csv: ', () => {
         try {
           await exportCSV.execute(tree, context, outputPath);
         } catch (error) {
-          expect(error).toBeInstanceOf(CliInputError);
+          expect(error).toBeInstanceOf(ExhaustError);
           expect(error).toEqual(
-            new CliInputError(
+            new ExhaustError(
               'CSV export criteria is not found in output path. Please append it after --output <path>#.'
             )
           );
