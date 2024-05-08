@@ -73,8 +73,6 @@ describe('lib/load: ', () => {
         parameters: PARAMETERS,
       };
 
-      console.log(JSON.stringify(result));
-
       expect(result).toEqual(expectedValue);
     });
 
