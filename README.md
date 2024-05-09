@@ -56,7 +56,12 @@ ie --manifest <path-to-your-manifest-file> --stdout
 ie -m <path-to-your-manifest-file> -s
 ```
 
-You can also add a savepath for your output yaml in order to have the output stored in a file:
+You can also add a savepath for your output yaml in order to have the output stored in a file. Note that you also have to add configuration to your manifest to enable this, as follows:
+
+```yaml
+initialize:
+  output:
+    - yaml
 
 ```sh
 ie --manifest <path-to-your-manifest-file> --output <your-savepath>
