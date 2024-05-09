@@ -62,6 +62,9 @@ You can also add a savepath for your output yaml in order to have the output sto
 initialize:
   output:
     - yaml
+```
+
+On the command line:
 
 ```sh
 ie --manifest <path-to-your-manifest-file> --output <your-savepath>
