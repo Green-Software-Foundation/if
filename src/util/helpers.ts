@@ -3,10 +3,20 @@ import {promisify} from 'node:util';
 
 import {ERRORS} from './errors';
 import {logger} from './logger';
-
+import {ErrorFormatParams} from '../types/helpers';
 import {STRINGS} from '../config';
 
 const {ISSUE_TEMPLATE} = STRINGS;
+
+/**
+ * Formats given error according to class instance, scope and message.
+ */
+export const buildErrorMessage =
+  (classInstanceName: string) => (params: ErrorFormatParams) => {
+    const {scope, message} = params;
+
+    return `${classInstanceName}${scope ? `(${scope})` : ''}: ${message}.`;
+  };
 
 /**
  * Impact engine error handler. Logs errors and appends issue template if error is unknown.
