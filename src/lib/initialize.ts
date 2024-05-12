@@ -84,9 +84,9 @@ const initPlugin = async (
 };
 
 /**
- * Registers all plugins from `manifest`.`initalize` property.
+ * Registers all plugins from `manifest`.`initialize` property.
  */
-export const initalize = async (
+export const initialize = async (
   plugins: GlobalPlugins
 ): Promise<PluginStorageInterface> => {
   const storage = pluginStorage();

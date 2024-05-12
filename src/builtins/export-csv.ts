@@ -6,7 +6,7 @@ import {ERRORS} from '../util/errors';
 import {Context} from '../types/manifest';
 import {PluginParams} from '../types/interface';
 
-const {CliInputError} = ERRORS;
+const {ExhaustError} = ERRORS;
 
 /**
  * Extension to IF that outputs the tree in a CSV format.
@@ -20,7 +20,7 @@ export const ExportCSV = () => {
     const criteria = paths[paths.length - 1];
 
     if (paths.length <= 1 || !criteria) {
-      throw new CliInputError(
+      throw new ExhaustError(
         'CSV export criteria is not found in output path. Please append it after --output <path>#.'
       );
     }
@@ -36,11 +36,11 @@ export const ExportCSV = () => {
    */
   const validateOutputPath = (outputPath: string) => {
     if (!outputPath) {
-      throw new CliInputError('Output path is required.');
+      throw new ExhaustError('Output path is required.');
     }
 
     if (!outputPath.includes('#')) {
-      throw new CliInputError('Output path should contains `#`.');
+      throw new ExhaustError('Output path should contain `#`.');
     }
 
     return outputPath;
