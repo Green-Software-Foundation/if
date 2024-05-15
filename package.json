@@ -7,7 +7,8 @@
     "email": "info@gsf.com"
   },
   "bin": {
-    "ie": "./build/index.js"
+    "ie": "./build/index.js",
+    "if-diff": "./build/diff.js"
   },
   "bugs": {
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
@@ -67,6 +68,7 @@
     "fix": "gts fix",
     "fix:package": "fixpack",
     "ie": "npx ts-node src/index.ts",
+    "if-diff": "npx ts-node src/diff.ts",
     "lint": "gts lint",
     "prepare": "husky install",
     "prepublish": "npm run build",
