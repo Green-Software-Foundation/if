@@ -11,7 +11,7 @@ const {REJECTING_OVERRIDE, UNKNOWN_PARAM} = STRINGS;
 /**
  * Parameters manager. Provides get aggregation method and combine functionality.
  */
-const Parametrize = () => {
+const Parameterize = () => {
   let parametersStorage = PARAMETERS;
 
   /**
@@ -63,4 +63,4 @@ const Parametrize = () => {
   };
 };
 
-export const parameterize = Parametrize();
+export const parameterize = Parameterize();
