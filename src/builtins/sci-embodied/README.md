@@ -56,7 +56,7 @@ IF implements the plugin based on the logic described above. To run the plugin, 
 The following snippet demonstrates how to call the `sci-embodied` plugin from Typescript.
 
 ```typescript
-import {SciEmbodied} from '@grnsft/if-plugins';
+import {SciEmbodied} from 'builtin';
 
 const sciEmbodied = SciEmbodied();
 const results = await sciEmbodied.execute([
@@ -84,7 +84,7 @@ initialize:
   plugins:
     sci-embodied:
       method: SciEmbodied
-      path: '@grnsft/if-plugins'
+      path: 'builtin'
 tree:
   children:
     child:
@@ -104,8 +104,7 @@ You can run this example `manifest` by executing the following command from the 
 
 ```sh
 npm i -g @grnsft/if
-npm i -g @grnsft/if-plugins
-ie --manifest ./examples/manifests/test/sci-embodied.yml --output ./examples/outputs/sci-embodied.yml
+ie --manifest manifests/plugins/sci-embodied.yml --output manifests/outputs/sci-embodied.yml
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`.
