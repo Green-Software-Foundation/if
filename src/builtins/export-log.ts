@@ -10,7 +10,10 @@ export const ExportLog = () => {
       ...context,
       tree,
     };
-    console.log(YAML.dump(outputFile, {noRefs: true}));
+
+    console.log(`# start
+${YAML.dump(outputFile, {noRefs: true})}
+# end`);
   };
 
   return {execute};
