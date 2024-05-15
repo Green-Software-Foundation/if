@@ -68,6 +68,7 @@
     "fix:package": "fixpack",
     "ie": "npx ts-node src/index.ts",
     "lint": "gts lint",
+    "pre-commit": "lint-staged",
     "prepare": "husky install",
     "prepublish": "npm run build",
     "release": "release-it",
