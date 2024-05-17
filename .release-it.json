@@ -4,7 +4,6 @@
     "requireUpstream": true,  
     "commit": true,
     "commitMessage": "chore(release): ${version} ✨",
-    "commitArgs": "-S",
     "push": true,
     "pushArgs": ["--follow-tags"],
     "tag": false
