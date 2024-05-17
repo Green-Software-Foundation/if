@@ -59,7 +59,9 @@ jobs:
           npm run release -- --ci ${{github.event.release.tag_name}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          
       - name: Create pull request
         run: gh pr create -B ${{ github.event.repository.default_branch }} -H $PR_BRANCH_NAME --title "Release ${{github.event.release.tag_name}}" --body "${{github.event.release.body}}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
