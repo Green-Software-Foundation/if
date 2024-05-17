@@ -1,5 +1,5 @@
 name: divide
-description: success path
+description: denominator is invalid, denominator is
 tags:
 initialize:
 #  outputs: ['yaml']
@@ -12,7 +12,7 @@ initialize:
       path: "@grnsft/if-plugins"
       global-config:
         numerator: vcpus-allocated
-        denominator: 2
+        denominator: 0
         output: cpu/number-cores
     boavizta-cpu:
       method: BoaviztaCpuOutput

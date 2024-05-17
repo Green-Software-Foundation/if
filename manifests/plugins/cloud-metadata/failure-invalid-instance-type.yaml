@@ -1,8 +1,8 @@
 name: cloud-metadata
-description: failure with invalid `inputs.cloud/vendor`
+description: cloud/instance-type instance type is not supported in the cloud vendor
 tags:
 initialize:
-  #outputs: ['yaml']
+  outputs: ['yaml']
   plugins:
     cloud-metadata:
       method: CloudMetadata
@@ -15,7 +15,7 @@ tree:
       config:
       inputs:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
-          cloud/vendor: gcp
-          cloud/instance-type: m5n.large
+          cloud/vendor: aws
+          cloud/instance-type: m6
           duration: 100
           cpu/utilization: 10

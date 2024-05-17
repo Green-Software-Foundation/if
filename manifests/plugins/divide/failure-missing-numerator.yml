@@ -11,7 +11,7 @@ initialize:
       method: Divide
       path: "@grnsft/if-plugins"
       global-config:
-        numerator: vcpus-allocated
+        #numerator: vcpus-allocated
         denominator: 2
         output: cpu/number-cores
     boavizta-cpu:
