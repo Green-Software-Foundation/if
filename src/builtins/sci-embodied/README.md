@@ -56,7 +56,7 @@ IF implements the plugin based on the logic described above. To run the plugin, 
 The following snippet demonstrates how to call the `sci-embodied` plugin from Typescript.
 
 ```typescript
-import {SciEmbodied} from 'builtin';
+import {SciEmbodied} from 'builtins';
 
 const sciEmbodied = SciEmbodied();
 const results = await sciEmbodied.execute([
@@ -84,7 +84,7 @@ initialize:
   plugins:
     sci-embodied:
       method: SciEmbodied
-      path: 'builtin'
+      path: 'builtins'
 tree:
   children:
     child:
