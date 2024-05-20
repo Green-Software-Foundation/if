@@ -34,7 +34,7 @@ output = input0 * input1 * input2 ... inputN
 To run the plugin, you must first create an instance of `Multiply`. Then, you can call `execute()`.
 
 ```typescript
-import {Multiply} from '@grnsft/if-plugins';
+import {Multiply} from 'builtins';
 
 const config = {
   inputParameters: ['cpu/energy', 'network/energy'],
@@ -66,7 +66,7 @@ initialize:
   plugins:
     multiply:
       method: Multiply
-      path: '@grnsft/if-plugins'
+      path: 'builtins'
       global-config:
         input-parameters: ['cpu/energy', 'network/energy']
         output-parameter: 'energy-product'
