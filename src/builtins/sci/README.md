@@ -102,7 +102,7 @@ sci-per-f-unit = sci-per-functional-unit-time / 100  // (= 3.012 gC/request)
 To run the plugin, you must first create an instance of `Sci`. Then, you can call `execute()` to return `sci`.
 
 ```typescript
-import {Sci} from '@grnsft/if-plugins';
+import {Sci} from '@grnsft/if-builtin';
 
 const sci = Sci({'functional-unit': 'requests'});
 const results = await sci.execute(
@@ -137,7 +137,7 @@ initialize:
   plugins:
     sci:
       method: Sci
-      path: '@grnsft/if-plugins'
+      path: '@grnsft/builtin'
       global-config:
         functional-unit-time: '5 minutes'
 tree:
@@ -156,11 +156,10 @@ tree:
           requests: 100
 ```
 
-You can run this example `manifest` by saving it as `./examples/manifests/test/sci.yml` and executing the following command from the project root:
+You can run this example `manifest` by saving it as `./manifests/plugins/sci.yml` and executing the following command from the project root:
 
 ```sh
 npm i -g @grnsft/if
-npm i -g @grnsft/if-plugins
 ie --manifest ./examples/manifests/test/sci.yml --output ./examples/outputs/sci.yml
 ```
 
