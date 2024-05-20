@@ -102,7 +102,7 @@ sci-per-f-unit = sci-per-functional-unit-time / 100  // (= 3.012 gC/request)
 To run the plugin, you must first create an instance of `Sci`. Then, you can call `execute()` to return `sci`.
 
 ```typescript
-import {Sci} from '@grnsft/if-builtin';
+import {Sci} from 'builtins';
 
 const sci = Sci({'functional-unit': 'requests'});
 const results = await sci.execute(
@@ -137,7 +137,7 @@ initialize:
   plugins:
     sci:
       method: Sci
-      path: '@grnsft/builtin'
+      path: 'builtins'
       global-config:
         functional-unit-time: '5 minutes'
 tree:
