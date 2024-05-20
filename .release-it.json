@@ -1,0 +1,18 @@
+{
+  "git": { 
+    "requireBranch": false,
+    "requireUpstream": true,  
+    "commit": true,
+    "commitMessage": "chore(release): ${version} ✨",
+    "push": true,
+    "pushArgs": ["--follow-tags"],
+    "tag": false
+  },
+  "github": {    
+    "tokenRef": "GITHUB_TOKEN",
+    "preRelease": true
+  },
+  "npm": {
+    "publish": false
+  }
+}

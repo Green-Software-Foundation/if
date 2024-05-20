@@ -1,27 +1,35 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
 labels: 'bug'
-assignees: ''
-
 ---
+<!--- Please provide us the following info -->
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Description of the Error
+<!--- Tell us what happened -->
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## Expected Behaviour
+<!--- Tell us what should happen -->
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+## Actual Behaviour
+<!--- Tell us what happens instead of the expected behavior -->
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+## Steps to Reproduce
+<!--- A set of specific instructions to reproduce the bug. Include code, if relevant -->
 
-**Additional context**
-Add any other context about the problem here.
+
+## Link to online environment
+<!--- Please provide a link to Stackblitz or similar tool that allows us to reproduce your error in a preconfigured online environment -->
+ 
+<!--- If you provided a link to Stackblitz or similar, you can ignore the remaining fields. 
+Otherwise, please provide the following information -->
+
+## Manifest File That Generated the Error
+
+<!--- Provide the manifest file that you ran that generated the error-->
+
+## Links to Any Additional Code
+<!--- E.g. your plugin code, it must be available online -->
+
+## Runtime Info
+<!--- Such as OS, node version, package.json, IF version -->
