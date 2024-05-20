@@ -3,7 +3,7 @@ import {promisify} from 'node:util';
 
 import {ERRORS} from './errors';
 import {logger} from './logger';
-
+import {ErrorFormatParams} from '../types/helpers';
 import {STRINGS} from '../config';
 
 const {ISSUE_TEMPLATE} = STRINGS;
@@ -39,6 +39,13 @@ export const mergeObjects = (defaults: any, input: any) => {
 
   return merged;
 };
+
+export const buildErrorMessage =
+  (classInstanceName: string) => (params: ErrorFormatParams) => {
+    const {scope, message} = params;
+
+    return `${classInstanceName}${scope ? `(${scope})` : ''}: ${message}.`;
+  };
 
 /**
  * Promise version of Node's `exec` from `child-process`.
