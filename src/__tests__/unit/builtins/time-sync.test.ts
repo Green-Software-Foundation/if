@@ -93,7 +93,7 @@ describe('execute(): ', () => {
 
   it('throws error if `end-time` is missing.', async () => {
     const errorMessage =
-      '"end-time" parameter is invalid datetime. Error code: invalid_string.,`start-time` should be lower than `end-time`. Error code: custom.';
+      '"end-time" parameter is invalid datetime. Error code: invalid_string.,`start-time` should be lower than `end-time`';
     const invalidEndTimeConfig = {
       'start-time': '2023-12-12T00:01:00.000Z',
       'end-time': '',
@@ -289,7 +289,7 @@ describe('execute(): ', () => {
       expect(error).toBeInstanceOf(InputValidationError);
       expect(error).toStrictEqual(
         new InputValidationError(
-          '"timestamp" parameter is invalid input. Error code: invalid_union.'
+          '"timestamp" parameter is required in input[0]. Error code: invalid_union.'
         )
       );
     }
@@ -322,7 +322,7 @@ describe('execute(): ', () => {
       expect(error).toBeInstanceOf(InputValidationError);
       expect(error).toStrictEqual(
         new InputValidationError(
-          '"timestamp" parameter is invalid input. Error code: invalid_union.'
+          '"timestamp" parameter is required in input[0]. Error code: invalid_union.'
         )
       );
     }
@@ -380,9 +380,7 @@ describe('execute(): ', () => {
       ]);
     } catch (error) {
       expect(error).toStrictEqual(
-        new InputValidationError(
-          '`start-time` should be lower than `end-time`. Error code: custom.'
-        )
+        new InputValidationError('`start-time` should be lower than `end-time`')
       );
     }
   });
