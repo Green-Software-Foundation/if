@@ -1,0 +1,65 @@
+name: Mock observation and time sync integration
+description: Integration of `mock observation` + `time sync`
+tags:
+initialize:
+  plugins:
+    mock-observations:
+      kind: plugin
+      method: MockObservations
+      path: "@grnsft/if-plugins"
+      global-config:
+        timestamp-from: 2023-07-06T00:00
+        timestamp-to: 2023-07-06T00:10
+        duration: 60
+        components:
+          - cloud/instance-type: A1
+        generators:
+          common:
+            cloud/region: uk-west
+            common-key: common-val
+          randint:
+            cpu/utilization:
+              min: 1
+              max: 99
+    "teads-curve":
+      path: "@grnsft/if-unofficial-plugins"
+      method: TeadsCurve
+      global-config:
+        interpolation: spline
+    "time-sync":
+      method: TimeSync
+      path: "builtin"
+      global-config:
+        start-time: "2023-12-12T00:00:00.000Z"
+        end-time: "2023-12-12T00:01:00.000Z"
+        interval: 5
+        allow-padding: true
+tree:
+  children:
+    child-1:
+      pipeline:
+        - teads-curve
+        - time-sync        
+      defaults:
+        cpu/thermal-design-power: 100
+      inputs:
+        - timestamp: "2023-12-12T00:00:00.000Z"
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          duration: 1
+          cpu/utilization: 10
+        - timestamp: "2023-12-12T00:00:01.000Z"
+          duration: 5
+          cpu/utilization: 20
+          cloud/instance-type: A1
+          cloud/region: uk-west
+        - timestamp: "2023-12-12T00:00:06.000Z"
+          duration: 7
+          cpu/utilization: 15
+          cloud/instance-type: A1
+          cloud/region: uk-west
+        - timestamp: "2023-12-12T00:00:13.000Z"
+          duration: 30
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          cpu/utilization: 15

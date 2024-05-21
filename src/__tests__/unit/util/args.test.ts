@@ -51,15 +51,11 @@ import path = require('path');
 import {parseArgs} from '../../../util/args';
 import {ERRORS} from '../../../util/errors';
 
-import {STRINGS, CONFIG} from '../../../config';
-const {impact} = CONFIG;
-const {HELP} = impact;
+import {STRINGS} from '../../../config';
 
 const {CliInputError} = ERRORS;
 
 const {MANIFEST_IS_MISSING, FILE_IS_NOT_YAML} = STRINGS;
-
-const info = jest.spyOn(console, 'info').mockImplementation(() => {});
 
 describe('util/args: ', () => {
   const originalEnv = process.env;
@@ -104,6 +100,9 @@ describe('util/args: ', () => {
       const manifestPath = 'manifest-mock.yml';
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
+        outputOptions: {
+          stdout: undefined,
+        },
       };
 
       expect(result).toEqual(expectedResult);
@@ -118,6 +117,7 @@ describe('util/args: ', () => {
       const manifestPath = 'manifest-mock.yml';
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
+        outputOptions: {},
       };
 
       expect(result).toEqual(expectedResult);
@@ -133,20 +133,10 @@ describe('util/args: ', () => {
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
         paramPath: 'override-params-mock.yml',
+        outputOptions: {},
       };
 
       expect(result).toEqual(expectedResult);
-    });
-
-    it('returns manifest with help.', () => {
-      expect.assertions(2);
-
-      process.env.result = 'help';
-
-      const result = parseArgs();
-
-      expect(info).toHaveBeenCalledWith(HELP);
-      expect(result).toEqual(undefined);
     });
 
     it('returns manifest and output path.', () => {
@@ -159,7 +149,10 @@ describe('util/args: ', () => {
       const outputPath = 'output-mock.yml';
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
-        outputPath: path.normalize(`${processRunningPath}/${outputPath}`),
+        outputOptions: {
+          outputPath: path.normalize(`${processRunningPath}/${outputPath}`),
+          stdout: undefined,
+        },
       };
 
       expect(result).toEqual(expectedResult);

@@ -1,10 +1,12 @@
+import * as YAML from 'js-yaml';
+
 import {openYamlFileAsObject, saveYamlFileAs} from '../../../util/yaml';
 import {Manifest} from '../../../types/manifest';
 import {
   npmInstallPackage,
   npmUninstallPackage,
 } from '../helpers/module-installer';
-import {execPromise, getJSONFromText} from '../helpers/common';
+import {execPromise} from '../helpers/common';
 import {sciEInputData} from '../test-data/sci-e';
 
 describe('integration/sci-e', () => {
@@ -24,7 +26,7 @@ describe('integration/sci-e', () => {
       method: 'SciE',
       path: '@grnsft/if-plugins',
     };
-    file.initialize.outputs = ['log'];
+    file.initialize.outputs = [];
 
     file.tree.children.child.pipeline = [modelName];
     file.tree.children.child.config = {};
@@ -33,23 +35,29 @@ describe('integration/sci-e', () => {
 
     await saveYamlFileAs(file, absoluteManifestPath); // save yaml uses absolute path
     const response = (
-      await execPromise(`npm run ie -- --manifest ${relativeManifestPath}`)
+      await execPromise(
+        `npm run ie -- --manifest ${relativeManifestPath} --stdout`
+      )
     ).stdout; // exec promise uses relative path
 
-    const finalOutputParsed = getJSONFromText(response);
+    const yamlPart = response.substring(
+      response.indexOf('name:'),
+      response.length
+    );
+    const finalOutputParsed: any = YAML.load(yamlPart);
 
     // assertions
-    const path = finalOutputParsed.tree.children['child'].outputs![0];
-    const manifestPath = file.tree.children['child'].inputs[0];
+    const path = finalOutputParsed.tree.children.child.outputs[0];
+    const manifestPath = file.tree.children.child.inputs[0];
 
     // assert timestamp
-    expect(
-      finalOutputParsed.tree.children['child'].inputs[0].timestamp
-    ).toEqual(file.tree.children['child'].inputs[0].timestamp);
+    expect(finalOutputParsed.tree.children.child.inputs[0].timestamp).toEqual(
+      file.tree.children.child.inputs[0].timestamp
+    );
 
     // assert duration
-    expect(finalOutputParsed.tree.children['child'].inputs[0].duration).toEqual(
-      file.tree.children['child'].inputs[0].duration
+    expect(finalOutputParsed.tree.children.child.inputs[0].duration).toEqual(
+      file.tree.children.child.inputs[0].duration
     );
 
     // assert total energy

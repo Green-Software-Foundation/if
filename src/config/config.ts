@@ -1,59 +1,54 @@
-import {ArgumentConfig} from 'ts-command-line-args';
+import {ArgumentConfig, ParseOptions} from 'ts-command-line-args';
+
+import {STRINGS} from './strings';
 
 import {ManifestProcessArgs} from '../types/process-args';
 
+const {DISCLAIMER_MESSAGE} = STRINGS;
+
 export const CONFIG = {
-  impact: {
+  IE: {
     ARGS: {
       manifest: {
         type: String,
         optional: true,
-        alias: 'i',
-        description: 'Path to an input manifest file.',
+        alias: 'm',
+        description: '[path to the input file]',
       },
       output: {
         type: String,
         optional: true,
-        description:
-          'Path to the output file where the results as saved, if none is provided it prints to stdout.',
+        alias: 'o',
+        description: '[path to the output file]',
       },
       'override-params': {
         type: String,
         optional: true,
-        description: 'Path to a parameter file that overrides our defaults.',
+        alias: 'p',
+        description: '[path to a parameter file that overrides our defaults]',
       },
-      format: {
-        type: String,
-        optional: true,
-        description:
-          'The output file format. default to yaml but if csv is specified then it formats the outputs as a csv file for loading into another program.',
-        defaultValue: 'yaml',
-      },
-      verbose: {
+      stdout: {
         type: Boolean,
         optional: true,
-        description:
-          'How much information to output about the calculation to aid investigation and debugging.',
+        alias: 's',
+        description: '[prints out to the console]',
       },
       help: {
         type: Boolean,
         optional: true,
         alias: 'h',
-        description: 'Prints this usage guide.',
+        description: '[prints out the above help instruction]',
       },
     } as ArgumentConfig<ManifestProcessArgs>,
-    HELP: `impact 
-  -manifest [path to the input file]
-  -output [path to the output file]
-  -format [yaml|csv] 
-  -verbose
-  -help 
-  manifest: path to an input manifest
-  output: path to the output file where the results as saved, if none is provided it prints to stdout.
-  format: the output file format. default to yaml but if csv is specified then it formats the outputs as a csv file for loading into another program.
-  verbose: how much information to output about the calculation to aid investigation and debugging.
-  help: prints out the above help instruction.
-  `,
+    HELP: {
+      helpArg: 'help',
+      headerContentSections: [
+        {header: 'Impact Framework', content: 'Helpful keywords:'},
+      ],
+      footerContentSections: [
+        {header: 'Green Software Foundation', content: DISCLAIMER_MESSAGE},
+      ],
+    } as ParseOptions<any>,
   },
   GITHUB_PATH: 'https://github.com',
   NATIVE_PLUGIN: 'if-plugins',

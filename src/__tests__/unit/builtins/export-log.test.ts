@@ -1,5 +1,6 @@
-import {ExportLog} from '../../../builtins/export-log';
+import * as YAML from 'js-yaml';
 
+import {ExportLog} from '../../../builtins/export-log';
 import {tree, context} from '../../../__mocks__/builtins/export-csv';
 
 describe('builtins/export-log:', () => {
@@ -10,7 +11,7 @@ describe('builtins/export-log:', () => {
 
       expect(mockConsoleLog).toHaveBeenCalled();
       expect(mockConsoleLog).toHaveBeenCalledWith(
-        JSON.stringify({...context, tree}, null, 2)
+        YAML.dump({...context, tree}, {noRefs: true})
       );
 
       mockConsoleLog.mockRestore();
@@ -22,7 +23,7 @@ describe('builtins/export-log:', () => {
 
       expect(mockConsoleLog).toHaveBeenCalled();
       expect(mockConsoleLog).toHaveBeenCalledWith(
-        JSON.stringify({...context, tree: {}}, null, 2)
+        YAML.dump({...context, tree: {}}, {noRefs: true})
       );
 
       mockConsoleLog.mockRestore();

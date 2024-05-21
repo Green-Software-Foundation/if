@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {compute} from '../../../lib/compute';
 
 import {ComputeParams} from '../../../types/compute';
@@ -28,6 +29,7 @@ describe('lib/compute: ', () => {
    * Compute params.
    */
   const paramsExecute: ComputeParams = {
+    // @ts-ignore
     context: {
       name: 'mock-name',
       initialize: {
@@ -42,6 +44,7 @@ describe('lib/compute: ', () => {
     pluginStorage: pluginStorage().set('mock', mockExecutePlugin()),
   };
   const params: ComputeParams = {
+    // @ts-ignore
     context: {
       name: 'mock-name',
       initialize: {

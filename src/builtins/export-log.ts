@@ -1,3 +1,4 @@
+import * as YAML from 'js-yaml';
 import {Context} from '../types/manifest';
 
 export const ExportLog = () => {
@@ -9,8 +10,7 @@ export const ExportLog = () => {
       ...context,
       tree,
     };
-
-    console.log(JSON.stringify(outputFile, null, 2));
+    console.log(YAML.dump(outputFile, {noRefs: true}));
   };
 
   return {execute};
