@@ -16,14 +16,14 @@ initialize:
           - cpu/energy
           - network/energy
         output-parameter: energy
-    "sci-m":
-      path: "@grnsft/if-plugins"
-      method: SciM
+    "sci-embodied":
+      path: "builtin"
+      method: SciEmbodied
     "sci-o":
       path: "@grnsft/if-plugins"
       method: SciO
     "sci":
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       method: Sci
       global-config:
         functional-unit: ""
@@ -42,7 +42,7 @@ tree:
       pipeline:
         - teads-curve
         - sum
-        - sci-m
+        - sci-embodied
         - sci-o
         - time-sync
         - sci
