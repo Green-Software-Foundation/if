@@ -12,7 +12,7 @@ jobs:
         with:
           node-version: 18
       - run: npm ci
-      # - run: npm test
+      - run: npm test
   publish-npm:
     needs: build
     runs-on: ubuntu-latest
@@ -20,7 +20,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: master
+          ref: main
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
