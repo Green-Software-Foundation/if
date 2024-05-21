@@ -1,9 +1,8 @@
 import {exec} from 'node:child_process';
 import {promisify} from 'node:util';
-
+import {ErrorFormatParams} from '../types/helpers';
 import {ERRORS} from './errors';
 import {logger} from './logger';
-import {ErrorFormatParams} from '../types/helpers';
 import {STRINGS} from '../config';
 
 const {ISSUE_TEMPLATE} = STRINGS;
