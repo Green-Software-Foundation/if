@@ -10,13 +10,14 @@ describe('builtins/interpolation: ', () => {
       method: Method.LINEAR,
       x: [0, 10, 50, 100],
       y: [0.12, 0.32, 0.75, 1.02],
+      'input-parameter': 'cpu/utilization',
+      'output-parameter': 'cpu/energy',
     };
     const inputs = [
       {
         timestamp: '2023-07-06T00:00',
         duration: 3600,
         'cpu/utilization': 45,
-        'cpu/thermal-design-power': 100,
       },
     ];
     const plugin = Interpolation(globalConfig);
@@ -35,8 +36,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/thermal-design-power': 100,
-            'cpu/energy': 0.069625,
+            'cpu/energy': 0.00069625,
           },
         ];
 
@@ -47,6 +47,8 @@ describe('builtins/interpolation: ', () => {
         const globalConfig = {
           x: [0, 10, 50, 100],
           y: [0.12, 0.32, 0.75, 1.02],
+          'input-parameter': 'cpu/utilization',
+          'output-parameter': 'cpu/energy',
         };
         const plugin = Interpolation(globalConfig);
 
@@ -55,8 +57,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/thermal-design-power': 100,
-            'cpu/energy': 0.069625,
+            'cpu/energy': 0.00069625,
           },
         ];
 
@@ -72,8 +73,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/thermal-design-power': 100,
-            'cpu/energy': 0.0716969893292683,
+            'cpu/energy': 0.0007169698932926829,
           },
         ];
 
@@ -91,8 +91,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/thermal-design-power': 100,
-            'cpu/energy': 0.07187374999999999,
+            'cpu/energy': 0.0007187375000000001,
           },
         ];
 
@@ -110,8 +109,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/thermal-design-power': 100,
-            'cpu/energy': 0.069625,
+            'cpu/energy': 0.00069625,
           },
         ];
 
@@ -124,7 +122,6 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 50,
-            'cpu/thermal-design-power': 100,
           },
         ];
         const outputs = [
@@ -132,8 +129,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 50,
-            'cpu/thermal-design-power': 100,
-            'cpu/energy': 0.075,
+            'cpu/energy': 0.00075,
           },
         ];
 
@@ -146,7 +142,6 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/thermal-design-power': 100,
             'vcpus-allocated': 4,
             'vcpus-total': 64,
           },
@@ -157,10 +152,9 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/thermal-design-power': 100,
             'vcpus-allocated': 4,
             'vcpus-total': 64,
-            'cpu/energy': 0.0043515625,
+            'cpu/energy': 0.000043515625,
           },
         ];
 
@@ -188,7 +182,6 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/thermal-design-power': 100,
             'vcpus-allocated': 74,
             'vcpus-total': 64,
           },
@@ -233,7 +226,6 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 105,
-            'cpu/thermal-design-power': 100,
           },
         ];
         expect.assertions(2);
