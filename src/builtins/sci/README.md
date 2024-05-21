@@ -137,7 +137,7 @@ initialize:
   plugins:
     sci:
       method: Sci
-      path: 'builtins'
+      path: 'builtin'
       global-config:
         functional-unit-time: '5 minutes'
 tree:
