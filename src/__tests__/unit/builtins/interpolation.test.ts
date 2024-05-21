@@ -194,7 +194,7 @@ describe('builtins/interpolation: ', () => {
           expect(error).toBeInstanceOf(InputValidationError);
           expect(error).toEqual(
             new InputValidationError(
-              'the value of `vcpus-total` should be greater than the value of the `vcpus-allocated` in the input[0]. Error code: custom.'
+              'The value of `vcpus-total` should be greater than the value of the `vcpus-allocated` in the input[0]'
             )
           );
         }
@@ -214,7 +214,7 @@ describe('builtins/interpolation: ', () => {
           expect(error).toBeInstanceOf(InputValidationError);
           expect(error).toEqual(
             new InputValidationError(
-              'the elements count of `x` and `y` should be equal. Error code: custom.'
+              'The elements count of `x` and `y` should be equal'
             )
           );
         }
@@ -235,7 +235,7 @@ describe('builtins/interpolation: ', () => {
           expect(error).toBeInstanceOf(InputValidationError);
           expect(error).toEqual(
             new InputValidationError(
-              'the `cpu/utilization` value of input[0] should not be out of the range of `x` elements. Error code: custom.'
+              'The `cpu/utilization` value of input[0] should not be out of the range of `x` elements'
             )
           );
         }
