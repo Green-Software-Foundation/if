@@ -2,6 +2,8 @@ import {GroupByConfig} from './group-by';
 
 export type PluginParams = Record<string, any>;
 
+export type ConfigParams = Record<string, any>;
+
 export type ExecutePlugin = {
   execute: (
     inputs: PluginParams[],
