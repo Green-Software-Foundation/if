@@ -19,7 +19,7 @@ describe('config/strings: ', () => {
     it('successfully injects path into message.', () => {
       const path = 'mock/path';
       const expectedMessage = `
-[!important] You are using plugin ${path} which is not part of the Impact Framework standard library. You should do your own research to ensure the plugins are up to date and accurate. They may not be actively maintained.`;
+You are using plugin ${path} which is not part of the Impact Framework standard library. You should do your own research to ensure the plugins are up to date and accurate. They may not be actively maintained.`;
 
       expect(NOT_NATIVE_PLUGIN(path)).toEqual(expectedMessage);
     });

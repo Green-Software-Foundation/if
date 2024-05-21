@@ -1,17 +1,14 @@
 name: Node.js CI
-
 on: push
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'npm'
@@ -21,6 +18,6 @@ jobs:
 
       - name: Run lint
         run: npm run lint
-
+        
       - name: Run tests
         run: npm run test --silent

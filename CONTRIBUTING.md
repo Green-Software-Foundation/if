@@ -1,8 +1,5 @@
 ## Contribution Guidelines <!-- omit from toc -->
 
-> **HACKATHON PARTICIPANTS**: please note that these contribution guidelines are intended for community contributions to IF, and NOT hackathon submissions. If you are building plugins, tooling or other add-ons to IF, please maintain them in your own repositories and submit links to the hackathon judges.**
-
-
 First off, thanks for taking the time to contribute! 🎉
 
 The following document is a rule set of guidelines for contributing.
@@ -10,6 +7,7 @@ The following document is a rule set of guidelines for contributing.
 ## Table of Contents <!-- omit from toc -->
 
 - [What and when to contribute](#what-and-when-to-contribute)
+- [Reporting bugs](#reporting-bugs)
 - [Code Contributions](#code-contributions)
   - [Step 1: Fork](#step-1-fork)
   - [Step 2: Branch](#step-2-branch)
@@ -25,7 +23,60 @@ The following document is a rule set of guidelines for contributing.
 
 ## What and when to contribute
 
-You can contribute anything to the IF, but we are likely to close out unsolicited PRs without merging them. Our issue board is completely open and we have tags (`help-wanted`, `good-first-issue`) to help contributors to choose tasks to work on. We recommend speaking to the core team on Github before starting working on an issue. You can do this by raising an issue or commenting on an existing issue. This helps us to direct your energy is directions that are aligned with our roadmap, prevent multiple people working on the same task, and better manage our board. This all makes it much more likely that your work will get merged.
+You can contribute anything to the IF, but we are likely to close out unsolicited PRs without merging them. Our issue board is completely open and we have tags (`help-wanted`, `good-first-issue`) to help contributors to choose tasks to work on. We recommend speaking to the core team on Github before starting working on an issue. You can do this by raising an issue or commenting on an existing issue. This helps us to direct your energy in directions that are aligned with our roadmap, prevent multiple people working on the same task, and better manage our board. This all makes it much more likely that your work will get merged.
+
+## Reporting bugs
+
+We appreciate bug reports! If you experience an issue with IF or one of our plugins, you can report it using our bug reporting template. To do this:
+
+1. Go to the [IF repository](https://github.com/Green-Software-Foundation/if) (or [plugin repository](https://github.com/Green-Software-Foundation/if-plugins) if you bug relates to a specific plugin)
+2. Click on the `Issues` tab
+3. Click on `Create New Issue` and select the `Bug Report` template.
+4. Fill out the requested information.
+
+The more detailed information you provide in the bug report, the easier it will be for us to diagnose, triage and resolve your issue. We ask for some simple information about your issue, including a description of the error, the expected behaviour, the actual behaviour and the stepos we can take to reproduce the error in our local environments. We also then prompt you to provide a link to [Stackblitz](https://stackblitz.com/) or a similar online environment where we can run your manifest and observe the error. If you prefer *not* to send a link, we would appreciate a copy of the manifest file that you ran to produce the error, information about your runtime environment and any additional code that's required to reproduce the error. This is all designed to enable us to reproduce the same error and debug it for you as quickly as possible.
+
+Once a suitably detailed bug report exists, we will triage it. We hold weekly triage calls on Tuesdays. In most cases, the triage call will be the core team's first interaction with the bug, although in some cases we may engage asynchronously in advance of the call. Triage means that the core team will examine the issue and assign an urgency label - either Low, Medium or High. 
+
+The assessment rubric is as follows:
+
+|                                                                                                                        | Consequence                                                                              | Severity |
+| ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------- |
+| Bugs in IF core leading to incorrect calculations                                                                      | unusable framework                                                                       | 5        |
+| Bugs in if-plugins leading to incorrect calculations                                                                   | core pathways fail, IF very limited in functionality                                     | 5        |
+| Bugs in if-unofficial-pluginsd leading to incorrect calculations                                                       | Third party plugins harder to use, limits IF to standard lib                             | 3        |
+| Bugs in template                                                                                                       | Harder to build plugins, ecosystem growth is impacted                                    | 2        |
+| Bugs in docs                                                                                                           | product does not match expectation, hard to debug, frustration, loss of adoption         | 2        |
+| Security flaw: privacy related                                                                                         | leak user data, unlikely to achieve adoption in serious orgs                             | 5        |
+| Security flaw: permissions escalation                                                                                  | expose user to malware                                                                   | 5        |
+| Code not addressing user needs                                                                                         | no product market fit, loss of adoption                                                  | 5        |
+| Communication failures within team                                                                                     | Conflicting or duplicating work, frustration, morale damage                              | 4        |
+| Communication failures with community                                                                                  | we lose product market fit, we do not have good community retention, reputational damage | 3        |
+| Communication failures with leadership                                                                                 | product does not meet business goals                                                     | 3        |
+| License compliance failures, including in supply chain (e.g. exposing privileged api responses for free via  a plugin) | 4                                                                                        |
+| Bugs affecting releases                                                                                                | users stuck on old versions                                                              | 4        |
+| Strategy failures                                                                                                      | no product market fit                                                                    | 2        |
+
+The mapping of severity to label is as follows:
+
+| Severity | Label |
+| -------- | ----- |
+| 1        | L     |
+| 2        | M     |
+| 3        | M     |
+| 4        | H     |
+| 5        | H     |
+
+During the bug triage we will also discuss a remediation plan for the bug. This will be communicated in the comments on the bug report. For high urgency bugs, the fix will be implemented as soon as possible, maybe reorganizing our current work to accommodate it. For medium priority bugs, we will schedule the fix in the next available sprint. Low priority bugs will be backlogged and addressed when there is developer time available. Low priority bugs will also be tagged `help-wanted` so that they can be addressed by community members.
+
+Not every bug will be fixed. We may decide *not* to fix a bug in cases such as:
+
+- fixing the bug has some detrimental side effect elsewhere in the product
+- the bug has a fix coming soon as part of another upgrade
+- the bug is only problematic for a single specific use case and fixing it would break features relied upon by other users
+- the bug is contentious for some reason and there is reputational or community risks associated with the fix
+
+The bug will be labelled `fix-now`, `fix-later` or `wont-fix` to reflect our remediation plan and details will be provided in issue comments.
 
 
 ## Code Contributions
@@ -167,5 +218,27 @@ describe('util/args: ', () => {
    })
 })
 ```
+
+### How to report issues (bugs)
+
+Bug report should contain all the information required to reproduce a bug and to make it as easy as possible to fix. This includes providing the following information
+
+- a description of the error,
+- a description of the expected behaviour,
+- a description of the actual behaviour,
+- steps to reproduce
+
+To help us to diagnose and debug your issue, please provide either a [Stackblitz](https://stackblitz.com/) link that captures your local environment and failing manifest file, OR:
+
+- the manifest file that generated the error,
+- links to any code (e.g. your own plugin code), it must be available online,
+- runtime information such as OS, node version, package.json, IF version
+
+Reported bugs will be discussed among the team in a weekly bug triage and be assigned a severity (low, medium or high). 
+
+High severity bugs will be fixed as soon as possible, whereas medium and low severity bug fixes will likely be backlogged for attention in the next available sprint. 
+
+In some cases, we might decide not to fix certain bugs if they are low severity, either because we anticipate fixes coming soon as part of already-scheduled upgrades or because we think the fixes make "good first issues" for community contributors.
+Community members are welcome to report any issue they face and also work on fixing the low priority bugs.
 
 *[⬅️ back to the root](/README.md#ief)*

@@ -8,7 +8,7 @@ jest.mock('../../../util/yaml', () => ({
   saveYamlFileAs: jest.fn(),
 }));
 
-const {CliInputError} = ERRORS;
+const {ExhaustError} = ERRORS;
 
 describe('builtins/export-yaml: ', () => {
   describe('ExportYaml: ', () => {
@@ -38,8 +38,8 @@ describe('builtins/export-yaml: ', () => {
         try {
           await exportYaml.execute({}, context, '');
         } catch (error) {
-          expect(error).toBeInstanceOf(CliInputError);
-          expect(error).toEqual(new CliInputError('Output path is required.'));
+          expect(error).toBeInstanceOf(ExhaustError);
+          expect(error).toEqual(new ExhaustError('Output path is required.'));
         }
       });
     });
