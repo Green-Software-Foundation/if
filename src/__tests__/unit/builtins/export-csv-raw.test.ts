@@ -6,7 +6,7 @@ import {ERRORS} from '../../../util/errors';
 
 import {tree, context, outputs} from '../../../__mocks__/builtins/export-csv';
 
-const {CliInputError, WriteFileError} = ERRORS;
+const {ExhaustError} = ERRORS;
 
 jest.mock('fs/promises', () => ({
   __esModule: true,
@@ -50,7 +50,7 @@ describe('builtins/export-csv-raw: ', () => {
         await expect(
           exportCSVRaw.execute(tree, context, outputPath)
         ).rejects.toThrow(
-          new WriteFileError(
+          new ExhaustError(
             'Failed to write CSV to output#carbon: Could not write CSV file.'
           )
         );
@@ -65,8 +65,8 @@ describe('builtins/export-csv-raw: ', () => {
         try {
           await exportCSVRaw.execute(tree, context, outputPath);
         } catch (error) {
-          expect(error).toBeInstanceOf(CliInputError);
-          expect(error).toEqual(new CliInputError('Output path is required.'));
+          expect(error).toBeInstanceOf(ExhaustError);
+          expect(error).toEqual(new ExhaustError('Output path is required.'));
         }
       });
     });

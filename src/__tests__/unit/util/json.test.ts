@@ -17,8 +17,7 @@ describe('util/json: ', () => {
       expect.assertions(1);
 
       try {
-        const response = await readAndParseJson<typeof path>(path);
-        console.log(response);
+        await readAndParseJson<typeof path>(path);
       } catch (error) {
         expect(error).toBeInstanceOf(Error);
       }

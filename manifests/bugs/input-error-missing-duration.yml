@@ -1,0 +1,21 @@
+name: input-error-missing-duration
+description: a negative test case that fails due to the required `duration` field being omitted from input data
+tags:
+initialize:
+  plugins:
+    teads-curve: 
+      path: '@grnsft/if-unofficial-plugins'
+      method: TeadsCurve
+      global-config:
+        interpolation: spline
+  outputs: ['yaml']
+tree:
+  children:
+    child-0:
+      defaults:
+        cpu/thermal-design-power: 100
+      pipeline:
+        - teads-curve
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          cpu/utilization: 20
