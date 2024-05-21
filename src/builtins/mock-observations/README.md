@@ -60,7 +60,7 @@ initialize:
     mock-observations:
       kind: plugin
       method: MockObservations
-      path: 'builtins'
+      path: 'builtin'
       global-config:
         timestamp-from: 2023-07-06T00:00
         timestamp-to: 2023-07-06T00:10
@@ -87,11 +87,10 @@ tree:
       inputs:
 ```
 
-You can run this example `manifest` by saving it as `./examples/manifests/test/mock-observation.yml` and executing the following command from the project root:
+You can run this example `manifest` by saving it as `manifests/plugins/mock-observation.yml` and executing the following command from the project root:
 
 ```sh
 npm i -g @grnsft/if
-npm i -g @grnsft/if-plugins
 ie --manifest ./examples/manifests/test/mock-observation.yml --output ./examples/outputs/mock-observation
 ```
 
