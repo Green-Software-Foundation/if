@@ -91,7 +91,6 @@ You can run this example by saving it as `manifests/examples/test/exponent.yml` 
 
 ```sh
 npm i -g @grnsft/if
-npm i -g @grnsft/if-plugins
 ie --manifest manifests/examples/test/exponent.yml --output manifests/outputs/exponent.yml
 ```
 
