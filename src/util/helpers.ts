@@ -8,8 +8,6 @@ import {STRINGS} from '../config';
 
 const {ISSUE_TEMPLATE} = STRINGS;
 
-import {ErrorFormatParams} from '../types/helpers';
-
 /**
  * Formats given error according to class instance, scope and message.
  */
@@ -51,13 +49,6 @@ export const mergeObjects = (defaults: any, input: any) => {
 
   return merged;
 };
-
-export const buildErrorMessage =
-  (classInstanceName: string) => (params: ErrorFormatParams) => {
-    const {scope, message} = params;
-
-    return `${classInstanceName}${scope ? `(${scope})` : ''}: ${message}.`;
-  };
 
 /**
  * Promise version of Node's `exec` from `child-process`.
