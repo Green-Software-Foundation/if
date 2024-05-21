@@ -7,7 +7,7 @@ import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
 
-const {CliInputError, ModuleInitializationError} = ERRORS;
+const {ExhaustError} = ERRORS;
 const {INVALID_EXHAUST_PLUGIN} = STRINGS;
 
 describe('lib/exhaust: ', () => {
@@ -58,9 +58,9 @@ describe('lib/exhaust: ', () => {
         // @ts-ignore
         await exhaust(tree, context, {});
       } catch (error) {
-        expect(error).toBeInstanceOf(CliInputError);
+        expect(error).toBeInstanceOf(ExhaustError);
 
-        if (error instanceof CliInputError) {
+        if (error instanceof ExhaustError) {
           expect(error.message).toEqual(expectedMessage);
         }
       }
@@ -83,9 +83,9 @@ describe('lib/exhaust: ', () => {
         // @ts-ignore
         await exhaust(tree, context, {});
       } catch (error) {
-        expect(error).toBeInstanceOf(ModuleInitializationError);
+        expect(error).toBeInstanceOf(ExhaustError);
 
-        if (error instanceof ModuleInitializationError) {
+        if (error instanceof ExhaustError) {
           expect(error.message).toEqual(expectedMessage);
         }
       }

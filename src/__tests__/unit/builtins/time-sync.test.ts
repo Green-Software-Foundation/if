@@ -322,7 +322,7 @@ describe('execute(): ', () => {
       expect(error).toBeInstanceOf(InputValidationError);
       expect(error).toStrictEqual(
         new InputValidationError(
-          '"timestamp" parameter is invalid input. Error code: invalid_union.'
+          '"timestamp" parameter is required in input[0]. Error code: invalid_union.'
         )
       );
     }

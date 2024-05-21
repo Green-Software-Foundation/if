@@ -45,21 +45,42 @@ Then, run `if` using the following command:
 
 ```sh
 ie --manifest <path-to-your-manifest-file>
+## or you can use aliases
+ie -m <path-to-your-manifest-file>
 ```
 
 Note that above command will not print the final output. In order to print the final output to the console, run `if` using the optional stdout argument:
 ```sh
 ie --manifest <path-to-your-manifest-file> --stdout
+## or using aliases
+ie -m <path-to-your-manifest-file> -s
 ```
 
-You can also add an optional savepath for your output yaml (if you do not provide one, the output will be printed to the console):
+You can also add a savepath for your output yaml in order to have the output stored in a file. Note that you also have to add configuration to your manifest to enable this, as follows:
+
+```yaml
+initialize:
+  output:
+    - yaml
+```
+
+On the command line:
 
 ```sh
 ie --manifest <path-to-your-manifest-file> --output <your-savepath>
+## or using aliases
+ie -m <path-to-your-manifest-file> -o <your-savepath>
 ```
 
 The `ie` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
 
+Use the `help` command if you need guidance about the available commands
+
+```sh
+ie --help
+## or using alias
+ie -h
+```
 
 ## Documentation
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {Context} from '../../types/manifest';
 
 export const tree = {
@@ -117,6 +118,7 @@ export const tree = {
   },
 };
 
+// @ts-ignore
 export const context: Context = {
   name: 'demo',
   description: '',
