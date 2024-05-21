@@ -23,7 +23,7 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
 
       return {
         ...input,
-        'cpu/energy': energy,
+        [validatedConfig['output-parameter']]: energy,
       };
     });
   };
@@ -64,17 +64,16 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
     config: ConfigParams,
     input: PluginParams
   ) => {
-    const thermalDesignPower = input['cpu/thermal-design-power'] || 1; // TODO: change/remove after the specification varification
-    const cpu = input['cpu/utilization'];
+    const parameter = input[globalConfig['input-parameter']];
     const xPoints: number[] = config.x;
     const yPoints: number[] = config.y;
 
     const result = xPoints.reduce(
       (acc, xPoint, i) => {
-        if (cpu === xPoint) {
+        if (parameter === xPoint) {
           acc.baseCpu = xPoint;
           acc.baseRate = yPoints[i];
-        } else if (cpu > xPoint && cpu < xPoints[i + 1]) {
+        } else if (parameter > xPoint && parameter < xPoints[i + 1]) {
           acc.baseCpu = xPoint;
           acc.baseRate = yPoints[i];
           acc.ratio = (yPoints[i + 1] - yPoints[i]) / (xPoints[i + 1] - xPoint);
@@ -85,10 +84,7 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
       {baseRate: 0, baseCpu: 0, ratio: 0}
     );
 
-    return (
-      (result.baseRate + (cpu - result.baseCpu) * result.ratio) *
-      thermalDesignPower
-    );
+    return result.baseRate + (parameter - result.baseCpu) * result.ratio;
   };
 
   /**
@@ -98,13 +94,12 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
     config: ConfigParams,
     input: PluginParams
   ) => {
-    const thermalDesignPower = input['cpu/thermal-design-power'] || 1; // TODO: change/remove after the specification varification
-    const cpu = input['cpu/utilization'];
+    const parameter = input[globalConfig['input-parameter']];
     const xPoints: number[] = config.x;
     const yPoints: number[] = config.y;
     const spline: any = new Spline(xPoints, yPoints);
 
-    return spline.at(cpu) * thermalDesignPower;
+    return spline.at(parameter);
   };
 
   /**
@@ -114,8 +109,7 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
     config: ConfigParams,
     input: PluginParams
   ) => {
-    const thermalDesignPower = input['cpu/thermal-design-power'] || 1; // TODO: change/remove after the specification varification
-    const cpu = input['cpu/utilization'];
+    const parameter = input[globalConfig['input-parameter']];
     const xPoints: number[] = config.x;
     const yPoints: number[] = config.y;
 
@@ -124,14 +118,14 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
         yPoints[i] *
         xPoints.reduce((prod, xPoint, j) => {
           if (j !== i) {
-            return (prod * (cpu - xPoint)) / (x - xPoint);
+            return (prod * (parameter - xPoint)) / (x - xPoint);
           }
           return prod;
         }, 1);
       return acc + term;
     }, 0);
 
-    return result * thermalDesignPower;
+    return result;
   };
 
   /**
@@ -148,6 +142,8 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
         method: z.nativeEnum(Method),
         x: z.array(z.number()),
         y: z.array(z.number()),
+        'input-parameter': z.string(),
+        'output-parameter': z.string(),
       })
       .refine(data => data.x && data.y && data.x.length === data.y.length, {
         message: 'The elements count of `x` and `y` should be equal',
@@ -176,12 +172,12 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
    * Validates inputes parameters.
    */
   const validateInput = (input: PluginParams, index: number) => {
+    const inputParameter = globalConfig['input-parameter'];
     const schema = z
       .object({
         timestamp: z.string().or(z.date()),
         duration: z.number(),
-        'cpu/utilization': z.number(),
-        'cpu/thermal-design-power': z.number().gt(0).optional(), // need to varify
+        [inputParameter]: z.number().gt(0),
         'vcpus-allocated': z.number().gte(1).optional(),
         'vcpus-total': z.number().gt(0).optional(),
       })
@@ -202,9 +198,10 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
       )
       .refine(
         data =>
-          data['cpu/utilization'] <= globalConfig.x[globalConfig.x.length - 1],
+          data[inputParameter] >= globalConfig.x[0] &&
+          data[inputParameter] <= globalConfig.x[globalConfig.x.length - 1],
         {
-          message: `The \`cpu/utilization\` value of input[${index}] should not be out of the range of \`x\` elements`,
+          message: `The \`${inputParameter}\` value of input[${index}] should not be out of the range of \`x\` elements`,
         }
       );
 
