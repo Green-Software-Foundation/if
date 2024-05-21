@@ -1,0 +1,67 @@
+name: Release commit
+on:
+  release:
+    types: [published]
+
+env: 
+  PR_BRANCH_NAME: release-${{github.event.release.tag_name}}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm test
+
+  create-release-commit:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:      
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Initalize git user email
+        run: git config --global user.email "${{vars.RELEASE_USER_EMAIL}}"
+
+      - name: Initalize git user name
+        run: git config --global user.name "Release commit workflow"
+
+      - name: Create release branch
+        run: |
+          git checkout -b $PR_BRANCH_NAME
+          git push --set-upstream origin $PR_BRANCH_NAME
+          echo "branch=$PR_BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Bump version and push changes using release-it
+        run: |
+          npm run release -- --ci ${{github.event.release.tag_name}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Create pull request
+        run: gh pr create -B ${{ github.event.repository.default_branch }} -H $PR_BRANCH_NAME --title "Release ${{github.event.release.tag_name}}" --body "${{github.event.release.body}}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        

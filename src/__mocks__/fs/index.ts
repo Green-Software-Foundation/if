@@ -60,7 +60,7 @@ export const mkdir = (dirPath: string) => dirPath;
 
 export const writeFile = async (pathToFile: string, content: string) => {
   if (pathToFile === 'reject') {
-    throw Error('Wrong file path');
+    throw new Error('Wrong file path');
   }
 
   const mockPathToFile = 'mock-pathToFile';

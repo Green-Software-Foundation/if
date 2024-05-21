@@ -13,4 +13,6 @@ export type AggregationParamsSure = Extract<Manifest['aggregation'], {}>;
 
 export type Context = Omit<Manifest, 'tree'>;
 
+export type ContextWithExec = Omit<Manifest, 'tree'>;
+
 export type ManifestParameter = Extract<Manifest['params'], {}>[number];

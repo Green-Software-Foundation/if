@@ -1,34 +1,10 @@
-<div id="header" align="center">
-<img style=”margin: 0px” src=hack-banner.png alt=”banner” height=”500" />
-</div>
-
-----------------------------
-
-**Welcome to [CarbonHack 24](https://grnsft.org/hack/github) from the Green Software Foundation.**
-
-> From Monday, 18th March - Monday, 8th April 2024, participants will compete to showcase their best application of IF in measuring the environmental impacts of software. 
-> 
-> Carbon Hack is a dynamic competition that combines healthy rivalry with collaborative innovation. Hackers will push the limits of the framework, uncover potential weaknesses, and create innovations to enhance the tool.
-> 
-> CarbonHack is open to all, including software practitioners and those with a passion for Green Software.
->
-> Find out more about CarbonHack 2024 on the [CarbonHack website](https://grnsft.org/hack/github). Check out the [FAQ on GitHub](https://grnsft.org/hack/faq).
-> 
-> Registration opens 15th January!
->
-> **PLEASE NOTE** hackathon projects are not supposed to be raised as pull requests to this rpeository! Please keep your hackathon plugins in your own repositories and submit links instead of raising PRs!
-----------------------------
-
-
-
 # Impact Framework
 
 
 > [!IMPORTANT]
 > Incubation Project: This project is an incubation project being run inside the Green Software Foundation; as such, we DON’T recommend using it in any critical use case. Incubation projects are experimental, offer no support guarantee, have minimal governance and process, and may be retired at any moment. This project may one day Graduate, in which case this disclaimer will be removed.
 
-**Note** We have recently refactored the IF codebase and introduced some changes affecting both users and developers. You can read our migration guide [HERE](./Refactor-migration-guide.md) to help you update to the latest version!
-
+**Note** We have recently (March 2024) refactored the IF codebase and introduced some changes affecting both users and developers. You can read our migration guide [HERE](./Refactor-migration-guide.md) to help you update to the latest version!
 
 
 [Impact Framework](https://greensoftwarefoundation.atlassian.net/wiki/spaces/~612dd45e45cd76006a84071a/pages/17072136/Opensource+Impact+Engine+Framework) (IF) is an [Incubation](https://oc.greensoftware.foundation/project-lifecycle.html#incubation) project from the [Open Source Working Group](https://greensoftwarefoundation.atlassian.net/wiki/spaces/~612dd45e45cd76006a84071a/pages/852049/Open+Source+Working+Group) in the [Green Software Foundation](https://greensoftware.foundation/).
@@ -69,21 +45,42 @@ Then, run `if` using the following command:
 
 ```sh
 ie --manifest <path-to-your-manifest-file>
+## or you can use aliases
+ie -m <path-to-your-manifest-file>
 ```
 
 Note that above command will not print the final output. In order to print the final output to the console, run `if` using the optional stdout argument:
 ```sh
 ie --manifest <path-to-your-manifest-file> --stdout
+## or using aliases
+ie -m <path-to-your-manifest-file> -s
 ```
 
-You can also add an optional savepath for your output yaml (if you do not provide one, the output will be printed to the console):
+You can also add a savepath for your output yaml in order to have the output stored in a file. Note that you also have to add configuration to your manifest to enable this, as follows:
+
+```yaml
+initialize:
+  output:
+    - yaml
+```
+
+On the command line:
 
 ```sh
 ie --manifest <path-to-your-manifest-file> --output <your-savepath>
+## or using aliases
+ie -m <path-to-your-manifest-file> -o <your-savepath>
 ```
 
 The `ie` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
 
+Use the `help` command if you need guidance about the available commands
+
+```sh
+ie --help
+## or using alias
+ie -h
+```
 
 ## Documentation
 
@@ -105,3 +102,9 @@ You can check our issue board for issues tagged `help-wanted`. These are issues 
 Please read the full contribution guidelines at [if.greensoftware.foundation](https://if.greensoftware.foundation/Contributing)
 
 The same guidelines also apply to `if-docs`, `if-plugins` and `if-unofficial-plugins`.
+
+## Bug reports
+
+To report bugs please use our bug report template. You can do this by opening a new issue and selecting `Bug Report` when you are prompted to pick a template. The more information you provide,.the quicker we will be able to reproduce, diagnose and triage your issue.
+
+To read about our bug reporting and triage process, please see [our contribution guidelines](contributing.md#reporting-bugs).
