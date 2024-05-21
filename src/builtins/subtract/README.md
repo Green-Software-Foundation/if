@@ -66,7 +66,7 @@ initialize:
   plugins:
     subtract:
       method: Subtract
-      path: 'builtins'
+      path: 'builtin'
       global-config:
         input-parameters: ['cpu/energy', 'network/energy']
         output-parameter: 'energy/diff'
