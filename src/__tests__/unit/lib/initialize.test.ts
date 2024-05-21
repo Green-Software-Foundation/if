@@ -10,7 +10,7 @@ jest.mock('../../../util/log-memoize', () => ({
   memoizedLog: mockLog,
 }));
 
-import {initalize} from '../../../lib/initialize';
+import {initialize} from '../../../lib/initialize';
 
 import {ERRORS} from '../../../util/errors';
 
@@ -25,7 +25,7 @@ describe('lib/initalize: ', () => {
   describe('initalize(): ', () => {
     it('creates instance with get and set methods.', async () => {
       const plugins = {};
-      const response = await initalize(plugins);
+      const response = await initialize(plugins);
 
       expect(response).toHaveProperty('get');
       expect(response).toHaveProperty('set');
@@ -40,7 +40,7 @@ describe('lib/initalize: ', () => {
           method: 'Mockavizta',
         },
       };
-      const storage = await initalize(plugins);
+      const storage = await initialize(plugins);
 
       const pluginName = Object.keys(plugins)[0];
       const module = storage.get(pluginName);
@@ -59,7 +59,7 @@ describe('lib/initalize: ', () => {
           },
         },
       };
-      const storage = await initalize(plugins);
+      const storage = await initialize(plugins);
 
       const pluginName = Object.keys(plugins)[0];
       const module = storage.get(pluginName);
@@ -79,7 +79,7 @@ describe('lib/initalize: ', () => {
       };
 
       try {
-        await initalize(plugins);
+        await initialize(plugins);
       } catch (error) {
         expect(error).toBeInstanceOf(PluginCredentialError);
 
@@ -101,7 +101,7 @@ describe('lib/initalize: ', () => {
       };
 
       try {
-        await initalize(plugins);
+        await initialize(plugins);
       } catch (error) {
         expect(error).toBeInstanceOf(PluginCredentialError);
 
@@ -121,7 +121,7 @@ describe('lib/initalize: ', () => {
           },
         },
       };
-      const storage = await initalize(plugins);
+      const storage = await initialize(plugins);
 
       const pluginName = Object.keys(plugins)[0];
       const module = storage.get(pluginName);
@@ -139,7 +139,7 @@ describe('lib/initalize: ', () => {
           },
         },
       };
-      const storage = await initalize(plugins);
+      const storage = await initialize(plugins);
 
       const pluginName = Object.keys(plugins)[0];
       const module = storage.get(pluginName);
@@ -159,7 +159,7 @@ describe('lib/initalize: ', () => {
       };
 
       try {
-        await initalize(plugins);
+        await initialize(plugins);
       } catch (error) {
         expect(error).toBeInstanceOf(ModuleInitializationError);
 

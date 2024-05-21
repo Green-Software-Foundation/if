@@ -1,10 +1,9 @@
 import {saveYamlFileAs} from '../util/yaml';
-
 import {ERRORS} from '../util/errors';
 
 import {Context} from '../types/manifest';
 
-const {CliInputError} = ERRORS;
+const {ExhaustError} = ERRORS;
 
 export const ExportYaml = () => {
   /** Takes string before hashtag. */
@@ -15,7 +14,7 @@ export const ExportYaml = () => {
    */
   const execute = async (tree: any, context: Context, outputPath: string) => {
     if (!outputPath) {
-      throw new CliInputError('Output path is required.');
+      throw new ExhaustError('Output path is required.');
     }
 
     const outputFile = {
