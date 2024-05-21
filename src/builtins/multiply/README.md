@@ -66,7 +66,7 @@ initialize:
   plugins:
     multiply:
       method: Multiply
-      path: 'builtins'
+      path: 'builtin'
       global-config:
         input-parameters: ['cpu/energy', 'network/energy']
         output-parameter: 'energy-product'
