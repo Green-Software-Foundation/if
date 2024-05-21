@@ -10,6 +10,9 @@ initialize:
         method: linear
         x: [0, 10, 50, 100]
         y: [0.12, 0.32, 0.75, 1.02]
+        input-parameter: "cpu/utilization"
+        output-parameter: "result"
+
 tree:
   children:
     child:
@@ -19,6 +22,5 @@ tree:
         - timestamp: 2023-07-06T00:00
           duration: 3600
           cpu/utilization: 45
-          cpu/thermal-design-power: 100
           # vcpus-allocated: 4
           # vcpus-total: 64
