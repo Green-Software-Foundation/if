@@ -1,5 +1,5 @@
 name: sci-embodied
-description: failure with `defaults.device/emissions-embodied` being string instead of number
+description: receiving incorrect error message when running sci-embodied without `resources-total` issue #716
 tags:
 initialize:
   outputs: ['yaml']
@@ -13,11 +13,11 @@ tree:
       pipeline:
         - sci-embodied # duration & config -> embodied
       defaults:
-        device/emissions-embodied: 'fail' # gCO2eq
+        device/emissions-embodied: 1533.120 # gCO2eq
         time-reserved: 3600 # 1hr in seconds
         device/expected-lifespan: 94608000 # 3 years in seconds
         resources-reserved: 1
-        resources-total: 8
+       # resources-total: 8
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600
