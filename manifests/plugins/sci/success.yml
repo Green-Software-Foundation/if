@@ -7,7 +7,7 @@ initialize:
     sci:
       kind: plugin
       method: Sci
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       # global-config:
       #   functional-unit-time: 1 minute
 tree:

@@ -2,7 +2,7 @@ name: divide
 description: success path
 tags:
 initialize:
-  outputs: ['yaml']
+#  outputs: ['yaml']
   plugins:
     cloud-metadata:
       method: CloudMetadata

@@ -6,7 +6,6 @@ initialize:
   plugins:
     "sci-embodied": # a model that calculates m from te, tir, el, rr and rtor
       method: SciEmbodied
-      verbose: false
       path: "builtin"
 tree:
   children:
