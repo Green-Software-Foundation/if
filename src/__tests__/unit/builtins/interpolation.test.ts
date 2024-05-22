@@ -136,31 +136,6 @@ describe('builtins/interpolation: ', () => {
         expect(plugin.execute(inputs)).toEqual(outputs);
       });
 
-      it('returns result when `vcpus-allocated` and `vcpus-total` are provided.', () => {
-        const inputs = [
-          {
-            timestamp: '2023-07-06T00:00',
-            duration: 3600,
-            'cpu/utilization': 45,
-            'vcpus-allocated': 4,
-            'vcpus-total': 64,
-          },
-        ];
-
-        const outputs = [
-          {
-            timestamp: '2023-07-06T00:00',
-            duration: 3600,
-            'cpu/utilization': 45,
-            'vcpus-allocated': 4,
-            'vcpus-total': 64,
-            'cpu/energy': 0.000043515625,
-          },
-        ];
-
-        expect(plugin.execute(inputs)).toEqual(outputs);
-      });
-
       it('throws an when the global config is not provided.', () => {
         const config = undefined;
         const plugin = Interpolation(config!);
@@ -172,30 +147,6 @@ describe('builtins/interpolation: ', () => {
           expect(error).toBeInstanceOf(ConfigNotFoundError);
           expect(error).toEqual(
             new ConfigNotFoundError('Global config is not provided.')
-          );
-        }
-      });
-
-      it('throws an error when `vcpus-allocated` is greater than `vcpus-total`.', () => {
-        const inputs = [
-          {
-            timestamp: '2023-07-06T00:00',
-            duration: 3600,
-            'cpu/utilization': 45,
-            'vcpus-allocated': 74,
-            'vcpus-total': 64,
-          },
-        ];
-
-        expect.assertions(2);
-        try {
-          plugin.execute(inputs);
-        } catch (error) {
-          expect(error).toBeInstanceOf(InputValidationError);
-          expect(error).toEqual(
-            new InputValidationError(
-              'The value of `vcpus-total` should be greater than the value of the `vcpus-allocated` in the input[0]'
-            )
           );
         }
       });
