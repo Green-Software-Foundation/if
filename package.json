@@ -36,6 +36,7 @@
     "gts": "^5.0.0",
     "husky": "^8.0.0",
     "jest": "^29.6.1",
+    "lint-staged": "^15.2.2",
     "release-it": "^16.3.0",
     "rimraf": "^5.0.5",
     "ts-jest": "^29.1.1"
@@ -69,6 +70,7 @@
     "fix:package": "fixpack",
     "ie": "npx ts-node src/index.ts",
     "lint": "gts lint",
+    "pre-commit": "lint-staged",
     "prepare": "husky install",
     "prepublish": "npm run build",
     "release": "release-it",

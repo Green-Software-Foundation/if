@@ -2,7 +2,7 @@ name: multiply
 description: a manifest demonstrating how to use the multiply feature
 tags:
 initialize:
-  outputs: ['yaml']
+ # outputs: ['yaml']
   plugins:
     multiply:
       method: Multiply
@@ -16,7 +16,7 @@ tree:
       pipeline:
         - multiply
       config:
-        sum:
+        sum: 
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600

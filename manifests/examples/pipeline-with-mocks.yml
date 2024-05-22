@@ -33,14 +33,14 @@ initialize:
     "sci-e":
       path: "@grnsft/if-plugins"
       method: SciE
-    "sci-m":
-      path: "@grnsft/if-plugins"
-      method: SciM
+    "sci-embodied":
+      path: "builtin"
+      method: SciEmbodied
     "sci-o":
       path: "@grnsft/if-plugins"
       method: SciO
     "sci":
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       method: Sci
       global-config:
         functional-unit: "requests"
@@ -63,7 +63,7 @@ tree:
       pipeline:
         - teads-curve
         - sci-e
-        - sci-m
+        - sci-embodied
         - sci-o
         - time-sync
         - sci
@@ -106,7 +106,7 @@ tree:
       pipeline:
         - teads-curve
         - sci-e
-        - sci-m
+        - sci-embodied
         - sci-o
         - time-sync
         - sci
