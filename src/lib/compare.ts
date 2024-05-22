@@ -32,7 +32,7 @@ export const compare = (source: any, target: any, path = ''): Difference => {
     }
 
     for (let i = 0; i < source.length; i++) {
-      return compare(source[i], target[i], path ? `${path}[${i}]` : `${i}`);
+      compare(source[i], target[i], path ? `${path}[${i}]` : `${i}`);
     }
   }
 
