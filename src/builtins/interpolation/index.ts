@@ -42,8 +42,6 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
    * (wattage * duration) / (seconds in an hour) / 1000 = kWh
    */
   const calcuateEnergy = (config: ConfigParams, input: PluginParams) => {
-    const total = input['vcpus-total'];
-    const allocated = input['vcpus-allocated'];
     const methodType: {[key: string]: number} = {
       linear: getLinearInterpolation(config, input),
       spline: getSplineInterpolation(config, input),
@@ -52,9 +50,8 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
 
     const interpolation = methodType[config.method];
     const wattage = (interpolation * input.duration) / 3600 / 1000;
-    const energy = allocated && total ? wattage * (allocated / total) : wattage;
 
-    return energy;
+    return wattage;
   };
 
   /**
@@ -178,24 +175,7 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
         timestamp: z.string().or(z.date()),
         duration: z.number(),
         [inputParameter]: z.number().gt(0),
-        'vcpus-allocated': z.number().gte(1).optional(),
-        'vcpus-total': z.number().gt(0).optional(),
       })
-      .refine(
-        data => {
-          if (
-            data['vcpus-allocated'] !== undefined &&
-            data['vcpus-total'] !== undefined &&
-            data['vcpus-total'] < data['vcpus-allocated']
-          ) {
-            return false;
-          }
-          return true;
-        },
-        {
-          message: `The value of \`vcpus-total\` should be greater than the value of the \`vcpus-allocated\` in the input[${index}]`,
-        }
-      )
       .refine(
         data =>
           data[inputParameter] >= globalConfig.x[0] &&
