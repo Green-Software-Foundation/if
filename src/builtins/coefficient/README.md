@@ -32,7 +32,7 @@ output = input * coefficient
 
 ## Implementation
 
-To run the plugin, you must first create an instance of `Coefficient`. Then, you can call `execute()`.
+To run the plugin from a Typescript app, you must first create an instance of `Coefficient`. Then, you can call `execute()`.
 
 ```typescript
 const config = {
