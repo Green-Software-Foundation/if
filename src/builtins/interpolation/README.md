@@ -32,10 +32,6 @@ The plugin expects the following input parameters:
 - `timestamp`: a timestamp for the input (required)
 - `duration`: the amount of time, in seconds, that the input covers. (required)
 - `[input-parameter]` - a field whose name matches the string provided to input-parameter in global config (i.e. if the input-parameter in global config is cpu/utilisation then cpu-utilisation must exist in the input data)
-- `vcpus-allocated`: number of allocated virtual CPUs (optional)
-- `vcpus-total`: number of total virtual CPUs (optional)
-
-If `vcpus-allocated` and `vcpus-total` are provided, these data will be used to scale the CPU energy usage.
 
 ## Output
 
@@ -64,8 +60,6 @@ The plugin conducts input validation using the `zod` library and may throw error
      - `timestamp` - should be in string or date format
      - `[input-parameter]` - validates whether the parameter name is included in the input, and if its value should be a number within the range of x points.
 
-     If the `vcpus-allocated` and `vcpus-total` are provided, the `vcpus-total` should be greater than `vcpus-allocated`. The `vcpus-allocated` should be greater than or equal to 1.
-
    - Calculation
 
      - If the `method` is provided, choose the right way to calculate. For the `linear` and `polynomial` methods, calculate according to their formulas. For spline interpolation, use the npm module `typescript-cubic-spline`.
@@ -73,9 +67,6 @@ The plugin conducts input validation using the `zod` library and may throw error
    The result is multiplied by the `duration` and divided by 3600 to get seconds in an hour, then divided by 1000 to get kilowatt-hours (kWh):
 
    `(wattage * duration) / (seconds in an hour) / 1000 = kWh`
-
-   If `vcpus-allocated` and `vcpus-total` are provided, the result is multiplied by their division
-   `energy * (vcpus-total / vcpus-allocated)`
 
 2. **Output**: Output the provided input along with the calculated `cpu/energy`, formatted in `kWh` units.
 
@@ -97,9 +88,7 @@ const inputs = [
   {
     timestamp: '2024-04-16T12:00:00Z',
     duration: 3600,
-    'cpu/utilization': 45,
-    'vcpus-allocated': 4,
-    'vcpus-total': 8,
+    'cpu/utilization': 45
   },
 ];
 
