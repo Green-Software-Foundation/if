@@ -1,8 +1,8 @@
 name: sci-embodied
-description: failure with `defaults.device/emissions-embodied` being string instead of number
+description: missing device/expected-lifespan
 tags:
 initialize:
-  outputs: ['yaml']
+  #outputs: ['yaml']
   plugins:
     "sci-embodied": # a model that calculates m from te, tir, el, rr and rtor
       method: SciEmbodied
@@ -13,9 +13,9 @@ tree:
       pipeline:
         - sci-embodied # duration & config -> embodied
       defaults:
-        device/emissions-embodied: 'fail' # gCO2eq
+        device/emissions-embodied: 1533.120 # gCO2eq
         time-reserved: 3600 # 1hr in seconds
-        device/expected-lifespan: 94608000 # 3 years in seconds
+        #device/expected-lifespan: 94608000 # 3 years in seconds
         resources-reserved: 1
         resources-total: 8
       inputs:

@@ -1,8 +1,8 @@
 name: sci
-description: successful path
+description: missing input value (carbon-embodied)
 tags:
 initialize:
-  outputs: ['yaml']
+  #outputs: ['yaml']
   plugins:
     sci:
       kind: plugin
@@ -24,5 +24,4 @@ tree:
           duration: 3600
           energy: 5
           carbon-operational: 5
-          carbon-embodied: 0.02
           requests: 100
