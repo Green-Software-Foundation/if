@@ -3,7 +3,7 @@
 ## Overview
 
 Interpolation is a way to infer new data points from a previously known set of points.
-This plugin implements linear interpolation by default for estimating energy consumption.
+This plugin provides the `y` value at a given `x` by interpolating between known points. You provide a set of known `x`s and `y`s and a target `x`, the plugin returns the `y` for your `x`.
 
 ## Usage
 
@@ -23,7 +23,7 @@ To employ the `Interpolation` plugin, adhere to these steps:
 - `input-parameter`: a string defining the name to use its value to calculate the interpolation. It should match an existing key in the inputs array (required).
 - `output-parameter`: a string defining the name to use to add the result of interpolation with additional calculation (required).
 
-Counts of `x` and `y` arrays elements should be equal.
+`x` and `y` arrays must be equal lengths.
 
 ## Input Parameters
 
