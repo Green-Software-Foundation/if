@@ -63,7 +63,7 @@ export const Divide = (globalConfig: ConfigParams): ExecutePlugin => {
         [numerator]: z.number(),
         [denominator]: z.number().optional(),
       })
-      .refine(_data => {
+      .refine(() => {
         if (typeof denominator === 'string' && !input[denominator]) {
           throw new InputValidationError(
             `\`${denominator}\` is missing from the input.`
