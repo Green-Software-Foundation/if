@@ -22,5 +22,3 @@ tree:
         - timestamp: 2023-07-06T00:00
           duration: 3600
           cpu/utilization: 45
-          # vcpus-allocated: 4
-          # vcpus-total: 64
