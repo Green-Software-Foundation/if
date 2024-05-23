@@ -140,7 +140,10 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
         'output-parameter': z.string(),
       })
       .refine(data => data.x && data.y && data.x.length === data.y.length, {
-        message: 'The elements count of `x` and `y` should be equal',
+        message: 'The length of `x` and `y` should be equal',
+      })
+      .refine(data => data.x.length > 1 && data.y.length > 1, {
+        message: 'the length of the input arrays must be greater than 1',
       });
 
     const defaultMethod = globalConfig.method ?? Method.LINEAR;
@@ -178,7 +181,8 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
           data[inputParameter] >= globalConfig.x[0] &&
           data[inputParameter] <= globalConfig.x[globalConfig.x.length - 1],
         {
-          message: `The \`${inputParameter}\` value of input[${index}] should not be out of the range of \`x\` elements`,
+          message:
+            'The target x value must be within the range of the given x values',
         }
       );
 
