@@ -19,11 +19,11 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
 
     return inputs.map((input, index) => {
       const safeInput = validateInput(input, index);
-      const energy = calcuateEnergy(validatedConfig, safeInput);
+      const result = calculateResult(validatedConfig, safeInput);
 
       return {
         ...input,
-        [validatedConfig['output-parameter']]: energy,
+        [validatedConfig['output-parameter']]: result,
       };
     });
   };
@@ -41,17 +41,14 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
    * Wh / 1000 = kWh
    * (wattage * duration) / (seconds in an hour) / 1000 = kWh
    */
-  const calcuateEnergy = (config: ConfigParams, input: PluginParams) => {
+  const calculateResult = (config: ConfigParams, input: PluginParams) => {
     const methodType: {[key: string]: number} = {
       linear: getLinearInterpolation(config, input),
       spline: getSplineInterpolation(config, input),
       polynomial: getPolynomialInterpolation(config, input),
     };
 
-    const interpolation = methodType[config.method];
-    const wattage = (interpolation * input.duration) / 3600 / 1000;
-
-    return wattage;
+    return methodType[config.method];
   };
 
   /**
