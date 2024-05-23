@@ -14,7 +14,14 @@ const {CliInputError} = ERRORS;
 
 const {IE, IF_DIFF} = CONFIG;
 
-const {FILE_IS_NOT_YAML, MANIFEST_IS_MISSING, NO_OUTPUT} = STRINGS;
+const {
+  FILE_IS_NOT_YAML,
+  MANIFEST_IS_MISSING,
+  NO_OUTPUT,
+  SOURCE_IS_NOT_YAML,
+  TARGET_IS_NOT_YAML,
+  INVALID_TARGET,
+} = STRINGS;
 
 /**
  * Validates `ie` process arguments.
@@ -106,6 +113,10 @@ export const parseIfDiffArgs = () => {
   const {source, target} = validateAndParseIfDiffArgs();
 
   if (target) {
+    if (source && !checkIfFileIsYaml(source)) {
+      throw new CliInputError(SOURCE_IS_NOT_YAML);
+    }
+
     if (checkIfFileIsYaml(target)) {
       const response: LoadDiffParams = {
         targetPath: prependFullFilePath(target),
@@ -118,8 +129,8 @@ export const parseIfDiffArgs = () => {
       return response;
     }
 
-    throw new CliInputError(FILE_IS_NOT_YAML); // change to one of the source or target parts are not a yaml
+    throw new CliInputError(TARGET_IS_NOT_YAML);
   }
 
-  throw new CliInputError(MANIFEST_IS_MISSING); // change to one of the source or target are missing
+  throw new CliInputError(INVALID_TARGET);
 };
