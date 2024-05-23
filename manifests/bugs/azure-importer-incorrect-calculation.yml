@@ -7,14 +7,14 @@ initialize:
       path: '@grnsft/if-unofficial-plugins'
       method: AzureImporter
     try-defaults-1:
-      path: '@grnsft/if-plugins'
+      path: 'builtin'
       method: Coefficient
       global-config:
         input-parameter: grid/carbon-intensity
         coefficient: 0.1
         output-parameter: grid/carbon-intensity
     try-defaults-2:
-      path: '@grnsft/if-plugins'
+      path: 'builtin'
       method: Coefficient
       global-config:
         input-parameter: network/energy
