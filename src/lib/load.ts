@@ -1,14 +1,20 @@
 import * as YAML from 'js-yaml';
 
+import {ERRORS} from '../util/errors';
 import {openYamlFileAsObject} from '../util/yaml';
 import {readAndParseJson} from '../util/json';
 import {parseManifestFromStdin} from '../util/helpers';
 
 import {PARAMETERS} from '../config';
+import {STRINGS} from '../config';
 
 import {Parameters} from '../types/parameters';
 import {LoadDiffParams} from '../types/util/args';
 import {Manifest} from '../types/manifest';
+
+const {CliInputError} = ERRORS;
+
+const {INVALID_SOURCE} = STRINGS;
 
 /**
  * Parses manifest file as an object. Checks if parameter file is passed via CLI, then loads it too.
@@ -37,7 +43,7 @@ export const loadIfDiffFiles = async (params: LoadDiffParams) => {
   const pipedSourceManifest = await parseManifestFromStdin();
 
   if (!sourcePath && !pipedSourceManifest) {
-    throw new Error('Source is invalid.');
+    throw new CliInputError(INVALID_SOURCE);
   }
 
   const loadFromSource =
