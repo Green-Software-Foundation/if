@@ -165,7 +165,7 @@ describe('builtins/interpolation: ', () => {
           expect(error).toBeInstanceOf(InputValidationError);
           expect(error).toEqual(
             new InputValidationError(
-              'The elements count of `x` and `y` should be equal'
+              'The length of `x` and `y` should be equal'
             )
           );
         }
@@ -186,7 +186,35 @@ describe('builtins/interpolation: ', () => {
           expect(error).toBeInstanceOf(InputValidationError);
           expect(error).toEqual(
             new InputValidationError(
-              'The `cpu/utilization` value of input[0] should not be out of the range of `x` elements'
+              'The target x value must be within the range of the given x values'
+            )
+          );
+        }
+      });
+      it('throws an error when the the length of the input arrays is <2', () => {
+        const globalConfig = {
+          x: [0],
+          y: [0.12],
+          'input-parameter': 'cpu/utilization',
+          'output-parameter': 'interpolation-result',
+        };
+        const config = Object.assign({}, globalConfig, {method: Method.SPLINE});
+        const plugin = Interpolation(config);
+        const inputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/utilization': 105,
+          },
+        ];
+        expect.assertions(2);
+        try {
+          plugin.execute(inputs);
+        } catch (error) {
+          expect(error).toBeInstanceOf(InputValidationError);
+          expect(error).toEqual(
+            new InputValidationError(
+              'the length of the input arrays must be greater than 1'
             )
           );
         }
