@@ -28,15 +28,33 @@ jest.mock('ts-command-line-args', () => ({
           manifest: 'manifest-mock.yml',
           'override-params': 'override-params-mock.yml',
         };
-      case 'help':
-        return {
-          manifest: path.normalize(`${processRunningPath}/manifest-mock.yml`),
-          help: true,
-        };
       case 'not-yaml':
         return {
           manifest: 'mock.notyaml',
         };
+      /** If-diff mocks */
+      case 'only-target':
+        return {
+          target: 'target-mock.yml',
+        };
+      case 'target-is-not-yaml':
+        return {
+          target: 'target-mock',
+        };
+      case 'source-is-not-yaml':
+        return {
+          target: 'target-mock.yml',
+          source: 'source-mock',
+        };
+      case 'target-source':
+        return {
+          target: 'target-mock.yml',
+          source: 'source-mock.yml',
+        };
+      case 'diff-throw-error':
+        throw new Error('mock-error');
+      case 'diff-throw':
+        throw 'mock-error';
       default:
         return {
           manifest: 'mock-manifest.yaml',
@@ -48,14 +66,20 @@ jest.mock('ts-command-line-args', () => ({
 
 import path = require('path');
 
-import {parseIEProcessArgs} from '../../../util/args';
+import {parseIEProcessArgs, parseIfDiffArgs} from '../../../util/args';
 import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
 
 const {CliInputError} = ERRORS;
 
-const {MANIFEST_IS_MISSING, FILE_IS_NOT_YAML} = STRINGS;
+const {
+  MANIFEST_IS_MISSING,
+  FILE_IS_NOT_YAML,
+  TARGET_IS_NOT_YAML,
+  INVALID_TARGET,
+  SOURCE_IS_NOT_YAML,
+} = STRINGS;
 
 describe('util/args: ', () => {
   const originalEnv = process.env;
@@ -168,6 +192,87 @@ describe('util/args: ', () => {
       } catch (error) {
         expect(error).toBeInstanceOf(CliInputError);
         expect(error).toEqual(new CliInputError(FILE_IS_NOT_YAML));
+      }
+    });
+  });
+
+  describe('parseIfDiffArgs(): ', () => {
+    it('throws error if `target` is missing.', async () => {
+      expect.assertions(1);
+
+      try {
+        await parseIfDiffArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliInputError(INVALID_TARGET));
+        }
+      }
+    });
+
+    it('throws error if `target` is not a yaml.', async () => {
+      process.env.result = 'target-is-not-yaml';
+      expect.assertions(1);
+
+      try {
+        await parseIfDiffArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliInputError(TARGET_IS_NOT_YAML));
+        }
+      }
+    });
+
+    it('returns `target`s full path.', async () => {
+      process.env.result = 'only-target';
+      expect.assertions(1);
+
+      const response = await parseIfDiffArgs();
+      expect(response).toHaveProperty('targetPath');
+    });
+
+    it('throws error if source is not a yaml.', async () => {
+      process.env.result = 'source-is-not-yaml';
+      expect.assertions(1);
+
+      try {
+        await parseIfDiffArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliInputError(SOURCE_IS_NOT_YAML));
+        }
+      }
+    });
+
+    it('returns target and source full paths.', async () => {
+      process.env.result = 'target-source';
+      expect.assertions(2);
+
+      const response = await parseIfDiffArgs();
+      expect(response).toHaveProperty('targetPath');
+      expect(response).toHaveProperty('sourcePath');
+    });
+
+    it('throws error if parsing failed.', async () => {
+      process.env.result = 'diff-throw-error';
+      expect.assertions(1);
+
+      try {
+        await parseIfDiffArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliInputError('mock-error'));
+        }
+      }
+    });
+
+    it('throws error if parsing failed (not instance of error).', async () => {
+      process.env.result = 'diff-throw';
+      expect.assertions(1);
+
+      try {
+        await parseIfDiffArgs();
+      } catch (error) {
+        expect(error).toEqual('mock-error');
       }
     });
   });
