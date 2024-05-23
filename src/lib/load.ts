@@ -1,4 +1,3 @@
-import {validateManifest} from '../util/validations';
 import {openYamlFileAsObject} from '../util/yaml';
 import {readAndParseJson} from '../util/json';
 
@@ -11,7 +10,6 @@ import {Parameters} from '../types/parameters';
  */
 export const load = async (inputPath: string, paramPath?: string) => {
   const rawManifest = await openYamlFileAsObject<any>(inputPath);
-  const {tree, ...context} = validateManifest(rawManifest);
   const parametersFromCli =
     paramPath &&
     (await readAndParseJson<Parameters>(paramPath)); /** @todo validate json */
@@ -20,8 +18,7 @@ export const load = async (inputPath: string, paramPath?: string) => {
     PARAMETERS; /** @todo PARAMETERS should be specified in parameterize only */
 
   return {
-    tree,
-    context,
+    rawManifest,
     parameters,
   };
 };

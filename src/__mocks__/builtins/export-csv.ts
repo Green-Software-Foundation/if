@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {Context} from '../../types/manifest';
 
 export const tree = {
   children: {
     'child-1': {
-      pipeline: ['teads-curve', 'sum', 'sci-m', 'sci-o', 'sci'],
+      pipeline: ['teads-curve', 'sum', 'sci-embodied', 'sci-o', 'sci'],
       config: null,
       defaults: {
         'cpu/thermal-design-power': 100,
@@ -54,7 +55,7 @@ export const tree = {
       aggregated: undefined,
     },
     'child-2': {
-      pipeline: ['teads-curve', 'sum', 'sci-m', 'sci-o', 'sci'],
+      pipeline: ['teads-curve', 'sum', 'sci-embodied', 'sci-o', 'sci'],
       config: null,
       defaults: {
         'cpu/thermal-design-power': 100,
@@ -117,6 +118,7 @@ export const tree = {
   },
 };
 
+// @ts-ignore
 export const context: Context = {
   name: 'demo',
   description: '',
@@ -139,9 +141,9 @@ export const context: Context = {
           'output-parameter': "carbon-plus-energy'",
         },
       },
-      'sci-m': {
-        path: '@grnsft/if-plugins',
-        method: 'SciM',
+      'sci-embodied': {
+        path: 'builtin',
+        method: 'SciEmbodied',
       },
       'sci-o': {
         path: '@grnsft/if-plugins',
