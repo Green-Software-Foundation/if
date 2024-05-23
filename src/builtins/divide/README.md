@@ -88,7 +88,8 @@ tree:
 You can run this example by saving it as `./examples/manifests/divide.yml` and executing the following command from the project root:
 
 ```sh
-if --manifest ./examples/manifests/divide.yml --output ./examples/outputs/divide.yml
+npm i -g @grnsft/if
+ie --manifest ./examples/manifests/divide.yml --output ./examples/outputs/divide.yml
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`.
