@@ -11,7 +11,7 @@ describe('builtins/interpolation: ', () => {
       x: [0, 10, 50, 100],
       y: [0.12, 0.32, 0.75, 1.02],
       'input-parameter': 'cpu/utilization',
-      'output-parameter': 'cpu/energy',
+      'output-parameter': 'interpolation-result',
     };
     const inputs = [
       {
@@ -36,7 +36,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/energy': 0.00069625,
+            'interpolation-result': 0.69625,
           },
         ];
 
@@ -48,7 +48,7 @@ describe('builtins/interpolation: ', () => {
           x: [0, 10, 50, 100],
           y: [0.12, 0.32, 0.75, 1.02],
           'input-parameter': 'cpu/utilization',
-          'output-parameter': 'cpu/energy',
+          'output-parameter': 'interpolation-result',
         };
         const plugin = Interpolation(globalConfig);
 
@@ -57,7 +57,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/energy': 0.00069625,
+            'interpolation-result': 0.69625,
           },
         ];
 
@@ -73,7 +73,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/energy': 0.0007169698932926829,
+            'interpolation-result': 0.7169698932926829,
           },
         ];
 
@@ -91,7 +91,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/energy': 0.0007187375000000001,
+            'interpolation-result': 0.7187374999999999,
           },
         ];
 
@@ -109,7 +109,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 45,
-            'cpu/energy': 0.00069625,
+            'interpolation-result': 0.69625,
           },
         ];
 
@@ -129,7 +129,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 50,
-            'cpu/energy': 0.00075,
+            'interpolation-result': 0.75,
           },
         ];
 
