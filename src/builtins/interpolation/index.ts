@@ -29,17 +29,7 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
   };
 
   /**
-   * Calculates energy consumption based on configuration and input parameters.
-   * Determines the appropriate interpolation value based on the specified method type in the config.
-   * Calculates the wattage based on the interpolation value and the duration of usage.
-   * Computes the energy consumption, taking into account the allocated and total virtual CPUs if available.
-   *
-   * The duration is in seconds, the wattage is in watts, e.g. 30W x 300s = 9000 J.
-   * To get the result in kWh, additional calculations are required:
-   * 1 Wh = 3600 J
-   * J / 3600 = Wh
-   * Wh / 1000 = kWh
-   * (wattage * duration) / (seconds in an hour) / 1000 = kWh
+   * Calculates the appropriate interpolation value based on the specified method type in the config and input parameters.
    */
   const calculateResult = (config: ConfigParams, input: PluginParams) => {
     const methodType: {[key: string]: number} = {
@@ -52,7 +42,7 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
   };
 
   /**
-   * Calculates the wattage when the method is linear.
+   * Calculates the interpolation when the method is linear.
    */
   const getLinearInterpolation = (
     config: ConfigParams,
@@ -82,7 +72,7 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
   };
 
   /**
-   * Calculates the wattage when the method is spline.
+   * Calculates the interpolation when the method is spline.
    */
   const getSplineInterpolation = (
     config: ConfigParams,
@@ -97,7 +87,7 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
   };
 
   /**
-   * Calculates the wattage when the method is polynomial.
+   * Calculates the interpolation when the method is polynomial.
    */
   const getPolynomialInterpolation = (
     config: ConfigParams,
