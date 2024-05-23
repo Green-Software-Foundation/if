@@ -64,11 +64,7 @@ The plugin conducts input validation using the `zod` library and may throw error
 
      - If the `method` is provided, choose the right way to calculate. For the `linear` and `polynomial` methods, calculate according to their formulas. For spline interpolation, use the npm module `typescript-cubic-spline`.
 
-   The result is multiplied by the `duration` and divided by 3600 to get seconds in an hour, then divided by 1000 to get kilowatt-hours (kWh):
-
-   `(wattage * duration) / (seconds in an hour) / 1000 = kWh`
-
-2. **Output**: Output the provided input along with the calculated `cpu/energy`, formatted in `kWh` units.
+2. **Output**: Output the provided input along with the calculated `cpu/energy`
 
 ### TypeScript Usage
 
