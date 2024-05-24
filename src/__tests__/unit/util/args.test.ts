@@ -32,6 +32,11 @@ jest.mock('ts-command-line-args', () => ({
         return {
           manifest: 'mock.notyaml',
         };
+      case 'stdout':
+        return {
+          manifest: 'manifest-mock.yaml',
+          stdout: true,
+        };
       /** If-diff mocks */
       case 'only-target':
         return {
@@ -194,14 +199,31 @@ describe('util/args: ', () => {
         expect(error).toEqual(new CliInputError(FILE_IS_NOT_YAML));
       }
     });
+
+    it('returns stdout and manifest.', () => {
+      expect.assertions(1);
+
+      process.env.result = 'stdout';
+      const manifestPath = 'manifest-mock.yaml';
+
+      const response = parseIEProcessArgs();
+      const expectedResult = {
+        inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
+        outputOptions: {
+          stdout: true,
+        },
+      };
+
+      expect(response).toEqual(expectedResult);
+    });
   });
 
   describe('parseIfDiffArgs(): ', () => {
-    it('throws error if `target` is missing.', async () => {
+    it('throws error if `target` is missing.', () => {
       expect.assertions(1);
 
       try {
-        await parseIfDiffArgs();
+        parseIfDiffArgs();
       } catch (error) {
         if (error instanceof Error) {
           expect(error).toEqual(new CliInputError(INVALID_TARGET));
@@ -209,12 +231,12 @@ describe('util/args: ', () => {
       }
     });
 
-    it('throws error if `target` is not a yaml.', async () => {
+    it('throws error if `target` is not a yaml.', () => {
       process.env.result = 'target-is-not-yaml';
       expect.assertions(1);
 
       try {
-        await parseIfDiffArgs();
+        parseIfDiffArgs();
       } catch (error) {
         if (error instanceof Error) {
           expect(error).toEqual(new CliInputError(TARGET_IS_NOT_YAML));
@@ -222,20 +244,20 @@ describe('util/args: ', () => {
       }
     });
 
-    it('returns `target`s full path.', async () => {
+    it('returns `target`s full path.', () => {
       process.env.result = 'only-target';
       expect.assertions(1);
 
-      const response = await parseIfDiffArgs();
+      const response = parseIfDiffArgs();
       expect(response).toHaveProperty('targetPath');
     });
 
-    it('throws error if source is not a yaml.', async () => {
+    it('throws error if source is not a yaml.', () => {
       process.env.result = 'source-is-not-yaml';
       expect.assertions(1);
 
       try {
-        await parseIfDiffArgs();
+        parseIfDiffArgs();
       } catch (error) {
         if (error instanceof Error) {
           expect(error).toEqual(new CliInputError(SOURCE_IS_NOT_YAML));
@@ -243,21 +265,21 @@ describe('util/args: ', () => {
       }
     });
 
-    it('returns target and source full paths.', async () => {
+    it('returns target and source full paths.', () => {
       process.env.result = 'target-source';
       expect.assertions(2);
 
-      const response = await parseIfDiffArgs();
+      const response = parseIfDiffArgs();
       expect(response).toHaveProperty('targetPath');
       expect(response).toHaveProperty('sourcePath');
     });
 
-    it('throws error if parsing failed.', async () => {
+    it('throws error if parsing failed.', () => {
       process.env.result = 'diff-throw-error';
       expect.assertions(1);
 
       try {
-        await parseIfDiffArgs();
+        parseIfDiffArgs();
       } catch (error) {
         if (error instanceof Error) {
           expect(error).toEqual(new CliInputError('mock-error'));
@@ -265,12 +287,12 @@ describe('util/args: ', () => {
       }
     });
 
-    it('throws error if parsing failed (not instance of error).', async () => {
+    it('throws error if parsing failed (not instance of error).', () => {
       process.env.result = 'diff-throw';
       expect.assertions(1);
 
       try {
-        await parseIfDiffArgs();
+        parseIfDiffArgs();
       } catch (error) {
         expect(error).toEqual('mock-error');
       }
