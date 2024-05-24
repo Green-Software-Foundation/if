@@ -12,6 +12,7 @@ jest.mock('../../../util/logger', () => ({
 }));
 import {
   andHandle,
+  checkIfEqual,
   formatNotMatchingLog,
   mergeObjects,
   oneIsPrimitive,
@@ -384,6 +385,32 @@ description: mock-description
 `;
 
       expect(response).toEqual(expectedMessage);
+    });
+  });
+
+  describe('checkIfEqual(): ', () => {
+    it('checks if values are equal.', () => {
+      const a = 'mock';
+      const b = 'mock';
+
+      const response = checkIfEqual(a, b);
+      expect(response).toBeTruthy();
+    });
+
+    it('returns true if one of the values is wildcard.', () => {
+      const a = 'mock';
+      const b = '*';
+
+      const response = checkIfEqual(a, b);
+      expect(response).toBeTruthy();
+    });
+
+    it('returns false for number and string with the same value.', () => {
+      const a = 5;
+      const b = '5';
+
+      const response = checkIfEqual(a, b);
+      expect(response).toBeFalsy();
     });
   });
 });
