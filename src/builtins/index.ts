@@ -1,5 +1,6 @@
 export {GroupBy} from './group-by';
 export {TimeSync} from './time-sync';
+export {Divide} from './divide';
 export {Subtract} from './subtract';
 export {Coefficient} from './coefficient';
 export {Multiply} from './multiply';
