@@ -27,10 +27,6 @@ export const compare = (source: any, target: any, path = ''): Difference => {
   const allKeys = new Set([...keys1, ...keys2]);
 
   if (Array.isArray(source) && Array.isArray(target)) {
-    if (source.length !== target.length) {
-      return {path, source: source, target: target};
-    }
-
     for (let i = 0; i < source.length; i++) {
       compare(source[i], target[i], path ? `${path}[${i}]` : `${i}`);
     }
