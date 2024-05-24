@@ -49,6 +49,21 @@ export const mergeObjects = (defaults: any, input: any) => {
 export const execPromise = promisify(exec);
 
 /**
+ * `If-diff` equality checker.
+ */
+export const checkIfEqual = (source: any, target: any) => {
+  if (source === target) {
+    return true;
+  }
+
+  if (source === '*' || target === '*') {
+    return true;
+  }
+
+  return false;
+};
+
+/**
  * Converts given `value` to either `1` or `0`.
  */
 const convertToXorable = (value: any) => {

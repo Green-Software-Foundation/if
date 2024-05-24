@@ -8,6 +8,7 @@ import {formatNotMatchingLog} from './util/helpers';
 import {validateManifest} from './util/validations';
 
 import {CONFIG} from './config';
+import {logger} from './util/logger';
 
 const {IF_DIFF} = CONFIG;
 const {SUCCESS_MESSAGE, FAILURE_MESSAGE} = IF_DIFF;
@@ -40,7 +41,7 @@ const IfDiff = async () => {
 
 IfDiff().catch(error => {
   if (error instanceof Error) {
-    console.log(error);
+    logger.error(error);
     process.exit(2);
   }
 });
