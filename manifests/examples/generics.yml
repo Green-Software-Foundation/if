@@ -17,14 +17,14 @@ initialize:
           - network/energy
         output-parameter: energy-sum
     "coefficient":
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       method: Coefficient
       global-config:
         input-parameter: energy
         coefficient: 2
         output-parameter: energy-doubled
     "multiply":
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       method: Multiply
       global-config:
         input-parameters: ["cpu/utilization", "duration"]

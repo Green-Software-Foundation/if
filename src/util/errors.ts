@@ -9,6 +9,7 @@ const CUSTOM_ERRORS = [
   'PluginCredentialError',
   'PluginInitalizationError',
   'WriteFileError',
+  'ConfigNotFoundError',
 ] as const;
 
 type CustomErrors = {
