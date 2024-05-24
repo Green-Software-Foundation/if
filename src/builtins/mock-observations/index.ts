@@ -30,21 +30,19 @@ export const MockObservations = (globalConfig: ConfigParams): ExecutePlugin => {
 
     const defaults = inputs && inputs[0];
 
-    return Object.entries(components).reduce(
-      (acc: PluginParams[], [_key, component]) => {
-        timeBuckets.forEach(timeBucket => {
-          const observation = createObservation(
-            {duration, component, timeBucket, generators},
-            generatorToHistory
-          );
+    return Object.entries(components).reduce((acc: PluginParams[], item) => {
+      const component = item[1];
+      timeBuckets.forEach(timeBucket => {
+        const observation = createObservation(
+          {duration, component, timeBucket, generators},
+          generatorToHistory
+        );
 
-          acc.push(Object.assign({}, defaults, observation));
-        });
+        acc.push(Object.assign({}, defaults, observation));
+      });
 
-        return acc;
-      },
-      []
-    );
+      return acc;
+    }, []);
   };
 
   /**
