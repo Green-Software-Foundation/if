@@ -7,7 +7,7 @@ initialize:
       path: 'builtin'
       method: GroupBy   
     operational-carbon:
-      path: '@grnsft/if-plugins'
+      path: 'builtin'
       method: Multiply
       global-config:
         input-parameters: ['cpu/energy', 'grid/carbon-intensity']

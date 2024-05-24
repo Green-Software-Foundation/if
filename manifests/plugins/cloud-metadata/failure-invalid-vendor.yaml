@@ -2,7 +2,7 @@ name: cloud-metadata
 description: failure with invalid `inputs.cloud/vendor`
 tags:
 initialize:
-  outputs: ['yaml']
+  #outputs: ['yaml']
   plugins:
     cloud-metadata:
       method: CloudMetadata

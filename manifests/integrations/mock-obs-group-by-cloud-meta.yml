@@ -1,0 +1,51 @@
+name: My Manifest File
+description: integration of mock observations, group by and cloud metadata
+aggregation:
+  metrics:
+    - 'cpu/utilization'
+  type: 'both'
+initialize:
+ # outputs: ['yaml']
+  plugins: 
+    group-by: 
+      path: 'builtin'
+      method: GroupBy  
+      global-config:
+        input-parameters: ['cpu/energy', 'grid/carbon-intensity']
+        output-parameter: 'carbon'       
+    cloud-metadata:
+      method: CloudMetadata
+      path: "@grnsft/if-plugins"   
+    mock-observations:
+      path: '@grnsft/if-plugins'
+      method: MockObservations
+      global-config:
+        timestamp-from: 2024-03-05T00:00
+        timestamp-to: 2024-03-05T01:00
+        duration: 300
+        components:
+          - name: server-1
+            cloud/instance-type: Standard_E64_v3
+            cloud/region: eastus
+          - name: server-2
+            cloud/instance-type: Standard_E64_v3
+            cloud/region: france            
+        generators:
+          common:
+            geolocation: 37.7749,-122.4194
+            cloud/vendor: azure
+          randint:
+            cpu/utilization:
+              min: 1
+              max: 99               
+tree: 
+  pipeline:
+    - mock-observations
+    - group-by
+    - cloud-metadata
+  config:
+    group-by:
+      group:
+        - name
+        - cloud/instance-type
+  inputs: null

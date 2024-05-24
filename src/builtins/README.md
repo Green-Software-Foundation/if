@@ -231,9 +231,9 @@ initialize:
     sci-e:
       method: SciE
       path: '@grnsft/if-plugins'
-    sci-m:
-      path: '@grnsft/if-plugins'
-      method: SciM
+    sci-embodied:
+      path: 'builtin'
+      method: SciEmbodied
     sci-o:
       method: SciO
       path: '@grnsft/if-plugins'
@@ -250,13 +250,13 @@ tree:
       pipeline:
         - teads-curve
         - sci-e
-        - sci-m
+        - sci-embodied
         - sci-o
         - time-sync
       config:
         teads-curve:
           cpu/thermal-design-power: 65
-        sci-m:
+        sci-embodied:
           device/emissions-embodied: 251000 # gCO2eq
           time-reserved: 3600 # 1 hour in s
           device/expected-lifespan: 126144000 # 4 years in seconds
