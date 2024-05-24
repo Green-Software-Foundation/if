@@ -31,8 +31,7 @@ export const CommonGenerator = (config: KeyValuePair): Generator => {
   /**
    * Generates next value by copying the validated config.
    */
-  const next = (_historical: Object[] | undefined): Object =>
-    copyObject(validateConfig(config));
+  const next = (): Object => copyObject(validateConfig(config));
 
   return {
     next,

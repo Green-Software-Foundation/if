@@ -13,7 +13,7 @@ export const RandIntGenerator = (
 ): Generator => {
   const errorBuilder = buildErrorMessage(RandIntGenerator.name);
 
-  const next = (_historical: Object[] | undefined) => ({
+  const next = () => ({
     [validatedName]: generateRandInt(getFieldToPopulate()),
   });
 
