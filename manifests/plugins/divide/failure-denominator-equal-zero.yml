@@ -9,7 +9,7 @@ initialize:
       path: "@grnsft/if-plugins"
     divide:
       method: Divide
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       global-config:
         numerator: vcpus-allocated
         denominator: 0
