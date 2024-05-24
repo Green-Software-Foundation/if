@@ -1,4 +1,4 @@
-import {oneIsPrimitive} from '../util/helpers';
+import {checkIfEqual, oneIsPrimitive} from '../util/helpers';
 
 import {Difference} from '../types/lib/compare';
 
@@ -12,13 +12,13 @@ import {Difference} from '../types/lib/compare';
  */
 export const compare = (source: any, target: any, path = ''): Difference => {
   if (oneIsPrimitive(source, target)) {
-    return source !== target
-      ? {
+    return checkIfEqual(source, target)
+      ? {}
+      : {
           path,
           source: source,
           target: target,
-        }
-      : {};
+        };
   }
 
   const keys1 = Object.keys(source);
