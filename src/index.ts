@@ -7,7 +7,7 @@ import {initialize} from './lib/initialize';
 import {load} from './lib/load';
 import {parameterize} from './lib/parameterize';
 
-import {parseArgs} from './util/args';
+import {parseIEProcessArgs} from './util/args';
 import {andHandle} from './util/helpers';
 import {logger} from './util/logger';
 import {validateManifest} from './util/validations';
@@ -17,7 +17,7 @@ import {STRINGS} from './config';
 const {DISCLAIMER_MESSAGE} = STRINGS;
 
 const impactEngine = async () => {
-  const options = parseArgs();
+  const options = parseIEProcessArgs();
 
   logger.info(DISCLAIMER_MESSAGE);
   const {inputPath, paramPath, outputOptions} = options;

@@ -2,7 +2,7 @@ import {ArgumentConfig, ParseOptions} from 'ts-command-line-args';
 
 import {STRINGS} from './strings';
 
-import {ManifestProcessArgs} from '../types/process-args';
+import {IFDiffArgs, IEArgs} from '../types/process-args';
 
 const {DISCLAIMER_MESSAGE} = STRINGS;
 
@@ -39,7 +39,7 @@ export const CONFIG = {
         alias: 'h',
         description: '[prints out the above help instruction]',
       },
-    } as ArgumentConfig<ManifestProcessArgs>,
+    } as ArgumentConfig<IEArgs>,
     HELP: {
       helpArg: 'help',
       headerContentSections: [
@@ -49,6 +49,33 @@ export const CONFIG = {
         {header: 'Green Software Foundation', content: DISCLAIMER_MESSAGE},
       ],
     } as ParseOptions<any>,
+  },
+  IF_DIFF: {
+    ARGS: {
+      source: {
+        type: String,
+        optional: true,
+        alias: 's',
+        description: '[path to the source file]',
+      },
+      target: {
+        type: String,
+        optional: false,
+        alias: 't',
+        description: '[path to the target file',
+      },
+    } as ArgumentConfig<IFDiffArgs>,
+    HELP: {
+      helpArg: 'help',
+      headerContentSections: [
+        {header: 'Impact Framework', content: 'IF-Diff Helpful keywords:'},
+      ],
+      footerContentSections: [
+        {header: 'Green Software Foundation', content: DISCLAIMER_MESSAGE},
+      ],
+    } as ParseOptions<any>,
+    SUCCESS_MESSAGE: 'Files match!',
+    FAILURE_MESSAGE: 'Files do not match!',
   },
   GITHUB_PATH: 'https://github.com',
   NATIVE_PLUGIN: 'if-plugins',

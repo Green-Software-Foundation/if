@@ -48,7 +48,7 @@ jest.mock('ts-command-line-args', () => ({
 
 import path = require('path');
 
-import {parseArgs} from '../../../util/args';
+import {parseIEProcessArgs} from '../../../util/args';
 import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
@@ -60,14 +60,14 @@ const {MANIFEST_IS_MISSING, FILE_IS_NOT_YAML} = STRINGS;
 describe('util/args: ', () => {
   const originalEnv = process.env;
 
-  describe('parseArgs(): ', () => {
+  describe('parseIEProcessArgs(): ', () => {
     it('throws error if there is no argument passed.', () => {
       expect.assertions(5);
 
       process.env.result = 'error'; // used for mocking
 
       try {
-        parseArgs();
+        parseIEProcessArgs();
       } catch (error) {
         expect(error).toEqual(MANIFEST_IS_MISSING);
       }
@@ -75,7 +75,7 @@ describe('util/args: ', () => {
       process.env.result = 'throw-error-object';
 
       try {
-        parseArgs();
+        parseIEProcessArgs();
       } catch (error) {
         expect(error).toBeInstanceOf(CliInputError);
         expect(error).toEqual(new CliInputError(MANIFEST_IS_MISSING));
@@ -84,7 +84,7 @@ describe('util/args: ', () => {
       process.env.result = 'manifest-is-missing';
 
       try {
-        parseArgs();
+        parseIEProcessArgs();
       } catch (error) {
         expect(error).toBeInstanceOf(CliInputError);
         expect(error).toEqual(new CliInputError(MANIFEST_IS_MISSING));
@@ -96,7 +96,7 @@ describe('util/args: ', () => {
 
       process.env.result = 'manifest';
 
-      const result = parseArgs();
+      const result = parseIEProcessArgs();
       const manifestPath = 'manifest-mock.yml';
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
@@ -113,7 +113,7 @@ describe('util/args: ', () => {
 
       process.env.result = 'absolute-path';
 
-      const result = parseArgs();
+      const result = parseIEProcessArgs();
       const manifestPath = 'manifest-mock.yml';
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
@@ -128,7 +128,7 @@ describe('util/args: ', () => {
 
       process.env.result = 'override-params';
 
-      const result = parseArgs();
+      const result = parseIEProcessArgs();
       const manifestPath = 'manifest-mock.yml';
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
@@ -144,7 +144,7 @@ describe('util/args: ', () => {
 
       process.env.result = 'manifest-output';
 
-      const result = parseArgs();
+      const result = parseIEProcessArgs();
       const manifestPath = 'manifest-mock.yml';
       const outputPath = 'output-mock.yml';
       const expectedResult = {
@@ -164,7 +164,7 @@ describe('util/args: ', () => {
       process.env.result = 'not-yaml';
 
       try {
-        parseArgs();
+        parseIEProcessArgs();
       } catch (error) {
         expect(error).toBeInstanceOf(CliInputError);
         expect(error).toEqual(new CliInputError(FILE_IS_NOT_YAML));
