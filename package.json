@@ -20,6 +20,7 @@
     "luxon": "^3.4.4",
     "ts-command-line-args": "^2.5.1",
     "typescript": "^5.1.6",
+    "typescript-cubic-spline": "^1.0.1",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
   },

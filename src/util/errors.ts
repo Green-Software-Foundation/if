@@ -1,6 +1,9 @@
 const CUSTOM_ERRORS = [
   'CliInputError',
+  'ConfigNotFoundError',
   'ExhaustError',
+  'FileNotFoundError',
+  'MakeDirectoryError',
   'ManifestValidationError',
   'ModuleInitializationError',
   'InputValidationError',
