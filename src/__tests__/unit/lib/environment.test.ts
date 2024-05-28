@@ -23,7 +23,7 @@ describe('lib/envirnoment: ', () => {
     it('checks environment response type.', async () => {
       // @ts-ignore
       const response = await injectEnvironment(context);
-      const {environment} = response.execution;
+      const environment = response.execution!.environment!;
 
       expect(typeof environment['date-time']).toEqual('string');
       expect(Array.isArray(environment.dependencies)).toBeTruthy();
