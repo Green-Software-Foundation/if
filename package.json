@@ -1,7 +1,7 @@
 {
   "name": "@grnsft/if",
   "description": "Impact Framework",
-  "version": "v0.3.2",
+  "version": "0.3.3-beta.0",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
@@ -21,6 +21,7 @@
     "luxon": "^3.4.4",
     "ts-command-line-args": "^2.5.1",
     "typescript": "^5.1.6",
+    "typescript-cubic-spline": "^1.0.1",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
   },
@@ -36,6 +37,7 @@
     "gts": "^5.0.0",
     "husky": "^8.0.0",
     "jest": "^29.6.1",
+    "lint-staged": "^15.2.2",
     "release-it": "^16.3.0",
     "rimraf": "^5.0.5",
     "ts-jest": "^29.1.1"
@@ -70,6 +72,7 @@
     "ie": "npx ts-node src/index.ts",
     "if-diff": "npx ts-node src/diff.ts",
     "lint": "gts lint",
+    "pre-commit": "lint-staged",
     "prepare": "husky install",
     "prepublish": "npm run build",
     "release": "release-it",

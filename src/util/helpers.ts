@@ -1,15 +1,24 @@
 import {createInterface} from 'node:readline/promises';
 import {exec} from 'node:child_process';
 import {promisify} from 'node:util';
-
+import {ErrorFormatParams} from '../types/helpers';
 import {ERRORS} from './errors';
 import {logger} from './logger';
-
 import {STRINGS} from '../config';
 
 import {Difference} from '../types/lib/compare';
 
 const {ISSUE_TEMPLATE} = STRINGS;
+
+/**
+ * Formats given error according to class instance, scope and message.
+ */
+export const buildErrorMessage =
+  (classInstanceName: string) => (params: ErrorFormatParams) => {
+    const {scope, message} = params;
+
+    return `${classInstanceName}${scope ? `(${scope})` : ''}: ${message}.`;
+  };
 
 /**
  * Impact engine error handler. Logs errors and appends issue template if error is unknown.
