@@ -2,11 +2,10 @@ name: shell
 description: successful path
 tags:
 initialize:
-  outputs: ['yaml']
   plugins:
     shell:
       method: Shell
-      path: "@grnsft/if-plugins"
+      path: 'builtin'
       global-config:
         command: python3 /usr/local/bin/sampler
 tree:
