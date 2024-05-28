@@ -8,6 +8,16 @@ import {STRINGS} from '../config';
 const {ISSUE_TEMPLATE} = STRINGS;
 
 /**
+ * Formats given error according to class instance, scope and message.
+ */
+export const buildErrorMessage =
+  (classInstanceName: string) => (params: ErrorFormatParams) => {
+    const {scope, message} = params;
+
+    return `${classInstanceName}${scope ? `(${scope})` : ''}: ${message}.`;
+  };
+
+/**
  * Impact engine error handler. Logs errors and appends issue template if error is unknown.
  */
 export const andHandle = (error: Error) => {
@@ -38,13 +48,6 @@ export const mergeObjects = (defaults: any, input: any) => {
 
   return merged;
 };
-
-export const buildErrorMessage =
-  (classInstanceName: string) => (params: ErrorFormatParams) => {
-    const {scope, message} = params;
-
-    return `${classInstanceName}${scope ? `(${scope})` : ''}: ${message}.`;
-  };
 
 /**
  * Promise version of Node's `exec` from `child-process`.
