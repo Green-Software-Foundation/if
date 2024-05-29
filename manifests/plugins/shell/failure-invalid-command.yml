@@ -6,7 +6,7 @@ initialize:
   plugins:
     shell:
       method: Shell
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       global-config:
         command: 1000
 tree:
