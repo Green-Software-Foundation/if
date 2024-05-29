@@ -120,7 +120,7 @@ tree:
           energy: 0.02 # added by plugin
 ```
 
-You can run this example `manifest` by saving it as `./examples/manifests/test/sci.yml` and executing the following command from the project root:
+You can run this example `manifest` by saving it as `manifests/plugins/shell.yml` and executing the following command from the project root:
 
 ```sh
 npm i -g @grnsft/if
