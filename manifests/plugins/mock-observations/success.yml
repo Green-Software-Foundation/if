@@ -2,12 +2,12 @@ name: mock-observation-demo
 description: a manifest demonstrating how to use the mock observations feature
 tags:
 initialize:
-  outputs: ['yaml']
+ # outputs: ['yaml']
   plugins:
     mock-observations:
       kind: plugin
       method: MockObservations
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       global-config:
         timestamp-from: 2023-07-06T00:00
         timestamp-to: 2023-07-06T00:10
