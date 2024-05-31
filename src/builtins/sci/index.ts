@@ -39,25 +39,16 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
   const execute = (inputs: PluginParams[]): PluginParams[] => {
     return inputs.map(input => {
       const safeInput = validateInput(input);
-      let sci = 0;
-      if (safeInput['carbon'] > 0) {
-        sci = safeInput['carbon'] / input[globalConfig['functional-unit']];
-      }
+      const sci =
+        safeInput['carbon'] > 0
+          ? safeInput['carbon'] / input[globalConfig['functional-unit']]
+          : 0;
       return {
         ...input,
         sci,
       };
     });
   };
-
-  /**
-   * Converts the given sci value from seconds to the specified time unit.
-   */
-  // const convertSciToTimeUnit = (
-  //   sciPerSecond: number,
-  //   functionalUnitTime: { unit: string; value: number }
-  // ): number => {
-  //   const conversionFactor = TIME_UNITS_IN_SECONDS[functionalUnitTime.unit];
 
   /**
    * Checks for fields in input.
