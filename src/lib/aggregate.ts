@@ -3,6 +3,10 @@ import {aggregateInputsIntoOne} from '../util/aggregation-helper';
 import {PluginParams} from '../types/interface';
 import {AggregationParams, AggregationParamsSure} from '../types/manifest';
 
+import {STRINGS} from '../config/strings';
+
+const {AGGREGATING_NODE, AGGREGATING_OUTPUTS} = STRINGS;
+
 /**
  * Gets `i`th element from all children outputs and collects them in single array.
  */
@@ -49,6 +53,8 @@ const aggregateNode = (node: any, aggregationParams: AggregationParamsSure) => {
 
   if (node.children) {
     for (const child in node.children) {
+      console.debug(AGGREGATING_NODE(child));
+
       aggregateNode(node.children[child], aggregationParams);
     }
   }
@@ -71,6 +77,8 @@ const aggregateNode = (node: any, aggregationParams: AggregationParamsSure) => {
  * Otherwise creates copy of the tree, then applies aggregation to it.
  */
 export const aggregate = (tree: any, aggregationParams: AggregationParams) => {
+  console.debug(AGGREGATING_OUTPUTS);
+
   if (!aggregationParams || !aggregationParams.type) {
     return tree;
   }
