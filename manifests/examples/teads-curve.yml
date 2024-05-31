@@ -76,30 +76,3 @@ tree:
           duration: 360
           carbon: 30
           cpu/utilization: 100
-
-
-
-        # - timestamp: 2023-08-06T00:00
-        #   duration: 360
-        #   cpu/utilization: 1
-        #   carbon: 30
-        #   cpu/thermal-design-power: 100
-        #   cpu/energy: 0.0014087590853658538
-        # - timestamp: 2023-09-06T00:00
-        #   duration: 360
-        #   carbon: 30
-        #   cpu/utilization: 10
-        #   cpu/thermal-design-power: 100
-        #   cpu/energy: 0.0032
-        # - timestamp: 2023-10-06T00:00
-        #   duration: 360
-        #   carbon: 30
-        #   cpu/utilization: 50
-        #   cpu/thermal-design-power: 100
-        #   cpu/energy: 0.0075
-        # - timestamp: 2023-10-06T00:00
-        #   duration: 360
-        #   carbon: 30
-        #   cpu/utilization: 100
-        #   cpu/thermal-design-power: 100
-        #   cpu/energy: 0.010199999999999999
