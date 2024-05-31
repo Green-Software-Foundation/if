@@ -73,11 +73,12 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
     const nodeConfig = config && config[pluginName];
 
     console.debug(COMPUTING_PIPELINE_FOR_NODE(pluginName));
+    debugLogger.getExecutingPluginName(pluginName);
 
     if (isExecute(plugin)) {
-      debugLogger.getExecutingPluginName(pluginName);
-
       inputStorage = await plugin.execute(inputStorage, nodeConfig);
+      debugLogger.removeExecutedPluginName();
+
       node.outputs = inputStorage;
     }
 
@@ -95,12 +96,11 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
         defaults,
         config,
       });
+      debugLogger.removeExecutedPluginName();
 
       break;
     }
   }
-
-  debugLogger.removeExecutedPluginName();
 };
 
 /**
