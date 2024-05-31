@@ -11,7 +11,7 @@ const {
   REJECTING_OVERRIDE,
   UNKNOWN_PARAM,
   SYNCING_PARAMETERS,
-  // CHECKING_AGGREGATION_METHOD,
+  CHECKING_AGGREGATION_METHOD,
 } = STRINGS;
 
 /**
@@ -27,7 +27,7 @@ const Parameterize = () => {
    */
   const getAggregationMethod = (unitName: string) => {
     debugLogger.removeExecutedPluginName();
-    // console.debug(CHECKING_AGGREGATION_METHOD(unitName));
+    console.debug(CHECKING_AGGREGATION_METHOD(unitName));
 
     if (`${unitName}` in parametersStorage) {
       return parametersStorage[unitName as keyof typeof PARAMETERS].aggregation;
