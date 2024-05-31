@@ -6,7 +6,7 @@ initialize:
   plugins:
     regex:
       method: Regex
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       global-config:
         parameter: physical-processor
         match: ^(.*),
