@@ -9,7 +9,7 @@ initialize:
       global-config:
         interpolation: spline
     "sum":
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       method: Sum
       global-config:
         input-parameters:

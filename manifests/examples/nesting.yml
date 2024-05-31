@@ -11,7 +11,7 @@ aggregation:
   type: "both"
 params:
 initialize:
-  # outputs: ['yaml']
+  outputs: ['yaml']
   plugins:
     teads-curve:
       path: "@grnsft/if-unofficial-plugins"
@@ -19,7 +19,7 @@ initialize:
       global-config:
         interpolation: spline
     sum:
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       method: Sum
       global-config:
         input-parameters:

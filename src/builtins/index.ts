@@ -10,3 +10,4 @@ export {Sum} from './sum';
 export {SciEmbodied} from './sci-embodied';
 export {Sci} from './sci';
 export {Exponent} from './exponent';
+export {Shell} from './shell';
