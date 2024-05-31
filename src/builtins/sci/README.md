@@ -39,7 +39,7 @@ const sci = Sci({'functional-unit': 'requests'});
 const results = await sci.execute(
   [
     {
-      'carbon': 5',
+      'carbon': 5'
       duration: 1,
       requests: 100,
     },
