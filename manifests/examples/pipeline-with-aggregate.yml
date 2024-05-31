@@ -27,7 +27,7 @@ initialize:
       global-config:
         functional-unit: "requests"
     "sum-carbon":
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       method: Sum
       global-config:
         input-parameters:

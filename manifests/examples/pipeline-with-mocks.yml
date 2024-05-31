@@ -40,7 +40,7 @@ initialize:
       path: "@grnsft/if-plugins"
       method: SciO
     "sum-carbon":
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       method: Sum
       global-config:
         input-parameters:
