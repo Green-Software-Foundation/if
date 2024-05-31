@@ -39,6 +39,12 @@ export const CONFIG = {
         alias: 'h',
         description: '[prints out the above help instruction]',
       },
+      debug: {
+        type: Boolean,
+        optional: true,
+        alias: 'd',
+        description: '[prints out debug logs to the console]',
+      },
     } as ArgumentConfig<IEArgs>,
     HELP: {
       helpArg: 'help',
