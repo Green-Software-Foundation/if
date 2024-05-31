@@ -2,11 +2,11 @@ name: sum
 description: failure with `inputs[0]` misses one of `global-config.input-parameters`
 tags:
 initialize:
-  #outputs: ['yaml']
+  outputs: ['yaml']
   plugins:
     sum:
       method: Sum
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       global-config:
         input-parameters: ["cpu/energy", "network/energy"]
         output-parameter: "energy"

@@ -146,7 +146,7 @@ export const formatNotMatchingLog = (message: Difference) => {
  */
 const collectPipedData = async () => {
   if (process.stdin.isTTY) {
-    return;
+    return '';
   }
 
   const readline = createInterface({

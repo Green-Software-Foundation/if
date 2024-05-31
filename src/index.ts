@@ -34,8 +34,8 @@ const impactEngine = async () => {
     await exhaust(aggregatedTree, context, outputOptions);
   } catch (error) {
     if (error instanceof Error) {
-      envManifest.execution.status = 'fail';
-      envManifest.execution.error = error.toString();
+      envManifest.execution!.status = 'fail';
+      envManifest.execution!.error = error.toString();
       logger.error(error);
       const {tree, ...context} = envManifest;
 

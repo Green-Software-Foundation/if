@@ -11,3 +11,4 @@ export {SciEmbodied} from './sci-embodied';
 export {Sci} from './sci';
 export {Exponent} from './exponent';
 export {CSVLookup} from './csv-lookup';
+export {Shell} from './shell';
