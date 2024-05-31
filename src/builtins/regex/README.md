@@ -85,7 +85,6 @@ You can run this example by saving it as `./examples/manifests/test/regex.yml` a
 
 ```sh
 npm i -g @grnsft/if
-npm i -g @grnsft/if-plugins
 if --manifest manifests/examples/regex.yml --output manifests/outputs/regex.yml
 ```
 
