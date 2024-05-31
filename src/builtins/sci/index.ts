@@ -58,10 +58,16 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
 
     const validatedConfig = validateConfig(globalConfig);
 
-    if (!(validatedConfig['functional-unit'] in input)) {
+    if (
+      !(
+        validatedConfig['functional-unit'] in input &&
+        input[validatedConfig['functional-unit']] > 0
+      )
+    ) {
       throw new InputValidationError(
         errorBuilder({
-          message: 'functional-unit value is missing from input data',
+          message:
+            'functional-unit value is missing from input data or it is not a positive integer',
         })
       );
     }
