@@ -9,7 +9,7 @@ initialize:
       method: Sci
       path: "builtin"
       # global-config:
-      #   functional-unit-time: 1 minute
+      #   functional-unit: requests
 tree:
   children:
     child:

@@ -11,7 +11,7 @@ aggregation:
   type: "both"
 params:
 initialize:
-  #outputs: ['yaml']
+  outputs: ['yaml']
   plugins:
     teads-curve:
       path: "@grnsft/if-unofficial-plugins"
@@ -37,7 +37,14 @@ initialize:
       method: Sci
       global-config:
         functional-unit: "requests"
-        functional-unit-time: "1 minute"
+    "sum-carbon":
+      path: "builtin"
+      method: Sum
+      global-config:
+        input-parameters:
+          - carbon-operational
+          - carbon-embodied
+        output-parameter: carbon
     time-sync:
       method: TimeSync
       path: "builtin"
@@ -62,6 +69,7 @@ tree:
         - sum
         - sci-embodied
         - sci-o
+        - sum-carbon
         - time-sync
         - sci
       inputs:
@@ -71,24 +79,28 @@ tree:
           duration: 1
           cpu/utilization: 50
           network/energy: 0.000001
+          requests: 50
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
+          requests: 60
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
+          requests: 70
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
           cpu/utilization: 15
           network/energy: 0.000001
+          requests: 55
     child-1:
       defaults:
         cpu/thermal-design-power: 100
@@ -103,6 +115,7 @@ tree:
         - sum
         - sci-embodied
         - sci-o
+        - sum-carbon
         - time-sync
         - sci
       inputs:
@@ -112,24 +125,28 @@ tree:
           duration: 1
           cpu/utilization: 50
           network/energy: 0.000001
+          requests: 10
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
+          requests: 90
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
+          requests: 30
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
           cpu/utilization: 15
           network/energy: 0.000001
+          requests: 22
     child-2:
       children:
         child-2-0:
@@ -146,6 +163,7 @@ tree:
             - sum
             - sci-embodied
             - sci-o
+            - sum-carbon
             - time-sync
             - sci
           inputs:
@@ -155,24 +173,28 @@ tree:
               duration: 1
               cpu/utilization: 50
               network/energy: 0.000001
+              requests: 50
             - timestamp: "2023-12-12T00:00:01.000Z"
               duration: 5
               cpu/utilization: 20
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 0.000001
+              requests: 65
             - timestamp: "2023-12-12T00:00:06.000Z"
               duration: 7
               cpu/utilization: 15
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 0.000001
+              requests: 80
             - timestamp: "2023-12-12T00:00:13.000Z"
               duration: 30
               cloud/instance-type: A1
               cloud/region: uk-west
               cpu/utilization: 15
               network/energy: 0.000001
+              requests: 40
         child-2-1:
           defaults:
             cpu/thermal-design-power: 100
@@ -187,6 +209,7 @@ tree:
             - sum
             - sci-embodied
             - sci-o
+            - sum-carbon
             - time-sync
             - sci
           inputs:
@@ -196,21 +219,25 @@ tree:
               duration: 1
               cpu/utilization: 50
               network/energy: 0.000001
+              requests: 50
             - timestamp: "2023-12-12T00:00:01.000Z"
               duration: 5
               cpu/utilization: 20
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 0.000001
+              requests: 50
             - timestamp: "2023-12-12T00:00:06.000Z"
               duration: 7
               cpu/utilization: 15
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 0.000001
+              requests: 60
             - timestamp: "2023-12-12T00:00:13.000Z"
               duration: 30
               cloud/instance-type: A1
               cloud/region: uk-west
               cpu/utilization: 15
               network/energy: 0.000001
+              requests: 40
