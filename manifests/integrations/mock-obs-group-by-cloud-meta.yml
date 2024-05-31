@@ -17,7 +17,7 @@ initialize:
       method: CloudMetadata
       path: "@grnsft/if-plugins"   
     mock-observations:
-      path: '@grnsft/if-plugins'
+      path: 'builtin'
       method: MockObservations
       global-config:
         timestamp-from: 2024-03-05T00:00
