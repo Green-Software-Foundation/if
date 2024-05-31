@@ -81,7 +81,7 @@ tree:
           physical-processor: Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz
 ```
 
-You can run this example by saving it as `./examples/manifests/test/regex.yml` and executing the following command from the project root:
+You can run this example by saving it as `manifests/plugins/regex.yml` and executing the following command from the project root:
 
 ```sh
 npm i -g @grnsft/if
