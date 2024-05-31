@@ -62,8 +62,6 @@ const debugLog = (level: LogLevel, args: any[], debugMode: boolean) => {
       case LogLevel.Debug:
         originalConsole.debug(formattedMessage);
         break;
-      default:
-        originalConsole.info(formattedMessage);
     }
   }
 };
