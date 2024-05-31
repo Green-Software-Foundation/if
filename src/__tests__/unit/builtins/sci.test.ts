@@ -116,6 +116,29 @@ describe('lib/sci:', () => {
           expect(error).toBeInstanceOf(InputValidationError);
         }
       });
+
+      it('throws exception if functional unit value is not positive integer.', async () => {
+        const sci = Sci({
+          'functional-unit': 'requests',
+        });
+        const inputs = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            'carbon-operational': 0.002,
+            'carbon-embodied': 0.0005,
+            duration: 1,
+            requests: -5,
+          },
+        ];
+
+        expect.assertions(1);
+
+        try {
+          await sci.execute(inputs);
+        } catch (error) {
+          expect(error).toBeInstanceOf(InputValidationError);
+        }
+      });
     });
   });
 });
