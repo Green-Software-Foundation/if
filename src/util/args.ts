@@ -52,7 +52,7 @@ const prependFullFilePath = (filePath: string) => {
 };
 
 /**
- * 1. Parses process arguments like `manifest`, `output`, `override-params` and `help`.
+ * 1. Parses process arguments like `manifest`, `output`, `override-params`, `help` and `debug`.
  * 2. Checks if `help` param is provided, then logs help message and exits.
  * 3. If output params are missing, warns user about it.
  * 3. Otherwise checks if `manifest` param is there, then processes with checking if it's a yaml file.
@@ -65,6 +65,7 @@ export const parseIEProcessArgs = (): ProcessArgsOutputs => {
     output,
     'override-params': overrideParams,
     stdout,
+    debug,
   } = validateAndParseProcessArgs();
 
   if (!output && !stdout) {
@@ -80,6 +81,7 @@ export const parseIEProcessArgs = (): ProcessArgsOutputs => {
           ...(stdout && {stdout}),
         },
         ...(overrideParams && {paramPath: overrideParams}),
+        debug,
       };
     }
 
