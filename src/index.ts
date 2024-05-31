@@ -7,6 +7,7 @@ import {initialize} from './lib/initialize';
 import {load} from './lib/load';
 import {parameterize} from './lib/parameterize';
 
+import {debugLogger} from './util/debug-logger';
 import {parseIEProcessArgs} from './util/args';
 import {andHandle} from './util/helpers';
 import {logger} from './util/logger';
@@ -14,13 +15,16 @@ import {validateManifest} from './util/validations';
 
 import {STRINGS} from './config';
 
-const {DISCLAIMER_MESSAGE} = STRINGS;
+const {DISCLAIMER_MESSAGE, STARTING_IMPACT_FRAMEWORK, EXITING_IF} = STRINGS;
 
 const impactEngine = async () => {
   const options = parseIEProcessArgs();
+  const {inputPath, paramPath, outputOptions, debug} = options;
+
+  debugLogger.overrideConsoleMethods(!!debug);
 
   logger.info(DISCLAIMER_MESSAGE);
-  const {inputPath, paramPath, outputOptions} = options;
+  console.info(STARTING_IMPACT_FRAMEWORK);
 
   const {rawManifest, parameters} = await load(inputPath, paramPath);
   const envManifest = await injectEnvironment(rawManifest);
@@ -44,6 +48,7 @@ const impactEngine = async () => {
       }
     }
   }
+  console.info(EXITING_IF);
 };
 
 impactEngine().catch(andHandle);
