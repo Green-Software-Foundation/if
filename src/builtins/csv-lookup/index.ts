@@ -51,6 +51,24 @@ ${error}`
   };
 
   /**
+   * Converts empty values to `nan`.
+   */
+  const nanifyEmptyValues = (object: any) => {
+    if (typeof object === 'object') {
+      const keys = Object.keys(object);
+
+      keys.forEach(key => {
+        const value = object[key];
+        object[key] = value || 'nan';
+      });
+
+      return object;
+    }
+
+    return object || 'nan';
+  };
+
+  /**
    * 1. If output is anything, then returns data.
    * 2. Otherwise checks if it's an miltidimensional, then grabs multiple fields.
    * 3. If not, then returns single field.
@@ -61,7 +79,7 @@ ${error}`
     output: string | string[] | string[][]
   ) => {
     if (output === '*') {
-      return dataFromCSV;
+      return nanifyEmptyValues(dataFromCSV);
     }
 
     if (Array.isArray(output)) {
@@ -69,19 +87,21 @@ ${error}`
       if (Array.isArray(output[0])) {
         const result: any = {};
         output.forEach(outputField => {
-          result[outputField[1]] = dataFromCSV[outputField[0]];
+          result[outputField[1]] = nanifyEmptyValues(
+            dataFromCSV[outputField[0]]
+          );
         });
 
         return result;
       }
 
       return {
-        [(output as string[])[1]]: dataFromCSV[output[0]],
+        [(output as string[])[1]]: nanifyEmptyValues(dataFromCSV[output[0]]),
       };
     }
 
     return {
-      [output]: dataFromCSV[output],
+      [output]: nanifyEmptyValues(dataFromCSV[output]),
     };
   };
 
