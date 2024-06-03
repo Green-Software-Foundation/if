@@ -33,15 +33,35 @@ Notice that the query parameters are key/value pairs where the key is the column
 
 - `filepath` - path to a csv file, either on the local filesystem or on the internet
 - `query` - an array of key/value pairs where the key is a column name in the target csv and the value is a parameter from inputs
-- `output` - the columns to grab data from and add to output data - should support wildcard or multiple values. Here are few samples showing valid formats: `"*"`, `"tdp"`, `["processor-name": "processor-model-id"]`, `[["processor-name", "processor-model-id"],["tdp","thermal-design-power"]]`
+- `output` - the columns to grab data from and add to output data - should support wildcard or multiple values. 
+
+The plugin also supports data renaming. This means you can grab data from a named column but push it into your manifest file data under another name, for example, maybe we want to grab data from the `processor-name` column int he target csv and add it to the manifest file data as `processor-id` because this is the name expected by some other plugin in your piepline. You can do this by passing comma separated values in arrays. 
+
+```yaml
+output:
+  ["processor-name": "processor-id"]
+```
+
+You can nest arrays to do this renaming for multiple columns.
+
+```yaml
+output:
+  [["processor-name", "processor-model-id"],["tdp","thermal-design-power"]]
+```
+
+All the following values are valid for the `output` field:
+- `"*"`
+- `"tdp"`
+- `["processor-name", "processor-model-id"]`
+- `[["processor-name", "processor-model-id"],["tdp","thermal-design-power"]]`
 
 ### Inputs
 
-There are no strict requirements on input for this plugin because they depend upon the contents of the target CSV and your input data at the time the CSV lookup is invoked. Please make sure you are requesting data from columns that exist int he target csv file and that your query values are available in your `input` data.
+There are no strict requirements on input for this plugin because they depend upon the contents of the target CSV and your input data at the time the CSV lookup is invoked. Please make sure you are requesting data from columns that exist in the target csv file and that your query values are available in your `input` data.
 
 ## Returns
 
-The input data appended with the requested csv content.
+The input data with the requested csv content appended to it.
 
 ## Plugin logic
 
