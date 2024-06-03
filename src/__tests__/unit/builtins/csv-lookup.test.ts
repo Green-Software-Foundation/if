@@ -3,11 +3,11 @@ jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
 import axios from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter';
 
-import { CSVLookup } from '../../../builtins';
+import {CSVLookup} from '../../../builtins';
 
-import { ERRORS } from '../../../util/errors';
+import {ERRORS} from '../../../util/errors';
 
-const { FileNotFoundError, InputValidationError, ConfigNotFoundError } = ERRORS;
+const {FileNotFoundError, InputValidationError, ConfigNotFoundError} = ERRORS;
 
 describe('builtins/CSVLookup: ', () => {
   const mock = new AxiosMockAdapter(axios);
