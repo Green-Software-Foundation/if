@@ -53,7 +53,7 @@ const flattenDependencies = (dependencies: [string, PackageDependency][]) =>
 const listDependencies = async () => {
   const {stdout} = await execPromise('npm list --json');
   const npmListResponse: NpmListResponse = JSON.parse(stdout);
-  const dependencies = Object.entries(npmListResponse.dependencies);
+  const dependencies = Object.entries(npmListResponse.dependencies ?? {});
 
   return flattenDependencies(dependencies);
 };
