@@ -20,7 +20,7 @@ describe('util/debug-logger: ', () => {
   });
 
   afterEach(() => {
-    debugLogger.removeExecutedPluginName();
+    debugLogger.setExecutingPluginName();
   });
 
   it('overrides console methods and log messages with INFO level.', () => {
@@ -48,7 +48,7 @@ describe('util/debug-logger: ', () => {
   });
 
   it('includes plugin name in log messages when set.', () => {
-    debugLogger.getExecutingPluginName('TestPlugin');
+    debugLogger.setExecutingPluginName('TestPlugin');
 
     console.log('Test message with plugin');
 
@@ -58,8 +58,7 @@ describe('util/debug-logger: ', () => {
   });
 
   it('not includes plugin name in log messages when removed.', () => {
-    debugLogger.getExecutingPluginName('TestPlugin');
-    debugLogger.removeExecutedPluginName();
+    debugLogger.setExecutingPluginName();
 
     console.log('Test message without plugin');
 
@@ -70,9 +69,22 @@ describe('util/debug-logger: ', () => {
 
   it('not logs messages when debugMode is false.', () => {
     debugLogger.overrideConsoleMethods(false);
-
     console.log('Test message when debugMode is false');
 
     expect(infoSpy).not.toHaveBeenCalled();
+  });
+
+  it('drops off the log message with DEBUG level when the `debug` command is not provided.', () => {
+    debugLogger.overrideConsoleMethods(false);
+    console.debug('Test debug message');
+
+    expect(debugSpy).not.toHaveBeenCalled();
+  });
+
+  it('drops off the log message from the STRINGS when the `debug` command is not provided.', () => {
+    debugLogger.overrideConsoleMethods(false);
+    console.info('Starting Impact framework');
+
+    expect(debugSpy).not.toHaveBeenCalled();
   });
 });
