@@ -9,7 +9,7 @@ initialize:
       method: Sci
       path: "builtin"
       # global-config:
-      #   functional-unit-time: 1 minute
+      #   functional-unit: 1 minute
 tree:
   children:
     child:
@@ -17,7 +17,6 @@ tree:
         - sci
       config:
         sci:
-          functional-unit-time: 1 sec
           functional-unit: 999 # factor to convert per time to per f.unit
       inputs:
         - timestamp: 2023-07-06T00:00

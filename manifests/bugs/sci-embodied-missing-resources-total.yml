@@ -2,7 +2,7 @@ name: sci-embodied
 description: receiving incorrect error message when running sci-embodied without `resources-total` issue #716
 tags:
 initialize:
-  outputs: ['yaml']
+  #outputs: ['yaml']
   plugins:
     "sci-embodied": # a model that calculates m from te, tir, el, rr and rtor
       method: SciEmbodied

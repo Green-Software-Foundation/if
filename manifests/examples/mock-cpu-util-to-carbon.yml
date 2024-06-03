@@ -1,7 +1,7 @@
 name: mock-cpu-util-to-carbon
 description: a complete pipeline that starts with mocked CPU utilization data and outputs operational carbon in gCO2eq
 initialize:
-  outputs: ['yaml']
+  #outputs: ['yaml']
   plugins: 
     group-by: 
       path: 'builtin'
@@ -24,7 +24,7 @@ initialize:
       method: CloudMetadata
       path: "@grnsft/if-plugins"   
     mock-observations:
-      path: '@grnsft/if-plugins'
+      path: 'builtin'
       method: MockObservations
       global-config:
         timestamp-from: '2024-03-05T00:00:00.000Z'

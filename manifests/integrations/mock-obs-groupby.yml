@@ -3,7 +3,7 @@ description: Integration of `mock observations` + `groupby plugins`
 initialize: 
   plugins: 
     mock-observations:
-      path: '@grnsft/if-plugins'
+      path: 'builtin'
       method: MockObservations
       global-config:
         timestamp-from: '2024-03-05T00:00:00.000Z'

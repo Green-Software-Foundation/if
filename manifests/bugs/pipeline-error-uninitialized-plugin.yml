@@ -2,13 +2,13 @@ name: pipeline-uninitialized-plugin-error
 description: a negative test case that fails due to an uninitialized plugin being invoked in a pipeline
 tags:
 initialize:
+ # outputs: ['yaml']
   plugins:
     teads-curve: 
       path: '@grnsft/if-unofficial-plugins'
       method: TeadsCurve
       global-config:
         interpolation: spline
-  outputs: ['yaml']
 tree:
   children:
     child-0:
