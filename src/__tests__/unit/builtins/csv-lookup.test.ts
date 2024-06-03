@@ -3,11 +3,11 @@ jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
 import axios from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter';
 
-import {CSVLookup} from '../../../builtins';
+import { CSVLookup } from '../../../builtins';
 
-import {ERRORS} from '../../../util/errors';
+import { ERRORS } from '../../../util/errors';
 
-const {FileNotFoundError, InputValidationError, ConfigNotFoundError} = ERRORS;
+const { FileNotFoundError, InputValidationError, ConfigNotFoundError } = ERRORS;
 
 describe('builtins/CSVLookup: ', () => {
   const mock = new AxiosMockAdapter(axios);
@@ -346,7 +346,7 @@ describe('builtins/CSVLookup: ', () => {
             expect(error).toBeInstanceOf(InputValidationError);
             expect(error.message).toEqual(
               `Error happened while parsing given CSV file: ./file.csv
-InputValidationError: Requested data according to query is not found.`
+InputValidationError: One or more of the given query parameters are not found in the target CSV file column headers.`
             );
           }
         }

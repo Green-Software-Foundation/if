@@ -149,7 +149,7 @@ ${error}`
 
         if (!relatedData) {
           throw new InputValidationError(
-            'Requested data according to query is not found.'
+            'One or more of the given query parameters are not found in the target CSV file column headers.'
           );
         }
 
