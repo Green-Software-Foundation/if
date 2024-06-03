@@ -15,7 +15,7 @@ import {validateManifest} from './util/validations';
 
 import {STRINGS} from './config';
 
-const {DISCLAIMER_MESSAGE, STARTING_IMPACT_FRAMEWORK, EXITING_IF} = STRINGS;
+const {DISCLAIMER_MESSAGE, EXITING_IF, STARTING_IMPACT_FRAMEWORK} = STRINGS;
 
 const impactEngine = async () => {
   const options = parseIEProcessArgs();
