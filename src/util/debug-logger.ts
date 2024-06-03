@@ -1,3 +1,26 @@
+import {STRINGS} from '../config/strings';
+
+const logMessagesKeys: (keyof typeof STRINGS)[] = [
+  'STARTING_IMPACT_FRAMEWORK',
+  'EXITING_IF',
+  'LOADING_MANIFEST',
+  'VALIDATING_MANIFEST',
+  'CAPTURING_RUNTIME_ENVIRONMENT_DATA',
+  'SYNCING_PARAMETERS',
+  'CHECKING_AGGREGATION_METHOD',
+  'INITIALIZING_PLUGINS',
+  'INITIALIZING_PLUGIN',
+  'LOADING_PLUGIN_FROM_PATH',
+  'COMPUTING_PIPELINE_FOR_NODE',
+  'MERGING_DEFAULTS_WITH_INPUT_DATA',
+  'AGGREGATING_OUTPUTS',
+  'AGGREGATING_NODE',
+  'PREPARING_OUTPUT_DATA',
+  'EXPORTING_TO_YAML_FILE',
+  'EXPORTING_TO_CSV_FILE',
+  'EXPORTING_RAW_CSV_FILE',
+];
+
 enum LogLevel {
   Info = 'INFO',
   Warn = 'WARN',
@@ -28,21 +51,35 @@ const overrideConsoleMethods = (debugMode: boolean) => {
 /**
  * Sets the name of the currently executing plugin.
  */
-const getExecutingPluginName = (pluginName: string) => {
+const setExecutingPluginName = (pluginName?: string) => {
   plugin = pluginName;
-};
-
-/**
- * Removes the name of the executed plugin.
- */
-const removeExecutedPluginName = () => {
-  plugin = undefined;
 };
 
 /**
  * Logs messages with the specified log level and format.
  */
 const debugLog = (level: LogLevel, args: any[], debugMode: boolean) => {
+  if (!debugMode) {
+    if (level === LogLevel.Debug) {
+      return;
+    }
+
+    const isDebugLog = logMessagesKeys.some(key => {
+      const message =
+        typeof STRINGS[key] === 'function'
+          ? (STRINGS[key] as Function).call(null, '')
+          : (STRINGS[key] as string);
+
+      return args[0].includes(message);
+    });
+
+    if (!isDebugLog) {
+      originalConsole.log(...args);
+    }
+
+    return;
+  }
+
   const date = new Date().toISOString();
   const formattedMessage = `${level}: ${date}: ${
     plugin ? plugin + ': ' : ''
@@ -68,6 +105,5 @@ const debugLog = (level: LogLevel, args: any[], debugMode: boolean) => {
 
 export const debugLogger = {
   overrideConsoleMethods,
-  getExecutingPluginName,
-  removeExecutedPluginName,
+  setExecutingPluginName,
 };
