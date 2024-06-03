@@ -26,7 +26,7 @@ const Parameterize = () => {
    * Returns aggregation method for given `unitName`. If doesn't exist then returns value `sum`.
    */
   const getAggregationMethod = (unitName: string) => {
-    debugLogger.removeExecutedPluginName();
+    debugLogger.setExecutingPluginName();
     console.debug(CHECKING_AGGREGATION_METHOD(unitName));
 
     if (`${unitName}` in parametersStorage) {
