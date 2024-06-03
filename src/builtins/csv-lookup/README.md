@@ -1,8 +1,31 @@
 # CSV Lookup Plugin
 
-`csv-lookup` is a generic plugin which enables a user to grab arbitrary data from a given csv file and add it to `input` array.
+`csv-lookup` is a generic plugin that enables you to select arbitrary data from a given csv file and add it to your manifest file's `input` data.
 
-You provide path to a csv file (can ba either local file or url), the columns to grab data from (an array of key/value pairs where the key is a column name in the target csv and the value is a parameter from inputs) and output data.
+You provide path to the target csv file pus some query parameters. The filepath can point to a location on the local filesystem or it can be a URL for an online resource. The query parameters include the column names for the target data you want to return (can be one column name, multiple column names or all column names, indicated using `"*"`), plus the column names and values you want to use as selectors.
+
+For example, for the following CSV:
+
+|      |                |                 |            |            |              |           |                  |            |            |                        |            |                            |                                   |                                |                                  |                       |
+| ---- | -------------- | --------------- | ---------- | ---------- | ------------ | --------- | ---------------- | ---------- | ---------- | ---------------------- | ---------- | -------------------------- | --------------------------------- | ------------------------------ | -------------------------------- | --------------------- |
+| year | cloud-provider | cloud-region    | cfe-region | em-zone-id | wt-region-id | location  | geolocation      | cfe-hourly | cfe-annual | power-usage-efficiency | net-carbon | grid-carbon-intensity-24x7 | grid-carbon-intensity-consumption | grid-carbon-intensity-marginal | grid-carbon-intensity-production | grid-carbon-intensity |
+| 2022 | Google Cloud   | asia-east1      | Taiwan     | TW         | TW           | Taiwan    | 25.0375,121.5625 | 0.18       |            |                        | 0          | 453                        |                                   |                                |                                  | 453                   |
+| 2022 | Google Cloud   | asia-east2      | Hong Kong  | HK         | HK           | Hong Kong | 22.3,114.2       | 0.28       |            |                        | 0          | 453                        |                                   |                                |                                  | 360                   |
+| 2022 | Google Cloud   | asia-northeast1 | Tokyo      | JP-TK      | JP-TK        | Tokyo     | 35.6897,139.692  | 0.28       |            |                        | 0          | 463                        |                                   |                                |                                  | 463                   |
+
+
+You could select all the data for the cloud provider `Google Cloud` in the region `asia-east2` using the following configuration:
+
+```yaml
+filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
+query:
+  cloud-provider: "cloud/provider"
+  cloud-region: "cloud/region"
+output: "*"
+```
+
+Notice that the query parameters are key/value pairs where the key is the column name in the target CSV and the value is a **reference to a value** in your `input` data (*not* an actual value - a reference). This is to enable you to chain CSV lookups together based on information from other plugins in your pipeline.
+
 
 ## Parameters
 
@@ -10,15 +33,15 @@ You provide path to a csv file (can ba either local file or url), the columns to
 
 - `filepath` - path to a csv file, either on the local filesystem or on the internet
 - `query` - an array of key/value pairs where the key is a column name in the target csv and the value is a parameter from inputs
-- `output` - the columns to grab data from and add to output data - should support wildcard or multiple values. Here are few samples for supported values: `"*"`, `"tdp"`, `["processor-name": "processor-model-id"]`, `[["processor-name", "processor-model-id"],["tdp","thermal-design-power"]]`
+- `output` - the columns to grab data from and add to output data - should support wildcard or multiple values. Here are few samples showing valid formats: `"*"`, `"tdp"`, `["processor-name": "processor-model-id"]`, `[["processor-name", "processor-model-id"],["tdp","thermal-design-power"]]`
 
 ### Inputs
 
-There are not strict requirements on input for this plugin. However make sure that `query` parameters should be present in input.
+There are no strict requirements on input for this plugin because they depend upon the contents of the target CSV and your input data at the time the CSV lookup is invoked. Please make sure you are requesting data from columns that exist int he target csv file and that your query values are available in your `input` data.
 
 ## Returns
 
-The input data and additional csv content.
+The input data appended with the requested csv content.
 
 ## Plugin logic
 
@@ -26,6 +49,8 @@ The input data and additional csv content.
 2. Tries to retrieve given file (with url or local path).
 3. Parses given CSV.
 4. Filters requested information from CSV.
+5. Adds new key-value pairs to the input data
+6. Returns enriched input data
 
 ## Implementation
 
@@ -91,7 +116,7 @@ You can run this example by saving it as `./examples/manifests/csv-lookup.yml` a
 
 ```sh
 npm i -g @grnsft/if
-ie --manifest ./examples/manifests/csv-lookup.yml --output ./examples/outputs/csv-lookup.yml
+ie --manifest manifests/plugins/csv-lookup.yml --output manifests/outputs/csv-lookup
 ```
 
-The results will be saved to a new `yaml` file in `./examples/outputs`.
+The results will be saved to a new `yaml` file in `manifests/outputs`.
