@@ -231,7 +231,7 @@ describe('builtins/CSVLookup: ', () => {
             'memory-available': 32,
             'platform-memory': 32,
             'release-date': 'November 2018',
-            'storage-drives': 0,
+            'storage-drives': 'nan',
             'Hardware Information on AWS Documentation & Comments':
               'AWS Graviton (ARM)',
             'cpu-model-name': 'AWS Graviton',
@@ -372,6 +372,109 @@ InputValidationError: One or more of the given query parameters are not found in
             expect(error.message).toEqual('Global config is not provided.');
           }
         }
+      });
+
+      it('rejects with no such column in csv error.', async () => {
+        expect.assertions(2);
+
+        const globalConfig = {
+          filepath: './file.csv',
+          query: {
+            'cpu-cores-available': 'cpu/available',
+            'cpu-cores-utilized': 'cpu/utilized',
+            'cpu-manufacturer': 'cpu/manufacturer',
+          },
+          output: 'mock',
+        };
+        const csvLookup = CSVLookup(globalConfig);
+        const input = [
+          {
+            timestamp: '2024-03-01',
+            'cpu/available': 16,
+            'cpu/utilized': 16,
+            'cpu/manufacturer': 'AWS',
+          },
+        ];
+
+        try {
+          await csvLookup.execute(input);
+        } catch (error) {
+          if (error instanceof Error) {
+            expect(error).toBeInstanceOf(InputValidationError);
+            expect(error.message).toEqual(
+              `Error happened while parsing given CSV file: ./file.csv
+InputValidationError: There is no column with name: mock.`
+            );
+          }
+        }
+      });
+
+      it('successfully applies CSVLookup if output is array with string.', async () => {
+        expect.assertions(1);
+        const globalConfig = {
+          filepath: './file.csv',
+          query: {
+            'cpu-cores-available': 'cpu/available',
+            'cpu-cores-utilized': 'cpu/utilized',
+            'cpu-manufacturer': 'cpu/manufacturer',
+          },
+          output: ['gpu-count'],
+        };
+        const csvLookup = CSVLookup(globalConfig);
+
+        const result = await csvLookup.execute([
+          {
+            timestamp: '2024-03-01',
+            'cpu/available': 16,
+            'cpu/utilized': 16,
+            'cpu/manufacturer': 'AWS',
+          },
+        ]);
+        const expectedResult = [
+          {
+            timestamp: '2024-03-01',
+            'cpu/available': 16,
+            'cpu/utilized': 16,
+            'cpu/manufacturer': 'AWS',
+            'gpu-count': 'N/A',
+          },
+        ];
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('successfully applies CSVLookup if output is matrix with strings.', async () => {
+        expect.assertions(1);
+        const globalConfig = {
+          filepath: './file.csv',
+          query: {
+            'cpu-cores-available': 'cpu/available',
+            'cpu-cores-utilized': 'cpu/utilized',
+            'cpu-manufacturer': 'cpu/manufacturer',
+          },
+          output: [['gpu-count']],
+        };
+        const csvLookup = CSVLookup(globalConfig);
+
+        const result = await csvLookup.execute([
+          {
+            timestamp: '2024-03-01',
+            'cpu/available': 16,
+            'cpu/utilized': 16,
+            'cpu/manufacturer': 'AWS',
+          },
+        ]);
+        const expectedResult = [
+          {
+            timestamp: '2024-03-01',
+            'cpu/available': 16,
+            'cpu/utilized': 16,
+            'cpu/manufacturer': 'AWS',
+            'gpu-count': 'N/A',
+          },
+        ];
+
+        expect(result).toStrictEqual(expectedResult);
       });
     });
   });
