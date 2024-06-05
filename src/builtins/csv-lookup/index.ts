@@ -192,12 +192,8 @@ ${error}`
         };
       });
     } catch (error) {
-      if (error instanceof Error) {
-        throw new InputValidationError(`Error happened while parsing given CSV file: ${filepath}
+      throw new InputValidationError(`Error happened while parsing given CSV file: ${filepath}
 ${error}`);
-      }
-
-      throw error;
     }
   };
 
