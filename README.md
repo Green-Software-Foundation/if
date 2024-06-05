@@ -93,6 +93,10 @@ Watch this video to learn how to create and run a `manifest`.
 
 [![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/GW37Qd4AQbU)
 
+## Join our mailing list
+
+We have a public mailing list at if-community@greensoftware.foundation. We send out weekly updates that explains what we've shipped, what we're working on and how you can get involved each week!
+
 
 ## Contributing
 
