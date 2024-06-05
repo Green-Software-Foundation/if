@@ -8,7 +8,7 @@ export type ExecutePlugin = {
   execute: (
     inputs: PluginParams[],
     config?: Record<string, any>
-  ) => PluginParams[];
+  ) => PluginParams[] | Promise<PluginParams[]>;
   metadata: {
     kind: string;
   };
