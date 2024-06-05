@@ -9,7 +9,7 @@ initialize:
       global-config:
         interpolation: spline
     "sum":
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       method: Sum
       global-config:
         input-parameters:
@@ -26,8 +26,15 @@ initialize:
       path: "builtin"
       method: Sci
       global-config:
-        functional-unit: ""
-        functional-unit-time: "1-day"
+        functional-unit: "component"
+    "sum-carbon":
+      path: "builtin"
+      method: Sum
+      global-config:
+        input-parameters:
+          - carbon-operational
+          - carbon-embodied
+        output-parameter: carbon
     "time-sync":
       method: TimeSync
       path: "builtin"
@@ -44,7 +51,7 @@ tree:
         - sum
         - sci-embodied
         - sci-o
-        - time-sync
+        - sum-carbon
         - sci
       config:
       defaults:
@@ -55,6 +62,7 @@ tree:
         device/expected-lifespan: 94608000 # 3 years in seconds
         resources-reserved: 1
         resources-total: 8
+        component: 1
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
