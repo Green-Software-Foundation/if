@@ -27,7 +27,6 @@ enum LogLevel {
   Error = 'ERROR',
   Debug = 'DEBUG',
 }
-let plugin: string | undefined = undefined;
 
 const originalConsole = {
   log: console.log,
@@ -49,10 +48,28 @@ const overrideConsoleMethods = (debugMode: boolean) => {
 };
 
 /**
+ * Creates an encapsulated object to retrieve the plugin name.
+ */
+const pluginNameManager = (() => {
+  let pluginName: string | undefined = '';
+
+  const manager = {
+    get currentPluginName() {
+      return pluginName;
+    },
+    set currentPluginName(value: string | undefined) {
+      pluginName = value;
+    },
+  };
+
+  return manager;
+})();
+
+/**
  * Sets the name of the currently executing plugin.
  */
 const setExecutingPluginName = (pluginName?: string) => {
-  plugin = pluginName;
+  pluginNameManager.currentPluginName = pluginName;
 };
 
 /**
@@ -81,6 +98,7 @@ const debugLog = (level: LogLevel, args: any[], debugMode: boolean) => {
   }
 
   const date = new Date().toISOString();
+  const plugin = pluginNameManager.currentPluginName;
   const formattedMessage = `${level}: ${date}: ${
     plugin ? plugin + ': ' : ''
   }${args.join(', ')}`;
