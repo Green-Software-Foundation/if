@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import {readFile} from 'fs/promises';
 
 import axios from 'axios';
@@ -51,6 +52,12 @@ ${error}`
   };
 
   /**
+   * Checks if value is invalid: `undefined`, `null` or an empty string, then sets `nan` instead.
+   */
+  const setNanValue = (value: any) =>
+    value == null || value === '' ? 'nan' : value;
+
+  /**
    * Converts empty values to `nan`.
    */
   const nanifyEmptyValues = (object: any) => {
@@ -59,26 +66,49 @@ ${error}`
 
       keys.forEach(key => {
         const value = object[key];
-        object[key] = value || 'nan';
+        object[key] = setNanValue(value);
       });
 
       return object;
     }
 
-    return object || 'nan';
+    return setNanValue(object);
   };
 
   /**
-   * 1. If output is anything, then returns data.
-   * 2. Otherwise checks if it's an miltidimensional, then grabs multiple fields.
+   * If `field` is missing from `object`, then reject with error.
+   * Otherwise nanify empty values and return data.
+   */
+  const fieldAccessor = (field: string, object: any) => {
+    if (!(`${field}` in object)) {
+      throw new InputValidationError(`There is no column with name: ${field}.`);
+    }
+
+    return nanifyEmptyValues(object[field]);
+  };
+
+  /**
+   * 1. If output is anything, then removes query data from csv record to escape duplicates.
+   * 2. Otherwise checks if it's a miltidimensional array, then grabs multiple fields ().
    * 3. If not, then returns single field.
    * 4. In case if it's string, then
    */
   const filterOutput = (
     dataFromCSV: any,
-    output: string | string[] | string[][]
+    params: {
+      output: string | string[] | string[][];
+      query: Record<string, any>;
+    }
   ) => {
+    const {output, query} = params;
+
     if (output === '*') {
+      const keys = Object.keys(query);
+
+      keys.forEach(key => {
+        delete dataFromCSV[key];
+      });
+
       return nanifyEmptyValues(dataFromCSV);
     }
 
@@ -86,22 +116,25 @@ ${error}`
       /** Check if it's a multidimensional array. */
       if (Array.isArray(output[0])) {
         const result: any = {};
+
         output.forEach(outputField => {
-          result[outputField[1]] = nanifyEmptyValues(
-            dataFromCSV[outputField[0]]
-          );
+          /** Check if there is no renaming request, then export as is */
+          const outputTitle = outputField[1] || outputField[0];
+          result[outputTitle] = fieldAccessor(outputField[0], dataFromCSV);
         });
 
         return result;
       }
 
+      const outputTitle = output[1] || output[0];
+
       return {
-        [(output as string[])[1]]: nanifyEmptyValues(dataFromCSV[output[0]]),
+        [outputTitle as string]: fieldAccessor(output[0], dataFromCSV),
       };
     }
 
     return {
-      [output]: nanifyEmptyValues(dataFromCSV[output]),
+      [output]: fieldAccessor(output, dataFromCSV),
     };
   };
 
@@ -110,7 +143,6 @@ ${error}`
    */
   const withCriteria = (queryData: Record<string, any>) => (csvRecord: any) => {
     const ifMatchesCriteria = Object.keys(queryData).map(
-      // eslint-disable-next-line eqeqeq
       (key: string) => csvRecord[key] == queryData[key]
     );
 
@@ -133,6 +165,7 @@ ${error}`
       const parsedCSV: any[] = parse(file, {
         columns: true,
         skip_empty_lines: true,
+        cast: true,
       });
 
       return inputs.map(input => {
@@ -155,7 +188,7 @@ ${error}`
 
         return {
           ...input,
-          ...filterOutput(relatedData, output),
+          ...filterOutput(relatedData, {output, query}),
         };
       });
     } catch (error) {
