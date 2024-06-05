@@ -66,7 +66,7 @@ describe('builtins/CSVLookup: ', () => {
             'cpu/available': 16,
             'cpu/utilized': 16,
             'cpu/manufacturer': 'AWS',
-            tdp: '150.00',
+            tdp: 150,
           },
         ];
 
@@ -100,7 +100,7 @@ describe('builtins/CSVLookup: ', () => {
             'cpu/available': 16,
             'cpu/utilized': 16,
             'cpu/manufacturer': 'AWS',
-            tdp: '150.00',
+            tdp: 150,
           },
         ];
 
@@ -228,17 +228,14 @@ describe('builtins/CSVLookup: ', () => {
             'gpu-model-name': 'N/A',
             'instance-class': 'a1.4xlarge',
             'instance-storage': 'EBS-Only',
-            'memory-available': '32',
-            'platform-memory': '32',
+            'memory-available': 32,
+            'platform-memory': 32,
             'release-date': 'November 2018',
-            'storage-drives': '0',
+            'storage-drives': 0,
             'Hardware Information on AWS Documentation & Comments':
               'AWS Graviton (ARM)',
-            'cpu-cores-available': '16',
-            'cpu-cores-utilized': '16',
-            'cpu-manufacturer': 'AWS',
             'cpu-model-name': 'AWS Graviton',
-            'cpu-tdp': '150.00',
+            'cpu-tdp': 150,
           },
         ];
 
