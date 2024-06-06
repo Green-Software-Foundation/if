@@ -3,7 +3,7 @@ description:
 tags:
 initialize:
   plugins:
-    cloud-instance-metadata:
+    tdp-finder:
       method: CSVLookup
       path: "builtin"
       global-config:
@@ -15,7 +15,7 @@ tree:
   children:
     child:
       pipeline:
-        - cloud-instance-metadata
+        - tdp-finder
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
