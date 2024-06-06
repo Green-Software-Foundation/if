@@ -15,7 +15,7 @@ import {validateManifest} from './util/validations';
 
 import {STRINGS} from './config';
 
-const {DISCLAIMER_MESSAGE, EXITING_IF, STARTING_IMPACT_FRAMEWORK} = STRINGS;
+const {DISCLAIMER_MESSAGE, EXITING_IF, STARTING_IF} = STRINGS;
 
 const impactEngine = async () => {
   const options = parseIEProcessArgs();
@@ -24,7 +24,7 @@ const impactEngine = async () => {
   debugLogger.overrideConsoleMethods(!!debug);
 
   logger.info(DISCLAIMER_MESSAGE);
-  console.info(STARTING_IMPACT_FRAMEWORK);
+  console.info(STARTING_IF);
 
   const {rawManifest, parameters} = await load(inputPath, paramPath);
   const envManifest = await injectEnvironment(rawManifest);

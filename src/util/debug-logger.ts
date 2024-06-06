@@ -1,7 +1,7 @@
 import {STRINGS} from '../config/strings';
 
 const logMessagesKeys: (keyof typeof STRINGS)[] = [
-  'STARTING_IMPACT_FRAMEWORK',
+  'STARTING_IF',
   'EXITING_IF',
   'LOADING_MANIFEST',
   'VALIDATING_MANIFEST',

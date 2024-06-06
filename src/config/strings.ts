@@ -56,7 +56,7 @@ Note that for the '--output' option you also need to define the output type in y
   TARGET_IS_NOT_YAML: 'Given target is not in yaml format.',
   INVALID_TARGET: 'Target is invalid.',
   INVALID_SOURCE: 'Source is invalid.',
-  STARTING_IMPACT_FRAMEWORK: 'Starting Impact framework',
+  STARTING_IF: 'Starting IF',
   EXITING_IF: 'Exiting IF',
   LOADING_MANIFEST: 'Loading manifest',
   VALIDATING_MANIFEST: 'Validating manifest',
