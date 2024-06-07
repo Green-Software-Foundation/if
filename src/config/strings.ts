@@ -56,4 +56,5 @@ Note that for the '--output' option you also need to define the output type in y
   TARGET_IS_NOT_YAML: 'Given target is not in yaml format.',
   INVALID_TARGET: 'Target is invalid.',
   INVALID_SOURCE: 'Source is invalid.',
+  MANIFEST_NOT_FOUND: 'Manifest file not found.',
 };
