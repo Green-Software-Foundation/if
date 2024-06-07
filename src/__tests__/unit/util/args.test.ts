@@ -1,5 +1,14 @@
 const processRunningPath = process.cwd();
 
+jest.mock('../../../util/helpers', () => ({
+  isFileExists: () => {
+    if (process.env.fileExists === 'true') {
+      return true;
+    }
+    return false;
+  },
+}));
+
 jest.mock('ts-command-line-args', () => ({
   __esModule: true,
   parse: () => {
@@ -60,6 +69,22 @@ jest.mock('ts-command-line-args', () => ({
         throw new Error('mock-error');
       case 'diff-throw':
         throw 'mock-error';
+      /** If-env mocks */
+      // case 'env-manifest-is-missing':
+      //   return;
+      case 'manifest-install-provided':
+        return {
+          install: true,
+          manifest: 'mock-manifest.yaml',
+        };
+      case 'manifest-is-not-yaml':
+        return {manifest: 'manifest'};
+      case 'manifest-path-invalid':
+        throw new Error(MANIFEST_NOT_FOUND);
+      case 'env-throw-error':
+        throw new Error('mock-error');
+      case 'env-throw':
+        throw 'mock-error';
       default:
         return {
           manifest: 'mock-manifest.yaml',
@@ -71,7 +96,11 @@ jest.mock('ts-command-line-args', () => ({
 
 import path = require('path');
 
-import {parseIEProcessArgs, parseIfDiffArgs} from '../../../util/args';
+import {
+  parseIEProcessArgs,
+  parseIfDiffArgs,
+  parseIfEnvArgs,
+} from '../../../util/args';
 import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
@@ -84,6 +113,7 @@ const {
   TARGET_IS_NOT_YAML,
   INVALID_TARGET,
   SOURCE_IS_NOT_YAML,
+  MANIFEST_NOT_FOUND,
 } = STRINGS;
 
 describe('util/args: ', () => {
@@ -293,6 +323,80 @@ describe('util/args: ', () => {
 
       try {
         parseIfDiffArgs();
+      } catch (error) {
+        expect(error).toEqual('mock-error');
+      }
+    });
+  });
+
+  describe('parseIfEnvArgs(): ', () => {
+    it('executes if `manifest` is missing.', async () => {
+      process.env.fileExists = 'true';
+      process.env.result = 'manifest-is-missing';
+      const response = await parseIfEnvArgs();
+
+      expect.assertions(1);
+
+      expect(response).toEqual(undefined);
+    });
+
+    it('executes if `manifest` and `install` are provided.', async () => {
+      process.env.fileExists = 'true';
+      process.env.result = 'manifest-install-provided';
+
+      const response = await parseIfEnvArgs();
+
+      expect.assertions(2);
+      expect(response).toHaveProperty('install');
+      expect(response).toHaveProperty('manifest');
+    });
+
+    it('throws an error if `manifest` is not a yaml.', async () => {
+      process.env.fileExists = 'true';
+      process.env.result = 'manifest-is-not-yaml';
+      expect.assertions(1);
+
+      try {
+        await parseIfEnvArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliInputError(FILE_IS_NOT_YAML));
+        }
+      }
+    });
+
+    it('throws an error if `manifest` path is invalid.', async () => {
+      process.env.fileExists = 'false';
+      expect.assertions(1);
+
+      try {
+        await parseIfEnvArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliInputError(MANIFEST_NOT_FOUND));
+        }
+      }
+    });
+
+    it('throws an error if parsing failed.', async () => {
+      process.env.result = 'env-throw-error';
+      expect.assertions(1);
+
+      try {
+        await parseIfEnvArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliInputError('mock-error'));
+        }
+      }
+    });
+
+    it('throws error if parsing failed (not instance of error).', async () => {
+      process.env.result = 'env-throw';
+      expect.assertions(1);
+
+      try {
+        await parseIfEnvArgs();
       } catch (error) {
         expect(error).toEqual('mock-error');
       }
