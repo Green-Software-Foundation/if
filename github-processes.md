@@ -3,7 +3,7 @@
 
 - [`if`](https://github.com/Green-Software-Foundation/if)
     - source code for the IF
-- [`if-plugins`](https://github.com/Green-Software-Foundation/if-plugins)
+- [`if-plugins`](https://github.com/Green-Software-Foundation/if-plugins) **DEPRECATED**
     - source code for standard library of plugins
     - IF core team commit to maintaining these plugins 
 - [`if-unofficial-plugins`](https://github.com/Green-Software-Foundation/if-unofficial-plugins)
@@ -110,47 +110,21 @@ We intend to respond to new PRs and issues within 3 days of the ticket being ope
 
 ## Labels
 
-```
-//review status labels 
-awaiting-triage 
-triage-pass 
-awaiting-review 
-review-pass 
-awaiting-qa 
-qa-pass 
-changes-needed 
-
-//change type labels 
-fix 
-feature 
-docs 
-package 
-other 
-
-// size labels 
-small 
-medium 
-large 
-
-// priority labels 
-high-priority 
-med-priority 
-low-priority 
-
-//delay explanation labels 
-abandoned 
-blocked 
-backlogged
-
-// other labels
-project-management
-agenda
-discussion
-help-wanted
-good-first-issue
-```
-
-Each PR is expected to have one label from each category (except `other`) assigned to it at all times.
+| Label            | Used by   | Description                                                                                |
+| ---------------- | --------- | ------------------------------------------------------------------------------------------ |
+| blocked          | all       | The issue is blocked and cannot proceed.                                                   |
+| bug              | all       | Error, flaw or fault                                                                       |
+| core-only        | all       | This issue is reserved for the IF core team only                                           |
+| draft            | all       | The issue is still being written, no need to respond or action on anything.                |
+| good-first-issue | all       | This issue is a good one for someone looking to get involved with this project/initiative. |
+| help-wanted      | all       | This issue can be picked up by anyone in the community                                     |
+| needs-response   | all       | The issue has stalled because someone isn’t responding.                                    |
+| agenda           | core team | Use for any meeting agenda or minutes issue.                                               |
+| EPIC             | core team | Used to denote an issue that represents a whole epic                                       |
+| initiative       | core team | A helper label, needed for GSF internal processes                                          |
+| i-summary        | core team | A helper label, needed for GSF internal processes                                          |
+| i-milestone      | core team | A helper label, needed for GSF internal processes                                          |
+| project-update   | core team | Used to flag project progress updates                                                      |
 
 
 ## Releases
