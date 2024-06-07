@@ -10,6 +10,11 @@ export interface IFDiffArgs {
   target: string;
 }
 
+export interface IFEnvArgs {
+  manifest?: string;
+  install?: boolean;
+}
+
 export interface Options {
   outputPath?: string;
   stdout?: boolean;
