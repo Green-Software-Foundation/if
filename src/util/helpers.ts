@@ -1,3 +1,5 @@
+import * as fs from 'fs/promises';
+
 import {createInterface} from 'node:readline/promises';
 import {exec} from 'node:child_process';
 import {promisify} from 'node:util';
@@ -181,4 +183,16 @@ export const parseManifestFromStdin = async () => {
   }
 
   return match![1];
+};
+
+/**
+ * Checks if file exists with the given `filePath`.
+ */
+export const isFileExists = async (filePath: string) => {
+  try {
+    await fs.stat(filePath);
+    return true;
+  } catch (error) {
+    return false;
+  }
 };
