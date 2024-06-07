@@ -2,21 +2,28 @@ import * as path from 'path';
 import {parse} from 'ts-command-line-args';
 
 import {checkIfFileIsYaml} from './yaml';
+import {isFileExists} from './helpers';
 import {ERRORS} from './errors';
 import {logger} from './logger';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {IFDiffArgs, IEArgs, ProcessArgsOutputs} from '../types/process-args';
+import {
+  IFDiffArgs,
+  IEArgs,
+  ProcessArgsOutputs,
+  IFEnvArgs,
+} from '../types/process-args';
 import {LoadDiffParams} from '../types/util/args';
 
 const {CliInputError} = ERRORS;
 
-const {IE, IF_DIFF} = CONFIG;
+const {IE, IF_DIFF, IF_ENV} = CONFIG;
 
 const {
   FILE_IS_NOT_YAML,
   MANIFEST_IS_MISSING,
+  MANIFEST_NOT_FOUND,
   NO_OUTPUT,
   SOURCE_IS_NOT_YAML,
   TARGET_IS_NOT_YAML,
@@ -133,4 +140,46 @@ export const parseIfDiffArgs = () => {
   }
 
   throw new CliInputError(INVALID_TARGET);
+};
+
+/** -- IF Env -- */
+
+/**
+ * Parses `if-env` process arguments.
+ */
+const validateAndParseIfEnvArgs = () => {
+  try {
+    return parse<IFEnvArgs>(IF_ENV.ARGS, IF_ENV.HELP);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new CliInputError(error.message);
+    }
+
+    throw error;
+  }
+};
+
+/**
+ * Checks if the `manifest` command is provided and it is valid manifest file.
+ */
+export const parseIfEnvArgs = async () => {
+  const {manifest, install} = validateAndParseIfEnvArgs();
+
+  if (manifest) {
+    const isManifestFileExists = await isFileExists(manifest);
+
+    if (!isManifestFileExists) {
+      throw new CliInputError(MANIFEST_NOT_FOUND);
+    }
+
+    if (checkIfFileIsYaml(manifest)) {
+      const response = prependFullFilePath(manifest);
+
+      return {manifest: response, install};
+    }
+
+    throw new CliInputError(FILE_IS_NOT_YAML);
+  }
+
+  return;
 };
