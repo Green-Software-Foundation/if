@@ -18,8 +18,6 @@ const {
  * Parameters manager. Provides get aggregation method and combine functionality.
  */
 const Parameterize = () => {
-  console.debug(SYNCING_PARAMETERS);
-
   let parametersStorage = PARAMETERS;
 
   /**
@@ -47,6 +45,8 @@ const Parameterize = () => {
     contextParameters: ManifestParameter[] | null | undefined,
     parameters: Parameters
   ) => {
+    console.debug(SYNCING_PARAMETERS);
+
     if (contextParameters) {
       contextParameters.forEach(param => {
         if (`${param.name}` in parameters) {
