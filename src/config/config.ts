@@ -2,7 +2,7 @@ import {ArgumentConfig, ParseOptions} from 'ts-command-line-args';
 
 import {STRINGS} from './strings';
 
-import {IFDiffArgs, IEArgs} from '../types/process-args';
+import {IFDiffArgs, IEArgs, IFEnvArgs} from '../types/process-args';
 
 const {DISCLAIMER_MESSAGE} = STRINGS;
 
@@ -76,6 +76,36 @@ export const CONFIG = {
     } as ParseOptions<any>,
     SUCCESS_MESSAGE: 'Files match!',
     FAILURE_MESSAGE: 'Files do not match!',
+  },
+  IF_ENV: {
+    ARGS: {
+      manifest: {
+        type: String,
+        optional: true,
+        alias: 'm',
+        description: '[path to the manifest file]',
+      },
+      install: {
+        type: Boolean,
+        optional: true,
+        alias: 'i',
+        description: '[commant to install package.json]',
+      },
+    } as ArgumentConfig<IFEnvArgs>,
+    HELP: {
+      helpArg: 'help',
+      headerContentSections: [
+        {header: 'Impact Framework', content: 'IF-Env Helpful keywords:'},
+      ],
+      footerContentSections: [
+        {header: 'Green Software Foundation', content: DISCLAIMER_MESSAGE},
+      ],
+    } as ParseOptions<any>,
+    SUCCESS_MESSAGE: 'The environment is successfully setup!',
+    FAILURE_MESSAGE: 'Faied to create the environment!',
+    FAILURE_MESSAGE_TEMPLATE:
+      'Faied to create the environment with the template manifest!',
+    FAILURE_MESSAGE_DEPENDENCIES: 'Manifest dependencies are not available!',
   },
   GITHUB_PATH: 'https://github.com',
   NATIVE_PLUGIN: 'if-plugins',
