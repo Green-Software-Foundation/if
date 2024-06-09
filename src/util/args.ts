@@ -10,7 +10,12 @@ import {CONFIG, STRINGS} from '../config';
 import {IFDiffArgs, IEArgs, ProcessArgsOutputs} from '../types/process-args';
 import {LoadDiffParams} from '../types/util/args';
 
-const {CliInputError} = ERRORS;
+const {
+  CliInputError,
+  ParseCliParamsError,
+  CliTargetFileError,
+  CliSourceFileError,
+} = ERRORS;
 
 const {IE, IF_DIFF} = CONFIG;
 
@@ -83,10 +88,10 @@ export const parseIEProcessArgs = (): ProcessArgsOutputs => {
       };
     }
 
-    throw new CliInputError(FILE_IS_NOT_YAML);
+    throw new CliSourceFileError(FILE_IS_NOT_YAML);
   }
 
-  throw new CliInputError(MANIFEST_IS_MISSING);
+  throw new CliSourceFileError(MANIFEST_IS_MISSING);
 };
 
 /** -- IF Diff -- */
@@ -99,7 +104,7 @@ const validateAndParseIfDiffArgs = () => {
     return parse<IFDiffArgs>(IF_DIFF.ARGS, IF_DIFF.HELP);
   } catch (error) {
     if (error instanceof Error) {
-      throw new CliInputError(error.message);
+      throw new ParseCliParamsError(error.message);
     }
 
     throw error;
@@ -114,7 +119,7 @@ export const parseIfDiffArgs = () => {
 
   if (target) {
     if (source && !checkIfFileIsYaml(source)) {
-      throw new CliInputError(SOURCE_IS_NOT_YAML);
+      throw new CliSourceFileError(SOURCE_IS_NOT_YAML);
     }
 
     if (checkIfFileIsYaml(target)) {
@@ -129,7 +134,7 @@ export const parseIfDiffArgs = () => {
       return response;
     }
 
-    throw new CliInputError(TARGET_IS_NOT_YAML);
+    throw new CliTargetFileError(TARGET_IS_NOT_YAML);
   }
 
   throw new CliInputError(INVALID_TARGET);
