@@ -6,7 +6,7 @@ import {CONFIG, STRINGS} from '../config';
 import {AggregationResult} from '../types/aggregation';
 import {PluginParams} from '../types/interface';
 
-const {InvalidAggregationParamsError} = ERRORS;
+const {InvalidAggregationMethodError, MissingAggregationParamError} = ERRORS;
 const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
 const {AGGREGATION_ADDITIONAL_PARAMS} = CONFIG;
 
@@ -19,7 +19,7 @@ const checkIfMetricsAreValid = (metrics: string[]) => {
     const method = parameterize.getAggregationMethod(metric);
 
     if (method === 'none') {
-      throw new InvalidAggregationParamsError(
+      throw new InvalidAggregationMethodError(
         INVALID_AGGREGATION_METHOD(metric)
       );
     }
@@ -41,7 +41,7 @@ export const aggregateInputsIntoOne = (
   return inputs.reduce((acc, input, index) => {
     for (const metric of extendedMetrics) {
       if (!(metric in input)) {
-        throw new InvalidAggregationParamsError(METRIC_MISSING(metric, index));
+        throw new MissingAggregationParamError(METRIC_MISSING(metric, index));
       }
 
       /** Checks if metric is timestamp or duration, then adds to aggregated value. */
