@@ -12,7 +12,7 @@ import {Parameters} from '../types/parameters';
 import {LoadDiffParams} from '../types/util/args';
 import {Manifest} from '../types/manifest';
 
-const {CliInputError} = ERRORS;
+const {CliSourceFileError} = ERRORS;
 
 const {INVALID_SOURCE} = STRINGS;
 
@@ -43,7 +43,7 @@ export const loadIfDiffFiles = async (params: LoadDiffParams) => {
   const pipedSourceManifest = await parseManifestFromStdin();
 
   if (!sourcePath && !pipedSourceManifest) {
-    throw new CliInputError(INVALID_SOURCE);
+    throw new CliSourceFileError(INVALID_SOURCE);
   }
 
   const loadFromSource =
