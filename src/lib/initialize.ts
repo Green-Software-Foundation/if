@@ -11,7 +11,11 @@ import {PluginInterface} from '../types/interface';
 import {GlobalPlugins, PluginOptions} from '../types/manifest';
 import {PluginStorageInterface} from '../types/plugin-storage';
 
-const {ModuleInitializationError, PluginCredentialError} = ERRORS;
+const {
+  PluginInitializationError,
+  MissingPluginMethodError,
+  MissingPluginPathError,
+} = ERRORS;
 
 const {GITHUB_PATH, NATIVE_PLUGIN} = CONFIG;
 const {MISSING_METHOD, MISSING_PATH, NOT_NATIVE_PLUGIN, INVALID_MODULE_PATH} =
@@ -21,14 +25,11 @@ const {MISSING_METHOD, MISSING_PATH, NOT_NATIVE_PLUGIN, INVALID_MODULE_PATH} =
  * Imports module by given `path`.
  */
 const importModuleFrom = async (path: string) => {
-  try {
-    const module = await import(path);
+  const module = await import(path).catch(error => {
+    throw new PluginInitializationError(INVALID_MODULE_PATH(path, error));
+  });
 
-    return module;
-  } catch (error) {
-    logger.error(error);
-    throw new ModuleInitializationError(INVALID_MODULE_PATH(path));
-  }
+  return module;
 };
 
 /**
@@ -71,11 +72,11 @@ const initPlugin = async (
   const {method, path, 'global-config': globalConfig} = initPluginParams;
 
   if (!method) {
-    throw new PluginCredentialError(MISSING_METHOD);
+    throw new MissingPluginMethodError(MISSING_METHOD);
   }
 
   if (!path) {
-    throw new PluginCredentialError(MISSING_PATH);
+    throw new MissingPluginPathError(MISSING_PATH);
   }
 
   const plugin = await handModule(method, path);
