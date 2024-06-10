@@ -97,6 +97,11 @@ const debugLog = (level: LogLevel, args: any[], debugMode: boolean) => {
     return;
   }
 
+  if (args[0].includes('# start')) {
+    originalConsole.log(...args);
+    return;
+  }
+
   const date = new Date().toISOString();
   const plugin = pluginNameManager.currentPluginName;
   const formattedMessage = `${level}: ${date}: ${
