@@ -1,4 +1,5 @@
 import * as fs from 'fs/promises';
+import * as path from 'path';
 
 import {createInterface} from 'node:readline/promises';
 import {exec} from 'node:child_process';
@@ -10,7 +11,8 @@ import {STRINGS} from '../config';
 
 import {Difference} from '../types/lib/compare';
 
-const {ISSUE_TEMPLATE} = STRINGS;
+const {ISSUE_TEMPLATE, INITIALIZING_PACKAGE_JSON, INSTALLING_NPM_PACKAGES} =
+  STRINGS;
 
 /**
  * Formats given error according to class instance, scope and message.
@@ -195,4 +197,36 @@ export const isFileExists = async (filePath: string) => {
   } catch (error) {
     return false;
   }
+};
+
+/**
+ * Checks if the package.json is exists, if not, inisializes it.
+ */
+export const initPackageJsonIfNotExists = async (folderPath: string) => {
+  const packageJsonPath = path.resolve(folderPath, 'package.json');
+  const isPackageJsonExists = await isFileExists(packageJsonPath);
+
+  if (!isPackageJsonExists) {
+    logger.info(INITIALIZING_PACKAGE_JSON);
+    await execPromise('npm init -y', {cwd: folderPath});
+  }
+
+  return packageJsonPath;
+};
+
+/**
+ * Installs packages from the specified dependencies in the specified folder.
+ */
+export const installDependencies = async (
+  folderPath: string,
+  dependencies: {[path: string]: string}
+) => {
+  const packages = Object.entries(dependencies).map(
+    ([dependency, version]) => `${dependency}@${version.replace('^', '')}`
+  );
+
+  logger.info(INSTALLING_NPM_PACKAGES);
+  await execPromise(`npm install ${packages.join(' ')}`, {
+    cwd: folderPath,
+  });
 };
