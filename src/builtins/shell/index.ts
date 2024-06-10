@@ -8,7 +8,7 @@ import {ConfigParams} from '../../types/common';
 import {validate} from '../../util/validations';
 import {ERRORS} from '../../util/errors';
 
-const {InputValidationError} = ERRORS;
+const {ProcessExecutionError} = ERRORS;
 
 export const Shell = (globalConfig: ConfigParams): ExecutePlugin => {
   const metadata = {
@@ -55,7 +55,7 @@ export const Shell = (globalConfig: ConfigParams): ExecutePlugin => {
 
       return {outputs};
     } catch (error: any) {
-      throw new InputValidationError(error.message);
+      throw new ProcessExecutionError(error.message);
     }
   };
 
