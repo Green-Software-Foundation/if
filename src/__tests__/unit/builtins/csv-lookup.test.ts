@@ -5,9 +5,19 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 
 import {CSVLookup} from '../../../builtins';
 
+import {STRINGS} from '../../../config';
+
 import {ERRORS} from '../../../util/errors';
 
-const {FileNotFoundError, InputValidationError, ConfigNotFoundError} = ERRORS;
+const {
+  GlobalConfigError,
+  ReadFileError,
+  FetchingFileError,
+  QueryDataNotFoundError,
+  MissingCSVColumnError,
+  CSVParseError,
+} = ERRORS;
+const {MISSING_GLOBAL_CONFIG, MISSING_CSV_COLUMN, NO_QUERY_DATA} = STRINGS;
 
 describe('builtins/CSVLookup: ', () => {
   const mock = new AxiosMockAdapter(axios);
@@ -131,7 +141,7 @@ describe('builtins/CSVLookup: ', () => {
           await csvLookup.execute(input);
         } catch (error) {
           if (error instanceof Error) {
-            expect(error).toBeInstanceOf(FileNotFoundError);
+            expect(error).toBeInstanceOf(ReadFileError);
           }
         }
       });
@@ -160,7 +170,7 @@ describe('builtins/CSVLookup: ', () => {
           await csvLookup.execute(input);
         } catch (error) {
           if (error instanceof Error) {
-            expect(error).toBeInstanceOf(FileNotFoundError);
+            expect(error).toBeInstanceOf(ReadFileError);
           }
         }
       });
@@ -192,7 +202,7 @@ describe('builtins/CSVLookup: ', () => {
           await csvLookup.execute(input);
         } catch (error) {
           if (error instanceof Error) {
-            expect(error).toBeInstanceOf(FileNotFoundError);
+            expect(error).toBeInstanceOf(FetchingFileError);
           }
         }
       });
@@ -340,11 +350,8 @@ describe('builtins/CSVLookup: ', () => {
           await csvLookup.execute(input);
         } catch (error) {
           if (error instanceof Error) {
-            expect(error).toBeInstanceOf(InputValidationError);
-            expect(error.message).toEqual(
-              `Error happened while parsing given CSV file: ./file.csv
-InputValidationError: One or more of the given query parameters are not found in the target CSV file column headers.`
-            );
+            expect(error).toBeInstanceOf(QueryDataNotFoundError);
+            expect(error.message).toEqual(NO_QUERY_DATA);
           }
         }
       });
@@ -368,8 +375,8 @@ InputValidationError: One or more of the given query parameters are not found in
           await csvLookup.execute(input);
         } catch (error) {
           if (error instanceof Error) {
-            expect(error).toBeInstanceOf(ConfigNotFoundError);
-            expect(error.message).toEqual('Global config is not provided.');
+            expect(error).toBeInstanceOf(GlobalConfigError);
+            expect(error.message).toEqual(MISSING_GLOBAL_CONFIG);
           }
         }
       });
@@ -400,10 +407,9 @@ InputValidationError: One or more of the given query parameters are not found in
           await csvLookup.execute(input);
         } catch (error) {
           if (error instanceof Error) {
-            expect(error).toBeInstanceOf(InputValidationError);
+            expect(error).toBeInstanceOf(MissingCSVColumnError);
             expect(error.message).toEqual(
-              `Error happened while parsing given CSV file: ./file.csv
-InputValidationError: There is no column with name: mock.`
+              MISSING_CSV_COLUMN(globalConfig.output)
             );
           }
         }
@@ -476,6 +482,34 @@ InputValidationError: There is no column with name: mock.`
 
         expect(result).toStrictEqual(expectedResult);
       });
+    });
+
+    it('rejects with CSV parse error', async () => {
+      process.env.csv = 'fail';
+      expect.assertions(1);
+      const globalConfig = {
+        filepath: './fail-csv-reader.csv',
+        query: {
+          'cpu-cores-available': 'cpu/available',
+          'cpu-cores-utilized': 'cpu/utilized',
+          'cpu-manufacturer': 'cpu/manufacturer',
+        },
+        output: [['gpu-count']],
+      };
+      const csvLookup = CSVLookup(globalConfig);
+
+      try {
+        await csvLookup.execute([
+          {
+            timestamp: '2024-03-01',
+            'cpu/available': 16,
+            'cpu/utilized': 16,
+            'cpu/manufacturer': 'AWS',
+          },
+        ]);
+      } catch (error) {
+        expect(error).toBeInstanceOf(CSVParseError);
+      }
     });
   });
 });
