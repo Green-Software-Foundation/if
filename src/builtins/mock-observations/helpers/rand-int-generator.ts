@@ -1,70 +1,57 @@
-import {KeyValuePair} from '../../../types/common';
 import {ERRORS} from '../../../util/errors';
-import {buildErrorMessage} from '../../../util/helpers';
+
+import {STRINGS} from '../../../config';
 
 import {Generator} from '../interfaces';
 import {RandIntGeneratorParams} from '../types';
 
-const {InputValidationError} = ERRORS;
+const {GlobalConfigError} = ERRORS;
+
+const {MISSING_GLOBAL_CONFIG, MISSING_MIN_MAX, INVALID_MIN_MAX, INVALID_NAME} =
+  STRINGS;
 
 export const RandIntGenerator = (
   name: string,
-  config: KeyValuePair
+  config: Record<string, any>
 ): Generator => {
-  const errorBuilder = buildErrorMessage(RandIntGenerator.name);
-
   const next = () => ({
     [validatedName]: generateRandInt(getFieldToPopulate()),
   });
 
   const validateName = (name: string | null): string => {
     if (!name || name.trim() === '') {
-      throw new InputValidationError(
-        errorBuilder({
-          message: '`name` is empty or all spaces',
-        })
-      );
+      throw new GlobalConfigError(INVALID_NAME);
     }
+
     return name;
   };
 
-  const validateConfig = (config: KeyValuePair): {min: number; max: number} => {
+  const validateConfig = (
+    config: Record<string, any>
+  ): {min: number; max: number} => {
     if (!config || Object.keys(config).length === 0) {
-      throw new InputValidationError(
-        errorBuilder({
-          message: 'Config must not be null or empty',
-        })
-      );
+      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }
 
     if (!config.min || !config.max) {
-      throw new InputValidationError(
-        errorBuilder({
-          message: 'Config is missing min or max',
-        })
-      );
+      throw new GlobalConfigError(MISSING_MIN_MAX);
     }
 
     if (config.min >= config.max) {
-      throw new InputValidationError(
-        errorBuilder({
-          message: `Min value should not be greater than or equal to max value of ${validatedName}`,
-        })
-      );
+      throw new GlobalConfigError(INVALID_MIN_MAX(validatedName));
     }
+
     return {min: config.min, max: config.max};
   };
 
   const validatedName = validateName(name);
   const validatedConfig = validateConfig(config);
 
-  const getFieldToPopulate = () => {
-    return {
-      name: validatedName,
-      min: validatedConfig.min,
-      max: validatedConfig.max,
-    };
-  };
+  const getFieldToPopulate = () => ({
+    name: validatedName,
+    min: validatedConfig.min,
+    max: validatedConfig.max,
+  });
 
   const generateRandInt = (
     randIntGenerator: RandIntGeneratorParams
@@ -73,6 +60,7 @@ export const RandIntGenerator = (
     const scaledNumber =
       randomNumber * (randIntGenerator.max - randIntGenerator.min) +
       randIntGenerator.min;
+
     return Math.trunc(scaledNumber);
   };
 
