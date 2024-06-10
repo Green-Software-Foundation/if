@@ -5,9 +5,12 @@ import {ExecutePlugin, PluginParams} from '../../types/interface';
 import {validate} from '../../util/validations';
 import {ERRORS} from '../../util/errors';
 
+import {STRINGS} from '../../config';
+
 import {CoefficientConfig} from './types';
 
-const {ConfigNotFoundError} = ERRORS;
+const {GlobalConfigError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
 export const Coefficient = (globalConfig: CoefficientConfig): ExecutePlugin => {
   const metadata = {
@@ -45,7 +48,7 @@ export const Coefficient = (globalConfig: CoefficientConfig): ExecutePlugin => {
    */
   const validateGlobalConfig = () => {
     if (!globalConfig) {
-      throw new ConfigNotFoundError('Global config is not provided.');
+      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }
 
     const globalConfigSchema = z.object({
