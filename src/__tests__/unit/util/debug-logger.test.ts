@@ -1,4 +1,4 @@
-const logSpy = jest.spyOn(console, 'info');
+const logSpy = jest.spyOn(console, 'log');
 const infoSpy = jest.spyOn(console, 'info');
 const warnSpy = jest.spyOn(console, 'warn');
 const errorSpy = jest.spyOn(console, 'error');
@@ -24,9 +24,15 @@ describe('util/debug-logger: ', () => {
   });
 
   it('overrides console methods and log messages with INFO level.', () => {
-    console.log('Test log message');
+    console.log('Starting IF');
 
-    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('INFO:'));
+    expect(infoSpy).toHaveBeenCalledWith(expect.stringContaining('INFO:'));
+  });
+
+  it('does not override console method if the message starts with `# start`.', () => {
+    console.log('# start');
+
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('# start'));
   });
 
   it('logs messages with WARN level.', () => {
