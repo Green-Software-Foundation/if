@@ -2,10 +2,13 @@ import * as fs from 'fs/promises';
 
 import {ERRORS} from '../util/errors';
 
+import {STRINGS} from '../config';
+
 import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
 import {Context} from '../types/manifest';
 
-const {ExhaustError} = ERRORS;
+const {ExhaustOutputArgError, WriteFileError} = ERRORS;
+const {OUTPUT_REQUIRED, WRITE_CSV_ERROR} = STRINGS;
 
 export const ExportCSVRaw = (): ExhaustPluginInterface => {
   /**
@@ -127,7 +130,7 @@ export const ExportCSVRaw = (): ExhaustPluginInterface => {
     try {
       await fs.writeFile(`${outputPath}.csv`, content);
     } catch (error) {
-      throw new ExhaustError(`Failed to write CSV to ${outputPath}: ${error}`);
+      throw new WriteFileError(WRITE_CSV_ERROR(outputPath, error));
     }
   };
 
@@ -136,7 +139,7 @@ export const ExportCSVRaw = (): ExhaustPluginInterface => {
    */
   const execute = async (tree: any, _context: Context, outputPath: string) => {
     if (!outputPath) {
-      throw new ExhaustError('Output path is required.');
+      throw new ExhaustOutputArgError(OUTPUT_REQUIRED);
     }
 
     const [extractredFlatMap, extractedHeaders] =
