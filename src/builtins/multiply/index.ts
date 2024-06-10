@@ -1,16 +1,17 @@
 import {z} from 'zod';
 
-import {buildErrorMessage} from '../../util/helpers';
 import {ERRORS} from '../../util/errors';
 import {validate} from '../../util/validations';
+
+import {STRINGS} from '../../config';
 
 import {ExecutePlugin, PluginParams} from '../../types/interface';
 import {MultiplyConfig} from './types';
 
-const {InputValidationError} = ERRORS;
+const {MissingInputDataError} = ERRORS;
+const {MISSING_INPUT_DATA} = STRINGS;
 
 export const Multiply = (globalConfig: MultiplyConfig): ExecutePlugin => {
-  const errorBuilder = buildErrorMessage(Multiply.name);
   const metadata = {
     kind: 'execute',
   };
@@ -42,11 +43,7 @@ export const Multiply = (globalConfig: MultiplyConfig): ExecutePlugin => {
         input[metricToMultiply] === undefined ||
         isNaN(input[metricToMultiply])
       ) {
-        throw new InputValidationError(
-          errorBuilder({
-            message: `${metricToMultiply} is missing from the input array`,
-          })
-        );
+        throw new MissingInputDataError(MISSING_INPUT_DATA(metricToMultiply));
       }
     });
 
