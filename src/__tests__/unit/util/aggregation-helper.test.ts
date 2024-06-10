@@ -5,7 +5,7 @@ import {STRINGS} from '../../../config';
 
 import {PluginParams} from '../../../types/interface';
 
-const {InvalidAggregationParamsError} = ERRORS;
+const {InvalidAggregationMethodError, MissingAggregationParamError} = ERRORS;
 const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
 
 describe('util/aggregation-helper: ', () => {
@@ -20,9 +20,9 @@ describe('util/aggregation-helper: ', () => {
       try {
         aggregateInputsIntoOne(inputs, metrics, isTemporal);
       } catch (error) {
-        expect(error).toBeInstanceOf(InvalidAggregationParamsError);
+        expect(error).toBeInstanceOf(InvalidAggregationMethodError);
 
-        if (error instanceof InvalidAggregationParamsError) {
+        if (error instanceof InvalidAggregationMethodError) {
           expect(error.message).toEqual(INVALID_AGGREGATION_METHOD(metrics[0]));
         }
       }
@@ -38,9 +38,10 @@ describe('util/aggregation-helper: ', () => {
       try {
         aggregateInputsIntoOne(inputs, metrics, isTemporal);
       } catch (error) {
-        expect(error).toBeInstanceOf(InvalidAggregationParamsError);
+        console.log(error);
+        expect(error).toBeInstanceOf(MissingAggregationParamError);
 
-        if (error instanceof InvalidAggregationParamsError) {
+        if (error instanceof MissingAggregationParamError) {
           expect(error.message).toEqual(METRIC_MISSING(metrics[0], 0));
         }
       }
