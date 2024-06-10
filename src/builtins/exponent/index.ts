@@ -1,16 +1,17 @@
 import {z} from 'zod';
 
 import {ERRORS} from '../../util/errors';
-import {buildErrorMessage} from '../../util/helpers';
 import {validate} from '../../util/validations';
+
+import {STRINGS} from '../../config';
 
 import {ExecutePlugin, PluginParams} from '../../types/interface';
 import {ExponentConfig} from './types';
 
-const {InputValidationError} = ERRORS;
+const {MissingInputDataError, InputValidationError} = ERRORS;
+const {MISSING_INPUT_DATA, NOT_NUMERIC_VALUE} = STRINGS;
 
 export const Exponent = (globalConfig: ExponentConfig): ExecutePlugin => {
-  const errorBuilder = buildErrorMessage(Exponent.name);
   const metadata = {
     kind: 'execute',
   };
@@ -41,21 +42,13 @@ export const Exponent = (globalConfig: ExponentConfig): ExecutePlugin => {
 
   const validateParamExists = (input: PluginParams, param: string) => {
     if (input[param] === undefined) {
-      throw new InputValidationError(
-        errorBuilder({
-          message: `${param} is missing from the input array`,
-        })
-      );
+      throw new MissingInputDataError(MISSING_INPUT_DATA(param));
     }
   };
 
   const validateNumericString = (str: string) => {
     if (isNaN(+Number(str))) {
-      throw new InputValidationError(
-        errorBuilder({
-          message: `${str} is not numeric`,
-        })
-      );
+      throw new InputValidationError(NOT_NUMERIC_VALUE(str));
     }
   };
 
