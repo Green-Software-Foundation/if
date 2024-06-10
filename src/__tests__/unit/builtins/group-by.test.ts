@@ -1,7 +1,10 @@
 import {GroupBy} from '../../../builtins/group-by';
 import {ERRORS} from '../../../util/errors';
 
-const {InvalidGroupingError, InputValidationError} = ERRORS;
+import {STRINGS} from '../../../config';
+
+const {InvalidGroupingError, InputValidationError, GlobalConfigError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG, INVALID_GROUP_BY} = STRINGS;
 
 describe('builtins/group-by: ', () => {
   describe('GroupBy: ', () => {
@@ -92,10 +95,8 @@ describe('builtins/group-by: ', () => {
         try {
           plugin.execute(inputs, config!);
         } catch (error) {
-          expect(error).toBeInstanceOf(InputValidationError);
-          expect(error).toEqual(
-            new InputValidationError('Config is not provided.')
-          );
+          expect(error).toBeInstanceOf(GlobalConfigError);
+          expect(error).toEqual(new GlobalConfigError(MISSING_GLOBAL_CONFIG));
         }
       });
 
@@ -166,7 +167,7 @@ describe('builtins/group-by: ', () => {
         } catch (error) {
           expect(error).toBeInstanceOf(InvalidGroupingError);
           expect(error).toEqual(
-            new InvalidGroupingError('Invalid group unknown.')
+            new InvalidGroupingError(INVALID_GROUP_BY(config.group[2]))
           );
         }
       });

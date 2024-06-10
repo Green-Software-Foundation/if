@@ -1,11 +1,26 @@
-import {TimeSync} from '../../../builtins/time-sync';
-import {ERRORS} from '../../../util/errors';
 import {Settings, DateTime} from 'luxon';
-import {STRINGS} from '../../../config';
-Settings.defaultZone = 'utc';
-const {InputValidationError} = ERRORS;
 
-const {INVALID_OBSERVATION_OVERLAP, INVALID_TIME_NORMALIZATION} = STRINGS;
+import {TimeSync} from '../../../builtins/time-sync';
+
+import {ERRORS} from '../../../util/errors';
+
+import {STRINGS} from '../../../config';
+
+Settings.defaultZone = 'utc';
+const {
+  InputValidationError,
+  InvalidPaddingError,
+  InvalidDateInInputError,
+  InvalidInputError,
+  GlobalConfigError,
+} = ERRORS;
+
+const {
+  INVALID_OBSERVATION_OVERLAP,
+  INVALID_TIME_NORMALIZATION,
+  AVOIDING_PADDING_BY_EDGES,
+  INVALID_DATE_TYPE,
+} = STRINGS;
 
 jest.mock('luxon', () => {
   const originalModule = jest.requireActual('luxon');
@@ -196,7 +211,7 @@ describe('execute(): ', () => {
       ]);
     } catch (error) {
       expect(error).toStrictEqual(
-        new InputValidationError(INVALID_TIME_NORMALIZATION)
+        new GlobalConfigError(INVALID_TIME_NORMALIZATION)
       );
     }
   });
@@ -228,7 +243,7 @@ describe('execute(): ', () => {
       ]);
     } catch (error) {
       expect(error).toStrictEqual(
-        new InputValidationError(INVALID_OBSERVATION_OVERLAP)
+        new InvalidInputError(INVALID_OBSERVATION_OVERLAP)
       );
     }
   });
@@ -258,7 +273,7 @@ describe('execute(): ', () => {
       ]);
     } catch (error) {
       expect(error).toStrictEqual(
-        new InputValidationError(INVALID_OBSERVATION_OVERLAP)
+        new InvalidInputError(INVALID_OBSERVATION_OVERLAP)
       );
     }
   });
@@ -335,22 +350,23 @@ describe('execute(): ', () => {
       interval: 10,
       'allow-padding': true,
     };
+    const data = [
+      {
+        timestamp: 45,
+        duration: 10,
+        'cpu/utilization': 10,
+      },
+    ];
 
     const timeModel = TimeSync(basicConfig);
     expect.assertions(2);
 
     try {
-      await timeModel.execute([
-        {
-          timestamp: 45,
-          duration: 10,
-          'cpu/utilization': 10,
-        },
-      ]);
+      await timeModel.execute(data);
     } catch (error) {
-      expect(error).toBeInstanceOf(InputValidationError);
+      expect(error).toBeInstanceOf(InvalidDateInInputError);
       expect(error).toStrictEqual(
-        new InputValidationError('Unexpected date datatype: number: 45')
+        new InvalidDateInInputError(INVALID_DATE_TYPE(data[0].timestamp))
       );
     }
   });
@@ -675,7 +691,7 @@ describe('execute(): ', () => {
       ]);
     } catch (error) {
       expect(error).toStrictEqual(
-        new InputValidationError('Avoiding padding at start')
+        new InvalidPaddingError(AVOIDING_PADDING_BY_EDGES(true, false))
       );
     }
   });
@@ -735,7 +751,7 @@ describe('execute(): ', () => {
       ]);
     } catch (error) {
       expect(error).toStrictEqual(
-        new InputValidationError('Avoiding padding at start and end')
+        new InvalidPaddingError(AVOIDING_PADDING_BY_EDGES(true, true))
       );
     }
   });

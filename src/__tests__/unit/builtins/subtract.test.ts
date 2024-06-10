@@ -1,10 +1,12 @@
 import {Subtract} from '../../../builtins/subtract';
 
 import {ERRORS} from '../../../util/errors';
+import {STRINGS} from '../../../config';
 
 const {InputValidationError} = ERRORS;
+const {MISSING_INPUT_DATA} = STRINGS;
 
-describe('lib/subtract: ', () => {
+describe('builtins/subtract: ', () => {
   describe('Subtract: ', () => {
     const globalConfig = {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
@@ -48,9 +50,6 @@ describe('lib/subtract: ', () => {
       });
 
       it('throws an error on missing params in input.', async () => {
-        const expectedMessage =
-          'Subtract: cpu/energy is missing from the input array.';
-
         expect.assertions(1);
 
         try {
@@ -62,7 +61,7 @@ describe('lib/subtract: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(expectedMessage)
+            new InputValidationError(MISSING_INPUT_DATA('cpu/energy'))
           );
         }
       });

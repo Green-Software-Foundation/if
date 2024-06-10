@@ -5,12 +5,12 @@ import {Shell} from '../../../builtins/shell';
 
 import {ERRORS} from '../../../util/errors';
 
-const {InputValidationError} = ERRORS;
+const {InputValidationError, ProcessExecutionError} = ERRORS;
 
 jest.mock('child_process');
 jest.mock('js-yaml');
 
-describe('lib/shell', () => {
+describe('builtins/shell', () => {
   describe('Shell', () => {
     const shell = Shell({});
 
@@ -87,9 +87,9 @@ describe('lib/shell', () => {
         try {
           await shell.execute(inputs);
         } catch (error) {
-          expect(error).toBeInstanceOf(InputValidationError);
+          expect(error).toBeInstanceOf(ProcessExecutionError);
           expect(error).toStrictEqual(
-            new InputValidationError('Could not run the command')
+            new ProcessExecutionError('Could not run the command')
           );
         }
       });

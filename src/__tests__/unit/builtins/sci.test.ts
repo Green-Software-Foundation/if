@@ -2,9 +2,9 @@ import {Sci} from '../../../builtins/sci';
 
 import {ERRORS} from '../../../util/errors';
 
-const {InputValidationError} = ERRORS;
+const {MissingInputDataError} = ERRORS;
 
-describe('lib/sci:', () => {
+describe('builtins/sci:', () => {
   describe('Sci: ', () => {
     const sci = Sci({'functional-unit': 'users'});
 
@@ -113,7 +113,7 @@ describe('lib/sci:', () => {
         try {
           await sci.execute(inputs);
         } catch (error) {
-          expect(error).toBeInstanceOf(InputValidationError);
+          expect(error).toBeInstanceOf(MissingInputDataError);
         }
       });
 
@@ -136,7 +136,7 @@ describe('lib/sci:', () => {
         try {
           await sci.execute(inputs);
         } catch (error) {
-          expect(error).toBeInstanceOf(InputValidationError);
+          expect(error).toBeInstanceOf(MissingInputDataError);
         }
       });
     });
