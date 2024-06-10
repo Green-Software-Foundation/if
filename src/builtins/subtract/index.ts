@@ -1,16 +1,17 @@
 import {z} from 'zod';
 
 import {ERRORS} from '../../util/errors';
-import {buildErrorMessage} from '../../util/helpers';
 import {validate} from '../../util/validations';
+
+import {STRINGS} from '../../config';
 
 import {ExecutePlugin, PluginParams} from '../../types/interface';
 import {SubtractConfig} from './types';
 
 const {InputValidationError} = ERRORS;
+const {MISSING_INPUT_DATA, NOT_NUMERIC_VALUE} = STRINGS;
 
 export const Subtract = (globalConfig: SubtractConfig): ExecutePlugin => {
-  const errorBuilder = buildErrorMessage(Subtract.name);
   const metadata = {
     kind: 'execute',
   };
@@ -47,21 +48,13 @@ export const Subtract = (globalConfig: SubtractConfig): ExecutePlugin => {
 
   const validateParamExists = (input: PluginParams, param: string) => {
     if (input[param] === undefined) {
-      throw new InputValidationError(
-        errorBuilder({
-          message: `${param} is missing from the input array`,
-        })
-      );
+      throw new InputValidationError(MISSING_INPUT_DATA(param));
     }
   };
 
   const validateNumericString = (str: string) => {
     if (isNaN(+Number(str))) {
-      throw new InputValidationError(
-        errorBuilder({
-          message: `${str} is not numberic`,
-        })
-      );
+      throw new InputValidationError(NOT_NUMERIC_VALUE(str));
     }
   };
 
@@ -73,6 +66,7 @@ export const Subtract = (globalConfig: SubtractConfig): ExecutePlugin => {
       'input-parameters': inputParameters,
       'output-parameter': outputParameter,
     } = validateGlobalConfig();
+
     return inputs.map(input => {
       validateSingleInput(input, inputParameters);
 
@@ -88,6 +82,7 @@ export const Subtract = (globalConfig: SubtractConfig): ExecutePlugin => {
    */
   const calculateDiff = (input: PluginParams, inputParameters: string[]) => {
     const [firstItem, ...restItems] = inputParameters;
+
     return restItems.reduce(
       (accumulator, metricToSubtract) => accumulator - input[metricToSubtract],
       input[firstItem] // Starting accumulator with the value of the first item
