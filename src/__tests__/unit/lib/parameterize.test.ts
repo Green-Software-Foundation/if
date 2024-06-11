@@ -16,7 +16,7 @@ import {STRINGS} from '../../../config';
 
 import {ManifestParameter} from '../../../types/manifest';
 
-const {REJECTING_OVERRIDE} = STRINGS;
+const {REJECTING_OVERRIDE, CHECKING_AGGREGATION_METHOD} = STRINGS;
 
 describe('lib/parameterize: ', () => {
   afterEach(() => {
@@ -41,6 +41,17 @@ describe('lib/parameterize: ', () => {
 
       expect(method).toEqual(expectedMethod);
       expect(mockLog).toHaveBeenCalledTimes(1);
+    });
+
+    test('prints debug log for first input.', () => {
+      const debugSpy = jest.spyOn(console, 'debug');
+      const unitName = 'timespam';
+
+      parameterize.getAggregationMethod(unitName);
+
+      expect(debugSpy).toHaveBeenCalledWith(
+        CHECKING_AGGREGATION_METHOD(unitName)
+      );
     });
   });
 
