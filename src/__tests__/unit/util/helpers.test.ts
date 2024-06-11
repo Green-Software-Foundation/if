@@ -1,3 +1,9 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
+jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
+
+const mockInfo = jest.fn();
 const mockWarn = jest.fn();
 const mockError = jest.fn();
 
@@ -6,10 +12,12 @@ jest.mock('node:readline/promises', () =>
 );
 jest.mock('../../../util/logger', () => ({
   logger: {
+    info: mockInfo,
     warn: mockWarn,
     error: mockError,
   },
 }));
+
 import {
   andHandle,
   checkIfEqual,
@@ -17,11 +25,16 @@ import {
   mergeObjects,
   oneIsPrimitive,
   parseManifestFromStdin,
+  isFileExists,
+  installDependencies,
+  initPackageJsonIfNotExists,
 } from '../../../util/helpers';
 import {ERRORS} from '../../../util/errors';
 import {Difference} from '../../../types/lib/compare';
+import {STRINGS} from '../../../config/strings';
 
 const {WriteFileError} = ERRORS;
+const {INITIALIZING_PACKAGE_JSON, INSTALLING_NPM_PACKAGES} = STRINGS;
 
 describe('util/helpers: ', () => {
   describe('andHandle(): ', () => {
@@ -47,9 +60,7 @@ describe('util/helpers: ', () => {
       expect(mockError).toHaveBeenCalledTimes(1);
     });
   });
-});
 
-describe('util/helpers: ', () => {
   describe('mergeObjects(): ', () => {
     it('does not override input.', () => {
       expect.assertions(1);
@@ -411,6 +422,94 @@ description: mock-description
 
       const response = checkIfEqual(a, b);
       expect(response).toBeFalsy();
+    });
+  });
+
+  describe('isFileExists(): ', () => {
+    it('returns true if the file exists.', async () => {
+      const result = await isFileExists('true');
+
+      expect.assertions(1);
+      expect(result).toEqual(true);
+    });
+
+    it('returns fale if the file does not exist.', async () => {
+      const result = await isFileExists('false');
+
+      expect.assertions(1);
+      expect(result).toEqual(false);
+    });
+  });
+
+  describe('npm manipulation tests.', () => {
+    const helpers = require('../../../util/helpers');
+    let folderPath = path.resolve(__dirname, 'npm-test');
+
+    beforeAll(() => {
+      if (!fs.existsSync(folderPath)) {
+        fs.mkdirSync(folderPath, {recursive: true});
+      }
+    });
+
+    afterAll(() => {
+      if (fs.existsSync(folderPath)) {
+        fs.rmSync(folderPath, {recursive: true, force: true});
+      }
+    });
+
+    describe('initPackageJsonIfNotExists(): ', () => {
+      it('initializes package.json if it does not exist.', async () => {
+        const spyExecPromise = jest.spyOn(helpers, 'execPromise');
+        isFileExists('true');
+
+        await initPackageJsonIfNotExists(folderPath);
+
+        expect.assertions(2);
+        expect(mockInfo).toHaveBeenCalledWith(INITIALIZING_PACKAGE_JSON);
+        expect(spyExecPromise).toHaveBeenCalledWith('npm init -y', {
+          cwd: folderPath,
+        });
+      });
+
+      it('returns the package.json path if it exists.', async () => {
+        const packageJsonPath = path.resolve(folderPath, 'package.json');
+        isFileExists('false');
+
+        const result = await initPackageJsonIfNotExists(folderPath);
+
+        expect.assertions(1);
+        expect(result).toBe(packageJsonPath);
+      });
+    });
+
+    describe('installDependencies(): ', () => {
+      const dependencies = {
+        '@grnsft/if': '^0.3.3-beta.0',
+      };
+
+      it('calls execPromise with the correct arguments.', async () => {
+        const spyExecPromise = jest.spyOn(helpers, 'execPromise');
+        const formattedDependencies = ['@grnsft/if@0.3.3-beta.0'];
+        expect.assertions(1);
+
+        await installDependencies(folderPath, dependencies);
+
+        expect(spyExecPromise).toHaveBeenCalledWith(
+          `npm install ${formattedDependencies.join(' ')}`,
+          {cwd: folderPath}
+        );
+      }, 30000);
+
+      it('logs the installation message.', async () => {
+        const dependencies = {
+          '@grnsft/if': '^0.3.3-beta.0',
+        };
+
+        await installDependencies(folderPath, dependencies);
+
+        expect.assertions(1);
+        expect(mockInfo).toHaveBeenCalledWith(INSTALLING_NPM_PACKAGES);
+      });
     });
   });
 });
