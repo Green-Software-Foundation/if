@@ -24,10 +24,8 @@ const Parameterize = () => {
    * Returns aggregation method for given `unitName`. If doesn't exist then returns value `sum`.
    */
   const getAggregationMethod = (unitName: string) => {
-    if (setUniqueUnitName.isUnique(unitName)) {
-      debugLogger.setExecutingPluginName();
-      console.debug(CHECKING_AGGREGATION_METHOD(unitName));
-    }
+    debugLogger.setExecutingPluginName();
+    memoizedLog(console.debug, CHECKING_AGGREGATION_METHOD(unitName));
 
     if (`${unitName}` in parametersStorage) {
       return parametersStorage[unitName as keyof typeof PARAMETERS].aggregation;
@@ -69,25 +67,6 @@ const Parameterize = () => {
 
     parametersStorage = parameters;
   };
-
-  /**
-   * Creates a handler for managing unique unit names.
-   */
-  const setUniqueUnitName = (() => {
-    const uniqueUnitNames: string[] = [];
-
-    return {
-      isUnique(currentUnitName: string) {
-        if (!uniqueUnitNames.includes(currentUnitName)) {
-          uniqueUnitNames.push(currentUnitName);
-
-          return true;
-        }
-
-        return false;
-      },
-    };
-  })();
 
   return {
     combine,
