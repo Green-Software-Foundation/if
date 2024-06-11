@@ -59,6 +59,7 @@ export const Coefficient = (globalConfig: CoefficientConfig): ExecutePlugin => {
       globalConfig
     );
   };
+
   return {
     metadata,
     execute,
