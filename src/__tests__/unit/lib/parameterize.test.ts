@@ -1,4 +1,6 @@
-const mockLog = jest.fn();
+import {LeveledLogMethod} from 'winston';
+
+const mockLog = jest.fn((message: string) => message);
 
 jest.mock('../../../util/log-memoize', () => ({
   memoizedLog: mockLog,
@@ -6,6 +8,7 @@ jest.mock('../../../util/log-memoize', () => ({
 jest.mock('../../../util/logger', () => ({
   logger: {
     warn: mockLog,
+    debug: mockLog,
   },
 }));
 
@@ -20,7 +23,7 @@ const {REJECTING_OVERRIDE, CHECKING_AGGREGATION_METHOD} = STRINGS;
 
 describe('lib/parameterize: ', () => {
   afterEach(() => {
-    mockLog.mockReset();
+    (mockLog as jest.Mock).mockReset();
   });
 
   describe('getAggregationMethod(): ', () => {
@@ -40,16 +43,16 @@ describe('lib/parameterize: ', () => {
       const expectedMethod = 'sum';
 
       expect(method).toEqual(expectedMethod);
-      expect(mockLog).toHaveBeenCalledTimes(1);
+      expect(mockLog as unknown as LeveledLogMethod).toHaveBeenCalledTimes(2);
     });
 
-    test('prints debug log for first input.', () => {
-      const debugSpy = jest.spyOn(console, 'debug');
-      const unitName = 'timespam';
+    it('prints debug log for first input.', () => {
+      const unitName = 'timestamp';
 
       parameterize.getAggregationMethod(unitName);
 
-      expect(debugSpy).toHaveBeenCalledWith(
+      expect(mockLog as typeof console.debug).toHaveBeenCalledWith(
+        console.debug,
         CHECKING_AGGREGATION_METHOD(unitName)
       );
     });
