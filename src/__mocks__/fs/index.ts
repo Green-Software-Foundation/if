@@ -86,3 +86,11 @@ export const writeFile = async (pathToFile: string, content: string) => {
   expect(pathToFile).toBe(mockPathToFile);
   expect(content).toBe(mockObject);
 };
+
+export const stat = async (filePath: string) => {
+  if (filePath === 'true') {
+    return true;
+  } else {
+    throw new Error('File not found.');
+  }
+};
