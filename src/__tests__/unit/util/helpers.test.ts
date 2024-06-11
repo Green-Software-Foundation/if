@@ -443,7 +443,7 @@ description: mock-description
 
   describe('npm manipulation tests.', () => {
     const helpers = require('../../../util/helpers');
-    let folderPath = path.resolve(__dirname, 'npm-test');
+    const folderPath = path.resolve(__dirname, 'npm-test');
 
     beforeAll(() => {
       if (!fs.existsSync(folderPath)) {
