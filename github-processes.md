@@ -107,6 +107,7 @@ After a PR has passed triage, it can be assigned to a core team member to review
 
 We intend to respond to new PRs and issues within 3 days of the ticket being opened, even if only with a brief message thanking the OP and explaining the triage process.
 
+There may be exceptional instances where bug fixes are prioritized over other ongoing tasks and worked on immediately, before triage. 
 
 ## Labels
 
@@ -140,3 +141,41 @@ If more than two hotfixes are required on a particular release, the team will ca
 Hotfixes on release can be merged back into `main` when they have been fully QA tested.
 
 We intend for hotfixes to be as infrequent as possible.
+
+
+## Software Development Life Cycle
+
+Our normal process is to have week-long sprints where we tackle issues that contribute to a larger epic which typically last for 4-6 weeks.
+
+Our Executive Director and Product owner take responsibility for defining epics. This means they make decisions about how IF should change and translate that into a series of documents that get worked up into tickets for specific tasks. After the initial design, individual tasks are refined by the product owner, which means defining a scope of work and acceptance criteria for each task. 
+
+Refinement is the process of taking a loosely scoped or ambiguous ticket and making it so well-described that anyone could pick it up off the board and produce an equivalent outcome to one of the core team. It's important we do this diligently even if it feels unnecessary or frictionful, because:
+
+- it keeps us all aligned with the purpose and rationale of individual tasks
+- it improves our transparency
+- it lowers the barrier to entry for contributors
+- it helps us to "measure twice, cut once" and avoid doing work more than once
+- it helps us to think together about each issue
+- it provides an archive of our thinking that we can go back to in future.
+
+We use checkboxes for the statement of work and acceptance criteria as this helps to track progress on the task while it is in flight.
+
+A ticket is considered READY when it has been refined by the product owner. In general, we try to pass the refined ticket to a core developer to review any implementation details.
+
+We have the `core-only` label that we apply to tasks that are reserved for the core team to work on. Community contributions that cover these tickets are unlikely to get merged unless organized in advance. This is typically for sensitive parts of the core of the IF.
+
+Epics are also opresented to the community on the IF discussion forum in advance of being worked on in a development sprint. This is to give community contributors a chance to give feedback, suggest course corrections and discuss the changes with the team. These discussions can also lead to community members taking on some of the epic tasks.
+
+Once the tickets are refined they get prioritized and assigned during our development sprints. There is a pre-sprint prioritization call between the project sponsor, owner and manager to determien the priorities for each sprint, then a sprint planning meeting where the tasks are assigned and sized.
+
+### Overview of development practises
+
+| Stage                                                             | Participants                                              | Inputs                                                                                                | Outputs                                                                                                                                                                                                                                              | Overview                                                                                                                                                         |
+| ----------------------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. Initiation                                                     | Sponsor and Product Owner                                 | Problem Statement and Objectives                                                                      | Action Plan                                                                                                                                                                                                                                          | In this phase, the team identifies a specific job-to-be-done or problem, develops a high-level vision for a solution, and outlines a preliminary task breakdown. |
+| 2. Backlog                                                        | Product Owner                                             | Breakdown of Epic or Milestone Tasks                                                                  | An issue for each high-level task detailing the What and Why, along with a link to its parent epic                                                                                                                                                   | In this phase, each task from the epic or milestone is incorporated into the backlog (labeled as 'draft'), setting the context effectively.                      |
+| 3. Design                                                         | Sponsor and Product Owner                                 | What and Why, link to parent Epic	Priority, Preliminary Acceptance Criteria and outline of work scope | In this phase, preliminary acceptance criteria are documented as a foundation for further refinement.                                                                                                                                                |
+| 4. Refinement	Product Owner, Dev and QA (where applicable)        | Preliminary Acceptance Criteria and outline of work scope | Comprehensive scenarios for Acceptance Criteria, confirmed work scope, and size                       | In this phase, engineers review the desired outcomes to ensure technical feasibility, clarify doubts, and solidify their understanding. They also estimate the required effort. Following this review, the issue is deemed Ready for implementation. |
+| 5. Implementation                                                 | Dev and QA (where applicable)                             | A comprehensive set of scenarios for Acceptance Criteria and a confirmed Scope of Work.               | A Pull Request (PR) including Unit Tests that pass and manifest files for automated testing, Technical documentation                                                                                                                                 | In this phase, engineers execute the solution and review PRs. They also record a demo to demonstrate that it meets the acceptance criteria.                      |
+| 6. UAT                                                            | Product Owner and Sponsor (if applicable)                 | Working feature and Acceptance Criteria                                                               | TBC                                                                                                                                                                                                                                                  | In this phase, the Product Owner verifies that the implementation matches the design by reviewing a demonstration of the work completed.                         |
+| 7. Rollout	\Product Owner,  Sponsor and Marketing (if applicable) | Demos, Technical Documentation                            | TBC                                                                                                   | In this phase, the Product Owner ensures that the community is prepared for the upcoming change. This preparation includes updates to the change log, project announcements, revisions to documentation, marketing efforts, and more.                |
