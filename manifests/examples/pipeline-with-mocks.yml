@@ -10,7 +10,7 @@ initialize:
     mock-observations:
       kind: plugin
       method: MockObservations
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       global-config:
         timestamp-from: 2023-07-06T00:00
         timestamp-to: 2023-07-06T00:10
@@ -33,18 +33,25 @@ initialize:
     "sci-e":
       path: "@grnsft/if-plugins"
       method: SciE
-    "sci-m":
-      path: "@grnsft/if-plugins"
-      method: SciM
+    "sci-embodied":
+      path: "builtin"
+      method: SciEmbodied
     "sci-o":
       path: "@grnsft/if-plugins"
       method: SciO
+    "sum-carbon":
+      path: "builtin"
+      method: Sum
+      global-config:
+        input-parameters:
+          - carbon-operational
+          - carbon-embodied
+        output-parameter: carbon
     "sci":
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       method: Sci
       global-config:
         functional-unit: "requests"
-        functional-unit-time: "1 minute"
     "time-sync":
       method: TimeSync
       path: "builtin"
@@ -56,15 +63,16 @@ initialize:
     "group-by":
       path: builtin
       method: GroupBy
-  outputs: ['yaml']
+  # outputs: ['yaml']
 tree:
   children:
     child-1:
       pipeline:
         - teads-curve
         - sci-e
-        - sci-m
+        - sci-embodied
         - sci-o
+        - sum-carbon
         - time-sync
         - sci
       config:
@@ -87,27 +95,32 @@ tree:
           cloud/region: uk-west
           duration: 1
           cpu/utilization: 10
+          requests: 30
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
           cloud/region: uk-west
+          requests: 40
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
+          requests: 30
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
           cpu/utilization: 15
+          requests: 50
     child-2:
       pipeline:
         - teads-curve
         - sci-e
-        - sci-m
+        - sci-embodied
         - sci-o
+        - sum-carbon
         - time-sync
         - sci
       config:
@@ -130,18 +143,22 @@ tree:
           cpu/utilization: 30
           cloud/instance-type: A1
           cloud/region: uk-west
+          requests: 30
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 28
           cloud/instance-type: A1
           cloud/region: uk-west
+          requests: 40
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 40
           cloud/instance-type: A1
           cloud/region: uk-west
+          requests: 50
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cpu/utilization: 33
           cloud/instance-type: A1
           cloud/region: uk-west
+          requests: 60

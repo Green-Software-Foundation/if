@@ -1,0 +1,34 @@
+name: mock-observation-demo
+description: a manifest demonstrating how to use the mock observations feature
+tags:
+initialize:
+ # outputs: ['yaml']
+  plugins:
+    mock-observations:
+      kind: plugin
+      method: MockObservations
+      path: "builtin"
+      global-config:
+        timestamp-from: 2023-07-06T00:00
+        timestamp-to: 2023-07-06T00:10
+        duration: 60
+        components:
+          - cloud/instance-type: A1
+          - cloud/instance-type: B1
+        generators:
+          common:
+            region: uk-west
+            common-key: common-val
+          randint:
+            cpu/utilization:
+              min: 1
+              max: 99
+            memory/utilization:
+              min: 99
+              max: 10
+tree:
+  children:
+    child:
+      pipeline:
+        - mock-observations
+      inputs:

@@ -2,14 +2,14 @@ name: sci
 description: successful path
 tags:
 initialize:
-  outputs: ['yaml']
+  # outputs: ['yaml']
   plugins:
     sci:
       kind: plugin
       method: Sci
-      path: "@grnsft/if-plugins"
-      # global-config:
-      #   functional-unit-time: 1 minute
+      path: "builtin"
+      global-config:
+        functional-unit: requests
 tree:
   children:
     child:
@@ -25,4 +25,5 @@ tree:
           energy: 5
           carbon-operational: 5
           carbon-embodied: 0.02
+          carbon: 5.02
           requests: 100

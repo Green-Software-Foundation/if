@@ -28,15 +28,38 @@ jest.mock('ts-command-line-args', () => ({
           manifest: 'manifest-mock.yml',
           'override-params': 'override-params-mock.yml',
         };
-      case 'help':
-        return {
-          manifest: path.normalize(`${processRunningPath}/manifest-mock.yml`),
-          help: true,
-        };
       case 'not-yaml':
         return {
           manifest: 'mock.notyaml',
         };
+      case 'stdout':
+        return {
+          manifest: 'manifest-mock.yaml',
+          stdout: true,
+        };
+      /** If-diff mocks */
+      case 'only-target':
+        return {
+          target: 'target-mock.yml',
+        };
+      case 'target-is-not-yaml':
+        return {
+          target: 'target-mock',
+        };
+      case 'source-is-not-yaml':
+        return {
+          target: 'target-mock.yml',
+          source: 'source-mock',
+        };
+      case 'target-source':
+        return {
+          target: 'target-mock.yml',
+          source: 'source-mock.yml',
+        };
+      case 'diff-throw-error':
+        throw new Error('mock-error');
+      case 'diff-throw':
+        throw 'mock-error';
       default:
         return {
           manifest: 'mock-manifest.yaml',
@@ -48,26 +71,32 @@ jest.mock('ts-command-line-args', () => ({
 
 import path = require('path');
 
-import {parseArgs} from '../../../util/args';
+import {parseIEProcessArgs, parseIfDiffArgs} from '../../../util/args';
 import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
 
 const {CliInputError} = ERRORS;
 
-const {MANIFEST_IS_MISSING, FILE_IS_NOT_YAML} = STRINGS;
+const {
+  MANIFEST_IS_MISSING,
+  FILE_IS_NOT_YAML,
+  TARGET_IS_NOT_YAML,
+  INVALID_TARGET,
+  SOURCE_IS_NOT_YAML,
+} = STRINGS;
 
 describe('util/args: ', () => {
   const originalEnv = process.env;
 
-  describe('parseArgs(): ', () => {
+  describe('parseIEProcessArgs(): ', () => {
     it('throws error if there is no argument passed.', () => {
       expect.assertions(5);
 
       process.env.result = 'error'; // used for mocking
 
       try {
-        parseArgs();
+        parseIEProcessArgs();
       } catch (error) {
         expect(error).toEqual(MANIFEST_IS_MISSING);
       }
@@ -75,7 +104,7 @@ describe('util/args: ', () => {
       process.env.result = 'throw-error-object';
 
       try {
-        parseArgs();
+        parseIEProcessArgs();
       } catch (error) {
         expect(error).toBeInstanceOf(CliInputError);
         expect(error).toEqual(new CliInputError(MANIFEST_IS_MISSING));
@@ -84,7 +113,7 @@ describe('util/args: ', () => {
       process.env.result = 'manifest-is-missing';
 
       try {
-        parseArgs();
+        parseIEProcessArgs();
       } catch (error) {
         expect(error).toBeInstanceOf(CliInputError);
         expect(error).toEqual(new CliInputError(MANIFEST_IS_MISSING));
@@ -96,7 +125,7 @@ describe('util/args: ', () => {
 
       process.env.result = 'manifest';
 
-      const result = parseArgs();
+      const result = parseIEProcessArgs();
       const manifestPath = 'manifest-mock.yml';
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
@@ -113,7 +142,7 @@ describe('util/args: ', () => {
 
       process.env.result = 'absolute-path';
 
-      const result = parseArgs();
+      const result = parseIEProcessArgs();
       const manifestPath = 'manifest-mock.yml';
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
@@ -128,7 +157,7 @@ describe('util/args: ', () => {
 
       process.env.result = 'override-params';
 
-      const result = parseArgs();
+      const result = parseIEProcessArgs();
       const manifestPath = 'manifest-mock.yml';
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
@@ -144,7 +173,7 @@ describe('util/args: ', () => {
 
       process.env.result = 'manifest-output';
 
-      const result = parseArgs();
+      const result = parseIEProcessArgs();
       const manifestPath = 'manifest-mock.yml';
       const outputPath = 'output-mock.yml';
       const expectedResult = {
@@ -164,10 +193,108 @@ describe('util/args: ', () => {
       process.env.result = 'not-yaml';
 
       try {
-        parseArgs();
+        parseIEProcessArgs();
       } catch (error) {
         expect(error).toBeInstanceOf(CliInputError);
         expect(error).toEqual(new CliInputError(FILE_IS_NOT_YAML));
+      }
+    });
+
+    it('returns stdout and manifest.', () => {
+      expect.assertions(1);
+
+      process.env.result = 'stdout';
+      const manifestPath = 'manifest-mock.yaml';
+
+      const response = parseIEProcessArgs();
+      const expectedResult = {
+        inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
+        outputOptions: {
+          stdout: true,
+        },
+      };
+
+      expect(response).toEqual(expectedResult);
+    });
+  });
+
+  describe('parseIfDiffArgs(): ', () => {
+    it('throws error if `target` is missing.', () => {
+      expect.assertions(1);
+
+      try {
+        parseIfDiffArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliInputError(INVALID_TARGET));
+        }
+      }
+    });
+
+    it('throws error if `target` is not a yaml.', () => {
+      process.env.result = 'target-is-not-yaml';
+      expect.assertions(1);
+
+      try {
+        parseIfDiffArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliInputError(TARGET_IS_NOT_YAML));
+        }
+      }
+    });
+
+    it('returns `target`s full path.', () => {
+      process.env.result = 'only-target';
+      expect.assertions(1);
+
+      const response = parseIfDiffArgs();
+      expect(response).toHaveProperty('targetPath');
+    });
+
+    it('throws error if source is not a yaml.', () => {
+      process.env.result = 'source-is-not-yaml';
+      expect.assertions(1);
+
+      try {
+        parseIfDiffArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliInputError(SOURCE_IS_NOT_YAML));
+        }
+      }
+    });
+
+    it('returns target and source full paths.', () => {
+      process.env.result = 'target-source';
+      expect.assertions(2);
+
+      const response = parseIfDiffArgs();
+      expect(response).toHaveProperty('targetPath');
+      expect(response).toHaveProperty('sourcePath');
+    });
+
+    it('throws error if parsing failed.', () => {
+      process.env.result = 'diff-throw-error';
+      expect.assertions(1);
+
+      try {
+        parseIfDiffArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliInputError('mock-error'));
+        }
+      }
+    });
+
+    it('throws error if parsing failed (not instance of error).', () => {
+      process.env.result = 'diff-throw';
+      expect.assertions(1);
+
+      try {
+        parseIfDiffArgs();
+      } catch (error) {
+        expect(error).toEqual('mock-error');
       }
     });
   });

@@ -15,7 +15,7 @@ import {Context} from '../types/manifest';
 import {Options} from '../types/process-args';
 
 const {ExhaustError} = ERRORS;
-const {INVALID_EXHAUST_PLUGIN} = STRINGS;
+const {INVALID_EXHAUST_PLUGIN, PREPARING_OUTPUT_DATA} = STRINGS;
 
 /**
  * Initialize exhaust plugins based on the provided config
@@ -48,6 +48,8 @@ export const exhaust = async (
   context: Context,
   outputOptions: Options
 ) => {
+  console.debug(PREPARING_OUTPUT_DATA);
+
   const outputPlugins = context.initialize.outputs;
 
   if (outputOptions.stdout) {

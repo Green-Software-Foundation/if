@@ -7,20 +7,24 @@ import {initialize} from './lib/initialize';
 import {load} from './lib/load';
 import {parameterize} from './lib/parameterize';
 
-import {parseArgs} from './util/args';
+import {debugLogger} from './util/debug-logger';
+import {parseIEProcessArgs} from './util/args';
 import {andHandle} from './util/helpers';
 import {logger} from './util/logger';
 import {validateManifest} from './util/validations';
 
 import {STRINGS} from './config';
 
-const {DISCLAIMER_MESSAGE} = STRINGS;
+const {DISCLAIMER_MESSAGE, EXITING_IF, STARTING_IF} = STRINGS;
 
 const impactEngine = async () => {
-  const options = parseArgs();
+  const options = parseIEProcessArgs();
+  const {inputPath, paramPath, outputOptions, debug} = options;
+
+  debugLogger.overrideConsoleMethods(!!debug);
 
   logger.info(DISCLAIMER_MESSAGE);
-  const {inputPath, paramPath, outputOptions} = options;
+  console.info(STARTING_IF);
 
   const {rawManifest, parameters} = await load(inputPath, paramPath);
   const envManifest = await injectEnvironment(rawManifest);
@@ -34,8 +38,8 @@ const impactEngine = async () => {
     await exhaust(aggregatedTree, context, outputOptions);
   } catch (error) {
     if (error instanceof Error) {
-      envManifest.execution.status = 'fail';
-      envManifest.execution.error = error.toString();
+      envManifest.execution!.status = 'fail';
+      envManifest.execution!.error = error.toString();
       logger.error(error);
       const {tree, ...context} = envManifest;
 
@@ -44,6 +48,7 @@ const impactEngine = async () => {
       }
     }
   }
+  console.info(EXITING_IF);
 };
 
 impactEngine().catch(andHandle);

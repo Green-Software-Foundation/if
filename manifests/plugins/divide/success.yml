@@ -2,14 +2,14 @@ name: divide
 description: success path
 tags:
 initialize:
-  outputs: ['yaml']
+#  outputs: ['yaml']
   plugins:
     cloud-metadata:
       method: CloudMetadata
       path: "@grnsft/if-plugins"
     divide:
       method: Divide
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       global-config:
         numerator: vcpus-allocated
         denominator: 2

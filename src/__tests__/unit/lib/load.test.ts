@@ -1,4 +1,4 @@
-jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
+jest.mock('../../../util/json', () => require('../../../__mocks__/json'));
 jest.mock(
   'mockavizta',
   () => ({
@@ -12,64 +12,52 @@ jest.mock(
   }),
   {virtual: true}
 );
+jest.mock('../../../util/helpers', () => ({
+  parseManifestFromStdin: () => {
+    if (process.env.readline === 'valid-source') {
+      return `
+name: 'mock-name'
+description: 'mock-description'
+`;
+    }
+    return '';
+  },
+}));
+jest.mock('../../../util/yaml', () => ({
+  openYamlFileAsObject: (path: string) => {
+    switch (path) {
+      case 'load-default.yml':
+        return 'raw-manifest';
+      case 'source-path.yml':
+        return 'source-manifest';
+      case 'target-path.yml':
+        return 'target-manifest';
+      default:
+        return '';
+    }
+  },
+}));
 
-import {load} from '../../../lib/load';
+import {load, loadIfDiffFiles} from '../../../lib/load';
 
 import {PARAMETERS} from '../../../config';
 
 import {PluginParams} from '../../../types/interface';
 
+import {STRINGS} from '../../../config';
+
+const {INVALID_SOURCE} = STRINGS;
+
 describe('lib/load: ', () => {
   describe('load(): ', () => {
     it('loads yaml with default parameters.', async () => {
-      const inputPath = 'mock.yaml';
+      const inputPath = 'load-default.yml';
       const paramPath = undefined;
 
       const result = await load(inputPath, paramPath);
 
       const expectedValue = {
-        rawManifest: {
-          name: 'gsf-demo',
-          description: 'Hello',
-          tags: {
-            kind: 'web',
-            complexity: 'moderate',
-            category: 'cloud',
-          },
-          initialize: {
-            plugins: {
-              mockavizta: {
-                path: 'mockavizta',
-                method: 'Mockavizta',
-              },
-            },
-          },
-          tree: {
-            children: {
-              'front-end': {
-                pipeline: ['boavizta-cpu'],
-                config: {
-                  'boavizta-cpu': {
-                    'core-units': 24,
-                    processor: 'Intel® Core™ i7-1185G7',
-                  },
-                },
-                inputs: [
-                  {
-                    timestamp: '2023-07-06T00:00',
-                    duration: 3600,
-                    'cpu/utilization': 18.392,
-                  },
-                  {
-                    timestamp: '2023-08-06T00:00',
-                    duration: 3600,
-                    'cpu/utilization': 16,
-                  },
-                ],
-              },
-            },
-          },
-        },
+        rawManifest: 'raw-manifest',
         parameters: PARAMETERS,
       };
 
@@ -77,54 +65,13 @@ describe('lib/load: ', () => {
     });
 
     it('loads yaml with custom parameters.', async () => {
-      const inputPath = 'param-mock.yaml';
+      const inputPath = 'load-default.yml';
       const paramPath = 'param-mock.json';
 
       const result = await load(inputPath, paramPath);
 
       const expectedValue = {
-        rawManifest: {
-          name: 'gsf-demo',
-          description: 'Hello',
-          tags: {
-            kind: 'web',
-            complexity: 'moderate',
-            category: 'cloud',
-          },
-          initialize: {
-            plugins: {
-              mockavizta: {
-                path: 'mockavizta',
-                method: 'Mockavizta',
-              },
-            },
-          },
-          tree: {
-            children: {
-              'front-end': {
-                pipeline: ['boavizta-cpu'],
-                config: {
-                  'boavizta-cpu': {
-                    'core-units': 24,
-                    processor: 'Intel® Core™ i7-1185G7',
-                  },
-                },
-                inputs: [
-                  {
-                    timestamp: '2023-07-06T00:00',
-                    duration: 3600,
-                    'cpu/utilization': 18.392,
-                  },
-                  {
-                    timestamp: '2023-08-06T00:00',
-                    duration: 3600,
-                    'cpu/utilization': 16,
-                  },
-                ],
-              },
-            },
-          },
-        },
+        rawManifest: 'raw-manifest',
         parameters: {
           'mock-carbon': {
             description: 'an amount of carbon emitted into the atmosphere',
@@ -140,6 +87,53 @@ describe('lib/load: ', () => {
       };
 
       expect(result).toEqual(expectedValue);
+    });
+  });
+
+  describe('loadIfDiffFiles(): ', () => {
+    it('rejects with invalid source error.', async () => {
+      const params = {
+        sourcePath: '',
+        targetPath: '',
+      };
+
+      try {
+        await loadIfDiffFiles(params);
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error.message).toBe(INVALID_SOURCE);
+        }
+      }
+    });
+
+    it('successfully loads target, and source from stdin.', async () => {
+      process.env.readline = 'valid-source';
+      const params = {
+        targetPath: 'target-path.yml',
+      };
+
+      const response = await loadIfDiffFiles(params);
+      const expectedSource = {
+        name: 'mock-name',
+        description: 'mock-description',
+      };
+      const expectedTarget = 'target-manifest';
+      expect(response.rawSourceManifest).toEqual(expectedSource);
+      expect(response.rawTargetManifest).toEqual(expectedTarget);
+    });
+
+    it('successfully loads target, and source from stdin.', async () => {
+      const params = {
+        targetPath: 'target-path.yml',
+        sourcePath: 'source-path.yml',
+      };
+
+      const response = await loadIfDiffFiles(params);
+      const expectedSource = 'source-manifest';
+      const expectedTarget = 'target-manifest';
+      expect(response.rawSourceManifest).toEqual(expectedSource);
+      expect(response.rawTargetManifest).toEqual(expectedTarget);
     });
   });
 });

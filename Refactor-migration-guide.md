@@ -116,9 +116,9 @@ There have also been some changes to the structure of manifest files. Some of th
     For example:
     
     ```yaml
-    "sci-m":
-      path: "@grnsft/if-plugins"
-      method: SciM
+    "sci-embodied":
+      path: "builtin"
+      method: SciEmbodied
     ```
 
 - **Global config**
@@ -150,7 +150,7 @@ There have also been some changes to the structure of manifest files. Some of th
           pipeline:
             - teads-curve
             - sci-e
-            - sci-m
+            - sci-embodied
             - sci-o
             - time-sync
             - sci
@@ -174,7 +174,7 @@ There have also been some changes to the structure of manifest files. Some of th
           pipeline:
             - teads-curve
             - sci-e
-            - sci-m
+            - sci-embodied
             - sci-o
             - time-sync
             - sci
@@ -254,7 +254,7 @@ tree:
       pipeline:
         - teads-curve
         - sci-e
-        - sci-m
+        - sci-embodied
         - sci-o
         - time-sync
         - group-by

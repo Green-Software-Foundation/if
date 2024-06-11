@@ -9,21 +9,21 @@ initialize:
       global-config:
         interpolation: spline
     "sum":
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       method: Sum
       global-config:
         input-parameters:
           - cpu/energy
           - network/energy
         output-parameter: energy
-    "sci-m":
-      path: "@grnsft/if-plugins"
-      method: SciM
+    "sci-embodied":
+      path: "builtin"
+      method: SciEmbodied
     "sci-o":
       path: "@grnsft/if-plugins"
       method: SciO
     "sci":
-      path: "@grnsft/if-plugins"
+      path: "builtin"
       method: Sci
       global-config:
         functional-unit: ""
@@ -43,7 +43,7 @@ tree:
         - teads-curve
         - sci-o
         - sum
-        - sci-m
+        - sci-embodied
         - time-sync
         - sci
       config:

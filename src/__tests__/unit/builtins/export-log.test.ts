@@ -9,10 +9,12 @@ describe('builtins/export-log:', () => {
       const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
       await ExportLog().execute(tree, context);
 
+      const expectedMessage = `# start
+${YAML.dump({...context, tree}, {noRefs: true})}
+# end`;
+
       expect(mockConsoleLog).toHaveBeenCalled();
-      expect(mockConsoleLog).toHaveBeenCalledWith(
-        YAML.dump({...context, tree}, {noRefs: true})
-      );
+      expect(mockConsoleLog).toHaveBeenCalledWith(expectedMessage);
 
       mockConsoleLog.mockRestore();
     });
@@ -21,10 +23,12 @@ describe('builtins/export-log:', () => {
       const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
       await ExportLog().execute({}, context);
 
+      const expectedMessage = `# start
+${YAML.dump({...context, tree: {}}, {noRefs: true})}
+# end`;
+
       expect(mockConsoleLog).toHaveBeenCalled();
-      expect(mockConsoleLog).toHaveBeenCalledWith(
-        YAML.dump({...context, tree: {}}, {noRefs: true})
-      );
+      expect(mockConsoleLog).toHaveBeenCalledWith(expectedMessage);
 
       mockConsoleLog.mockRestore();
     });

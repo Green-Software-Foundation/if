@@ -2,11 +2,13 @@ import {GroupByConfig} from './group-by';
 
 export type PluginParams = Record<string, any>;
 
+export type ConfigParams = Record<string, any>;
+
 export type ExecutePlugin = {
   execute: (
     inputs: PluginParams[],
     config?: Record<string, any>
-  ) => PluginParams[];
+  ) => PluginParams[] | Promise<PluginParams[]>;
   metadata: {
     kind: string;
   };

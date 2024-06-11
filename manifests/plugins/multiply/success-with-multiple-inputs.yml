@@ -1,0 +1,32 @@
+name: multiply
+description: a manifest demonstrating how to use the multiply feature
+tags:
+initialize:
+  outputs: ['yaml']
+  plugins:
+    multiply:
+      method: Multiply
+      path: "builtin"
+      global-config:
+        input-parameters: ["cpu/energy", "network/energy"]
+        output-parameter: "energy-product"
+tree:
+  children:
+    child:
+      pipeline:
+        - multiply
+      config:
+        sum: 
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          cpu/energy: 0.001
+          network/energy: 0.002
+        - timestamp: 2023-08-06T10:00
+          duration: 3600
+          cpu/energy: 0.005
+          network/energy: -0.002
+        - timestamp: 2023-08-06T10:00
+          duration: 3600
+          cpu/energy: 0.005
+          network/energy: 0
