@@ -6,7 +6,7 @@ import {STRINGS} from '../config';
 import {Context} from '../types/manifest';
 
 const {ExhaustOutputArgError} = ERRORS;
-const {OUTPUT_REQUIRED} = STRINGS;
+const {OUTPUT_REQUIRED, EXPORTING_TO_YAML_FILE} = STRINGS;
 
 export const ExportYaml = () => {
   /** Takes string before hashtag. */
@@ -25,6 +25,8 @@ export const ExportYaml = () => {
       tree,
     };
     const path = stripHashtag(outputPath);
+
+    console.debug(EXPORTING_TO_YAML_FILE(path));
 
     await saveYamlFileAs(outputFile, `${path}.yaml`);
   };

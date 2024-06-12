@@ -3,16 +3,6 @@ import {checkIfEqual, oneIsPrimitive} from '../util/helpers';
 import {Difference} from '../types/lib/compare';
 
 /**
- * Returns `status` and `exception` properties from execution context.
- */
-const omitExecutionParams = (object: any) => ({
-  status: object.status,
-  ...(object.error && {
-    error: object.error,
-  }),
-});
-
-/**
  * 1. If objects are not of the same type or are primitive types, compares directly.
  * 2. Gets the keys from both objects.
  * 3. If both are arrays, checks their elements.
@@ -36,6 +26,25 @@ export const compare = (source: any, target: any, path = ''): Difference => {
 
   const allKeys = new Set([...keys1, ...keys2]);
 
+  if (path === '') {
+    allKeys.delete('name');
+    allKeys.delete('description');
+    allKeys.delete('tags');
+  }
+
+  if (path === 'initialize') {
+    allKeys.delete('outputs');
+  }
+
+  if (path === 'execution') {
+    const whitelist = ['status', 'error'];
+    allKeys.forEach(value => {
+      if (!whitelist.includes(value)) {
+        allKeys.delete(value);
+      }
+    });
+  }
+
   if (Array.isArray(source) && Array.isArray(target)) {
     source.forEach((_record, i) => {
       compare(source[i], target[i], path ? `${path}[${i}]` : `${i}`);
@@ -43,19 +52,11 @@ export const compare = (source: any, target: any, path = ''): Difference => {
   }
 
   for (const key of allKeys) {
-    let result: any = {};
-
-    if (key === 'execution') {
-      if (source[key] && target[key]) {
-        result = compare(
-          omitExecutionParams(source[key]),
-          omitExecutionParams(target[key]),
-          path ? `${path}.${key}` : key
-        );
-      }
-    } else {
-      result = compare(source[key], target[key], path ? `${path}.${key}` : key);
-    }
+    const result = compare(
+      source[key],
+      target[key],
+      path ? `${path}.${key}` : key
+    );
 
     if (Object.keys(result).length) {
       return result;

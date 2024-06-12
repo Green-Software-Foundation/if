@@ -1,8 +1,13 @@
+import {debugLogger} from '../util/debug-logger';
 import {mergeObjects} from '../util/helpers';
 
 import {ComputeParams, Node, Params} from '../types/compute';
 import {PluginParams, isExecute, isGroupBy} from '../types/interface';
 import {GroupByConfig} from '../types/group-by';
+
+import {STRINGS} from '../config/strings';
+
+const {MERGING_DEFAULTS_WITH_INPUT_DATA, COMPUTING_PIPELINE_FOR_NODE} = STRINGS;
 
 /**
  * Traverses all child nodes based on children grouping.
@@ -27,6 +32,8 @@ const mergeDefaults = (
 
     return response;
   }
+
+  console.debug(MERGING_DEFAULTS_WITH_INPUT_DATA);
 
   return defaults ? [defaults] : [];
 };
@@ -65,8 +72,13 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
     const plugin = params.pluginStorage.get(pluginName);
     const nodeConfig = config && config[pluginName];
 
+    console.debug(COMPUTING_PIPELINE_FOR_NODE(pluginName));
+    debugLogger.setExecutingPluginName(pluginName);
+
     if (isExecute(plugin)) {
       inputStorage = await plugin.execute(inputStorage, nodeConfig);
+      debugLogger.setExecutingPluginName();
+
       node.outputs = inputStorage;
     }
 
@@ -84,6 +96,8 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
         defaults,
         config,
       });
+
+      debugLogger.setExecutingPluginName();
 
       break;
     }

@@ -8,7 +8,7 @@ import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
 import {Context} from '../types/manifest';
 
 const {ExhaustOutputArgError, WriteFileError} = ERRORS;
-const {OUTPUT_REQUIRED, WRITE_CSV_ERROR} = STRINGS;
+const {OUTPUT_REQUIRED, WRITE_CSV_ERROR, EXPORTING_RAW_CSV_FILE} = STRINGS;
 
 export const ExportCSVRaw = (): ExhaustPluginInterface => {
   /**
@@ -141,6 +141,8 @@ export const ExportCSVRaw = (): ExhaustPluginInterface => {
     if (!outputPath) {
       throw new ExhaustOutputArgError(OUTPUT_REQUIRED);
     }
+
+    console.debug(EXPORTING_RAW_CSV_FILE(outputPath));
 
     const [extractredFlatMap, extractedHeaders] =
       extractFlatMapAndHeaders(tree);

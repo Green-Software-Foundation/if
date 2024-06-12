@@ -18,8 +18,15 @@ const {
 } = ERRORS;
 
 const {GITHUB_PATH, NATIVE_PLUGIN} = CONFIG;
-const {MISSING_METHOD, MISSING_PATH, NOT_NATIVE_PLUGIN, INVALID_MODULE_PATH} =
-  STRINGS;
+const {
+  MISSING_METHOD,
+  MISSING_PATH,
+  NOT_NATIVE_PLUGIN,
+  INVALID_MODULE_PATH,
+  LOADING_PLUGIN_FROM_PATH,
+  INITIALIZING_PLUGIN,
+  INITIALIZING_PLUGINS,
+} = STRINGS;
 
 /**
  * Imports module by given `path`.
@@ -47,6 +54,8 @@ const importAndVerifyModule = async (method: string, path: string) => {
  * Imports module, then checks if it's a valid plugin.
  */
 const handModule = (method: string, path: string) => {
+  console.debug(LOADING_PLUGIN_FROM_PATH(method, path));
+
   if (path === 'builtin') {
     path = pathLib.normalize(`${__dirname}/../builtins`);
   } else {
@@ -71,6 +80,8 @@ const initPlugin = async (
 ): Promise<PluginInterface> => {
   const {method, path, 'global-config': globalConfig} = initPluginParams;
 
+  console.debug(INITIALIZING_PLUGIN(method));
+
   if (!method) {
     throw new MissingPluginMethodError(MISSING_METHOD);
   }
@@ -90,6 +101,8 @@ const initPlugin = async (
 export const initialize = async (
   plugins: GlobalPlugins
 ): Promise<PluginStorageInterface> => {
+  console.debug(INITIALIZING_PLUGINS);
+
   const storage = pluginStorage();
 
   for await (const pluginName of Object.keys(plugins)) {
