@@ -6,7 +6,11 @@ import {Manifest} from '../types/manifest';
 import {NpmListResponse, PackageDependency} from '../types/environment';
 import {osInfo} from '../util/os-checker';
 
+import {STRINGS} from '../config/strings';
+
 const packageJson = require('../../package.json');
+
+const {CAPTURING_RUNTIME_ENVIRONMENT_DATA} = STRINGS;
 
 /**
  * 1. Gets the high-resolution real time when the application starts.
@@ -53,9 +57,14 @@ const flattenDependencies = (dependencies: [string, PackageDependency][]) =>
 const listDependencies = async () => {
   const {stdout} = await execPromise('npm list --json');
   const npmListResponse: NpmListResponse = JSON.parse(stdout);
-  const dependencies = Object.entries(npmListResponse.dependencies);
 
-  return flattenDependencies(dependencies);
+  if (npmListResponse.dependencies) {
+    const dependencies = Object.entries(npmListResponse.dependencies);
+
+    return flattenDependencies(dependencies);
+  }
+
+  return [];
 };
 
 /**
@@ -64,6 +73,8 @@ const listDependencies = async () => {
 export const injectEnvironment = async (
   manifest: Manifest
 ): Promise<Manifest> => {
+  console.debug(CAPTURING_RUNTIME_ENVIRONMENT_DATA);
+
   const dependencies = await listDependencies();
   const info = await osInfo();
   const dateTime = `${getProcessStartingTimestamp()} (UTC)`;

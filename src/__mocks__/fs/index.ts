@@ -24,6 +24,20 @@ export const readFile = async (filePath: string) => {
     return JSON.stringify(filePath);
   }
 
+  if (filePath.includes('fail.csv')) {
+    throw new Error('file not found');
+  }
+
+  /**
+   * Used for csv lookup plugin.
+   */
+  if (filePath.includes('.csv')) {
+    return `
+cpu-cores-available,cpu-cores-utilized,cpu-manufacturer,cpu-model-name,cpu-tdp,gpu-count,gpu-model-name,Hardware Information on AWS Documentation & Comments,instance-class,instance-storage,memory-available,platform-memory,release-date,storage-drives
+16,8,AWS,AWS Graviton,150.00,N/A,N/A,AWS Graviton (ARM),a1.2xlarge,EBS-Only,16,32,November 2018,
+16,16,AWS,AWS Graviton,150.00,N/A,N/A,AWS Graviton (ARM),a1.4xlarge,EBS-Only,32,32,November 2018,`;
+  }
+
   /** mock for util/yaml */
   return `
   name: gsf-demo

@@ -27,7 +27,6 @@ module.exports = {
         'package',
         'config',
         'mocks',
-        'examples',
         '.github',
         '.husky',
         'scripts',

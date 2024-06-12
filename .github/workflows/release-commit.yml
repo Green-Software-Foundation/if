@@ -4,28 +4,11 @@ on:
     types: [published]
 
 env: 
-  PR_BRANCH_NAME: release-${{github.event.release.tag_name}}
+  PR_BRANCH_NAME: release-${{ github.event.release.tag_name }}
+  PRE_RELEASE: ${{ github.event.release.prerelease}}
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run unit tests
-        run: npm test
-
-  create-release-commit:
-    needs: build
+  release-commit-pr:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -42,25 +25,37 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run unit tests
+        run: npm test
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Initialize git user email
         run: git config --global user.email "${{ vars.RELEASE_USER_EMAIL }}"
 
       - name: Initialize git user name
         run: git config --global user.name "Release commit workflow"
 
-      - name: Create release branch
+      - name: Fetch latest changes
+        run: git fetch --all
+
+      - name: Checkout to release branch if it's not a pre-release
+        if: ${{!env.PRE_RELEASE}}
+        run: git checkout ${{ vars.RELEASE_BRANCH_NAME }}
+
+      - name: Checkout to current release branch to create PR from
         run: |
           git checkout -b $PR_BRANCH_NAME
           git push --set-upstream origin $PR_BRANCH_NAME
-          echo "branch=$PR_BRANCH_NAME" >> $GITHUB_ENV
         
       - name: Bump version and push changes using release-it
         run: |
-          npm run release -- --ci ${{github.event.release.tag_name}}
+          npm run release -- --ci ${{ github.event.release.tag_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create pull request
-        run: gh pr create -B ${{ github.event.repository.default_branch }} -H $PR_BRANCH_NAME --title "Release ${{github.event.release.tag_name}}" --body "${{github.event.release.body}}"
+        run: gh pr create -B ${{ vars.RELEASE_BRANCH_NAME }} -H $PR_BRANCH_NAME --title "Release ${{github.event.release.tag_name}}" --body "${{github.event.release.body}}"
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
