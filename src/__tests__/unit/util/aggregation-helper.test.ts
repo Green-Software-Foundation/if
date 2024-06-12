@@ -38,7 +38,6 @@ describe('util/aggregation-helper: ', () => {
       try {
         aggregateInputsIntoOne(inputs, metrics, isTemporal);
       } catch (error) {
-        console.log(error);
         expect(error).toBeInstanceOf(MissingAggregationParamError);
 
         if (error instanceof MissingAggregationParamError) {
