@@ -193,7 +193,6 @@ export const CSVLookup = (globalConfig: any): ExecutePlugin => {
     const {filepath, query, output} = safeGlobalConfig;
 
     const file = await retrieveFile(filepath);
-    console.log(file);
     const parsedCSV = parseCSVFile(file);
 
     return inputs.map(input => {
