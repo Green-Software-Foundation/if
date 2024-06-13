@@ -1,3 +1,5 @@
+import {ERRORS} from '@grnsft/if-core';
+
 /**
  * @todo This is temporary solution, will be refactored to support dynamic plugins.
  */
@@ -6,7 +8,6 @@ import {ExportCSVRaw} from '../builtins/export-csv-raw';
 import {ExportLog} from '../builtins/export-log';
 import {ExportYaml} from '../builtins/export-yaml';
 
-import {ERRORS} from '../util/errors';
 
 import {STRINGS} from '../config';
 

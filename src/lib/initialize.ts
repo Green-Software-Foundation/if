@@ -1,6 +1,7 @@
-import pathLib = require('path');
+import * as path from 'node:path';
 
-import {ERRORS} from '../util/errors';
+import {ERRORS} from '@grnsft/if-core';
+
 import {logger} from '../util/logger';
 import {memoizedLog} from '../util/log-memoize';
 import {pluginStorage} from '../util/plugin-storage';
@@ -53,23 +54,23 @@ const importAndVerifyModule = async (method: string, path: string) => {
  * Then checks if `path` is starting with github, then grabs the repository name.
  * Imports module, then checks if it's a valid plugin.
  */
-const handModule = (method: string, path: string) => {
-  console.debug(LOADING_PLUGIN_FROM_PATH(method, path));
+const handModule = (method: string, pluginPath: string) => {
+  console.debug(LOADING_PLUGIN_FROM_PATH(method, pluginPath));
 
-  if (path === 'builtin') {
-    path = pathLib.normalize(`${__dirname}/../builtins`);
+  if (pluginPath === 'builtin') {
+    pluginPath = path.normalize(`${__dirname}/../builtins`);
   } else {
-    if (path?.startsWith(GITHUB_PATH)) {
-      const parts = path.split('/');
-      path = parts[parts.length - 1];
+    if (pluginPath?.startsWith(GITHUB_PATH)) {
+      const parts = pluginPath.split('/');
+      pluginPath = parts[parts.length - 1];
     }
 
-    if (!path.includes(NATIVE_PLUGIN)) {
-      memoizedLog(logger.warn, NOT_NATIVE_PLUGIN(path));
+    if (!pluginPath.includes(NATIVE_PLUGIN)) {
+      memoizedLog(logger.warn, NOT_NATIVE_PLUGIN(pluginPath));
     }
   }
 
-  return importAndVerifyModule(method, path);
+  return importAndVerifyModule(method, pluginPath);
 };
 
 /**
