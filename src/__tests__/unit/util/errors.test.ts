@@ -1,4 +1,4 @@
-import {ERRORS} from '../../../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 
 describe('util/errors: ', () => {
   describe('ERRORS: ', () => {

@@ -69,10 +69,10 @@ jest.mock('ts-command-line-args', () => ({
   },
 }));
 
-import path = require('path');
+import * as path from 'node:path';
+import {ERRORS} from '@grnsft/if-core';
 
 import {parseIEProcessArgs, parseIfDiffArgs} from '../../../util/args';
-import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
 

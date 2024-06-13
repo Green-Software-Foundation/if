@@ -10,6 +10,7 @@ jest.mock('../../../util/logger', () => ({
     error: mockError,
   },
 }));
+import {ERRORS} from '@grnsft/if-core';
 import {
   andHandle,
   checkIfEqual,
@@ -18,7 +19,6 @@ import {
   oneIsPrimitive,
   parseManifestFromStdin,
 } from '../../../util/helpers';
-import {ERRORS} from '../../../util/errors';
 import {Difference} from '../../../types/lib/compare';
 
 const {WriteFileError} = ERRORS;

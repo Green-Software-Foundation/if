@@ -1,5 +1,6 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {pluginStorage} from '../../../util/plugin-storage';
-import {ERRORS} from '../../../util/errors';
 
 const {PluginInitializationError} = ERRORS;
 
