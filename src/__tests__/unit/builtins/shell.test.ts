@@ -4,7 +4,6 @@ import {ERRORS} from '@grnsft/if-core';
 
 import {Shell} from '../../../builtins/shell';
 
-
 const {InputValidationError, ProcessExecutionError} = ERRORS;
 
 jest.mock('child_process');

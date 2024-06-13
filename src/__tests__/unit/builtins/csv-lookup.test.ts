@@ -8,7 +8,6 @@ import {CSVLookup} from '../../../builtins';
 
 import {STRINGS} from '../../../config';
 
-
 const {
   GlobalConfigError,
   ReadFileError,
