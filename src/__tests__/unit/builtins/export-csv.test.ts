@@ -1,9 +1,9 @@
 import * as fs from 'fs/promises';
 import {stringify} from 'csv-stringify/sync';
 import {jest} from '@jest/globals';
+import {ERRORS} from '@grnsft/if-core';
 
 import {ExportCSV} from '../../../builtins/export-csv';
-import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
 

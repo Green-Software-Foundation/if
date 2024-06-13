@@ -1,5 +1,6 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {SciEmbodied} from '../../../builtins/sci-embodied';
-import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
 

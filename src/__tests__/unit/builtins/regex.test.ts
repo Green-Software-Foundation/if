@@ -1,6 +1,7 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {Regex} from '../../../builtins/regex';
 
-import {ERRORS} from '../../../util/errors';
 import {STRINGS} from '../../../config';
 
 const {GlobalConfigError, MissingInputDataError, RegexMismatchError} = ERRORS;

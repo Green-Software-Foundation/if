@@ -1,5 +1,6 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {ExportYaml} from '../../../builtins/export-yaml';
-import {ERRORS} from '../../../util/errors';
 import {saveYamlFileAs} from '../../../util/yaml';
 
 import {STRINGS} from '../../../config';

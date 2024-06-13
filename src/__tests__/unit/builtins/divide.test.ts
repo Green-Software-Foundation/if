@@ -1,6 +1,7 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {Divide} from '../../../builtins';
 
-import {ERRORS} from '../../../util/errors';
 import {STRINGS} from '../../../config';
 
 const {InputValidationError, GlobalConfigError, MissingInputDataError} = ERRORS;

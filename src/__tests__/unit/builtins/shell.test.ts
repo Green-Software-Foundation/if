@@ -1,9 +1,9 @@
 import {spawnSync} from 'child_process';
 import {loadAll} from 'js-yaml';
+import {ERRORS} from '@grnsft/if-core';
 
 import {Shell} from '../../../builtins/shell';
 
-import {ERRORS} from '../../../util/errors';
 
 const {InputValidationError, ProcessExecutionError} = ERRORS;
 

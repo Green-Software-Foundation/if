@@ -2,12 +2,12 @@ jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
 
 import axios from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter';
+import {ERRORS} from '@grnsft/if-core';
 
 import {CSVLookup} from '../../../builtins';
 
 import {STRINGS} from '../../../config';
 
-import {ERRORS} from '../../../util/errors';
 
 const {
   GlobalConfigError,
