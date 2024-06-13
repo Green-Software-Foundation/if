@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 jest.mock('fs', () => require('../../../__mocks__/fs'));
 
-import {exhaust} from '../../../lib/exhaust';
+import {ERRORS} from '@grnsft/if-core';
 
-import {ERRORS} from '../../../util/errors';
+import {exhaust} from '../../../lib/exhaust';
 
 import {STRINGS} from '../../../config';
 
