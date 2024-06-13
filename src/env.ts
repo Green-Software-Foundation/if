@@ -23,17 +23,15 @@ const {
   FAILURE_MESSAGE_DEPENDENCIES,
 } = IF_ENV;
 
-const FOLDER_NAME = 'if-environment';
-
 const IfEnv = async () => {
   const commandArgs = await parseIfEnvArgs();
   const options: EnvironmentOptions = {
-    folderPath: path.resolve(__dirname, FOLDER_NAME),
-    install: true,
+    folderPath: __dirname,
+    install: !!commandArgs.install,
     dependencies: {'@grnsft/if': packageJson.version},
   };
 
-  if (commandArgs) {
+  if (commandArgs && commandArgs.manifest) {
     const {folderPath, install, dependencies} =
       await getOptionsFromArgs(commandArgs);
     options.folderPath = folderPath;
@@ -43,7 +41,7 @@ const IfEnv = async () => {
 
   await initializeAndInstallLibs(options);
 
-  if (!commandArgs) {
+  if (!commandArgs || !commandArgs.manifest) {
     await addTemplateManifest();
   }
 
@@ -152,11 +150,7 @@ const updatePackageJsonDependencies = async (
 const addTemplateManifest = async () => {
   try {
     const templateManifest = path.resolve(__dirname, './env-template.yml');
-    const destinationPath = path.resolve(
-      __dirname,
-      FOLDER_NAME,
-      'manifest.yml'
-    );
+    const destinationPath = path.resolve(__dirname, 'manifest.yml');
 
     const data = await fs.readFile(templateManifest, 'utf-8');
     await fs.writeFile(destinationPath, '', 'utf-8');
