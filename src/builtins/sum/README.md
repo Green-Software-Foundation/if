@@ -85,7 +85,7 @@ tree:
 You can run this example by saving it as `./examples/manifests/sum.yml` and executing the following command from the project root:
 
 ```sh
-ie --manifest ./examples/manifests/sum.yml --output ./examples/outputs/sum.yml
+if-run --manifest ./examples/manifests/sum.yml --output ./examples/outputs/sum.yml
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`.
