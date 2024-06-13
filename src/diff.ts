@@ -4,7 +4,7 @@ import {loadIfDiffFiles} from './lib/load';
 import {compare} from './lib/compare';
 
 import {parseIfDiffArgs} from './util/args';
-import {formatNotMatchingLog} from './util/helpers';
+import {formatNotMatchingLog, parseManifestFromStdin} from './util/helpers';
 import {validateManifest} from './util/validations';
 
 import {CONFIG} from './config';
@@ -14,11 +14,13 @@ const {IF_DIFF} = CONFIG;
 const {SUCCESS_MESSAGE, FAILURE_MESSAGE} = IF_DIFF;
 
 const IfDiff = async () => {
+  const pipedSourceManifest = await parseManifestFromStdin();
   const {sourcePath, targetPath} = parseIfDiffArgs();
 
   const {rawSourceManifest, rawTargetManifest} = await loadIfDiffFiles({
     targetPath,
     sourcePath,
+    pipedSourceManifest,
   });
   const [sourceManifest, targetManifest] = [
     rawSourceManifest,
