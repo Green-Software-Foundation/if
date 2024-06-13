@@ -3,7 +3,6 @@ import * as YAML from 'js-yaml';
 import {ERRORS} from '../util/errors';
 import {openYamlFileAsObject} from '../util/yaml';
 import {readAndParseJson} from '../util/json';
-import {parseManifestFromStdin} from '../util/helpers';
 
 import {PARAMETERS} from '../config';
 import {STRINGS} from '../config';
@@ -41,8 +40,7 @@ export const load = async (inputPath: string, paramPath?: string) => {
  * Loads files to compare. As a source file checks if data is piped and then decides which one to take.
  */
 export const loadIfDiffFiles = async (params: LoadDiffParams) => {
-  const {sourcePath, targetPath} = params;
-  const pipedSourceManifest = await parseManifestFromStdin();
+  const {sourcePath, targetPath, pipedSourceManifest} = params;
 
   if (!sourcePath && !pipedSourceManifest) {
     throw new CliSourceFileError(INVALID_SOURCE);

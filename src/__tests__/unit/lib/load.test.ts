@@ -45,6 +45,8 @@ import {PARAMETERS} from '../../../config';
 import {PluginParams} from '../../../types/interface';
 
 import {STRINGS} from '../../../config';
+import {parseManifestFromStdin} from '../../../util/helpers';
+import {LoadDiffParams} from '../../../types/util/args';
 
 const {INVALID_SOURCE} = STRINGS;
 
@@ -109,8 +111,10 @@ describe('lib/load: ', () => {
 
     it('successfully loads target, and source from stdin.', async () => {
       process.env.readline = 'valid-source';
-      const params = {
+      const piped = await parseManifestFromStdin();
+      const params: LoadDiffParams = {
         targetPath: 'target-path.yml',
+        pipedSourceManifest: piped,
       };
 
       const response = await loadIfDiffFiles(params);
