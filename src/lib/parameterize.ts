@@ -1,12 +1,18 @@
 import {logger} from '../util/logger';
 import {memoizedLog} from '../util/log-memoize';
+import {debugLogger} from '../util/debug-logger';
 
 import {STRINGS, PARAMETERS} from '../config';
 
 import {ManifestParameter} from '../types/manifest';
 import {Parameters} from '../types/parameters';
 
-const {REJECTING_OVERRIDE, UNKNOWN_PARAM} = STRINGS;
+const {
+  REJECTING_OVERRIDE,
+  UNKNOWN_PARAM,
+  SYNCING_PARAMETERS,
+  CHECKING_AGGREGATION_METHOD,
+} = STRINGS;
 
 /**
  * Parameters manager. Provides get aggregation method and combine functionality.
@@ -18,6 +24,9 @@ const Parameterize = () => {
    * Returns aggregation method for given `unitName`. If doesn't exist then returns value `sum`.
    */
   const getAggregationMethod = (unitName: string) => {
+    debugLogger.setExecutingPluginName();
+    memoizedLog(console.debug, CHECKING_AGGREGATION_METHOD(unitName));
+
     if (`${unitName}` in parametersStorage) {
       return parametersStorage[unitName as keyof typeof PARAMETERS].aggregation;
     }
@@ -36,6 +45,8 @@ const Parameterize = () => {
     contextParameters: ManifestParameter[] | null | undefined,
     parameters: Parameters
   ) => {
+    console.debug(SYNCING_PARAMETERS);
+
     if (contextParameters) {
       contextParameters.forEach(param => {
         if (`${param.name}` in parameters) {

@@ -6,7 +6,10 @@ import {ERRORS} from '../util/errors';
 import {Context} from '../types/manifest';
 import {PluginParams} from '../types/interface';
 
+import {STRINGS} from '../config/strings';
+
 const {ExhaustError} = ERRORS;
+const {EXPORTING_TO_CSV_FILE} = STRINGS;
 
 /**
  * Extension to IF that outputs the tree in a CSV format.
@@ -24,6 +27,8 @@ export const ExportCSV = () => {
         'CSV export criteria is not found in output path. Please append it after --output <path>#.'
       );
     }
+
+    console.debug(EXPORTING_TO_CSV_FILE(output));
 
     return {
       output,

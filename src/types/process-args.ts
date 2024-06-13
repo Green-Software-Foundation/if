@@ -3,6 +3,7 @@ export interface IEArgs {
   output?: string;
   'override-params'?: string;
   stdout?: boolean;
+  debug?: boolean;
 }
 
 export interface IFDiffArgs {
@@ -27,4 +28,5 @@ export interface ProcessArgsOutputs {
     stdout?: boolean;
   };
   paramPath?: string;
+  debug?: boolean;
 }

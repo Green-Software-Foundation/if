@@ -20,10 +20,13 @@ The following document is a rule set of guidelines for contributing.
   - [Naming conventions](#naming-conventions)
     - [Documentation](#documentation)
   - [Writing tests](#writing-tests)
+  - [How to report issues (bugs)](#how-to-report-issues-bugs)
 
 ## What and when to contribute
 
 You can contribute anything to the IF, but we are likely to close out unsolicited PRs without merging them. Our issue board is completely open and we have tags (`help-wanted`, `good-first-issue`) to help contributors to choose tasks to work on. We recommend speaking to the core team on Github before starting working on an issue. You can do this by raising an issue or commenting on an existing issue. This helps us to direct your energy in directions that are aligned with our roadmap, prevent multiple people working on the same task, and better manage our board. This all makes it much more likely that your work will get merged.
+
+You can also contribute by participating in discussions on our mailing list at [if-community@greensoftware.foundation](https://groups.google.com/u/1/a/greensoftware.foundation/g/if-community). We send out weekly updates that includes what we've shipped, what we're working on and how you can get involved each week.
 
 ## Reporting bugs
 

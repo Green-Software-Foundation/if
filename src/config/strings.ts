@@ -59,4 +59,28 @@ Note that for the '--output' option you also need to define the output type in y
   MANIFEST_NOT_FOUND: 'Manifest file not found.',
   INITIALIZING_PACKAGE_JSON: 'Initializing package.json.',
   INSTALLING_NPM_PACKAGES: 'Installing npm packages...',
+  STARTING_IF: 'Starting IF',
+  EXITING_IF: 'Exiting IF',
+  LOADING_MANIFEST: 'Loading manifest',
+  VALIDATING_MANIFEST: 'Validating manifest',
+  CAPTURING_RUNTIME_ENVIRONMENT_DATA: 'Capturing runtime environment data',
+  SYNCING_PARAMETERS: 'Syncing parameters',
+  CHECKING_AGGREGATION_METHOD: (unitName: string) =>
+    `Checking aggregation method for ${unitName}`,
+  INITIALIZING_PLUGINS: 'Initializing plugins',
+  INITIALIZING_PLUGIN: (pluginName: string) => `Initializing ${pluginName}`,
+  LOADING_PLUGIN_FROM_PATH: (pluginName: string, path: string) =>
+    `Loading ${pluginName} from ${path}`,
+  COMPUTING_PIPELINE_FOR_NODE: (nodeName: string) =>
+    `Computing pipeline for \`${nodeName}\``,
+  MERGING_DEFAULTS_WITH_INPUT_DATA: 'Merging defaults with input data',
+  AGGREGATING_OUTPUTS: 'Aggregating outputs',
+  AGGREGATING_NODE: (nodeName: string) => `Aggregating node ${nodeName}`,
+  PREPARING_OUTPUT_DATA: 'Preparing output data',
+  EXPORTING_TO_YAML_FILE: (savepath: string) =>
+    `Exporting to yaml file: ${savepath}`,
+  EXPORTING_TO_CSV_FILE: (savepath: string) =>
+    `Exporting to csv file: ${savepath}`,
+  EXPORTING_RAW_CSV_FILE: (savepath: string) =>
+    `Exporting raw csv file: ${savepath}`,
 };

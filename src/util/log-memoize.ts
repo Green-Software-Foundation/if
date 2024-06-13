@@ -6,7 +6,7 @@ import {LeveledLogMethod} from 'winston';
 const memoizedLogger = () => {
   const memory: string[] = [];
 
-  return (logger: LeveledLogMethod, message: string) => {
+  return (logger: LeveledLogMethod | typeof console.debug, message: string) => {
     if (memory.includes(message)) {
       return;
     }
