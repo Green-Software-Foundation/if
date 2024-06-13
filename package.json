@@ -7,7 +7,7 @@
     "email": "info@gsf.com"
   },
   "bin": {
-    "ie": "./build/index.js",
+    "if-run": "./build/index.js",
     "if-diff": "./build/diff.js"
   },
   "bugs": {
@@ -72,7 +72,7 @@
     "coverage": "jest --verbose --coverage --testPathPattern=src/__tests__/unit",
     "fix": "gts fix",
     "fix:package": "fixpack",
-    "ie": "npx ts-node src/index.ts",
+    "if-run": "npx ts-node src/index.ts",
     "if-diff": "npx ts-node src/diff.ts",
     "lint": "gts lint",
     "pre-commit": "lint-staged",
