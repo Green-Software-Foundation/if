@@ -181,5 +181,5 @@ export const parseIfEnvArgs = async () => {
     throw new CliInputError(FILE_IS_NOT_YAML);
   }
 
-  return;
+  return {install};
 };
