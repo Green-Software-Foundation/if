@@ -9,8 +9,7 @@ import {STRINGS} from '../config';
 
 import {Difference} from '../types/lib/compare';
 
-const {ISSUE_TEMPLATE, MISSING_MANIFEST_IN_STDIN} = STRINGS;
-const {CliInputError} = ERRORS;
+const {ISSUE_TEMPLATE} = STRINGS;
 
 /**
  * Impact engine error handler. Logs errors and appends issue template if error is unknown.
