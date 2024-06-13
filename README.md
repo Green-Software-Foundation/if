@@ -7,33 +7,30 @@
 
 **Note** We have recently (March 2024) refactored the IF codebase and introduced some changes affecting both users and developers. You can read our migration guide [HERE](./Refactor-migration-guide.md) to help you update to the latest version!
 
-
 [Impact Framework](https://greensoftwarefoundation.atlassian.net/wiki/spaces/~612dd45e45cd76006a84071a/pages/17072136/Opensource+Impact+Engine+Framework) (IF) is an [Incubation](https://oc.greensoftware.foundation/project-lifecycle.html#incubation) project from the [Open Source Working Group](https://greensoftwarefoundation.atlassian.net/wiki/spaces/~612dd45e45cd76006a84071a/pages/852049/Open+Source+Working+Group) in the [Green Software Foundation](https://greensoftware.foundation/).
 
-
 **Our documentation is online at [if.greensoftware.foundation](https://if.greensoftware.foundation/)**
-
 
 **IF** is a framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environmental impacts of software
 
 Modern applications are composed of many smaller pieces of software (components) running on many different environments, for example, private cloud, public cloud, bare-metal, virtualized, containerized, mobile, laptops, and desktops.
 
-Every environment requires a different plugin of measurement, and there is no single solution you can use to calculate the environmental impacts for all components across all environments.      
+Every environment requires a different plugin of measurement, and there is no single solution you can use to calculate the environmental impacts for all components across all environments.
 
 The friction to measuring software emissions isn't that we need to know how, it's that we run software on many things and each thing has several different ways to measure.
 
 Read the [specification and design docs](https://if.greensoftware.foundation) to begin.
 
-
 ## Get started
 
-The first thing to understand is that IF is a framework for running plugins. This means that in order to do some calculations, you need to load some plugins from some external resource. We provide a [standard library of plugins](https://github.com/Green-Software-Foundation/if-plugins) and a repository of [community plugins](https://github.com/Green-Software-Foundation/if-unofficial-plugins) to get you started. 
+The first thing to understand is that IF is a framework for running plugins. This means that in order to do some calculations, you need to load some plugins from some external resource. We provide a [standard library of plugins](https://github.com/Green-Software-Foundation/if-plugins) and a repository of [community plugins](https://github.com/Green-Software-Foundation/if-unofficial-plugins) to get you started.
 
 Start by installing framework itself:
 
 ```sh
 npm install -g "@grnsft/if"
 ```
+
 Then installing some plugins:
 
 ```sh
@@ -51,6 +48,7 @@ ie -m <path-to-your-manifest-file>
 ```
 
 Note that above command will not print the final output. In order to print the final output to the console, run `if` using the optional stdout argument:
+
 ```sh
 ie --manifest <path-to-your-manifest-file> --stdout
 ## or using aliases
@@ -75,6 +73,12 @@ ie -m <path-to-your-manifest-file> -o <your-savepath>
 
 The `ie` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
 
+Use the `debug` command if you want to diagnose and fix errors in your plugin:
+
+```sh
+ie --manifest <path-to-your-manifest-file> --debug
+```
+
 Use the `help` command if you need guidance about the available commands
 
 ```sh
@@ -94,9 +98,14 @@ Watch this video to learn how to create and run a `manifest`.
 [![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/GW37Qd4AQbU)
 
 
+## Join our mailing list
+
+We have a public mailing list at [if-community@greensoftware.foundation](https://groups.google.com/u/1/a/greensoftware.foundation/g/if-community). We send out weekly updates that explain what we've shipped, what we're working on and how you can get involved each week!
+
+
 ## Contributing
 
-To contribute to IF, please fork this repository and raise a pull request from your fork. 
+To contribute to IF, please fork this repository and raise a pull request from your fork.
 
 You can check our issue board for issues tagged `help-wanted`. These are issues that are not currently, actively being worked on by the core team but are well-scoped enough for someone to pick up. We recommend commenting on the issue to start a chat with the core team, then start working on the issue when you have been assigned to it. This process helps to ensure your work is aligned with our roadmap and makes it much more likely that your changes will get merged compared to unsolicited PRs.
 

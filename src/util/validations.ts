@@ -5,8 +5,10 @@ import {ERRORS} from './errors';
 import {AGGREGATION_METHODS} from '../types/aggregation';
 import {AGGREGATION_TYPES} from '../types/parameters';
 
-const {ManifestValidationError, InputValidationError} = ERRORS;
+import {STRINGS} from '../config/strings';
 
+const {ManifestValidationError, InputValidationError} = ERRORS;
+const {VALIDATING_MANIFEST} = STRINGS;
 /**
  * At least one property defined handler.
  */
@@ -86,8 +88,11 @@ export const manifestSchema = z.object({
 /**
  * Validates given `manifest` object to match pattern.
  */
-export const validateManifest = (manifest: any) =>
-  validate(manifestSchema, manifest, undefined, ManifestValidationError);
+export const validateManifest = (manifest: any) => {
+  console.debug(VALIDATING_MANIFEST);
+
+  return validate(manifestSchema, manifest, undefined, ManifestValidationError);
+};
 
 /**
  * Validates given `object` with given `schema`.

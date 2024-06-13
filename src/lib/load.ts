@@ -14,13 +14,15 @@ import {Manifest} from '../types/manifest';
 
 const {CliInputError} = ERRORS;
 
-const {INVALID_SOURCE} = STRINGS;
+const {INVALID_SOURCE, LOADING_MANIFEST} = STRINGS;
 
 /**
  * Parses manifest file as an object. Checks if parameter file is passed via CLI, then loads it too.
  * Returns context, tree and parameters (either the default one, or from CLI).
  */
 export const load = async (inputPath: string, paramPath?: string) => {
+  console.debug(LOADING_MANIFEST);
+
   const rawManifest = await openYamlFileAsObject<any>(inputPath);
   const parametersFromCli =
     paramPath &&
