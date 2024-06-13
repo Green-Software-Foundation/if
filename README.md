@@ -42,17 +42,17 @@ Then create a `manifest` file that describes your application (see our docs for 
 Then, run `if` using the following command:
 
 ```sh
-ie --manifest <path-to-your-manifest-file>
+if-run --manifest <path-to-your-manifest-file>
 ## or you can use aliases
-ie -m <path-to-your-manifest-file>
+if-run -m <path-to-your-manifest-file>
 ```
 
 Note that above command will not print the final output. In order to print the final output to the console, run `if` using the optional stdout argument:
 
 ```sh
-ie --manifest <path-to-your-manifest-file> --stdout
+if-run --manifest <path-to-your-manifest-file> --stdout
 ## or using aliases
-ie -m <path-to-your-manifest-file> -s
+if-run -m <path-to-your-manifest-file> -s
 ```
 
 You can also add a savepath for your output yaml in order to have the output stored in a file. Note that you also have to add configuration to your manifest to enable this, as follows:
@@ -66,25 +66,25 @@ initialize:
 On the command line:
 
 ```sh
-ie --manifest <path-to-your-manifest-file> --output <your-savepath>
+if-run --manifest <path-to-your-manifest-file> --output <your-savepath>
 ## or using aliases
-ie -m <path-to-your-manifest-file> -o <your-savepath>
+if-run -m <path-to-your-manifest-file> -o <your-savepath>
 ```
 
-The `ie` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
+The `if-run` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
 
 Use the `debug` command if you want to diagnose and fix errors in your plugin:
 
 ```sh
-ie --manifest <path-to-your-manifest-file> --debug
+if-run --manifest <path-to-your-manifest-file> --debug
 ```
 
 Use the `help` command if you need guidance about the available commands
 
 ```sh
-ie --help
+if-run --help
 ## or using alias
-ie -h
+if-run -h
 ```
 
 ## Documentation
