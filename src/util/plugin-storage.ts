@@ -4,7 +4,7 @@ import {STRINGS} from '../config';
 import {PluginInterface} from '../types/interface';
 import {PluginStorage} from '../types/plugin-storage';
 
-const {PluginInitalizationError} = ERRORS;
+const {PluginInitializationError} = ERRORS;
 const {NOT_INITALIZED_PLUGIN} = STRINGS;
 
 /**
@@ -21,7 +21,7 @@ export const pluginStorage = () => {
       const plugin = storage[name];
 
       if (!plugin) {
-        throw new PluginInitalizationError(NOT_INITALIZED_PLUGIN(name));
+        throw new PluginInitializationError(NOT_INITALIZED_PLUGIN(name));
       }
 
       return plugin;

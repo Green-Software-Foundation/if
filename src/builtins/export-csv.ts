@@ -3,13 +3,13 @@ import {stringify} from 'csv-stringify/sync';
 
 import {ERRORS} from '../util/errors';
 
+import {STRINGS} from '../config';
+
 import {Context} from '../types/manifest';
 import {PluginParams} from '../types/interface';
 
-import {STRINGS} from '../config/strings';
-
-const {ExhaustError} = ERRORS;
-const {EXPORTING_TO_CSV_FILE} = STRINGS;
+const {ExhaustOutputArgError} = ERRORS;
+const {CSV_EXPORT, OUTPUT_REQUIRED, EXPORTING_TO_CSV_FILE} = STRINGS;
 
 /**
  * Extension to IF that outputs the tree in a CSV format.
@@ -19,15 +19,13 @@ export const ExportCSV = () => {
     const validatedPath = validateOutputPath(outputPath);
 
     const paths = validatedPath.split('#');
-    const output = paths.slice(0, paths.length - 1).join('');
     const criteria = paths[paths.length - 1];
 
     if (paths.length <= 1 || !criteria) {
-      throw new ExhaustError(
-        'CSV export criteria is not found in output path. Please append it after --output <path>#.'
-      );
+      throw new ExhaustOutputArgError(CSV_EXPORT);
     }
 
+    const output = paths.slice(0, paths.length - 1).join('');
     console.debug(EXPORTING_TO_CSV_FILE(output));
 
     return {
@@ -41,11 +39,7 @@ export const ExportCSV = () => {
    */
   const validateOutputPath = (outputPath: string) => {
     if (!outputPath) {
-      throw new ExhaustError('Output path is required.');
-    }
-
-    if (!outputPath.includes('#')) {
-      throw new ExhaustError('Output path should contain `#`.');
+      throw new ExhaustOutputArgError(OUTPUT_REQUIRED);
     }
 
     return outputPath;

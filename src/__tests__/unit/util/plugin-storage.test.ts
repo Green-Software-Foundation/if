@@ -1,7 +1,7 @@
 import {pluginStorage} from '../../../util/plugin-storage';
 import {ERRORS} from '../../../util/errors';
 
-const {PluginInitalizationError} = ERRORS;
+const {PluginInitializationError} = ERRORS;
 
 describe('util/pluginStorage: ', () => {
   describe('pluginStorage(): ', () => {
@@ -30,9 +30,9 @@ describe('util/pluginStorage: ', () => {
         try {
           storage.get(pluginName);
         } catch (error) {
-          expect(error).toBeInstanceOf(PluginInitalizationError);
+          expect(error).toBeInstanceOf(PluginInitializationError);
 
-          if (error instanceof PluginInitalizationError) {
+          if (error instanceof PluginInitializationError) {
             expect(error.message).toEqual;
           }
         }

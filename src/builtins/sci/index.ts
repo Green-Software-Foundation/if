@@ -1,16 +1,17 @@
 import {z} from 'zod';
 
+import {validate, allDefined} from '../../util/validations';
+import {ERRORS} from '../../util/errors';
+
+import {STRINGS} from '../../config';
+
 import {ExecutePlugin, PluginParams} from '../../types/interface';
 import {ConfigParams} from '../../types/common';
 
-import {validate, allDefined} from '../../util/validations';
-import {buildErrorMessage} from '../../util/helpers';
-import {ERRORS} from '../../util/errors';
-
-const {InputValidationError} = ERRORS;
+const {MissingInputDataError} = ERRORS;
+const {MISSING_FUNCTIONAL_UNIT_CONFIG, MISSING_FUNCTIONAL_UNIT_INPUT} = STRINGS;
 
 export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
-  const errorBuilder = buildErrorMessage(Sci.name);
   const metadata = {
     kind: 'execute',
   };
@@ -19,15 +20,12 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
    * Validates node and gloabl configs.
    */
   const validateConfig = (config?: ConfigParams) => {
-    const errorMessage =
-      '`functional-unit` should be provided in your global config';
-
     const schema = z
       .object({
         'functional-unit': z.string(),
       })
       .refine(data => data['functional-unit'], {
-        message: errorMessage,
+        message: MISSING_FUNCTIONAL_UNIT_CONFIG,
       });
 
     return validate<z.infer<typeof schema>>(schema, config);
@@ -36,19 +34,19 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
   /**
    * Calculate the total emissions for a list of inputs.
    */
-  const execute = (inputs: PluginParams[]): PluginParams[] => {
-    return inputs.map(input => {
+  const execute = (inputs: PluginParams[]): PluginParams[] =>
+    inputs.map(input => {
       const safeInput = validateInput(input);
       const sci =
         safeInput['carbon'] > 0
           ? safeInput['carbon'] / input[globalConfig['functional-unit']]
           : 0;
+
       return {
         ...input,
         sci,
       };
     });
-  };
 
   /**
    * Checks for fields in input.
@@ -64,12 +62,7 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
         input[validatedConfig['functional-unit']] > 0
       )
     ) {
-      throw new InputValidationError(
-        errorBuilder({
-          message:
-            'functional-unit value is missing from input data or it is not a positive integer',
-        })
-      );
+      throw new MissingInputDataError(MISSING_FUNCTIONAL_UNIT_INPUT);
     }
 
     const schema = z

@@ -1,10 +1,12 @@
 import {Exponent} from '../../../builtins/exponent';
 
 import {ERRORS} from '../../../util/errors';
+import {STRINGS} from '../../../config';
 
-const {InputValidationError} = ERRORS;
+const {InputValidationError, MissingInputDataError} = ERRORS;
+const {NOT_NUMERIC_VALUE, MISSING_INPUT_DATA} = STRINGS;
 
-describe('lib/exponent: ', () => {
+describe('builtins/exponent: ', () => {
   describe('Exponent: ', () => {
     const globalConfig = {
       'input-parameter': 'energy/base',
@@ -45,9 +47,6 @@ describe('lib/exponent: ', () => {
       });
 
       it('throws an error on missing params in input.', async () => {
-        const expectedMessage =
-          'Exponent: energy/base is missing from the input array.';
-
         expect.assertions(1);
 
         try {
@@ -59,27 +58,26 @@ describe('lib/exponent: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(expectedMessage)
+            new MissingInputDataError(MISSING_INPUT_DATA('energy/base'))
           );
         }
       });
 
       it('throws an error on input param value not numeric.', async () => {
-        const expectedMessage = 'Exponent: i-am-not-a-number is not numeric.';
-
         expect.assertions(1);
+        const input = [
+          {
+            duration: 3600,
+            'energy/base': 'i-am-not-a-number',
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
 
         try {
-          await exponent.execute([
-            {
-              duration: 3600,
-              'energy/base': 'i-am-not-a-number',
-              timestamp: '2021-01-01T00:00:00Z',
-            },
-          ]);
+          await exponent.execute(input);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(expectedMessage)
+            new InputValidationError(NOT_NUMERIC_VALUE(input[0]['energy/base']))
           );
         }
       });

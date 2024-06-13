@@ -1,10 +1,12 @@
 import {Multiply} from '../../../builtins/multiply';
 
 import {ERRORS} from '../../../util/errors';
+import {STRINGS} from '../../../config';
 
-const {InputValidationError} = ERRORS;
+const {MissingInputDataError} = ERRORS;
+const {MISSING_INPUT_DATA} = STRINGS;
 
-describe('lib/multiply: ', () => {
+describe('builtins/multiply: ', () => {
   describe('Multiply: ', () => {
     const globalConfig = {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
@@ -48,9 +50,6 @@ describe('lib/multiply: ', () => {
       });
 
       it('throws an error on missing params in input.', async () => {
-        const expectedMessage =
-          'Multiply: cpu/energy is missing from the input array.';
-
         expect.assertions(1);
 
         try {
@@ -62,7 +61,7 @@ describe('lib/multiply: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(expectedMessage)
+            new MissingInputDataError(MISSING_INPUT_DATA('cpu/energy'))
           );
         }
       });

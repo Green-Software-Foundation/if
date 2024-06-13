@@ -8,9 +8,9 @@ import {GroupByConfig} from '../types/group-by';
 import {ERRORS} from '../util/errors';
 import {validate} from '../util/validations';
 
-const {InvalidGroupingError, InputValidationError} = ERRORS;
+const {InvalidGroupingError, GlobalConfigError} = ERRORS;
 
-const {INVALID_GROUP_BY} = STRINGS;
+const {INVALID_GROUP_BY, MISSING_GLOBAL_CONFIG} = STRINGS;
 
 /**
  * Plugin for inputs grouping.
@@ -79,7 +79,7 @@ export const GroupBy = (): GroupByPlugin => {
    */
   const validateConfig = (config: GroupByConfig) => {
     if (!config) {
-      throw new InputValidationError('Config is not provided.');
+      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }
 
     const schema = z.object({

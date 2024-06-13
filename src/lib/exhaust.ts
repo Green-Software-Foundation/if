@@ -14,7 +14,7 @@ import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
 import {Context} from '../types/manifest';
 import {Options} from '../types/process-args';
 
-const {ExhaustError} = ERRORS;
+const {InvalidExhaustPluginError} = ERRORS;
 const {INVALID_EXHAUST_PLUGIN, PREPARING_OUTPUT_DATA} = STRINGS;
 
 /**
@@ -35,7 +35,7 @@ const initializeExhaustPlugin = (name: string): ExhaustPluginInterface => {
     case 'csv-raw':
       return ExportCSVRaw();
     default:
-      throw new ExhaustError(INVALID_EXHAUST_PLUGIN(name));
+      throw new InvalidExhaustPluginError(INVALID_EXHAUST_PLUGIN(name));
   }
 };
 
