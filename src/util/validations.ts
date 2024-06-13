@@ -9,6 +9,7 @@ import {STRINGS} from '../config/strings';
 
 const {ManifestValidationError, InputValidationError} = ERRORS;
 const {VALIDATING_MANIFEST} = STRINGS;
+
 /**
  * At least one property defined handler.
  */
@@ -148,5 +149,6 @@ const flattenPath = (path: (string | number)[]): string => {
   const flattenPath = path.map(part =>
     typeof part === 'number' ? `[${part}]` : part
   );
+
   return flattenPath.join('.');
 };
