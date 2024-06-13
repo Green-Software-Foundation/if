@@ -6,7 +6,7 @@ import {ExecutePlugin, PluginParams} from '../../types/interface';
 import {ConfigParams} from '../../types/common';
 
 import {validate} from '../../util/validations';
-import {ERRORS} from '../../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 
 const {ProcessExecutionError} = ERRORS;
 

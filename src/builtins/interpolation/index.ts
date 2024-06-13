@@ -4,7 +4,7 @@ import {z} from 'zod';
 import {ExecutePlugin, PluginParams, ConfigParams} from '../../types/interface';
 
 import {validate} from '../../util/validations';
-import {ERRORS} from '../../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 
 import {STRINGS} from '../../config';
 

@@ -6,7 +6,7 @@ import {z} from 'zod';
 import {parse} from 'csv-parse/sync';
 
 import {validate} from '../../util/validations';
-import {ERRORS} from '../../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 
 import {STRINGS} from '../../config';
 
