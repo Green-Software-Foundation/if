@@ -9,12 +9,16 @@ import {validateManifest} from './util/validations';
 
 import {CONFIG} from './config';
 import {logger} from './util/logger';
+import {debugLogger} from './util/debug-logger';
 
 const {IF_DIFF} = CONFIG;
 const {SUCCESS_MESSAGE, FAILURE_MESSAGE} = IF_DIFF;
 
 const IfDiff = async () => {
   const {sourcePath, targetPath} = parseIfDiffArgs();
+
+  // Call this function with false parameter to prevent log debug messages.
+  debugLogger.overrideConsoleMethods(false);
 
   const {rawSourceManifest, rawTargetManifest} = await loadIfDiffFiles({
     targetPath,
