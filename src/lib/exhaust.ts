@@ -8,7 +8,6 @@ import {ExportCSVRaw} from '../builtins/export-csv-raw';
 import {ExportLog} from '../builtins/export-log';
 import {ExportYaml} from '../builtins/export-yaml';
 
-
 import {STRINGS} from '../config';
 
 import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
