@@ -337,7 +337,7 @@ describe('util/args: ', () => {
 
       expect.assertions(1);
 
-      expect(response).toEqual(undefined);
+      expect(response).toEqual({install: undefined});
     });
 
     it('executes if `manifest` and `install` are provided.', async () => {
