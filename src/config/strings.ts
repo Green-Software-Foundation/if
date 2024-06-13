@@ -55,7 +55,6 @@ Note that for the '--output' option you also need to define the output type in y
   TARGET_IS_NOT_YAML: 'Given target is not in yaml format.',
   INVALID_TARGET: 'Target is invalid.',
   INVALID_SOURCE: 'Source is invalid.',
-  MISSING_MANIFEST_IN_STDIN: 'Manifest not found in STDIN.',
   /** Plugin messages */
   MISSING_GLOBAL_CONFIG: 'Global config is not provided.',
   MISSING_INPUT_DATA: (param: string) =>
