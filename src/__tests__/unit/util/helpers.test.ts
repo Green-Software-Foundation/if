@@ -364,16 +364,11 @@ describe('util/helpers: ', () => {
 
     it('throws error if there is no manifest in stdin.', async () => {
       process.env.readline = 'no_manifest';
-      const expectedMessage = 'Manifest not found in STDIN.';
       expect.assertions(1);
 
-      try {
-        await parseManifestFromStdin();
-      } catch (error) {
-        if (error instanceof Error) {
-          expect(error.message).toEqual(expectedMessage);
-        }
-      }
+      const response = await parseManifestFromStdin();
+
+      expect(response).toEqual('');
     });
 
     it('returns empty string if there is no data in stdin.', async () => {

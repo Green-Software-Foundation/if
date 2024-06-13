@@ -164,7 +164,7 @@ const collectPipedData = async () => {
 
 /**
  * Checks if there is piped data, tries to parse yaml from it.
- * Throws error if there is piped info, but there is no valid manifest.
+ * Returns empty string if haven't found anything.
  */
 export const parseManifestFromStdin = async () => {
   const pipedSourceManifest = await collectPipedData();
@@ -177,7 +177,7 @@ export const parseManifestFromStdin = async () => {
   const match = regex.exec(pipedSourceManifest);
 
   if (!match) {
-    throw new Error('Manifest not found in STDIN.');
+    return '';
   }
 
   return match![1];
