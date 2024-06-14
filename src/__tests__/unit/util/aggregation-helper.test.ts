@@ -1,5 +1,6 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {aggregateInputsIntoOne} from '../../../util/aggregation-helper';
-import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
 

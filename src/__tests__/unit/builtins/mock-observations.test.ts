@@ -1,6 +1,7 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {MockObservations} from '../../../builtins/mock-observations';
 
-import {ERRORS} from '../../../util/errors';
 import {STRINGS} from '../../../config';
 
 const {InputValidationError, GlobalConfigError} = ERRORS;

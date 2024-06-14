@@ -1,6 +1,6 @@
-import {Sci} from '../../../builtins/sci';
+import {ERRORS} from '@grnsft/if-core';
 
-import {ERRORS} from '../../../util/errors';
+import {Sci} from '../../../builtins/sci';
 
 const {MissingInputDataError} = ERRORS;
 

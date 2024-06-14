@@ -1,6 +1,7 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {Exponent} from '../../../builtins/exponent';
 
-import {ERRORS} from '../../../util/errors';
 import {STRINGS} from '../../../config';
 
 const {InputValidationError, MissingInputDataError} = ERRORS;

@@ -1,5 +1,6 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {GroupBy} from '../../../builtins/group-by';
-import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
 

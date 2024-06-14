@@ -1,7 +1,7 @@
 import {writeFile} from 'fs/promises';
 import {stringify} from 'csv-stringify/sync';
 
-import {ERRORS} from '../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 
 import {STRINGS} from '../config';
 

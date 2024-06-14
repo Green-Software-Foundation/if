@@ -1,8 +1,9 @@
 import * as path from 'path';
+
 import {parse} from 'ts-command-line-args';
+import {ERRORS} from '@grnsft/if-core';
 
 import {checkIfFileIsYaml} from './yaml';
-import {ERRORS} from './errors';
 import {logger} from './logger';
 
 import {CONFIG, STRINGS} from '../config';

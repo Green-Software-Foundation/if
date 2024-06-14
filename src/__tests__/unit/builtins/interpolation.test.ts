@@ -1,5 +1,6 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {Interpolation} from '../../../builtins';
-import {ERRORS} from '../../../util/errors';
 
 import {Method} from '../../../builtins/interpolation/types';
 import {STRINGS} from '../../../config';

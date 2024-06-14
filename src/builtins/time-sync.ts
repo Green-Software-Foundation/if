@@ -4,7 +4,7 @@ import {z} from 'zod';
 
 import {parameterize} from '../lib/parameterize';
 
-import {ERRORS} from '../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 import {validate} from '../util/validations';
 
 import {STRINGS} from '../config';

@@ -1,6 +1,7 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {Subtract} from '../../../builtins/subtract';
 
-import {ERRORS} from '../../../util/errors';
 import {STRINGS} from '../../../config';
 
 const {InputValidationError} = ERRORS;

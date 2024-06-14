@@ -5,7 +5,7 @@ import {STRINGS} from '../config';
 import {GroupByPlugin, PluginParams} from '../types/interface';
 import {GroupByConfig} from '../types/group-by';
 
-import {ERRORS} from '../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 import {validate} from '../util/validations';
 
 const {InvalidGroupingError, GlobalConfigError} = ERRORS;

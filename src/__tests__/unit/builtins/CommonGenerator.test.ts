@@ -1,6 +1,7 @@
-import {ERRORS} from '../../../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 
 import {CommonGenerator} from '../../../builtins/mock-observations/helpers/common-generator';
+
 import {STRINGS} from '../../../config';
 
 const {GlobalConfigError} = ERRORS;

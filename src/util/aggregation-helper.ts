@@ -1,4 +1,5 @@
-import {ERRORS} from '../util/errors';
+import {ERRORS} from '@grnsft/if-core';
+
 import {parameterize} from '../lib/parameterize';
 
 import {CONFIG, STRINGS} from '../config';

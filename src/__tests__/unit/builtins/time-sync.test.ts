@@ -1,8 +1,7 @@
+import {ERRORS} from '@grnsft/if-core';
 import {Settings, DateTime} from 'luxon';
 
 import {TimeSync} from '../../../builtins/time-sync';
-
-import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
 

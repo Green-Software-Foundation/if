@@ -1,6 +1,6 @@
-import {Coefficient} from '../../../builtins/coefficient';
+import {ERRORS} from '@grnsft/if-core';
 
-import {ERRORS} from '../../../util/errors';
+import {Coefficient} from '../../../builtins/coefficient';
 
 import {STRINGS} from '../../../config';
 

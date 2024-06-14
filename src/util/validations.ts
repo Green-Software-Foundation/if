@@ -1,6 +1,5 @@
 import {ZodIssue, ZodIssueCode, ZodSchema, z} from 'zod';
-
-import {ERRORS} from './errors';
+import {ERRORS} from '@grnsft/if-core';
 
 import {AGGREGATION_METHODS} from '../types/aggregation';
 import {AGGREGATION_TYPES} from '../types/parameters';

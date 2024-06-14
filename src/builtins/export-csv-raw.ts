@@ -1,6 +1,6 @@
 import * as fs from 'fs/promises';
 
-import {ERRORS} from '../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 
 import {STRINGS} from '../config';
 
