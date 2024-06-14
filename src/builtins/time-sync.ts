@@ -1,20 +1,21 @@
 import {isDate} from 'node:util/types';
+
 import {Settings, DateTime, DateTimeMaybeValid, Interval} from 'luxon';
 import {z} from 'zod';
-
-import {parameterize} from '../lib/parameterize';
-
-import {ERRORS} from '@grnsft/if-core';
-import {validate} from '../util/validations';
-
-import {STRINGS} from '../config';
-
-import {ExecutePlugin, PluginParams} from '../types/interface';
+import {ERRORS} from '@grnsft/if-core/utils';
 import {
+  ExecutePlugin,
+  PluginParams,
   PaddingReceipt,
   TimeNormalizerConfig,
   TimeParams,
-} from '../types/time-sync';
+} from '@grnsft/if-core/types';
+
+import {parameterize} from '../lib/parameterize';
+
+import {validate} from '../util/validations';
+
+import {STRINGS} from '../config';
 
 Settings.defaultZone = 'utc';
 

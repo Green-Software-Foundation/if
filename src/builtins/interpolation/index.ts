@@ -1,14 +1,16 @@
 import Spline from 'typescript-cubic-spline';
 import {z} from 'zod';
-
-import {ExecutePlugin, PluginParams, ConfigParams} from '../../types/interface';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  ExecutePlugin,
+  PluginParams,
+  ConfigParams,
+  Method,
+} from '@grnsft/if-core/types';
 
 import {validate} from '../../util/validations';
-import {ERRORS} from '@grnsft/if-core';
 
 import {STRINGS} from '../../config';
-
-import {Method} from './types';
 
 const {GlobalConfigError} = ERRORS;
 const {

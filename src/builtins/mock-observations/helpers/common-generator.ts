@@ -1,4 +1,5 @@
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {ConfigParams} from '@grnsft/if-core/types';
 
 import {STRINGS} from '../../../config';
 
@@ -7,7 +8,7 @@ import {Generator} from '../interfaces';
 const {GlobalConfigError} = ERRORS;
 const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
-export const CommonGenerator = (config: Record<string, any>): Generator => {
+export const CommonGenerator = (config: ConfigParams): Generator => {
   /**
    * Generates next value by copying the validated config.
    * Validates the provided config is not null or empty.

@@ -1,12 +1,14 @@
 import {z} from 'zod';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  ExecutePlugin,
+  PluginParams,
+  MultiplyConfig,
+} from '@grnsft/if-core/types';
 
-import {ERRORS} from '@grnsft/if-core';
 import {validate} from '../../util/validations';
 
 import {STRINGS} from '../../config';
-
-import {ExecutePlugin, PluginParams} from '../../types/interface';
-import {MultiplyConfig} from './types';
 
 const {MissingInputDataError} = ERRORS;
 const {MISSING_INPUT_DATA} = STRINGS;

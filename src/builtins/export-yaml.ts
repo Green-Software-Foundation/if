@@ -1,5 +1,6 @@
+import {ERRORS} from '@grnsft/if-core/utils';
+
 import {saveYamlFileAs} from '../util/yaml';
-import {ERRORS} from '@grnsft/if-core';
 
 import {STRINGS} from '../config';
 
