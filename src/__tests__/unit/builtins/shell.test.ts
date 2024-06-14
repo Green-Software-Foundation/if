@@ -1,6 +1,6 @@
 import {spawnSync} from 'child_process';
 import {loadAll} from 'js-yaml';
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {Shell} from '../../../builtins/shell';
 

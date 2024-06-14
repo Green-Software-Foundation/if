@@ -1,4 +1,4 @@
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {CommonGenerator} from '../../../builtins/mock-observations/helpers/common-generator';
 
