@@ -3,11 +3,6 @@ description: a pipeline that does arbitrary calculations using our generic arith
 tags:
 initialize:
   plugins:
-    teads-curve:
-      path: "@grnsft/if-unofficial-plugins"
-      method: TeadsCurve
-      global-config:
-        interpolation: spline
     "sum":
       path: "builtin"
       method: Sum
@@ -33,7 +28,6 @@ tree:
   children:
     child-1:
       pipeline:
-        - teads-curve
         - sum
         - coefficient
         - multiply
@@ -46,26 +40,6 @@ tree:
           cloud/region: uk-west
           duration: 1
           cpu/utilization: 50
-          network/energy: 10
-          energy: 5
-        - timestamp: "2023-12-12T00:00:01.000Z"
-          duration: 5
-          cpu/utilization: 20
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          network/energy: 10
-          energy: 5
-        - timestamp: "2023-12-12T00:00:06.000Z"
-          duration: 7
-          cpu/utilization: 15
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          network/energy: 10
-          energy: 5
-        - timestamp: "2023-12-12T00:00:13.000Z"
-          duration: 30
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          cpu/utilization: 15
+          cpu/energy: 20
           network/energy: 10
           energy: 5

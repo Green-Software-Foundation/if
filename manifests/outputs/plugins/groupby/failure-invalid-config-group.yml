@@ -1,5 +1,5 @@
 name: groupby
-description: successful path
+description: failure when `config->group-by->group` is not an array
 initialize:
   outputs: ['yaml']
   plugins:
@@ -13,9 +13,7 @@ tree:
         - group-by
       config:
         group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+          group: cloud/region
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 300

@@ -1,0 +1,23 @@
+name: sci-embodied
+description: missing device/expected-lifespan
+tags:
+initialize:
+  #outputs: ['yaml']
+  plugins:
+    "sci-embodied": # a model that calculates m from te, tir, el, rr and rtor
+      method: SciEmbodied
+      path: "builtin"
+tree:
+  children:
+    child:
+      pipeline:
+        - sci-embodied # duration & config -> embodied
+      defaults:
+        device/emissions-embodied: 1533.120 # gCO2eq
+        time-reserved: 3600 # 1hr in seconds
+        #device/expected-lifespan: 94608000 # 3 years in seconds
+        resources-reserved: 1
+        resources-total: 8
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600

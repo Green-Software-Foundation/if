@@ -8,7 +8,6 @@ initialize:
       method: TeadsCurve
       global-config:
         interpolation: spline
-  outputs: ['yaml']
 tree:
   children:
     child-0:
