@@ -7,9 +7,10 @@ import {parseIfDiffArgs} from './util/args';
 import {formatNotMatchingLog, parseManifestFromStdin} from './util/helpers';
 import {validateManifest} from './util/validations';
 
-import {CONFIG} from './config';
 import {logger} from './util/logger';
 import {debugLogger} from './util/debug-logger';
+
+import {CONFIG} from './config';
 
 const {IF_DIFF} = CONFIG;
 const {SUCCESS_MESSAGE, FAILURE_MESSAGE} = IF_DIFF;
