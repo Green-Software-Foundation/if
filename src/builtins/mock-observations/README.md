@@ -91,7 +91,7 @@ You can run this example `manifest` by saving it as `manifests/plugins/mock-obse
 
 ```sh
 npm i -g @grnsft/if
-ie --manifest ./examples/manifests/test/mock-observation.yml --output ./examples/outputs/mock-observation
+if-run --manifest ./examples/manifests/test/mock-observation.yml --output ./examples/outputs/mock-observation
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`.
