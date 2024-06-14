@@ -30,9 +30,9 @@ You can also contribute by participating in discussions on our mailing list at [
 
 ## Reporting bugs
 
-We appreciate bug reports! If you experience an issue with IF or one of our plugins, you can report it using our bug reporting template. To do this:
+We appreciate bug reports! If you experience an issue with IF, you can report it using our bug reporting template. To do this:
 
-1. Go to the [IF repository](https://github.com/Green-Software-Foundation/if) (or [plugin repository](https://github.com/Green-Software-Foundation/if-plugins) if you bug relates to a specific plugin)
+1. Go to the [IF repository](https://github.com/Green-Software-Foundation/if)
 2. Click on the `Issues` tab
 3. Click on `Create New Issue` and select the `Bug Report` template.
 4. Fill out the requested information.
@@ -46,8 +46,7 @@ The assessment rubric is as follows:
 |                                                                                                                        | Consequence                                                                              | Severity |
 | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------- |
 | Bugs in IF core leading to incorrect calculations                                                                      | unusable framework                                                                       | 5        |
-| Bugs in if-plugins leading to incorrect calculations                                                                   | core pathways fail, IF very limited in functionality                                     | 5        |
-| Bugs in if-unofficial-pluginsd leading to incorrect calculations                                                       | Third party plugins harder to use, limits IF to standard lib                             | 3        |
+| Bugs in builtins leading to incorrect calculations                                                                   | core pathways fail, IF very limited in functionality                                     | 5        |
 | Bugs in template                                                                                                       | Harder to build plugins, ecosystem growth is impacted                                    | 2        |
 | Bugs in docs                                                                                                           | product does not match expectation, hard to debug, frustration, loss of adoption         | 2        |
 | Security flaw: privacy related                                                                                         | leak user data, unlikely to achieve adoption in serious orgs                             | 5        |
