@@ -1,9 +1,10 @@
+import {PluginParams} from '@grnsft/if-core/types';
+
 import {aggregateInputsIntoOne} from '../util/aggregation-helper';
 
-import {PluginParams} from '../types/interface';
-import {AggregationParams, AggregationParamsSure} from '../types/manifest';
-
 import {STRINGS} from '../config/strings';
+
+import {AggregationParams, AggregationParamsSure} from '../types/manifest';
 
 const {AGGREGATING_NODE, AGGREGATING_OUTPUTS} = STRINGS;
 
