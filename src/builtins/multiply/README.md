@@ -88,7 +88,7 @@ You can run this example by saving it as `./examples/manifests/test/multiply.yml
 
 ```sh
 npm i -g @grnsft/if
-ie --manifest ./examples/manifests/test/multiply.yml --output ./examples/outputs/multiply.yml
+if-run --manifest ./examples/manifests/test/multiply.yml --output ./examples/outputs/multiply.yml
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`

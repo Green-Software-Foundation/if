@@ -88,7 +88,7 @@ You can run this example by saving it as `./examples/manifests/test/subrtact.yml
 
 ```sh
 npm i -g @grnsft/if
-ie --manifest /manifests/plugins/subtract.yml --output manifests/outputs/subtract.yml
+if-run --manifest /manifests/plugins/subtract.yml --output manifests/outputs/subtract.yml
 ```
 
 The results will be saved to a new `yaml` file in `manifests/outputs`.

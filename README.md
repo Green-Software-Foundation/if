@@ -35,6 +35,7 @@ Then, run `if` using the following command:
 if-run --manifest <path-to-your-manifest-file> --stdout
 ## or you can use aliases
 if-run -m <path-to-your-manifest-file> --stdout
+
 ```
 
 Note that above command will print your outputs to the console. You can also provide the `--output` command to save your outputs to a yaml file:
