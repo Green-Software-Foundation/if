@@ -1,7 +1,7 @@
 import * as path from 'path';
 
 import {parse} from 'ts-command-line-args';
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {checkIfFileIsYaml} from './yaml';
 import {logger} from './logger';

@@ -2,7 +2,7 @@ import {createInterface} from 'node:readline/promises';
 import {exec} from 'node:child_process';
 import {promisify} from 'node:util';
 
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {logger} from './logger';
 
