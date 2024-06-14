@@ -104,7 +104,7 @@ You can run this example `manifest` by executing the following command from the 
 
 ```sh
 npm i -g @grnsft/if
-ie --manifest manifests/plugins/sci-embodied.yml --output manifests/outputs/sci-embodied.yml
+if-run --manifest manifests/plugins/sci-embodied.yml --output manifests/outputs/sci-embodied.yml
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`.

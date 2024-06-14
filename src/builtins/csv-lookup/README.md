@@ -136,7 +136,7 @@ You can run this example by saving it as `./examples/manifests/csv-lookup.yml` a
 
 ```sh
 npm i -g @grnsft/if
-ie --manifest manifests/plugins/csv-lookup.yml --output manifests/outputs/csv-lookup
+if-run --manifest manifests/plugins/csv-lookup.yml --output manifests/outputs/csv-lookup
 ```
 
 The results will be saved to a new `yaml` file in `manifests/outputs`.

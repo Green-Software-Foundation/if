@@ -305,7 +305,7 @@ Then, you must select the metric you want to export to CSV. The name of that met
 For example, to export the `carbon` data from your tree to a CSV file:
 
 ```sh
-ie --manifest example.yml --output example#carbon
+if-run --manifest example.yml --output example#carbon
 ```
 
 This will save a CSV file called `example.csv`. The contents will look similar to the following:

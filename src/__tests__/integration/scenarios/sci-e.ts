@@ -36,7 +36,7 @@ describe('integration/sci-e', () => {
     await saveYamlFileAs(file, absoluteManifestPath); // save yaml uses absolute path
     const response = (
       await execPromise(
-        `npm run ie -- --manifest ${relativeManifestPath} --stdout`
+        `npm run if-run -- --manifest ${relativeManifestPath} --stdout`
       )
     ).stdout; // exec promise uses relative path
 

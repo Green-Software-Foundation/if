@@ -12,13 +12,13 @@ There have been some name changes to the CLI, specifically:
     The command line tool has been renamed from `impact-engine` to simply `ie`. This means that to invoke the Impact Framework on the command line you simply use 
 
     ```
-    ie ...
+    if-run ...
     ```
 -  `impl` --> `manifest` 
     We have deprecated the original `impl` and `ompl` terminology across all our repositories and on the command line. Now, to pass a manifest file to IF, you use the `--manifest` command, as follows:
 
     ```sh
-    ie --manifest <path-to-manifest>
+    if-run --manifest <path-to-manifest>
     ```
 
 
@@ -27,7 +27,7 @@ There have been some name changes to the CLI, specifically:
     We have deprecated the original `impl` and `ompl` terminology across all our repositories and on the command line. Now, to define a savepath for your output file, you use the `--output` command, as follows:
 
     ```sh
-    ie --manifest <path-to-manifest> --output <savepath>
+    if-run --manifest <path-to-manifest> --output <savepath>
     ```
 
 ## Outputs
@@ -55,13 +55,13 @@ npm i @grnsft/if
 Then run IF using the following command:
 
 ```sh
-ie --manifest <path-to-manifest>
+if-run --manifest <path-to-manifest>
 ```
 
 This will dump the output to the console. If you want to save the output to a yaml file, provide a savepath to the `--output` command:
 
 ```sh
-ie --manifest <path-to-manifest> --output <savepath>
+if-run --manifest <path-to-manifest> --output <savepath>
 ```
 
 

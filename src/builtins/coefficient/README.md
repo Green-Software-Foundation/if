@@ -86,7 +86,7 @@ tree:
 You can run this example by saving it as `./examples/manifests/coefficient.yml` and executing the following command from the project root:
 
 ```sh
-ie --manifest ./examples/manifests/coefficient.yml --output ./examples/outputs/coefficient.yml
+if-run --manifest ./examples/manifests/coefficient.yml --output ./examples/outputs/coefficient.yml
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`
