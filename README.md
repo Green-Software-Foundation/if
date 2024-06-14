@@ -34,7 +34,7 @@ Then, run `if` using the following command:
 ```sh
 if-run --manifest <path-to-your-manifest-file> --stdout
 ## or you can use aliases
-if-run -m <path-to-your-manifest-file> --stdout
+if-run -m <path-to-your-manifest-file> -s
 
 ```
 
