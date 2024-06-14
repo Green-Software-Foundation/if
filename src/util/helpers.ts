@@ -10,7 +10,7 @@ import {STRINGS} from '../config';
 
 import {Difference} from '../types/lib/compare';
 
-const {ISSUE_TEMPLATE} = STRINGS;
+const {UNSUPPORTED_ERROR} = STRINGS;
 
 /**
  * Impact engine error handler. Logs errors and appends issue template if error is unknown.
@@ -21,7 +21,9 @@ export const andHandle = (error: Error) => {
   logger.error(error);
 
   if (!knownErrors.includes(error.name)) {
-    logger.warn(ISSUE_TEMPLATE);
+    logger.error(UNSUPPORTED_ERROR(error.name));
+    // eslint-disable-next-line no-process-exit
+    process.exit(2);
   }
 };
 
