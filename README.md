@@ -51,7 +51,7 @@ initialize:
     - yaml
 ```
 
-The `ie` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
+The `if-run` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
 
 Use the `debug` command if you want to diagnose and fix errors in your plugin:
 
