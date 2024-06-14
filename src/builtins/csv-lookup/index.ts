@@ -5,12 +5,29 @@ import axios from 'axios';
 import {z} from 'zod';
 import {parse} from 'csv-parse/sync';
 
+import {validate} from '../../util/validations';
+import {ERRORS} from '@grnsft/if-core';
+
+import {STRINGS} from '../../config';
+
 import {ExecutePlugin, PluginParams} from '../../types/interface';
 
-import {validate} from '../../util/validations';
-import {ERRORS} from '../../util/errors';
+const {
+  FILE_FETCH_FAILED,
+  FILE_READ_FAILED,
+  MISSING_CSV_COLUMN,
+  NO_QUERY_DATA,
+  MISSING_GLOBAL_CONFIG,
+} = STRINGS;
 
-const {ConfigNotFoundError, FileNotFoundError, InputValidationError} = ERRORS;
+const {
+  FetchingFileError,
+  ReadFileError,
+  MissingCSVColumnError,
+  QueryDataNotFoundError,
+  GlobalConfigError,
+  CSVParseError,
+} = ERRORS;
 
 export const CSVLookup = (globalConfig: any): ExecutePlugin => {
   const metadata = {
@@ -36,18 +53,16 @@ export const CSVLookup = (globalConfig: any): ExecutePlugin => {
   const retrieveFile = async (filepath: string) => {
     if (isURL(filepath)) {
       const {data} = await axios.get(filepath).catch(error => {
-        throw new FileNotFoundError(`Something went wrong while reading the file: ${filepath}.
-        ${error.response.message}`);
+        throw new FetchingFileError(
+          FILE_FETCH_FAILED(filepath, error.response.message)
+        );
       });
 
       return data;
     }
 
     return readFile(filepath).catch(error => {
-      throw new FileNotFoundError(
-        `Something went wrong while reading the file: ${filepath}. 
-${error}`
-      );
+      throw new ReadFileError(FILE_READ_FAILED(filepath, error));
     });
   };
 
@@ -81,7 +96,7 @@ ${error}`
    */
   const fieldAccessor = (field: string, object: any) => {
     if (!(`${field}` in object)) {
-      throw new InputValidationError(`There is no column with name: ${field}.`);
+      throw new MissingCSVColumnError(MISSING_CSV_COLUMN(field));
     }
 
     return nanifyEmptyValues(object[field]);
@@ -150,6 +165,24 @@ ${error}`
   };
 
   /**
+   * Parses CSV file.
+   */
+  const parseCSVFile = (file: string | Buffer) => {
+    try {
+      const parsedCSV: any[] = parse(file, {
+        columns: true,
+        skip_empty_lines: true,
+        cast: true,
+      });
+
+      return parsedCSV;
+    } catch (error: any) {
+      console.error(error);
+      throw new CSVParseError(error);
+    }
+  };
+
+  /**
    * 1. Validates global config.
    * 2. Tries to retrieve given file (with url or local path).
    * 3. Parses given CSV.
@@ -160,41 +193,29 @@ ${error}`
     const {filepath, query, output} = safeGlobalConfig;
 
     const file = await retrieveFile(filepath);
+    const parsedCSV = parseCSVFile(file);
 
-    try {
-      const parsedCSV: any[] = parse(file, {
-        columns: true,
-        skip_empty_lines: true,
-        cast: true,
+    return inputs.map(input => {
+      /** Collects query values from input. */
+      const queryData: any = {};
+      const queryKeys = Object.keys(query);
+      queryKeys.forEach(queryKey => {
+        const queryValue = query[queryKey];
+        queryData[queryKey] = input[queryValue];
       });
 
-      return inputs.map(input => {
-        /** Collects query values from input. */
-        const queryData: any = {};
-        const queryKeys = Object.keys(query);
-        queryKeys.forEach(queryKey => {
-          const queryValue = query[queryKey];
-          queryData[queryKey] = input[queryValue];
-        });
+      /** Gets related data from CSV. */
+      const relatedData = parsedCSV.find(withCriteria(queryData));
 
-        /** Gets related data from CSV. */
-        const relatedData = parsedCSV.find(withCriteria(queryData));
+      if (!relatedData) {
+        throw new QueryDataNotFoundError(NO_QUERY_DATA);
+      }
 
-        if (!relatedData) {
-          throw new InputValidationError(
-            'One or more of the given query parameters are not found in the target CSV file column headers.'
-          );
-        }
-
-        return {
-          ...input,
-          ...filterOutput(relatedData, {output, query}),
-        };
-      });
-    } catch (error) {
-      throw new InputValidationError(`Error happened while parsing given CSV file: ${filepath}
-${error}`);
-    }
+      return {
+        ...input,
+        ...filterOutput(relatedData, {output, query}),
+      };
+    });
   };
 
   /**
@@ -202,7 +223,7 @@ ${error}`);
    */
   const validateGlobalConfig = () => {
     if (!globalConfig) {
-      throw new ConfigNotFoundError('Global config is not provided.');
+      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }
 
     const globalConfigSchema = z.object({

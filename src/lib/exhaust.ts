@@ -1,3 +1,5 @@
+import {ERRORS} from '@grnsft/if-core';
+
 /**
  * @todo This is temporary solution, will be refactored to support dynamic plugins.
  */
@@ -6,15 +8,13 @@ import {ExportCSVRaw} from '../builtins/export-csv-raw';
 import {ExportLog} from '../builtins/export-log';
 import {ExportYaml} from '../builtins/export-yaml';
 
-import {ERRORS} from '../util/errors';
-
 import {STRINGS} from '../config';
 
 import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
 import {Context} from '../types/manifest';
 import {Options} from '../types/process-args';
 
-const {ExhaustError} = ERRORS;
+const {InvalidExhaustPluginError} = ERRORS;
 const {INVALID_EXHAUST_PLUGIN, PREPARING_OUTPUT_DATA} = STRINGS;
 
 /**
@@ -35,7 +35,7 @@ const initializeExhaustPlugin = (name: string): ExhaustPluginInterface => {
     case 'csv-raw':
       return ExportCSVRaw();
     default:
-      throw new ExhaustError(INVALID_EXHAUST_PLUGIN(name));
+      throw new InvalidExhaustPluginError(INVALID_EXHAUST_PLUGIN(name));
   }
 };
 

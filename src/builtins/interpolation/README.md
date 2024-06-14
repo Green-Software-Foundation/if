@@ -164,5 +164,5 @@ You can execute this by passing it to `ie`. Run the impact using the following c
 
 ```sh
 npm i -g @grnsft/if
-ie --manifest ./manifests/examples/interpolation.yml --output ./manifests/outputs/interpolation.yml
+if-run --manifest ./manifests/examples/interpolation.yml --output ./manifests/outputs/interpolation.yml
 ```

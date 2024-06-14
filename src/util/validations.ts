@@ -1,6 +1,5 @@
 import {ZodIssue, ZodIssueCode, ZodSchema, z} from 'zod';
-
-import {ERRORS} from './errors';
+import {ERRORS} from '@grnsft/if-core';
 
 import {AGGREGATION_METHODS} from '../types/aggregation';
 import {AGGREGATION_TYPES} from '../types/parameters';
@@ -9,6 +8,7 @@ import {STRINGS} from '../config/strings';
 
 const {ManifestValidationError, InputValidationError} = ERRORS;
 const {VALIDATING_MANIFEST} = STRINGS;
+
 /**
  * At least one property defined handler.
  */
@@ -148,5 +148,6 @@ const flattenPath = (path: (string | number)[]): string => {
   const flattenPath = path.map(part =>
     typeof part === 'number' ? `[${part}]` : part
   );
+
   return flattenPath.join('.');
 };

@@ -1,9 +1,8 @@
 import * as YAML from 'js-yaml';
+import {ERRORS} from '@grnsft/if-core';
 
-import {ERRORS} from '../util/errors';
 import {openYamlFileAsObject} from '../util/yaml';
 import {readAndParseJson} from '../util/json';
-import {parseManifestFromStdin} from '../util/helpers';
 
 import {PARAMETERS} from '../config';
 import {STRINGS} from '../config';
@@ -12,7 +11,7 @@ import {Parameters} from '../types/parameters';
 import {LoadDiffParams} from '../types/util/args';
 import {Manifest} from '../types/manifest';
 
-const {CliInputError} = ERRORS;
+const {CliSourceFileError} = ERRORS;
 
 const {INVALID_SOURCE, LOADING_MANIFEST} = STRINGS;
 
@@ -41,11 +40,10 @@ export const load = async (inputPath: string, paramPath?: string) => {
  * Loads files to compare. As a source file checks if data is piped and then decides which one to take.
  */
 export const loadIfDiffFiles = async (params: LoadDiffParams) => {
-  const {sourcePath, targetPath} = params;
-  const pipedSourceManifest = await parseManifestFromStdin();
+  const {sourcePath, targetPath, pipedSourceManifest} = params;
 
   if (!sourcePath && !pipedSourceManifest) {
-    throw new CliInputError(INVALID_SOURCE);
+    throw new CliSourceFileError(INVALID_SOURCE);
   }
 
   const loadFromSource =

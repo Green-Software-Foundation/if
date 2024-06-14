@@ -4,7 +4,8 @@ import {z} from 'zod';
 
 import {parameterize} from '../lib/parameterize';
 
-import {ERRORS} from '../util/errors';
+import {ERRORS} from '@grnsft/if-core';
+import {validate} from '../util/validations';
 
 import {STRINGS} from '../config';
 
@@ -14,16 +15,24 @@ import {
   TimeNormalizerConfig,
   TimeParams,
 } from '../types/time-sync';
-import {validate} from '../util/validations';
 
 Settings.defaultZone = 'utc';
 
-const {InputValidationError} = ERRORS;
+const {
+  GlobalConfigError,
+  InvalidDateInInputError,
+  InvalidPaddingError,
+  InvalidInputError,
+} = ERRORS;
 
 const {
   INVALID_TIME_NORMALIZATION,
   INVALID_OBSERVATION_OVERLAP,
   AVOIDING_PADDING_BY_EDGES,
+  INVALID_DATE_TYPE,
+  START_LOWER_END,
+  TIMESTAMP_REQUIRED,
+  INVALID_DATETIME,
 } = STRINGS;
 
 export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
@@ -64,7 +73,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
               seconds: previousInput.duration,
             }) > currentMoment
           ) {
-            throw new InputValidationError(INVALID_OBSERVATION_OVERLAP);
+            throw new InvalidInputError(INVALID_OBSERVATION_OVERLAP);
           }
 
           const compareableTime = previousInputTimestamp.plus({
@@ -106,19 +115,22 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
   };
 
   const parseDate = (date: Date | string) => {
-    if (!date) return DateTime.invalid('Invalid date');
+    if (!date) {
+      return DateTime.invalid('Invalid date');
+    }
+
     // dates are passed to time-sync.ts both in ISO 8601 format
     // and as a Date object (from the deserialization of a YAML file)
     // if the YAML parser fails to identify as a date, it passes as a string
     if (isDate(date)) {
       return DateTime.fromJSDate(date);
     }
+
     if (typeof date === 'string') {
       return DateTime.fromISO(date);
     }
-    throw new InputValidationError(
-      `Unexpected date datatype: ${typeof date}: ${date}`
-    );
+
+    throw new InvalidDateInInputError(INVALID_DATE_TYPE(date));
   };
 
   /**
@@ -128,10 +140,10 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
     const schema = z.object({
       timestamp: z
         .string({
-          required_error: `required in input[${index}]`,
+          required_error: TIMESTAMP_REQUIRED(index),
         })
         .datetime({
-          message: `invalid datetime in input[${index}]`,
+          message: INVALID_DATETIME(index),
         })
         .or(z.date()),
       duration: z.number(),
@@ -145,7 +157,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
    */
   const validateGlobalConfig = () => {
     if (globalConfig === undefined) {
-      throw new InputValidationError(INVALID_TIME_NORMALIZATION);
+      throw new GlobalConfigError(INVALID_TIME_NORMALIZATION);
     }
 
     const schema = z
@@ -156,7 +168,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
         'allow-padding': z.boolean(),
       })
       .refine(data => data['start-time'] < data['end-time'], {
-        message: '`start-time` should be lower than `end-time`',
+        message: START_LOWER_END,
       });
 
     return validate<z.infer<typeof schema>>(schema, globalConfig);
@@ -176,8 +188,10 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
     i: number
   ) => {
     const thisMoment = parseDate(currentRoundMoment).startOf('second');
+
     return thisMoment.plus({seconds: i});
   };
+
   /**
    * Breaks down input per minimal time unit.
    */
@@ -259,8 +273,9 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
   const validatePadding = (pad: PaddingReceipt, params: TimeParams): void => {
     const {start, end} = pad;
     const isPaddingNeeded = start || end;
+
     if (!params.allowPadding && isPaddingNeeded) {
-      throw new InputValidationError(AVOIDING_PADDING_BY_EDGES(start, end));
+      throw new InvalidPaddingError(AVOIDING_PADDING_BY_EDGES(start, end));
     }
   };
 
@@ -292,8 +307,8 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
    * Iterates over given inputs frame, meanwhile checking if aggregation method is `sum`, then calculates it.
    * For methods is `avg` and `none` calculating average of the frame.
    */
-  const resampleInputFrame = (inputsInTimeslot: PluginParams[]) => {
-    return inputsInTimeslot.reduce((acc, input, index, inputs) => {
+  const resampleInputFrame = (inputsInTimeslot: PluginParams[]) =>
+    inputsInTimeslot.reduce((acc, input, index, inputs) => {
       const metrics = Object.keys(input);
 
       metrics.forEach(metric => {
@@ -336,13 +351,12 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
 
       return acc;
     }, {} as PluginParams);
-  };
 
   /**
    * Takes each array frame with interval length, then aggregating them together as from units.yaml file.
    */
-  const resampleInputs = (inputs: PluginParams[], params: TimeParams) => {
-    return inputs.reduce((acc: PluginParams[], _input, index, inputs) => {
+  const resampleInputs = (inputs: PluginParams[], params: TimeParams) =>
+    inputs.reduce((acc: PluginParams[], _input, index, inputs) => {
       const frameStart = index * params.interval;
       const frameEnd = (index + 1) * params.interval;
       const inputsFrame = inputs.slice(frameStart, frameEnd);
@@ -356,7 +370,6 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
 
       return acc;
     }, [] as PluginParams[]);
-  };
 
   /**
    * Pads zeroish inputs from the beginning or at the end of the inputs if needed.
@@ -394,6 +407,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
         )
       );
     }
+
     return paddedArray;
   };
 
@@ -404,6 +418,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
   ) => {
     const array: PluginParams[] = [];
     const dateRange = Interval.fromDateTimes(startDate, endDate);
+
     for (const interval of dateRange.splitBy({second: 1})) {
       array.push(
         fillWithZeroishInput(
@@ -415,6 +430,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
         )
       );
     }
+
     return array;
   };
 
@@ -424,8 +440,8 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
   const trimInputsByGlobalTimeline = (
     inputs: PluginParams[],
     params: TimeParams
-  ): PluginParams[] => {
-    return inputs.reduce((acc: PluginParams[], item) => {
+  ): PluginParams[] =>
+    inputs.reduce((acc: PluginParams[], item) => {
       const {timestamp} = item;
 
       if (
@@ -437,7 +453,6 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
 
       return acc;
     }, [] as PluginParams[]);
-  };
 
   return {metadata, execute};
 };

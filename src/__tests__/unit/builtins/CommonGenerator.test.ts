@@ -1,12 +1,13 @@
-import {KeyValuePair} from '../../../types/common';
-
-import {ERRORS} from '../../../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 
 import {CommonGenerator} from '../../../builtins/mock-observations/helpers/common-generator';
 
-const {InputValidationError} = ERRORS;
+import {STRINGS} from '../../../config';
 
-describe('lib/mock-observations/CommonGenerator: ', () => {
+const {GlobalConfigError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG} = STRINGS;
+
+describe('builtins/mock-observations/CommonGenerator: ', () => {
   describe('initialize: ', () => {
     it('throws an error when config is not empty object.', async () => {
       const commonGenerator = CommonGenerator({});
@@ -16,18 +17,14 @@ describe('lib/mock-observations/CommonGenerator: ', () => {
       try {
         commonGenerator.next([]);
       } catch (error) {
-        expect(error).toEqual(
-          new InputValidationError(
-            'CommonGenerator: Config must not be null or empty.'
-          )
-        );
+        expect(error).toEqual(new GlobalConfigError(MISSING_GLOBAL_CONFIG));
       }
     });
   });
 
   describe('next(): ', () => {
     it('returns a result with valid data.', async () => {
-      const config: KeyValuePair = {
+      const config: Record<string, any> = {
         key1: 'value1',
         key2: 'value2',
       };
@@ -35,7 +32,7 @@ describe('lib/mock-observations/CommonGenerator: ', () => {
 
       expect.assertions(1);
 
-      expect(commonGenerator.next([])).toStrictEqual({
+      expect(commonGenerator.next([])).toEqual({
         key1: 'value1',
         key2: 'value2',
       });

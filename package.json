@@ -1,14 +1,14 @@
 {
   "name": "@grnsft/if",
   "description": "Impact Framework",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
   },
   "bin": {
-    "ie": "./build/index.js",
     "if-diff": "./build/diff.js",
+    "if-run": "./build/index.js",
     "if-env": "./build/env.js"
   },
   "bugs": {
@@ -17,6 +17,7 @@
   "dependencies": {
     "@commitlint/cli": "^18.6.0",
     "@commitlint/config-conventional": "^18.6.0",
+    "@grnsft/if-core": "^0.0.3",
     "axios": "^1.7.2",
     "csv-parse": "^5.5.6",
     "csv-stringify": "^6.4.6",
@@ -73,8 +74,8 @@
     "coverage": "jest --verbose --coverage --testPathPattern=src/__tests__/unit",
     "fix": "gts fix",
     "fix:package": "fixpack",
-    "ie": "npx ts-node src/index.ts",
     "if-diff": "npx ts-node src/diff.ts",
+    "if-run": "npx ts-node src/index.ts",
     "if-env": "npx ts-node src/env.ts",
     "lint": "gts lint",
     "pre-commit": "lint-staged",
