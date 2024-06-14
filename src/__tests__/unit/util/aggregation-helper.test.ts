@@ -1,10 +1,9 @@
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {PluginParams} from '@grnsft/if-core/types';
 
 import {aggregateInputsIntoOne} from '../../../util/aggregation-helper';
 
 import {STRINGS} from '../../../config';
-
-import {PluginParams} from '../../../types/interface';
 
 const {InvalidAggregationMethodError, MissingAggregationParamError} = ERRORS;
 const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
