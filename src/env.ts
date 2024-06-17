@@ -26,9 +26,9 @@ const {
 const IfEnv = async () => {
   const commandArgs = await parseIfEnvArgs();
   const options: EnvironmentOptions = {
-    folderPath: __dirname,
+    folderPath: process.cwd(),
     install: !!commandArgs.install,
-    dependencies: {'@grnsft/if': packageJson.version},
+    dependencies: {},
   };
 
   if (commandArgs && commandArgs.manifest) {
@@ -57,11 +57,8 @@ const getOptionsFromArgs = async (commandArgs: {
   install: boolean | undefined;
 }) => {
   const {manifest: manifestPath, install} = commandArgs;
-
   const folderPath = path.dirname(manifestPath);
-
   const manifest = await load(manifestPath);
-  const plugins = manifest.rawManifest?.initialize?.plugins || {};
   const dependencies =
     manifest.rawManifest?.execution?.environment.dependencies || [];
 
@@ -69,7 +66,7 @@ const getOptionsFromArgs = async (commandArgs: {
     throw new Error(FAILURE_MESSAGE_DEPENDENCIES);
   }
 
-  const pathsWithVersion = extractPathsWithVersion(plugins, dependencies);
+  const pathsWithVersion = extractPathsWithVersion(dependencies);
 
   return {
     folderPath,
@@ -81,25 +78,21 @@ const getOptionsFromArgs = async (commandArgs: {
 /**
  * Gets depencecies with versions.
  */
-const extractPathsWithVersion = (plugins: any, dependencies: string[]) => {
-  const paths = Object.keys(plugins).map(plugin => plugins[plugin].path);
-  const uniquePaths = [...new Set(paths)].filter(path => path !== 'builtin');
+const extractPathsWithVersion = (dependencies: string[]) => {
   const pathsWithVersion: PathWithVersion = {};
 
-  uniquePaths.forEach(pluginPath => {
-    const dependency = dependencies.find((dependency: string) =>
-      dependency.startsWith(pluginPath)
-    );
+  dependencies.forEach(dependency => {
+    const splittedDependency = dependency.split('@');
+    const packageName =
+      splittedDependency.length > 2
+        ? `@${splittedDependency[1]}`
+        : `@${splittedDependency[0]}`;
+    const version =
+      splittedDependency.length > 2
+        ? splittedDependency[2].split(' ')[0]
+        : splittedDependency[1];
 
-    if (dependency) {
-      const splittedDependency = dependency.split('@');
-      const version =
-        splittedDependency.length > 2
-          ? splittedDependency[2].split(' ')[0]
-          : splittedDependency[1];
-
-      pathsWithVersion[pluginPath] = `^${version}`;
-    }
+    pathsWithVersion[packageName] = `^${version}`;
   });
 
   return pathsWithVersion;
@@ -112,9 +105,14 @@ const initializeAndInstallLibs = async (options: EnvironmentOptions) => {
   try {
     const {folderPath, install, dependencies} = options;
 
+    if (!Object.keys(dependencies).length) {
+      throw new Error(FAILURE_MESSAGE_DEPENDENCIES);
+    }
+
     await fs.mkdir(folderPath, {recursive: true});
 
     const packageJsonPath = await initPackageJsonIfNotExists(folderPath);
+    await updatePackageJsonProperties(packageJsonPath);
 
     if (install) {
       await installDependencies(folderPath, dependencies);
@@ -123,7 +121,33 @@ const initializeAndInstallLibs = async (options: EnvironmentOptions) => {
     }
   } catch (error) {
     console.log(FAILURE_MESSAGE);
+    process.exit(2);
   }
+};
+
+/**
+ * Update the package.json properties.
+ */
+const updatePackageJsonProperties = async (packageJsonPath: string) => {
+  const packageJsonContent = await fs.readFile(packageJsonPath, 'utf8');
+  const parsedPackageJsonContent = JSON.parse(packageJsonContent);
+
+  const properties = {
+    name: 'if-environment',
+    description: packageJson.description,
+    author: packageJson.author,
+    bugs: packageJson.bugs,
+    engines: packageJson.engines,
+    homepage: packageJson.homepage,
+  };
+
+  const newPackageJson = Object.assign(
+    {},
+    parsedPackageJsonContent,
+    properties
+  );
+
+  await fs.writeFile(packageJsonPath, JSON.stringify(newPackageJson, null, 2));
 };
 
 /**
