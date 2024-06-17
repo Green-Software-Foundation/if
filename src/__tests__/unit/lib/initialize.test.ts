@@ -10,15 +10,19 @@ jest.mock('../../../util/log-memoize', () => ({
   memoizedLog: mockLog,
 }));
 
-import {initialize} from '../../../lib/initialize';
+import {ERRORS} from '@grnsft/if-core';
 
-import {ERRORS} from '../../../util/errors';
+import {initialize} from '../../../lib/initialize';
 
 import {STRINGS} from '../../../config';
 
 import {GlobalPlugins} from '../../../types/manifest';
 
-const {PluginCredentialError, ModuleInitializationError} = ERRORS;
+const {
+  MissingPluginPathError,
+  MissingPluginMethodError,
+  PluginInitializationError,
+} = ERRORS;
 const {MISSING_METHOD, MISSING_PATH, INVALID_MODULE_PATH} = STRINGS;
 
 describe('lib/initalize: ', () => {
@@ -81,9 +85,9 @@ describe('lib/initalize: ', () => {
       try {
         await initialize(plugins);
       } catch (error) {
-        expect(error).toBeInstanceOf(PluginCredentialError);
+        expect(error).toBeInstanceOf(MissingPluginPathError);
 
-        if (error instanceof PluginCredentialError) {
+        if (error instanceof MissingPluginPathError) {
           expect(error.message).toEqual(MISSING_PATH);
         }
       }
@@ -103,9 +107,9 @@ describe('lib/initalize: ', () => {
       try {
         await initialize(plugins);
       } catch (error) {
-        expect(error).toBeInstanceOf(PluginCredentialError);
+        expect(error).toBeInstanceOf(MissingPluginMethodError);
 
-        if (error instanceof PluginCredentialError) {
+        if (error instanceof MissingPluginMethodError) {
           expect(error.message).toEqual(MISSING_METHOD);
         }
       }
@@ -160,14 +164,16 @@ describe('lib/initalize: ', () => {
 
       try {
         await initialize(plugins);
-      } catch (error) {
-        expect(error).toBeInstanceOf(ModuleInitializationError);
-
-        if (error instanceof ModuleInitializationError) {
-          expect(error.message).toEqual(
-            INVALID_MODULE_PATH(plugins.mockavizta.path)
-          );
-        }
+      } catch (error: any) {
+        expect(error).toBeInstanceOf(PluginInitializationError);
+        expect(error.message).toEqual(
+          INVALID_MODULE_PATH(
+            plugins.mockavizta.path,
+            new Error(
+              "Cannot find module 'failing-mock' from 'src/lib/initialize.ts'"
+            )
+          )
+        );
       }
     });
   });

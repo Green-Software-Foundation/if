@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 jest.mock('fs', () => require('../../../__mocks__/fs'));
 
-import {exhaust} from '../../../lib/exhaust';
+import {ERRORS} from '@grnsft/if-core';
 
-import {ERRORS} from '../../../util/errors';
+import {exhaust} from '../../../lib/exhaust';
 
 import {STRINGS} from '../../../config';
 
-const {ExhaustError} = ERRORS;
-const {INVALID_EXHAUST_PLUGIN} = STRINGS;
+const {ExhaustOutputArgError, InvalidExhaustPluginError} = ERRORS;
+const {INVALID_EXHAUST_PLUGIN, OUTPUT_REQUIRED} = STRINGS;
 
 describe('lib/exhaust: ', () => {
   describe('exhaust(): ', () => {
@@ -50,7 +50,6 @@ describe('lib/exhaust: ', () => {
           outputs: ['yaml'],
         },
       };
-      const expectedMessage = 'Output path is required.';
 
       expect.assertions(2);
 
@@ -58,10 +57,10 @@ describe('lib/exhaust: ', () => {
         // @ts-ignore
         await exhaust(tree, context, {});
       } catch (error) {
-        expect(error).toBeInstanceOf(ExhaustError);
+        expect(error).toBeInstanceOf(ExhaustOutputArgError);
 
-        if (error instanceof ExhaustError) {
-          expect(error.message).toEqual(expectedMessage);
+        if (error instanceof ExhaustOutputArgError) {
+          expect(error.message).toEqual(OUTPUT_REQUIRED);
         }
       }
     });
@@ -73,9 +72,6 @@ describe('lib/exhaust: ', () => {
           outputs: ['mock'],
         },
       };
-      const expectedMessage = INVALID_EXHAUST_PLUGIN(
-        context.initialize.outputs[0]
-      );
 
       expect.assertions(2);
 
@@ -83,10 +79,12 @@ describe('lib/exhaust: ', () => {
         // @ts-ignore
         await exhaust(tree, context, {});
       } catch (error) {
-        expect(error).toBeInstanceOf(ExhaustError);
+        expect(error).toBeInstanceOf(InvalidExhaustPluginError);
 
-        if (error instanceof ExhaustError) {
-          expect(error.message).toEqual(expectedMessage);
+        if (error instanceof InvalidExhaustPluginError) {
+          expect(error.message).toEqual(
+            INVALID_EXHAUST_PLUGIN(context.initialize.outputs[0])
+          );
         }
       }
     });

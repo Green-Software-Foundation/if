@@ -1,12 +1,15 @@
 import * as fs from 'fs/promises';
 import {jest} from '@jest/globals';
+import {ERRORS} from '@grnsft/if-core';
 
 import {ExportCSVRaw} from '../../../builtins/export-csv-raw';
-import {ERRORS} from '../../../util/errors';
+
+import {STRINGS} from '../../../config';
 
 import {tree, context, outputs} from '../../../__mocks__/builtins/export-csv';
 
-const {ExhaustError} = ERRORS;
+const {ExhaustOutputArgError} = ERRORS;
+const {WRITE_CSV_ERROR, OUTPUT_REQUIRED} = STRINGS;
 
 jest.mock('fs/promises', () => ({
   __esModule: true,
@@ -40,18 +43,17 @@ describe('builtins/export-csv-raw: ', () => {
 
       it('throws an error when the CSV file could not be created.', async () => {
         const outputPath = 'output#carbon';
+        const expectedMessage = 'Could not write CSV file.';
 
         expect.assertions(1);
 
-        jest
-          .spyOn(fs, 'writeFile')
-          .mockRejectedValue('Could not write CSV file.');
+        jest.spyOn(fs, 'writeFile').mockRejectedValue(expectedMessage);
 
         await expect(
           exportCSVRaw.execute(tree, context, outputPath)
         ).rejects.toThrow(
-          new ExhaustError(
-            'Failed to write CSV to output#carbon: Could not write CSV file.'
+          new ExhaustOutputArgError(
+            WRITE_CSV_ERROR(outputPath, expectedMessage)
           )
         );
       });
@@ -65,8 +67,8 @@ describe('builtins/export-csv-raw: ', () => {
         try {
           await exportCSVRaw.execute(tree, context, outputPath);
         } catch (error) {
-          expect(error).toBeInstanceOf(ExhaustError);
-          expect(error).toEqual(new ExhaustError('Output path is required.'));
+          expect(error).toBeInstanceOf(ExhaustOutputArgError);
+          expect(error).toEqual(new ExhaustOutputArgError(OUTPUT_REQUIRED));
         }
       });
     });

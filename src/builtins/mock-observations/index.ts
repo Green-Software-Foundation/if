@@ -1,13 +1,13 @@
 import {DateTime, Duration} from 'luxon';
 import {z} from 'zod';
 
-import {ExecutePlugin, PluginParams} from '../../types/interface';
-import {ConfigParams, KeyValuePair} from '../../types/common';
-
 import {validate} from '../../util/validations';
 
 import {CommonGenerator} from './helpers/common-generator';
 import {RandIntGenerator} from './helpers/rand-int-generator';
+
+import {ExecutePlugin, PluginParams} from '../../types/interface';
+import {ConfigParams, KeyValuePair} from '../../types/common';
 import {Generator} from './interfaces/index';
 import {ObservationParams} from './types';
 

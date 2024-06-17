@@ -94,18 +94,18 @@ jest.mock('ts-command-line-args', () => ({
   },
 }));
 
-import path = require('path');
+import * as path from 'node:path';
+import {ERRORS} from '@grnsft/if-core';
 
 import {
   parseIEProcessArgs,
   parseIfDiffArgs,
   parseIfEnvArgs,
 } from '../../../util/args';
-import {ERRORS} from '../../../util/errors';
 
 import {STRINGS} from '../../../config';
 
-const {CliInputError} = ERRORS;
+const {CliInputError, CliSourceFileError} = ERRORS;
 
 const {
   MANIFEST_IS_MISSING,
@@ -145,8 +145,8 @@ describe('util/args: ', () => {
       try {
         parseIEProcessArgs();
       } catch (error) {
-        expect(error).toBeInstanceOf(CliInputError);
-        expect(error).toEqual(new CliInputError(MANIFEST_IS_MISSING));
+        expect(error).toBeInstanceOf(CliSourceFileError);
+        expect(error).toEqual(new CliSourceFileError(MANIFEST_IS_MISSING));
       }
     });
 
@@ -225,8 +225,8 @@ describe('util/args: ', () => {
       try {
         parseIEProcessArgs();
       } catch (error) {
-        expect(error).toBeInstanceOf(CliInputError);
-        expect(error).toEqual(new CliInputError(FILE_IS_NOT_YAML));
+        expect(error).toBeInstanceOf(CliSourceFileError);
+        expect(error).toEqual(new CliSourceFileError(FILE_IS_NOT_YAML));
       }
     });
 

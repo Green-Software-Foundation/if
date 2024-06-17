@@ -1,8 +1,17 @@
-import {Interpolation} from '../../../builtins';
-import {Method} from '../../../builtins/interpolation/types';
-import {ERRORS} from '../../../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 
-const {InputValidationError, ConfigNotFoundError} = ERRORS;
+import {Interpolation} from '../../../builtins';
+
+import {Method} from '../../../builtins/interpolation/types';
+import {STRINGS} from '../../../config';
+
+const {InputValidationError, GlobalConfigError} = ERRORS;
+const {
+  MISSING_GLOBAL_CONFIG,
+  WITHIN_THE_RANGE,
+  ARRAY_LENGTH_NON_EMPTY,
+  X_Y_EQUAL,
+} = STRINGS;
 
 describe('builtins/interpolation: ', () => {
   describe('Interpolation: ', () => {
@@ -144,10 +153,8 @@ describe('builtins/interpolation: ', () => {
         try {
           plugin.execute(inputs);
         } catch (error) {
-          expect(error).toBeInstanceOf(ConfigNotFoundError);
-          expect(error).toEqual(
-            new ConfigNotFoundError('Global config is not provided.')
-          );
+          expect(error).toBeInstanceOf(GlobalConfigError);
+          expect(error).toEqual(new GlobalConfigError(MISSING_GLOBAL_CONFIG));
         }
       });
 
@@ -163,11 +170,7 @@ describe('builtins/interpolation: ', () => {
           plugin.execute(inputs);
         } catch (error) {
           expect(error).toBeInstanceOf(InputValidationError);
-          expect(error).toEqual(
-            new InputValidationError(
-              'The length of `x` and `y` should be equal'
-            )
-          );
+          expect(error).toEqual(new InputValidationError(X_Y_EQUAL));
         }
       });
 
@@ -184,11 +187,7 @@ describe('builtins/interpolation: ', () => {
           plugin.execute(inputs);
         } catch (error) {
           expect(error).toBeInstanceOf(InputValidationError);
-          expect(error).toEqual(
-            new InputValidationError(
-              'The target x value must be within the range of the given x values'
-            )
-          );
+          expect(error).toEqual(new InputValidationError(WITHIN_THE_RANGE));
         }
       });
       it('throws an error when the the length of the input arrays is <2', () => {
@@ -213,9 +212,7 @@ describe('builtins/interpolation: ', () => {
         } catch (error) {
           expect(error).toBeInstanceOf(InputValidationError);
           expect(error).toEqual(
-            new InputValidationError(
-              'the length of the input arrays must be greater than 1'
-            )
+            new InputValidationError(ARRAY_LENGTH_NON_EMPTY)
           );
         }
       });

@@ -1,10 +1,13 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {Regex} from '../../../builtins/regex';
 
-import {ERRORS} from '../../../util/errors';
+import {STRINGS} from '../../../config';
 
-const {InputValidationError, ConfigValidationError} = ERRORS;
+const {GlobalConfigError, MissingInputDataError, RegexMismatchError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
 
-describe('lib/regex: ', () => {
+describe('builtins/regex: ', () => {
   describe('Regex: ', () => {
     const globalConfig = {
       parameter: 'physical-processor',
@@ -81,7 +84,6 @@ describe('lib/regex: ', () => {
       it('throws an error when `parameter` does not match to `match`.', async () => {
         const physicalProcessor =
           'Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz';
-        const expectedMessage = `Regex: \`${physicalProcessor}\` does not match the /^(^:)+/ regex expression.`;
 
         const globalConfig = {
           parameter: 'physical-processor',
@@ -102,14 +104,14 @@ describe('lib/regex: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(expectedMessage)
+            new RegexMismatchError(
+              REGEX_MISMATCH(physicalProcessor, '/^(^:)+/')
+            )
           );
         }
       });
 
       it('throws an error on missing global config.', async () => {
-        const expectedMessage = 'Regex: Configuration data is missing.';
-
         const config = undefined;
         const regex = Regex(config!);
 
@@ -124,15 +126,12 @@ describe('lib/regex: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new ConfigValidationError(expectedMessage)
+            new GlobalConfigError(MISSING_GLOBAL_CONFIG)
           );
         }
       });
 
       it('throws an error on missing params in input.', async () => {
-        const expectedMessage =
-          'Regex: `physical-processor` is missing from the input.';
-
         expect.assertions(1);
 
         try {
@@ -144,7 +143,7 @@ describe('lib/regex: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(expectedMessage)
+            new MissingInputDataError(MISSING_INPUT_DATA('physical-processor'))
           );
         }
       });

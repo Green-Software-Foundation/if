@@ -1,9 +1,13 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {SciEmbodied} from '../../../builtins/sci-embodied';
-import {ERRORS} from '../../../util/errors';
+
+import {STRINGS} from '../../../config';
 
 const {InputValidationError} = ERRORS;
+const {SCI_EMBODIED_ERROR} = STRINGS;
 
-describe('lib/sci-embodied:', () => {
+describe('builtins/sci-embodied:', () => {
   describe('SciEmbodied: ', () => {
     const sciEmbodied = SciEmbodied();
 
@@ -191,8 +195,6 @@ describe('lib/sci-embodied:', () => {
       });
 
       it('throws an error when `device/emissions-embodied` is string.', async () => {
-        const errorMessage =
-          '"device/emissions-embodied" parameter is not a valid number in input. please provide it as `gco2e`. Error code: invalid_union.';
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -216,7 +218,13 @@ describe('lib/sci-embodied:', () => {
         try {
           await sciEmbodied.execute(inputs);
         } catch (error) {
-          expect(error).toStrictEqual(new InputValidationError(errorMessage));
+          expect(error).toStrictEqual(
+            new InputValidationError(
+              `"device/emissions-embodied" parameter is ${SCI_EMBODIED_ERROR(
+                'gco2e'
+              )}. Error code: invalid_union.`
+            )
+          );
           expect(error).toBeInstanceOf(InputValidationError);
         }
       });
@@ -268,8 +276,6 @@ describe('lib/sci-embodied:', () => {
       });
 
       it('throws an exception on invalid values.', async () => {
-        const errorMessage =
-          '"device/emissions-embodied" parameter is not a valid number in input. please provide it as `gco2e`. Error code: invalid_union.';
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -285,8 +291,14 @@ describe('lib/sci-embodied:', () => {
         try {
           await sciEmbodied.execute(inputs);
         } catch (error) {
-          expect(error).toStrictEqual(new InputValidationError(errorMessage));
           expect(error).toBeInstanceOf(InputValidationError);
+          expect(error).toStrictEqual(
+            new InputValidationError(
+              `"device/emissions-embodied" parameter is ${SCI_EMBODIED_ERROR(
+                'gco2e'
+              )}. Error code: invalid_union.`
+            )
+          );
         }
       });
     });

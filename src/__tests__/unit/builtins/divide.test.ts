@@ -1,8 +1,11 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {Divide} from '../../../builtins';
 
-import {ERRORS} from '../../../util/errors';
+import {STRINGS} from '../../../config';
 
-const {InputValidationError, ConfigNotFoundError} = ERRORS;
+const {InputValidationError, GlobalConfigError, MissingInputDataError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA} = STRINGS;
 
 describe('builtins/divide: ', () => {
   describe('Divide: ', () => {
@@ -103,7 +106,6 @@ describe('builtins/divide: ', () => {
     });
 
     it('throws an error on missing global config.', async () => {
-      const expectedMessage = 'Global config is not provided.';
       const config = undefined;
       const divide = Divide(config!);
 
@@ -117,7 +119,9 @@ describe('builtins/divide: ', () => {
           },
         ]);
       } catch (error) {
-        expect(error).toStrictEqual(new ConfigNotFoundError(expectedMessage));
+        expect(error).toStrictEqual(
+          new GlobalConfigError(MISSING_GLOBAL_CONFIG)
+        );
       }
     });
 
@@ -148,8 +152,6 @@ describe('builtins/divide: ', () => {
     });
 
     it('throws an error when `denominator` is string.', async () => {
-      const expectedMessage = '`10` is missing from the input.';
-
       const globalConfig = {
         numerator: 'vcpus-allocated',
         denominator: '10',
@@ -168,7 +170,11 @@ describe('builtins/divide: ', () => {
           },
         ]);
       } catch (error) {
-        expect(error).toStrictEqual(new InputValidationError(expectedMessage));
+        expect(error).toStrictEqual(
+          new MissingInputDataError(
+            MISSING_INPUT_DATA(globalConfig.denominator)
+          )
+        );
       }
     });
   });

@@ -1,10 +1,13 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {Sum} from '../../../builtins/sum';
 
-import {ERRORS} from '../../../util/errors';
+import {STRINGS} from '../../../config';
 
-const {InputValidationError, ConfigNotFoundError} = ERRORS;
+const {GlobalConfigError, MissingInputDataError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA} = STRINGS;
 
-describe('lib/sum: ', () => {
+describe('builtins/sum: ', () => {
   describe('Sum: ', () => {
     const globalConfig = {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
@@ -48,7 +51,6 @@ describe('lib/sum: ', () => {
       });
 
       it('throws an error when global config is not provided.', () => {
-        const expectedMessage = 'Global config is not provided.';
         const config = undefined;
         const sum = Sum(config!);
 
@@ -65,13 +67,13 @@ describe('lib/sum: ', () => {
             },
           ]);
         } catch (error) {
-          expect(error).toStrictEqual(new ConfigNotFoundError(expectedMessage));
+          expect(error).toStrictEqual(
+            new GlobalConfigError(MISSING_GLOBAL_CONFIG)
+          );
         }
       });
 
       it('throws an error on missing params in input.', () => {
-        const expectedMessage = 'cpu/energy is missing from the input array.';
-
         expect.assertions(1);
 
         try {
@@ -83,7 +85,7 @@ describe('lib/sum: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(expectedMessage)
+            new MissingInputDataError(MISSING_INPUT_DATA('cpu/energy'))
           );
         }
       });

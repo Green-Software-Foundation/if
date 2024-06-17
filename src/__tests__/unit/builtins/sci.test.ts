@@ -1,10 +1,10 @@
+import {ERRORS} from '@grnsft/if-core';
+
 import {Sci} from '../../../builtins/sci';
 
-import {ERRORS} from '../../../util/errors';
+const {MissingInputDataError} = ERRORS;
 
-const {InputValidationError} = ERRORS;
-
-describe('lib/sci:', () => {
+describe('builtins/sci:', () => {
   describe('Sci: ', () => {
     const sci = Sci({'functional-unit': 'users'});
 
@@ -113,7 +113,7 @@ describe('lib/sci:', () => {
         try {
           await sci.execute(inputs);
         } catch (error) {
-          expect(error).toBeInstanceOf(InputValidationError);
+          expect(error).toBeInstanceOf(MissingInputDataError);
         }
       });
 
@@ -136,7 +136,7 @@ describe('lib/sci:', () => {
         try {
           await sci.execute(inputs);
         } catch (error) {
-          expect(error).toBeInstanceOf(InputValidationError);
+          expect(error).toBeInstanceOf(MissingInputDataError);
         }
       });
     });

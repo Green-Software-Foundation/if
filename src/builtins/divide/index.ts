@@ -1,11 +1,14 @@
 import {z} from 'zod';
 
-import {ERRORS} from '../../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 import {validate} from '../../util/validations';
+
+import {STRINGS} from '../../config';
 
 import {ExecutePlugin, PluginParams, ConfigParams} from '../../types/interface';
 
-const {InputValidationError, ConfigNotFoundError} = ERRORS;
+const {GlobalConfigError, MissingInputDataError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA} = STRINGS;
 
 export const Divide = (globalConfig: ConfigParams): ExecutePlugin => {
   const metadata = {
@@ -38,7 +41,7 @@ export const Divide = (globalConfig: ConfigParams): ExecutePlugin => {
    */
   const validateGlobalConfig = () => {
     if (!globalConfig) {
-      throw new ConfigNotFoundError('Global config is not provided.');
+      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }
 
     const schema = z.object({
@@ -65,9 +68,7 @@ export const Divide = (globalConfig: ConfigParams): ExecutePlugin => {
       })
       .refine(() => {
         if (typeof denominator === 'string' && !input[denominator]) {
-          throw new InputValidationError(
-            `\`${denominator}\` is missing from the input.`
-          );
+          throw new MissingInputDataError(MISSING_INPUT_DATA(denominator));
         }
         return true;
       });

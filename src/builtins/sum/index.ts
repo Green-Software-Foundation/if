@@ -1,13 +1,15 @@
 import {z} from 'zod';
 
-import {ExecutePlugin, PluginParams} from '../../types/interface';
-
 import {validate} from '../../util/validations';
-import {ERRORS} from '../../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 
+import {STRINGS} from '../../config';
+
+import {ExecutePlugin, PluginParams} from '../../types/interface';
 import {SumConfig} from './types';
 
-const {InputValidationError, ConfigNotFoundError} = ERRORS;
+const {GlobalConfigError, MissingInputDataError} = ERRORS;
+const {MISSING_INPUT_DATA, MISSING_GLOBAL_CONFIG} = STRINGS;
 
 export const Sum = (globalConfig: SumConfig): ExecutePlugin => {
   const metadata = {
@@ -37,7 +39,7 @@ export const Sum = (globalConfig: SumConfig): ExecutePlugin => {
    */
   const validateGlobalConfig = () => {
     if (!globalConfig) {
-      throw new ConfigNotFoundError('Global config is not provided.');
+      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }
 
     const globalConfigSchema = z.object({
@@ -60,9 +62,7 @@ export const Sum = (globalConfig: SumConfig): ExecutePlugin => {
   ) => {
     inputParameters.forEach(metricToSum => {
       if (!input[metricToSum]) {
-        throw new InputValidationError(
-          `${metricToSum} is missing from the input array.`
-        );
+        throw new MissingInputDataError(MISSING_INPUT_DATA(metricToSum));
       }
     });
 

@@ -1,9 +1,11 @@
 import * as fs from 'fs/promises';
 import {stringify} from 'csv-stringify/sync';
 import {jest} from '@jest/globals';
+import {ERRORS} from '@grnsft/if-core';
 
 import {ExportCSV} from '../../../builtins/export-csv';
-import {ERRORS} from '../../../util/errors';
+
+import {STRINGS} from '../../../config';
 
 import {
   tree,
@@ -13,7 +15,8 @@ import {
   aggregation,
 } from '../../../__mocks__/builtins/export-csv';
 
-const {ExhaustError} = ERRORS;
+const {ExhaustOutputArgError} = ERRORS;
+const {OUTPUT_REQUIRED, CSV_EXPORT} = STRINGS;
 
 jest.mock('fs/promises', () => ({
   writeFile: jest.fn<() => Promise<void>>().mockResolvedValue(),
@@ -197,8 +200,8 @@ describe('builtins/export-csv: ', () => {
         try {
           await exportCSV.execute(tree, context, outputPath);
         } catch (error) {
-          expect(error).toBeInstanceOf(ExhaustError);
-          expect(error).toEqual(new ExhaustError('Output path is required.'));
+          expect(error).toBeInstanceOf(ExhaustOutputArgError);
+          expect(error).toEqual(new ExhaustOutputArgError(OUTPUT_REQUIRED));
         }
       });
 
@@ -210,10 +213,8 @@ describe('builtins/export-csv: ', () => {
         try {
           await exportCSV.execute(tree, context, outputPath);
         } catch (error) {
-          expect(error).toBeInstanceOf(ExhaustError);
-          expect(error).toEqual(
-            new ExhaustError('Output path should contain `#`.')
-          );
+          expect(error).toBeInstanceOf(ExhaustOutputArgError);
+          expect(error).toEqual(new ExhaustOutputArgError(CSV_EXPORT));
         }
       });
 
@@ -225,12 +226,8 @@ describe('builtins/export-csv: ', () => {
         try {
           await exportCSV.execute(tree, context, outputPath);
         } catch (error) {
-          expect(error).toBeInstanceOf(ExhaustError);
-          expect(error).toEqual(
-            new ExhaustError(
-              'CSV export criteria is not found in output path. Please append it after --output <path>#.'
-            )
-          );
+          expect(error).toBeInstanceOf(ExhaustOutputArgError);
+          expect(error).toEqual(new ExhaustOutputArgError(CSV_EXPORT));
         }
       });
     });

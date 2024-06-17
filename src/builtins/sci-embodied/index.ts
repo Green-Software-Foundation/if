@@ -1,8 +1,12 @@
 import {z} from 'zod';
 
+import {validate, allDefined} from '../../util/validations';
+
+import {STRINGS} from '../../config';
+
 import {ExecutePlugin, PluginParams} from '../../types/interface';
 
-import {validate, allDefined} from '../../util/validations';
+const {SCI_EMBODIED_ERROR} = STRINGS;
 
 export const SciEmbodied = (): ExecutePlugin => {
   const metadata = {
@@ -55,9 +59,6 @@ export const SciEmbodied = (): ExecutePlugin => {
    * Checks for required fields in input.
    */
   const validateInput = (input: PluginParams) => {
-    const errorMessage = (unit: string) =>
-      `not a valid number in input. Please provide it as \`${unit}\``;
-
     const commonSchemaPart = (errorMessage: (unit: string) => string) => ({
       'device/emissions-embodied': z
         .number({
@@ -81,13 +82,13 @@ export const SciEmbodied = (): ExecutePlugin => {
     const vcpusSchemaPart = {
       'vcpus-allocated': z
         .number({
-          invalid_type_error: errorMessage('count'),
+          invalid_type_error: SCI_EMBODIED_ERROR('count'),
         })
         .gte(0)
         .min(0),
       'vcpus-total': z
         .number({
-          invalid_type_error: errorMessage('count'),
+          invalid_type_error: SCI_EMBODIED_ERROR('count'),
         })
         .gte(0)
         .min(0),
@@ -96,24 +97,24 @@ export const SciEmbodied = (): ExecutePlugin => {
     const resourcesSchemaPart = {
       'resources-reserved': z
         .number({
-          invalid_type_error: errorMessage('count'),
+          invalid_type_error: SCI_EMBODIED_ERROR('count'),
         })
         .gte(0)
         .min(0),
       'resources-total': z
         .number({
-          invalid_type_error: errorMessage('count'),
+          invalid_type_error: SCI_EMBODIED_ERROR('count'),
         })
         .gte(0)
         .min(0),
     };
 
     const schemaWithVcpus = z.object({
-      ...commonSchemaPart(errorMessage),
+      ...commonSchemaPart(SCI_EMBODIED_ERROR),
       ...vcpusSchemaPart,
     });
     const schemaWithResources = z.object({
-      ...commonSchemaPart(errorMessage),
+      ...commonSchemaPart(SCI_EMBODIED_ERROR),
       ...resourcesSchemaPart,
     });
 

@@ -4,25 +4,17 @@ import * as path from 'path';
 import {createInterface} from 'node:readline/promises';
 import {exec} from 'node:child_process';
 import {promisify} from 'node:util';
-import {ErrorFormatParams} from '../types/helpers';
-import {ERRORS} from './errors';
+
+import {ERRORS} from '@grnsft/if-core';
+
 import {logger} from './logger';
+
 import {STRINGS} from '../config';
 
 import {Difference} from '../types/lib/compare';
 
 const {ISSUE_TEMPLATE, INITIALIZING_PACKAGE_JSON, INSTALLING_NPM_PACKAGES} =
   STRINGS;
-
-/**
- * Formats given error according to class instance, scope and message.
- */
-export const buildErrorMessage =
-  (classInstanceName: string) => (params: ErrorFormatParams) => {
-    const {scope, message} = params;
-
-    return `${classInstanceName}${scope ? `(${scope})` : ''}: ${message}.`;
-  };
 
 /**
  * Impact engine error handler. Logs errors and appends issue template if error is unknown.
@@ -168,7 +160,7 @@ const collectPipedData = async () => {
 
 /**
  * Checks if there is piped data, tries to parse yaml from it.
- * Throws error if there is piped info, but there is no valid manifest.
+ * Returns empty string if haven't found anything.
  */
 export const parseManifestFromStdin = async () => {
   const pipedSourceManifest = await collectPipedData();
@@ -181,7 +173,7 @@ export const parseManifestFromStdin = async () => {
   const match = regex.exec(pipedSourceManifest);
 
   if (!match) {
-    throw new Error('Manifest not found in STDIN.');
+    return '';
   }
 
   return match![1];

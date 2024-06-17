@@ -6,9 +6,9 @@ import {ExecutePlugin, PluginParams} from '../../types/interface';
 import {ConfigParams} from '../../types/common';
 
 import {validate} from '../../util/validations';
-import {ERRORS} from '../../util/errors';
+import {ERRORS} from '@grnsft/if-core';
 
-const {InputValidationError} = ERRORS;
+const {ProcessExecutionError} = ERRORS;
 
 export const Shell = (globalConfig: ConfigParams): ExecutePlugin => {
   const metadata = {
@@ -55,7 +55,7 @@ export const Shell = (globalConfig: ConfigParams): ExecutePlugin => {
 
       return {outputs};
     } catch (error: any) {
-      throw new InputValidationError(error.message);
+      throw new ProcessExecutionError(error.message);
     }
   };
 

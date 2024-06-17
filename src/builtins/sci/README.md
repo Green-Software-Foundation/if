@@ -83,7 +83,7 @@ You can run this example `manifest` by saving it as `./manifests/plugins/sci.yml
 
 ```sh
 npm i -g @grnsft/if
-ie --manifest manifests/plugins/sci.yml --output manifests/outputs/sci.yml
+if-run --manifest manifests/plugins/sci.yml --output manifests/outputs/sci.yml
 ```
 
 The results will be saved to a new `yaml` file.
