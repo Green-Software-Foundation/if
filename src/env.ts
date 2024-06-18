@@ -24,9 +24,10 @@ const {
 } = IF_ENV;
 
 const IfEnv = async () => {
+  console.log(process.env.CURRENT_DIR);
   const commandArgs = await parseIfEnvArgs();
   const options: EnvironmentOptions = {
-    folderPath: process.cwd(),
+    folderPath: process.env.CURRENT_DIR || process.cwd(),
     install: !!commandArgs.install,
     dependencies: {},
   };
@@ -36,7 +37,12 @@ const IfEnv = async () => {
       await getOptionsFromArgs(commandArgs);
     options.folderPath = folderPath;
     options.install = !!install;
-    options.dependencies = {...options.dependencies, ...dependencies};
+    options.dependencies = {...dependencies};
+  } else {
+    options.dependencies = {
+      ...packageJson.depencecies,
+      ...packageJson.devDependencies,
+    };
   }
 
   await initializeAndInstallLibs(options);
