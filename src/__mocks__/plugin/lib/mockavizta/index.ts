@@ -1,4 +1,4 @@
-import {PluginParams} from '../../../../types/interface';
+import {PluginParams} from '@grnsft/if-core/types';
 
 /**
  * Mock model for testing.

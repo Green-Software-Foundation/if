@@ -1,8 +1,8 @@
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {Method} from '@grnsft/if-core/types';
 
 import {Interpolation} from '../../../builtins';
 
-import {Method} from '../../../builtins/interpolation/types';
 import {STRINGS} from '../../../config';
 
 const {InputValidationError, GlobalConfigError} = ERRORS;

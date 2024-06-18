@@ -1,4 +1,5 @@
-import {PluginParams} from './interface';
+import {PluginParams} from '@grnsft/if-core/types';
+
 import {Context} from './manifest';
 import {PluginStorageInterface} from './plugin-storage';
 

@@ -1,12 +1,10 @@
 import {z} from 'zod';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {ExecutePlugin, PluginParams, ConfigParams} from '@grnsft/if-core/types';
 
 import {validate, allDefined} from '../../util/validations';
-import {ERRORS} from '@grnsft/if-core';
 
 import {STRINGS} from '../../config';
-
-import {ExecutePlugin, PluginParams} from '../../types/interface';
-import {ConfigParams} from '../../types/common';
 
 const {MissingInputDataError} = ERRORS;
 const {MISSING_FUNCTIONAL_UNIT_CONFIG, MISSING_FUNCTIONAL_UNIT_INPUT} = STRINGS;

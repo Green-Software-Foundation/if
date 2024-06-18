@@ -1,10 +1,9 @@
 import {z} from 'zod';
+import {ExecutePlugin, PluginParams} from '@grnsft/if-core/types';
 
 import {validate, allDefined} from '../../util/validations';
 
 import {STRINGS} from '../../config';
-
-import {ExecutePlugin, PluginParams} from '../../types/interface';
 
 const {SCI_EMBODIED_ERROR} = STRINGS;
 

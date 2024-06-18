@@ -1,9 +1,9 @@
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {RandIntGeneratorParams, ConfigParams} from '@grnsft/if-core/types';
 
 import {STRINGS} from '../../../config';
 
 import {Generator} from '../interfaces';
-import {RandIntGeneratorParams} from '../types';
 
 const {GlobalConfigError} = ERRORS;
 
@@ -12,7 +12,7 @@ const {MISSING_GLOBAL_CONFIG, MISSING_MIN_MAX, INVALID_MIN_MAX, INVALID_NAME} =
 
 export const RandIntGenerator = (
   name: string,
-  config: Record<string, any>
+  config: ConfigParams
 ): Generator => {
   const next = () => ({
     [validatedName]: generateRandInt(getFieldToPopulate()),
@@ -26,9 +26,7 @@ export const RandIntGenerator = (
     return name;
   };
 
-  const validateConfig = (
-    config: Record<string, any>
-  ): {min: number; max: number} => {
+  const validateConfig = (config: ConfigParams): {min: number; max: number} => {
     if (!config || Object.keys(config).length === 0) {
       throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }

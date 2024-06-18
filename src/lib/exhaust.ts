@@ -1,4 +1,4 @@
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 /**
  * @todo This is temporary solution, will be refactored to support dynamic plugins.

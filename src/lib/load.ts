@@ -1,5 +1,5 @@
 import * as YAML from 'js-yaml';
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {openYamlFileAsObject} from '../util/yaml';
 import {readAndParseJson} from '../util/json';

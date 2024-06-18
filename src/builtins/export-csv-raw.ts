@@ -1,16 +1,14 @@
 import * as fs from 'fs/promises';
-
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {STRINGS} from '../config';
 
-import {ExhaustPluginInterface} from '../types/exhaust-plugin-interface';
 import {Context} from '../types/manifest';
 
 const {ExhaustOutputArgError, WriteFileError} = ERRORS;
 const {OUTPUT_REQUIRED, WRITE_CSV_ERROR, EXPORTING_RAW_CSV_FILE} = STRINGS;
 
-export const ExportCSVRaw = (): ExhaustPluginInterface => {
+export const ExportCSVRaw = () => {
   /**
    * handle a tree leaf, where there are no child nodes, by adding it as key->value pair to the flat map
    * and capturing key as a header

@@ -1,11 +1,13 @@
 import {z} from 'zod';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  GroupByPlugin,
+  PluginParams,
+  GroupByConfig,
+} from '@grnsft/if-core/types';
 
 import {STRINGS} from '../config';
 
-import {GroupByPlugin, PluginParams} from '../types/interface';
-import {GroupByConfig} from '../types/group-by';
-
-import {ERRORS} from '@grnsft/if-core';
 import {validate} from '../util/validations';
 
 const {InvalidGroupingError, GlobalConfigError} = ERRORS;
