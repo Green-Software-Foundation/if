@@ -19,6 +19,7 @@ jest.mock('../../../util/logger', () => ({
 }));
 
 import {ERRORS} from '@grnsft/if-core';
+
 import {
   andHandle,
   checkIfEqual,
