@@ -24,6 +24,7 @@ const {
 } = IF_ENV;
 
 const IfEnv = async () => {
+  console.log(process.env.CURRENT_DIR);
   const commandArgs = await parseIfEnvArgs();
   const options: EnvironmentOptions = {
     folderPath: __dirname,

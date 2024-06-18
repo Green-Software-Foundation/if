@@ -76,7 +76,7 @@
     "fix:package": "fixpack",
     "if-diff": "npx ts-node src/diff.ts",
     "if-run": "npx ts-node src/index.ts",
-    "if-env": "npx ts-node src/env.ts",
+    "if-env": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/env.ts",
     "lint": "gts lint",
     "pre-commit": "lint-staged",
     "prepare": "husky install",
