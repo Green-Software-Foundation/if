@@ -11,7 +11,11 @@ import {load} from './lib/load';
 
 import {CONFIG} from './config';
 
-import {EnvironmentOptions, PathWithVersion} from './types/if-env';
+import {
+  EnvironmentOptions,
+  ManifestPlugin,
+  PathWithVersion,
+} from './types/if-env';
 
 const packageJson = require('../package.json');
 
@@ -24,31 +28,26 @@ const {
 } = IF_ENV;
 
 const IfEnv = async () => {
-  console.log(process.env.CURRENT_DIR);
   const commandArgs = await parseIfEnvArgs();
   const options: EnvironmentOptions = {
     folderPath: process.env.CURRENT_DIR || process.cwd(),
     install: !!commandArgs.install,
     dependencies: {},
+    cmd: !!commandArgs.cmd,
   };
 
   if (commandArgs && commandArgs.manifest) {
     const {folderPath, install, dependencies} =
       await getOptionsFromArgs(commandArgs);
-    options.folderPath = folderPath;
+    options.folderPath = commandArgs.cmd ? options.folderPath : folderPath;
     options.install = !!install;
     options.dependencies = {...dependencies};
-  } else {
-    options.dependencies = {
-      ...packageJson.depencecies,
-      ...packageJson.devDependencies,
-    };
   }
 
   await initializeAndInstallLibs(options);
 
   if (!commandArgs || !commandArgs.manifest) {
-    await addTemplateManifest();
+    await addTemplateManifest(options.folderPath);
   }
 
   console.log(SUCCESS_MESSAGE);
@@ -65,6 +64,7 @@ const getOptionsFromArgs = async (commandArgs: {
   const {manifest: manifestPath, install} = commandArgs;
   const folderPath = path.dirname(manifestPath);
   const manifest = await load(manifestPath);
+  const plugins = manifest.rawManifest?.initialize?.plugins || {};
   const dependencies =
     manifest.rawManifest?.execution?.environment.dependencies || [];
 
@@ -72,7 +72,7 @@ const getOptionsFromArgs = async (commandArgs: {
     throw new Error(FAILURE_MESSAGE_DEPENDENCIES);
   }
 
-  const pathsWithVersion = extractPathsWithVersion(dependencies);
+  const pathsWithVersion = extractPathsWithVersion(plugins, dependencies);
 
   return {
     folderPath,
@@ -84,21 +84,28 @@ const getOptionsFromArgs = async (commandArgs: {
 /**
  * Gets depencecies with versions.
  */
-const extractPathsWithVersion = (dependencies: string[]) => {
+const extractPathsWithVersion = (
+  plugins: ManifestPlugin,
+  dependencies: string[]
+) => {
+  const paths = Object.keys(plugins).map(plugin => plugins[plugin].path);
+  const uniquePaths = [...new Set(paths)].filter(path => path !== 'builtin');
   const pathsWithVersion: PathWithVersion = {};
 
-  dependencies.forEach(dependency => {
-    const splittedDependency = dependency.split('@');
-    const packageName =
-      splittedDependency.length > 2
-        ? `@${splittedDependency[1]}`
-        : `@${splittedDependency[0]}`;
-    const version =
-      splittedDependency.length > 2
-        ? splittedDependency[2].split(' ')[0]
-        : splittedDependency[1];
+  uniquePaths.forEach(pluginPath => {
+    const dependency = dependencies.find((dependency: string) =>
+      dependency.startsWith(pluginPath)
+    );
 
-    pathsWithVersion[packageName] = `^${version}`;
+    if (dependency) {
+      const splittedDependency = dependency.split('@');
+      const version =
+        splittedDependency.length > 2
+          ? splittedDependency[2].split(' ')[0]
+          : splittedDependency[1];
+
+      pathsWithVersion[pluginPath] = `^${version}`;
+    }
   });
 
   return pathsWithVersion;
@@ -109,21 +116,15 @@ const extractPathsWithVersion = (dependencies: string[]) => {
  */
 const initializeAndInstallLibs = async (options: EnvironmentOptions) => {
   try {
-    const {folderPath, install, dependencies} = options;
-
-    if (!Object.keys(dependencies).length) {
-      throw new Error(FAILURE_MESSAGE_DEPENDENCIES);
-    }
-
-    await fs.mkdir(folderPath, {recursive: true});
-
+    const {folderPath, install, cmd, dependencies} = options;
     const packageJsonPath = await initPackageJsonIfNotExists(folderPath);
+
     await updatePackageJsonProperties(packageJsonPath);
 
     if (install) {
       await installDependencies(folderPath, dependencies);
     } else {
-      await updatePackageJsonDependencies(packageJsonPath, dependencies);
+      await updatePackageJsonDependencies(packageJsonPath, dependencies, cmd);
     }
   } catch (error) {
     console.log(FAILURE_MESSAGE);
@@ -161,15 +162,20 @@ const updatePackageJsonProperties = async (packageJsonPath: string) => {
  */
 const updatePackageJsonDependencies = async (
   packageJsonPath: string,
-  dependencies: PathWithVersion
+  dependencies: PathWithVersion,
+  cmd: boolean
 ) => {
   const packageJsonContent = await fs.readFile(packageJsonPath, 'utf8');
   const packageJson = JSON.parse(packageJsonContent);
 
-  packageJson.dependencies = {
-    ...packageJson.dependencies,
-    ...dependencies,
-  };
+  if (cmd) {
+    packageJson.dependencies = {
+      ...packageJson.dependencies,
+      ...dependencies,
+    };
+  } else {
+    packageJson.dependencies = {...dependencies};
+  }
 
   await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
 };
@@ -177,10 +183,10 @@ const updatePackageJsonDependencies = async (
 /**
  * Adds a manifest template to the folder where the if-env CLI command runs.
  */
-const addTemplateManifest = async () => {
+const addTemplateManifest = async (destinationDir: string) => {
   try {
     const templateManifest = path.resolve(__dirname, './env-template.yml');
-    const destinationPath = path.resolve(__dirname, 'manifest.yml');
+    const destinationPath = path.resolve(destinationDir, 'manifest.yml');
 
     const data = await fs.readFile(templateManifest, 'utf-8');
     await fs.writeFile(destinationPath, '', 'utf-8');
