@@ -1,12 +1,10 @@
 import {z} from 'zod';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {ExecutePlugin, PluginParams, SumConfig} from '@grnsft/if-core/types';
 
 import {validate} from '../../util/validations';
-import {ERRORS} from '@grnsft/if-core';
 
 import {STRINGS} from '../../config';
-
-import {ExecutePlugin, PluginParams} from '../../types/interface';
-import {SumConfig} from './types';
 
 const {GlobalConfigError, MissingInputDataError} = ERRORS;
 const {MISSING_INPUT_DATA, MISSING_GLOBAL_CONFIG} = STRINGS;

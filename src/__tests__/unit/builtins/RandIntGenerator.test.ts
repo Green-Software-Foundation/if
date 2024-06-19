@@ -1,10 +1,8 @@
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {RandIntGenerator} from '../../../builtins/mock-observations/helpers/rand-int-generator';
 
 import {STRINGS} from '../../../config';
-
-import {KeyValuePair} from '../../../types/common';
 
 const {GlobalConfigError} = ERRORS;
 const {INVALID_NAME, MISSING_MIN_MAX, MISSING_GLOBAL_CONFIG} = STRINGS;
@@ -44,7 +42,7 @@ describe('builtins/mock-observations/RandIntGenerator: ', () => {
 
   describe('next(): ', () => {
     it('returns a result with valid data.', async () => {
-      const config: KeyValuePair = {
+      const config: Record<string, any> = {
         min: 10,
         max: 90,
       };

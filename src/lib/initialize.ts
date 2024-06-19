@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {logger} from '../util/logger';
 import {memoizedLog} from '../util/log-memoize';

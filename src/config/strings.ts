@@ -17,9 +17,6 @@ Incubation projects are experimental, offer no support guarantee, have minimal g
   NOT_NATIVE_PLUGIN: (path: string) =>
     `
 You are using plugin ${path} which is not part of the Impact Framework standard library. You should do your own research to ensure the plugins are up to date and accurate. They may not be actively maintained.`,
-  ISSUE_TEMPLATE: `
-Impact Framework is an alpha release from the Green Software Foundation and is released to capture early feedback. If you'd like to offer some feedback, please use this issue template: 
-https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+`,
   INVALID_MODULE_PATH: (path: string, error?: any) =>
     `Provided module \`${path}\` is invalid or not found. ${error ?? ''}
 `,
@@ -55,9 +52,8 @@ Note that for the '--output' option you also need to define the output type in y
   TARGET_IS_NOT_YAML: 'Given target is not in yaml format.',
   INVALID_TARGET: 'Target is invalid.',
   INVALID_SOURCE: 'Source is invalid.',
-  MANIFEST_NOT_FOUND: 'Manifest file not found.',
-  INITIALIZING_PACKAGE_JSON: 'Initializing package.json.',
-  INSTALLING_NPM_PACKAGES: 'Installing npm packages...',
+  UNSUPPORTED_ERROR: (errorName: string) =>
+    `UnsupportedErrorClass: plugin threw error class: ${errorName} that is not recognized by Impact Framework`,
   /** Plugin messages */
   MISSING_GLOBAL_CONFIG: 'Global config is not provided.',
   MISSING_INPUT_DATA: (param: string) =>

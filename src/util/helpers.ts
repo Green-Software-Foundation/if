@@ -4,7 +4,7 @@ import {createInterface} from 'node:readline/promises';
 import {exec} from 'node:child_process';
 import {promisify} from 'node:util';
 
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {logger} from './logger';
 
@@ -12,8 +12,7 @@ import {STRINGS} from '../config';
 
 import {Difference} from '../types/lib/compare';
 
-const {ISSUE_TEMPLATE, INITIALIZING_PACKAGE_JSON, INSTALLING_NPM_PACKAGES} =
-  STRINGS;
+const {UNSUPPORTED_ERROR} = STRINGS;
 
 /**
  * Impact engine error handler. Logs errors and appends issue template if error is unknown.
@@ -24,7 +23,9 @@ export const andHandle = (error: Error) => {
   logger.error(error);
 
   if (!knownErrors.includes(error.name)) {
-    logger.warn(ISSUE_TEMPLATE);
+    logger.error(UNSUPPORTED_ERROR(error.name));
+    // eslint-disable-next-line no-process-exit
+    process.exit(2);
   }
 };
 

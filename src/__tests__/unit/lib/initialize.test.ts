@@ -10,7 +10,7 @@ jest.mock('../../../util/log-memoize', () => ({
   memoizedLog: mockLog,
 }));
 
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {initialize} from '../../../lib/initialize';
 

@@ -18,7 +18,7 @@ jest.mock('../../../util/logger', () => ({
   },
 }));
 
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {
   andHandle,
@@ -42,15 +42,6 @@ describe('util/helpers: ', () => {
     afterEach(() => {
       mockWarn.mockReset();
       mockError.mockReset();
-    });
-
-    it('logs error and warn in case of error is unknown.', () => {
-      const message = 'mock-message';
-      const MockError = class extends Error {};
-
-      andHandle(new MockError(message));
-      expect(mockWarn).toHaveBeenCalledTimes(1);
-      expect(mockError).toHaveBeenCalledTimes(1);
     });
 
     it('logs error in case of error is unknown.', () => {

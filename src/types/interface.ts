@@ -1,27 +1,4 @@
-import {GroupByConfig} from './group-by';
-
-export type PluginParams = Record<string, any>;
-
-export type ConfigParams = Record<string, any>;
-
-export type ExecutePlugin = {
-  execute: (
-    inputs: PluginParams[],
-    config?: Record<string, any>
-  ) => PluginParams[] | Promise<PluginParams[]>;
-  metadata: {
-    kind: string;
-  };
-  [key: string]: any;
-};
-
-export type GroupByPlugin = {
-  execute: (inputs: PluginParams[], config: GroupByConfig) => {children: any};
-  metadata: {
-    kind: string;
-  };
-  [key: string]: any;
-};
+import {ExecutePlugin, GroupByPlugin} from '@grnsft/if-core/types';
 
 export type PluginInterface = ExecutePlugin | GroupByPlugin;
 

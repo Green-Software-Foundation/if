@@ -1,12 +1,11 @@
 import {spawnSync, SpawnSyncReturns} from 'child_process';
+
 import {loadAll, dump} from 'js-yaml';
 import {z} from 'zod';
-
-import {ExecutePlugin, PluginParams} from '../../types/interface';
-import {ConfigParams} from '../../types/common';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {ExecutePlugin, PluginParams, ConfigParams} from '@grnsft/if-core/types';
 
 import {validate} from '../../util/validations';
-import {ERRORS} from '@grnsft/if-core';
 
 const {ProcessExecutionError} = ERRORS;
 

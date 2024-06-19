@@ -4,13 +4,12 @@ import {readFile} from 'fs/promises';
 import axios from 'axios';
 import {z} from 'zod';
 import {parse} from 'csv-parse/sync';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {ExecutePlugin, PluginParams} from '@grnsft/if-core/types';
 
 import {validate} from '../../util/validations';
-import {ERRORS} from '@grnsft/if-core';
 
 import {STRINGS} from '../../config';
-
-import {ExecutePlugin, PluginParams} from '../../types/interface';
 
 const {
   FILE_FETCH_FAILED,

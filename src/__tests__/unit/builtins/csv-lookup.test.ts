@@ -2,7 +2,7 @@ jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
 
 import axios from 'axios';
 import AxiosMockAdapter from 'axios-mock-adapter';
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {CSVLookup} from '../../../builtins';
 

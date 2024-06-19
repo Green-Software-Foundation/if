@@ -1,4 +1,21 @@
 name: csv-demo
+<<<<<<< add-tdp-manifest
+description:
+tags:
+initialize:
+  plugins:
+    cloud-instance-metadata:
+      method: CSVLookup
+      path: "builtin"
+      global-config:
+        filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-azure-instances.csv
+        query:
+          instance-class: "cloud/instance-type"
+        output: "*"
+    extract-processor-name:
+      method: Regex
+      path: "builtin"
+=======
 description: null
 tags: null
 initialize:
@@ -15,12 +32,16 @@ initialize:
     extract-processor-name:
       path: builtin
       method: Regex
+>>>>>>> main
       global-config:
         parameter: cpu-model-name
         match: /^([^,])+/g
         output: cpu/name
+<<<<<<< add-tdp-manifest
+=======
   outputs:
     - yaml
+>>>>>>> main
 tree:
   children:
     child:

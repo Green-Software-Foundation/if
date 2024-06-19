@@ -1,6 +1,7 @@
 import * as fs from 'fs/promises';
+
 import {jest} from '@jest/globals';
-import {ERRORS} from '@grnsft/if-core';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {ExportCSVRaw} from '../../../builtins/export-csv-raw';
 

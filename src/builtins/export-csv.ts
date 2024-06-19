@@ -1,12 +1,12 @@
 import {writeFile} from 'fs/promises';
-import {stringify} from 'csv-stringify/sync';
 
-import {ERRORS} from '@grnsft/if-core';
+import {stringify} from 'csv-stringify/sync';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {PluginParams} from '@grnsft/if-core/types';
 
 import {STRINGS} from '../config';
 
 import {Context} from '../types/manifest';
-import {PluginParams} from '../types/interface';
 
 const {ExhaustOutputArgError} = ERRORS;
 const {CSV_EXPORT, OUTPUT_REQUIRED, EXPORTING_TO_CSV_FILE} = STRINGS;
