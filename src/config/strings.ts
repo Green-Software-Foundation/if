@@ -1,4 +1,4 @@
-import { ManifestParameter } from '../types/manifest';
+import {ManifestParameter} from '../types/manifest';
 
 export const STRINGS = {
   FILE_IS_NOT_YAML: 'Provided manifest is not in yaml format.',
@@ -27,7 +27,8 @@ You are using plugin ${path} which is not part of the Impact Framework standard 
   AVOIDING_PADDING: (description: string) =>
     `Avoiding padding at ${description}`,
   AVOIDING_PADDING_BY_EDGES: (start: boolean, end: boolean) =>
-    `Avoiding padding at ${start && end ? 'start and end' : start ? 'start' : 'end'
+    `Avoiding padding at ${
+      start && end ? 'start and end' : start ? 'start' : 'end'
     }`,
   INVALID_AGGREGATION_METHOD: (metric: string) =>
     `Aggregation is not possible for given ${metric} since method is 'none'.`,
