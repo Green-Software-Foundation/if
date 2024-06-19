@@ -1,7 +1,7 @@
 export type EnvironmentOptions = {
   folderPath: string;
   install: boolean;
-  cmd: boolean;
+  cwd: boolean;
   dependencies: {[path: string]: string};
 };
 

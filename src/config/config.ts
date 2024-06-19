@@ -97,7 +97,7 @@ export const CONFIG = {
         alias: 'i',
         description: '[command to install package.json]',
       },
-      cmd: {
+      cwd: {
         type: Boolean,
         optional: true,
         alias: 'c',

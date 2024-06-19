@@ -33,13 +33,13 @@ const IfEnv = async () => {
     folderPath: process.env.CURRENT_DIR || process.cwd(),
     install: !!commandArgs.install,
     dependencies: {},
-    cmd: !!commandArgs.cmd,
+    cwd: !!commandArgs.cwd,
   };
 
   if (commandArgs && commandArgs.manifest) {
     const {folderPath, install, dependencies} =
       await getOptionsFromArgs(commandArgs);
-    options.folderPath = commandArgs.cmd ? options.folderPath : folderPath;
+    options.folderPath = commandArgs.cwd ? options.folderPath : folderPath;
     options.install = !!install;
     options.dependencies = {...dependencies};
   }
@@ -116,7 +116,7 @@ const extractPathsWithVersion = (
  */
 const initializeAndInstallLibs = async (options: EnvironmentOptions) => {
   try {
-    const {folderPath, install, cmd, dependencies} = options;
+    const {folderPath, install, cwd, dependencies} = options;
     const packageJsonPath = await initPackageJsonIfNotExists(folderPath);
 
     await updatePackageJsonProperties(packageJsonPath);
@@ -124,7 +124,7 @@ const initializeAndInstallLibs = async (options: EnvironmentOptions) => {
     if (install) {
       await installDependencies(folderPath, dependencies);
     } else {
-      await updatePackageJsonDependencies(packageJsonPath, dependencies, cmd);
+      await updatePackageJsonDependencies(packageJsonPath, dependencies, cwd);
     }
   } catch (error) {
     console.log(FAILURE_MESSAGE);
@@ -163,12 +163,12 @@ const updatePackageJsonProperties = async (packageJsonPath: string) => {
 const updatePackageJsonDependencies = async (
   packageJsonPath: string,
   dependencies: PathWithVersion,
-  cmd: boolean
+  cwd: boolean
 ) => {
   const packageJsonContent = await fs.readFile(packageJsonPath, 'utf8');
   const packageJson = JSON.parse(packageJsonContent);
 
-  if (cmd) {
+  if (cwd) {
     packageJson.dependencies = {
       ...packageJson.dependencies,
       ...dependencies,

@@ -14,7 +14,7 @@ export interface IFDiffArgs {
 export interface IFEnvArgs {
   manifest?: string;
   install?: boolean;
-  cmd?: boolean;
+  cwd?: boolean;
 }
 
 export interface Options {
