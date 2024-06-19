@@ -185,7 +185,10 @@ const updatePackageJsonDependencies = async (
  */
 const addTemplateManifest = async (destinationDir: string) => {
   try {
-    const templateManifest = path.resolve(__dirname, './env-template.yml');
+    const templateManifest = path.resolve(
+      __dirname,
+      './config/env-template.yml'
+    );
     const destinationPath = path.resolve(destinationDir, 'manifest.yml');
 
     const data = await fs.readFile(templateManifest, 'utf-8');
