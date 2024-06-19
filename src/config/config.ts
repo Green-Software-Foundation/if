@@ -95,7 +95,14 @@ export const CONFIG = {
         type: Boolean,
         optional: true,
         alias: 'i',
-        description: '[commant to install package.json]',
+        description: '[command to install package.json]',
+      },
+      cmd: {
+        type: Boolean,
+        optional: true,
+        alias: 'c',
+        description:
+          '[command to generate the package.json in the command working directory]',
       },
     } as ArgumentConfig<IFEnvArgs>,
     HELP: {
