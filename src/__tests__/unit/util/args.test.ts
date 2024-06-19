@@ -76,11 +76,10 @@ import {parseIEProcessArgs, parseIfDiffArgs} from '../../../util/args';
 
 import {STRINGS} from '../../../config';
 
-const {CliInputError, CliSourceFileError} = ERRORS;
+const {CliSourceFileError, ParseCliParamsError} = ERRORS;
 
 const {
   MANIFEST_IS_MISSING,
-  FILE_IS_NOT_YAML,
   TARGET_IS_NOT_YAML,
   INVALID_TARGET,
   SOURCE_IS_NOT_YAML,
@@ -106,8 +105,8 @@ describe('util/args: ', () => {
       try {
         parseIEProcessArgs();
       } catch (error) {
-        expect(error).toBeInstanceOf(CliInputError);
-        expect(error).toEqual(new CliInputError(MANIFEST_IS_MISSING));
+        expect(error).toBeInstanceOf(ParseCliParamsError);
+        expect(error).toEqual(new ParseCliParamsError(MANIFEST_IS_MISSING));
       }
 
       process.env.result = 'manifest-is-missing';
@@ -196,7 +195,7 @@ describe('util/args: ', () => {
         parseIEProcessArgs();
       } catch (error) {
         expect(error).toBeInstanceOf(CliSourceFileError);
-        expect(error).toEqual(new CliSourceFileError(FILE_IS_NOT_YAML));
+        expect(error).toEqual(new CliSourceFileError(SOURCE_IS_NOT_YAML));
       }
     });
 
@@ -226,7 +225,7 @@ describe('util/args: ', () => {
         parseIfDiffArgs();
       } catch (error) {
         if (error instanceof Error) {
-          expect(error).toEqual(new CliInputError(INVALID_TARGET));
+          expect(error).toEqual(new ParseCliParamsError(INVALID_TARGET));
         }
       }
     });
@@ -239,7 +238,7 @@ describe('util/args: ', () => {
         parseIfDiffArgs();
       } catch (error) {
         if (error instanceof Error) {
-          expect(error).toEqual(new CliInputError(TARGET_IS_NOT_YAML));
+          expect(error).toEqual(new ParseCliParamsError(TARGET_IS_NOT_YAML));
         }
       }
     });
@@ -260,7 +259,7 @@ describe('util/args: ', () => {
         parseIfDiffArgs();
       } catch (error) {
         if (error instanceof Error) {
-          expect(error).toEqual(new CliInputError(SOURCE_IS_NOT_YAML));
+          expect(error).toEqual(new ParseCliParamsError(SOURCE_IS_NOT_YAML));
         }
       }
     });
@@ -282,7 +281,7 @@ describe('util/args: ', () => {
         parseIfDiffArgs();
       } catch (error) {
         if (error instanceof Error) {
-          expect(error).toEqual(new CliInputError('mock-error'));
+          expect(error).toEqual(new ParseCliParamsError('mock-error'));
         }
       }
     });
