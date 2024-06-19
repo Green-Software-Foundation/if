@@ -1,18 +1,18 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import {createInterface} from 'node:readline/promises';
-import {exec} from 'node:child_process';
-import {promisify} from 'node:util';
+import { createInterface } from 'node:readline/promises';
+import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
 
-import {ERRORS} from '@grnsft/if-core/utils';
+import { ERRORS } from '@grnsft/if-core/utils';
 
-import {logger} from './logger';
+import { logger } from './logger';
 
-import {STRINGS} from '../config';
+import { STRINGS } from '../config';
 
-import {Difference} from '../types/lib/compare';
+import { Difference } from '../types/lib/compare';
 
-const {UNSUPPORTED_ERROR} = STRINGS;
+const { UNSUPPORTED_ERROR, INITIALIZING_PACKAGE_JSON, INSTALLING_NPM_PACKAGES } = STRINGS;
 
 /**
  * Impact engine error handler. Logs errors and appends issue template if error is unknown.
@@ -200,7 +200,7 @@ export const initPackageJsonIfNotExists = async (folderPath: string) => {
 
   if (!isPackageJsonExists) {
     logger.info(INITIALIZING_PACKAGE_JSON);
-    await execPromise('npm init -y', {cwd: folderPath});
+    await execPromise('npm init -y', { cwd: folderPath });
   }
 
   return packageJsonPath;
@@ -211,7 +211,7 @@ export const initPackageJsonIfNotExists = async (folderPath: string) => {
  */
 export const installDependencies = async (
   folderPath: string,
-  dependencies: {[path: string]: string}
+  dependencies: { [path: string]: string }
 ) => {
   const packages = Object.entries(dependencies).map(
     ([dependency, version]) => `${dependency}@${version.replace('^', '')}`

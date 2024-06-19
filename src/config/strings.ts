@@ -1,4 +1,4 @@
-import {ManifestParameter} from '../types/manifest';
+import { ManifestParameter } from '../types/manifest';
 
 export const STRINGS = {
   FILE_IS_NOT_YAML: 'Provided manifest is not in yaml format.',
@@ -27,8 +27,7 @@ You are using plugin ${path} which is not part of the Impact Framework standard 
   AVOIDING_PADDING: (description: string) =>
     `Avoiding padding at ${description}`,
   AVOIDING_PADDING_BY_EDGES: (start: boolean, end: boolean) =>
-    `Avoiding padding at ${
-      start && end ? 'start and end' : start ? 'start' : 'end'
+    `Avoiding padding at ${start && end ? 'start and end' : start ? 'start' : 'end'
     }`,
   INVALID_AGGREGATION_METHOD: (metric: string) =>
     `Aggregation is not possible for given ${metric} since method is 'none'.`,
@@ -58,6 +57,9 @@ Note that for the '--output' option you also need to define the output type in y
   MISSING_GLOBAL_CONFIG: 'Global config is not provided.',
   MISSING_INPUT_DATA: (param: string) =>
     `${param} is missing from the input array.`,
+  MANIFEST_NOT_FOUND: 'Manifest file not found.',
+  INITIALIZING_PACKAGE_JSON: 'Initializing package.json.',
+  INSTALLING_NPM_PACKAGES: 'Installing npm packages...',
   NOT_NUMERIC_VALUE: (str: any) => `${str} is not numberic.`,
   MISSING_FUNCTIONAL_UNIT_CONFIG:
     '`functional-unit` should be provided in your global config',
