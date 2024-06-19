@@ -173,7 +173,7 @@ const validateAndParseIfEnvArgs = () => {
  * Checks if the `manifest` command is provided and it is valid manifest file.
  */
 export const parseIfEnvArgs = async () => {
-  const {manifest, install} = validateAndParseIfEnvArgs();
+  const {manifest, install, cmd} = validateAndParseIfEnvArgs();
 
   if (manifest) {
     const isManifestFileExists = await isFileExists(manifest);
@@ -185,11 +185,11 @@ export const parseIfEnvArgs = async () => {
     if (checkIfFileIsYaml(manifest)) {
       const response = prependFullFilePath(manifest);
 
-      return {manifest: response, install};
+      return {manifest: response, install, cmd};
     }
 
     throw new CliInputError(FILE_IS_NOT_YAML);
   }
 
-  return {install};
+  return {install, cmd};
 };
