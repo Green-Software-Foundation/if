@@ -140,3 +140,39 @@ if-run --manifest manifests/plugins/csv-lookup.yml --output manifests/outputs/cs
 ```
 
 The results will be saved to a new `yaml` file in `manifests/outputs`.
+
+
+## Errors
+
+`Coefficient exposes six of the IF error classes.
+
+### FetchingFileError
+
+This error is caused by problems finding the file at the path provided in the `filepath`. If the file is on your local filesystem, you can check that the file is definitely there. For a remote file, check your internet connection. You can check your connection to the server using a tool such as `ping` or `curl`. if you still experience problems, you could retrieve the remote file onto your local filesystem using a tool such as `wget`.
+
+### ReadFileError,
+
+This error is caused by problems reading the CSV file provided in the `filepath`. To fix it, check that the file contains valid CSV data. The file should have a `.csv` file extension and the data inside should be formatted correctly.
+
+### MissingCSVColumnError,
+
+This error is caused by `CsvLookup` failing to find a column in the CSV file whose name matches what was provided in `query`. To debug, check that you do not have any typos in your `query` and confirm that the requested column name definitely exists in the target file.
+
+### QueryDataNotFoundError,
+
+This error is caused by the `CsvLookup` plugin failing to find data that matches your query. Try revising your query parameters.
+
+### CSVParseError,
+
+This error arises due to problems parsing CSV data into IF. This can occur when the CSV data is incorrectly formatted or contains unexpected characters that IF does not recognize. These errors are expected to be unusual edge cases as incorrectly formatted data will usually be identified during file loading and cause a `ReadFileError`. To debug, check your CSV file for any unexpected formatting or unusual characters.
+
+### GlobalConfigError
+
+You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+
+The required parameters are:
+- `filepath`: This must be a path to a csv file
+- `query`: this must be an array of key-value pairs where the key is a string containing a column name an the value is a string containing the name of a value in `inputs`
+- `output`: this must be a string containing a name or a wildcard character (`"*"`)
+
+You can fix this error by checking you are providing valid values for each parameter in the config.
