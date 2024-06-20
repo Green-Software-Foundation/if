@@ -106,3 +106,5 @@ The required parameters are:
 - `output-parameter`: this must be a string
 
 You can fix this error by checking you are providing valid values for each parameter in the config.
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

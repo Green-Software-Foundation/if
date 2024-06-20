@@ -119,3 +119,6 @@ The results will be saved to a new `yaml` file in `./examples/outputs`.
 This error class is used to describe a problem with one of the input values to `sci-embodied`. This is typically due to an incorrect type or a reference to a value that is not available.
 
 You will receive a specific error message explaining which parameter is problematic, and you can check and replace where appropriate.
+
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

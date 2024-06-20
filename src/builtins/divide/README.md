@@ -118,3 +118,4 @@ Every element in the ``inputs` array must contain:
 - whatever value you passed to `numerator`
 
 
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

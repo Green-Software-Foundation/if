@@ -106,3 +106,5 @@ Every element in the `inputs` array must contain:
 ### Validation errors
 
 There is also a validation step that checks that the `functional-unit` was provided in the plugin config. If you see an error reporting this value as missing, please check you have provided it.
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

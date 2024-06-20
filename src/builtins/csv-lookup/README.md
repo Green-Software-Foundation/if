@@ -176,3 +176,5 @@ The required parameters are:
 - `output`: this must be a string containing a name or a wildcard character (`"*"`)
 
 You can fix this error by checking you are providing valid values for each parameter in the config.
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

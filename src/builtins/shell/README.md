@@ -137,3 +137,5 @@ The results will be saved to a new `yaml` file.
 ### `ProcessExecutionError`
 
 This error is thrown when the program invoked in the spawned shell fails for some reason that is not known to IF. Since the shell executes arbitrary code, it is difficult for IF to provide specific errors - this is delegated to the developers of the executed program.
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

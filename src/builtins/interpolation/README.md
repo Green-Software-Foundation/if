@@ -192,3 +192,5 @@ There are also several validation errors that can arise, including:
 - if the lengths of `x` and `y` are not equal
 - if `x` or `y` are empty
 - if the requested point to interpolate at is outside the range of `x`
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

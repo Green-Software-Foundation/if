@@ -119,3 +119,5 @@ You can fix this error by checking you are providing valid values for each param
 ### `RegexMismatchError`
 
 This error arises when the requested regex cannot find any matches in the given data. If there are multiple matches, the plugin returns the first, but if there are none, it throws this error.
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors
