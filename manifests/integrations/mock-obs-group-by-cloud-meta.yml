@@ -14,8 +14,14 @@ initialize:
         input-parameters: ['cpu/energy', 'grid/carbon-intensity']
         output-parameter: 'carbon'       
     cloud-metadata:
-      method: CloudMetadata
-      path: "@grnsft/if-plugins"   
+      path: builtin
+      method: CSVLookup
+      global-config:
+        filepath: >-
+          https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-azure-instances.csv
+        query:
+          instance-class: cloud/instance-type
+        output: ['cpu-tdp']
     mock-observations:
       path: 'builtin'
       method: MockObservations

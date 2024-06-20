@@ -21,8 +21,14 @@ initialize:
       global-config:
         interpolation: spline  
     cloud-metadata:
-      method: CloudMetadata
-      path: "@grnsft/if-plugins"   
+      path: builtin
+      method: CSVLookup
+      global-config:
+        filepath: >-
+          https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-azure-instances.csv
+        query:
+          instance-class: cloud/instance-type
+        output: ['cpu-cores-utilized', 'vcpus-allocated']
     mock-observations:
       path: 'builtin'
       method: MockObservations
