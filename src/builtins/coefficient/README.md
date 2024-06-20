@@ -90,3 +90,19 @@ if-run --manifest ./examples/manifests/coefficient.yml --output ./examples/outpu
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`
+
+
+## Errors
+
+`Coefficient exposes one of the IF error classes.
+
+### GlobalConfigError
+
+You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+
+The required parameters are:
+- `input-parameter`: this must be a string
+- `coefficient`: this must be a number
+- `output-parameter`: this must be a string
+
+You can fix this error by checking you are providing valid values for each parameter in the config.
