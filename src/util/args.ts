@@ -5,7 +5,7 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {checkIfFileIsYaml} from './yaml';
 
-import {isFileExists} from './helpers';
+import {isFileExists} from './fs';
 
 import {logger} from './logger';
 
@@ -176,15 +176,14 @@ export const parseIfEnvArgs = async () => {
   const {manifest, install, cwd} = validateAndParseIfEnvArgs();
 
   if (manifest) {
-    const isManifestFileExists = await isFileExists(manifest);
+    const response = prependFullFilePath(manifest);
+    const isManifestFileExists = await isFileExists(response);
 
     if (!isManifestFileExists) {
       throw new CliInputError(MANIFEST_NOT_FOUND);
     }
 
     if (checkIfFileIsYaml(manifest)) {
-      const response = prependFullFilePath(manifest);
-
       return {manifest: response, install, cwd};
     }
 
