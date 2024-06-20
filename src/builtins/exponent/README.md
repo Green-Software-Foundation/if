@@ -95,3 +95,21 @@ if-run --manifest manifests/examples/test/exponent.yml --output manifests/output
 ```
 
 The results will be saved to a new `yaml` file in `manifests/outputs`.
+
+## Errors
+
+`Exponent` exposes two of IF's error classes.
+
+### `MissingInputDataError`
+
+This error arises when a necessary piece of input data is missing from the `inputs` array.
+Every element in the ``inputs` array must contain:
+
+- `timestamp`
+- `duration`
+- whatever value you passed to `input-parameter`
+
+
+### `InputValidationError`
+
+This error arises when an invalid value is passed to `Exponent`. Typically, this can occur when a non-numeric value (such as a string made of alphabetic characters) is passed where a number or numeric string is expected. Please check that the types are correct for all the relevant fields in your `inputs` array.
