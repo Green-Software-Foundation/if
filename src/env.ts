@@ -3,7 +3,13 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import {installDependencies, initPackageJsonIfNotExists} from './util/helpers';
+import {
+  installDependencies,
+  initPackageJsonIfNotExists,
+  updatePackageJsonDependencies,
+  extractPathsWithVersion,
+  updatePackageJsonProperties,
+} from './util/npm';
 import {parseIfEnvArgs} from './util/args';
 import {logger} from './util/logger';
 
@@ -11,13 +17,7 @@ import {load} from './lib/load';
 
 import {CONFIG} from './config';
 
-import {
-  EnvironmentOptions,
-  ManifestPlugin,
-  PathWithVersion,
-} from './types/if-env';
-
-const packageJson = require('../package.json');
+import {EnvironmentOptions} from './types/if-env';
 
 const {IF_ENV} = CONFIG;
 const {
@@ -82,36 +82,6 @@ const getOptionsFromArgs = async (commandArgs: {
 };
 
 /**
- * Gets depencecies with versions.
- */
-const extractPathsWithVersion = (
-  plugins: ManifestPlugin,
-  dependencies: string[]
-) => {
-  const paths = Object.keys(plugins).map(plugin => plugins[plugin].path);
-  const uniquePaths = [...new Set(paths)].filter(path => path !== 'builtin');
-  const pathsWithVersion: PathWithVersion = {};
-
-  uniquePaths.forEach(pluginPath => {
-    const dependency = dependencies.find((dependency: string) =>
-      dependency.startsWith(pluginPath)
-    );
-
-    if (dependency) {
-      const splittedDependency = dependency.split('@');
-      const version =
-        splittedDependency.length > 2
-          ? splittedDependency[2].split(' ')[0]
-          : splittedDependency[1];
-
-      pathsWithVersion[pluginPath] = `^${version}`;
-    }
-  });
-
-  return pathsWithVersion;
-};
-
-/**
  * Creates folder if not exists, installs dependencies if required, update depenedencies.
  */
 const initializeAndInstallLibs = async (options: EnvironmentOptions) => {
@@ -130,54 +100,6 @@ const initializeAndInstallLibs = async (options: EnvironmentOptions) => {
     console.log(FAILURE_MESSAGE);
     process.exit(2);
   }
-};
-
-/**
- * Update the package.json properties.
- */
-const updatePackageJsonProperties = async (packageJsonPath: string) => {
-  const packageJsonContent = await fs.readFile(packageJsonPath, 'utf8');
-  const parsedPackageJsonContent = JSON.parse(packageJsonContent);
-
-  const properties = {
-    name: 'if-environment',
-    description: packageJson.description,
-    author: packageJson.author,
-    bugs: packageJson.bugs,
-    engines: packageJson.engines,
-    homepage: packageJson.homepage,
-  };
-
-  const newPackageJson = Object.assign(
-    {},
-    parsedPackageJsonContent,
-    properties
-  );
-
-  await fs.writeFile(packageJsonPath, JSON.stringify(newPackageJson, null, 2));
-};
-
-/**
- * Updates package.json dependencies.
- */
-const updatePackageJsonDependencies = async (
-  packageJsonPath: string,
-  dependencies: PathWithVersion,
-  cwd: boolean
-) => {
-  const packageJsonContent = await fs.readFile(packageJsonPath, 'utf8');
-  const packageJson = JSON.parse(packageJsonContent);
-
-  if (cwd) {
-    packageJson.dependencies = {
-      ...packageJson.dependencies,
-      ...dependencies,
-    };
-  } else {
-    packageJson.dependencies = {...dependencies};
-  }
-
-  await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
 };
 
 /**
