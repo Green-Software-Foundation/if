@@ -87,3 +87,22 @@ if-run --manifest manifests/plugins/sci.yml --output manifests/outputs/sci.yml
 ```
 
 The results will be saved to a new `yaml` file.
+
+## Errors
+
+`SCI` uses one of the IF error classes.
+
+### `MissingInputDataError`
+
+This error arises when a necessary piece of input data is missing from the `inputs` array.
+
+Every element in the `inputs` array must contain:
+- `timestamp`
+- `duration`
+- `carbon`: a numeric value named `carbon` must exist in the inputs array
+- whatever value you passed to `functional-unit`
+
+
+### Validation errors
+
+There is also a validation step that checks that the `functional-unit` was provided in the plugin config. If you see an error reporting this value as missing, please check you have provided it.
