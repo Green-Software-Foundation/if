@@ -94,7 +94,7 @@ The results will be saved to a new `yaml` file in `./examples/outputs`
 
 ## Errors
 
-`Coefficient exposes one of the IF error classes.
+`Coefficient` exposes one of the IF error classes.
 
 ### GlobalConfigError
 
