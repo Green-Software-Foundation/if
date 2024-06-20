@@ -1,6 +1,6 @@
 const processRunningPath = process.cwd();
 
-jest.mock('../../../util/helpers', () => ({
+jest.mock('../../../util/fs', () => ({
   isFileExists: () => {
     if (process.env.fileExists === 'true') {
       return true;
