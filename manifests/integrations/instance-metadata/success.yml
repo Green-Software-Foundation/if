@@ -1,26 +1,23 @@
-name: csv-demo
+name: instance-metadata
 description:
 tags:
 initialize:
   plugins:
     cloud-instance-metadata:
-      path: builtin
       method: CSVLookup
+      path: "builtin"
       global-config:
-        filepath: >-
-          https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-azure-instances.csv
+        filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-azure-instances.csv
         query:
-          instance-class: cloud/instance-type
-        output: '*'
+          instance-class: "cloud/instance-type"
+        output: "*"
     extract-processor-name:
-      path: builtin
       method: Regex
+      path: "builtin"
       global-config:
         parameter: cpu-model-name
         match: /^([^,])+/g
         output: cpu/name
-  # outputs:
-  #   - yaml
 tree:
   children:
     child:

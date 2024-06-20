@@ -12,15 +12,23 @@ initialize:
       method: TeadsCurve
       global-config:
         interpolation: spline
-    "sci-e":
-      path: "@grnsft/if-plugins"
-      method: SciE
+    "sum-energy-components":
+      path: "builtin"
+      method: Sum
+      global-config:
+        input-parameters:
+          - cpu/energy
+          - network/energy
+        output-parameter: energy
     "sci-embodied":
       path: "builtin"
       method: SciEmbodied
-    "sci-o":
-      path: "@grnsft/if-plugins"
-      method: SciO
+    "operational-carbon":
+      method: Multiply
+      path: builtin
+      global-config:
+        input-parameters: ["energy", "grid/carbon-intensity"]
+        output-parameter: "carbon-operational"
     "sci":
       path: "builtin"
       method: Sci
@@ -43,9 +51,9 @@ tree:
     child-1:
       pipeline:
         - teads-curve
-        - sci-e
+        - sum-energy-components
         - sci-embodied
-        - sci-o
+        - operational-carbon
         - time-sync
         - sci
       config:

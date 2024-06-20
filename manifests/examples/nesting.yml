@@ -29,9 +29,12 @@ initialize:
     sci-embodied:
       path: "builtin"
       method: SciEmbodied
-    sci-o:
-      path: "@grnsft/if-plugins"
-      method: SciO
+    "operational-carbon":
+      method: Multiply
+      path: builtin
+      global-config:
+        input-parameters: ["energy", "grid/carbon-intensity"]
+        output-parameter: "carbon-operational"
     sci:
       path: "builtin"
       method: Sci
@@ -68,7 +71,7 @@ tree:
         - teads-curve
         - sum
         - sci-embodied
-        - sci-o
+        - operational-carbon
         - sum-carbon
         - time-sync
         - sci

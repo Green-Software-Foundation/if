@@ -20,9 +20,12 @@ initialize:
         input-parameter: network/energy
         coefficient: 1000
         output-parameter: network/energy
-    sci-o:
-      path: '@grnsft/if-plugins'
-      method: SciO
+    "operational-carbon":
+      method: Multiply
+      path: builtin
+      global-config:
+        input-parameters: ["energy", "grid/carbon-intensity"]
+        output-parameter: "carbon-operational"
     group-by:
       path: builtin
       method: GroupBy
