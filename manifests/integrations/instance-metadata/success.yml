@@ -1,0 +1,33 @@
+name: instance-metadata
+description:
+tags:
+initialize:
+  plugins:
+    cloud-instance-metadata:
+      method: CSVLookup
+      path: "builtin"
+      global-config:
+        filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-azure-instances.csv
+        query:
+          instance-class: "cloud/instance-type"
+        output: "*"
+    extract-processor-name:
+      method: Regex
+      path: "builtin"
+      global-config:
+        parameter: cpu-model-name
+        match: /^([^,])+/g
+        output: cpu/name
+tree:
+  children:
+    child:
+      pipeline:
+        - cloud-instance-metadata
+        - extract-processor-name
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          cpu/energy: 0.001
+          cloud/provider: gcp
+          cloud/region: asia-east
+          cloud/instance-type: Standard_A1_v2
