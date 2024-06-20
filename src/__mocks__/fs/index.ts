@@ -1,10 +1,19 @@
 import * as YAML from 'js-yaml';
+import * as fs from 'fs';
+import * as fsAsync from 'fs/promises';
 
 export const readFile = async (filePath: string) => {
+  /** mock for util/npm */
+  if (filePath.includes('package.json-npm')) {
+    const updatedPath = filePath.replace('-npm', '');
+    return fs.readFileSync(updatedPath, 'utf8');
+  }
+
   /** mock for util/json */
   if (filePath.includes('json-reject')) {
     return Promise.reject(new Error('rejected'));
   }
+
   if (filePath.includes('json')) {
     if (filePath.includes('param')) {
       return JSON.stringify({
@@ -80,18 +89,25 @@ cpu-cores-available,cpu-cores-utilized,cpu-manufacturer,cpu-model-name,cpu-tdp,g
 export const mkdir = (dirPath: string) => dirPath;
 
 export const writeFile = async (pathToFile: string, content: string) => {
-  if (pathToFile === 'reject') {
-    throw new Error('Wrong file path');
+  if (pathToFile.includes('package.json-npm')) {
+    const updatedPath = pathToFile.replace('-npm', '');
+
+    const content = await fsAsync.readFile(updatedPath, 'utf8');
+    expect(content).toBe(content);
+  } else {
+    if (pathToFile === 'reject') {
+      throw new Error('Wrong file path');
+    }
+
+    const mockPathToFile = 'mock-pathToFile';
+    const mockContent = {
+      name: 'mock-name',
+    };
+    const mockObject = YAML.dump(mockContent, {noRefs: true});
+
+    expect(pathToFile).toBe(mockPathToFile);
+    expect(content).toBe(mockObject);
   }
-
-  const mockPathToFile = 'mock-pathToFile';
-  const mockContent = {
-    name: 'mock-name',
-  };
-  const mockObject = YAML.dump(mockContent, {noRefs: true});
-
-  expect(pathToFile).toBe(mockPathToFile);
-  expect(content).toBe(mockObject);
 };
 
 export const stat = async (filePath: string) => {
