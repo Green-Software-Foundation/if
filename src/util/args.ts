@@ -5,7 +5,7 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {checkIfFileIsYaml} from './yaml';
 
-import {isFileExists} from './fs';
+import {isDirectoryExists, isFileExists} from './fs';
 
 import {logger} from './logger';
 
@@ -16,6 +16,7 @@ import {
   IEArgs,
   ProcessArgsOutputs,
   IFEnvArgs,
+  IFCheckArgs,
 } from '../types/process-args';
 import {LoadDiffParams} from '../types/util/args';
 
@@ -26,7 +27,7 @@ const {
   CliSourceFileError,
 } = ERRORS;
 
-const {IE, IF_DIFF, IF_ENV} = CONFIG;
+const {IE, IF_DIFF, IF_ENV, IF_CHECK} = CONFIG;
 
 const {
   FILE_IS_NOT_YAML,
@@ -36,6 +37,8 @@ const {
   SOURCE_IS_NOT_YAML,
   TARGET_IS_NOT_YAML,
   INVALID_TARGET,
+  IF_CHECK_FLAGS_MISSING,
+  DIRECTORY_NOT_FOUND,
 } = STRINGS;
 
 /**
@@ -191,4 +194,55 @@ export const parseIfEnvArgs = async () => {
   }
 
   return {install, cwd};
+};
+
+/** -- IF Check -- */
+
+/**
+ * Parses `if-check` process arguments.
+ */
+const validateAndParseIfCheckArgs = () => {
+  try {
+    return parse<IFCheckArgs>(IF_CHECK.ARGS, IF_CHECK.HELP);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new CliInputError(error.message);
+    }
+
+    throw error;
+  }
+};
+
+/**
+ * Checks if either `manifest` or `directory` command is provided.
+ */
+export const parseIfCheckArgs = async () => {
+  const {manifest, directory} = validateAndParseIfCheckArgs();
+
+  if (manifest) {
+    const response = prependFullFilePath(manifest);
+    const isManifestFileExists = await isFileExists(response);
+
+    if (!isManifestFileExists) {
+      throw new CliInputError(MANIFEST_NOT_FOUND);
+    }
+
+    if (checkIfFileIsYaml(manifest)) {
+      return {manifest};
+    }
+
+    throw new CliInputError(FILE_IS_NOT_YAML);
+  } else if (directory) {
+    const isDirExists = await isDirectoryExists(directory);
+
+    if (!isDirExists) {
+      throw new CliInputError(DIRECTORY_NOT_FOUND);
+    }
+
+    const response = prependFullFilePath(directory);
+
+    return {directory: response};
+  }
+
+  throw new CliInputError(IF_CHECK_FLAGS_MISSING);
 };
