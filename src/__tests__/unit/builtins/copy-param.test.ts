@@ -90,6 +90,33 @@ describe('builtins/copy: ', () => {
           );
         }
       });
+      it('does not persist the original value when keep-existing==false.', () => {
+        expect.assertions(1);
+        const globalConfig = {
+          'keep-existing': false,
+          from: 'original',
+          to: 'copy',
+        };
+        const copy = Copy(globalConfig);
+
+        const expectedResult = [
+          {
+            duration: 3600,
+            copy: 'hello',
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = copy.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            original: 'hello',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
     });
   });
 });
