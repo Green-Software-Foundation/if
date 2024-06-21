@@ -17,6 +17,11 @@ export interface IFEnvArgs {
   cwd?: boolean;
 }
 
+export interface IFCheckArgs {
+  manifest?: string;
+  directory?: string;
+}
+
 export interface Options {
   outputPath?: string;
   stdout?: boolean;
