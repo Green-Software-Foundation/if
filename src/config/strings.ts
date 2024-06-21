@@ -133,4 +133,8 @@ ${error}`,
     `Exporting to csv file: ${savepath}`,
   EXPORTING_RAW_CSV_FILE: (savepath: string) =>
     `Exporting raw csv file: ${savepath}`,
+  CHECKING: 'Checking...',
+  IF_CHECK_FLAGS_MISSING:
+    'Either the `--manifest` or `--directory` command should be provided with a path',
+  DIRECTORY_NOT_FOUND: 'Directory not found.',
 };
