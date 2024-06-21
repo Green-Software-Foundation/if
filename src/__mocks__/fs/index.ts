@@ -117,3 +117,19 @@ export const stat = async (filePath: string) => {
     throw new Error('File not found.');
   }
 };
+
+export const access = async (directoryPath: string) => {
+  if (directoryPath === 'true') {
+    return true;
+  } else {
+    throw new Error('Directory not found.');
+  }
+};
+
+export const unlink = async (filePath: string) => {
+  if (filePath === 'true') {
+    return;
+  } else {
+    throw new Error('File not found.');
+  }
+};
