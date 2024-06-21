@@ -221,7 +221,7 @@ describe('util/npm: ', () => {
   describe('updatePackageJsonProperties(): ', () => {
     it('updates the package.json properties correctly.', async () => {
       const newPackageJsonPath = path.resolve(folderPath, '/package.json-npm');
-      await updatePackageJsonProperties(newPackageJsonPath);
+      await updatePackageJsonProperties(newPackageJsonPath, false);
 
       expect.assertions(2);
       expect(fs.readFile).toHaveBeenCalledWith(newPackageJsonPath, 'utf8');
