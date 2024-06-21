@@ -9,7 +9,8 @@
   "bin": {
     "if-diff": "./build/diff.js",
     "if-run": "./build/index.js",
-    "if-env": "./build/env.js"
+    "if-env": "./build/env.js",
+    "if-check": "./build/check.js"
   },
   "bugs": {
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
@@ -75,6 +76,7 @@
     "coverage": "jest --verbose --coverage --testPathPattern=src/__tests__/unit",
     "fix": "gts fix",
     "fix:package": "fixpack",
+    "if-check": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/check.ts",
     "if-diff": "npx ts-node src/diff.ts",
     "if-env": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/env.ts",
     "if-run": "npx ts-node src/index.ts",
