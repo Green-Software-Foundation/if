@@ -128,4 +128,6 @@ ${error}`,
     `Exporting to csv file: ${savepath}`,
   EXPORTING_RAW_CSV_FILE: (savepath: string) =>
     `Exporting raw csv file: ${savepath}`,
+  ZERO_DIVISION: (moduleName: string, index: number) =>
+    `-- SKIPPING -- DivisionByZero: you are attempting to divide by zero in ${moduleName} plugin : inputs[${index}]\n`,
 };
