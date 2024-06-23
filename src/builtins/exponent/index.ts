@@ -18,7 +18,7 @@ export const Exponent = (globalConfig: ExponentConfig): ExecutePlugin => {
   const validateGlobalConfig = () => {
     const globalConfigSchema = z.object({
       'input-parameter': z.string().min(1),
-      exponent: z.number().min(1),
+      exponent: z.number(),
       'output-parameter': z.string().min(1),
     });
 
@@ -70,6 +70,7 @@ export const Exponent = (globalConfig: ExponentConfig): ExecutePlugin => {
     exponent: number
   ) => {
     const base = input[inputParameter];
+
     return Math.pow(base, exponent);
   };
 
