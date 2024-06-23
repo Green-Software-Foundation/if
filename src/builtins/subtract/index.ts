@@ -1,5 +1,4 @@
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
 import {
   ExecutePlugin,
   PluginParams,
@@ -7,11 +6,6 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../util/validations';
-
-import {STRINGS} from '../../config';
-
-const {InputValidationError} = ERRORS;
-const {MISSING_INPUT_DATA, NOT_NUMERIC_VALUE} = STRINGS;
 
 export const Subtract = (globalConfig: SubtractConfig): ExecutePlugin => {
   const metadata = {
@@ -40,24 +34,20 @@ export const Subtract = (globalConfig: SubtractConfig): ExecutePlugin => {
     input: PluginParams,
     inputParameters: string[]
   ) => {
-    inputParameters.forEach(metricToSubtract => {
-      validateParamExists(input, metricToSubtract);
-      validateNumericString(input[metricToSubtract]);
-    });
+    const inputData = inputParameters.reduce(
+      (acc, param) => {
+        acc[param] = input[param];
+
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+    const validationSchema = z.record(z.string(), z.number());
+
+    validate(validationSchema, inputData);
 
     return input;
-  };
-
-  const validateParamExists = (input: PluginParams, param: string) => {
-    if (input[param] === undefined) {
-      throw new InputValidationError(MISSING_INPUT_DATA(param));
-    }
-  };
-
-  const validateNumericString = (str: string) => {
-    if (isNaN(+Number(str))) {
-      throw new InputValidationError(NOT_NUMERIC_VALUE(str));
-    }
   };
 
   /**
