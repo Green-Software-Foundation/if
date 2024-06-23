@@ -7,7 +7,11 @@ import {validate, allDefined} from '../../util/validations';
 import {STRINGS} from '../../config';
 
 const {MissingInputDataError} = ERRORS;
-const {MISSING_FUNCTIONAL_UNIT_CONFIG, MISSING_FUNCTIONAL_UNIT_INPUT} = STRINGS;
+const {
+  MISSING_FUNCTIONAL_UNIT_CONFIG,
+  MISSING_FUNCTIONAL_UNIT_INPUT,
+  ZERO_DIVISION,
+} = STRINGS;
 
 export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
   const metadata = {
@@ -33,12 +37,22 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
    * Calculate the total emissions for a list of inputs.
    */
   const execute = (inputs: PluginParams[]): PluginParams[] =>
-    inputs.map(input => {
+    inputs.map((input, index) => {
       const safeInput = validateInput(input);
-      const sci =
-        safeInput['carbon'] > 0
-          ? safeInput['carbon'] / input[globalConfig['functional-unit']]
-          : 0;
+      const functionalUnit = input[globalConfig['functional-unit']];
+
+      let sci: any = {};
+
+      if (safeInput['carbon'] > 0) {
+        if (functionalUnit === 0) {
+          console.warn(ZERO_DIVISION(Sci.name, index));
+          sci = safeInput['carbon'];
+        } else {
+          sci = safeInput['carbon'] / functionalUnit;
+        }
+      } else {
+        sci = 0;
+      }
 
       return {
         ...input,
@@ -57,7 +71,7 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
     if (
       !(
         validatedConfig['functional-unit'] in input &&
-        input[validatedConfig['functional-unit']] > 0
+        input[validatedConfig['functional-unit']] >= 0
       )
     ) {
       throw new MissingInputDataError(MISSING_FUNCTIONAL_UNIT_INPUT);
