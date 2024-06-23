@@ -56,8 +56,7 @@ Note that for the '--output' option you also need to define the output type in y
   /** Plugin messages */
   MISSING_GLOBAL_CONFIG: 'Global config is not provided.',
   MISSING_INPUT_DATA: (param: string) =>
-    `${param} is missing from the input array.`,
-  NOT_NUMERIC_VALUE: (str: any) => `${str} is not numberic.`,
+    `${param} is missing from the input array, or has nullish value.`,
   MISSING_FUNCTIONAL_UNIT_CONFIG:
     '`functional-unit` should be provided in your global config',
   MISSING_FUNCTIONAL_UNIT_INPUT:
