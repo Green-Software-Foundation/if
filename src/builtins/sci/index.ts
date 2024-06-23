@@ -41,22 +41,18 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
       const safeInput = validateInput(input);
       const functionalUnit = input[globalConfig['functional-unit']];
 
-      let sci: any = {};
+      if (functionalUnit === 0) {
+        console.warn(ZERO_DIVISION(Sci.name, index));
 
-      if (safeInput['carbon'] > 0) {
-        if (functionalUnit === 0) {
-          console.warn(ZERO_DIVISION(Sci.name, index));
-          sci = safeInput['carbon'];
-        } else {
-          sci = safeInput['carbon'] / functionalUnit;
-        }
-      } else {
-        sci = 0;
+        return {
+          ...input,
+          sci: safeInput['carbon'],
+        };
       }
 
       return {
         ...input,
-        sci,
+        sci: safeInput['carbon'] / functionalUnit,
       };
     });
 
