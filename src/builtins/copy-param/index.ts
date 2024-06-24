@@ -8,7 +8,6 @@ import {STRINGS} from '../../config';
 
 const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA} = STRINGS;
 const {GlobalConfigError, MissingInputDataError} = ERRORS;
-// global-config:
 //   keep-existing: true/false (whether to remove the parameter you are copying from)
 //   from-param: the parameter you are copying from (e.g. cpu/name)
 //   to-field: the parameter you are copying to (e.g. cpu/processor-name)
