@@ -1,3 +1,5 @@
+import {jest} from '@jest/globals';
+
 const mockWarn = jest.fn();
 const mockError = jest.fn();
 
@@ -11,6 +13,67 @@ jest.mock('../../../util/logger', () => ({
   },
 }));
 
+jest.mock('path', () => {
+  const actualPath = jest.requireActual('path') as Record<string, any>;
+  return {
+    __esModule: true,
+    ...actualPath,
+    dirname: jest.fn(() => './mock-path'),
+  };
+});
+
+jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
+
+jest.mock('../../../lib/load', () => ({
+  load: jest.fn(() => {
+    if (process.env.manifest === 'true') {
+      return {
+        rawManifest: {
+          name: 'divide',
+          initialize: {
+            plugins: {
+              'cloud-metadata': {
+                path: '@grnsft/if-plugins',
+                method: 'CloudMetadata',
+              },
+              divide: {
+                path: 'builtin',
+                method: 'Divide',
+                'global-config': {
+                  numerator: 'vcpus-allocated',
+                  denominator: 2,
+                  output: 'cpu/number-cores',
+                },
+              },
+            },
+          },
+          execution: {
+            environment: {
+              dependencies: [
+                '@grnsft/if-core@0.0.7',
+                '@grnsft/if-plugins@v0.3.2 extraneous -> file:../../../if-models',
+                '@grnsft/if-unofficial-plugins@v0.3.0 extraneous -> file:../../../if-unofficial-models',
+              ],
+            },
+          },
+        },
+      };
+    }
+    return {
+      rawManifest: {
+        initialize: {
+          plugins: {'@grnsft/if-plugins': '1.0.0'},
+        },
+        execution: {
+          environment: {
+            dependencies: [],
+          },
+        },
+      },
+    };
+  }),
+}));
+
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {
@@ -20,8 +83,13 @@ import {
   mergeObjects,
   oneIsPrimitive,
   parseManifestFromStdin,
+  getOptionsFromArgs,
 } from '../../../util/helpers';
 import {Difference} from '../../../types/lib/compare';
+import {CONFIG} from '../../../config';
+
+const {IF_ENV} = CONFIG;
+const {FAILURE_MESSAGE_DEPENDENCIES} = IF_ENV;
 
 const {WriteFileError} = ERRORS;
 
@@ -397,6 +465,44 @@ description: mock-description
 
       const response = checkIfEqual(a, b);
       expect(response).toBeFalsy();
+    });
+  });
+
+  describe('getOptionsFromArgs(): ', () => {
+    it('returns the correct options when dependencies are present.', async () => {
+      const commandArgs = {
+        manifest: '/path/to/mock-manifest.json',
+        install: false,
+      };
+
+      process.env.manifest = 'true';
+
+      const result = await getOptionsFromArgs(commandArgs);
+      expect.assertions(1);
+
+      expect(result).toEqual({
+        folderPath: './mock-path',
+        dependencies: {
+          '@grnsft/if-plugins': '^v0.3.2',
+        },
+        install: false,
+      });
+    });
+
+    it('throws an error when there are no dependencies.', async () => {
+      const commandArgs = {
+        manifest: '/path/to/mock-manifest.json',
+        install: false,
+      };
+
+      process.env.manifest = 'false';
+
+      expect.assertions(1);
+      try {
+        await getOptionsFromArgs(commandArgs);
+      } catch (error) {
+        expect(error).toEqual(new Error(FAILURE_MESSAGE_DEPENDENCIES));
+      }
     });
   });
 });
