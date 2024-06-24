@@ -4,8 +4,8 @@ import {Copy} from '../../../builtins/copy-param';
 
 import {STRINGS} from '../../../config';
 
-const {GlobalConfigError, MissingInputDataError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA} = STRINGS;
+const {GlobalConfigError, InputValidationError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
 describe('builtins/copy: ', () => {
   describe('Copy: ', () => {
@@ -86,7 +86,9 @@ describe('builtins/copy: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new MissingInputDataError(MISSING_INPUT_DATA('original'))
+            new InputValidationError(
+              '"original" parameter is required. Error code: invalid_type.'
+            )
           );
         }
       });
