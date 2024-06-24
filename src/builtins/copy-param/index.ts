@@ -6,8 +6,8 @@ import {validate} from '../../util/validations';
 
 import {STRINGS} from '../../config';
 
-const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA} = STRINGS;
-const {GlobalConfigError, MissingInputDataError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {GlobalConfigError} = ERRORS;
 //   keep-existing: true/false (whether to remove the parameter you are copying from)
 //   from-param: the parameter you are copying from (e.g. cpu/name)
 //   to-field: the parameter you are copying to (e.g. cpu/processor-name)
@@ -40,10 +40,22 @@ export const Copy = (globalConfig: Record<string, any>): ExecutePlugin => {
   /**
    * Checks for required fields in input.
    */
-  const validateSingleInput = (input: PluginParams, parameter: string) => {
-    if (!input[parameter]) {
-      throw new MissingInputDataError(MISSING_INPUT_DATA(parameter));
-    }
+  const validateSingleInput = (
+    input: PluginParams,
+    inputParameters: string[]
+  ) => {
+    const inputData = inputParameters.reduce(
+      (acc, param) => {
+        acc[param] = input[param];
+
+        return acc;
+      },
+      {} as Record<string, string>
+    );
+
+    const validationSchema = z.record(z.string(), z.string());
+
+    validate(validationSchema, inputData);
 
     return input;
   };
@@ -55,7 +67,7 @@ export const Copy = (globalConfig: Record<string, any>): ExecutePlugin => {
     const to = safeGlobalConfig['to'];
 
     return inputs.map(input => {
-      const safeInput = validateSingleInput(input, from);
+      const safeInput = validateSingleInput(input, [from]);
 
       const outputValue = safeInput[from];
       if (safeInput[from]) {
