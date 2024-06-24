@@ -10,6 +10,7 @@ const {MissingInputDataError} = ERRORS;
 const {
   MISSING_FUNCTIONAL_UNIT_CONFIG,
   MISSING_FUNCTIONAL_UNIT_INPUT,
+  SCI_MISSING_FN_UNIT,
   ZERO_DIVISION,
 } = STRINGS;
 
@@ -60,8 +61,6 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
    * Checks for fields in input.
    */
   const validateInput = (input: PluginParams) => {
-    const message = `'carbon' and ${globalConfig['functional-unit']} should be present in your input data.`;
-
     const validatedConfig = validateConfig(globalConfig);
 
     if (
@@ -78,7 +77,9 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
         carbon: z.number().gte(0),
         duration: z.number().gte(1),
       })
-      .refine(allDefined, {message});
+      .refine(allDefined, {
+        message: SCI_MISSING_FN_UNIT(globalConfig['functional-unit']),
+      });
 
     return validate<z.infer<typeof schema>>(schema, input);
   };
