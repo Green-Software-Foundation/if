@@ -144,7 +144,7 @@ The results will be saved to a new `yaml` file in `manifests/outputs`.
 
 ## Errors
 
-`Coefficient exposes six of the IF error classes.
+Coefficient exposes six of the IF error classes.
 
 ### FetchingFileError
 
