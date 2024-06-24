@@ -103,7 +103,7 @@ The results will be saved to a new `yaml` file in `manifests/outputs`.
 ### `MissingInputDataError`
 
 This error arises when a necessary piece of input data is missing from the `inputs` array.
-Every element in the ``inputs` array must contain:
+Every element in the `inputs` array must contain:
 
 - `timestamp`
 - `duration`
