@@ -258,16 +258,12 @@ export const addTemplateManifest = async (destinationDir: string) => {
       '../config/env-template.yml'
     );
 
-    console.log('--templateManifest', templateManifest);
-
     const destinationPath = path.resolve(destinationDir, 'manifest.yml');
-
     const data = await fs.readFile(templateManifest, 'utf-8');
-    console.log('--after read');
+
     await fs.writeFile(destinationPath, '', 'utf-8');
     await fs.writeFile(destinationPath, data, 'utf-8');
   } catch (error) {
-    console.log('---errr', error);
     console.log(FAILURE_MESSAGE_TEMPLATE);
     process.exit(1);
   }
