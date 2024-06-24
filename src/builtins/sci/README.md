@@ -19,6 +19,8 @@
 
 - `sci`: carbon expressed in terms of the given functional unit
 
+>Note: Plugin will warn and return `carbon` value in case if `functional-unit`'s value is zero.
+
 ## Calculation
 
 SCI is calculated as:
