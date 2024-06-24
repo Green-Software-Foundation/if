@@ -86,6 +86,8 @@ ${error}`,
     `Unexpected date datatype: ${typeof date}: ${date}`,
   INVALID_OBSERVATION_OVERLAP:
     'Observation timestamps overlap, please check inputs.',
+  SCI_MISSING_FN_UNIT: (functionalUnit: string) =>
+    `'carbon' and ${functionalUnit} should be present in your input data.`,
   /** Exhaust messages */
   OUTPUT_REQUIRED:
     'Output path is required, please make sure output is configured properly.',
