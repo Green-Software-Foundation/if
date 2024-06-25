@@ -156,7 +156,7 @@ const validateAndParseIfEnvArgs = () => {
     return parse<IFEnvArgs>(IF_ENV.ARGS, IF_ENV.HELP);
   } catch (error) {
     if (error instanceof Error) {
-      throw new CliInputError(error.message);
+      throw new ParseCliParamsError(error.message);
     }
 
     throw error;
@@ -174,14 +174,14 @@ export const parseIfEnvArgs = async () => {
     const isManifestFileExists = await isFileExists(response);
 
     if (!isManifestFileExists) {
-      throw new CliInputError(MANIFEST_NOT_FOUND);
+      throw new ParseCliParamsError(MANIFEST_NOT_FOUND);
     }
 
     if (checkIfFileIsYaml(manifest)) {
       return {manifest: response, install, cwd};
     }
 
-    throw new CliInputError(FILE_IS_NOT_YAML);
+    throw new CliSourceFileError(SOURCE_IS_NOT_YAML);
   }
 
   return {install, cwd};
