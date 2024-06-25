@@ -34,6 +34,7 @@ const {
 } = IF_ENV;
 
 const {UNSUPPORTED_ERROR} = STRINGS;
+const {MissingPluginDependenciesError} = ERRORS;
 
 /**
  * Impact engine error handler. Logs errors and appends issue template if error is unknown.
@@ -215,7 +216,7 @@ export const getOptionsFromArgs = async (commandArgs: {
   const dependencies = rawManifest?.execution?.environment.dependencies || [];
 
   if (!dependencies.length) {
-    throw new Error(FAILURE_MESSAGE_DEPENDENCIES);
+    throw new MissingPluginDependenciesError(FAILURE_MESSAGE_DEPENDENCIES);
   }
 
   const pathsWithVersion = extractPathsWithVersion(plugins, dependencies);
@@ -261,7 +262,6 @@ export const addTemplateManifest = async (destinationDir: string) => {
     const destinationPath = path.resolve(destinationDir, 'manifest.yml');
     const data = await fs.readFile(templateManifest, 'utf-8');
 
-    await fs.writeFile(destinationPath, '', 'utf-8');
     await fs.writeFile(destinationPath, data, 'utf-8');
   } catch (error) {
     console.log(FAILURE_MESSAGE_TEMPLATE);
