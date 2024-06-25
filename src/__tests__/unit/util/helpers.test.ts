@@ -84,12 +84,14 @@ import {
   oneIsPrimitive,
   parseManifestFromStdin,
   getOptionsFromArgs,
+  addTemplateManifest,
+  // initializeAndInstallLibs,
 } from '../../../util/helpers';
 import {Difference} from '../../../types/lib/compare';
 import {CONFIG} from '../../../config';
 
 const {IF_ENV} = CONFIG;
-const {FAILURE_MESSAGE_DEPENDENCIES} = IF_ENV;
+const {FAILURE_MESSAGE_DEPENDENCIES, FAILURE_MESSAGE} = IF_ENV;
 
 const {WriteFileError} = ERRORS;
 
@@ -502,6 +504,25 @@ description: mock-description
         await getOptionsFromArgs(commandArgs);
       } catch (error) {
         expect(error).toEqual(new Error(FAILURE_MESSAGE_DEPENDENCIES));
+      }
+    });
+  });
+
+  describe('addTemplateManifest(): ', () => {
+    it('successfully adds the template manifest to the directory.', async () => {
+      await addTemplateManifest('./');
+
+      expect.assertions(1);
+    });
+
+    it('throws an error when the manifest is not added into the directory.', async () => {
+      expect.assertions(1);
+
+      try {
+        await addTemplateManifest('');
+      } catch (error) {
+        const logSpy = jest.spyOn(global.console, 'log');
+        expect(logSpy).toEqual(FAILURE_MESSAGE);
       }
     });
   });
