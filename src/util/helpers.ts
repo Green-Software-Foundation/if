@@ -236,7 +236,7 @@ export const initializeAndInstallLibs = async (options: EnvironmentOptions) => {
     const {folderPath, install, cwd, dependencies} = options;
     const packageJsonPath = await initPackageJsonIfNotExists(folderPath);
 
-    await updatePackageJsonProperties(packageJsonPath, !cwd);
+    await updatePackageJsonProperties(packageJsonPath, cwd);
 
     if (install) {
       await installDependencies(folderPath, dependencies);
