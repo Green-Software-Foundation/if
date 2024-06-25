@@ -110,7 +110,6 @@ describe('util/npm: ', () => {
       const expectedPackageJsonContent = JSON.stringify(
         {
           dependencies: {
-            '@grnsft/if': '^0.3.3-beta.0',
             '@grnsft/if-plugins': '^0.3.3-beta.0',
           },
         },
@@ -137,7 +136,6 @@ describe('util/npm: ', () => {
       const expectedPackageJsonContent = JSON.stringify(
         {
           dependencies: {
-            '@grnsft/if': '^0.3.3-beta.0',
             '@grnsft/if-plugins': '^0.3.3-beta.0',
           },
         },
@@ -220,11 +218,32 @@ describe('util/npm: ', () => {
 
   describe('updatePackageJsonProperties(): ', () => {
     it('updates the package.json properties correctly.', async () => {
-      const newPackageJsonPath = path.resolve(folderPath, '/package.json-npm');
-      await updatePackageJsonProperties(newPackageJsonPath, false);
+      const packageJsonPath = path.join(folderPath, 'package.json-npm1');
 
-      expect.assertions(2);
-      expect(fs.readFile).toHaveBeenCalledWith(newPackageJsonPath, 'utf8');
+      const expectedPackageJsonContent = JSON.stringify(
+        {
+          name: 'if-environment',
+          description: 'mock-description',
+          author: {},
+          bugs: {},
+          engines: {},
+          homepage: 'mock-homepage',
+          dependencies: {
+            '@grnsft/if-plugins': '^0.3.3-beta.0',
+          },
+        },
+        null,
+        2
+      );
+
+      const fsReadSpy = jest
+        .spyOn(fs, 'readFile')
+        .mockResolvedValue(expectedPackageJsonContent);
+      await updatePackageJsonProperties(packageJsonPath, true);
+
+      expect.assertions(8);
+
+      expect(fsReadSpy).toHaveBeenCalledWith(packageJsonPath, 'utf8');
     });
   });
 });
