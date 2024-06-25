@@ -108,7 +108,7 @@ export const extractPathsWithVersion = (
  */
 export const updatePackageJsonProperties = async (
   newPackageJsonPath: string,
-  resetDependencies: boolean
+  appendDependencies: boolean
 ) => {
   const packageJsonContent = await fs.readFile(newPackageJsonPath, 'utf8');
   const parsedPackageJsonContent = JSON.parse(packageJsonContent);
@@ -120,7 +120,9 @@ export const updatePackageJsonProperties = async (
     bugs: packageJson.bugs,
     engines: packageJson.engines,
     homepage: packageJson.homepage,
-    dependencies: resetDependencies ? {} : packageJson.dependencies,
+    dependencies: appendDependencies
+      ? parsedPackageJsonContent.dependencies
+      : {},
   };
 
   const newPackageJson = Object.assign(

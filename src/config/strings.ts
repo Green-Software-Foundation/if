@@ -1,7 +1,6 @@
 import {ManifestParameter} from '../types/manifest';
 
 export const STRINGS = {
-  FILE_IS_NOT_YAML: 'Provided manifest is not in yaml format.',
   MANIFEST_IS_MISSING: 'Manifest is missing.',
   MISSING_METHOD: "Initalization param 'method' is missing.",
   MISSING_PATH: "Initalization param 'path' is missing.",
@@ -49,7 +48,7 @@ You have not selected an output method. To see your output data, you can choose 
 --output <savepath>: this will save your output data to the given filepath (do not provide file extension)
 Note that for the '--output' option you also need to define the output type in your manifest file. See https://if.greensoftware.foundation/major-concepts/manifest-file#initialize`,
   SOURCE_IS_NOT_YAML: 'Given source file is not in yaml format.',
-  TARGET_IS_NOT_YAML: 'Given target is not in yaml format.',
+  TARGET_IS_NOT_YAML: 'Given target file is not in yaml format.',
   INVALID_TARGET: 'Target is invalid.',
   INVALID_SOURCE: 'Source is invalid.',
   UNSUPPORTED_ERROR: (errorName: string) =>

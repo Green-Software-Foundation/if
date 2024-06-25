@@ -1,16 +1,40 @@
+#!/usr/bin/env node
+/* eslint-disable no-process-exit */
 import {createInterface} from 'node:readline/promises';
 import {exec} from 'node:child_process';
 import {promisify} from 'node:util';
 
+import * as fs from 'fs/promises';
+import * as path from 'path';
+
 import {ERRORS} from '@grnsft/if-core/utils';
 
-import {logger} from './logger';
-
-import {STRINGS} from '../config';
+import {STRINGS, CONFIG} from '../config';
 
 import {Difference} from '../types/lib/compare';
 
+import {load} from '../lib/load';
+
+import {
+  installDependencies,
+  initPackageJsonIfNotExists,
+  updatePackageJsonDependencies,
+  extractPathsWithVersion,
+  updatePackageJsonProperties,
+} from './npm';
+
+import {logger} from './logger';
+import {EnvironmentOptions} from '../types/if-env';
+
+const {IF_ENV} = CONFIG;
+const {
+  FAILURE_MESSAGE,
+  FAILURE_MESSAGE_TEMPLATE,
+  FAILURE_MESSAGE_DEPENDENCIES,
+} = IF_ENV;
+
 const {UNSUPPORTED_ERROR} = STRINGS;
+const {MissingPluginDependenciesError} = ERRORS;
 
 /**
  * Impact engine error handler. Logs errors and appends issue template if error is unknown.
@@ -175,4 +199,72 @@ export const parseManifestFromStdin = async () => {
   }
 
   return match![1];
+};
+
+/**
+ * Gets the folder path of the manifest file, dependencies from manifest file and install argument from the given arguments.
+ */
+export const getOptionsFromArgs = async (commandArgs: {
+  manifest: string;
+  install: boolean | undefined;
+}) => {
+  const {manifest, install} = commandArgs;
+  const folderPath = path.dirname(manifest);
+  const loadedManifest = await load(manifest);
+  const rawManifest = loadedManifest.rawManifest;
+  const plugins = rawManifest?.initialize?.plugins || {};
+  const dependencies = rawManifest?.execution?.environment.dependencies || [];
+
+  if (!dependencies.length) {
+    throw new MissingPluginDependenciesError(FAILURE_MESSAGE_DEPENDENCIES);
+  }
+
+  const pathsWithVersion = extractPathsWithVersion(plugins, dependencies);
+
+  return {
+    folderPath,
+    dependencies: pathsWithVersion,
+    install,
+  };
+};
+
+/**
+ * Creates folder if not exists, installs dependencies if required, update depenedencies.
+ */
+export const initializeAndInstallLibs = async (options: EnvironmentOptions) => {
+  try {
+    const {folderPath, install, cwd, dependencies} = options;
+    const packageJsonPath = await initPackageJsonIfNotExists(folderPath);
+
+    await updatePackageJsonProperties(packageJsonPath, cwd);
+
+    if (install) {
+      await installDependencies(folderPath, dependencies);
+    } else {
+      await updatePackageJsonDependencies(packageJsonPath, dependencies, cwd);
+    }
+  } catch (error) {
+    console.log(FAILURE_MESSAGE);
+    process.exit(2);
+  }
+};
+
+/**
+ * Adds a manifest template to the folder where the if-env CLI command runs.
+ */
+export const addTemplateManifest = async (destinationDir: string) => {
+  try {
+    const templateManifest = path.resolve(
+      __dirname,
+      '../config/env-template.yml'
+    );
+
+    const destinationPath = path.resolve(destinationDir, 'manifest.yml');
+    const data = await fs.readFile(templateManifest, 'utf-8');
+
+    await fs.writeFile(destinationPath, data, 'utf-8');
+  } catch (error) {
+    console.log(FAILURE_MESSAGE_TEMPLATE);
+    process.exit(1);
+  }
 };

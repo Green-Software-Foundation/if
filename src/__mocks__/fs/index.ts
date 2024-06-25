@@ -1,6 +1,7 @@
 import * as YAML from 'js-yaml';
 import * as fs from 'fs';
 import * as fsAsync from 'fs/promises';
+import * as path from 'path';
 
 export const readFile = async (filePath: string) => {
   /** mock for util/npm */
@@ -89,11 +90,28 @@ cpu-cores-available,cpu-cores-utilized,cpu-manufacturer,cpu-model-name,cpu-tdp,g
 export const mkdir = (dirPath: string) => dirPath;
 
 export const writeFile = async (pathToFile: string, content: string) => {
-  if (pathToFile.includes('package.json-npm')) {
-    const updatedPath = pathToFile.replace('-npm', '');
+  if (pathToFile.includes('package.json-npm1')) {
+    const updatedPath = pathToFile.replace('-npm1', '');
+    const fileContent = await fsAsync.readFile(updatedPath, 'utf8');
+    const fileContentObject = JSON.parse(fileContent);
+    const parsedContent = JSON.parse(content);
 
-    const content = await fsAsync.readFile(updatedPath, 'utf8');
-    expect(content).toBe(content);
+    for (const property in fileContentObject) {
+      expect(parsedContent).toHaveProperty(property);
+    }
+  } else if (pathToFile.includes('package.json-npm')) {
+    const updatedPath = pathToFile.replace('-npm', '');
+    const fileContent = await fsAsync.readFile(updatedPath, 'utf8');
+
+    expect(content).toBe(fileContent);
+  } else if (pathToFile.includes('/manifest.yml')) {
+    const templateManifest = path.resolve(
+      __dirname,
+      '../../config/env-template.yml'
+    );
+    const fileContent = await fsAsync.readFile(templateManifest, 'utf8');
+
+    expect(content).toBe(fileContent);
   } else {
     if (pathToFile === 'reject') {
       throw new Error('Wrong file path');

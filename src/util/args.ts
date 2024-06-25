@@ -20,17 +20,11 @@ import {
 } from '../types/process-args';
 import {LoadDiffParams} from '../types/util/args';
 
-const {
-  CliInputError,
-  ParseCliParamsError,
-  CliTargetFileError,
-  CliSourceFileError,
-} = ERRORS;
+const {ParseCliParamsError, CliTargetFileError, CliSourceFileError} = ERRORS;
 
 const {IE, IF_DIFF, IF_ENV, IF_CHECK} = CONFIG;
 
 const {
-  FILE_IS_NOT_YAML,
   MANIFEST_IS_MISSING,
   MANIFEST_NOT_FOUND,
   NO_OUTPUT,
@@ -49,7 +43,7 @@ const validateAndParseProcessArgs = () => {
     return parse<IEArgs>(IE.ARGS, IE.HELP);
   } catch (error) {
     if (error instanceof Error) {
-      throw new CliInputError(error.message);
+      throw new ParseCliParamsError(error.message);
     }
 
     throw error;
@@ -75,7 +69,7 @@ const prependFullFilePath = (filePath: string) => {
  * 3. If output params are missing, warns user about it.
  * 3. Otherwise checks if `manifest` param is there, then processes with checking if it's a yaml file.
  *    If it is, then returns object containing full path.
- * 4. If params are missing or invalid, then rejects with `CliInputError`.
+ * 4. If params are missing or invalid, then rejects with `ParseCliParamsError`.
  */
 export const parseIEProcessArgs = (): ProcessArgsOutputs => {
   const {
@@ -103,7 +97,7 @@ export const parseIEProcessArgs = (): ProcessArgsOutputs => {
       };
     }
 
-    throw new CliSourceFileError(FILE_IS_NOT_YAML);
+    throw new CliSourceFileError(SOURCE_IS_NOT_YAML);
   }
 
   throw new CliSourceFileError(MANIFEST_IS_MISSING);
@@ -152,7 +146,7 @@ export const parseIfDiffArgs = () => {
     throw new CliTargetFileError(TARGET_IS_NOT_YAML);
   }
 
-  throw new CliInputError(INVALID_TARGET);
+  throw new ParseCliParamsError(INVALID_TARGET);
 };
 
 /** -- IF Env -- */
@@ -165,7 +159,7 @@ const validateAndParseIfEnvArgs = () => {
     return parse<IFEnvArgs>(IF_ENV.ARGS, IF_ENV.HELP);
   } catch (error) {
     if (error instanceof Error) {
-      throw new CliInputError(error.message);
+      throw new ParseCliParamsError(error.message);
     }
 
     throw error;
@@ -183,14 +177,14 @@ export const parseIfEnvArgs = async () => {
     const isManifestFileExists = await isFileExists(response);
 
     if (!isManifestFileExists) {
-      throw new CliInputError(MANIFEST_NOT_FOUND);
+      throw new ParseCliParamsError(MANIFEST_NOT_FOUND);
     }
 
     if (checkIfFileIsYaml(manifest)) {
       return {manifest: response, install, cwd};
     }
 
-    throw new CliInputError(FILE_IS_NOT_YAML);
+    throw new CliSourceFileError(SOURCE_IS_NOT_YAML);
   }
 
   return {install, cwd};
