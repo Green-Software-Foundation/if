@@ -14,7 +14,6 @@ export const tree = {
         'device/expected-lifespan': 94608000,
         'resources-reserved': 1,
         'resources-total': 8,
-        'functional-unit-time': '1 min',
       },
       inputs: [
         {
@@ -43,7 +42,6 @@ export const tree = {
           'device/expected-lifespan': 94608000,
           'resources-reserved': 1,
           'resources-total': 8,
-          'functional-unit-time': '1 min',
           'cpu/energy': 0.000008888888888888888,
           "carbon-plus-energy'": 10.000008888888889,
           'carbon-embodied': 0.0000020256215119228817,
@@ -65,7 +63,6 @@ export const tree = {
         'device/expected-lifespan': 94608000,
         'resources-reserved': 1,
         'resources-total': 8,
-        'functional-unit-time': '1 min',
       },
       inputs: [
         {
@@ -94,7 +91,6 @@ export const tree = {
           'device/expected-lifespan': 94608000,
           'resources-reserved': 1,
           'resources-total': 8,
-          'functional-unit-time': '1 min',
           'cpu/energy': 0.00001650338753387534,
           "carbon-plus-energy'": 10.000016503387533,
           'carbon-embodied': 0.0000020256215119228817,
@@ -154,7 +150,6 @@ export const context: Context = {
         method: 'Sci',
         'global-config': {
           'functional-unit': 'requests',
-          'functional-unit-time': '1 minute',
         },
       },
     },
