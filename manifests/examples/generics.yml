@@ -33,7 +33,6 @@ tree:
   children:
     child-1:
       pipeline:
-        - teads-curve
         - sum
         - coefficient
         - multiply
