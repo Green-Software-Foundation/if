@@ -4,7 +4,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 
 import {execPromise} from './helpers';
-import {isFileExists} from './fs';
+import {getFileName, isFileExists} from './fs';
 import {logger} from './logger';
 
 import {STRINGS} from '../config';
@@ -135,4 +135,44 @@ export const updatePackageJsonProperties = async (
     newPackageJsonPath,
     JSON.stringify(newPackageJson, null, 2)
   );
+};
+
+/**
+ * Executes a series of npm commands based on the provided manifest file.
+ */
+export const executeCommands = async (manifest: string, cwd: boolean) => {
+  // TODO: After release remove isGlobal and appropriate checks
+  const isGlobal = !!process.env.npm_config_global;
+  const manifestDirPath = path.dirname(manifest);
+  const manifestFileName = getFileName(manifest);
+  const executedManifest = path.join(manifestDirPath, `re-${manifestFileName}`);
+  const ifEnv = `${isGlobal ? 'if-env' : 'npm run if-env --'} -m ${manifest}`;
+  const ifEnvCommand = cwd ? `${ifEnv} -c` : ifEnv;
+  const ifRunCommand = `${
+    isGlobal ? 'if-run' : 'npm run if-run --'
+  } -m ${manifest} -o ${executedManifest}`;
+  const ifDiffCommand = `${
+    isGlobal ? 'if-diff' : 'npm run if-diff --'
+  } -s ${executedManifest}.yaml -t ${manifest}`;
+  const ttyCommand = " node -p 'Boolean(process.stdout.isTTY)'";
+
+  const result = await execPromise(
+    `${ifEnvCommand} && ${ifRunCommand} && ${ttyCommand} | ${ifDiffCommand}`,
+    {
+      cwd: process.env.CURRENT_DIR || process.cwd(),
+    }
+  );
+
+  if (!cwd) {
+    await fs.unlink(`${manifestDirPath}/package.json`);
+  }
+
+  await fs.unlink(`${executedManifest}.yaml`);
+
+  if (result.stdout) {
+    const logs = result.stdout.split('\n\n');
+    const successMessage = logs[logs.length - 1];
+
+    console.log(successMessage);
+  }
 };
