@@ -1,5 +1,4 @@
-import {jest} from '@jest/globals';
-
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 const mockWarn = jest.fn();
 const mockError = jest.fn();
 
@@ -74,6 +73,67 @@ jest.mock('../../../lib/load', () => ({
   }),
 }));
 
+const initPackage = jest.fn(() => Promise.resolve('mock-path'));
+const updatePackage = jest.fn(() => Promise.resolve(true));
+const installdeps = jest.fn();
+const updatedeps = jest.fn();
+jest.mock('../../../util/npm', () => {
+  const actualNPMUtil = jest.requireActual('../../../util/npm');
+
+  return {
+    ...actualNPMUtil,
+    initPackageJsonIfNotExists: (folderPath: string) => {
+      if (process.env.NPM_MOCK === 'true') {
+        return initPackage();
+      }
+
+      if (process.env.NPM_MOCK === 'error') {
+        throw new Error('mock-error');
+      }
+
+      return actualNPMUtil.initPackageJsonIfNotExists(folderPath);
+    },
+    updatePackageJsonProperties: (
+      newPackageJsonPath: string,
+      appendDependencies: boolean
+    ) => {
+      if (process.env.NPM_MOCK === 'true') {
+        return updatePackage();
+      }
+
+      return actualNPMUtil.updatePackageJsonProperties(
+        newPackageJsonPath,
+        appendDependencies
+      );
+    },
+    installDependencies: (
+      folderPath: string,
+      dependencies: {[path: string]: string}
+    ) => {
+      if (process.env.NPM_MOCK === 'true') {
+        return installdeps();
+      }
+
+      return actualNPMUtil.installDependencies(folderPath, dependencies);
+    },
+    updatePackageJsonDependencies: (
+      packageJsonPath: string,
+      dependencies: any,
+      cwd: boolean
+    ) => {
+      if (process.env.NPM_MOCK === 'true') {
+        return updatedeps();
+      }
+
+      return actualNPMUtil.updatePackageJsonDependencies(
+        packageJsonPath,
+        dependencies,
+        cwd
+      );
+    },
+  };
+});
+
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {
@@ -85,10 +145,11 @@ import {
   parseManifestFromStdin,
   getOptionsFromArgs,
   addTemplateManifest,
+  initializeAndInstallLibs,
   // initializeAndInstallLibs,
 } from '../../../util/helpers';
-import {Difference} from '../../../types/lib/compare';
 import {CONFIG} from '../../../config';
+import {Difference} from '../../../types/lib/compare';
 
 const {IF_ENV} = CONFIG;
 const {FAILURE_MESSAGE_DEPENDENCIES, FAILURE_MESSAGE} = IF_ENV;
@@ -524,6 +585,83 @@ description: mock-description
         const logSpy = jest.spyOn(global.console, 'log');
         expect(logSpy).toEqual(FAILURE_MESSAGE);
       }
+    });
+  });
+
+  describe('initializeAndInstallLibs(): ', () => {
+    beforeEach(() => {
+      initPackage.mockReset();
+      updatePackage.mockReset();
+      installdeps.mockReset();
+      updatedeps.mockReset();
+    });
+
+    it('installs dependencies if install flag is truthy.', async () => {
+      process.env.NPM_MOCK = 'true';
+      // @ts-ignore
+      process.exit = (code: any) => code;
+      const options = {
+        folderPath: 'mock-folderPath',
+        install: true,
+        cwd: true,
+        dependencies: {
+          mock: 'mock-dependencies',
+        },
+      };
+
+      expect.assertions(4);
+      await initializeAndInstallLibs(options);
+
+      expect(initPackage).toHaveBeenCalledTimes(1);
+      expect(updatePackage).toHaveBeenCalledTimes(1);
+      expect(installdeps).toHaveBeenCalledTimes(1);
+      expect(updatedeps).toHaveBeenCalledTimes(0);
+    });
+
+    it('updates dependencies if install flag is falsy.', async () => {
+      process.env.NPM_MOCK = 'true';
+      // @ts-ignore
+      process.exit = (code: any) => code;
+      const options = {
+        folderPath: 'mock-folderPath',
+        install: false,
+        cwd: true,
+        dependencies: {
+          mock: 'mock-dependencies',
+        },
+      };
+
+      expect.assertions(4);
+      await initializeAndInstallLibs(options);
+
+      expect(initPackage).toHaveBeenCalledTimes(1);
+      expect(updatePackage).toHaveBeenCalledTimes(1);
+      expect(installdeps).toHaveBeenCalledTimes(0);
+      expect(updatedeps).toHaveBeenCalledTimes(1);
+    });
+
+    it('exits process if error is thrown.', async () => {
+      process.env.NPM_MOCK = 'error';
+      const mockExit = jest.fn();
+      // @ts-ignore
+      process.exit = mockExit;
+      const options = {
+        folderPath: 'mock-folderPath',
+        install: false,
+        cwd: true,
+        dependencies: {
+          mock: 'mock-dependencies',
+        },
+      };
+
+      expect.assertions(5);
+      await initializeAndInstallLibs(options);
+
+      expect(initPackage).toHaveBeenCalledTimes(0);
+      expect(updatePackage).toHaveBeenCalledTimes(0);
+      expect(installdeps).toHaveBeenCalledTimes(0);
+      expect(updatedeps).toHaveBeenCalledTimes(0);
+      expect(mockExit).toHaveBeenCalledTimes(1);
     });
   });
 });
