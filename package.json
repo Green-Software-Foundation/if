@@ -17,6 +17,7 @@
   "dependencies": {
     "@commitlint/cli": "^18.6.0",
     "@commitlint/config-conventional": "^18.6.0",
+    "@ethereum-attestation-service/eas-sdk": "^2.3.0",
     "@grnsft/if-core": "^0.0.9",
     "axios": "^1.7.2",
     "csv-parse": "^5.5.6",
