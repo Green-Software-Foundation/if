@@ -15,7 +15,7 @@ const packageJson = require('../../package.json');
 const {INITIALIZING_PACKAGE_JSON, INSTALLING_NPM_PACKAGES} = STRINGS;
 
 /**
- * Checks if the package.json is exists, if not, inisializes it.
+ * Checks if the package.json is exists, if not, initializes it.
  */
 export const initPackageJsonIfNotExists = async (folderPath: string) => {
   const packageJsonPath = path.resolve(folderPath, 'package.json');
