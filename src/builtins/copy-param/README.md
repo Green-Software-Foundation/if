@@ -2,7 +2,7 @@
 
 `copy-param` is a generic plugin that duplicates an existing parameter in the `input` data and assigns it to a new key. You can either keep or delete the original copied parameter. A common use case for this is to rename parameters in the `inputs` array.
 
-You provide the name of the value you want to copy, and a name to assign the copy to. You also toggle a `keep-existing` parameter to either persist or del;et the original copied value.
+You provide the name of the value you want to copy, and a name to assign the copy to. You also toggle a `keep-existing` parameter to either persist or delete the original copied value.
 
 For example, you could copy `energy` into `energy-copy`, with `keep-existing=true`. In this case your inputs:
 
