@@ -30,7 +30,6 @@ initialize:
       method: Sci
       global-config:
         functional-unit: ""
-        functional-unit-time: "1-day"
     "time-sync":
       method: TimeSync
       path: "builtin"
