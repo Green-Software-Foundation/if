@@ -76,6 +76,7 @@
     "coverage": "jest --verbose --coverage --testPathPattern=src/__tests__/unit",
     "fix": "gts fix",
     "fix:package": "fixpack",
+    "if-attest": "npx ts-node src/attest.ts",
     "if-diff": "npx ts-node src/diff.ts",
     "if-env": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/env.ts",
     "if-run": "npx ts-node src/index.ts",
