@@ -117,7 +117,12 @@ import {
 
 import {STRINGS} from '../../../config';
 
-const {CliSourceFileError, ParseCliParamsError} = ERRORS;
+const {
+  CliSourceFileError,
+  ParseCliParamsError,
+  InvalidDirectoryError,
+  MissingCliFlagsError,
+} = ERRORS;
 
 const {
   MANIFEST_IS_MISSING,
@@ -446,7 +451,7 @@ describe('util/args: ', () => {
       try {
         await parseIfCheckArgs();
       } catch (error) {
-        expect(error).toEqual(new CliInputError(DIRECTORY_NOT_FOUND));
+        expect(error).toEqual(new InvalidDirectoryError(DIRECTORY_NOT_FOUND));
       }
     });
 
@@ -457,7 +462,7 @@ describe('util/args: ', () => {
       try {
         await parseIfCheckArgs();
       } catch (error) {
-        expect(error).toEqual(new CliInputError(IF_CHECK_FLAGS_MISSING));
+        expect(error).toEqual(new MissingCliFlagsError(IF_CHECK_FLAGS_MISSING));
       }
     });
 
@@ -470,7 +475,7 @@ describe('util/args: ', () => {
         await parseIfCheckArgs();
       } catch (error) {
         if (error instanceof Error) {
-          expect(error).toEqual(new CliInputError(FILE_IS_NOT_YAML));
+          expect(error).toEqual(new CliSourceFileError(SOURCE_IS_NOT_YAML));
         }
       }
     });
@@ -483,7 +488,7 @@ describe('util/args: ', () => {
         await parseIfCheckArgs();
       } catch (error) {
         if (error instanceof Error) {
-          expect(error).toEqual(new CliInputError(MANIFEST_NOT_FOUND));
+          expect(error).toEqual(new ParseCliParamsError(MANIFEST_NOT_FOUND));
         }
       }
     });
@@ -496,7 +501,7 @@ describe('util/args: ', () => {
         await parseIfCheckArgs();
       } catch (error) {
         if (error instanceof Error) {
-          expect(error).toEqual(new CliInputError('mock-error'));
+          expect(error).toEqual(new ParseCliParamsError('mock-error'));
         }
       }
     });
