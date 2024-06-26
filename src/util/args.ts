@@ -20,7 +20,13 @@ import {
 } from '../types/process-args';
 import {LoadDiffParams} from '../types/util/args';
 
-const {ParseCliParamsError, CliTargetFileError, CliSourceFileError} = ERRORS;
+const {
+  ParseCliParamsError,
+  CliTargetFileError,
+  CliSourceFileError,
+  InvalidDirectoryError,
+  MissingCliFlagsError,
+} = ERRORS;
 
 const {IE, IF_DIFF, IF_ENV, IF_CHECK} = CONFIG;
 
@@ -200,7 +206,7 @@ const validateAndParseIfCheckArgs = () => {
     return parse<IFCheckArgs>(IF_CHECK.ARGS, IF_CHECK.HELP);
   } catch (error) {
     if (error instanceof Error) {
-      throw new CliInputError(error.message);
+      throw new ParseCliParamsError(error.message);
     }
 
     throw error;
@@ -218,19 +224,19 @@ export const parseIfCheckArgs = async () => {
     const isManifestFileExists = await isFileExists(response);
 
     if (!isManifestFileExists) {
-      throw new CliInputError(MANIFEST_NOT_FOUND);
+      throw new ParseCliParamsError(MANIFEST_NOT_FOUND);
     }
 
     if (checkIfFileIsYaml(manifest)) {
       return {manifest};
     }
 
-    throw new CliInputError(FILE_IS_NOT_YAML);
+    throw new CliSourceFileError(SOURCE_IS_NOT_YAML);
   } else if (directory) {
     const isDirExists = await isDirectoryExists(directory);
 
     if (!isDirExists) {
-      throw new CliInputError(DIRECTORY_NOT_FOUND);
+      throw new InvalidDirectoryError(DIRECTORY_NOT_FOUND);
     }
 
     const response = prependFullFilePath(directory);
@@ -238,5 +244,5 @@ export const parseIfCheckArgs = async () => {
     return {directory: response};
   }
 
-  throw new CliInputError(IF_CHECK_FLAGS_MISSING);
+  throw new MissingCliFlagsError(IF_CHECK_FLAGS_MISSING);
 };
