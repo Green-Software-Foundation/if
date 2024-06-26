@@ -3,11 +3,10 @@
 import {ethers} from 'ethers';
 import {readFileSync} from 'fs';
 import * as YAML from 'js-yaml';
+//import { EAS } from '@ethereum-attestation-service/eas-sdk';
 
-const IfAttest = async () => {
-  const manifestHash = HashManifest(
-    '/home/joe/Code/if/manifests/examples/sci.yml'
-  );
+const IfAttest = async (manifestPath: string) => {
+  const manifestHash = HashManifest(manifestPath);
   console.log(manifestHash);
 };
 
@@ -19,4 +18,4 @@ const HashManifest = (manifestPath: string): string => {
   return manifestHash;
 };
 
-IfAttest();
+IfAttest('/home/user/Code/if/manifests/examples/sci.yml');
