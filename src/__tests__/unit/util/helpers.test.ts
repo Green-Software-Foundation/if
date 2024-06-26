@@ -85,7 +85,7 @@ import {
   parseManifestFromStdin,
   getOptionsFromArgs,
   addTemplateManifest,
-  // initializeAndInstallLibs,
+  logStdoutFailMessage,
 } from '../../../util/helpers';
 import {Difference} from '../../../types/lib/compare';
 import {CONFIG} from '../../../config';
@@ -524,6 +524,18 @@ description: mock-description
         const logSpy = jest.spyOn(global.console, 'log');
         expect(logSpy).toEqual(FAILURE_MESSAGE);
       }
+    });
+  });
+
+  describe('logStdoutFailMessage(): ', () => {
+    it('successfully logs the failed message.', () => {
+      const errorMessage = {stdout: '\n\nmock error message'};
+      const logSpy = jest.spyOn(global.console, 'log');
+      logStdoutFailMessage(errorMessage);
+
+      expect.assertions(1);
+
+      expect(logSpy).toHaveBeenCalledWith('mock error message');
     });
   });
 });
