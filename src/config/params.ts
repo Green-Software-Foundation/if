@@ -62,12 +62,6 @@ export const PARAMETERS: Parameters = {
     unit: 'none',
     aggregation: 'sum',
   },
-  'functional-unit-time': {
-    description:
-      'string describing the unit of time in which the final SCI calculation should be expressed, e.g. "1-min"',
-    unit: 'none',
-    aggregation: 'none',
-  },
   'gpu-util': {
     description: 'refers to CPU utilization.',
     unit: 'percentage',
