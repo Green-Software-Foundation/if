@@ -1,16 +1,19 @@
 import {SchemaRegistry} from '@ethereum-attestation-service/eas-sdk';
 import {ethers} from 'ethers';
+import * as dotenv from 'dotenv';
 
-const RpcUrl = 'http://localhost:8545';
-const REGISTRY_CONTRACT_ADDRESS = '0xC2679fBD37d54388Ce493F1DB75320D236e1815e'; //Sepolia v0.26 // replace this with our schema contract address!
+dotenv.config();
 
-const PRIVATE_KEY = '0xh2487tfy8742fb834ygf98o3q4hg98';
+const RPC_URL: string = process.env.RPC_URL ?? '';
+const REGISTRY_CONTRACT_ADDRESS: string =
+  process.env.REGISTRY_CONTRACT_ADDRESS ?? ''; //Sepolia v0.26 // replace this with our schema contract address!
+const PRIVATE_KEY: string = process.env.ETH_PRIVATE_KEY ?? '';
 const SCHEMA =
   'uint256 manifestStart, uint256 manifestEnd, bytes32 manifestHash, uint256 carbon, uint256 sci, uint256 energy';
 
 const registerSchema = async () => {
   const schemaRegistry = new SchemaRegistry(REGISTRY_CONTRACT_ADDRESS);
-  const provider = new ethers.JsonRpcProvider(RpcUrl);
+  const provider = new ethers.JsonRpcProvider(RPC_URL);
   const signer = new ethers.Wallet(PRIVATE_KEY, provider);
 
   schemaRegistry.connect(signer);
