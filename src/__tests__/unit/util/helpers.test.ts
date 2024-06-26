@@ -642,6 +642,7 @@ description: mock-description
 
     it('exits process if error is thrown.', async () => {
       process.env.NPM_MOCK = 'error';
+      const originalProcessExit = process.exit;
       const mockExit = jest.fn();
       // @ts-ignore
       process.exit = mockExit;
@@ -662,6 +663,8 @@ description: mock-description
       expect(installdeps).toHaveBeenCalledTimes(0);
       expect(updatedeps).toHaveBeenCalledTimes(0);
       expect(mockExit).toHaveBeenCalledTimes(1);
+
+      process.exit = originalProcessExit;
     });
   });
 });
