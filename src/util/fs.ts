@@ -26,13 +26,6 @@ export const isDirectoryExists = async (directoryPath: string) => {
 };
 
 /**
- * Removes the given file from the directory.
- */
-export const removeFileFromDirectory = async (filePath: string) => {
-  await fs.unlink(filePath);
-};
-
-/**
  * Gets all files that have either .yml or .yaml extension in the given directory.
  */
 export const getYamlFiles = async (directory: string) => {
@@ -56,6 +49,9 @@ export const getYamlFiles = async (directory: string) => {
   return yamlFiles;
 };
 
+/**
+ * Gets fileName from the given path without an extension.
+ */
 export const getFileName = (filePath: string) => {
   const baseName = path.basename(filePath);
   const extension = path.extname(filePath);
