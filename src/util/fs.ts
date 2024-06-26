@@ -11,3 +11,15 @@ export const isFileExists = async (filePath: string) => {
     return false;
   }
 };
+
+/**
+ * Checks if the directory exists with the given `filePath`.
+ */
+export const isDirectoryExists = async (directoryPath: string) => {
+  try {
+    await fs.access(directoryPath);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};

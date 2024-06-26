@@ -4,7 +4,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 
 import {execPromise} from './helpers';
-import {isFileExists} from './fs';
+import {isDirectoryExists, isFileExists} from './fs';
 import {logger} from './logger';
 
 import {STRINGS} from '../config';
@@ -23,6 +23,14 @@ export const initPackageJsonIfNotExists = async (folderPath: string) => {
 
   if (!isPackageJsonExists) {
     logger.info(INITIALIZING_PACKAGE_JSON);
+
+    const nodeModulesPath = path.resolve(folderPath, 'node_modules');
+    const isNodeModulesExists = await isDirectoryExists(nodeModulesPath);
+
+    if (isNodeModulesExists) {
+      await fs.rm(nodeModulesPath, {recursive: true});
+    }
+
     await execPromise('npm init -y', {cwd: folderPath});
   }
 
