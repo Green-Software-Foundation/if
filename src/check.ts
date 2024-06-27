@@ -4,13 +4,14 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 
 import {logger} from './util/logger';
+import {logStdoutFailMessage} from './util/helpers';
 import {parseIfCheckArgs} from './util/args';
 import {getYamlFiles} from './util/fs';
 
 import {STRINGS} from './config';
 import {executeCommands} from './util/npm';
 
-const {CHECKING, IF_CHECK_FAILED} = STRINGS;
+const {CHECKING} = STRINGS;
 
 const IfCheck = async () => {
   const commandArgs = await parseIfCheckArgs();
@@ -29,7 +30,7 @@ const IfCheck = async () => {
         .replace('yml', 'yaml');
       const manifestDirPath = path.dirname(manifest);
 
-      console.log(IF_CHECK_FAILED(fileName));
+      logStdoutFailMessage(error, fileName);
 
       await fs.unlink(`${manifestDirPath}/package.json`);
       await fs.unlink(executedFile);
@@ -50,7 +51,8 @@ const IfCheck = async () => {
           .replace(fileName, `re-${fileName}`)
           .replace('yml', 'yaml');
 
-        console.log(IF_CHECK_FAILED(fileName));
+        logStdoutFailMessage(error, fileName);
+
         await fs.unlink(executedFile);
       }
     }
