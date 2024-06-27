@@ -4,8 +4,8 @@ import {Sum} from '../../../builtins/sum';
 
 import {STRINGS} from '../../../config';
 
-const {GlobalConfigError, MissingInputDataError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA} = STRINGS;
+const {GlobalConfigError, InputValidationError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
 describe('builtins/sum: ', () => {
   describe('Sum: ', () => {
@@ -85,7 +85,9 @@ describe('builtins/sum: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new MissingInputDataError(MISSING_INPUT_DATA('cpu/energy'))
+            new InputValidationError(
+              '"cpu/energy" parameter is required. Error code: invalid_type.,"network/energy" parameter is required. Error code: invalid_type.,"memory/energy" parameter is required. Error code: invalid_type.'
+            )
           );
         }
       });

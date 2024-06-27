@@ -2,10 +2,7 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {Subtract} from '../../../builtins/subtract';
 
-import {STRINGS} from '../../../config';
-
 const {InputValidationError} = ERRORS;
-const {MISSING_INPUT_DATA} = STRINGS;
 
 describe('builtins/subtract: ', () => {
   describe('Subtract: ', () => {
@@ -62,7 +59,9 @@ describe('builtins/subtract: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(MISSING_INPUT_DATA('cpu/energy'))
+            new InputValidationError(
+              '"cpu/energy" parameter is required. Error code: invalid_type.,"network/energy" parameter is required. Error code: invalid_type.,"memory/energy" parameter is required. Error code: invalid_type.'
+            )
           );
         }
       });

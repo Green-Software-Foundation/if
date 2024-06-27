@@ -28,11 +28,26 @@ export const Coefficient = (globalConfig: CoefficientConfig): ExecutePlugin => {
     const coefficient = safeGlobalConfig['coefficient'];
 
     return inputs.map(input => {
+      validateSingleInput(input, inputParameter);
+
       return {
         ...input,
         [outputParameter]: calculateProduct(input, inputParameter, coefficient),
       };
     });
+  };
+
+  /**
+   * Checks for required fields in input.
+   */
+  const validateSingleInput = (input: PluginParams, inputParameter: string) => {
+    const inputData = {
+      'input-parameter': input[inputParameter],
+    };
+    const validationSchema = z.record(z.string(), z.number());
+    validate(validationSchema, inputData);
+
+    return input;
   };
 
   /**

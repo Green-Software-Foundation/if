@@ -26,6 +26,8 @@ For example, `boavizta-cpu` need `cpu/number-cores` to work, however `cloud-meta
 
 The plugin throws an exception if the division result is not a number.
 
+>Note: Plugin will warn and return `numerator` value in case if `denominator` is zero.
+
 ## Calculation
 
 ```pseudocode

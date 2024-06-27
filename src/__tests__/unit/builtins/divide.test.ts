@@ -126,9 +126,6 @@ describe('builtins/divide: ', () => {
     });
 
     it('throws an error when `denominator` is 0.', async () => {
-      const expectedMessage =
-        '"denominator" parameter is number must be greater than 0. Error code: too_small.';
-
       const globalConfig = {
         numerator: 'vcpus-allocated',
         denominator: 0,
@@ -138,17 +135,22 @@ describe('builtins/divide: ', () => {
 
       expect.assertions(1);
 
-      try {
-        await divide.execute([
-          {
-            timestamp: '2021-01-01T00:00:00Z',
-            duration: 3600,
-            'vcpus-allocated': 24,
-          },
-        ]);
-      } catch (error) {
-        expect(error).toStrictEqual(new InputValidationError(expectedMessage));
-      }
+      const response = await divide.execute([
+        {
+          timestamp: '2021-01-01T00:00:00Z',
+          duration: 3600,
+          'vcpus-allocated': 24,
+        },
+      ]);
+
+      expect(response).toEqual([
+        {
+          timestamp: '2021-01-01T00:00:00Z',
+          duration: 3600,
+          'vcpus-allocated': 24,
+          'vcpus-allocated-per-second': 24,
+        },
+      ]);
     });
 
     it('throws an error when `denominator` is string.', async () => {
