@@ -25,7 +25,9 @@ const IfCheck = async () => {
       await executeCommands(manifest, false);
     } catch (error: any) {
       const fileName = path.basename(manifest);
-      const executedFile = manifest.replace(fileName, `re-${fileName}`);
+      const executedFile = manifest
+        .replace(fileName, `re-${fileName}`)
+        .replace('yml', 'yaml');
       const manifestDirPath = path.dirname(manifest);
 
       logStdoutFailMessage(error);
@@ -45,7 +47,9 @@ const IfCheck = async () => {
         await executeCommands(file, true);
       } catch (error: any) {
         const fileName = path.basename(file);
-        const executedFile = file.replace(fileName, `re-${fileName}`);
+        const executedFile = file
+          .replace(fileName, `re-${fileName}`)
+          .replace('yml', 'yaml');
 
         logStdoutFailMessage(error);
         await fs.unlink(executedFile);
