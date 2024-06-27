@@ -1,5 +1,4 @@
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
 import {
   ExecutePlugin,
   PluginParams,
@@ -7,11 +6,6 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../util/validations';
-
-import {STRINGS} from '../../config';
-
-const {MissingInputDataError, InputValidationError} = ERRORS;
-const {MISSING_INPUT_DATA, NOT_NUMERIC_VALUE} = STRINGS;
 
 export const Exponent = (globalConfig: ExponentConfig): ExecutePlugin => {
   const metadata = {
@@ -24,7 +18,7 @@ export const Exponent = (globalConfig: ExponentConfig): ExecutePlugin => {
   const validateGlobalConfig = () => {
     const globalConfigSchema = z.object({
       'input-parameter': z.string().min(1),
-      exponent: z.number().min(1),
+      exponent: z.number(),
       'output-parameter': z.string().min(1),
     });
 
@@ -38,20 +32,13 @@ export const Exponent = (globalConfig: ExponentConfig): ExecutePlugin => {
    * Checks for required fields in input.
    */
   const validateSingleInput = (input: PluginParams, inputParameter: string) => {
-    validateParamExists(input, inputParameter);
-    validateNumericString(input[inputParameter]);
-  };
+    const inputData = {
+      'input-parameter': input[inputParameter],
+    };
+    const validationSchema = z.record(z.string(), z.number());
+    validate(validationSchema, inputData);
 
-  const validateParamExists = (input: PluginParams, param: string) => {
-    if (input[param] === undefined) {
-      throw new MissingInputDataError(MISSING_INPUT_DATA(param));
-    }
-  };
-
-  const validateNumericString = (str: string) => {
-    if (isNaN(+Number(str))) {
-      throw new InputValidationError(NOT_NUMERIC_VALUE(str));
-    }
+    return input;
   };
 
   /**
@@ -60,9 +47,10 @@ export const Exponent = (globalConfig: ExponentConfig): ExecutePlugin => {
   const execute = (inputs: PluginParams[]): PluginParams[] => {
     const {
       'input-parameter': inputParameter,
-      exponent: exponent,
+      exponent,
       'output-parameter': outputParameter,
     } = validateGlobalConfig();
+
     return inputs.map(input => {
       validateSingleInput(input, inputParameter);
 
@@ -82,6 +70,7 @@ export const Exponent = (globalConfig: ExponentConfig): ExecutePlugin => {
     exponent: number
   ) => {
     const base = input[inputParameter];
+
     return Math.pow(base, exponent);
   };
 

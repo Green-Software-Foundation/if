@@ -6,8 +6,8 @@ import {validate} from '../../util/validations';
 
 import {STRINGS} from '../../config';
 
-const {GlobalConfigError, MissingInputDataError} = ERRORS;
-const {MISSING_INPUT_DATA, MISSING_GLOBAL_CONFIG} = STRINGS;
+const {GlobalConfigError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
 export const Sum = (globalConfig: SumConfig): ExecutePlugin => {
   const metadata = {
@@ -23,11 +23,11 @@ export const Sum = (globalConfig: SumConfig): ExecutePlugin => {
     const outputParameter = safeGlobalConfig['output-parameter'];
 
     return inputs.map(input => {
-      const safeInput = validateSingleInput(input, inputParameters);
+      validateSingleInput(input, inputParameters);
 
       return {
         ...input,
-        [outputParameter]: calculateSum(safeInput, inputParameters),
+        [outputParameter]: calculateSum(input, inputParameters),
       };
     });
   };
@@ -58,11 +58,16 @@ export const Sum = (globalConfig: SumConfig): ExecutePlugin => {
     input: PluginParams,
     inputParameters: string[]
   ) => {
-    inputParameters.forEach(metricToSum => {
-      if (!input[metricToSum]) {
-        throw new MissingInputDataError(MISSING_INPUT_DATA(metricToSum));
-      }
-    });
+    const inputData = inputParameters.reduce(
+      (acc, param) => {
+        acc[param] = input[param];
+
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+    const validationSchema = z.record(z.string(), z.number());
+    validate(validationSchema, inputData);
 
     return input;
   };

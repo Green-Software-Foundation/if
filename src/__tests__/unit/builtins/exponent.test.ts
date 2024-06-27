@@ -2,10 +2,7 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {Exponent} from '../../../builtins/exponent';
 
-import {STRINGS} from '../../../config';
-
-const {InputValidationError, MissingInputDataError} = ERRORS;
-const {NOT_NUMERIC_VALUE, MISSING_INPUT_DATA} = STRINGS;
+const {InputValidationError} = ERRORS;
 
 describe('builtins/exponent: ', () => {
   describe('Exponent: ', () => {
@@ -59,7 +56,9 @@ describe('builtins/exponent: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new MissingInputDataError(MISSING_INPUT_DATA('energy/base'))
+            new InputValidationError(
+              '"input-parameter" parameter is required. Error code: invalid_type.'
+            )
           );
         }
       });
@@ -78,7 +77,9 @@ describe('builtins/exponent: ', () => {
           await exponent.execute(input);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(NOT_NUMERIC_VALUE(input[0]['energy/base']))
+            new InputValidationError(
+              '"input-parameter" parameter is expected number, received string. Error code: invalid_type.'
+            )
           );
         }
       });

@@ -1,5 +1,4 @@
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
 import {
   ExecutePlugin,
   PluginParams,
@@ -7,11 +6,6 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../util/validations';
-
-import {STRINGS} from '../../config';
-
-const {MissingInputDataError} = ERRORS;
-const {MISSING_INPUT_DATA} = STRINGS;
 
 export const Multiply = (globalConfig: MultiplyConfig): ExecutePlugin => {
   const metadata = {
@@ -40,14 +34,18 @@ export const Multiply = (globalConfig: MultiplyConfig): ExecutePlugin => {
     input: PluginParams,
     inputParameters: string[]
   ) => {
-    inputParameters.forEach(metricToMultiply => {
-      if (
-        input[metricToMultiply] === undefined ||
-        isNaN(input[metricToMultiply])
-      ) {
-        throw new MissingInputDataError(MISSING_INPUT_DATA(metricToMultiply));
-      }
-    });
+    const inputData = inputParameters.reduce(
+      (acc, param) => {
+        acc[param] = input[param];
+
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+    const validationSchema = z.record(z.string(), z.number());
+
+    validate(validationSchema, inputData);
 
     return input;
   };
@@ -61,17 +59,17 @@ export const Multiply = (globalConfig: MultiplyConfig): ExecutePlugin => {
     const outputParameter = safeGlobalConfig['output-parameter'];
 
     return inputs.map(input => {
-      const safeInput = validateSingleInput(input, inputParameters);
+      validateSingleInput(input, inputParameters);
 
       return {
         ...input,
-        [outputParameter]: calculateProduct(safeInput, inputParameters),
+        [outputParameter]: calculateProduct(input, inputParameters),
       };
     });
   };
 
   /**
-   * Calculates the product of the energy components.
+   * Calculates the product of the components.
    */
   const calculateProduct = (input: PluginParams, inputParameters: string[]) =>
     inputParameters.reduce(
