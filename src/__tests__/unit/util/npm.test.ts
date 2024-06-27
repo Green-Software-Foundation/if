@@ -266,7 +266,9 @@ describe('util/npm: ', () => {
       expect(spyExecPromise).toHaveBeenCalledWith(command, {
         cwd: process.cwd(),
       });
-      expect(logSpy).toHaveBeenCalledWith('Files match!\n');
+      expect(logSpy).toHaveBeenCalledWith(
+        'if-check successfully verified <mock-manifest.yaml>\n'
+      );
 
       const packageJsonPath = 'src/__mocks__/package.json';
       fsSync.unlink(path.resolve(process.cwd(), reManifest), () => {});
