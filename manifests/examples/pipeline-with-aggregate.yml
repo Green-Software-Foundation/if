@@ -93,7 +93,7 @@ tree:
         - operational-carbon
         - sum-carbon
         - time-sync
-        # - sci
+        - sci
       config:
         group-by:
           group:
@@ -132,55 +132,54 @@ tree:
           cloud/region: uk-west
           cpu/utilization: 15
           requests: 30
-    # child-2:
-    #   pipeline:
-    #     - interpolate
-    #     - cpu-factor-to-wattage
-    #     - wattage-times-duration
-    #     - wattage-to-energy-kwh
-    #     - calculate-vcpu-ratio
-    #     - correct-cpu-energy-for-vcpu-ratio
-    #     - sci-e
-    #     - sci-embodied
-    #     - sci-o
-    #     - sum-carbon
-    #     - time-sync
-    #     - sci
-    #   config:
-    #     group-by:
-    #       group:
-    #         - cloud/region
-    #         - cloud/instance-type
-    #   defaults:
-    #     cpu/thermal-design-power: 100
-    #     grid/carbon-intensity: 800
-    #     device/emissions-embodied: 1533.120 # gCO2eq
-    #     time-reserved: 3600 # 1hr in seconds
-    #     device/expected-lifespan: 94608000 # 3 years in seconds
-    #     resources-reserved: 1
-    #     resources-total: 8
-    #   inputs:
-    #     - timestamp: "2023-12-12T00:00:00.000Z"
-    #       duration: 1
-    #       cpu/utilization: 30
-    #       cloud/instance-type: A1
-    #       cloud/region: uk-west
-    #       requests: 100
-    #     - timestamp: "2023-12-12T00:00:01.000Z"
-    #       duration: 5
-    #       cpu/utilization: 28
-    #       cloud/instance-type: A1
-    #       cloud/region: uk-west
-    #       requests: 150
-    #     - timestamp: "2023-12-12T00:00:06.000Z"
-    #       duration: 7
-    #       cpu/utilization: 40
-    #       cloud/instance-type: A1
-    #       cloud/region: uk-west
-    #       requests: 110
-    #     - timestamp: "2023-12-12T00:00:13.000Z"
-    #       duration: 30
-    #       cpu/utilization: 33
-    #       cloud/instance-type: A1
-    #       cloud/region: uk-west
-    #       requests: 180
+    child-2:
+      pipeline:
+        - interpolate
+        - cpu-factor-to-wattage
+        - wattage-times-duration
+        - wattage-to-energy-kwh
+        - calculate-vcpu-ratio
+        - correct-cpu-energy-for-vcpu-ratio
+        - sci-embodied
+        - operational-carbon
+        - sum-carbon
+        - time-sync
+        - sci
+      config:
+        group-by:
+          group:
+            - cloud/region
+            - cloud/instance-type
+      defaults:
+        cpu/thermal-design-power: 100
+        grid/carbon-intensity: 800
+        device/emissions-embodied: 1533.120 # gCO2eq
+        time-reserved: 3600 # 1hr in seconds
+        device/expected-lifespan: 94608000 # 3 years in seconds
+        vcpus-total: 8
+        vcpus-allocated: 1
+      inputs:
+        - timestamp: "2023-12-12T00:00:00.000Z"
+          duration: 1
+          cpu/utilization: 30
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          requests: 100
+        - timestamp: "2023-12-12T00:00:01.000Z"
+          duration: 5
+          cpu/utilization: 28
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          requests: 150
+        - timestamp: "2023-12-12T00:00:06.000Z"
+          duration: 7
+          cpu/utilization: 40
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          requests: 110
+        - timestamp: "2023-12-12T00:00:13.000Z"
+          duration: 30
+          cpu/utilization: 33
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          requests: 180
