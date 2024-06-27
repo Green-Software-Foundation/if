@@ -57,7 +57,7 @@ initialize:
       path: builtin
       global-config:
         input-parameters: ["cpu-energy-kwh", "grid/carbon-intensity"]
-        output-parameter: "carbon-operational"
+        output-parameter: "carbon"
     "sci":
       path: "builtin"
       method: Sci
@@ -87,7 +87,7 @@ tree:
         - sci-embodied
         - operational-carbon
         - time-sync
-        # - sci
+        - sci
       config:
         group-by:
           group:
@@ -107,21 +107,25 @@ tree:
           cloud/region: uk-west
           duration: 1
           cpu/utilization: 10
+          requests: 100
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
           cloud/region: uk-west
+          requests: 100
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
+          requests: 100
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
           cpu/utilization: 15
+          requests: 100
     child-2:
       pipeline:
         - interpolate
@@ -133,7 +137,7 @@ tree:
         - sci-embodied
         - operational-carbon
         - time-sync
-        # - sci
+        - sci
       config:
         group-by:
           group:
@@ -153,18 +157,22 @@ tree:
           cpu/utilization: 30
           cloud/instance-type: A1
           cloud/region: uk-west
+          requests: 100
         - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 28
           cloud/instance-type: A1
           cloud/region: uk-west
+          requests: 100
         - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 40
           cloud/instance-type: A1
           cloud/region: uk-west
+          requests: 100
         - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cpu/utilization: 33
           cloud/instance-type: A1
           cloud/region: uk-west
+          requests: 100
