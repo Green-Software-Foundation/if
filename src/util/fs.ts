@@ -57,3 +57,4 @@ export const getFileName = (filePath: string) => {
   const extension = path.extname(filePath);
   return baseName.replace(extension, '');
 };
+

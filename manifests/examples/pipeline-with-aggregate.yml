@@ -62,7 +62,6 @@ initialize:
       path: "builtin"
       method: Sci
       global-config:
-        functional-unit-time: 1 sec
         functional-unit: requests # factor to convert per time to per f.unit
     "sum-carbon":
       path: "builtin"
