@@ -106,7 +106,7 @@ tree:
         - operational-carbon
         - sum-carbon
         - time-sync
-        # - sci
+        - sci
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
@@ -156,7 +156,7 @@ tree:
         - operational-carbon
         - sum-carbon
         - time-sync
-        # - sci
+        - sci
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
@@ -208,7 +208,7 @@ tree:
             - operational-carbon
             - sum-carbon
             - time-sync
-            # - sci
+            - sci
           inputs:
             - timestamp: "2023-12-12T00:00:00.000Z"
               cloud/instance-type: A1
@@ -258,7 +258,7 @@ tree:
             - operational-carbon
             - sum-carbon
             - time-sync
-            # - sci
+            - sci
           inputs:
             - timestamp: "2023-12-12T00:00:00.000Z"
               cloud/instance-type: A1
