@@ -12,7 +12,8 @@ import {ManifestPlugin, PathWithVersion} from '../types/npm';
 
 const packageJson = require('../../package.json');
 
-const {INITIALIZING_PACKAGE_JSON, INSTALLING_NPM_PACKAGES} = STRINGS;
+const {INITIALIZING_PACKAGE_JSON, INSTALLING_NPM_PACKAGES, IF_CHECK_VERIFIED} =
+  STRINGS;
 
 /**
  * Checks if the package.json is exists, if not, initializes it.
@@ -164,7 +165,7 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   } -s ${executedManifest}.yaml -t ${manifest}`;
   const ttyCommand = " node -p 'Boolean(process.stdout.isTTY)'";
 
-  const result = await execPromise(
+  await execPromise(
     `${ifEnvCommand} && ${ifRunCommand} && ${ttyCommand} | ${ifDiffCommand}`,
     {
       cwd: process.env.CURRENT_DIR || process.cwd(),
@@ -177,10 +178,5 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
 
   await fs.unlink(`${executedManifest}.yaml`);
 
-  if (result.stdout) {
-    const logs = result.stdout.split('\n\n');
-    const successMessage = logs[logs.length - 1];
-
-    console.log(successMessage);
-  }
+  console.log(IF_CHECK_VERIFIED(path.basename(manifest)));
 };
