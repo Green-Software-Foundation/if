@@ -7,19 +7,48 @@ aggregation:
   type: "both"
 initialize:
   plugins:
-    "teads-curve":
-      path: "@grnsft/if-unofficial-plugins"
-      method: TeadsCurve
+    "interpolate":
+      method: Interpolation
+      path: 'builtin'
       global-config:
-        interpolation: spline
-    "sum-energy-components":
+        method: linear
+        x: [0, 10, 50, 100]
+        y: [0.12, 0.32, 0.75, 1.02]
+        input-parameter: 'cpu/utilization'
+        output-parameter: 'cpu-factor'
+    "cpu-factor-to-wattage":
+      method: Multiply
+      path: builtin
+      global-config:
+        input-parameters: ["cpu-factor", "cpu/thermal-design-power"]
+        output-parameter: "cpu-wattage"
+    "wattage-times-duration":
+      method: Multiply
+      path: builtin
+      global-config:
+        input-parameters: ["cpu-wattage", "duration"]
+        output-parameter: "cpu-wattage-times-duration"
+    "wattage-to-energy-kwh":
+      method: Divide
       path: "builtin"
-      method: Sum
       global-config:
-        input-parameters:
-          - cpu/energy
-          - network/energy
-        output-parameter: energy
+        numerator: cpu-wattage-times-duration
+        denominator: 3600000
+        output: cpu-energy-raw
+    "calculate-vcpu-ratio":
+      method: Divide
+      path: "builtin"
+      global-config:
+        numerator: vcpus-total
+        denominator: vcpus-allocated
+        output: vcpu-ratio
+    "correct-cpu-energy-for-vcpu-ratio":
+      method: Divide
+      path: "builtin"
+      global-config:
+        numerator: cpu-energy-raw
+        denominator: vcpu-ratio
+        output: cpu-energy-kwh
     "sci-embodied":
       path: "builtin"
       method: SciEmbodied
@@ -27,7 +56,7 @@ initialize:
       method: Multiply
       path: builtin
       global-config:
-        input-parameters: ["energy", "grid/carbon-intensity"]
+        input-parameters: ["cpu-energy-kwh", "grid/carbon-intensity"]
         output-parameter: "carbon-operational"
     "sci":
       path: "builtin"
@@ -49,12 +78,16 @@ tree:
   children:
     child-1:
       pipeline:
-        - teads-curve
-        - sum-energy-components
+        - interpolate
+        - cpu-factor-to-wattage
+        - wattage-times-duration
+        - wattage-to-energy-kwh
+        - calculate-vcpu-ratio
+        - correct-cpu-energy-for-vcpu-ratio
         - sci-embodied
         - operational-carbon
         - time-sync
-        - sci
+        # - sci
       config:
         group-by:
           group:
@@ -66,8 +99,8 @@ tree:
         device/emissions-embodied: 1533.120 # gCO2eq
         time-reserved: 3600 # 1hr in seconds
         device/expected-lifespan: 94608000 # 3 years in seconds
-        resources-reserved: 1
-        resources-total: 8
+        vcpus-allocated: 1
+        vcpus-total: 8
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
@@ -91,12 +124,16 @@ tree:
           cpu/utilization: 15
     child-2:
       pipeline:
-        - teads-curve
-        - sci-e
+        - interpolate
+        - cpu-factor-to-wattage
+        - wattage-times-duration
+        - wattage-to-energy-kwh
+        - calculate-vcpu-ratio
+        - correct-cpu-energy-for-vcpu-ratio
         - sci-embodied
-        - sci-o
+        - operational-carbon
         - time-sync
-        - sci
+        # - sci
       config:
         group-by:
           group:
@@ -108,8 +145,8 @@ tree:
         device/emissions-embodied: 1533.120 # gCO2eq
         time-reserved: 3600 # 1hr in seconds
         device/expected-lifespan: 94608000 # 3 years in seconds
-        resources-reserved: 1
-        resources-total: 8
+        vcpus-allocated: 1
+        vcpus-total: 8
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
           duration: 1

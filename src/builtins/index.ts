@@ -13,3 +13,4 @@ export {Exponent} from './exponent';
 export {CSVLookup} from './csv-lookup';
 export {Shell} from './shell';
 export {Regex} from './regex';
+export {Copy} from './copy-param';

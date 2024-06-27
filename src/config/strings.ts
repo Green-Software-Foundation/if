@@ -56,7 +56,7 @@ Note that for the '--output' option you also need to define the output type in y
   /** Plugin messages */
   MISSING_GLOBAL_CONFIG: 'Global config is not provided.',
   MISSING_INPUT_DATA: (param: string) =>
-    `${param} is missing from the input array.`,
+    `${param} is missing from the input array, or has nullish value.`,
   MANIFEST_NOT_FOUND: 'Manifest file not found.',
   INITIALIZING_PACKAGE_JSON: 'Initializing package.json.',
   INSTALLING_NPM_PACKAGES: 'Installing npm packages...',
@@ -90,6 +90,8 @@ ${error}`,
     `Unexpected date datatype: ${typeof date}: ${date}`,
   INVALID_OBSERVATION_OVERLAP:
     'Observation timestamps overlap, please check inputs.',
+  SCI_MISSING_FN_UNIT: (functionalUnit: string) =>
+    `'carbon' and ${functionalUnit} should be present in your input data.`,
   /** Exhaust messages */
   OUTPUT_REQUIRED:
     'Output path is required, please make sure output is configured properly.',
@@ -140,4 +142,6 @@ ${error}`,
     `if-check could not verify ${filename}. The re-executed file does not match the original.\n`,
   IF_CHECK_VERIFIED: (filename: string) =>
     `if-check successfully verified ${filename}\n`,
+  ZERO_DIVISION: (moduleName: string, index: number) =>
+    `-- SKIPPING -- DivisionByZero: you are attempting to divide by zero in ${moduleName} plugin : inputs[${index}]\n`,
 };

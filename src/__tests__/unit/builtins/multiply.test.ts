@@ -2,10 +2,7 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {Multiply} from '../../../builtins/multiply';
 
-import {STRINGS} from '../../../config';
-
-const {MissingInputDataError} = ERRORS;
-const {MISSING_INPUT_DATA} = STRINGS;
+const {InputValidationError} = ERRORS;
 
 describe('builtins/multiply: ', () => {
   describe('Multiply: ', () => {
@@ -62,7 +59,9 @@ describe('builtins/multiply: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new MissingInputDataError(MISSING_INPUT_DATA('cpu/energy'))
+            new InputValidationError(
+              '"cpu/energy" parameter is required. Error code: invalid_type.,"network/energy" parameter is required. Error code: invalid_type.,"memory/energy" parameter is required. Error code: invalid_type.'
+            )
           );
         }
       });
@@ -88,10 +87,10 @@ describe('builtins/multiply: ', () => {
         const expectedResult = [
           {
             duration: 3600,
+            timestamp: '2021-01-01T00:00:00Z',
             carbon: 3,
             'other-carbon': 2,
             'carbon-product': 6,
-            timestamp: '2021-01-01T00:00:00Z',
           },
         ];
 

@@ -1,49 +1,46 @@
 import {ERRORS} from '@grnsft/if-core/utils';
 
-import {Sum} from '../../../builtins/sum';
+import {Copy} from '../../../builtins/copy-param';
 
 import {STRINGS} from '../../../config';
 
 const {GlobalConfigError, InputValidationError} = ERRORS;
 const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
-describe('builtins/sum: ', () => {
-  describe('Sum: ', () => {
+describe('builtins/copy: ', () => {
+  describe('Copy: ', () => {
     const globalConfig = {
-      'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
-      'output-parameter': 'energy',
+      'keep-existing': true,
+      from: 'original',
+      to: 'copy',
     };
-    const sum = Sum(globalConfig);
+    const copy = Copy(globalConfig);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
-        expect(sum).toHaveProperty('metadata');
-        expect(sum).toHaveProperty('execute');
+        expect(copy).toHaveProperty('metadata');
+        expect(copy).toHaveProperty('execute');
       });
     });
 
     describe('execute(): ', () => {
-      it('successfully applies Sum strategy to given input.', () => {
+      it('successfully applies Copy strategy to given input.', () => {
         expect.assertions(1);
 
         const expectedResult = [
           {
             duration: 3600,
-            'cpu/energy': 1,
-            'network/energy': 1,
-            'memory/energy': 1,
-            energy: 3,
+            original: 'hello',
+            copy: 'hello',
             timestamp: '2021-01-01T00:00:00Z',
           },
         ];
 
-        const result = sum.execute([
+        const result = copy.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
-            'cpu/energy': 1,
-            'network/energy': 1,
-            'memory/energy': 1,
+            original: 'hello',
           },
         ]);
 
@@ -52,18 +49,16 @@ describe('builtins/sum: ', () => {
 
       it('throws an error when global config is not provided.', () => {
         const config = undefined;
-        const sum = Sum(config!);
+        const copy = Copy(config!);
 
         expect.assertions(1);
 
         try {
-          sum.execute([
+          copy.execute([
             {
               timestamp: '2021-01-01T00:00:00Z',
               duration: 3600,
-              'cpu/energy': 1,
-              'network/energy': 1,
-              'memory/energy': 1,
+              original: 1,
             },
           ]);
         } catch (error) {
@@ -74,10 +69,16 @@ describe('builtins/sum: ', () => {
       });
 
       it('throws an error on missing params in input.', () => {
+        const globalConfig = {
+          'keep-existing': true,
+          from: 'original',
+          to: 'copy',
+        };
+        const copy = Copy(globalConfig);
         expect.assertions(1);
 
         try {
-          sum.execute([
+          copy.execute([
             {
               duration: 3600,
               timestamp: '2021-01-01T00:00:00Z',
@@ -86,41 +87,37 @@ describe('builtins/sum: ', () => {
         } catch (error) {
           expect(error).toStrictEqual(
             new InputValidationError(
-              '"cpu/energy" parameter is required. Error code: invalid_type.,"network/energy" parameter is required. Error code: invalid_type.,"memory/energy" parameter is required. Error code: invalid_type.'
+              '"original" parameter is required. Error code: invalid_type.'
             )
           );
         }
       });
-
-      it('returns a result with input params not related to energy.', () => {
+      it('does not persist the original value when keep-existing==false.', () => {
         expect.assertions(1);
-        const newConfig = {
-          'input-parameters': ['carbon', 'other-carbon'],
-          'output-parameter': 'carbon-sum',
+        const globalConfig = {
+          'keep-existing': false,
+          from: 'original',
+          to: 'copy',
         };
-        const sum = Sum(newConfig);
-
-        const data = [
-          {
-            duration: 3600,
-            timestamp: '2021-01-01T00:00:00Z',
-            carbon: 1,
-            'other-carbon': 2,
-          },
-        ];
-        const response = sum.execute(data);
+        const copy = Copy(globalConfig);
 
         const expectedResult = [
           {
             duration: 3600,
-            carbon: 1,
-            'other-carbon': 2,
-            'carbon-sum': 3,
+            copy: 'hello',
             timestamp: '2021-01-01T00:00:00Z',
           },
         ];
 
-        expect(response).toEqual(expectedResult);
+        const result = copy.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            original: 'hello',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
       });
     });
   });
