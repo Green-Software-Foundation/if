@@ -268,3 +268,14 @@ export const addTemplateManifest = async (destinationDir: string) => {
     process.exit(1);
   }
 };
+
+/**
+ * Logs the failure message from the stdout of an error.
+ */
+export const logStdoutFailMessage = (error: any) => {
+  const stdout = error.stdout;
+  const logs = stdout.split('\n\n');
+  const failMessage = logs[logs.length - 1];
+
+  console.log(failMessage);
+};
