@@ -136,4 +136,8 @@ ${error}`,
   IF_CHECK_FLAGS_MISSING:
     'Either the `--manifest` or `--directory` command should be provided with a path',
   DIRECTORY_NOT_FOUND: 'Directory not found.',
+  IF_CHECK_FAILED: (filename: string) =>
+    `if-check could not verify <${filename}>. The re-executed file does not match the original.\n`,
+  IF_CHECK_VERIFIED: (filename: string) =>
+    `if-check successfully verified <${filename}>\n`,
 };
