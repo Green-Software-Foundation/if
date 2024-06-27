@@ -57,6 +57,10 @@ Note that for the '--output' option you also need to define the output type in y
   MISSING_GLOBAL_CONFIG: 'Global config is not provided.',
   MISSING_INPUT_DATA: (param: string) =>
     `${param} is missing from the input array, or has nullish value.`,
+  MANIFEST_NOT_FOUND: 'Manifest file not found.',
+  INITIALIZING_PACKAGE_JSON: 'Initializing package.json.',
+  INSTALLING_NPM_PACKAGES: 'Installing npm packages...',
+  NOT_NUMERIC_VALUE: (str: any) => `${str} is not numberic.`,
   MISSING_FUNCTIONAL_UNIT_CONFIG:
     '`functional-unit` should be provided in your global config',
   MISSING_FUNCTIONAL_UNIT_INPUT:

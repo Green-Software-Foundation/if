@@ -186,7 +186,6 @@ There have also been some changes to the structure of manifest files. Some of th
             device/expected-lifespan: 94608000 # 3 years in seconds
             resources-reserved: 1
             resources-total: 8
-            functional-unit-time: "1 min"
     ```
 
 

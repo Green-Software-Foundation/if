@@ -95,3 +95,29 @@ if-run --manifest ./examples/manifests/divide.yml --output ./examples/outputs/di
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`.
+
+## Errors
+
+`Divide` exposes two of IF's error classes.
+
+### GlobalConfigError
+
+You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+
+The required parameters are:
+- `numerator`: a string containing the name of the input parameter whose value should be divided by `denominator`
+- `denominator`: a number to use as the denominator
+- ``output`: a string containing the name to assign the result of the division
+
+You can fix this error by checking you are providing valid values for each parameter in the config.
+
+### `MissingInputDataError`
+
+This error arises when a necessary piece of input data is missing from the `inputs` array.
+Every element in the ``inputs` array must contain:
+- `timestamp`
+- `duration`
+- whatever value you passed to `numerator`
+
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

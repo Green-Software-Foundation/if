@@ -129,7 +129,6 @@ tree:
         device/expected-lifespan: 94608000 # 3 years in seconds
         vcpus-total: 8
         vcpus-allocated: 1
-        functional-unit-time: "1 min"
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
@@ -177,7 +176,6 @@ tree:
     #     device/expected-lifespan: 94608000 # 3 years in seconds
     #     resources-reserved: 1
     #     resources-total: 8
-    #     functional-unit-time: "1 min"
     #   inputs:
     #     - timestamp: "2023-12-12T00:00:00.000Z"
     #       duration: 1

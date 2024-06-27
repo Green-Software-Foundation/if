@@ -3,11 +3,15 @@ description: a negative test case that fails due to the plugin name in the pipel
 tags:
 initialize:
   plugins:
-    teads-curve: 
-      path: '@grnsft/if-unofficial-plugins'
-      method: TeadsCurve
+    "interpolate":
+      method: Interpolation
+      path: builtin
       global-config:
-        interpolation: spline
+        method: linear
+        x: [0, 10, 50, 100]
+        y: [0.12, 0.32, 0.75, 1.02]
+        input-parameter: 'cpu/utilization'
+        output-parameter: 'cpu-factor'
   outputs: ['yaml']
 tree:
   children:

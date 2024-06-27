@@ -4,19 +4,28 @@ import {parse} from 'ts-command-line-args';
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {checkIfFileIsYaml} from './yaml';
+
+import {isFileExists} from './fs';
+
 import {logger} from './logger';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {IFDiffArgs, IEArgs, ProcessArgsOutputs} from '../types/process-args';
+import {
+  IFDiffArgs,
+  IEArgs,
+  ProcessArgsOutputs,
+  IFEnvArgs,
+} from '../types/process-args';
 import {LoadDiffParams} from '../types/util/args';
 
 const {ParseCliParamsError, CliTargetFileError, CliSourceFileError} = ERRORS;
 
-const {IE, IF_DIFF} = CONFIG;
+const {IE, IF_DIFF, IF_ENV} = CONFIG;
 
 const {
   MANIFEST_IS_MISSING,
+  MANIFEST_NOT_FOUND,
   NO_OUTPUT,
   SOURCE_IS_NOT_YAML,
   TARGET_IS_NOT_YAML,
@@ -135,4 +144,45 @@ export const parseIfDiffArgs = () => {
   }
 
   throw new ParseCliParamsError(INVALID_TARGET);
+};
+
+/** -- IF Env -- */
+
+/**
+ * Parses `if-env` process arguments.
+ */
+const validateAndParseIfEnvArgs = () => {
+  try {
+    return parse<IFEnvArgs>(IF_ENV.ARGS, IF_ENV.HELP);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new ParseCliParamsError(error.message);
+    }
+
+    throw error;
+  }
+};
+
+/**
+ * Checks if the `manifest` command is provided and it is valid manifest file.
+ */
+export const parseIfEnvArgs = async () => {
+  const {manifest, install, cwd} = validateAndParseIfEnvArgs();
+
+  if (manifest) {
+    const response = prependFullFilePath(manifest);
+    const isManifestFileExists = await isFileExists(response);
+
+    if (!isManifestFileExists) {
+      throw new ParseCliParamsError(MANIFEST_NOT_FOUND);
+    }
+
+    if (checkIfFileIsYaml(manifest)) {
+      return {manifest: response, install, cwd};
+    }
+
+    throw new CliSourceFileError(SOURCE_IS_NOT_YAML);
+  }
+
+  return {install, cwd};
 };
