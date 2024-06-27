@@ -146,6 +146,7 @@ import {
   getOptionsFromArgs,
   addTemplateManifest,
   initializeAndInstallLibs,
+  logStdoutFailMessage,
 } from '../../../util/helpers';
 import {CONFIG} from '../../../config';
 import {Difference} from '../../../types/lib/compare';
@@ -664,6 +665,23 @@ description: mock-description
       expect(mockExit).toHaveBeenCalledTimes(1);
 
       process.exit = originalProcessExit;
+    });
+  });
+
+  describe('logStdoutFailMessage(): ', () => {
+    it('successfully logs the failed message.', () => {
+      const errorMessage = {stdout: '\n\nmock error message'};
+      const mockFilename = 'mock-filename.yaml';
+      const logSpy = jest.spyOn(global.console, 'log');
+      logStdoutFailMessage(errorMessage, mockFilename);
+
+      expect.assertions(2);
+
+      expect(logSpy).toHaveBeenCalledWith(
+        `if-check could not verify ${mockFilename}. The re-executed file does not match the original.\n`
+      );
+
+      expect(logSpy).toHaveBeenCalledWith('mock error message');
     });
   });
 });
