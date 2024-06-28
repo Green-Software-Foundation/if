@@ -5,6 +5,7 @@ import {
   isDirectoryExists,
   isFileExists,
   getYamlFiles,
+  removeFileIfExists,
 } from '../../../util/fs';
 
 jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
@@ -120,6 +121,24 @@ describe('util/fs: ', () => {
         '/mock-sub-directory/file1.yaml',
       ]);
       expect(fsReaddirSpy).toHaveBeenCalledWith('/mock-directory');
+    });
+  });
+
+  describe('removeFileIfExists(): ', () => {
+    it('successfully delete file if exists.', async () => {
+      await isFileExists('true');
+      const result = await removeFileIfExists('mock-path');
+
+      expect.assertions(1);
+      expect(result).toEqual(undefined);
+    });
+
+    it('does not throw an error if the file not exists.', async () => {
+      await isFileExists('false');
+      const result = await removeFileIfExists('mock-path');
+
+      expect.assertions(1);
+      expect(result).toEqual(undefined);
     });
   });
 });

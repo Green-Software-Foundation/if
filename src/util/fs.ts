@@ -57,3 +57,12 @@ export const getFileName = (filePath: string) => {
   const extension = path.extname(filePath);
   return baseName.replace(extension, '');
 };
+
+/**
+ * Removes the given file if exists.
+ */
+export const removeFileIfExists = async (filePath: string) => {
+  if (await isFileExists(filePath)) {
+    await fs.unlink(filePath);
+  }
+};
