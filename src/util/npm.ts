@@ -4,7 +4,12 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 
 import {execPromise} from './helpers';
-import {isDirectoryExists, isFileExists} from './fs';
+import {
+  isDirectoryExists,
+  getFileName,
+  isFileExists,
+  removeFileIfExists,
+} from './fs';
 import {logger} from './logger';
 
 import {STRINGS} from '../config';
@@ -12,7 +17,8 @@ import {ManifestPlugin, PathWithVersion} from '../types/npm';
 
 const packageJson = require('../../package.json');
 
-const {INITIALIZING_PACKAGE_JSON, INSTALLING_NPM_PACKAGES} = STRINGS;
+const {INITIALIZING_PACKAGE_JSON, INSTALLING_NPM_PACKAGES, IF_CHECK_VERIFIED} =
+  STRINGS;
 
 /**
  * Checks if the package.json is exists, if not, initializes it.
@@ -143,4 +149,45 @@ export const updatePackageJsonProperties = async (
     newPackageJsonPath,
     JSON.stringify(newPackageJson, null, 2)
   );
+};
+
+/**
+ * Executes a series of npm commands based on the provided manifest file.
+ */
+export const executeCommands = async (manifest: string, cwd: boolean) => {
+  // TODO: After release remove isGlobal and appropriate checks
+  const isGlobal = !!process.env.npm_config_global;
+  const manifestDirPath = path.dirname(manifest);
+  const manifestFileName = getFileName(manifest);
+  const executedManifest = path.join(manifestDirPath, `re-${manifestFileName}`);
+  const prefixFlag =
+    process.env.CURRENT_DIR && process.env.CURRENT_DIR !== process.cwd()
+      ? `--prefix=${path.relative(process.env.CURRENT_DIR!, process.cwd())}`
+      : '';
+  const ifEnv = `${
+    isGlobal ? `if-env ${prefixFlag}` : `npm run if-env ${prefixFlag} --`
+  } -m ${manifest}`;
+  const ifEnvCommand = cwd ? `${ifEnv} -c` : ifEnv;
+  const ifRunCommand = `${
+    isGlobal ? `if-run ${prefixFlag}` : `npm run if-run ${prefixFlag} --`
+  } -m ${manifest} -o ${executedManifest}`;
+  const ifDiffCommand = `${
+    isGlobal ? `if-diff ${prefixFlag}` : `npm run if-diff ${prefixFlag} --`
+  } -s ${executedManifest}.yaml -t ${manifest}`;
+  const ttyCommand = " node -p 'Boolean(process.stdout.isTTY)'";
+
+  await execPromise(
+    `${ifEnvCommand} && ${ifRunCommand} && ${ttyCommand} | ${ifDiffCommand}`,
+    {
+      cwd: process.env.CURRENT_DIR || process.cwd(),
+    }
+  );
+
+  if (!cwd) {
+    await removeFileIfExists(`${manifestDirPath}/package.json`);
+  }
+
+  await removeFileIfExists(`${executedManifest}.yaml`);
+
+  console.log(IF_CHECK_VERIFIED(path.basename(manifest)));
 };
