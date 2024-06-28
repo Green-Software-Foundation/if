@@ -135,3 +135,53 @@ export const stat = async (filePath: string) => {
     throw new Error('File not found.');
   }
 };
+
+export const access = async (directoryPath: string) => {
+  if (directoryPath === 'true') {
+    return true;
+  } else {
+    throw new Error('Directory not found.');
+  }
+};
+
+export const unlink = async (filePath: string) => {
+  if (filePath === 'true') {
+    return;
+  } else {
+    throw new Error('File not found.');
+  }
+};
+
+export const readdir = (directoryPath: string) => {
+  if (directoryPath.includes('mock-empty-directory')) {
+    return [];
+  }
+
+  if (directoryPath.includes('mock-directory')) {
+    return ['file1.yaml', 'file2.yml', 'file3.txt'];
+  }
+
+  if (directoryPath.includes('mock-sub-directory')) {
+    return ['subdir/file2.yml', 'file1.yaml'];
+  }
+
+  return [];
+};
+
+export const lstat = (filePath: string) => {
+  if (
+    filePath.includes('mock-directory') ||
+    filePath.includes('mock-sub-directory/subdir')
+  ) {
+    return {
+      isDirectory: () => true,
+    };
+  }
+
+  if (filePath.includes('mock-file')) {
+    return {
+      isDirectory: () => false,
+    };
+  }
+  return;
+};

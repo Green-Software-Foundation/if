@@ -21,6 +21,7 @@ import {
   updatePackageJsonDependencies,
   extractPathsWithVersion,
   updatePackageJsonProperties,
+  executeCommands,
 } from '../../../util/npm';
 import {isFileExists} from '../../../util/fs';
 
@@ -176,7 +177,7 @@ describe('util/npm: ', () => {
         '@commitlint/cli@18.6.0',
         '@commitlint/config-conventional@18.6.0',
         '@grnsft/if-core@0.0.7',
-        '@grnsft/if-plugins@v0.3.2 extraneous -> file:../../../if-models',
+        '@grnsft/if-plugins@v0.3.2',
         '@grnsft/if-unofficial-plugins@v0.3.0 extraneous -> file:../../../if-unofficial-models',
         '@jest/globals@29.7.0',
       ];
@@ -245,5 +246,26 @@ describe('util/npm: ', () => {
 
       expect(fsReadSpy).toHaveBeenCalledWith(packageJsonPath, 'utf8');
     });
+  });
+
+  describe('executeCommands(): ', () => {
+    it('successfully executes with correct commands.', async () => {
+      const manifest = './src/__mocks__/mock-manifest.yaml';
+      const reManifest = 'src/__mocks__/re-mock-manifest.yaml';
+      const logSpy = jest.spyOn(global.console, 'log');
+
+      jest.spyOn(fs, 'unlink').mockResolvedValue();
+
+      await executeCommands(manifest, false);
+
+      expect.assertions(1);
+      expect(logSpy).toHaveBeenCalledWith(
+        'if-check successfully verified mock-manifest.yaml\n'
+      );
+
+      const packageJsonPath = 'src/__mocks__/package.json';
+      fsSync.unlink(path.resolve(process.cwd(), reManifest), () => {});
+      fsSync.unlink(path.resolve(process.cwd(), packageJsonPath), () => {});
+    }, 70000);
   });
 });

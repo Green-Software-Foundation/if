@@ -134,6 +134,16 @@ ${error}`,
     `Exporting to csv file: ${savepath}`,
   EXPORTING_RAW_CSV_FILE: (savepath: string) =>
     `Exporting raw csv file: ${savepath}`,
+  CHECKING: 'Checking...',
+  IF_CHECK_FLAGS_MISSING:
+    'Either the `--manifest` or `--directory` command should be provided with a path',
+  DIRECTORY_NOT_FOUND: 'Directory not found.',
+  DIRECTORY_YAML_FILES_NOT_FOUND:
+    'The directory does not contain any YAML/YML files.\n',
+  IF_CHECK_FAILED: (filename: string) =>
+    `if-check could not verify ${filename}. The re-executed file does not match the original.\n`,
+  IF_CHECK_VERIFIED: (filename: string) =>
+    `if-check successfully verified ${filename}\n`,
   ZERO_DIVISION: (moduleName: string, index: number) =>
     `-- SKIPPING -- DivisionByZero: you are attempting to divide by zero in ${moduleName} plugin : inputs[${index}]\n`,
 };

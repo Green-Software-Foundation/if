@@ -33,7 +33,7 @@ const {
   FAILURE_MESSAGE_DEPENDENCIES,
 } = IF_ENV;
 
-const {UNSUPPORTED_ERROR} = STRINGS;
+const {UNSUPPORTED_ERROR, IF_CHECK_FAILED} = STRINGS;
 const {MissingPluginDependenciesError} = ERRORS;
 
 /**
@@ -267,4 +267,17 @@ export const addTemplateManifest = async (destinationDir: string) => {
     console.log(FAILURE_MESSAGE_TEMPLATE);
     process.exit(1);
   }
+};
+
+/**
+ * Logs the failure message from the stdout of an error.
+ */
+export const logStdoutFailMessage = (error: any, fileName: string) => {
+  console.log(IF_CHECK_FAILED(fileName));
+
+  const stdout = error.stdout;
+  const logs = stdout.split('\n\n');
+  const failMessage = logs[logs.length - 1];
+
+  console.log(failMessage);
 };
