@@ -15,4 +15,5 @@ module.exports = {
     './src/__tests__/integration/helpers',
     './src/__tests__/integration/test-data',
   ],
+  coveragePathIgnorePatterns: ['src/config', 'src/types'],
 };

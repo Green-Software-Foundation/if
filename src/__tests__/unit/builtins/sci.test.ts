@@ -140,5 +140,26 @@ describe('builtins/sci:', () => {
         }
       });
     });
+
+    it('fallbacks to carbon value, if functional unit is 0.', async () => {
+      const sci = Sci({
+        'functional-unit': 'requests',
+      });
+      const inputs = [
+        {
+          timestamp: '2021-01-01T00:00:00Z',
+          'carbon-operational': 0.2,
+          'carbon-embodied': 0.05,
+          carbon: 0.205,
+          duration: 1,
+          requests: 0,
+        },
+      ];
+      const result = await sci.execute(inputs);
+
+      expect.assertions(1);
+
+      expect(result).toStrictEqual([{...inputs[0], sci: inputs[0].carbon}]);
+    });
   });
 });

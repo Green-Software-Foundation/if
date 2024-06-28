@@ -24,8 +24,8 @@ export const SciEmbodied = (): ExecutePlugin => {
   /**
    * Calculate the Embodied carbon for a list of inputs.
    */
-  const execute = (inputs: PluginParams[]) => {
-    return inputs.map(input => {
+  const execute = (inputs: PluginParams[]) =>
+    inputs.map(input => {
       const safeInput = validateInput(input);
 
       return {
@@ -33,7 +33,6 @@ export const SciEmbodied = (): ExecutePlugin => {
         'carbon-embodied': calculateEmbodiedCarbon(safeInput),
       };
     });
-  };
 
   /**
    * Calculate the Embodied carbon for the input.
