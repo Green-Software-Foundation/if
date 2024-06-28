@@ -4,7 +4,12 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 
 import {execPromise} from './helpers';
-import {isDirectoryExists, getFileName, isFileExists} from './fs';
+import {
+  isDirectoryExists,
+  getFileName,
+  isFileExists,
+  removeFileIfExists,
+} from './fs';
 import {logger} from './logger';
 
 import {STRINGS} from '../config';
@@ -155,13 +160,19 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   const manifestDirPath = path.dirname(manifest);
   const manifestFileName = getFileName(manifest);
   const executedManifest = path.join(manifestDirPath, `re-${manifestFileName}`);
-  const ifEnv = `${isGlobal ? 'if-env' : 'npm run if-env --'} -m ${manifest}`;
+  const prefixFlag =
+    process.env.CURRENT_DIR && process.env.CURRENT_DIR !== process.cwd()
+      ? `--prefix=${path.relative(process.env.CURRENT_DIR!, process.cwd())}`
+      : '';
+  const ifEnv = `${
+    isGlobal ? `if-env ${prefixFlag}` : `npm run if-env ${prefixFlag} --`
+  } -m ${manifest}`;
   const ifEnvCommand = cwd ? `${ifEnv} -c` : ifEnv;
   const ifRunCommand = `${
-    isGlobal ? 'if-run' : 'npm run if-run --'
+    isGlobal ? `if-run ${prefixFlag}` : `npm run if-run ${prefixFlag} --`
   } -m ${manifest} -o ${executedManifest}`;
   const ifDiffCommand = `${
-    isGlobal ? 'if-diff' : 'npm run if-diff --'
+    isGlobal ? `if-diff ${prefixFlag}` : `npm run if-diff ${prefixFlag} --`
   } -s ${executedManifest}.yaml -t ${manifest}`;
   const ttyCommand = " node -p 'Boolean(process.stdout.isTTY)'";
 
@@ -173,10 +184,10 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   );
 
   if (!cwd) {
-    await fs.unlink(`${manifestDirPath}/package.json`);
+    await removeFileIfExists(`${manifestDirPath}/package.json`);
   }
 
-  await fs.unlink(`${executedManifest}.yaml`);
+  await removeFileIfExists(`${executedManifest}.yaml`);
 
   console.log(IF_CHECK_VERIFIED(path.basename(manifest)));
 };

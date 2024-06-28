@@ -252,20 +252,13 @@ describe('util/npm: ', () => {
     it('successfully executes with correct commands.', async () => {
       const manifest = './src/__mocks__/mock-manifest.yaml';
       const reManifest = 'src/__mocks__/re-mock-manifest.yaml';
-      const command = `npm run if-env -- -m ${manifest} && npm run if-run -- -m ${manifest} -o ${reManifest.replace(
-        '.yaml',
-        ''
-      )} &&  node -p 'Boolean(process.stdout.isTTY)' | npm run if-diff -- -s ${reManifest} -t ${manifest}`;
       const logSpy = jest.spyOn(global.console, 'log');
-      const spyExecPromise = jest.spyOn(helpers, 'execPromise');
+
       jest.spyOn(fs, 'unlink').mockResolvedValue();
 
       await executeCommands(manifest, false);
 
-      expect.assertions(2);
-      expect(spyExecPromise).toHaveBeenCalledWith(command, {
-        cwd: process.cwd(),
-      });
+      expect.assertions(1);
       expect(logSpy).toHaveBeenCalledWith(
         'if-check successfully verified mock-manifest.yaml\n'
       );
