@@ -3,14 +3,16 @@
 import {ethers} from 'ethers';
 import {readFileSync} from 'fs';
 import * as YAML from 'js-yaml';
+const packageJson = require('../package.json');
 //import { EAS } from '@ethereum-attestation-service/eas-sdk';
 
 const IfAttest = async (manifestPath: string) => {
-  const manifestHash = HashManifest(manifestPath);
-  console.log(manifestHash);
+  const manifestHash = GetManifestHash(manifestPath);
+  const ifVersion = GetIfVersion();
+  console.log(manifestHash, ifVersion);
 };
 
-const HashManifest = (manifestPath: string): string => {
+const GetManifestHash = (manifestPath: string): string => {
   const manifest = YAML.load(readFileSync(manifestPath, 'utf8'));
   const manifestAsString = YAML.dump(manifest).toString();
   const manifestAsBytes: Uint8Array = ethers.toUtf8Bytes(manifestAsString);
@@ -18,4 +20,8 @@ const HashManifest = (manifestPath: string): string => {
   return manifestHash;
 };
 
-IfAttest('/home/user/Code/if/manifests/examples/sci.yml');
+const GetIfVersion = (): string => {
+  return packageJson.version;
+};
+
+IfAttest('/home/joe/Code/if/manifests/examples/sci.yml');
