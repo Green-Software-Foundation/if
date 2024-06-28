@@ -4,8 +4,6 @@
 
 You provide the name of the value you want to match, and a name to use to add the regex to the output array.
 
-For example, `boavizta-cpu` need `cpu/name` to work, however `cloud-metadata` returns `physical-processor` which usually contains a long string of processors that the instance could be separated by `,`, like so:
-
 ```
 Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz
 ```

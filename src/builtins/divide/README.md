@@ -4,8 +4,6 @@
 
 You provide the names of the values you want to divide, and a name to use to add the divide to the output array.
 
-For example, `boavizta-cpu` need `cpu/number-cores` to work, however `cloud-metadata` returns `vcpus-allocated`, to get number of cores you divide `vcpus-allocated` by 2.
-
 ## Parameters
 
 ### Plugin config

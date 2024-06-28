@@ -20,19 +20,12 @@ initialize:
         numerator: vcpus-allocated
         denominator: 0
         output: cpu/number-cores
-    boavizta-cpu:
-      method: BoaviztaCpuOutput
-      path: "@grnsft/if-unofficial-plugins"
-      global-config:
-        allocation: LINEAR
-        verbose: true
 tree:
   children:
     child:
       pipeline:
         - cloud-metadata
         - divide
-        - boavizta-cpu
       config:
         divide:
       defaults:
