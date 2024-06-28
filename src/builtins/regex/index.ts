@@ -1,16 +1,15 @@
 import {z} from 'zod';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {ExecutePlugin, PluginParams, ConfigParams} from '@grnsft/if-core/types';
 
-import {buildErrorMessage} from '../../util/helpers';
-import {ERRORS} from '../../util/errors';
 import {validate} from '../../util/validations';
 
-import {ExecutePlugin, PluginParams} from '../../types/interface';
-import {ConfigParams} from '../../types/common';
+import {STRINGS} from '../../config';
 
-const {InputValidationError, ConfigValidationError} = ERRORS;
+const {MissingInputDataError, GlobalConfigError, RegexMismatchError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
 
 export const Regex = (globalConfig: ConfigParams): ExecutePlugin => {
-  const errorBuilder = buildErrorMessage(Regex.name);
   const metadata = {
     kind: 'execute',
   };
@@ -20,10 +19,9 @@ export const Regex = (globalConfig: ConfigParams): ExecutePlugin => {
    */
   const validateGlobalConfig = () => {
     if (!globalConfig) {
-      throw new ConfigValidationError(
-        errorBuilder({message: 'Configuration data is missing'})
-      );
+      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }
+
     const schema = z.object({
       parameter: z.string().min(1),
       match: z.string().min(1),
@@ -38,11 +36,7 @@ export const Regex = (globalConfig: ConfigParams): ExecutePlugin => {
    */
   const validateSingleInput = (input: PluginParams, parameter: string) => {
     if (!input[parameter]) {
-      throw new InputValidationError(
-        errorBuilder({
-          message: `\`${parameter}\` is missing from the input`,
-        })
-      );
+      throw new MissingInputDataError(MISSING_INPUT_DATA(parameter));
     }
 
     return input;
@@ -89,11 +83,7 @@ export const Regex = (globalConfig: ConfigParams): ExecutePlugin => {
     const matchedItem = input[parameter].match(regex);
 
     if (!matchedItem || !matchedItem[0]) {
-      throw new InputValidationError(
-        errorBuilder({
-          message: `\`${input[parameter]}\` does not match the ${match} regex expression`,
-        })
-      );
+      throw new RegexMismatchError(REGEX_MISMATCH(input[parameter], match));
     }
 
     return matchedItem[0];

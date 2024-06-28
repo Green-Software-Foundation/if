@@ -1,7 +1,8 @@
-import {pluginStorage} from '../../../util/plugin-storage';
-import {ERRORS} from '../../../util/errors';
+import {ERRORS} from '@grnsft/if-core/utils';
 
-const {PluginInitalizationError} = ERRORS;
+import {pluginStorage} from '../../../util/plugin-storage';
+
+const {PluginInitializationError} = ERRORS;
 
 describe('util/pluginStorage: ', () => {
   describe('pluginStorage(): ', () => {
@@ -30,9 +31,9 @@ describe('util/pluginStorage: ', () => {
         try {
           storage.get(pluginName);
         } catch (error) {
-          expect(error).toBeInstanceOf(PluginInitalizationError);
+          expect(error).toBeInstanceOf(PluginInitializationError);
 
-          if (error instanceof PluginInitalizationError) {
+          if (error instanceof PluginInitializationError) {
             expect(error.message).toEqual;
           }
         }

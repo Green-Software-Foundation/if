@@ -3,18 +3,17 @@ description: a negative test case that fails due to plugin initialization missin
 tags:
 initialize:
   plugins:
-    teads-curve: 
-      path: '@grnsft/if-unofficial-plugins'
-      method: TeadsCurve
+    "interpolate":
+      method: Interpolation
+      path: 'builtin'
       global-config:
-  outputs: ['yaml']
 tree:
   children:
     child-0:
       defaults:
         cpu/thermal-design-power: 100
       pipeline:
-        - teads-curve
+        - interpolate
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 1

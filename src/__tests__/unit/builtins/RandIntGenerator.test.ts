@@ -1,23 +1,20 @@
-import {KeyValuePair} from '../../../types/common';
-
-import {ERRORS} from '../../../util/errors';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {RandIntGenerator} from '../../../builtins/mock-observations/helpers/rand-int-generator';
 
-const {InputValidationError} = ERRORS;
+import {STRINGS} from '../../../config';
 
-describe('lib/mock-observations/RandIntGenerator: ', () => {
+const {GlobalConfigError} = ERRORS;
+const {INVALID_NAME, MISSING_MIN_MAX, MISSING_GLOBAL_CONFIG} = STRINGS;
+
+describe('builtins/mock-observations/RandIntGenerator: ', () => {
   describe('initialize', () => {
     it('throws an error when the generator name is empty string.', async () => {
       expect.assertions(1);
       try {
         RandIntGenerator('', {});
       } catch (error) {
-        expect(error).toEqual(
-          new InputValidationError(
-            'RandIntGenerator: `name` is empty or all spaces.'
-          )
-        );
+        expect(error).toEqual(new GlobalConfigError(INVALID_NAME));
       }
     });
 
@@ -26,11 +23,7 @@ describe('lib/mock-observations/RandIntGenerator: ', () => {
       try {
         RandIntGenerator('generator-name', {});
       } catch (error) {
-        expect(error).toEqual(
-          new InputValidationError(
-            'RandIntGenerator: Config must not be null or empty.'
-          )
-        );
+        expect(error).toEqual(new GlobalConfigError(MISSING_GLOBAL_CONFIG));
       }
     });
 
@@ -42,18 +35,14 @@ describe('lib/mock-observations/RandIntGenerator: ', () => {
       try {
         RandIntGenerator('random', config);
       } catch (error) {
-        expect(error).toEqual(
-          new InputValidationError(
-            'RandIntGenerator: Config is missing min or max.'
-          )
-        );
+        expect(error).toEqual(new GlobalConfigError(MISSING_MIN_MAX));
       }
     });
   });
 
   describe('next(): ', () => {
     it('returns a result with valid data.', async () => {
-      const config: KeyValuePair = {
+      const config: Record<string, any> = {
         min: 10,
         max: 90,
       };

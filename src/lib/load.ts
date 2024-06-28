@@ -1,6 +1,6 @@
 import * as YAML from 'js-yaml';
+import {ERRORS} from '@grnsft/if-core/utils';
 
-import {ERRORS} from '../util/errors';
 import {openYamlFileAsObject} from '../util/yaml';
 import {readAndParseJson} from '../util/json';
 
@@ -11,7 +11,7 @@ import {Parameters} from '../types/parameters';
 import {LoadDiffParams} from '../types/util/args';
 import {Manifest} from '../types/manifest';
 
-const {CliInputError} = ERRORS;
+const {CliSourceFileError} = ERRORS;
 
 const {INVALID_SOURCE, LOADING_MANIFEST} = STRINGS;
 
@@ -43,7 +43,7 @@ export const loadIfDiffFiles = async (params: LoadDiffParams) => {
   const {sourcePath, targetPath, pipedSourceManifest} = params;
 
   if (!sourcePath && !pipedSourceManifest) {
-    throw new CliInputError(INVALID_SOURCE);
+    throw new CliSourceFileError(INVALID_SOURCE);
   }
 
   const loadFromSource =

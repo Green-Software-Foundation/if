@@ -1,11 +1,10 @@
 import {ZodIssue, ZodIssueCode, ZodSchema, z} from 'zod';
+import {ERRORS} from '@grnsft/if-core/utils';
 
-import {ERRORS} from './errors';
+import {STRINGS} from '../config/strings';
 
 import {AGGREGATION_METHODS} from '../types/aggregation';
 import {AGGREGATION_TYPES} from '../types/parameters';
-
-import {STRINGS} from '../config/strings';
 
 const {ManifestValidationError, InputValidationError} = ERRORS;
 const {VALIDATING_MANIFEST} = STRINGS;

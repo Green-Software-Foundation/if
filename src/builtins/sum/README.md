@@ -85,7 +85,34 @@ tree:
 You can run this example by saving it as `./examples/manifests/sum.yml` and executing the following command from the project root:
 
 ```sh
-ie --manifest ./examples/manifests/sum.yml --output ./examples/outputs/sum.yml
+if-run --manifest ./examples/manifests/sum.yml --output ./examples/outputs/sum.yml
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`.
+
+
+## Errors
+
+`Sum` exposes two of the IF error classes.
+
+### GlobalConfigError
+
+You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+
+The required parameters are:
+- `input-parameters`: this must be an array of strings, each being the name of a value in the `inputs` array
+- `output-parameter`: this must be a string
+
+You can fix this error by checking you are providing valid values for each parameter in the config.
+
+### `MissingInputDataError`
+
+This error arises when a necessary piece of input data is missing from the `inputs` array.
+Every element in the ``inputs` array must contain:
+
+- `timestamp`
+- `duration`
+- whatever values you passed to `input-parameters`
+
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors).

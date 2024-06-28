@@ -1,10 +1,10 @@
-import {Subtract} from '../../../builtins/subtract';
+import {ERRORS} from '@grnsft/if-core/utils';
 
-import {ERRORS} from '../../../util/errors';
+import {Subtract} from '../../../builtins/subtract';
 
 const {InputValidationError} = ERRORS;
 
-describe('lib/subtract: ', () => {
+describe('builtins/subtract: ', () => {
   describe('Subtract: ', () => {
     const globalConfig = {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
@@ -48,9 +48,6 @@ describe('lib/subtract: ', () => {
       });
 
       it('throws an error on missing params in input.', async () => {
-        const expectedMessage =
-          'Subtract: cpu/energy is missing from the input array.';
-
         expect.assertions(1);
 
         try {
@@ -62,7 +59,9 @@ describe('lib/subtract: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(expectedMessage)
+            new InputValidationError(
+              '"cpu/energy" parameter is required. Error code: invalid_type.,"network/energy" parameter is required. Error code: invalid_type.,"memory/energy" parameter is required. Error code: invalid_type.'
+            )
           );
         }
       });

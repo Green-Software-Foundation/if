@@ -1,14 +1,13 @@
 import {spawnSync, SpawnSyncReturns} from 'child_process';
+
 import {loadAll, dump} from 'js-yaml';
 import {z} from 'zod';
-
-import {ExecutePlugin, PluginParams} from '../../types/interface';
-import {ConfigParams} from '../../types/common';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {ExecutePlugin, PluginParams, ConfigParams} from '@grnsft/if-core/types';
 
 import {validate} from '../../util/validations';
-import {ERRORS} from '../../util/errors';
 
-const {InputValidationError} = ERRORS;
+const {ProcessExecutionError} = ERRORS;
 
 export const Shell = (globalConfig: ConfigParams): ExecutePlugin => {
   const metadata = {
@@ -55,7 +54,7 @@ export const Shell = (globalConfig: ConfigParams): ExecutePlugin => {
 
       return {outputs};
     } catch (error: any) {
-      throw new InputValidationError(error.message);
+      throw new ProcessExecutionError(error.message);
     }
   };
 

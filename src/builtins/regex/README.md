@@ -4,8 +4,6 @@
 
 You provide the name of the value you want to match, and a name to use to add the regex to the output array.
 
-For example, `boavizta-cpu` need `cpu/name` to work, however `cloud-metadata` returns `physical-processor` which usually contains a long string of processors that the instance could be separated by `,`, like so:
-
 ```
 Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz
 ```
@@ -89,3 +87,35 @@ if --manifest manifests/examples/regex.yml --output manifests/outputs/regex.yml
 ```
 
 The results will be saved to a new `yaml` file in `manifests/outputs`.
+
+## Errors
+
+`Regex` uses three of IF's error classes:
+
+### `MissingInputDataError`
+
+This error arises when a necessary piece of input data is missing from the `inputs` array.
+Every element in the `inputs` array must contain:
+- `timestamp`
+- `duration`
+- whatever value you passed to `parameter`
+
+
+### `GlobalConfigError`
+
+You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+
+The required parameters are:
+
+- `parameter`: a string containing the name of a value in the inputs array
+- `match`: a valid regex pattern
+- `output`: a string
+
+You can fix this error by checking you are providing valid values for each parameter in the config.
+
+
+### `RegexMismatchError`
+
+This error arises when the requested regex cannot find any matches in the given data. If there are multiple matches, the plugin returns the first, but if there are none, it throws this error.
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

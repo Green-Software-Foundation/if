@@ -1,16 +1,13 @@
 import {z} from 'zod';
+import {
+  ExecutePlugin,
+  PluginParams,
+  MultiplyConfig,
+} from '@grnsft/if-core/types';
 
-import {buildErrorMessage} from '../../util/helpers';
-import {ERRORS} from '../../util/errors';
 import {validate} from '../../util/validations';
 
-import {ExecutePlugin, PluginParams} from '../../types/interface';
-import {MultiplyConfig} from './types';
-
-const {InputValidationError} = ERRORS;
-
 export const Multiply = (globalConfig: MultiplyConfig): ExecutePlugin => {
-  const errorBuilder = buildErrorMessage(Multiply.name);
   const metadata = {
     kind: 'execute',
   };
@@ -37,18 +34,18 @@ export const Multiply = (globalConfig: MultiplyConfig): ExecutePlugin => {
     input: PluginParams,
     inputParameters: string[]
   ) => {
-    inputParameters.forEach(metricToMultiply => {
-      if (
-        input[metricToMultiply] === undefined ||
-        isNaN(input[metricToMultiply])
-      ) {
-        throw new InputValidationError(
-          errorBuilder({
-            message: `${metricToMultiply} is missing from the input array`,
-          })
-        );
-      }
-    });
+    const inputData = inputParameters.reduce(
+      (acc, param) => {
+        acc[param] = input[param];
+
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+    const validationSchema = z.record(z.string(), z.number());
+
+    validate(validationSchema, inputData);
 
     return input;
   };
@@ -62,17 +59,17 @@ export const Multiply = (globalConfig: MultiplyConfig): ExecutePlugin => {
     const outputParameter = safeGlobalConfig['output-parameter'];
 
     return inputs.map(input => {
-      const safeInput = validateSingleInput(input, inputParameters);
+      validateSingleInput(input, inputParameters);
 
       return {
         ...input,
-        [outputParameter]: calculateProduct(safeInput, inputParameters),
+        [outputParameter]: calculateProduct(input, inputParameters),
       };
     });
   };
 
   /**
-   * Calculates the product of the energy components.
+   * Calculates the product of the components.
    */
   const calculateProduct = (input: PluginParams, inputParameters: string[]) =>
     inputParameters.reduce(

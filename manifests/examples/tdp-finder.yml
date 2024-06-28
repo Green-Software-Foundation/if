@@ -1,0 +1,23 @@
+name: csv-demo
+description:
+tags:
+initialize:
+  plugins:
+    tdp-finder:
+      method: CSVLookup
+      path: "builtin"
+      global-config:
+        filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/tdp-data-1.csv
+        query:
+          name: instance-id
+        output: "tdp"
+tree:
+  children:
+    child:
+      pipeline:
+        - tdp-finder
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          cpu/energy: 0.001
+          instance-id: "AMD A10-9700"

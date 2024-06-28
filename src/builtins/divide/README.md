@@ -4,8 +4,6 @@
 
 You provide the names of the values you want to divide, and a name to use to add the divide to the output array.
 
-For example, `boavizta-cpu` need `cpu/number-cores` to work, however `cloud-metadata` returns `vcpus-allocated`, to get number of cores you divide `vcpus-allocated` by 2.
-
 ## Parameters
 
 ### Plugin config
@@ -25,6 +23,8 @@ For example, `boavizta-cpu` need `cpu/number-cores` to work, however `cloud-meta
 - `output`: the division of `numerator` with the parameter name into `denominator` with the parameter name defined by `output` in global config.
 
 The plugin throws an exception if the division result is not a number.
+
+>Note: Plugin will warn and return `numerator` value in case if `denominator` is zero.
 
 ## Calculation
 
@@ -89,7 +89,33 @@ You can run this example by saving it as `./examples/manifests/divide.yml` and e
 
 ```sh
 npm i -g @grnsft/if
-ie --manifest ./examples/manifests/divide.yml --output ./examples/outputs/divide.yml
+if-run --manifest ./examples/manifests/divide.yml --output ./examples/outputs/divide.yml
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`.
+
+## Errors
+
+`Divide` exposes two of IF's error classes.
+
+### GlobalConfigError
+
+You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+
+The required parameters are:
+- `numerator`: a string containing the name of the input parameter whose value should be divided by `denominator`
+- `denominator`: a number to use as the denominator
+- ``output`: a string containing the name to assign the result of the division
+
+You can fix this error by checking you are providing valid values for each parameter in the config.
+
+### `MissingInputDataError`
+
+This error arises when a necessary piece of input data is missing from the `inputs` array.
+Every element in the ``inputs` array must contain:
+- `timestamp`
+- `duration`
+- whatever value you passed to `numerator`
+
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

@@ -1,14 +1,24 @@
 import Spline from 'typescript-cubic-spline';
 import {z} from 'zod';
-
-import {ExecutePlugin, PluginParams, ConfigParams} from '../../types/interface';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  ExecutePlugin,
+  PluginParams,
+  ConfigParams,
+  Method,
+} from '@grnsft/if-core/types';
 
 import {validate} from '../../util/validations';
-import {ERRORS} from '../../util/errors';
 
-import {Method} from './types';
+import {STRINGS} from '../../config';
 
-const {ConfigNotFoundError} = ERRORS;
+const {GlobalConfigError} = ERRORS;
+const {
+  MISSING_GLOBAL_CONFIG,
+  X_Y_EQUAL,
+  ARRAY_LENGTH_NON_EMPTY,
+  WITHIN_THE_RANGE,
+} = STRINGS;
 
 export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
   /**
@@ -118,7 +128,7 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
    */
   const validateConfig = () => {
     if (!globalConfig) {
-      throw new ConfigNotFoundError('Global config is not provided.');
+      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }
 
     const schema = z
@@ -130,10 +140,10 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
         'output-parameter': z.string(),
       })
       .refine(data => data.x && data.y && data.x.length === data.y.length, {
-        message: 'The length of `x` and `y` should be equal',
+        message: X_Y_EQUAL,
       })
       .refine(data => data.x.length > 1 && data.y.length > 1, {
-        message: 'the length of the input arrays must be greater than 1',
+        message: ARRAY_LENGTH_NON_EMPTY,
       });
 
     const defaultMethod = globalConfig.method ?? Method.LINEAR;
@@ -171,8 +181,7 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
           data[inputParameter] >= globalConfig.x[0] &&
           data[inputParameter] <= globalConfig.x[globalConfig.x.length - 1],
         {
-          message:
-            'The target x value must be within the range of the given x values',
+          message: WITHIN_THE_RANGE,
         }
       );
 

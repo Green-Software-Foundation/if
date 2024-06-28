@@ -1,16 +1,20 @@
 import {z} from 'zod';
-
-import {ExecutePlugin, PluginParams} from '../../types/interface';
-import {ConfigParams} from '../../types/common';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {ExecutePlugin, PluginParams, ConfigParams} from '@grnsft/if-core/types';
 
 import {validate, allDefined} from '../../util/validations';
-import {buildErrorMessage} from '../../util/helpers';
-import {ERRORS} from '../../util/errors';
 
-const {InputValidationError} = ERRORS;
+import {STRINGS} from '../../config';
+
+const {MissingInputDataError} = ERRORS;
+const {
+  MISSING_FUNCTIONAL_UNIT_CONFIG,
+  MISSING_FUNCTIONAL_UNIT_INPUT,
+  SCI_MISSING_FN_UNIT,
+  ZERO_DIVISION,
+} = STRINGS;
 
 export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
-  const errorBuilder = buildErrorMessage(Sci.name);
   const metadata = {
     kind: 'execute',
   };
@@ -19,15 +23,12 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
    * Validates node and gloabl configs.
    */
   const validateConfig = (config?: ConfigParams) => {
-    const errorMessage =
-      '`functional-unit` should be provided in your global config';
-
     const schema = z
       .object({
         'functional-unit': z.string(),
       })
       .refine(data => data['functional-unit'], {
-        message: errorMessage,
+        message: MISSING_FUNCTIONAL_UNIT_CONFIG,
       });
 
     return validate<z.infer<typeof schema>>(schema, config);
@@ -36,40 +37,39 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
   /**
    * Calculate the total emissions for a list of inputs.
    */
-  const execute = (inputs: PluginParams[]): PluginParams[] => {
-    return inputs.map(input => {
+  const execute = (inputs: PluginParams[]): PluginParams[] =>
+    inputs.map((input, index) => {
       const safeInput = validateInput(input);
-      const sci =
-        safeInput['carbon'] > 0
-          ? safeInput['carbon'] / input[globalConfig['functional-unit']]
-          : 0;
+      const functionalUnit = input[globalConfig['functional-unit']];
+
+      if (functionalUnit === 0) {
+        console.warn(ZERO_DIVISION(Sci.name, index));
+
+        return {
+          ...input,
+          sci: safeInput['carbon'],
+        };
+      }
+
       return {
         ...input,
-        sci,
+        sci: safeInput['carbon'] / functionalUnit,
       };
     });
-  };
 
   /**
    * Checks for fields in input.
    */
   const validateInput = (input: PluginParams) => {
-    const message = `'carbon' and ${globalConfig['functional-unit']} should be present in your input data.`;
-
     const validatedConfig = validateConfig(globalConfig);
 
     if (
       !(
         validatedConfig['functional-unit'] in input &&
-        input[validatedConfig['functional-unit']] > 0
+        input[validatedConfig['functional-unit']] >= 0
       )
     ) {
-      throw new InputValidationError(
-        errorBuilder({
-          message:
-            'functional-unit value is missing from input data or it is not a positive integer',
-        })
-      );
+      throw new MissingInputDataError(MISSING_FUNCTIONAL_UNIT_INPUT);
     }
 
     const schema = z
@@ -77,7 +77,9 @@ export const Sci = (globalConfig: ConfigParams): ExecutePlugin => {
         carbon: z.number().gte(0),
         duration: z.number().gte(1),
       })
-      .refine(allDefined, {message});
+      .refine(allDefined, {
+        message: SCI_MISSING_FN_UNIT(globalConfig['functional-unit']),
+      });
 
     return validate<z.infer<typeof schema>>(schema, input);
   };

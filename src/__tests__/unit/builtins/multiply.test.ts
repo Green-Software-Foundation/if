@@ -1,10 +1,10 @@
-import {Multiply} from '../../../builtins/multiply';
+import {ERRORS} from '@grnsft/if-core/utils';
 
-import {ERRORS} from '../../../util/errors';
+import {Multiply} from '../../../builtins/multiply';
 
 const {InputValidationError} = ERRORS;
 
-describe('lib/multiply: ', () => {
+describe('builtins/multiply: ', () => {
   describe('Multiply: ', () => {
     const globalConfig = {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
@@ -48,9 +48,6 @@ describe('lib/multiply: ', () => {
       });
 
       it('throws an error on missing params in input.', async () => {
-        const expectedMessage =
-          'Multiply: cpu/energy is missing from the input array.';
-
         expect.assertions(1);
 
         try {
@@ -62,7 +59,9 @@ describe('lib/multiply: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(expectedMessage)
+            new InputValidationError(
+              '"cpu/energy" parameter is required. Error code: invalid_type.,"network/energy" parameter is required. Error code: invalid_type.,"memory/energy" parameter is required. Error code: invalid_type.'
+            )
           );
         }
       });
@@ -88,10 +87,10 @@ describe('lib/multiply: ', () => {
         const expectedResult = [
           {
             duration: 3600,
+            timestamp: '2021-01-01T00:00:00Z',
             carbon: 3,
             'other-carbon': 2,
             'carbon-product': 6,
-            timestamp: '2021-01-01T00:00:00Z',
           },
         ];
 

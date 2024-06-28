@@ -1,15 +1,18 @@
 import {DateTime, Duration} from 'luxon';
 import {z} from 'zod';
-
-import {ExecutePlugin, PluginParams} from '../../types/interface';
-import {ConfigParams, KeyValuePair} from '../../types/common';
+import {
+  ExecutePlugin,
+  PluginParams,
+  ConfigParams,
+  ObservationParams,
+} from '@grnsft/if-core/types';
 
 import {validate} from '../../util/validations';
 
 import {CommonGenerator} from './helpers/common-generator';
 import {RandIntGenerator} from './helpers/rand-int-generator';
+
 import {Generator} from './interfaces/index';
-import {ObservationParams} from './types';
 
 export const MockObservations = (globalConfig: ConfigParams): ExecutePlugin => {
   const metadata = {
@@ -122,11 +125,10 @@ export const MockObservations = (globalConfig: ConfigParams): ExecutePlugin => {
       CommonGenerator(config),
     ];
 
-    const createRandIntGenerators = (config: any): Generator[] => {
-      return Object.entries(config).map(([fieldToPopulate, value]) =>
-        RandIntGenerator(fieldToPopulate, value as KeyValuePair)
+    const createRandIntGenerators = (config: any): Generator[] =>
+      Object.entries(config).map(([fieldToPopulate, value]) =>
+        RandIntGenerator(fieldToPopulate, value as Record<string, any>)
       );
-    };
 
     return Object.entries(generatorsConfig).flatMap(([key, value]) =>
       key === 'randint'

@@ -124,7 +124,18 @@ You can run this example `manifest` by saving it as `manifests/plugins/shell.yml
 
 ```sh
 npm i -g @grnsft/if
-ie --manifest manifests/plugins/shell.yml --output manifests/outputs/shell.yml
+if-run --manifest manifests/plugins/shell.yml --output manifests/outputs/shell.yml
 ```
 
 The results will be saved to a new `yaml` file.
+
+
+## Errors
+
+`Shell` uses one of the error classes provided by IF
+
+### `ProcessExecutionError`
+
+This error is thrown when the program invoked in the spawned shell fails for some reason that is not known to IF. Since the shell executes arbitrary code, it is difficult for IF to provide specific errors - this is delegated to the developers of the executed program.
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

@@ -86,7 +86,25 @@ tree:
 You can run this example by saving it as `./examples/manifests/coefficient.yml` and executing the following command from the project root:
 
 ```sh
-ie --manifest ./examples/manifests/coefficient.yml --output ./examples/outputs/coefficient.yml
+if-run --manifest ./examples/manifests/coefficient.yml --output ./examples/outputs/coefficient.yml
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`
+
+
+## Errors
+
+`Coefficient` exposes one of the IF error classes.
+
+### GlobalConfigError
+
+You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+
+The required parameters are:
+- `input-parameter`: this must be a string
+- `coefficient`: this must be a number
+- `output-parameter`: this must be a string
+
+You can fix this error by checking you are providing valid values for each parameter in the config.
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

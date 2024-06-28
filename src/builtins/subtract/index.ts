@@ -1,16 +1,13 @@
 import {z} from 'zod';
+import {
+  ExecutePlugin,
+  PluginParams,
+  SubtractConfig,
+} from '@grnsft/if-core/types';
 
-import {ERRORS} from '../../util/errors';
-import {buildErrorMessage} from '../../util/helpers';
 import {validate} from '../../util/validations';
 
-import {ExecutePlugin, PluginParams} from '../../types/interface';
-import {SubtractConfig} from './types';
-
-const {InputValidationError} = ERRORS;
-
 export const Subtract = (globalConfig: SubtractConfig): ExecutePlugin => {
-  const errorBuilder = buildErrorMessage(Subtract.name);
   const metadata = {
     kind: 'execute',
   };
@@ -37,32 +34,20 @@ export const Subtract = (globalConfig: SubtractConfig): ExecutePlugin => {
     input: PluginParams,
     inputParameters: string[]
   ) => {
-    inputParameters.forEach(metricToSubtract => {
-      validateParamExists(input, metricToSubtract);
-      validateNumericString(input[metricToSubtract]);
-    });
+    const inputData = inputParameters.reduce(
+      (acc, param) => {
+        acc[param] = input[param];
+
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+    const validationSchema = z.record(z.string(), z.number());
+
+    validate(validationSchema, inputData);
 
     return input;
-  };
-
-  const validateParamExists = (input: PluginParams, param: string) => {
-    if (input[param] === undefined) {
-      throw new InputValidationError(
-        errorBuilder({
-          message: `${param} is missing from the input array`,
-        })
-      );
-    }
-  };
-
-  const validateNumericString = (str: string) => {
-    if (isNaN(+Number(str))) {
-      throw new InputValidationError(
-        errorBuilder({
-          message: `${str} is not numberic`,
-        })
-      );
-    }
   };
 
   /**
@@ -73,6 +58,7 @@ export const Subtract = (globalConfig: SubtractConfig): ExecutePlugin => {
       'input-parameters': inputParameters,
       'output-parameter': outputParameter,
     } = validateGlobalConfig();
+
     return inputs.map(input => {
       validateSingleInput(input, inputParameters);
 
@@ -88,6 +74,7 @@ export const Subtract = (globalConfig: SubtractConfig): ExecutePlugin => {
    */
   const calculateDiff = (input: PluginParams, inputParameters: string[]) => {
     const [firstItem, ...restItems] = inputParameters;
+
     return restItems.reduce(
       (accumulator, metricToSubtract) => accumulator - input[metricToSubtract],
       input[firstItem] // Starting accumulator with the value of the first item

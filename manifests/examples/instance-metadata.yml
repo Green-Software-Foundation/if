@@ -1,6 +1,6 @@
 name: csv-demo
-description: null
-tags: null
+description:
+tags:
 initialize:
   plugins:
     cloud-instance-metadata:
@@ -19,8 +19,8 @@ initialize:
         parameter: cpu-model-name
         match: /^([^,])+/g
         output: cpu/name
-  outputs:
-    - yaml
+  # outputs:
+  #   - yaml
 tree:
   children:
     child:

@@ -1,11 +1,13 @@
 import {z} from 'zod';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {ExecutePlugin, PluginParams, ConfigParams} from '@grnsft/if-core/types';
 
-import {ERRORS} from '../../util/errors';
 import {validate} from '../../util/validations';
 
-import {ExecutePlugin, PluginParams, ConfigParams} from '../../types/interface';
+import {STRINGS} from '../../config';
 
-const {InputValidationError, ConfigNotFoundError} = ERRORS;
+const {GlobalConfigError, MissingInputDataError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
 
 export const Divide = (globalConfig: ConfigParams): ExecutePlugin => {
   const metadata = {
@@ -19,16 +21,16 @@ export const Divide = (globalConfig: ConfigParams): ExecutePlugin => {
     const safeGlobalConfig = validateGlobalConfig();
     const {numerator, denominator, output} = safeGlobalConfig;
 
-    return inputs.map(input => {
+    return inputs.map((input, index) => {
       const safeInput = Object.assign(
         {},
         input,
-        validateSingleInput(input, numerator, denominator)
+        validateSingleInput(input, {numerator, denominator})
       );
 
       return {
         ...input,
-        [output]: calculateDivide(safeInput, numerator, denominator),
+        [output]: calculateDivide(safeInput, index, {numerator, denominator}),
       };
     });
   };
@@ -38,12 +40,12 @@ export const Divide = (globalConfig: ConfigParams): ExecutePlugin => {
    */
   const validateGlobalConfig = () => {
     if (!globalConfig) {
-      throw new ConfigNotFoundError('Global config is not provided.');
+      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }
 
     const schema = z.object({
       numerator: z.string().min(1),
-      denominator: z.string().or(z.number().gt(0)),
+      denominator: z.string().or(z.number()),
       output: z.string(),
     });
 
@@ -55,9 +57,13 @@ export const Divide = (globalConfig: ConfigParams): ExecutePlugin => {
    */
   const validateSingleInput = (
     input: PluginParams,
-    numerator: string,
-    denominator: number | string
+    params: {
+      numerator: string;
+      denominator: number | string;
+    }
   ) => {
+    const {numerator, denominator} = params;
+
     const schema = z
       .object({
         [numerator]: z.number(),
@@ -65,10 +71,9 @@ export const Divide = (globalConfig: ConfigParams): ExecutePlugin => {
       })
       .refine(() => {
         if (typeof denominator === 'string' && !input[denominator]) {
-          throw new InputValidationError(
-            `\`${denominator}\` is missing from the input.`
-          );
+          throw new MissingInputDataError(MISSING_INPUT_DATA(denominator));
         }
+
         return true;
       });
 
@@ -80,9 +85,22 @@ export const Divide = (globalConfig: ConfigParams): ExecutePlugin => {
    */
   const calculateDivide = (
     input: PluginParams,
-    numerator: string,
-    denominator: number | string
-  ) => input[numerator] / (input[denominator] || denominator);
+    index: number,
+    params: {
+      numerator: string;
+      denominator: number | string;
+    }
+  ) => {
+    const {denominator, numerator} = params;
+    const finalDenominator = input[denominator] || denominator;
+
+    if (finalDenominator === 0) {
+      console.warn(ZERO_DIVISION(Divide.name, index));
+      return input[numerator];
+    }
+
+    return input[numerator] / finalDenominator;
+  };
 
   return {
     metadata,

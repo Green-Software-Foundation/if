@@ -1,8 +1,11 @@
+import {ERRORS} from '@grnsft/if-core/utils';
+
 import {Coefficient} from '../../../builtins/coefficient';
 
-import {ERRORS} from '../../../util/errors';
+import {STRINGS} from '../../../config';
 
-const {InputValidationError, ConfigNotFoundError} = ERRORS;
+const {InputValidationError, GlobalConfigError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
 describe('builtins/coefficient: ', () => {
   describe('Coefficient: ', () => {
@@ -49,7 +52,6 @@ describe('builtins/coefficient: ', () => {
       it('throws an error when global config is not provided.', () => {
         const config = undefined;
         const coefficient = Coefficient(config!);
-        const expectedMessage = 'Global config is not provided.';
 
         expect.assertions(1);
 
@@ -62,7 +64,9 @@ describe('builtins/coefficient: ', () => {
             },
           ]);
         } catch (error) {
-          expect(error).toStrictEqual(new ConfigNotFoundError(expectedMessage));
+          expect(error).toStrictEqual(
+            new GlobalConfigError(MISSING_GLOBAL_CONFIG)
+          );
         }
       });
 
