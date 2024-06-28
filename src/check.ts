@@ -1,17 +1,16 @@
 #!/usr/bin/env node
 /* eslint-disable no-process-exit */
-import * as fs from 'fs/promises';
 import * as path from 'path';
 
 import {logger} from './util/logger';
 import {logStdoutFailMessage} from './util/helpers';
 import {parseIfCheckArgs} from './util/args';
-import {getYamlFiles} from './util/fs';
+import {getYamlFiles, removeFileIfExists} from './util/fs';
 
 import {STRINGS} from './config';
 import {executeCommands} from './util/npm';
 
-const {CHECKING} = STRINGS;
+const {CHECKING, DIRECTORY_YAML_FILES_NOT_FOUND} = STRINGS;
 
 const IfCheck = async () => {
   const commandArgs = await parseIfCheckArgs();
@@ -32,12 +31,17 @@ const IfCheck = async () => {
 
       logStdoutFailMessage(error, fileName);
 
-      await fs.unlink(`${manifestDirPath}/package.json`);
-      await fs.unlink(executedFile);
+      await removeFileIfExists(`${manifestDirPath}/package.json`);
+      await removeFileIfExists(executedFile);
     }
   } else {
     const directory = commandArgs.directory;
     const files = await getYamlFiles(directory!);
+
+    if (files.length === 0) {
+      console.log(DIRECTORY_YAML_FILES_NOT_FOUND);
+      process.exit(1);
+    }
 
     for await (const file of files) {
       const fileName = path.basename(file);
@@ -53,7 +57,7 @@ const IfCheck = async () => {
 
         logStdoutFailMessage(error, fileName);
 
-        await fs.unlink(executedFile);
+        await removeFileIfExists(executedFile);
       }
     }
   }
