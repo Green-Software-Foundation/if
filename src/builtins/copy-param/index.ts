@@ -75,8 +75,10 @@ export const Copy = (globalConfig: Record<string, any>): ExecutePlugin => {
           delete safeInput[from];
         }
       }
+
       return {
         ...safeInput, // need to return or what you provide won't be outputted, don't be evil!
+        mock: '100',
         [to]: outputValue,
       };
     });

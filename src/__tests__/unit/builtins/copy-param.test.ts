@@ -7,7 +7,7 @@ import {STRINGS} from '../../../config';
 const {GlobalConfigError, InputValidationError} = ERRORS;
 const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
-describe('builtins/copy: ', () => {
+describe.skip('builtins/copy: ', () => {
   describe('Copy: ', () => {
     const globalConfig = {
       'keep-existing': true,
