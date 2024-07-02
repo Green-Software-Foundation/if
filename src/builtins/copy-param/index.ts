@@ -78,7 +78,6 @@ export const Copy = (globalConfig: Record<string, any>): ExecutePlugin => {
 
       return {
         ...safeInput, // need to return or what you provide won't be outputted, don't be evil!
-        mock: '100',
         [to]: outputValue,
       };
     });
