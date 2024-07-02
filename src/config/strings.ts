@@ -144,6 +144,8 @@ ${error}`,
     `if-check could not verify ${filename}. The re-executed file does not match the original.\n`,
   IF_CHECK_VERIFIED: (filename: string) =>
     `if-check successfully verified ${filename}\n`,
+  IF_CHECK_SUMMARY_LOG: (passedCount: number, totalCount: number) =>
+    `\nSummary of all failing files:\n${passedCount} of ${totalCount} files are passed.\n`,
   ZERO_DIVISION: (moduleName: string, index: number) =>
     `-- SKIPPING -- DivisionByZero: you are attempting to divide by zero in ${moduleName} plugin : inputs[${index}]\n`,
 };
