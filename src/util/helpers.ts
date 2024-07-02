@@ -280,4 +280,5 @@ export const logStdoutFailMessage = (error: any, fileName: string) => {
   const failMessage = logs[logs.length - 1];
 
   console.log(failMessage);
+  return `${fileName}\n${failMessage}`;
 };
