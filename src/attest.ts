@@ -3,11 +3,12 @@
 import {ethers} from 'ethers';
 import {readFileSync} from 'fs';
 import * as YAML from 'js-yaml';
-const packageJson = require('../package.json');
 import {SchemaEncoder} from '@ethereum-attestation-service/eas-sdk';
 import {execPromise} from './util/helpers';
 import {openYamlFileAsObject} from './util/yaml';
 import {Manifest} from './types/manifest';
+
+const packageJson = require('../package.json');
 
 const IfAttest = async (manifestPath: string) => {
   //todo: make level and signer CLI args
@@ -54,29 +55,48 @@ type ManifestInfo = {
   signer: string;
 };
 
+const getManifestStart = (manifest: Manifest): string => {
+  const firstChildName = Object.keys(manifest.tree.children)[0];
+  const manifestStart =
+    manifest.tree.children[`${firstChildName}`].inputs[0].timestamp;
+  return manifestStart;
+};
+
+const getManifestEnd = (manifest: Manifest): string => {
+  const firstChildName = Object.keys(manifest.tree.children)[0];
+  const inputsLength =
+    manifest.tree.children[`${firstChildName}`].inputs.length;
+  const manifestEnd =
+    manifest.tree.children[`${firstChildName}`].inputs[inputsLength - 1]
+      .timestamp;
+  return manifestEnd;
+};
+
 const getManifestInfo = async (
   manifestPath: string,
   level: number,
   signer: string
 ): Promise<ManifestInfo> => {
-  const file = await openYamlFileAsObject<Manifest>(manifestPath);
+  const manifest = await openYamlFileAsObject<Manifest>(manifestPath);
 
   // const functionalUnitStub = file.initialize.plugins.sci['global-config']['functional-unit'] ??  '';
   const functionalUnitStub = 'request'; //todo: DO NOT HARDCODE!
   const unit = 'carbon per ' + functionalUnitStub;
 
   const info: ManifestInfo = {
-    start: file.tree.children.child.outputs[0].timestamp,
-    end: file.tree.children.child.outputs[
-      file.tree.children.child.outputs.length - 1
-    ].timestamp,
+    // start: file.tree.children[0]['outputs'][0].timestamp,
+    // end: file.tree.children[0]['outputs'][
+    //   file.tree.children[0].outputs.length - 1
+    // ].timestamp,
+    start: getManifestStart(manifest),
+    end: getManifestEnd(manifest),
     hash: GetManifestHash(manifestPath),
     if: GetIfVersion(),
     verified: await runIfCheck(manifestPath),
-    sci: file.tree.aggregated.sci,
+    sci: manifest.tree.aggregated.sci,
     unit: unit,
-    energy: file.tree.aggregated.energy,
-    carbon: file.tree.aggregated.carbon,
+    energy: manifest.tree.aggregated.energy,
+    carbon: manifest.tree.aggregated.carbon,
     level: level,
     signer: signer,
   };
