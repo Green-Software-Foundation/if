@@ -678,7 +678,7 @@ description: mock-description
       expect.assertions(2);
 
       expect(logSpy).toHaveBeenCalledWith(
-        `if-check could not verify ${mockFilename}. The re-executed file does not match the original.\n`
+        `✖ if-check could not verify ${mockFilename}. The re-executed file does not match the original.\n`
       );
 
       expect(logSpy).toHaveBeenCalledWith('mock error message');

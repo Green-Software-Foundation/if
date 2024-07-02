@@ -1,5 +1,4 @@
 import * as fs from 'fs/promises';
-import * as fsSync from 'fs';
 import * as path from 'path';
 
 jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
@@ -14,6 +13,29 @@ jest.mock('../../../util/logger', () => ({
     info: mockInfo,
   },
 }));
+
+jest.mock('../../../util/helpers', () => {
+  const originalModule = jest.requireActual('../../../util/helpers');
+  return {
+    ...originalModule,
+    execPromise: async (param: any) => {
+      switch (process.env.NPM_INSTALL) {
+        case 'true':
+          expect(param).toEqual('npm install @grnsft/if@0.3.3-beta.0');
+          break;
+        case 'npm init -y':
+          expect(param).toEqual('npm init -y');
+          break;
+        case 'if-check':
+          expect(param).toEqual(
+            "npm run if-env  -- -m ./src/__mocks__/mock-manifest.yaml && npm run if-run  -- -m ./src/__mocks__/mock-manifest.yaml -o src/__mocks__/re-mock-manifest &&  node -p 'Boolean(process.stdout.isTTY)' | npm run if-diff  -- -s src/__mocks__/re-mock-manifest.yaml -t ./src/__mocks__/mock-manifest.yaml"
+          );
+          break;
+      }
+      return;
+    },
+  };
+});
 
 import {
   installDependencies,
@@ -31,33 +53,17 @@ import {ManifestPlugin} from '../../../types/npm';
 const {INITIALIZING_PACKAGE_JSON, INSTALLING_NPM_PACKAGES} = STRINGS;
 
 describe('util/npm: ', () => {
-  const helpers = require('../../../util/helpers');
   const folderPath = path.resolve(__dirname, 'npm-test');
-
-  beforeAll(() => {
-    if (!fsSync.existsSync(folderPath)) {
-      fsSync.mkdirSync(folderPath, {recursive: true});
-    }
-  });
-
-  afterAll(() => {
-    if (fsSync.existsSync(folderPath)) {
-      fsSync.rmSync(folderPath, {recursive: true, force: true});
-    }
-  });
 
   describe('initPackageJsonIfNotExists(): ', () => {
     it('initializes package.json if it does not exist.', async () => {
-      const spyExecPromise = jest.spyOn(helpers, 'execPromise');
+      process.env.NPM_INSTALL = 'npm init -y';
       isFileExists('true');
 
       await initPackageJsonIfNotExists(folderPath);
 
       expect.assertions(2);
       expect(mockInfo).toHaveBeenCalledWith(INITIALIZING_PACKAGE_JSON);
-      expect(spyExecPromise).toHaveBeenCalledWith('npm init -y', {
-        cwd: folderPath,
-      });
     });
 
     it('returns the package.json path if it exists.', async () => {
@@ -66,7 +72,7 @@ describe('util/npm: ', () => {
 
       const result = await initPackageJsonIfNotExists(folderPath);
 
-      expect.assertions(1);
+      expect.assertions(2);
       expect(result).toBe(packageJsonPath);
     });
   });
@@ -77,17 +83,11 @@ describe('util/npm: ', () => {
     };
 
     it('calls execPromise with the correct arguments.', async () => {
-      const spyExecPromise = jest.spyOn(helpers, 'execPromise');
-      const formattedDependencies = ['@grnsft/if@0.3.3-beta.0'];
+      process.env.NPM_INSTALL = 'true';
       expect.assertions(1);
 
       await installDependencies(folderPath, dependencies);
-
-      expect(spyExecPromise).toHaveBeenCalledWith(
-        `npm install ${formattedDependencies.join(' ')}`,
-        {cwd: folderPath}
-      );
-    }, 30000);
+    });
 
     it('logs the installation message.', async () => {
       const dependencies = {
@@ -96,7 +96,7 @@ describe('util/npm: ', () => {
 
       await installDependencies(folderPath, dependencies);
 
-      expect.assertions(1);
+      expect.assertions(2);
       expect(mockInfo).toHaveBeenCalledWith(INSTALLING_NPM_PACKAGES);
     });
   });
@@ -250,22 +250,16 @@ describe('util/npm: ', () => {
 
   describe('executeCommands(): ', () => {
     it('successfully executes with correct commands.', async () => {
+      process.env.NPM_INSTALL = 'if-check';
       const manifest = './src/__mocks__/mock-manifest.yaml';
-      const reManifest = 'src/__mocks__/re-mock-manifest.yaml';
       const logSpy = jest.spyOn(global.console, 'log');
-
-      jest.spyOn(fs, 'unlink').mockResolvedValue();
 
       await executeCommands(manifest, false);
 
-      expect.assertions(1);
+      expect.assertions(2);
       expect(logSpy).toHaveBeenCalledWith(
-        'if-check successfully verified mock-manifest.yaml\n'
+        '✔ if-check successfully verified mock-manifest.yaml\n'
       );
-
-      const packageJsonPath = 'src/__mocks__/package.json';
-      fsSync.unlink(path.resolve(process.cwd(), reManifest), () => {});
-      fsSync.unlink(path.resolve(process.cwd(), packageJsonPath), () => {});
-    }, 70000);
+    });
   });
 });
