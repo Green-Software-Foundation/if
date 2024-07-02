@@ -63,7 +63,7 @@ const IfCheck = async () => {
           .replace('yml', 'yaml');
 
         const failedFilesLog = logStdoutFailMessage(error, fileName);
-        failedLogs.message = failedLogs.message.concat(`${failedFilesLog}\n`);
+        failedLogs.message = failedLogs.message.concat(failedFilesLog);
         failedLogs.count++;
 
         await removeFileIfExists(executedFile);
