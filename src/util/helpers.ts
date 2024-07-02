@@ -33,7 +33,8 @@ const {
   FAILURE_MESSAGE_DEPENDENCIES,
 } = IF_ENV;
 
-const {UNSUPPORTED_ERROR, IF_CHECK_FAILED} = STRINGS;
+const {UNSUPPORTED_ERROR, IF_CHECK_FAILED, IF_CHECK_SUMMARY_ERROR_MESSAGE} =
+  STRINGS;
 const {MissingPluginDependenciesError} = ERRORS;
 
 /**
@@ -280,4 +281,5 @@ export const logStdoutFailMessage = (error: any, fileName: string) => {
   const failMessage = logs[logs.length - 1];
 
   console.log(failMessage);
+  return IF_CHECK_SUMMARY_ERROR_MESSAGE(fileName, failMessage);
 };
