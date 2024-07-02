@@ -260,7 +260,7 @@ describe('util/npm: ', () => {
 
       expect.assertions(1);
       expect(logSpy).toHaveBeenCalledWith(
-        'if-check successfully verified mock-manifest.yaml\n'
+        '✔ if-check successfully verified mock-manifest.yaml\n'
       );
 
       const packageJsonPath = 'src/__mocks__/package.json';
