@@ -10,7 +10,8 @@ import {getYamlFiles, removeFileIfExists} from './util/fs';
 import {STRINGS} from './config';
 import {executeCommands} from './util/npm';
 
-const {CHECKING, DIRECTORY_YAML_FILES_NOT_FOUND} = STRINGS;
+const {CHECKING, DIRECTORY_YAML_FILES_NOT_FOUND, IF_CHECK_SUMMARY_LOG} =
+  STRINGS;
 
 const IfCheck = async () => {
   const commandArgs = await parseIfCheckArgs();
@@ -35,6 +36,7 @@ const IfCheck = async () => {
       await removeFileIfExists(executedFile);
     }
   } else {
+    const failedLogs = {count: 0, message: ''};
     const directory = commandArgs.directory;
     const files = await getYamlFiles(directory!);
 
@@ -55,10 +57,20 @@ const IfCheck = async () => {
           .replace(fileName, `re-${fileName}`)
           .replace('yml', 'yaml');
 
-        logStdoutFailMessage(error, fileName);
+        const failedFilesLog = logStdoutFailMessage(error, fileName);
+        failedLogs.message = failedLogs.message.concat(`${failedFilesLog}\n`);
+        failedLogs.count++;
 
         await removeFileIfExists(executedFile);
       }
+    }
+
+    if (failedLogs.count > 0) {
+      const passedFilesCount = files.length - failedLogs.count;
+
+      console.log(IF_CHECK_SUMMARY_LOG(passedFilesCount, files.length));
+      console.error(failedLogs.message);
+      process.exit(1);
     }
   }
 };
