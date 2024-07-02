@@ -10,10 +10,11 @@ import {openYamlFileAsObject} from './util/yaml';
 import {Manifest} from './types/manifest';
 
 const IfAttest = async (manifestPath: string) => {
-  //todo: make level a CLI argument
+  //todo: make level and signer CLI args
   const level = 0;
+  const signer = 'GSF';
 
-  const manifestInfo = await getManifestInfo(manifestPath, level);
+  const manifestInfo = await getManifestInfo(manifestPath, level, signer);
   const encodedSchema = encodeSchema(manifestInfo);
 
   console.log(manifestInfo);
@@ -50,11 +51,13 @@ type ManifestInfo = {
   energy: number; // aggregated energy (value from the top level of the `tree`)
   carbon: number; // aggregated carbon (value from the top level of the `tree`)
   level: number; // 0-5 GSF review thoroughness score
+  signer: string;
 };
 
 const getManifestInfo = async (
   manifestPath: string,
-  level: number
+  level: number,
+  signer: string
 ): Promise<ManifestInfo> => {
   const file = await openYamlFileAsObject<Manifest>(manifestPath);
 
@@ -75,6 +78,7 @@ const getManifestInfo = async (
     energy: file.tree.aggregated.energy,
     carbon: file.tree.aggregated.carbon,
     level: level,
+    signer: signer,
   };
 
   return info;
