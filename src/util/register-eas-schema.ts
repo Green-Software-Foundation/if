@@ -17,8 +17,6 @@ export const RegisterSchema = async () => {
   const provider = new ethers.JsonRpcProvider(
     `https://sepolia.infura.io/v3/${INFURA_API_KEY}`
   );
-  // provider.getBlockNumber().then((result) => {
-  //   console.log("Current block number: " + result);})
 
   const signer = new ethers.Wallet(PRIVATE_KEY, provider);
   schemaRegistry.connect(signer);
