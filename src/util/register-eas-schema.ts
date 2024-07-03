@@ -4,30 +4,33 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-const RPC_URL: string = process.env.RPC_URL ?? '';
+const INFURA_API_KEY: string = process.env.INFURA_API_KEY ?? '';
 const REGISTRY_CONTRACT_ADDRESS: string =
-  process.env.REGISTRY_CONTRACT_ADDRESS ?? '';
-const RESOLVER_CONTRACT_ADDRESS: string =
-  process.env.RESOLVER_CONTRACT_ADDRESS ?? '';
+  process.env.REGISTRY_CONTRACT_ADDRESS_SEPOLIA ?? '';
 const PRIVATE_KEY: string = process.env.ETH_PRIVATE_KEY ?? '';
 const SCHEMA =
-  'uint256 manifestStart, uint256 manifestEnd, bytes32 manifestHash, uint256 carbon, uint256 sci, uint256 energy';
+  'string start, string end, bytes32 hash, string if, bool verified, uint8 sci, string unit, uint8 energy, uint8 carbon, uint8 level';
 
-const registerSchema = async () => {
+export const RegisterSchema = async () => {
   const schemaRegistry = new SchemaRegistry(REGISTRY_CONTRACT_ADDRESS);
-  const provider = new ethers.JsonRpcProvider(RPC_URL);
+
+  const provider = new ethers.JsonRpcProvider(
+    `https://sepolia.infura.io/v3/${INFURA_API_KEY}`
+  );
+  // provider.getBlockNumber().then((result) => {
+  //   console.log("Current block number: " + result);})
+
   const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+
+  console.log(signer);
 
   schemaRegistry.connect(signer);
 
   const transaction = await schemaRegistry.register({
     schema: SCHEMA,
-    resolverAddress: RESOLVER_CONTRACT_ADDRESS,
     revocable: true,
   });
 
   // Optional: Wait for transaction to be validated
   await transaction.wait();
 };
-
-registerSchema();
