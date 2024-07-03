@@ -1,26 +1,60 @@
 #!/usr/bin/env node
 /* eslint-disable no-process-exit */
-import {ethers} from 'ethers';
+import {ethers, Wallet} from 'ethers';
 // import {readFileSync} from 'fs';
 import * as YAML from 'js-yaml';
-import {SchemaEncoder} from '@ethereum-attestation-service/eas-sdk';
+import {EAS, SchemaEncoder} from '@ethereum-attestation-service/eas-sdk';
 import {execPromise} from './util/helpers';
 import {openYamlFileAsObject} from './util/yaml';
 import {Manifest} from './types/manifest';
-import {RegisterSchema} from './util/register-eas-schema';
+import * as dotenv from 'dotenv';
+
 const packageJson = require('../package.json');
+dotenv.config();
+
+const EAS_CONTRACT_ADDRESS_SEPOLIA: string =
+  process.env.EAS_CONTRACT_ADDRESS_SEPOLIA ?? '';
+const UID = process.env.SCHEMA_UID ?? '';
+const PRIVATE_KEY: string = process.env.ETH_PRIVATE_KEY ?? '';
+const INFURA_API_KEY: string = process.env.INFURA_API_KEY ?? '';
+
+const createSigningWallet = (): Wallet => {
+  const provider = new ethers.JsonRpcProvider(
+    `https://sepolia.infura.io/v3/${INFURA_API_KEY}`
+  );
+  const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+  return signer;
+};
 
 const IfAttest = async (manifestPath: string) => {
-  await RegisterSchema();
-  //todo: make level and signer CLI args
+  const signer = createSigningWallet();
+  const eas = new EAS(EAS_CONTRACT_ADDRESS_SEPOLIA);
+  eas.connect(signer);
+
+  //todo: make level a CLI args
   const level = 0;
-  const signer = 'GSF';
+  const manifestInfo = await getManifestInfo(manifestPath, level);
+  const encodedData = encodeSchema(manifestInfo);
+  const responseMessage = await sendAttestationTx(eas, signer, encodedData);
+  console.log(responseMessage);
+};
 
-  const manifestInfo = await getManifestInfo(manifestPath, level, signer);
-  const encodedSchema = encodeSchema(manifestInfo);
-
-  console.log(manifestInfo);
-  console.log(encodedSchema);
+const sendAttestationTx = async (
+  eas: EAS,
+  signer: Wallet,
+  encodedData: string
+): Promise<string> => {
+  const tx = await eas.attest({
+    schema: UID,
+    data: {
+      recipient: signer.address, //can provide an ethereum address for the attested org if needed- here it's the signer address
+      expirationTime: BigInt(0),
+      revocable: true, // Be aware that if your schema is not revocable, this MUST be false
+      data: encodedData,
+    },
+  });
+  const attestationUID = await tx.wait();
+  return attestationUID;
 };
 
 const encodeSchema = (manifestInfo: ManifestInfo) => {
@@ -53,7 +87,6 @@ type ManifestInfo = {
   energy: number; // aggregated energy (value from the top level of the `tree`)
   carbon: number; // aggregated carbon (value from the top level of the `tree`)
   level: number; // 0-5 GSF review thoroughness score
-  signer: string;
 };
 
 const getManifestStart = (manifest: Manifest): string => {
@@ -75,8 +108,7 @@ const getManifestEnd = (manifest: Manifest): string => {
 
 const getManifestInfo = async (
   manifestPath: string,
-  level: number,
-  signer: string
+  level: number
 ): Promise<ManifestInfo> => {
   const manifest = await openYamlFileAsObject<Manifest>(manifestPath);
 
@@ -95,7 +127,6 @@ const getManifestInfo = async (
     energy: manifest.tree.aggregated.energy,
     carbon: manifest.tree.aggregated.carbon,
     level: level,
-    signer: signer,
   };
 
   return info;
@@ -103,7 +134,6 @@ const getManifestInfo = async (
 
 const GetManifestHash = (manifest: Manifest): string => {
   const manifestAsString = YAML.dump(manifest).toString();
-  console.log(manifestAsString);
   const manifestAsBytes: Uint8Array = ethers.toUtf8Bytes(manifestAsString);
   const manifestHash = ethers.keccak256(manifestAsBytes);
   return manifestHash;
