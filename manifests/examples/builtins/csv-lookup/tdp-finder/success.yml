@@ -1,0 +1,24 @@
+name: tdp-finder
+description: successful path
+tags:
+initialize:
+  # outputs: ['yaml']
+  plugins:
+    tdp-finder:
+      method: CSVLookup
+      path: "builtin"
+      global-config:
+        filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/tdp-data-1.csv
+        query:
+          name: physical-processor
+        output: "tdp"
+tree:
+  children:
+    child:
+      pipeline:
+        - tdp-finder
+      config:
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 300
+          physical-processor: AMD 3020e

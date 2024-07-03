@@ -2,8 +2,7 @@ name: csv-lookup-demo
 description:
 tags:
 initialize:
-  # outputs:
-  #   - yaml
+  # outputs: [yaml]
   plugins:
     cloud-metadata:
       method: CSVLookup

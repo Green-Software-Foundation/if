@@ -10,7 +10,7 @@ initialize:
       path: "builtin"
       global-config:
         timestamp-from: 2023-07-06T00:00
-        timestamp-to: 2023-07-06T00:01
+        timestamp-to: 2023-07-06T00:10
         duration: 60
         components:
           - cloud/instance-type: A1

@@ -1,5 +1,5 @@
-name: divide
-description: success path
+name: cloud-metadata
+description: cloud/instance-type instance type is not supported in the cloud vendor
 tags:
 initialize:
   # outputs: ['yaml']
@@ -13,26 +13,15 @@ initialize:
         query:
           instance-class: cloud/instance-type
         output: ['cpu-cores-utilized', 'vcpus-allocated']
-    divide:
-      method: Divide
-      path: "builtin"
-      global-config:
-        numerator: vcpus-allocated
-        denominator: 2
-        output: cpu/number-cores
 tree:
   children:
     child:
       pipeline:
         - cloud-metadata
-        - divide
       config:
-        divide:
-      defaults:
-        cloud/vendor: aws
-        cloud/instance-type: m5n.large
-        cpu/name: Intel® Core™ i7-1185G7
       inputs:
-        - timestamp: 2023-08-06T00:00
-          duration: 3600
-          cpu/utilization: 80
+        - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+          cloud/vendor: aws
+          cloud/instance-type: m6
+          duration: 100
+          cpu/utilization: 10

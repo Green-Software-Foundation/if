@@ -2,8 +2,7 @@ name: csv-lookup-demo
 description:
 tags:
 initialize:
-  # outputs:
-  #   - yaml
+  # outputs: [yaml]
   plugins:
     cloud-metadata:
       method: CSVLookup
@@ -11,7 +10,7 @@ initialize:
       global-config:
         filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
         query:
-          cloud-provider: "nonexistant"
+          cloud-provider: "cloud/provider"
           cloud-region: "cloud/region"
         output: "*"
 tree:

@@ -5,8 +5,14 @@ initialize:
 #  outputs: ['yaml']
   plugins:
     cloud-metadata:
-      method: CloudMetadata
-      path: "@grnsft/if-plugins"
+      path: builtin
+      method: CSVLookup
+      global-config:
+        filepath: >-
+          https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv
+        query:
+          instance-class: cloud/instance-type
+        output: ['cpu-cores-utilized', 'vcpus-allocated']
     divide:
       method: Divide
       path: "builtin"
@@ -14,19 +20,12 @@ initialize:
         numerator: vcpus-allocated
         denominator: 0
         output: cpu/number-cores
-    boavizta-cpu:
-      method: BoaviztaCpuOutput
-      path: "@grnsft/if-unofficial-plugins"
-      global-config:
-        allocation: LINEAR
-        verbose: true
 tree:
   children:
     child:
       pipeline:
         - cloud-metadata
         - divide
-        - boavizta-cpu
       config:
         divide:
       defaults:
