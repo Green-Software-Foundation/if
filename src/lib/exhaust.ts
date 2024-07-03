@@ -52,7 +52,7 @@ export const exhaust = async (
 
   const outputPlugins = context.initialize.outputs;
 
-  if (outputOptions.stdout) {
+  if (!outputOptions.noOutput) {
     ExportLog().execute(tree, context);
   }
 
