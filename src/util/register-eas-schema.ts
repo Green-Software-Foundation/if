@@ -21,16 +21,17 @@ export const RegisterSchema = async () => {
   //   console.log("Current block number: " + result);})
 
   const signer = new ethers.Wallet(PRIVATE_KEY, provider);
-
-  console.log(signer);
-
   schemaRegistry.connect(signer);
 
+  const schema = SCHEMA;
+  const revocable = true;
   const transaction = await schemaRegistry.register({
-    schema: SCHEMA,
-    revocable: true,
+    schema,
+    revocable,
   });
 
-  // Optional: Wait for transaction to be validated
+  // Wait for transaction to be validated
   await transaction.wait();
+
+  console.log('Transaction was successful: \n', transaction.data);
 };
