@@ -19,7 +19,6 @@ tree:
   children:
     application:
       pipeline:
-        - cloud-metadata
       children:
         uk-west:
           children:

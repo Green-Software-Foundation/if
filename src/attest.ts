@@ -7,10 +7,11 @@ import {SchemaEncoder} from '@ethereum-attestation-service/eas-sdk';
 import {execPromise} from './util/helpers';
 import {openYamlFileAsObject} from './util/yaml';
 import {Manifest} from './types/manifest';
-
+import {RegisterSchema} from './util/register-eas-schema';
 const packageJson = require('../package.json');
 
 const IfAttest = async (manifestPath: string) => {
+  await RegisterSchema();
   //todo: make level and signer CLI args
   const level = 0;
   const signer = 'GSF';
