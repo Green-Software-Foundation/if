@@ -43,9 +43,8 @@ You are using plugin ${path} which is not part of the Impact Framework standard 
   NOT_INITALIZED_PLUGIN: (name: string) =>
     `Not initalized plugin: ${name}. Check if ${name} is in 'manifest.initalize.plugins'.`,
   NO_OUTPUT: `
-You have not selected an output method. To see your output data, you can choose from:
---stdout: this will print your output data to the console
---output <savepath>: this will save your output data to the given filepath (do not provide file extension)
+You have not added an output command: 
+--output <savepath>: will save your output data to the given filepath (do not provide file extension)
 Note that for the '--output' option you also need to define the output type in your manifest file. See https://if.greensoftware.foundation/major-concepts/manifest-file#initialize`,
   SOURCE_IS_NOT_YAML: 'Given source file is not in yaml format.',
   TARGET_IS_NOT_YAML: 'Given target file is not in yaml format.',
