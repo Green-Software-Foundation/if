@@ -36,7 +36,7 @@ export const CONFIG = {
         type: Boolean,
         optional: true,
         alias: 'n',
-        description: '[privent output to the console]',
+        description: '[prevent output to the console]',
       },
       help: {
         type: Boolean,
