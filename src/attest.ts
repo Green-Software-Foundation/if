@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable no-process-exit */
 import {ethers} from 'ethers';
-import {readFileSync} from 'fs';
+// import {readFileSync} from 'fs';
 import * as YAML from 'js-yaml';
 import {SchemaEncoder} from '@ethereum-attestation-service/eas-sdk';
 import {execPromise} from './util/helpers';
@@ -84,13 +84,9 @@ const getManifestInfo = async (
   const unit = 'carbon per ' + functionalUnitStub;
 
   const info: ManifestInfo = {
-    // start: file.tree.children[0]['outputs'][0].timestamp,
-    // end: file.tree.children[0]['outputs'][
-    //   file.tree.children[0].outputs.length - 1
-    // ].timestamp,
     start: getManifestStart(manifest),
     end: getManifestEnd(manifest),
-    hash: GetManifestHash(manifestPath),
+    hash: GetManifestHash(manifest),
     if: GetIfVersion(),
     verified: await runIfCheck(manifestPath),
     sci: manifest.tree.aggregated.sci,
@@ -104,9 +100,9 @@ const getManifestInfo = async (
   return info;
 };
 
-const GetManifestHash = (manifestPath: string): string => {
-  const manifest = YAML.load(readFileSync(manifestPath, 'utf8'));
+const GetManifestHash = (manifest: Manifest): string => {
   const manifestAsString = YAML.dump(manifest).toString();
+  console.log(manifestAsString);
   const manifestAsBytes: Uint8Array = ethers.toUtf8Bytes(manifestAsString);
   const manifestHash = ethers.keccak256(manifestAsBytes);
   return manifestHash;
