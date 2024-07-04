@@ -1,0 +1,27 @@
+name: cloud-metadata
+description: cloud/instance-type instance type is not supported in the cloud vendor
+tags:
+initialize:
+  # outputs: ['yaml']
+  plugins:
+    cloud-metadata:
+      path: builtin
+      method: CSVLookup
+      global-config:
+        filepath: >-
+          https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv
+        query:
+          instance-class: cloud/instance-type
+        output: ['cpu-cores-utilized', 'vcpus-allocated']
+tree:
+  children:
+    child:
+      pipeline:
+        - cloud-metadata
+      config:
+      inputs:
+        - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+          cloud/vendor: aws
+          cloud/instance-type: m6
+          duration: 100
+          cpu/utilization: 10
