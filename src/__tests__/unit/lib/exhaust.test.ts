@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 jest.mock('fs', () => require('../../../__mocks__/fs'));
 
-import {ERRORS} from '@grnsft/if-core/utils';
-
 import {exhaust} from '../../../lib/exhaust';
 
-import {STRINGS} from '../../../config';
-
-const {ExhaustOutputArgError, InvalidExhaustPluginError} = ERRORS;
-const {INVALID_EXHAUST_PLUGIN, OUTPUT_REQUIRED} = STRINGS;
-
+jest.mock('../../../builtins/export-yaml', () => ({
+  ExportYaml: jest.fn().mockImplementation(() => ({
+    // @ts-ignore
+    execute: (tree, context, outputOptions) => {
+      expect(outputOptions).toBe('mock-path');
+    },
+  })),
+}));
 describe('lib/exhaust: ', () => {
   describe('exhaust(): ', () => {
     const spy = jest.spyOn(global.console, 'log');
@@ -18,12 +19,23 @@ describe('lib/exhaust: ', () => {
       spy.mockReset();
     });
 
+    it('successfully executes provided yaml file.', async () => {
+      const tree = {};
+      const context = {
+        initialize: {},
+      };
+      const outputOptions = {outputPath: 'mock-path'};
+
+      // @ts-ignore
+      await exhaust(tree, context, outputOptions);
+
+      expect.assertions(1);
+    });
+
     it('returns void if no exhaust plugin selected.', async () => {
       const tree = {};
       const context = {
-        initialize: {
-          outputs: null,
-        },
+        initialize: {},
       };
 
       // @ts-ignore
@@ -41,52 +53,6 @@ describe('lib/exhaust: ', () => {
       // @ts-ignore
       await exhaust(tree, context, {'no-outout': false});
       expect(spy).toHaveBeenCalledTimes(1);
-    });
-
-    it('rejects with cli input error if output path is not provided with yaml.', async () => {
-      const tree = {};
-      const context = {
-        initialize: {
-          outputs: ['yaml'],
-        },
-      };
-
-      expect.assertions(2);
-
-      try {
-        // @ts-ignore
-        await exhaust(tree, context, {});
-      } catch (error) {
-        expect(error).toBeInstanceOf(ExhaustOutputArgError);
-
-        if (error instanceof ExhaustOutputArgError) {
-          expect(error.message).toEqual(OUTPUT_REQUIRED);
-        }
-      }
-    });
-
-    it('rejects with module init error if output module is not supported.', async () => {
-      const tree = {};
-      const context = {
-        initialize: {
-          outputs: ['mock'],
-        },
-      };
-
-      expect.assertions(2);
-
-      try {
-        // @ts-ignore
-        await exhaust(tree, context, {});
-      } catch (error) {
-        expect(error).toBeInstanceOf(InvalidExhaustPluginError);
-
-        if (error instanceof InvalidExhaustPluginError) {
-          expect(error.message).toEqual(
-            INVALID_EXHAUST_PLUGIN(context.initialize.outputs[0])
-          );
-        }
-      }
     });
   });
 });
