@@ -1,5 +1,5 @@
-name: csv-lookup-demo
-description: null
+name: divide
+description: success path
 tags: null
 initialize:
   plugins:
@@ -8,32 +8,38 @@ initialize:
       method: CSVLookup
       global-config:
         filepath: >-
-          https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
+          https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv
         query:
-          cloud-provider: cloud/provider
-          cloud-region: cloud/region
-        output: '*'
+          instance-class: cloud/instance-type
+        output:
+          - cpu-cores-utilized
+          - vcpus-allocated
+    divide:
+      path: builtin
+      method: Divide
+      global-config:
+        numerator: vcpus-allocated
+        denominator: 2
+        output: cpu/number-cores
   outputs:
     - yaml
 execution:
   command: >-
-    /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
-    /Users/mariamkhalatova/Projects/UK/if/src/index.ts -m
-    manifests/outputs/plugins/csv-lookup/region-metadata/success.yml -o
-    manifests/outputs/plugins/csv-lookup/region-metadata/success
+    /home/joe/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
+    /home/joe/Code/if/src/index.ts -m ./manifests/plugins/divide/success.yml -o
+    ./manifests/outputs/divide
   environment:
     if-version: 0.4.0
-    os: macOS
-    os-version: '13.2'
-    node-version: 18.14.2
-    date-time: 2024-07-02T21:23:15.965Z (UTC)
+    os: linux
+    os-version: 5.15.0-113-generic
+    node-version: 21.4.0
+    date-time: 2024-07-03T14:02:26.789Z (UTC)
     dependencies:
       - '@babel/core@7.22.10'
       - '@babel/preset-typescript@7.23.3'
       - '@commitlint/cli@18.6.0'
       - '@commitlint/config-conventional@18.6.0'
       - '@grnsft/if-core@0.0.10'
-
       - '@jest/globals@29.7.0'
       - '@types/jest@29.5.8'
       - '@types/js-yaml@4.0.9'
@@ -65,28 +71,23 @@ tree:
     child:
       pipeline:
         - cloud-metadata
+        - divide
+      config:
+        divide: null
+      defaults:
+        cloud/vendor: aws
+        cloud/instance-type: m5n.large
+        cpu/name: Intel® Core™ i7-1185G7
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
-          cloud/provider: Google Cloud
-          cloud/region: asia-east1
+          cpu/utilization: 80
       outputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
-          cloud/provider: Google Cloud
-          cloud/region: asia-east1
-          year: 2022
-          cfe-region: Taiwan
-          em-zone-id: TW
-          wt-region-id: TW
-          location: Taiwan
-          geolocation: 25.0375,121.5625
-          cfe-hourly: 0.18
-          cfe-annual: nan
-          power-usage-efficiency: nan
-          net-carbon: 0
-          grid-carbon-intensity-24x7: 453
-          grid-carbon-intensity-consumption: nan
-          grid-carbon-intensity-marginal: nan
-          grid-carbon-intensity-production: nan
-          grid-carbon-intensity: 453
+          cpu/utilization: 80
+          cloud/vendor: aws
+          cloud/instance-type: m5n.large
+          cpu/name: Intel® Core™ i7-1185G7
+          vcpus-allocated: 2
+          cpu/number-cores: 1
