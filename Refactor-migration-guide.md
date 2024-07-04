@@ -8,8 +8,8 @@ If you are a IF user or developer, there are some changes you must be aware of r
 
 There have been some name changes to the CLI, specifically:
 
-- `impact-engine` --> `ie`
-  The command line tool has been renamed from `impact-engine` to simply `ie`. This means that to invoke the Impact Framework on the command line you simply use
+- `impact-engine` --> `if-run`
+  The command line tool has been renamed from `impact-engine` to simply `if-run`. This means that to invoke the Impact Framework on the command line you simply use
 
   ```
   if-run ...
@@ -61,7 +61,7 @@ npm i
 Then run IF using the following command:
 
 ```sh
-npm run if -- --manifest <path-to-manifest>
+npm run if-run -- --manifest <path-to-manifest>
 ```
 
 ## Manifest files
