@@ -2,7 +2,6 @@ name: mock-observation-demo
 description: failure with `global-config->generators->randint->cpu/utilization->min` is greater than `max`
 tags:
 initialize:
-  outputs: ['yaml']
   plugins:
     mock-observations:
       kind: plugin

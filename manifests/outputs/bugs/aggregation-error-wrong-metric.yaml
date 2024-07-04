@@ -8,8 +8,6 @@ aggregation:
     - dummy-param
   type: both
 initialize:
-  outputs:
-    - yaml
   plugins:
     interpolate:
       method: Interpolation
@@ -21,7 +19,7 @@ initialize:
           - 10
           - 50
           - 100
-        'y':
+        "y":
           - 0.12
           - 0.32
           - 0.75
@@ -85,8 +83,8 @@ initialize:
       method: TimeSync
       path: builtin
       global-config:
-        start-time: '2023-12-12T00:00:00.000Z'
-        end-time: '2023-12-12T00:01:00.000Z'
+        start-time: "2023-12-12T00:00:00.000Z"
+        end-time: "2023-12-12T00:01:00.000Z"
         interval: 5
         allow-padding: true
     group-by:
@@ -102,20 +100,20 @@ execution:
   environment:
     if-version: 0.4.0
     os: macOS
-    os-version: '13.2'
+    os-version: "13.2"
     node-version: 18.14.2
     date-time: 2024-07-01T19:25:34.759Z (UTC)
     dependencies:
-      - '@babel/core@7.22.10'
-      - '@babel/preset-typescript@7.23.3'
-      - '@commitlint/cli@18.6.0'
-      - '@commitlint/config-conventional@18.6.0'
-      - '@grnsft/if-core@0.0.10'
-      - '@jest/globals@29.7.0'
-      - '@types/jest@29.5.8'
-      - '@types/js-yaml@4.0.9'
-      - '@types/luxon@3.4.2'
-      - '@types/node@20.9.0'
+      - "@babel/core@7.22.10"
+      - "@babel/preset-typescript@7.23.3"
+      - "@commitlint/cli@18.6.0"
+      - "@commitlint/config-conventional@18.6.0"
+      - "@grnsft/if-core@0.0.10"
+      - "@jest/globals@29.7.0"
+      - "@types/jest@29.5.8"
+      - "@types/js-yaml@4.0.9"
+      - "@types/luxon@3.4.2"
+      - "@types/node@20.9.0"
       - axios-mock-adapter@1.22.0
       - axios@1.7.2
       - cross-env@7.0.3
@@ -167,25 +165,25 @@ tree:
         vcpus-allocated: 1
         vcpus-total: 8
       inputs:
-        - timestamp: '2023-12-12T00:00:00.000Z'
+        - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 1
           cpu/utilization: 10
           requests: 100
-        - timestamp: '2023-12-12T00:00:01.000Z'
+        - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
           cloud/region: uk-west
           requests: 100
-        - timestamp: '2023-12-12T00:00:06.000Z'
+        - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
           requests: 100
-        - timestamp: '2023-12-12T00:00:13.000Z'
+        - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -217,25 +215,25 @@ tree:
         vcpus-allocated: 1
         vcpus-total: 8
       inputs:
-        - timestamp: '2023-12-12T00:00:00.000Z'
+        - timestamp: "2023-12-12T00:00:00.000Z"
           duration: 1
           cpu/utilization: 30
           cloud/instance-type: A1
           cloud/region: uk-west
           requests: 100
-        - timestamp: '2023-12-12T00:00:01.000Z'
+        - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 28
           cloud/instance-type: A1
           cloud/region: uk-west
           requests: 100
-        - timestamp: '2023-12-12T00:00:06.000Z'
+        - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 40
           cloud/instance-type: A1
           cloud/region: uk-west
           requests: 100
-        - timestamp: '2023-12-12T00:00:13.000Z'
+        - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cpu/utilization: 33
           cloud/instance-type: A1

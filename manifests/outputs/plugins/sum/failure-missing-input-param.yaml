@@ -2,8 +2,6 @@ name: sum
 description: failure with `inputs[0]` misses one of `global-config.input-parameters`
 tags: null
 initialize:
-  outputs:
-    - yaml
   plugins:
     sum:
       method: Sum

@@ -2,8 +2,6 @@ name: cloud-metadata
 description: failing because cloud/vendor is not provided
 tags: null
 initialize:
-  outputs:
-    - yaml
   plugins:
     cloud-metadata:
       path: builtin
