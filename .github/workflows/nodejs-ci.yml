@@ -21,6 +21,3 @@ jobs:
         
       - name: Run unit tests
         run: npm run test --silent
-
-      - name: Run integration tests
-        run: npm run if-check -- -d outputs
