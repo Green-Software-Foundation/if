@@ -115,7 +115,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 93
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:05:00.000Z'
               duration: 300
               name: server-1
@@ -123,7 +123,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 6
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:10:00.000Z'
               duration: 300
               name: server-1
@@ -131,7 +131,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 6
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:15:00.000Z'
               duration: 300
               name: server-1
@@ -139,7 +139,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 3
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:20:00.000Z'
               duration: 300
               name: server-1
@@ -155,7 +155,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 85
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:30:00.000Z'
               duration: 300
               name: server-1
@@ -163,7 +163,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 8
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:35:00.000Z'
               duration: 300
               name: server-1
@@ -171,7 +171,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 59
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:40:00.000Z'
               duration: 300
               name: server-1
@@ -179,7 +179,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 55
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:45:00.000Z'
               duration: 300
               name: server-1
@@ -187,7 +187,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 85
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:50:00.000Z'
               duration: 300
               name: server-1
@@ -195,7 +195,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 52
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:55:00.000Z'
               duration: 300
               name: server-1
@@ -203,7 +203,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 54
+              cpu/utilization: '*'
           outputs:
             - timestamp: '2024-03-05T00:00:00.000Z'
               duration: 300
@@ -212,7 +212,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 93
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:05:00.000Z'
               duration: 300
@@ -221,7 +221,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 6
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:10:00.000Z'
               duration: 300
@@ -230,7 +230,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 6
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:15:00.000Z'
               duration: 300
@@ -239,7 +239,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 3
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:20:00.000Z'
               duration: 300
@@ -248,7 +248,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 83
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:25:00.000Z'
               duration: 300
@@ -257,7 +257,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 85
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:30:00.000Z'
               duration: 300
@@ -266,7 +266,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 8
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:35:00.000Z'
               duration: 300
@@ -284,7 +284,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 55
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:45:00.000Z'
               duration: 300
@@ -293,7 +293,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 85
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:50:00.000Z'
               duration: 300
@@ -302,7 +302,7 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 52
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:55:00.000Z'
               duration: 300
@@ -311,49 +311,49 @@ tree:
               cloud/region: eastus
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 54
+              cpu/utilization: '*'
               cpu-tdp: 270
           aggregated:
-            cpu/utilization: 49.083333333333336
+            cpu/utilization: '*'
       outputs:
-        - cpu/utilization: 93
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:00:00.000Z'
           duration: 300
-        - cpu/utilization: 6
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:05:00.000Z'
           duration: 300
-        - cpu/utilization: 6
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:10:00.000Z'
           duration: 300
-        - cpu/utilization: 3
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:15:00.000Z'
           duration: 300
-        - cpu/utilization: 83
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:20:00.000Z'
           duration: 300
-        - cpu/utilization: 85
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:25:00.000Z'
           duration: 300
-        - cpu/utilization: 8
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:30:00.000Z'
           duration: 300
-        - cpu/utilization: 59
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:35:00.000Z'
           duration: 300
-        - cpu/utilization: 55
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:40:00.000Z'
           duration: 300
-        - cpu/utilization: 85
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:45:00.000Z'
           duration: 300
-        - cpu/utilization: 52
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:50:00.000Z'
           duration: 300
-        - cpu/utilization: 54
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:55:00.000Z'
           duration: 300
       aggregated:
-        cpu/utilization: 49.083333333333336
+        cpu/utilization: '*'
     server-2:
       children:
         Standard_E64_v3:
@@ -365,7 +365,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 4
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:05:00.000Z'
               duration: 300
               name: server-2
@@ -373,7 +373,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 63
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:10:00.000Z'
               duration: 300
               name: server-2
@@ -381,7 +381,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 38
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:15:00.000Z'
               duration: 300
               name: server-2
@@ -389,7 +389,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 10
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:20:00.000Z'
               duration: 300
               name: server-2
@@ -397,7 +397,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 88
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:25:00.000Z'
               duration: 300
               name: server-2
@@ -405,7 +405,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 81
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:30:00.000Z'
               duration: 300
               name: server-2
@@ -413,7 +413,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 17
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:35:00.000Z'
               duration: 300
               name: server-2
@@ -421,7 +421,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 11
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:40:00.000Z'
               duration: 300
               name: server-2
@@ -429,7 +429,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 76
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:45:00.000Z'
               duration: 300
               name: server-2
@@ -437,7 +437,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 63
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:50:00.000Z'
               duration: 300
               name: server-2
@@ -445,7 +445,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 81
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:55:00.000Z'
               duration: 300
               name: server-2
@@ -453,7 +453,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 74
+              cpu/utilization: '*'
           outputs:
             - timestamp: '2024-03-05T00:00:00.000Z'
               duration: 300
@@ -462,7 +462,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 4
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:05:00.000Z'
               duration: 300
@@ -471,7 +471,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 63
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:10:00.000Z'
               duration: 300
@@ -480,7 +480,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 38
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:15:00.000Z'
               duration: 300
@@ -489,7 +489,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 10
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:20:00.000Z'
               duration: 300
@@ -498,7 +498,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 88
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:25:00.000Z'
               duration: 300
@@ -507,7 +507,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 81
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:30:00.000Z'
               duration: 300
@@ -516,7 +516,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 17
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:35:00.000Z'
               duration: 300
@@ -525,7 +525,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 11
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:40:00.000Z'
               duration: 300
@@ -534,7 +534,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 76
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:45:00.000Z'
               duration: 300
@@ -543,7 +543,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 63
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:50:00.000Z'
               duration: 300
@@ -552,7 +552,7 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 81
+              cpu/utilization: '*'
               cpu-tdp: 270
             - timestamp: '2024-03-05T00:55:00.000Z'
               duration: 300
@@ -561,85 +561,85 @@ tree:
               cloud/region: france
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
-              cpu/utilization: 74
+              cpu/utilization: '*'
               cpu-tdp: 270
           aggregated:
-            cpu/utilization: 50.5
+            cpu/utilization: '*'
       outputs:
-        - cpu/utilization: 4
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:00:00.000Z'
           duration: 300
-        - cpu/utilization: 63
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:05:00.000Z'
           duration: 300
-        - cpu/utilization: 38
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:10:00.000Z'
           duration: 300
-        - cpu/utilization: 10
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:15:00.000Z'
           duration: 300
-        - cpu/utilization: 88
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:20:00.000Z'
           duration: 300
-        - cpu/utilization: 81
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:25:00.000Z'
           duration: 300
-        - cpu/utilization: 17
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:30:00.000Z'
           duration: 300
-        - cpu/utilization: 11
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:35:00.000Z'
           duration: 300
-        - cpu/utilization: 76
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:40:00.000Z'
           duration: 300
-        - cpu/utilization: 63
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:45:00.000Z'
           duration: 300
-        - cpu/utilization: 81
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:50:00.000Z'
           duration: 300
-        - cpu/utilization: 74
+        - cpu/utilization: '*'
           timestamp: '2024-03-05T00:55:00.000Z'
           duration: 300
       aggregated:
-        cpu/utilization: 50.5
+        cpu/utilization: '*'
   outputs:
-    - cpu/utilization: 48.5
+    - cpu/utilization: '*'
       timestamp: '2024-03-05T00:00:00.000Z'
       duration: 300
-    - cpu/utilization: 34.5
+    - cpu/utilization: '*'
       timestamp: '2024-03-05T00:05:00.000Z'
       duration: 300
-    - cpu/utilization: 22
+    - cpu/utilization: '*'
       timestamp: '2024-03-05T00:10:00.000Z'
       duration: 300
-    - cpu/utilization: 6.5
+    - cpu/utilization: '*'
       timestamp: '2024-03-05T00:15:00.000Z'
       duration: 300
-    - cpu/utilization: 85.5
+    - cpu/utilization: '*'
       timestamp: '2024-03-05T00:20:00.000Z'
       duration: 300
-    - cpu/utilization: 83
+    - cpu/utilization: '*'
       timestamp: '2024-03-05T00:25:00.000Z'
       duration: 300
-    - cpu/utilization: 12.5
+    - cpu/utilization: '*'
       timestamp: '2024-03-05T00:30:00.000Z'
       duration: 300
-    - cpu/utilization: 35
+    - cpu/utilization: '*'
       timestamp: '2024-03-05T00:35:00.000Z'
       duration: 300
-    - cpu/utilization: 65.5
+    - cpu/utilization: '*'
       timestamp: '2024-03-05T00:40:00.000Z'
       duration: 300
-    - cpu/utilization: 74
+    - cpu/utilization: '*'
       timestamp: '2024-03-05T00:45:00.000Z'
       duration: 300
-    - cpu/utilization: 66.5
+    - cpu/utilization: '*'
       timestamp: '2024-03-05T00:50:00.000Z'
       duration: 300
-    - cpu/utilization: 64
+    - cpu/utilization: '*'
       timestamp: '2024-03-05T00:55:00.000Z'
       duration: 300
   aggregated:
-    cpu/utilization: 49.791666666666664
+    cpu/utilization: '*'
