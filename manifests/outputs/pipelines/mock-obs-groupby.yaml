@@ -94,42 +94,42 @@ tree:
               cloud/instance-type: Standard_E64_v3
               cloud/region: westus3
               cloud/vendor: azure
-              cpu/utilization: 12
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:00:10.000Z'
               duration: 10
               name: server-1
               cloud/instance-type: Standard_E64_v3
               cloud/region: westus3
               cloud/vendor: azure
-              cpu/utilization: 71
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:00:20.000Z'
               duration: 10
               name: server-1
               cloud/instance-type: Standard_E64_v3
               cloud/region: westus3
               cloud/vendor: azure
-              cpu/utilization: 75
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:00:30.000Z'
               duration: 10
               name: server-1
               cloud/instance-type: Standard_E64_v3
               cloud/region: westus3
               cloud/vendor: azure
-              cpu/utilization: 39
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:00:40.000Z'
               duration: 10
               name: server-1
               cloud/instance-type: Standard_E64_v3
               cloud/region: westus3
               cloud/vendor: azure
-              cpu/utilization: 42
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:00:50.000Z'
               duration: 10
               name: server-1
               cloud/instance-type: Standard_E64_v3
               cloud/region: westus3
               cloud/vendor: azure
-              cpu/utilization: 98
+              cpu/utilization: '*'
     france:
       children:
         server-2:
@@ -140,39 +140,39 @@ tree:
               cloud/instance-type: Standard_E64_v3
               cloud/region: france
               cloud/vendor: azure
-              cpu/utilization: 14
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:00:10.000Z'
               duration: 10
               name: server-2
               cloud/instance-type: Standard_E64_v3
               cloud/region: france
               cloud/vendor: azure
-              cpu/utilization: 80
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:00:20.000Z'
               duration: 10
               name: server-2
               cloud/instance-type: Standard_E64_v3
               cloud/region: france
               cloud/vendor: azure
-              cpu/utilization: 53
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:00:30.000Z'
               duration: 10
               name: server-2
               cloud/instance-type: Standard_E64_v3
               cloud/region: france
               cloud/vendor: azure
-              cpu/utilization: 10
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:00:40.000Z'
               duration: 10
               name: server-2
               cloud/instance-type: Standard_E64_v3
               cloud/region: france
               cloud/vendor: azure
-              cpu/utilization: 40
+              cpu/utilization: '*'
             - timestamp: '2024-03-05T00:00:50.000Z'
               duration: 10
               name: server-2
               cloud/instance-type: Standard_E64_v3
               cloud/region: france
               cloud/vendor: azure
-              cpu/utilization: 92
+              cpu/utilization: '*'
