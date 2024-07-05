@@ -51,8 +51,11 @@ const IfCheck = async () => {
     }
 
     for await (const file of files) {
-      const fileName = path.basename(file);
-      console.log(IF_CHECK_EXECUTING(fileName));
+      const fileRelativePath = path.relative(
+        process.env.CURRENT_DIR || process.cwd(),
+        file
+      );
+      console.log(IF_CHECK_EXECUTING(fileRelativePath));
 
       try {
         await executeCommands(file, true);
