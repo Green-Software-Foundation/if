@@ -11,10 +11,8 @@ import {logger} from '../common/util/logger';
 import {debugLogger} from '../common/util/debug-logger';
 
 import {STRINGS} from './config';
-import {STRINGS as COMMON_STRINGS} from '../common/config';
 
-const {FAILURE_MESSAGE} = STRINGS;
-const {SUCCESS_MESSAGE} = COMMON_STRINGS;
+const {FAILURE_MESSAGE, SUCCESS_MESSAGE} = STRINGS;
 
 const IfDiff = async () => {
   const pipedSourceManifest = await parseManifestFromStdin();
