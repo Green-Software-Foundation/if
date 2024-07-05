@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /* eslint-disable no-process-exit */
+import {debugLogger} from './util/debug-logger';
 import {parseIfEnvArgs} from './util/args';
 import {logger} from './util/logger';
 
@@ -16,6 +17,9 @@ const {IF_ENV} = CONFIG;
 const {SUCCESS_MESSAGE} = IF_ENV;
 
 const IfEnv = async () => {
+  // Call this function with false parameter to prevent log debug messages.
+  debugLogger.overrideConsoleMethods(false);
+
   const commandArgs = await parseIfEnvArgs();
   const options: EnvironmentOptions = {
     folderPath: process.env.CURRENT_DIR || process.cwd(),
