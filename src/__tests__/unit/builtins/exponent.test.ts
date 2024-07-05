@@ -1,10 +1,10 @@
-import {Exponent} from '../../../builtins/exponent';
+import {ERRORS} from '@grnsft/if-core/utils';
 
-import {ERRORS} from '../../../util/errors';
+import {Exponent} from '../../../builtins/exponent';
 
 const {InputValidationError} = ERRORS;
 
-describe('lib/exponent: ', () => {
+describe('builtins/exponent: ', () => {
   describe('Exponent: ', () => {
     const globalConfig = {
       'input-parameter': 'energy/base',
@@ -45,9 +45,6 @@ describe('lib/exponent: ', () => {
       });
 
       it('throws an error on missing params in input.', async () => {
-        const expectedMessage =
-          'Exponent: energy/base is missing from the input array.';
-
         expect.assertions(1);
 
         try {
@@ -59,27 +56,30 @@ describe('lib/exponent: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(expectedMessage)
+            new InputValidationError(
+              '"input-parameter" parameter is required. Error code: invalid_type.'
+            )
           );
         }
       });
 
       it('throws an error on input param value not numeric.', async () => {
-        const expectedMessage = 'Exponent: i-am-not-a-number is not numeric.';
-
         expect.assertions(1);
+        const input = [
+          {
+            duration: 3600,
+            'energy/base': 'i-am-not-a-number',
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
 
         try {
-          await exponent.execute([
-            {
-              duration: 3600,
-              'energy/base': 'i-am-not-a-number',
-              timestamp: '2021-01-01T00:00:00Z',
-            },
-          ]);
+          await exponent.execute(input);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(expectedMessage)
+            new InputValidationError(
+              '"input-parameter" parameter is expected number, received string. Error code: invalid_type.'
+            )
           );
         }
       });

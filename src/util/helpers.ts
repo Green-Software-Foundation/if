@@ -1,24 +1,41 @@
+#!/usr/bin/env node
+/* eslint-disable no-process-exit */
 import {createInterface} from 'node:readline/promises';
 import {exec} from 'node:child_process';
 import {promisify} from 'node:util';
-import {ErrorFormatParams} from '../types/helpers';
-import {ERRORS} from './errors';
-import {logger} from './logger';
-import {STRINGS} from '../config';
+
+import * as fs from 'fs/promises';
+import * as path from 'path';
+
+import {ERRORS} from '@grnsft/if-core/utils';
+
+import {STRINGS, CONFIG} from '../config';
 
 import {Difference} from '../types/lib/compare';
 
-const {ISSUE_TEMPLATE} = STRINGS;
+import {load} from '../lib/load';
 
-/**
- * Formats given error according to class instance, scope and message.
- */
-export const buildErrorMessage =
-  (classInstanceName: string) => (params: ErrorFormatParams) => {
-    const {scope, message} = params;
+import {
+  installDependencies,
+  initPackageJsonIfNotExists,
+  updatePackageJsonDependencies,
+  extractPathsWithVersion,
+  updatePackageJsonProperties,
+} from './npm';
 
-    return `${classInstanceName}${scope ? `(${scope})` : ''}: ${message}.`;
-  };
+import {logger} from './logger';
+import {EnvironmentOptions} from '../types/if-env';
+
+const {IF_ENV} = CONFIG;
+const {
+  FAILURE_MESSAGE,
+  FAILURE_MESSAGE_TEMPLATE,
+  FAILURE_MESSAGE_DEPENDENCIES,
+} = IF_ENV;
+
+const {UNSUPPORTED_ERROR, IF_CHECK_FAILED, IF_CHECK_SUMMARY_ERROR_MESSAGE} =
+  STRINGS;
+const {MissingPluginDependenciesError} = ERRORS;
 
 /**
  * Impact engine error handler. Logs errors and appends issue template if error is unknown.
@@ -29,7 +46,9 @@ export const andHandle = (error: Error) => {
   logger.error(error);
 
   if (!knownErrors.includes(error.name)) {
-    logger.warn(ISSUE_TEMPLATE);
+    logger.error(UNSUPPORTED_ERROR(error.name));
+    // eslint-disable-next-line no-process-exit
+    process.exit(2);
   }
 };
 
@@ -164,7 +183,7 @@ const collectPipedData = async () => {
 
 /**
  * Checks if there is piped data, tries to parse yaml from it.
- * Throws error if there is piped info, but there is no valid manifest.
+ * Returns empty string if haven't found anything.
  */
 export const parseManifestFromStdin = async () => {
   const pipedSourceManifest = await collectPipedData();
@@ -177,8 +196,90 @@ export const parseManifestFromStdin = async () => {
   const match = regex.exec(pipedSourceManifest);
 
   if (!match) {
-    throw new Error('Manifest not found in STDIN.');
+    return '';
   }
 
   return match![1];
+};
+
+/**
+ * Gets the folder path of the manifest file, dependencies from manifest file and install argument from the given arguments.
+ */
+export const getOptionsFromArgs = async (commandArgs: {
+  manifest: string;
+  install: boolean | undefined;
+}) => {
+  const {manifest, install} = commandArgs;
+  const folderPath = path.dirname(manifest);
+  const loadedManifest = await load(manifest);
+  const rawManifest = loadedManifest.rawManifest;
+  const plugins = rawManifest?.initialize?.plugins || {};
+  const dependencies = rawManifest?.execution?.environment.dependencies || [];
+
+  if (!dependencies.length) {
+    throw new MissingPluginDependenciesError(FAILURE_MESSAGE_DEPENDENCIES);
+  }
+
+  const pathsWithVersion = extractPathsWithVersion(plugins, dependencies);
+
+  return {
+    folderPath,
+    dependencies: pathsWithVersion,
+    install,
+  };
+};
+
+/**
+ * Creates folder if not exists, installs dependencies if required, update depenedencies.
+ */
+export const initializeAndInstallLibs = async (options: EnvironmentOptions) => {
+  try {
+    const {folderPath, install, cwd, dependencies} = options;
+    const packageJsonPath = await initPackageJsonIfNotExists(folderPath);
+
+    await updatePackageJsonProperties(packageJsonPath, cwd);
+
+    if (install) {
+      await installDependencies(folderPath, dependencies);
+    } else {
+      await updatePackageJsonDependencies(packageJsonPath, dependencies, cwd);
+    }
+  } catch (error) {
+    console.log(FAILURE_MESSAGE);
+    process.exit(2);
+  }
+};
+
+/**
+ * Adds a manifest template to the folder where the if-env CLI command runs.
+ */
+export const addTemplateManifest = async (destinationDir: string) => {
+  try {
+    const templateManifest = path.resolve(
+      __dirname,
+      '../config/env-template.yml'
+    );
+
+    const destinationPath = path.resolve(destinationDir, 'manifest.yml');
+    const data = await fs.readFile(templateManifest, 'utf-8');
+
+    await fs.writeFile(destinationPath, data, 'utf-8');
+  } catch (error) {
+    console.log(FAILURE_MESSAGE_TEMPLATE);
+    process.exit(1);
+  }
+};
+
+/**
+ * Logs the failure message from the stdout of an error.
+ */
+export const logStdoutFailMessage = (error: any, fileName: string) => {
+  console.log(IF_CHECK_FAILED(fileName));
+
+  const stdout = error.stdout;
+  const logs = stdout.split('\n\n');
+  const failMessage = logs[logs.length - 1];
+
+  console.log(failMessage);
+  return IF_CHECK_SUMMARY_ERROR_MESSAGE(fileName, failMessage);
 };

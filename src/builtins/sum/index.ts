@@ -1,13 +1,13 @@
 import {z} from 'zod';
-
-import {ExecutePlugin, PluginParams} from '../../types/interface';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {ExecutePlugin, PluginParams, SumConfig} from '@grnsft/if-core/types';
 
 import {validate} from '../../util/validations';
-import {ERRORS} from '../../util/errors';
 
-import {SumConfig} from './types';
+import {STRINGS} from '../../config';
 
-const {InputValidationError, ConfigNotFoundError} = ERRORS;
+const {GlobalConfigError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
 export const Sum = (globalConfig: SumConfig): ExecutePlugin => {
   const metadata = {
@@ -23,11 +23,11 @@ export const Sum = (globalConfig: SumConfig): ExecutePlugin => {
     const outputParameter = safeGlobalConfig['output-parameter'];
 
     return inputs.map(input => {
-      const safeInput = validateSingleInput(input, inputParameters);
+      validateSingleInput(input, inputParameters);
 
       return {
         ...input,
-        [outputParameter]: calculateSum(safeInput, inputParameters),
+        [outputParameter]: calculateSum(input, inputParameters),
       };
     });
   };
@@ -37,7 +37,7 @@ export const Sum = (globalConfig: SumConfig): ExecutePlugin => {
    */
   const validateGlobalConfig = () => {
     if (!globalConfig) {
-      throw new ConfigNotFoundError('Global config is not provided.');
+      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }
 
     const globalConfigSchema = z.object({
@@ -58,13 +58,16 @@ export const Sum = (globalConfig: SumConfig): ExecutePlugin => {
     input: PluginParams,
     inputParameters: string[]
   ) => {
-    inputParameters.forEach(metricToSum => {
-      if (!input[metricToSum]) {
-        throw new InputValidationError(
-          `${metricToSum} is missing from the input array.`
-        );
-      }
-    });
+    const inputData = inputParameters.reduce(
+      (acc, param) => {
+        acc[param] = input[param];
+
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+    const validationSchema = z.record(z.string(), z.number());
+    validate(validationSchema, inputData);
 
     return input;
   };

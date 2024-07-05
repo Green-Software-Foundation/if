@@ -1,12 +1,13 @@
+import {ERRORS} from '@grnsft/if-core/utils';
+
 import {saveYamlFileAs} from '../util/yaml';
-import {ERRORS} from '../util/errors';
+
+import {STRINGS} from '../config';
 
 import {Context} from '../types/manifest';
 
-import {STRINGS} from '../config/strings';
-
-const {ExhaustError} = ERRORS;
-const {EXPORTING_TO_YAML_FILE} = STRINGS;
+const {ExhaustOutputArgError} = ERRORS;
+const {OUTPUT_REQUIRED, EXPORTING_TO_YAML_FILE} = STRINGS;
 
 export const ExportYaml = () => {
   /** Takes string before hashtag. */
@@ -17,7 +18,7 @@ export const ExportYaml = () => {
    */
   const execute = async (tree: any, context: Context, outputPath: string) => {
     if (!outputPath) {
-      throw new ExhaustError('Output path is required.');
+      throw new ExhaustOutputArgError(OUTPUT_REQUIRED);
     }
 
     const outputFile = {

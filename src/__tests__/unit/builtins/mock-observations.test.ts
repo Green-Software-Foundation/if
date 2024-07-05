@@ -1,10 +1,13 @@
+import {ERRORS} from '@grnsft/if-core/utils';
+
 import {MockObservations} from '../../../builtins/mock-observations';
 
-import {ERRORS} from '../../../util/errors';
+import {STRINGS} from '../../../config';
 
-const {InputValidationError} = ERRORS;
+const {InputValidationError, GlobalConfigError} = ERRORS;
+const {INVALID_MIN_MAX} = STRINGS;
 
-describe('lib/mock-observations: ', () => {
+describe('builtins/mock-observations: ', () => {
   describe('init: ', () => {
     it('successfully initalized.', () => {
       const mockObservations = MockObservations({
@@ -88,8 +91,6 @@ describe('lib/mock-observations: ', () => {
     });
 
     it('throws an error when the `min` is greater then `max` of `randint` config.', async () => {
-      const errorMessage =
-        'RandIntGenerator: Min value should not be greater than or equal to max value of cpu/utilization.';
       const config = {
         'timestamp-from': '2023-07-06T00:00',
         'timestamp-to': '2023-07-06T00:01',
@@ -112,8 +113,10 @@ describe('lib/mock-observations: ', () => {
       try {
         await mockObservations.execute([]);
       } catch (error) {
-        expect(error).toBeInstanceOf(InputValidationError);
-        expect(error).toEqual(new InputValidationError(errorMessage));
+        expect(error).toBeInstanceOf(GlobalConfigError);
+        expect(error).toEqual(
+          new GlobalConfigError(INVALID_MIN_MAX('cpu/utilization'))
+        );
       }
     });
 

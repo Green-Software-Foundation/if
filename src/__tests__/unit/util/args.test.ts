@@ -1,5 +1,20 @@
 const processRunningPath = process.cwd();
 
+jest.mock('../../../util/fs', () => ({
+  isFileExists: () => {
+    if (process.env.fileExists === 'true') {
+      return true;
+    }
+    return false;
+  },
+  isDirectoryExists: () => {
+    if (process.env.directoryExists === 'true') {
+      return true;
+    }
+    return false;
+  },
+}));
+
 jest.mock('ts-command-line-args', () => ({
   __esModule: true,
   parse: () => {
@@ -60,6 +75,27 @@ jest.mock('ts-command-line-args', () => ({
         throw new Error('mock-error');
       case 'diff-throw':
         throw 'mock-error';
+      /** If-env mocks */
+      case 'manifest-install-provided':
+        return {
+          install: true,
+          manifest: 'mock-manifest.yaml',
+        };
+      case 'manifest-is-not-yaml':
+        return {manifest: 'manifest'};
+      case 'manifest-path-invalid':
+        throw new Error(MANIFEST_NOT_FOUND);
+      case 'env-throw-error':
+        throw new Error('mock-error');
+      case 'env-throw':
+        throw 'mock-error';
+      /** If-check */
+      case 'manifest-is-provided':
+        return {manifest: 'mock-manifest.yaml'};
+      case 'directory-is-provided':
+        return {directory: '/mock-directory'};
+      case 'flags-are-not-provided':
+        return {manifest: undefined, directory: undefined};
       default:
         return {
           manifest: 'mock-manifest.yaml',
@@ -69,21 +105,33 @@ jest.mock('ts-command-line-args', () => ({
   },
 }));
 
-import path = require('path');
+import * as path from 'node:path';
+import {ERRORS} from '@grnsft/if-core/utils';
 
-import {parseIEProcessArgs, parseIfDiffArgs} from '../../../util/args';
-import {ERRORS} from '../../../util/errors';
+import {
+  parseIEProcessArgs,
+  parseIfCheckArgs,
+  parseIfDiffArgs,
+  parseIfEnvArgs,
+} from '../../../util/args';
 
 import {STRINGS} from '../../../config';
 
-const {CliInputError} = ERRORS;
+const {
+  CliSourceFileError,
+  ParseCliParamsError,
+  InvalidDirectoryError,
+  MissingCliFlagsError,
+} = ERRORS;
 
 const {
   MANIFEST_IS_MISSING,
-  FILE_IS_NOT_YAML,
   TARGET_IS_NOT_YAML,
   INVALID_TARGET,
   SOURCE_IS_NOT_YAML,
+  MANIFEST_NOT_FOUND,
+  DIRECTORY_NOT_FOUND,
+  IF_CHECK_FLAGS_MISSING,
 } = STRINGS;
 
 describe('util/args: ', () => {
@@ -106,8 +154,8 @@ describe('util/args: ', () => {
       try {
         parseIEProcessArgs();
       } catch (error) {
-        expect(error).toBeInstanceOf(CliInputError);
-        expect(error).toEqual(new CliInputError(MANIFEST_IS_MISSING));
+        expect(error).toBeInstanceOf(ParseCliParamsError);
+        expect(error).toEqual(new ParseCliParamsError(MANIFEST_IS_MISSING));
       }
 
       process.env.result = 'manifest-is-missing';
@@ -115,8 +163,8 @@ describe('util/args: ', () => {
       try {
         parseIEProcessArgs();
       } catch (error) {
-        expect(error).toBeInstanceOf(CliInputError);
-        expect(error).toEqual(new CliInputError(MANIFEST_IS_MISSING));
+        expect(error).toBeInstanceOf(CliSourceFileError);
+        expect(error).toEqual(new CliSourceFileError(MANIFEST_IS_MISSING));
       }
     });
 
@@ -195,8 +243,8 @@ describe('util/args: ', () => {
       try {
         parseIEProcessArgs();
       } catch (error) {
-        expect(error).toBeInstanceOf(CliInputError);
-        expect(error).toEqual(new CliInputError(FILE_IS_NOT_YAML));
+        expect(error).toBeInstanceOf(CliSourceFileError);
+        expect(error).toEqual(new CliSourceFileError(SOURCE_IS_NOT_YAML));
       }
     });
 
@@ -226,7 +274,7 @@ describe('util/args: ', () => {
         parseIfDiffArgs();
       } catch (error) {
         if (error instanceof Error) {
-          expect(error).toEqual(new CliInputError(INVALID_TARGET));
+          expect(error).toEqual(new ParseCliParamsError(INVALID_TARGET));
         }
       }
     });
@@ -239,7 +287,7 @@ describe('util/args: ', () => {
         parseIfDiffArgs();
       } catch (error) {
         if (error instanceof Error) {
-          expect(error).toEqual(new CliInputError(TARGET_IS_NOT_YAML));
+          expect(error).toEqual(new ParseCliParamsError(TARGET_IS_NOT_YAML));
         }
       }
     });
@@ -260,7 +308,7 @@ describe('util/args: ', () => {
         parseIfDiffArgs();
       } catch (error) {
         if (error instanceof Error) {
-          expect(error).toEqual(new CliInputError(SOURCE_IS_NOT_YAML));
+          expect(error).toEqual(new ParseCliParamsError(SOURCE_IS_NOT_YAML));
         }
       }
     });
@@ -282,7 +330,7 @@ describe('util/args: ', () => {
         parseIfDiffArgs();
       } catch (error) {
         if (error instanceof Error) {
-          expect(error).toEqual(new CliInputError('mock-error'));
+          expect(error).toEqual(new ParseCliParamsError('mock-error'));
         }
       }
     });
@@ -293,6 +341,177 @@ describe('util/args: ', () => {
 
       try {
         parseIfDiffArgs();
+      } catch (error) {
+        expect(error).toEqual('mock-error');
+      }
+    });
+  });
+
+  describe('parseIfEnvArgs(): ', () => {
+    it('executes if `manifest` is missing.', async () => {
+      process.env.fileExists = 'true';
+      process.env.result = 'manifest-is-missing';
+      const response = await parseIfEnvArgs();
+
+      expect.assertions(1);
+
+      expect(response).toEqual({install: undefined});
+    });
+
+    it('executes if `manifest` and `install` are provided.', async () => {
+      process.env.fileExists = 'true';
+      process.env.result = 'manifest-install-provided';
+
+      const response = await parseIfEnvArgs();
+
+      expect.assertions(2);
+      expect(response).toHaveProperty('install');
+      expect(response).toHaveProperty('manifest');
+    });
+
+    it('throws an error if `manifest` is not a yaml.', async () => {
+      process.env.fileExists = 'true';
+      process.env.result = 'manifest-is-not-yaml';
+      expect.assertions(1);
+
+      try {
+        await parseIfEnvArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliSourceFileError(SOURCE_IS_NOT_YAML));
+        }
+      }
+    });
+
+    it('throws an error if `manifest` path is invalid.', async () => {
+      process.env.fileExists = 'false';
+      expect.assertions(1);
+
+      try {
+        await parseIfEnvArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new ParseCliParamsError(MANIFEST_NOT_FOUND));
+        }
+      }
+    });
+
+    it('throws an error if parsing failed.', async () => {
+      process.env.result = 'env-throw-error';
+      expect.assertions(1);
+
+      try {
+        await parseIfEnvArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new ParseCliParamsError('mock-error'));
+        }
+      }
+    });
+
+    it('throws error if parsing failed (not instance of error).', async () => {
+      process.env.result = 'env-throw';
+      expect.assertions(1);
+
+      try {
+        await parseIfEnvArgs();
+      } catch (error) {
+        expect(error).toEqual('mock-error');
+      }
+    });
+  });
+
+  describe('parseIfCheckArgs(): ', () => {
+    it('executes when `manifest` is provided.', async () => {
+      process.env.fileExists = 'true';
+      process.env.result = 'manifest-is-provided';
+      const response = await parseIfCheckArgs();
+
+      expect.assertions(1);
+
+      expect(response).toEqual({manifest: 'mock-manifest.yaml'});
+    });
+
+    it('executes when the `directory` is provided.', async () => {
+      process.env.directoryExists = 'true';
+      process.env.result = 'directory-is-provided';
+
+      const response = await parseIfCheckArgs();
+
+      expect.assertions(1);
+
+      expect(response).toEqual({directory: '/mock-directory'});
+    });
+
+    it('throws an error when the `directory` does not exist.', async () => {
+      process.env.directoryExists = 'false';
+      process.env.result = 'directory-is-provided';
+      expect.assertions(1);
+
+      try {
+        await parseIfCheckArgs();
+      } catch (error) {
+        expect(error).toEqual(new InvalidDirectoryError(DIRECTORY_NOT_FOUND));
+      }
+    });
+
+    it('throws an error when both `manifest` and `directory` flags are not provided.', async () => {
+      process.env.result = 'flags-are-not-provided';
+      expect.assertions(1);
+
+      try {
+        await parseIfCheckArgs();
+      } catch (error) {
+        expect(error).toEqual(new MissingCliFlagsError(IF_CHECK_FLAGS_MISSING));
+      }
+    });
+
+    it('throws an error if `manifest` is not a yaml.', async () => {
+      process.env.fileExists = 'true';
+      process.env.result = 'manifest-is-not-yaml';
+      expect.assertions(1);
+
+      try {
+        await parseIfCheckArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new CliSourceFileError(SOURCE_IS_NOT_YAML));
+        }
+      }
+    });
+
+    it('throws an error if `manifest` path is invalid.', async () => {
+      process.env.fileExists = 'false';
+      expect.assertions(1);
+
+      try {
+        await parseIfCheckArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new ParseCliParamsError(MANIFEST_NOT_FOUND));
+        }
+      }
+    });
+
+    it('throws an error if parsing failed.', async () => {
+      process.env.result = 'env-throw-error';
+      expect.assertions(1);
+
+      try {
+        await parseIfCheckArgs();
+      } catch (error) {
+        if (error instanceof Error) {
+          expect(error).toEqual(new ParseCliParamsError('mock-error'));
+        }
+      }
+    });
+
+    it('throws error if parsing failed (not instance of error).', async () => {
+      process.env.result = 'env-throw';
+      expect.assertions(1);
+
+      try {
+        await parseIfCheckArgs();
       } catch (error) {
         expect(error).toEqual('mock-error');
       }

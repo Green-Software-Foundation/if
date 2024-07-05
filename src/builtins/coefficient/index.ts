@@ -1,13 +1,17 @@
 import {z} from 'zod';
-
-import {ExecutePlugin, PluginParams} from '../../types/interface';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  CoefficientConfig,
+  ExecutePlugin,
+  PluginParams,
+} from '@grnsft/if-core/types';
 
 import {validate} from '../../util/validations';
-import {ERRORS} from '../../util/errors';
 
-import {CoefficientConfig} from './types';
+import {STRINGS} from '../../config';
 
-const {ConfigNotFoundError} = ERRORS;
+const {GlobalConfigError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
 export const Coefficient = (globalConfig: CoefficientConfig): ExecutePlugin => {
   const metadata = {
@@ -24,11 +28,26 @@ export const Coefficient = (globalConfig: CoefficientConfig): ExecutePlugin => {
     const coefficient = safeGlobalConfig['coefficient'];
 
     return inputs.map(input => {
+      validateSingleInput(input, inputParameter);
+
       return {
         ...input,
         [outputParameter]: calculateProduct(input, inputParameter, coefficient),
       };
     });
+  };
+
+  /**
+   * Checks for required fields in input.
+   */
+  const validateSingleInput = (input: PluginParams, inputParameter: string) => {
+    const inputData = {
+      'input-parameter': input[inputParameter],
+    };
+    const validationSchema = z.record(z.string(), z.number());
+    validate(validationSchema, inputData);
+
+    return input;
   };
 
   /**
@@ -45,7 +64,7 @@ export const Coefficient = (globalConfig: CoefficientConfig): ExecutePlugin => {
    */
   const validateGlobalConfig = () => {
     if (!globalConfig) {
-      throw new ConfigNotFoundError('Global config is not provided.');
+      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }
 
     const globalConfigSchema = z.object({

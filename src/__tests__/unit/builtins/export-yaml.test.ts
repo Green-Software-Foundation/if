@@ -1,6 +1,9 @@
+import {ERRORS} from '@grnsft/if-core/utils';
+
 import {ExportYaml} from '../../../builtins/export-yaml';
-import {ERRORS} from '../../../util/errors';
 import {saveYamlFileAs} from '../../../util/yaml';
+
+import {STRINGS} from '../../../config';
 
 import {tree, context} from '../../../__mocks__/builtins/export-csv';
 
@@ -8,7 +11,8 @@ jest.mock('../../../util/yaml', () => ({
   saveYamlFileAs: jest.fn(),
 }));
 
-const {ExhaustError} = ERRORS;
+const {ExhaustOutputArgError} = ERRORS;
+const {OUTPUT_REQUIRED} = STRINGS;
 
 describe('builtins/export-yaml: ', () => {
   describe('ExportYaml: ', () => {
@@ -38,8 +42,8 @@ describe('builtins/export-yaml: ', () => {
         try {
           await exportYaml.execute({}, context, '');
         } catch (error) {
-          expect(error).toBeInstanceOf(ExhaustError);
-          expect(error).toEqual(new ExhaustError('Output path is required.'));
+          expect(error).toBeInstanceOf(ExhaustOutputArgError);
+          expect(error).toEqual(new ExhaustOutputArgError(OUTPUT_REQUIRED));
         }
       });
     });

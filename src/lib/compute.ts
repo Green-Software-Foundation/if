@@ -1,9 +1,10 @@
+import {PluginParams, GroupByConfig} from '@grnsft/if-core/types';
+
 import {debugLogger} from '../util/debug-logger';
 import {mergeObjects} from '../util/helpers';
 
 import {ComputeParams, Node, Params} from '../types/compute';
-import {PluginParams, isExecute, isGroupBy} from '../types/interface';
-import {GroupByConfig} from '../types/group-by';
+import {isExecute, isGroupBy} from '../types/interface';
 
 import {STRINGS} from '../config/strings';
 

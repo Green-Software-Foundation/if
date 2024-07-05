@@ -164,5 +164,33 @@ You can execute this by passing it to `ie`. Run the impact using the following c
 
 ```sh
 npm i -g @grnsft/if
-ie --manifest ./manifests/examples/interpolation.yml --output ./manifests/outputs/interpolation.yml
+if-run --manifest ./manifests/examples/interpolation.yml --output ./manifests/outputs/interpolation.yml
 ```
+
+## Errors
+
+`Interpolation` exposes one of IF's error classes.
+
+## `GlobalConfigError`
+
+### GlobalConfigError
+
+You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+
+The required parameters are:
+- `method`: a string containing either `linear`, `spline` or `polynomial`
+- `x`: an array of numbers
+- `y`: an array of numbers
+- `input-parameter`: a string containing the name of a value present in the `inputs` array'
+- `output-parameter`: a string
+
+You can fix this error by checking you are providing valid values for each parameter in the config.
+
+### Validation errors
+
+There are also several validation errors that can arise, including:
+- if the lengths of `x` and `y` are not equal
+- if `x` or `y` are empty
+- if the requested point to interpolate at is outside the range of `x`
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

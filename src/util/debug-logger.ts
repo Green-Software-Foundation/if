@@ -81,14 +81,16 @@ const debugLog = (level: LogLevel, args: any[], debugMode: boolean) => {
       return;
     }
 
-    const isDebugLog = logMessagesKeys.some(key => {
-      const message =
-        typeof STRINGS[key] === 'function'
-          ? (STRINGS[key] as Function).call(null, '')
-          : (STRINGS[key] as string);
+    const isDebugLog =
+      typeof args[0] === 'string' &&
+      logMessagesKeys.some(key => {
+        const message =
+          typeof STRINGS[key] === 'function'
+            ? (STRINGS[key] as Function).call(null, '')
+            : (STRINGS[key] as string);
 
-      return args[0].includes(message);
-    });
+        return args[0].includes(message);
+      });
 
     if (!isDebugLog) {
       originalConsole.log(...args);

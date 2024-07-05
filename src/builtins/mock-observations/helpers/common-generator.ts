@@ -1,37 +1,31 @@
-import {KeyValuePair} from '../../../types/common';
-import {ERRORS} from '../../../util/errors';
-import {buildErrorMessage} from '../../../util/helpers';
+import {ERRORS} from '@grnsft/if-core/utils';
+import {ConfigParams} from '@grnsft/if-core/types';
+
+import {STRINGS} from '../../../config';
 
 import {Generator} from '../interfaces';
 
-const {InputValidationError} = ERRORS;
+const {GlobalConfigError} = ERRORS;
+const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
-export const CommonGenerator = (config: KeyValuePair): Generator => {
-  const errorBuilder = buildErrorMessage(CommonGenerator.name);
-
+export const CommonGenerator = (config: ConfigParams): Generator => {
   /**
-   * Creates new copy of the given `object`.
-   */
-  const copyObject = <T>(object: T): T => ({...object});
-
-  /**
+   * Generates next value by copying the validated config.
    * Validates the provided config is not null or empty.
-   * returns a copy of the validated config, otherwise throws an InputValidationError.
+   * Returns a copy of the validated config, otherwise throws an GlobalConfigError.
    */
   const validateConfig = (config: object) => {
     if (!config || Object.keys(config).length === 0) {
-      throw new InputValidationError(
-        errorBuilder({message: 'Config must not be null or empty'})
-      );
+      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
     }
 
-    return copyObject(config);
+    return structuredClone(config);
   };
 
   /**
    * Generates next value by copying the validated config.
    */
-  const next = (): Object => copyObject(validateConfig(config));
+  const next = (): Object => validateConfig(config);
 
   return {
     next,

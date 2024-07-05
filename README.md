@@ -5,10 +5,6 @@
 > [!IMPORTANT]
 > Incubation Project: This project is an incubation project being run inside the Green Software Foundation; as such, we DON’T recommend using it in any critical use case. Incubation projects are experimental, offer no support guarantee, have minimal governance and process, and may be retired at any moment. This project may one day Graduate, in which case this disclaimer will be removed.
 
-**Note** We have recently (March 2024) refactored the IF codebase and introduced some changes affecting both users and developers. You can read our migration guide [HERE](./Refactor-migration-guide.md) to help you update to the latest version!
-
-[Impact Framework](https://greensoftwarefoundation.atlassian.net/wiki/spaces/~612dd45e45cd76006a84071a/pages/17072136/Opensource+Impact+Engine+Framework) (IF) is an [Incubation](https://oc.greensoftware.foundation/project-lifecycle.html#incubation) project from the [Open Source Working Group](https://greensoftwarefoundation.atlassian.net/wiki/spaces/~612dd45e45cd76006a84071a/pages/852049/Open+Source+Working+Group) in the [Green Software Foundation](https://greensoftware.foundation/).
-
 **Our documentation is online at [if.greensoftware.foundation](https://if.greensoftware.foundation/)**
 
 **IF** is a framework to **M**odel, **M**easure, si**M**ulate and **M**onitor the environmental impacts of software
@@ -23,18 +19,12 @@ Read the [specification and design docs](https://if.greensoftware.foundation) to
 
 ## Get started
 
-The first thing to understand is that IF is a framework for running plugins. This means that in order to do some calculations, you need to load some plugins from some external resource. We provide a [standard library of plugins](https://github.com/Green-Software-Foundation/if-plugins) and a repository of [community plugins](https://github.com/Green-Software-Foundation/if-unofficial-plugins) to get you started.
+IF is a framework for running pipelines of plugins that operate on a set of observations. This is all configured using a manifest file.  We provide a standard library of plugins that come bundled with IF - we refer to these as `builtins`. We also have an [Explorer](https://explorer.if.greensoftware.foundation) where anyone can list third party plugins you can install.
 
-Start by installing framework itself:
+Start by installing the latest version of IF:
 
 ```sh
 npm install -g "@grnsft/if"
-```
-
-Then installing some plugins:
-
-```sh
-npm install -g "@grnsft/if-plugins"
 ```
 
 Then create a `manifest` file that describes your application (see our docs for a detailed explanation).
@@ -42,20 +32,19 @@ Then create a `manifest` file that describes your application (see our docs for 
 Then, run `if` using the following command:
 
 ```sh
-ie --manifest <path-to-your-manifest-file>
+if-run --manifest <path-to-your-manifest-file> --stdout
 ## or you can use aliases
-ie -m <path-to-your-manifest-file>
+if-run -m <path-to-your-manifest-file> -s
+
 ```
 
-Note that above command will not print the final output. In order to print the final output to the console, run `if` using the optional stdout argument:
+Note that above command will print your outputs to the console. You can also provide the `--output` command to save your outputs to a yaml file:
 
 ```sh
-ie --manifest <path-to-your-manifest-file> --stdout
-## or using aliases
-ie -m <path-to-your-manifest-file> -s
+if-run -m <path-to-your-manifest> -o <savepath>
 ```
 
-You can also add a savepath for your output yaml in order to have the output stored in a file. Note that you also have to add configuration to your manifest to enable this, as follows:
+Note that you also have to add configuration to your manifest to enable this, as follows:
 
 ```yaml
 initialize:
@@ -63,33 +52,26 @@ initialize:
     - yaml
 ```
 
-On the command line:
-
-```sh
-ie --manifest <path-to-your-manifest-file> --output <your-savepath>
-## or using aliases
-ie -m <path-to-your-manifest-file> -o <your-savepath>
-```
-
-The `ie` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
+The `if-run` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
 
 Use the `debug` command if you want to diagnose and fix errors in your plugin:
 
 ```sh
-ie --manifest <path-to-your-manifest-file> --debug
+if-run --manifest <path-to-your-manifest-file> --debug
 ```
 
 Use the `help` command if you need guidance about the available commands
 
 ```sh
-ie --help
+if-run --help
 ## or using alias
-ie -h
+if-run -h
 ```
 
 ## Documentation
 
 Please read our documentation at [if.greensoftware.foundation](https://if.greensoftware.foundation/)
+
 
 ## Video walk-through
 
@@ -97,15 +79,20 @@ Watch this video to learn how to create and run a `manifest`.
 
 [![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/GW37Qd4AQbU)
 
+
+## Join our mailing list
+
+We have a public mailing list at [if-community@greensoftware.foundation](https://groups.google.com/u/1/a/greensoftware.foundation/g/if-community). We send out weekly updates that explain what we've shipped, what we're working on and how you can get involved each week!
+
+
 ## Contributing
 
 To contribute to IF, please fork this repository and raise a pull request from your fork.
 
-You can check our issue board for issues tagged `help-wanted`. These are issues that are not currently, actively being worked on by the core team but are well-scoped enough for someone to pick up. We recommend commenting on the issue to start a chat with the core team, then start working on the issue when you have been assigned to it. This process helps to ensure your work is aligned with our roadmap and makes it much more likely that your changes will get merged compared to unsolicited PRs.
+You can check our issue board for issues. We mark some issues `core-only` if they are somehow sensitive and we want one of our core developers to handle it. Any other issues are open for the community to work on. We recommend commenting on the issue to start a chat with the core team, then start working on the issue when you have been assigned to it. This process helps to ensure your work is aligned with our roadmap and makes it much more likely that your changes will get merged compared to unsolicited PRs.
 
 Please read the full contribution guidelines at [if.greensoftware.foundation](https://if.greensoftware.foundation/Contributing)
 
-The same guidelines also apply to `if-docs`, `if-plugins` and `if-unofficial-plugins`.
 
 ## Bug reports
 

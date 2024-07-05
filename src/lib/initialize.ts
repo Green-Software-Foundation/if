@@ -1,6 +1,7 @@
-import pathLib = require('path');
+import * as path from 'node:path';
 
-import {ERRORS} from '../util/errors';
+import {ERRORS} from '@grnsft/if-core/utils';
+
 import {logger} from '../util/logger';
 import {memoizedLog} from '../util/log-memoize';
 import {pluginStorage} from '../util/plugin-storage';
@@ -11,7 +12,11 @@ import {PluginInterface} from '../types/interface';
 import {GlobalPlugins, PluginOptions} from '../types/manifest';
 import {PluginStorageInterface} from '../types/plugin-storage';
 
-const {ModuleInitializationError, PluginCredentialError} = ERRORS;
+const {
+  PluginInitializationError,
+  MissingPluginMethodError,
+  MissingPluginPathError,
+} = ERRORS;
 
 const {GITHUB_PATH, NATIVE_PLUGIN} = CONFIG;
 const {
@@ -28,14 +33,11 @@ const {
  * Imports module by given `path`.
  */
 const importModuleFrom = async (path: string) => {
-  try {
-    const module = await import(path);
+  const module = await import(path).catch(error => {
+    throw new PluginInitializationError(INVALID_MODULE_PATH(path, error));
+  });
 
-    return module;
-  } catch (error) {
-    logger.error(error);
-    throw new ModuleInitializationError(INVALID_MODULE_PATH(path));
-  }
+  return module;
 };
 
 /**
@@ -52,23 +54,23 @@ const importAndVerifyModule = async (method: string, path: string) => {
  * Then checks if `path` is starting with github, then grabs the repository name.
  * Imports module, then checks if it's a valid plugin.
  */
-const handModule = (method: string, path: string) => {
-  console.debug(LOADING_PLUGIN_FROM_PATH(method, path));
+const handModule = (method: string, pluginPath: string) => {
+  console.debug(LOADING_PLUGIN_FROM_PATH(method, pluginPath));
 
-  if (path === 'builtin') {
-    path = pathLib.normalize(`${__dirname}/../builtins`);
+  if (pluginPath === 'builtin') {
+    pluginPath = path.normalize(`${__dirname}/../builtins`);
   } else {
-    if (path?.startsWith(GITHUB_PATH)) {
-      const parts = path.split('/');
-      path = parts[parts.length - 1];
+    if (pluginPath?.startsWith(GITHUB_PATH)) {
+      const parts = pluginPath.split('/');
+      pluginPath = parts[parts.length - 1];
     }
 
-    if (!path.includes(NATIVE_PLUGIN)) {
-      memoizedLog(logger.warn, NOT_NATIVE_PLUGIN(path));
+    if (!pluginPath.includes(NATIVE_PLUGIN)) {
+      memoizedLog(logger.warn, NOT_NATIVE_PLUGIN(pluginPath));
     }
   }
 
-  return importAndVerifyModule(method, path);
+  return importAndVerifyModule(method, pluginPath);
 };
 
 /**
@@ -82,11 +84,11 @@ const initPlugin = async (
   console.debug(INITIALIZING_PLUGIN(method));
 
   if (!method) {
-    throw new PluginCredentialError(MISSING_METHOD);
+    throw new MissingPluginMethodError(MISSING_METHOD);
   }
 
   if (!path) {
-    throw new PluginCredentialError(MISSING_PATH);
+    throw new MissingPluginPathError(MISSING_PATH);
   }
 
   const plugin = await handModule(method, path);

@@ -91,7 +91,27 @@ You can run this example by saving it as `manifests/examples/test/exponent.yml` 
 
 ```sh
 npm i -g @grnsft/if
-ie --manifest manifests/examples/test/exponent.yml --output manifests/outputs/exponent.yml
+if-run --manifest manifests/examples/test/exponent.yml --output manifests/outputs/exponent.yml
 ```
 
 The results will be saved to a new `yaml` file in `manifests/outputs`.
+
+## Errors
+
+`Exponent` exposes two of IF's error classes.
+
+### `MissingInputDataError`
+
+This error arises when a necessary piece of input data is missing from the `inputs` array.
+Every element in the `inputs` array must contain:
+
+- `timestamp`
+- `duration`
+- whatever value you passed to `input-parameter`
+
+
+### `InputValidationError`
+
+This error arises when an invalid value is passed to `Exponent`. Typically, this can occur when a non-numeric value (such as a string made of alphabetic characters) is passed where a number or numeric string is expected. Please check that the types are correct for all the relevant fields in your `inputs` array.
+
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

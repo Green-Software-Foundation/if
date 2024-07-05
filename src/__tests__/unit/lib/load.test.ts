@@ -38,13 +38,15 @@ jest.mock('../../../util/yaml', () => ({
   },
 }));
 
+import {PluginParams} from '@grnsft/if-core/types';
+
 import {load, loadIfDiffFiles} from '../../../lib/load';
 
-import {PARAMETERS} from '../../../config';
+import {PARAMETERS, STRINGS} from '../../../config';
 
-import {PluginParams} from '../../../types/interface';
+import {parseManifestFromStdin} from '../../../util/helpers';
 
-import {STRINGS} from '../../../config';
+import {LoadDiffParams} from '../../../types/util/args';
 
 const {INVALID_SOURCE} = STRINGS;
 
@@ -109,8 +111,10 @@ describe('lib/load: ', () => {
 
     it('successfully loads target, and source from stdin.', async () => {
       process.env.readline = 'valid-source';
-      const params = {
+      const piped = await parseManifestFromStdin();
+      const params: LoadDiffParams = {
         targetPath: 'target-path.yml',
+        pipedSourceManifest: piped,
       };
 
       const response = await loadIfDiffFiles(params);

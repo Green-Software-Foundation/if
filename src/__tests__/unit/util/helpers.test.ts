@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 const mockWarn = jest.fn();
 const mockError = jest.fn();
 
@@ -10,6 +11,131 @@ jest.mock('../../../util/logger', () => ({
     error: mockError,
   },
 }));
+
+jest.mock('path', () => {
+  const actualPath = jest.requireActual('path') as Record<string, any>;
+  return {
+    __esModule: true,
+    ...actualPath,
+    dirname: jest.fn(() => './mock-path'),
+  };
+});
+
+jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
+
+jest.mock('../../../lib/load', () => ({
+  load: jest.fn(() => {
+    if (process.env.manifest === 'true') {
+      return {
+        rawManifest: {
+          name: 'divide',
+          initialize: {
+            plugins: {
+              'cloud-metadata': {
+                path: '@grnsft/if-plugins',
+                method: 'CloudMetadata',
+              },
+              divide: {
+                path: 'builtin',
+                method: 'Divide',
+                'global-config': {
+                  numerator: 'vcpus-allocated',
+                  denominator: 2,
+                  output: 'cpu/number-cores',
+                },
+              },
+            },
+          },
+          execution: {
+            environment: {
+              dependencies: [
+                '@grnsft/if-core@0.0.7',
+                '@grnsft/if-plugins@v0.3.2 extraneous -> file:../../../if-models',
+                '@grnsft/if-unofficial-plugins@v0.3.0 extraneous -> file:../../../if-unofficial-models',
+              ],
+            },
+          },
+        },
+      };
+    }
+    return {
+      rawManifest: {
+        initialize: {
+          plugins: {'@grnsft/if-plugins': '1.0.0'},
+        },
+        execution: {
+          environment: {
+            dependencies: [],
+          },
+        },
+      },
+    };
+  }),
+}));
+
+const initPackage = jest.fn(() => Promise.resolve('mock-path'));
+const updatePackage = jest.fn(() => Promise.resolve(true));
+const installdeps = jest.fn();
+const updatedeps = jest.fn();
+jest.mock('../../../util/npm', () => {
+  const actualNPMUtil = jest.requireActual('../../../util/npm');
+
+  return {
+    ...actualNPMUtil,
+    initPackageJsonIfNotExists: (folderPath: string) => {
+      if (process.env.NPM_MOCK === 'true') {
+        return initPackage();
+      }
+
+      if (process.env.NPM_MOCK === 'error') {
+        throw new Error('mock-error');
+      }
+
+      return actualNPMUtil.initPackageJsonIfNotExists(folderPath);
+    },
+    updatePackageJsonProperties: (
+      newPackageJsonPath: string,
+      appendDependencies: boolean
+    ) => {
+      if (process.env.NPM_MOCK === 'true') {
+        return updatePackage();
+      }
+
+      return actualNPMUtil.updatePackageJsonProperties(
+        newPackageJsonPath,
+        appendDependencies
+      );
+    },
+    installDependencies: (
+      folderPath: string,
+      dependencies: {[path: string]: string}
+    ) => {
+      if (process.env.NPM_MOCK === 'true') {
+        return installdeps();
+      }
+
+      return actualNPMUtil.installDependencies(folderPath, dependencies);
+    },
+    updatePackageJsonDependencies: (
+      packageJsonPath: string,
+      dependencies: any,
+      cwd: boolean
+    ) => {
+      if (process.env.NPM_MOCK === 'true') {
+        return updatedeps();
+      }
+
+      return actualNPMUtil.updatePackageJsonDependencies(
+        packageJsonPath,
+        dependencies,
+        cwd
+      );
+    },
+  };
+});
+
+import {ERRORS} from '@grnsft/if-core/utils';
+
 import {
   andHandle,
   checkIfEqual,
@@ -17,9 +143,16 @@ import {
   mergeObjects,
   oneIsPrimitive,
   parseManifestFromStdin,
+  getOptionsFromArgs,
+  addTemplateManifest,
+  initializeAndInstallLibs,
+  logStdoutFailMessage,
 } from '../../../util/helpers';
-import {ERRORS} from '../../../util/errors';
+import {CONFIG} from '../../../config';
 import {Difference} from '../../../types/lib/compare';
+
+const {IF_ENV} = CONFIG;
+const {FAILURE_MESSAGE_DEPENDENCIES, FAILURE_MESSAGE} = IF_ENV;
 
 const {WriteFileError} = ERRORS;
 
@@ -30,15 +163,6 @@ describe('util/helpers: ', () => {
       mockError.mockReset();
     });
 
-    it('logs error and warn in case of error is unknown.', () => {
-      const message = 'mock-message';
-      const MockError = class extends Error {};
-
-      andHandle(new MockError(message));
-      expect(mockWarn).toHaveBeenCalledTimes(1);
-      expect(mockError).toHaveBeenCalledTimes(1);
-    });
-
     it('logs error in case of error is unknown.', () => {
       const message = 'mock-message';
 
@@ -47,9 +171,7 @@ describe('util/helpers: ', () => {
       expect(mockError).toHaveBeenCalledTimes(1);
     });
   });
-});
 
-describe('util/helpers: ', () => {
   describe('mergeObjects(): ', () => {
     it('does not override input.', () => {
       expect.assertions(1);
@@ -364,16 +486,11 @@ describe('util/helpers: ', () => {
 
     it('throws error if there is no manifest in stdin.', async () => {
       process.env.readline = 'no_manifest';
-      const expectedMessage = 'Manifest not found in STDIN.';
       expect.assertions(1);
 
-      try {
-        await parseManifestFromStdin();
-      } catch (error) {
-        if (error instanceof Error) {
-          expect(error.message).toEqual(expectedMessage);
-        }
-      }
+      const response = await parseManifestFromStdin();
+
+      expect(response).toEqual('');
     });
 
     it('returns empty string if there is no data in stdin.', async () => {
@@ -411,6 +528,160 @@ description: mock-description
 
       const response = checkIfEqual(a, b);
       expect(response).toBeFalsy();
+    });
+  });
+
+  describe('getOptionsFromArgs(): ', () => {
+    it('returns the correct options when dependencies are present.', async () => {
+      const commandArgs = {
+        manifest: '/path/to/mock-manifest.json',
+        install: false,
+      };
+
+      process.env.manifest = 'true';
+
+      const result = await getOptionsFromArgs(commandArgs);
+      expect.assertions(1);
+
+      expect(result).toEqual({
+        folderPath: './mock-path',
+        dependencies: {
+          '@grnsft/if-plugins': '^v0.3.2',
+        },
+        install: false,
+      });
+    });
+
+    it('throws an error when there are no dependencies.', async () => {
+      const commandArgs = {
+        manifest: '/path/to/mock-manifest.json',
+        install: false,
+      };
+
+      process.env.manifest = 'false';
+
+      expect.assertions(1);
+      try {
+        await getOptionsFromArgs(commandArgs);
+      } catch (error) {
+        expect(error).toEqual(new Error(FAILURE_MESSAGE_DEPENDENCIES));
+      }
+    });
+  });
+
+  describe('addTemplateManifest(): ', () => {
+    it('successfully adds the template manifest to the directory.', async () => {
+      await addTemplateManifest('./');
+
+      expect.assertions(1);
+    });
+
+    it('throws an error when the manifest is not added into the directory.', async () => {
+      expect.assertions(1);
+
+      try {
+        await addTemplateManifest('');
+      } catch (error) {
+        const logSpy = jest.spyOn(global.console, 'log');
+        expect(logSpy).toEqual(FAILURE_MESSAGE);
+      }
+    });
+  });
+
+  describe('initializeAndInstallLibs(): ', () => {
+    beforeEach(() => {
+      initPackage.mockReset();
+      updatePackage.mockReset();
+      installdeps.mockReset();
+      updatedeps.mockReset();
+    });
+
+    it('installs dependencies if install flag is truthy.', async () => {
+      process.env.NPM_MOCK = 'true';
+      // @ts-ignore
+      process.exit = (code: any) => code;
+      const options = {
+        folderPath: 'mock-folderPath',
+        install: true,
+        cwd: true,
+        dependencies: {
+          mock: 'mock-dependencies',
+        },
+      };
+
+      expect.assertions(4);
+      await initializeAndInstallLibs(options);
+
+      expect(initPackage).toHaveBeenCalledTimes(1);
+      expect(updatePackage).toHaveBeenCalledTimes(1);
+      expect(installdeps).toHaveBeenCalledTimes(1);
+      expect(updatedeps).toHaveBeenCalledTimes(0);
+    });
+
+    it('updates dependencies if install flag is falsy.', async () => {
+      process.env.NPM_MOCK = 'true';
+      // @ts-ignore
+      process.exit = (code: any) => code;
+      const options = {
+        folderPath: 'mock-folderPath',
+        install: false,
+        cwd: true,
+        dependencies: {
+          mock: 'mock-dependencies',
+        },
+      };
+
+      expect.assertions(4);
+      await initializeAndInstallLibs(options);
+
+      expect(initPackage).toHaveBeenCalledTimes(1);
+      expect(updatePackage).toHaveBeenCalledTimes(1);
+      expect(installdeps).toHaveBeenCalledTimes(0);
+      expect(updatedeps).toHaveBeenCalledTimes(1);
+    });
+
+    it('exits process if error is thrown.', async () => {
+      process.env.NPM_MOCK = 'error';
+      const originalProcessExit = process.exit;
+      const mockExit = jest.fn();
+      // @ts-ignore
+      process.exit = mockExit;
+      const options = {
+        folderPath: 'mock-folderPath',
+        install: false,
+        cwd: true,
+        dependencies: {
+          mock: 'mock-dependencies',
+        },
+      };
+
+      expect.assertions(5);
+      await initializeAndInstallLibs(options);
+
+      expect(initPackage).toHaveBeenCalledTimes(0);
+      expect(updatePackage).toHaveBeenCalledTimes(0);
+      expect(installdeps).toHaveBeenCalledTimes(0);
+      expect(updatedeps).toHaveBeenCalledTimes(0);
+      expect(mockExit).toHaveBeenCalledTimes(1);
+
+      process.exit = originalProcessExit;
+    });
+  });
+
+  describe('logStdoutFailMessage(): ', () => {
+    it('successfully logs the failed message.', () => {
+      const errorMessage = {stdout: '\n\nmock error message'};
+      const mockFilename = 'mock-filename.yaml';
+      const logSpy = jest.spyOn(global.console, 'log');
+      logStdoutFailMessage(errorMessage, mockFilename);
+
+      expect.assertions(2);
+
+      expect(logSpy).toHaveBeenCalledWith(
+        `✖ if-check could not verify ${mockFilename}. The re-executed file does not match the original.\n`
+      );
+
+      expect(logSpy).toHaveBeenCalledWith('mock error message');
     });
   });
 });
