@@ -28,8 +28,8 @@ jobs:
       - name: Run unit tests
         run: npm test
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Run integration tests
+        run: npm run if-check -- -d outputs
 
       - name: Initialize git user email
         run: git config --global user.email "${{ vars.RELEASE_USER_EMAIL }}"
