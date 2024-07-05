@@ -24,7 +24,7 @@ jobs:
         run: npm test
 
       - name: Run integration tests
-        run: npm run if-check -- -d outputs
+        run: npm run if-check -- -d manifests/outputs
 
       - name: Initialize git user email
         run: git config --global user.email "${{ env.RELEASE_USER_EMAIL }}"
