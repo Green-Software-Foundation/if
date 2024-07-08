@@ -2,7 +2,6 @@ name: tdp-finder
 description: successful path
 tags:
 initialize:
-  #
   plugins:
     tdp-finder:
       method: CSVLookup

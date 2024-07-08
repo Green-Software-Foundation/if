@@ -2,7 +2,6 @@ name: divide
 description: success path
 tags:
 initialize:
-  #
   plugins:
     cloud-metadata:
       path: builtin

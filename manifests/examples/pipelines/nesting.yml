@@ -10,7 +10,6 @@ aggregation:
   type: "both"
 params:
 initialize:
-  #
   plugins:
     "interpolate":
       method: Interpolation

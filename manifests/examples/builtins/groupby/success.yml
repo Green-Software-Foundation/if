@@ -1,7 +1,6 @@
 name: groupby
 description: successful path
 initialize:
-  #
   plugins:
     group-by:
       path: "builtin"

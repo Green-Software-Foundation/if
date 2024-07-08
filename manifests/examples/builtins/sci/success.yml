@@ -2,7 +2,6 @@ name: sci
 description: successful path
 tags:
 initialize:
-  #
   plugins:
     sci:
       kind: plugin

@@ -2,7 +2,6 @@ name: subtract demo
 description:
 tags:
 initialize:
-  #
   plugins:
     subtract:
       method: Subtract

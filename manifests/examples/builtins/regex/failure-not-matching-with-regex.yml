@@ -2,7 +2,6 @@ name: regex
 description: physical processor doesn't match the regex expression
 tags:
 initialize:
-  #
   plugins:
     regex:
       method: Regex

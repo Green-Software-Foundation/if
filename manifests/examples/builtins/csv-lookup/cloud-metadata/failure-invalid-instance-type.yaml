@@ -2,7 +2,6 @@ name: cloud-metadata
 description: cloud/instance-type instance type is not supported in the cloud vendor
 tags:
 initialize:
-  #
   plugins:
     cloud-metadata:
       path: builtin
