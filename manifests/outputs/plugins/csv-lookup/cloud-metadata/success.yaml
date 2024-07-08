@@ -20,21 +20,20 @@ execution:
   command: >-
     /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
     /Users/mariamkhalatova/Projects/UK/if/src/index.ts -m
-    manifests/outputs/plugins/csv-lookup/cloud-metadata/success.yml -o
-    manifests/outputs/plugins/csv-lookup/cloud-metadata/success
+    manifests/outputs/plugins/csv-lookup/cloud-metadata/success.yaml -o
+    manifests/outputs/plugins/csv-lookup/cloud-metadata/success1
   environment:
     if-version: 0.4.0
     os: macOS
     os-version: '13.2'
     node-version: 18.14.2
-    date-time: 2024-07-02T21:21:45.504Z (UTC)
+    date-time: 2024-07-05T09:05:09.577Z (UTC)
     dependencies:
       - '@babel/core@7.22.10'
       - '@babel/preset-typescript@7.23.3'
       - '@commitlint/cli@18.6.0'
       - '@commitlint/config-conventional@18.6.0'
       - '@grnsft/if-core@0.0.10'
-
       - '@jest/globals@29.7.0'
       - '@types/jest@29.5.8'
       - '@types/js-yaml@4.0.9'
