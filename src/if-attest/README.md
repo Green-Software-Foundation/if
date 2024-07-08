@@ -23,7 +23,7 @@ The following information is included in an attestation:
 ```
 'start': the first timestamp captured by the manifest
 'end': the last timestamp captured by the manifest
-'hash': the unioque keccak256 hash for the manifest file
+'hash': the unique keccak256 hash for the manifest file
 'if': the IF version used to compute the manifest
 'verified': true.false showing that `if-check` returned a success response
 'sci': the computes SCI score
@@ -32,3 +32,24 @@ The following information is included in an attestation:
 'carbon': the aggregated carbon value for the manifest in gCO2eq
 'level': the audit level being attested to
 ```
+
+The attestation does not guarantee that the **input data** is correct - there's not much we can do in the event that a manifest provider is deliberately falsifying or accidentally providing incorrect measurements. We won't have access to the systems being measured - to verify the validity of measurements feeding a manifest can only really be done by third party auditors with access to the systems under measurement.
+
+`if-attest` assumes the input data is correct and algorithmically verifies that the given output data really resulted from honestly executing the given input data using the configuration and plugin options defined in the given manifest. There's also the `levels` fiueld that gives auditors the option to do deeper audits offchain, e.g. manually checking a user's systems or collaborating on plugin choice, advising on config etc. and capturing this by assigning a higher audit level.
+
+e.g. you might define something like:
+
+```
+level-0: only checks manifest executes correctly
+level-1: checks plugin choices conform to best practises
+level-3: all config conforms to best practises
+level-4: underlying code indepedently reviewed and tested
+level-5: measurements independently verified by attester
+```
+
+No sensitive information is included in an attestation - it is all summary information and hashes. This emans an organization can choose to selectively disclose to trusted third parties without also sharing freely. The third party can always hash the given file to see that the attested file was identical to the one they were given.
+
+You could also design a system where an attestation includes a link to another attestation, for example attesting to a deeper audit or an attestation by a third party.
+
+
+## Future possibilities
