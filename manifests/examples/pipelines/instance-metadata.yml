@@ -11,7 +11,7 @@ initialize:
           https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-azure-instances.csv
         query:
           instance-class: cloud/instance-type
-        output: '*'
+        output: "*"
     extract-processor-name:
       path: builtin
       method: Regex
@@ -19,8 +19,6 @@ initialize:
         parameter: cpu-model-name
         match: /^([^,])+/g
         output: cpu/name
-  outputs:
-    - yaml
 tree:
   children:
     child:

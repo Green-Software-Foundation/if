@@ -46,8 +46,6 @@ initialize:
             cpu/utilization:
               min: 1
               max: 99
-  outputs:
-    - yaml
 execution:
   command: >-
     /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
@@ -57,21 +55,21 @@ execution:
   environment:
     if-version: 0.4.0
     os: macOS
-    os-version: '13.2'
+    os-version: "13.2"
     node-version: 18.14.2
     date-time: 2024-07-02T05:21:45.561Z (UTC)
     dependencies:
-      - '@babel/core@7.22.10'
-      - '@babel/preset-typescript@7.23.3'
-      - '@commitlint/cli@18.6.0'
-      - '@commitlint/config-conventional@18.6.0'
-      - '@grnsft/if-core@0.0.10'
+      - "@babel/core@7.22.10"
+      - "@babel/preset-typescript@7.23.3"
+      - "@commitlint/cli@18.6.0"
+      - "@commitlint/config-conventional@18.6.0"
+      - "@grnsft/if-core@0.0.10"
 
-      - '@jest/globals@29.7.0'
-      - '@types/jest@29.5.8'
-      - '@types/js-yaml@4.0.9'
-      - '@types/luxon@3.4.2'
-      - '@types/node@20.9.0'
+      - "@jest/globals@29.7.0"
+      - "@types/jest@29.5.8"
+      - "@types/js-yaml@4.0.9"
+      - "@types/luxon@3.4.2"
+      - "@types/node@20.9.0"
       - axios-mock-adapter@1.22.0
       - axios@1.7.2
       - cross-env@7.0.3
@@ -108,7 +106,7 @@ tree:
       children:
         Standard_E64_v3:
           inputs:
-            - timestamp: '2024-03-05T00:00:00.000Z'
+            - timestamp: "2024-03-05T00:00:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -116,7 +114,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 93
-            - timestamp: '2024-03-05T00:05:00.000Z'
+            - timestamp: "2024-03-05T00:05:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -124,7 +122,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 6
-            - timestamp: '2024-03-05T00:10:00.000Z'
+            - timestamp: "2024-03-05T00:10:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -132,7 +130,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 6
-            - timestamp: '2024-03-05T00:15:00.000Z'
+            - timestamp: "2024-03-05T00:15:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -140,7 +138,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 3
-            - timestamp: '2024-03-05T00:20:00.000Z'
+            - timestamp: "2024-03-05T00:20:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -148,7 +146,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 83
-            - timestamp: '2024-03-05T00:25:00.000Z'
+            - timestamp: "2024-03-05T00:25:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -156,7 +154,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 85
-            - timestamp: '2024-03-05T00:30:00.000Z'
+            - timestamp: "2024-03-05T00:30:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -164,7 +162,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 8
-            - timestamp: '2024-03-05T00:35:00.000Z'
+            - timestamp: "2024-03-05T00:35:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -172,7 +170,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 59
-            - timestamp: '2024-03-05T00:40:00.000Z'
+            - timestamp: "2024-03-05T00:40:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -180,7 +178,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 55
-            - timestamp: '2024-03-05T00:45:00.000Z'
+            - timestamp: "2024-03-05T00:45:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -188,7 +186,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 85
-            - timestamp: '2024-03-05T00:50:00.000Z'
+            - timestamp: "2024-03-05T00:50:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -196,7 +194,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 52
-            - timestamp: '2024-03-05T00:55:00.000Z'
+            - timestamp: "2024-03-05T00:55:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -205,7 +203,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 54
           outputs:
-            - timestamp: '2024-03-05T00:00:00.000Z'
+            - timestamp: "2024-03-05T00:00:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -214,7 +212,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 93
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:05:00.000Z'
+            - timestamp: "2024-03-05T00:05:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -223,7 +221,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 6
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:10:00.000Z'
+            - timestamp: "2024-03-05T00:10:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -232,7 +230,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 6
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:15:00.000Z'
+            - timestamp: "2024-03-05T00:15:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -241,7 +239,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 3
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:20:00.000Z'
+            - timestamp: "2024-03-05T00:20:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -250,7 +248,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 83
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:25:00.000Z'
+            - timestamp: "2024-03-05T00:25:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -259,7 +257,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 85
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:30:00.000Z'
+            - timestamp: "2024-03-05T00:30:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -268,7 +266,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 8
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:35:00.000Z'
+            - timestamp: "2024-03-05T00:35:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -277,7 +275,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 59
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:40:00.000Z'
+            - timestamp: "2024-03-05T00:40:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -286,7 +284,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 55
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:45:00.000Z'
+            - timestamp: "2024-03-05T00:45:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -295,7 +293,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 85
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:50:00.000Z'
+            - timestamp: "2024-03-05T00:50:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -304,7 +302,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 52
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:55:00.000Z'
+            - timestamp: "2024-03-05T00:55:00.000Z"
               duration: 300
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -317,40 +315,40 @@ tree:
             cpu/utilization: 49.083333333333336
       outputs:
         - cpu/utilization: 93
-          timestamp: '2024-03-05T00:00:00.000Z'
+          timestamp: "2024-03-05T00:00:00.000Z"
           duration: 300
         - cpu/utilization: 6
-          timestamp: '2024-03-05T00:05:00.000Z'
+          timestamp: "2024-03-05T00:05:00.000Z"
           duration: 300
         - cpu/utilization: 6
-          timestamp: '2024-03-05T00:10:00.000Z'
+          timestamp: "2024-03-05T00:10:00.000Z"
           duration: 300
         - cpu/utilization: 3
-          timestamp: '2024-03-05T00:15:00.000Z'
+          timestamp: "2024-03-05T00:15:00.000Z"
           duration: 300
         - cpu/utilization: 83
-          timestamp: '2024-03-05T00:20:00.000Z'
+          timestamp: "2024-03-05T00:20:00.000Z"
           duration: 300
         - cpu/utilization: 85
-          timestamp: '2024-03-05T00:25:00.000Z'
+          timestamp: "2024-03-05T00:25:00.000Z"
           duration: 300
         - cpu/utilization: 8
-          timestamp: '2024-03-05T00:30:00.000Z'
+          timestamp: "2024-03-05T00:30:00.000Z"
           duration: 300
         - cpu/utilization: 59
-          timestamp: '2024-03-05T00:35:00.000Z'
+          timestamp: "2024-03-05T00:35:00.000Z"
           duration: 300
         - cpu/utilization: 55
-          timestamp: '2024-03-05T00:40:00.000Z'
+          timestamp: "2024-03-05T00:40:00.000Z"
           duration: 300
         - cpu/utilization: 85
-          timestamp: '2024-03-05T00:45:00.000Z'
+          timestamp: "2024-03-05T00:45:00.000Z"
           duration: 300
         - cpu/utilization: 52
-          timestamp: '2024-03-05T00:50:00.000Z'
+          timestamp: "2024-03-05T00:50:00.000Z"
           duration: 300
         - cpu/utilization: 54
-          timestamp: '2024-03-05T00:55:00.000Z'
+          timestamp: "2024-03-05T00:55:00.000Z"
           duration: 300
       aggregated:
         cpu/utilization: 49.083333333333336
@@ -358,7 +356,7 @@ tree:
       children:
         Standard_E64_v3:
           inputs:
-            - timestamp: '2024-03-05T00:00:00.000Z'
+            - timestamp: "2024-03-05T00:00:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -366,7 +364,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 4
-            - timestamp: '2024-03-05T00:05:00.000Z'
+            - timestamp: "2024-03-05T00:05:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -374,7 +372,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 63
-            - timestamp: '2024-03-05T00:10:00.000Z'
+            - timestamp: "2024-03-05T00:10:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -382,7 +380,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 38
-            - timestamp: '2024-03-05T00:15:00.000Z'
+            - timestamp: "2024-03-05T00:15:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -390,7 +388,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 10
-            - timestamp: '2024-03-05T00:20:00.000Z'
+            - timestamp: "2024-03-05T00:20:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -398,7 +396,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 88
-            - timestamp: '2024-03-05T00:25:00.000Z'
+            - timestamp: "2024-03-05T00:25:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -406,7 +404,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 81
-            - timestamp: '2024-03-05T00:30:00.000Z'
+            - timestamp: "2024-03-05T00:30:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -414,7 +412,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 17
-            - timestamp: '2024-03-05T00:35:00.000Z'
+            - timestamp: "2024-03-05T00:35:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -422,7 +420,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 11
-            - timestamp: '2024-03-05T00:40:00.000Z'
+            - timestamp: "2024-03-05T00:40:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -430,7 +428,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 76
-            - timestamp: '2024-03-05T00:45:00.000Z'
+            - timestamp: "2024-03-05T00:45:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -438,7 +436,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 63
-            - timestamp: '2024-03-05T00:50:00.000Z'
+            - timestamp: "2024-03-05T00:50:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -446,7 +444,7 @@ tree:
               geolocation: 37.7749,-122.4194
               cloud/vendor: azure
               cpu/utilization: 81
-            - timestamp: '2024-03-05T00:55:00.000Z'
+            - timestamp: "2024-03-05T00:55:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -455,7 +453,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 74
           outputs:
-            - timestamp: '2024-03-05T00:00:00.000Z'
+            - timestamp: "2024-03-05T00:00:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -464,7 +462,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 4
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:05:00.000Z'
+            - timestamp: "2024-03-05T00:05:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -473,7 +471,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 63
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:10:00.000Z'
+            - timestamp: "2024-03-05T00:10:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -482,7 +480,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 38
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:15:00.000Z'
+            - timestamp: "2024-03-05T00:15:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -491,7 +489,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 10
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:20:00.000Z'
+            - timestamp: "2024-03-05T00:20:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -500,7 +498,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 88
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:25:00.000Z'
+            - timestamp: "2024-03-05T00:25:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -509,7 +507,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 81
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:30:00.000Z'
+            - timestamp: "2024-03-05T00:30:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -518,7 +516,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 17
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:35:00.000Z'
+            - timestamp: "2024-03-05T00:35:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -527,7 +525,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 11
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:40:00.000Z'
+            - timestamp: "2024-03-05T00:40:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -536,7 +534,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 76
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:45:00.000Z'
+            - timestamp: "2024-03-05T00:45:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -545,7 +543,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 63
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:50:00.000Z'
+            - timestamp: "2024-03-05T00:50:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -554,7 +552,7 @@ tree:
               cloud/vendor: azure
               cpu/utilization: 81
               cpu-tdp: 270
-            - timestamp: '2024-03-05T00:55:00.000Z'
+            - timestamp: "2024-03-05T00:55:00.000Z"
               duration: 300
               name: server-2
               cloud/instance-type: Standard_E64_v3
@@ -567,79 +565,79 @@ tree:
             cpu/utilization: 50.5
       outputs:
         - cpu/utilization: 4
-          timestamp: '2024-03-05T00:00:00.000Z'
+          timestamp: "2024-03-05T00:00:00.000Z"
           duration: 300
         - cpu/utilization: 63
-          timestamp: '2024-03-05T00:05:00.000Z'
+          timestamp: "2024-03-05T00:05:00.000Z"
           duration: 300
         - cpu/utilization: 38
-          timestamp: '2024-03-05T00:10:00.000Z'
+          timestamp: "2024-03-05T00:10:00.000Z"
           duration: 300
         - cpu/utilization: 10
-          timestamp: '2024-03-05T00:15:00.000Z'
+          timestamp: "2024-03-05T00:15:00.000Z"
           duration: 300
         - cpu/utilization: 88
-          timestamp: '2024-03-05T00:20:00.000Z'
+          timestamp: "2024-03-05T00:20:00.000Z"
           duration: 300
         - cpu/utilization: 81
-          timestamp: '2024-03-05T00:25:00.000Z'
+          timestamp: "2024-03-05T00:25:00.000Z"
           duration: 300
         - cpu/utilization: 17
-          timestamp: '2024-03-05T00:30:00.000Z'
+          timestamp: "2024-03-05T00:30:00.000Z"
           duration: 300
         - cpu/utilization: 11
-          timestamp: '2024-03-05T00:35:00.000Z'
+          timestamp: "2024-03-05T00:35:00.000Z"
           duration: 300
         - cpu/utilization: 76
-          timestamp: '2024-03-05T00:40:00.000Z'
+          timestamp: "2024-03-05T00:40:00.000Z"
           duration: 300
         - cpu/utilization: 63
-          timestamp: '2024-03-05T00:45:00.000Z'
+          timestamp: "2024-03-05T00:45:00.000Z"
           duration: 300
         - cpu/utilization: 81
-          timestamp: '2024-03-05T00:50:00.000Z'
+          timestamp: "2024-03-05T00:50:00.000Z"
           duration: 300
         - cpu/utilization: 74
-          timestamp: '2024-03-05T00:55:00.000Z'
+          timestamp: "2024-03-05T00:55:00.000Z"
           duration: 300
       aggregated:
         cpu/utilization: 50.5
   outputs:
     - cpu/utilization: 48.5
-      timestamp: '2024-03-05T00:00:00.000Z'
+      timestamp: "2024-03-05T00:00:00.000Z"
       duration: 300
     - cpu/utilization: 34.5
-      timestamp: '2024-03-05T00:05:00.000Z'
+      timestamp: "2024-03-05T00:05:00.000Z"
       duration: 300
     - cpu/utilization: 22
-      timestamp: '2024-03-05T00:10:00.000Z'
+      timestamp: "2024-03-05T00:10:00.000Z"
       duration: 300
     - cpu/utilization: 6.5
-      timestamp: '2024-03-05T00:15:00.000Z'
+      timestamp: "2024-03-05T00:15:00.000Z"
       duration: 300
     - cpu/utilization: 85.5
-      timestamp: '2024-03-05T00:20:00.000Z'
+      timestamp: "2024-03-05T00:20:00.000Z"
       duration: 300
     - cpu/utilization: 83
-      timestamp: '2024-03-05T00:25:00.000Z'
+      timestamp: "2024-03-05T00:25:00.000Z"
       duration: 300
     - cpu/utilization: 12.5
-      timestamp: '2024-03-05T00:30:00.000Z'
+      timestamp: "2024-03-05T00:30:00.000Z"
       duration: 300
     - cpu/utilization: 35
-      timestamp: '2024-03-05T00:35:00.000Z'
+      timestamp: "2024-03-05T00:35:00.000Z"
       duration: 300
     - cpu/utilization: 65.5
-      timestamp: '2024-03-05T00:40:00.000Z'
+      timestamp: "2024-03-05T00:40:00.000Z"
       duration: 300
     - cpu/utilization: 74
-      timestamp: '2024-03-05T00:45:00.000Z'
+      timestamp: "2024-03-05T00:45:00.000Z"
       duration: 300
     - cpu/utilization: 66.5
-      timestamp: '2024-03-05T00:50:00.000Z'
+      timestamp: "2024-03-05T00:50:00.000Z"
       duration: 300
     - cpu/utilization: 64
-      timestamp: '2024-03-05T00:55:00.000Z'
+      timestamp: "2024-03-05T00:55:00.000Z"
       duration: 300
   aggregated:
     cpu/utilization: 49.791666666666664

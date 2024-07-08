@@ -2,7 +2,6 @@ name: divide
 description: failure when `global-config.denominator` is string
 tags:
 initialize:
-  outputs: ['yaml']
   plugins:
     cloud-metadata:
       path: builtin
@@ -12,13 +11,13 @@ initialize:
           https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv
         query:
           instance-class: cloud/instance-type
-        output: ['cpu-cores-utilized', 'vcpus-allocated']
+        output: ["cpu-cores-utilized", "vcpus-allocated"]
     divide:
       method: Divide
       path: "builtin"
       global-config:
         numerator: vcpus-allocated
-        denominator: 'vcpus'
+        denominator: "vcpus"
         output: cpu/number-cores
 tree:
   children:

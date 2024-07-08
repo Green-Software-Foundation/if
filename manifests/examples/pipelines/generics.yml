@@ -2,7 +2,6 @@ name: generics
 description: a pipeline that does arbitrary calculations using our generic arithmetic builtins
 tags:
 initialize:
-  # outputs: [yaml]
   plugins:
     "interpolate":
       method: Interpolation

@@ -8,9 +8,7 @@
 
 - `functional-unit`: the name of the functional unit in which to express the carbon impact (required)
 
-
 ### Inputs
-
 
 - `carbon`: total carbon in gCO2eq (required)
 - `functional-unit`: whatever `functional-unit` you define in global config also has to be present in each input, for example if you provide `functional-unit: requests` in global config, `requests` must be present in your input data.
@@ -19,7 +17,7 @@
 
 - `sci`: carbon expressed in terms of the given functional unit
 
->Note: Plugin will warn and return `carbon` value in case if `functional-unit`'s value is zero.
+> Note: Plugin will warn and return `carbon` value in case if `functional-unit`'s value is zero.
 
 ## Calculation
 
@@ -28,7 +26,6 @@ SCI is calculated as:
 ```pseudocode
 sci = carbon / functional unit
 ```
-
 
 ## IF Implementation
 
@@ -60,8 +57,6 @@ name: sci-demo
 description: example invoking sci plugin
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     sci:
       method: Sci
@@ -99,11 +94,11 @@ The results will be saved to a new `yaml` file.
 This error arises when a necessary piece of input data is missing from the `inputs` array.
 
 Every element in the `inputs` array must contain:
+
 - `timestamp`
 - `duration`
 - `carbon`: a numeric value named `carbon` must exist in the inputs array
 - whatever value you passed to `functional-unit`
-
 
 ### Validation errors
 

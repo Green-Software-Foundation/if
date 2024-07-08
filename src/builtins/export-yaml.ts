@@ -26,10 +26,14 @@ export const ExportYaml = () => {
       tree,
     };
     const path = stripHashtag(outputPath);
+    const pathWithoutExtension =
+      path.split('.').length > 1
+        ? path.split('.').slice(0, -1).join('.')
+        : path;
 
-    console.debug(EXPORTING_TO_YAML_FILE(path));
+    console.debug(EXPORTING_TO_YAML_FILE(pathWithoutExtension));
 
-    await saveYamlFileAs(outputFile, `${path}.yaml`);
+    await saveYamlFileAs(outputFile, `${pathWithoutExtension}.yaml`);
   };
 
   return {execute};

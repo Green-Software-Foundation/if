@@ -63,7 +63,6 @@ export const manifestSchema = z.object({
         'global-config': z.record(z.string(), z.any()).optional(),
       })
     ),
-    outputs: z.array(z.string()).optional(),
   }),
   execution: z
     .object({

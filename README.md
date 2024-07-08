@@ -44,14 +44,6 @@ Note that above command will print your outputs to the console. If you do not wa
 if-run -m <path-to-your-manifest> -o <savepath>
 ```
 
-Note that you also have to add configuration to your manifest to enable this, as follows:
-
-```yaml
-initialize:
-  output:
-    - yaml
-```
-
 The `if-run` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
 
 Use the `debug` command if you want to diagnose and fix errors in your plugin:

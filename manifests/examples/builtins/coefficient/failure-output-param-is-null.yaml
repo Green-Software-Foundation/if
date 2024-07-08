@@ -2,7 +2,6 @@ name: coefficient-demo
 description: value of output-param is missing
 tags:
 initialize:
-  outputs: ['yaml']
   plugins:
     coefficient:
       method: Coefficient

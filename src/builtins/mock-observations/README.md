@@ -54,8 +54,6 @@ name: mock-observation-demo
 description: example invoking mock-observation plugin
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     mock-observations:
       kind: plugin

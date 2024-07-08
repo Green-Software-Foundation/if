@@ -164,5 +164,3 @@ export const aggregation = {
   metrics: ['carbon'],
   type: 'both',
 };
-
-export const outputs = ['csv'];

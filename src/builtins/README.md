@@ -31,9 +31,6 @@ The following should be defined in the plugin initialization:
 
 - `inputs`: time-synchronized version of the tree
 
-
-
-
 #### Overview
 
 A manifest file for a tree might contain many nodes each representing some different part of an application's stack or even different applications running on different machines. It is therefore common to have time series data in each component that is not directly comparable to other components either because the temporal resolution of the data is different, they cover different periods, or there are gaps in some records (e.g. some apps might burst but then go dormant, while others run continuously). This makes post-hoc visualization, analysis and aggregation of data from groups of nodes difficult to achieve. To address this, we created a time synchronization plugin that takes in non-uniform times series and snaps them all to a regular timeline with uniform start time, end time and temporal resolution.
@@ -170,7 +167,6 @@ Note that when `error-on-padding` is `true` no padding is performed and the plug
 
 Now we have synchronized, continuous, high resolution time series data, we can resample. To achieve this, we use `interval`, which sets the global temporal resolution for the final, processed time series. `intervalk` is expressed in units of seconds, which means we can simply batch `observations` together in groups of size `interval`. For each value in each object we either sum, average or copy the values into one single summary object representing each time bucket of size `interval` depending on their `aggregation-method` defined in `params.ts`. The returned array is the final, synchronized time series at the desired temporal resolution.
 
-
 #### Assumptions and limitations
 
 To do time synchronization, we assume:
@@ -178,9 +174,7 @@ To do time synchronization, we assume:
 - There is no environmental impact for an application when there is no data available.
 - Evenly distributing the total for a `duration` across higher resolution `observations` is appropriate, as opposed to having some non-uniform distribution.
 
-
 ### Typescript implementation
-
 
 To run the plugin, you must first create an instance of `TimeSync`.
 Then, you can call `execute()`.
@@ -216,7 +210,7 @@ const results = timeSync.execute([
 
 IF users will typically call the plugin as part of a pipeline defined in an `manifest`
 file. In this case, instantiating and configuring the plugin is handled by
-`ie` and does not have to be done explicitly by the user.
+`if-run` and does not have to be done explicitly by the user.
 The following is an example `manifest` that calls `time-sync`:
 
 ```yaml
@@ -281,22 +275,9 @@ tree:
               requests: 380
 ```
 
-
-## CSV Exporter 
+## CSV Exporter
 
 IF supports exporting data to CSV files. This provides users with a data format that enables visualization and data analysis using standard data analysis tools.
-
-### Manifest config
-
-To export your data to a CSV file, you have to provide a small piece of config data to your manifest file:
-
-```yaml
-initialize:
-  outputs:
-    - csv
-```
-
-You can also add `- yaml` if you want to export to both `yaml` and `csv` simultaneously.
 
 ### CLI command
 
@@ -319,10 +300,9 @@ This will save a CSV file called `example.csv`. The contents will look similar t
 | tree.children.france.carbon                    | 320.592395285847 | 14.3272496837754             | 5.42805738797808             | 38.6890057855649             |
 | tree.children.france.children.server-2.carbon  | 320.592395285847 | 14.3272496837754             | 5.42805738797808             | 38.6890057855649             |
 
-
 ### Comparing CSV to Yaml
 
-The CSV above is generated from the following yaml. The `carbon` metric is extracted and added to the CSV. Otherwise, the CSV is an exact representation of the following yaml tree. You can see that the CSV representation is *much* easier to understand than the full yaml tree:
+The CSV above is generated from the following yaml. The `carbon` metric is extracted and added to the CSV. Otherwise, the CSV is an exact representation of the following yaml tree. You can see that the CSV representation is _much_ easier to understand than the full yaml tree:
 
 ```yaml
 tree:
@@ -653,13 +633,11 @@ tree:
 
 ### CSV and aggregation
 
-The CSV representation of the output data is helpful for intuiting how the aggregation procedure works. What we refer to as "horizontal" aggregation is really an aggregation of the *rows* of the CSV. You can replicate the IF aggregation function by summing the cells in each row of the CSV. Similarly, what we refer to as "vertical" aggregation can be replicated by summing the *columns* in the CSV representation (this is not *exactly* accurate because you have to skip summing both parent nodes and their children, both of which are represented in the CSV, but it is true conceptually).
-
+The CSV representation of the output data is helpful for intuiting how the aggregation procedure works. What we refer to as "horizontal" aggregation is really an aggregation of the _rows_ of the CSV. You can replicate the IF aggregation function by summing the cells in each row of the CSV. Similarly, what we refer to as "vertical" aggregation can be replicated by summing the _columns_ in the CSV representation (this is not _exactly_ accurate because you have to skip summing both parent nodes and their children, both of which are represented in the CSV, but it is true conceptually).
 
 ## Groupby
 
 Groupby is an IF plugin that reorganizes a tree according to keys provided by the user. This allows users to regroup their observations according to various properties of their application. For example, the following manifest file contains a flat array of observations. This is how you might expect data to arrive from an importer plugin, maybe one that hits a metrics API for a cloud service.
-
 
 ```yaml
 name: if-demo
@@ -667,7 +645,7 @@ description: demo pipeline
 graph:
   children:
     my-app:
-      pipeline:     
+      pipeline:
         - group-by
         - teads-curve
       config:
@@ -691,7 +669,7 @@ graph:
           cloud/region: uk-west
           cpu-util: 12
         - timestamp: 2023-07-06T00:00 # note this time restarts at the start timstamp
-          duration: 300 
+          duration: 300
           instance-type: B1
           cloud/region: uk-west
           cpu-util: 11
@@ -701,7 +679,7 @@ graph:
           cloud/region: uk-west
           cpu-util: 67
         - timestamp: 2023-07-06T10:00
-          duration: 300 
+          duration: 300
           instance-type: B1
           cloud/region: uk-west
           cpu-util: 1
@@ -774,7 +752,6 @@ group-by:
 
 You then have to provide config defining which keys to group by in each component. This is done at the component level (i.e. not global config).
 For example:
-
 
 ```yaml
 tree:

@@ -1,7 +1,7 @@
 import * as YAML from 'js-yaml';
 
 import {ExportLog} from '../../../builtins/export-log';
-import {tree, context} from '../../../__mocks__/builtins/export-csv';
+import {tree, context} from '../../../__mocks__/builtins/export-yaml';
 
 describe('builtins/export-log:', () => {
   describe('ExportLog: ', () => {

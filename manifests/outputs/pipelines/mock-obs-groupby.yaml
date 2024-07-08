@@ -6,8 +6,8 @@ initialize:
       path: builtin
       method: MockObservations
       global-config:
-        timestamp-from: '2024-03-05T00:00:00.000Z'
-        timestamp-to: '2024-03-05T00:01:00.000Z'
+        timestamp-from: "2024-03-05T00:00:00.000Z"
+        timestamp-to: "2024-03-05T00:01:00.000Z"
         duration: 10
         components:
           - name: server-1
@@ -26,8 +26,6 @@ initialize:
     group-by:
       path: builtin
       method: GroupBy
-  outputs:
-    - yaml
 execution:
   command: >-
     /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
@@ -37,21 +35,21 @@ execution:
   environment:
     if-version: 0.4.0
     os: macOS
-    os-version: '13.2'
+    os-version: "13.2"
     node-version: 18.14.2
     date-time: 2024-07-02T05:27:34.757Z (UTC)
     dependencies:
-      - '@babel/core@7.22.10'
-      - '@babel/preset-typescript@7.23.3'
-      - '@commitlint/cli@18.6.0'
-      - '@commitlint/config-conventional@18.6.0'
-      - '@grnsft/if-core@0.0.10'
+      - "@babel/core@7.22.10"
+      - "@babel/preset-typescript@7.23.3"
+      - "@commitlint/cli@18.6.0"
+      - "@commitlint/config-conventional@18.6.0"
+      - "@grnsft/if-core@0.0.10"
 
-      - '@jest/globals@29.7.0'
-      - '@types/jest@29.5.8'
-      - '@types/js-yaml@4.0.9'
-      - '@types/luxon@3.4.2'
-      - '@types/node@20.9.0'
+      - "@jest/globals@29.7.0"
+      - "@types/jest@29.5.8"
+      - "@types/js-yaml@4.0.9"
+      - "@types/luxon@3.4.2"
+      - "@types/node@20.9.0"
       - axios-mock-adapter@1.22.0
       - axios@1.7.2
       - cross-env@7.0.3
@@ -88,42 +86,42 @@ tree:
       children:
         server-1:
           inputs:
-            - timestamp: '2024-03-05T00:00:00.000Z'
+            - timestamp: "2024-03-05T00:00:00.000Z"
               duration: 10
               name: server-1
               cloud/instance-type: Standard_E64_v3
               cloud/region: westus3
               cloud/vendor: azure
               cpu/utilization: 12
-            - timestamp: '2024-03-05T00:00:10.000Z'
+            - timestamp: "2024-03-05T00:00:10.000Z"
               duration: 10
               name: server-1
               cloud/instance-type: Standard_E64_v3
               cloud/region: westus3
               cloud/vendor: azure
               cpu/utilization: 71
-            - timestamp: '2024-03-05T00:00:20.000Z'
+            - timestamp: "2024-03-05T00:00:20.000Z"
               duration: 10
               name: server-1
               cloud/instance-type: Standard_E64_v3
               cloud/region: westus3
               cloud/vendor: azure
               cpu/utilization: 75
-            - timestamp: '2024-03-05T00:00:30.000Z'
+            - timestamp: "2024-03-05T00:00:30.000Z"
               duration: 10
               name: server-1
               cloud/instance-type: Standard_E64_v3
               cloud/region: westus3
               cloud/vendor: azure
               cpu/utilization: 39
-            - timestamp: '2024-03-05T00:00:40.000Z'
+            - timestamp: "2024-03-05T00:00:40.000Z"
               duration: 10
               name: server-1
               cloud/instance-type: Standard_E64_v3
               cloud/region: westus3
               cloud/vendor: azure
               cpu/utilization: 42
-            - timestamp: '2024-03-05T00:00:50.000Z'
+            - timestamp: "2024-03-05T00:00:50.000Z"
               duration: 10
               name: server-1
               cloud/instance-type: Standard_E64_v3
@@ -134,42 +132,42 @@ tree:
       children:
         server-2:
           inputs:
-            - timestamp: '2024-03-05T00:00:00.000Z'
+            - timestamp: "2024-03-05T00:00:00.000Z"
               duration: 10
               name: server-2
               cloud/instance-type: Standard_E64_v3
               cloud/region: france
               cloud/vendor: azure
               cpu/utilization: 14
-            - timestamp: '2024-03-05T00:00:10.000Z'
+            - timestamp: "2024-03-05T00:00:10.000Z"
               duration: 10
               name: server-2
               cloud/instance-type: Standard_E64_v3
               cloud/region: france
               cloud/vendor: azure
               cpu/utilization: 80
-            - timestamp: '2024-03-05T00:00:20.000Z'
+            - timestamp: "2024-03-05T00:00:20.000Z"
               duration: 10
               name: server-2
               cloud/instance-type: Standard_E64_v3
               cloud/region: france
               cloud/vendor: azure
               cpu/utilization: 53
-            - timestamp: '2024-03-05T00:00:30.000Z'
+            - timestamp: "2024-03-05T00:00:30.000Z"
               duration: 10
               name: server-2
               cloud/instance-type: Standard_E64_v3
               cloud/region: france
               cloud/vendor: azure
               cpu/utilization: 10
-            - timestamp: '2024-03-05T00:00:40.000Z'
+            - timestamp: "2024-03-05T00:00:40.000Z"
               duration: 10
               name: server-2
               cloud/instance-type: Standard_E64_v3
               cloud/region: france
               cloud/vendor: azure
               cpu/utilization: 40
-            - timestamp: '2024-03-05T00:00:50.000Z'
+            - timestamp: "2024-03-05T00:00:50.000Z"
               duration: 10
               name: server-2
               cloud/instance-type: Standard_E64_v3

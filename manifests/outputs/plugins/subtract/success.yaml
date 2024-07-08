@@ -11,8 +11,6 @@ initialize:
           - cpu/energy
           - network/energy
         output-parameter: energy/diff
-  outputs:
-    - yaml
 execution:
   command: >-
     /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node

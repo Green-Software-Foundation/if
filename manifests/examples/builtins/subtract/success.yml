@@ -2,14 +2,13 @@ name: subtract demo
 description:
 tags:
 initialize:
-  # outputs: ['yaml']
   plugins:
     subtract:
       method: Subtract
-      path: 'builtin'
+      path: "builtin"
       global-config:
-        input-parameters: ['cpu/energy', 'network/energy']
-        output-parameter: 'energy/diff'
+        input-parameters: ["cpu/energy", "network/energy"]
+        output-parameter: "energy/diff"
 tree:
   children:
     child:

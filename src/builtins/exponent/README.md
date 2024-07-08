@@ -63,8 +63,6 @@ name: exponent demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     exponent:
       method: Exponent
@@ -91,7 +89,7 @@ You can run this example by saving it as `manifests/examples/test/exponent.yml` 
 
 ```sh
 npm i -g @grnsft/if
-if-run --manifest manifests/examples/test/exponent.yml --output manifests/outputs/exponent.yml
+if-run --manifest manifests/examples/test/exponent.yml --output manifests/outputs/exponent
 ```
 
 The results will be saved to a new `yaml` file in `manifests/outputs`.
@@ -108,7 +106,6 @@ Every element in the `inputs` array must contain:
 - `timestamp`
 - `duration`
 - whatever value you passed to `input-parameter`
-
 
 ### `InputValidationError`
 

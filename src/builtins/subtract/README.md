@@ -61,8 +61,6 @@ name: subtract demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     subtract:
       method: Subtract
@@ -92,7 +90,6 @@ if-run --manifest /manifests/plugins/subtract.yml --output manifests/outputs/sub
 ```
 
 The results will be saved to a new `yaml` file in `manifests/outputs`.
-
 
 ## Errors
 

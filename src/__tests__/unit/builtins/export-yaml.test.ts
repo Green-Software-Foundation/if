@@ -5,7 +5,7 @@ import {saveYamlFileAs} from '../../../util/yaml';
 
 import {STRINGS} from '../../../config';
 
-import {tree, context} from '../../../__mocks__/builtins/export-csv';
+import {tree, context} from '../../../__mocks__/builtins/export-yaml';
 
 jest.mock('../../../util/yaml', () => ({
   saveYamlFileAs: jest.fn(),
@@ -32,7 +32,7 @@ describe('builtins/export-yaml: ', () => {
 
         expect(saveYamlFileAs).toHaveBeenCalledWith(
           {...context, tree},
-          `${outputPath.split('#')[0]}.yaml`
+          outputPath.split('#')[0]
         );
       });
 

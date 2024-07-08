@@ -2,11 +2,10 @@ name: csv-lookup-demo
 description:
 tags:
 initialize:
-  # outputs: [yaml]
   plugins:
     cloud-metadata:
       method: CSVLookup
-      path: 'builtin'
+      path: "builtin"
       global-config:
         filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
         query:

@@ -1,7 +1,6 @@
 name: groupby
 description: failure when `config->group-by->group` is not an array
 initialize:
-  outputs: ['yaml']
   plugins:
     group-by:
       path: "builtin"
