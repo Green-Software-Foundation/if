@@ -4,9 +4,9 @@ import {ethers, Wallet} from 'ethers';
 // import {readFileSync} from 'fs';
 import * as YAML from 'js-yaml';
 import {EAS, SchemaEncoder} from '@ethereum-attestation-service/eas-sdk';
-import {execPromise} from './util/helpers';
-import {openYamlFileAsObject} from './util/yaml';
-import {Manifest} from './types/manifest';
+import {execPromise} from '../common/util/helpers';
+import {openYamlFileAsObject} from '../common/util/yaml';
+import {Manifest} from '../common/types/manifest';
 import * as dotenv from 'dotenv';
 
 const packageJson = require('../package.json');
