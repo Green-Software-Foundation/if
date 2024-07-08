@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable no-process-exit */
-import {debugLogger} from './util/debug-logger';
-import {parseIfEnvArgs} from './util/args';
-
+import {debugLogger} from '../common/util/debug-logger';
+import {logger} from '../common/util/logger';
 import {STRINGS} from '../common/config';
 
 import {
@@ -10,9 +9,8 @@ import {
   getOptionsFromArgs,
   initializeAndInstallLibs,
 } from './util/helpers';
-import {logger} from '../common/util/logger';
-
 import {EnvironmentOptions} from './types/if-env';
+import {parseIfEnvArgs} from './util/args';
 
 const {SUCCESS_MESSAGE} = STRINGS;
 
