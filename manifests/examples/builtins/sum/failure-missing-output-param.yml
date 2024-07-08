@@ -2,14 +2,13 @@ name: sum
 description: missing `output-parameter` in global-config
 tags:
 initialize:
-  outputs: ['yaml']
   plugins:
     sum:
       method: Sum
       path: "builtin"
       global-config:
         input-parameters: ["cpu/energy", "network/energy"]
-       # output-parameter: "energy"
+        # output-parameter: "energy"
 tree:
   children:
     child:

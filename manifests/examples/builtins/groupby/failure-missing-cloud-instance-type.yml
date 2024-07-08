@@ -1,7 +1,7 @@
 name: groupby
-description: 
+description:
 initialize:
- # outputs: ['yaml']
+  #
   plugins:
     group-by:
       path: "builtin"

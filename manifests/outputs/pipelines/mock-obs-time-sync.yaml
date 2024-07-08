@@ -30,7 +30,7 @@ initialize:
           - 10
           - 50
           - 100
-        'y':
+        "y":
           - 0.12
           - 0.32
           - 0.75
@@ -78,12 +78,10 @@ initialize:
       path: builtin
       method: TimeSync
       global-config:
-        start-time: '2023-12-12T00:00:00.000Z'
-        end-time: '2023-12-12T00:01:00.000Z'
+        start-time: "2023-12-12T00:00:00.000Z"
+        end-time: "2023-12-12T00:01:00.000Z"
         interval: 5
         allow-padding: true
-  outputs:
-    - yaml
 execution:
   command: >-
     /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
@@ -93,21 +91,21 @@ execution:
   environment:
     if-version: 0.4.0
     os: macOS
-    os-version: '13.2'
+    os-version: "13.2"
     node-version: 18.14.2
     date-time: 2024-07-02T05:29:47.787Z (UTC)
     dependencies:
-      - '@babel/core@7.22.10'
-      - '@babel/preset-typescript@7.23.3'
-      - '@commitlint/cli@18.6.0'
-      - '@commitlint/config-conventional@18.6.0'
-      - '@grnsft/if-core@0.0.10'
+      - "@babel/core@7.22.10"
+      - "@babel/preset-typescript@7.23.3"
+      - "@commitlint/cli@18.6.0"
+      - "@commitlint/config-conventional@18.6.0"
+      - "@grnsft/if-core@0.0.10"
 
-      - '@jest/globals@29.7.0'
-      - '@types/jest@29.5.8'
-      - '@types/js-yaml@4.0.9'
-      - '@types/luxon@3.4.2'
-      - '@types/node@20.9.0'
+      - "@jest/globals@29.7.0"
+      - "@types/jest@29.5.8"
+      - "@types/js-yaml@4.0.9"
+      - "@types/luxon@3.4.2"
+      - "@types/node@20.9.0"
       - axios-mock-adapter@1.22.0
       - axios@1.7.2
       - cross-env@7.0.3
@@ -145,28 +143,28 @@ tree:
         vcpus-total: 8
         vcpus-allocated: 1
       inputs:
-        - timestamp: '2023-12-12T00:00:00.000Z'
+        - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 1
           cpu/utilization: 10
-        - timestamp: '2023-12-12T00:00:01.000Z'
+        - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
           cloud/region: uk-west
-        - timestamp: '2023-12-12T00:00:06.000Z'
+        - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
-        - timestamp: '2023-12-12T00:00:13.000Z'
+        - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
           cpu/utilization: 15
       outputs:
-        - timestamp: '2023-12-12T00:00:00.000Z'
+        - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 5
@@ -180,7 +178,7 @@ tree:
           cpu-energy-raw: 0.0000563888888888889
           vcpu-ratio: 14.399999999999999
           cpu-energy-kwh: 0.000007048611111111113
-        - timestamp: '2023-12-12T00:00:05.000Z'
+        - timestamp: "2023-12-12T00:00:05.000Z"
           duration: 5
           cpu/utilization: 13
           cloud/instance-type: A1
@@ -194,7 +192,7 @@ tree:
           cpu-energy-raw: 0.00005340277777777778
           vcpu-ratio: 6.171428571428571
           cpu-energy-kwh: 0.000006675347222222222
-        - timestamp: '2023-12-12T00:00:10.000Z'
+        - timestamp: "2023-12-12T00:00:10.000Z"
           duration: 5
           cpu/utilization: 12
           cloud/instance-type: A1
@@ -208,7 +206,7 @@ tree:
           cpu-energy-raw: 0.00005190972222222222
           vcpu-ratio: 3.9619047619047616
           cpu-energy-kwh: 0.0000064887152777777775
-        - timestamp: '2023-12-12T00:00:15.000Z'
+        - timestamp: "2023-12-12T00:00:15.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -222,7 +220,7 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 1.3333333333333333
           cpu-energy-kwh: 0.000006488715277777778
-        - timestamp: '2023-12-12T00:00:20.000Z'
+        - timestamp: "2023-12-12T00:00:20.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -236,7 +234,7 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 1.3333333333333333
           cpu-energy-kwh: 0.000006488715277777778
-        - timestamp: '2023-12-12T00:00:25.000Z'
+        - timestamp: "2023-12-12T00:00:25.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -250,7 +248,7 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 1.3333333333333333
           cpu-energy-kwh: 0.000006488715277777778
-        - timestamp: '2023-12-12T00:00:30.000Z'
+        - timestamp: "2023-12-12T00:00:30.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -264,7 +262,7 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 1.3333333333333333
           cpu-energy-kwh: 0.000006488715277777778
-        - timestamp: '2023-12-12T00:00:35.000Z'
+        - timestamp: "2023-12-12T00:00:35.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -278,7 +276,7 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 1.3333333333333333
           cpu-energy-kwh: 0.000006488715277777778
-        - timestamp: '2023-12-12T00:00:40.000Z'
+        - timestamp: "2023-12-12T00:00:40.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -292,7 +290,7 @@ tree:
           cpu-energy-raw: 0.000031145833333333336
           vcpu-ratio: 0.8
           cpu-energy-kwh: 0.000003893229166666667
-        - timestamp: '2023-12-12T00:00:45.000Z'
+        - timestamp: "2023-12-12T00:00:45.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -306,7 +304,7 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 0
           cpu-energy-kwh: 0
-        - timestamp: '2023-12-12T00:00:50.000Z'
+        - timestamp: "2023-12-12T00:00:50.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -320,7 +318,7 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 0
           cpu-energy-kwh: 0
-        - timestamp: '2023-12-12T00:00:55.000Z'
+        - timestamp: "2023-12-12T00:00:55.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -334,7 +332,7 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 0
           cpu-energy-kwh: 0
-        - timestamp: '2023-12-12T00:01:00.000Z'
+        - timestamp: "2023-12-12T00:01:00.000Z"
           duration: 1
           cloud/instance-type: A1
           cloud/region: uk-west

@@ -2,7 +2,6 @@ name: shell
 description: falure with `global-config.command` being number instead od string
 tags:
 initialize:
-  outputs: ['yaml']
   plugins:
     shell:
       method: Shell

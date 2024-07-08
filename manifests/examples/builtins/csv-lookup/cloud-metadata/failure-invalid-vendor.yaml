@@ -2,7 +2,7 @@ name: cloud-metadata
 description: failure with invalid `inputs.cloud/vendor`
 tags:
 initialize:
-  # outputs: ['yaml']
+  #
   plugins:
     cloud-metadata:
       path: builtin
@@ -12,7 +12,7 @@ initialize:
           https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv
         query:
           instance-class: cloud/instance-type
-        output: ['cpu-cores-utilized', 'vcpus-allocated']
+        output: ["cpu-cores-utilized", "vcpus-allocated"]
 tree:
   children:
     child:

@@ -2,17 +2,16 @@ name: csv-lookup-demo
 description:
 tags:
 initialize:
-  # outputs: [yaml]
   plugins:
     cloud-metadata:
       method: CSVLookup
-      path: 'builtin'
+      path: "builtin"
       global-config:
         filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
         query:
           cloud-provider: "cloud/provider"
           cloud-region: "cloud/region"
-        output: ['em-zone-id','renamed-em-zone-data']
+        output: ["em-zone-id", "renamed-em-zone-data"]
 tree:
   children:
     child:

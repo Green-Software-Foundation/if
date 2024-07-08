@@ -2,7 +2,7 @@ name: regex
 description: physical processor doesn't match the regex expression
 tags:
 initialize:
- # outputs: ['yaml']
+  #
   plugins:
     regex:
       method: Regex

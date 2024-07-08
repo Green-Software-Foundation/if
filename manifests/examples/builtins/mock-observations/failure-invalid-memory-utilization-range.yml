@@ -2,7 +2,7 @@ name: mock-observation-demo
 description: a manifest demonstrating how to use the mock observations feature
 tags:
 initialize:
- # outputs: ['yaml']
+  #
   plugins:
     mock-observations:
       kind: plugin
