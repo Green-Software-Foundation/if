@@ -1,0 +1,1 @@
+export {STRINGS} from './strings';

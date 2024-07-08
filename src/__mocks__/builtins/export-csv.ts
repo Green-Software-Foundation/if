@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import {Context} from '../../types/manifest';
+
+import {Context} from '../../common/types/manifest';
 
 export const tree = {
   children: {
