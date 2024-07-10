@@ -15,11 +15,11 @@ const {ManifestValidationError} = ERRORS;
  * Gets the folder path of the manifest file, dependencies from manifest file and install argument from the given arguments.
  */
 export const getManifestData = async (manifest: string) => {
-  const loadedManifest = await load(manifest);
-  const children = loadedManifest.rawManifest.tree.children;
+  const {rawManifest} = await load(manifest);
+  const children = rawManifest.tree.children;
 
   if ((children.child || children['child-0']).outputs) {
-    return loadedManifest.rawManifest;
+    return rawManifest;
   }
 
   throw new ManifestValidationError(FAILURE_MESSAGE_OUTPUTS);
