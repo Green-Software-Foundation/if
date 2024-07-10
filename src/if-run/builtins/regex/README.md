@@ -22,7 +22,8 @@ Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-26
 
 ## Returns
 
-- `output`: the first match of `parameter` with the parameter name with `match` defined in global config.
+- `output`: The match of the `parameter` value using the `match` regex defined in the global config. If the `match` regex includes the global flag (`g`), a string containing all matches separated by spaces.
+
 
 ## Implementation
 

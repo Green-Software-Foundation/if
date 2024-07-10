@@ -80,13 +80,13 @@ export const Regex = (globalConfig: ConfigParams): ExecutePlugin => {
     }
 
     const regex = eval(match);
-    const matchedItem = input[parameter].match(regex);
+    const matchedItems = input[parameter].match(regex);
 
-    if (!matchedItem || !matchedItem[0]) {
+    if (!matchedItems || matchedItems.length === 0) {
       throw new RegexMismatchError(REGEX_MISMATCH(input[parameter], match));
     }
 
-    return matchedItem[0];
+    return matchedItems.join(' ');
   };
 
   return {
