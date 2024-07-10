@@ -1,8 +1,29 @@
-import {stringify} from 'csv-stringify/sync';
 import * as fs from 'fs/promises';
+import {stringify} from 'csv-stringify/sync';
 import {PluginParams} from '@grnsft/if-core/types';
+import {ERRORS} from '@grnsft/if-core/utils';
+
+import {load} from '../../common/lib/load';
 
 import {CsvOptions} from '../types/csv';
+import {STRINGS} from '../config';
+
+const {FAILURE_MESSAGE_OUTPUTS} = STRINGS;
+const {ManifestValidationError} = ERRORS;
+
+/**
+ * Gets the folder path of the manifest file, dependencies from manifest file and install argument from the given arguments.
+ */
+export const getManifestData = async (manifest: string) => {
+  const loadedManifest = await load(manifest);
+  const children = loadedManifest.rawManifest.tree.children;
+
+  if ((children.child || children['child-0']).outputs) {
+    return loadedManifest.rawManifest;
+  }
+
+  throw new ManifestValidationError(FAILURE_MESSAGE_OUTPUTS);
+};
 
 /**
  * Executes a CSV generation based on the provided tree structure, context, output path, and params.
