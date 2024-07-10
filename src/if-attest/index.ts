@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 /* eslint-disable no-process-exit */
 import {ethers, Wallet} from 'ethers';
-// import {readFileSync} from 'fs';
+import {ManifestInfo} from './types/types';
 import * as YAML from 'js-yaml';
 import {EAS, SchemaEncoder} from '@ethereum-attestation-service/eas-sdk';
 import {execPromise} from '../common/util/helpers';
 import {openYamlFileAsObject} from '../common/util/yaml';
 import {Manifest} from '../common/types/manifest';
+import {logger} from '../common/util/logger';
 import * as dotenv from 'dotenv';
+import {RegisterSchema} from './util/register-eas-schema';
 
-const packageJson = require('../package.json');
+const packageJson = require('../../package.json');
 dotenv.config();
 
 const EAS_CONTRACT_ADDRESS_SEPOLIA: string =
@@ -30,6 +32,8 @@ const IfAttest = async (manifestPath: string) => {
   const signer = createSigningWallet();
   const eas = new EAS(EAS_CONTRACT_ADDRESS_SEPOLIA);
   eas.connect(signer);
+
+  RegisterSchema();
 
   //todo: make level a CLI args
   const level = 0;
@@ -71,22 +75,10 @@ const encodeSchema = (manifestInfo: ManifestInfo) => {
     {name: 'unit', value: manifestInfo.unit, type: 'string'},
     {name: 'energy', value: manifestInfo.energy, type: 'uint8'},
     {name: 'carbon', value: manifestInfo.carbon, type: 'uint8'},
+    {name: 'quality', value: manifestInfo.quality, type: 'uint8'},
     {name: 'level', value: manifestInfo.level, type: 'uint8'},
   ]);
   return encodedData;
-};
-
-type ManifestInfo = {
-  start: string;
-  end: string;
-  hash: string;
-  if: string;
-  verified: boolean;
-  sci: number;
-  unit: string; // aggregated SCI (from the top level of the `tree`)aggregate
-  energy: number; // aggregated energy (value from the top level of the `tree`)
-  carbon: number; // aggregated carbon (value from the top level of the `tree`)
-  level: number; // 0-5 GSF review thoroughness score
 };
 
 const getManifestStart = (manifest: Manifest): string => {
@@ -126,6 +118,7 @@ const getManifestInfo = async (
     unit: unit,
     energy: manifest.tree.aggregated.energy,
     carbon: manifest.tree.aggregated.carbon,
+    quality: manifest.tree.aggregated.quality,
     level: level,
   };
 
@@ -157,4 +150,11 @@ const runIfCheck = async (manifestPath: string): Promise<boolean> => {
   return true;
 };
 
-IfAttest('/home/joe/Code/if/manifests/outputs/coefficient.yaml');
+IfAttest('/home/joe/Code/if/manifests/outputs/coefficient.yaml').catch(
+  error => {
+    if (error instanceof Error) {
+      logger.error(error);
+      process.exit(2);
+    }
+  }
+);
