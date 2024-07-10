@@ -3,18 +3,12 @@
 import * as YAML from 'js-yaml';
 
 import {parseManifestFromStdin} from '../common/util/helpers';
-import {validateManifest} from '../common/util/validations';
 import {debugLogger} from '../common/util/debug-logger';
+import {Manifest} from '../common/types/manifest';
 import {logger} from '../common/util/logger';
-import {load} from '../common/lib/load';
 
-import {injectEnvironment} from '../if-run/lib/environment';
-import {initialize} from '../if-run/lib/initialize';
-import {aggregate} from '../if-run/lib/aggregate';
-import {compute} from '../if-run/lib/compute';
-
+import {executeCsv, getManifestData} from './util/helpers';
 import {parseIfCsvArgs} from './util/args';
-import {executeCsv} from './util/helpers';
 import {CsvOptions} from './types/csv';
 
 const IfCsv = async () => {
@@ -24,23 +18,18 @@ const IfCsv = async () => {
   const pipedManifest = await parseManifestFromStdin();
   const {manifest, output, params} = await parseIfCsvArgs();
   const resolvedManifest = manifest || pipedManifest;
-  let envManifest;
+  let manifestData: Manifest;
 
   if (resolvedManifest) {
     if (pipedManifest) {
-      envManifest = await YAML.load(pipedManifest!);
+      manifestData = (await YAML.load(pipedManifest!)) as Manifest;
     } else {
-      const {rawManifest} = await load(resolvedManifest);
-      envManifest = await injectEnvironment(rawManifest);
+      manifestData = await getManifestData(manifest!);
     }
 
-    const {tree, ...context} = validateManifest(envManifest);
-    const pluginStorage = await initialize(context.initialize.plugins);
-    const computedTree = await compute(tree, {context, pluginStorage});
-    const aggregatedTree = aggregate(computedTree, context.aggregation);
     const options: CsvOptions = {
-      tree: aggregatedTree,
-      context,
+      tree: manifestData.tree,
+      context: manifestData,
       outputPath: output,
       params,
     };
