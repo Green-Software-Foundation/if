@@ -102,8 +102,6 @@ name: interpolation-demo
 description: simple demo of interpolation plugin
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     interpolation:
       method: Interpolation
@@ -132,8 +130,6 @@ name: interpolation-demo
 description: simple demo of interpolation plugin
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     interpolation:
       method: Interpolation
@@ -178,6 +174,7 @@ if-run --manifest ./manifests/examples/interpolation.yml --output ./manifests/ou
 You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
+
 - `method`: a string containing either `linear`, `spline` or `polynomial`
 - `x`: an array of numbers
 - `y`: an array of numbers
@@ -189,6 +186,7 @@ You can fix this error by checking you are providing valid values for each param
 ### Validation errors
 
 There are also several validation errors that can arise, including:
+
 - if the lengths of `x` and `y` are not equal
 - if `x` or `y` are empty
 - if the requested point to interpolate at is outside the range of `x`

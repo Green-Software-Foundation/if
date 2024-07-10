@@ -45,11 +45,11 @@ export const parseIfRunProcessArgs = (): ProcessArgsOutputs => {
     manifest,
     output,
     'override-params': overrideParams,
-    stdout,
+    'no-output': noOutput,
     debug,
   } = validateAndParseProcessArgs();
 
-  if (!output && !stdout) {
+  if (!output && noOutput) {
     logger.warn(NO_OUTPUT);
   }
 
@@ -59,7 +59,7 @@ export const parseIfRunProcessArgs = (): ProcessArgsOutputs => {
         inputPath: prependFullFilePath(manifest),
         outputOptions: {
           ...(output && {outputPath: prependFullFilePath(output)}),
-          ...(stdout && {stdout}),
+          ...(noOutput && {noOutput}),
         },
         ...(overrideParams && {paramPath: overrideParams}),
         debug,

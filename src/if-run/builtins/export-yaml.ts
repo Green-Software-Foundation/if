@@ -10,9 +10,6 @@ const {ExhaustOutputArgError} = ERRORS;
 const {OUTPUT_REQUIRED, EXPORTING_TO_YAML_FILE} = STRINGS;
 
 export const ExportYaml = () => {
-  /** Takes string before hashtag. */
-  const stripHashtag = (path: string) => path.split('#')[0];
-
   /**
    * Saves output file in YAML format.
    */
@@ -25,11 +22,14 @@ export const ExportYaml = () => {
       ...context,
       tree,
     };
-    const path = stripHashtag(outputPath);
+    const pathWithoutExtension =
+      outputPath.split('.').length > 1
+        ? outputPath.split('.').slice(0, -1).join('.')
+        : outputPath;
 
-    console.debug(EXPORTING_TO_YAML_FILE(path));
+    console.debug(EXPORTING_TO_YAML_FILE(pathWithoutExtension));
 
-    await saveYamlFileAs(outputFile, `${path}.yaml`);
+    await saveYamlFileAs(outputFile, `${pathWithoutExtension}.yaml`);
   };
 
   return {execute};

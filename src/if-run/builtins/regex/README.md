@@ -29,7 +29,6 @@ Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-26
 To run the plugin, you must first create an instance of `Regex`. Then, you can call `execute()`.
 
 ```typescript
-
 const globalConfig = {
   parameter: 'physical-processor',
   match: '^[^,]+',
@@ -56,8 +55,6 @@ name: regex-demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     regex:
       method: Regex
@@ -96,10 +93,10 @@ The results will be saved to a new `yaml` file in `manifests/outputs`.
 
 This error arises when a necessary piece of input data is missing from the `inputs` array.
 Every element in the `inputs` array must contain:
+
 - `timestamp`
 - `duration`
 - whatever value you passed to `parameter`
-
 
 ### `GlobalConfigError`
 
@@ -112,7 +109,6 @@ The required parameters are:
 - `output`: a string
 
 You can fix this error by checking you are providing valid values for each parameter in the config.
-
 
 ### `RegexMismatchError`
 

@@ -55,7 +55,7 @@ export const MockObservations = (globalConfig: ConfigParams): ExecutePlugin => {
     const schema = z.object({
       'timestamp-from': z.string(),
       'timestamp-to': z.string(),
-      duration: z.number(),
+      duration: z.number().gt(0),
       components: z.array(z.record(z.string())),
       generators: z.object({
         common: z.record(z.string().or(z.number())),

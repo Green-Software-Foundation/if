@@ -30,10 +30,10 @@ jest.mock('ts-command-line-args', () => ({
         return {
           manifest: 'mock.notyaml',
         };
-      case 'stdout':
+      case 'no-output':
         return {
           manifest: 'manifest-mock.yaml',
-          stdout: true,
+          'no-output': false,
         };
       default:
         return {
@@ -97,7 +97,7 @@ describe('if-run/util/args: ', () => {
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
         outputOptions: {
-          stdout: undefined,
+          'no-output': undefined,
         },
       };
 
@@ -147,7 +147,7 @@ describe('if-run/util/args: ', () => {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
         outputOptions: {
           outputPath: path.normalize(`${processRunningPath}/${outputPath}`),
-          stdout: undefined,
+          'no-output': undefined,
         },
       };
 
@@ -167,18 +167,16 @@ describe('if-run/util/args: ', () => {
       }
     });
 
-    it('returns stdout and manifest.', () => {
+    it('returns `no-output` and manifest.', () => {
       expect.assertions(1);
 
-      process.env.result = 'stdout';
+      process.env.result = 'no-output';
       const manifestPath = 'manifest-mock.yaml';
 
       const response = parseIfRunProcessArgs();
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
-        outputOptions: {
-          stdout: true,
-        },
+        outputOptions: {},
       };
 
       expect(response).toEqual(expectedResult);

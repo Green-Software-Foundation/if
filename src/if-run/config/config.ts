@@ -27,11 +27,11 @@ export const CONFIG = {
         alias: 'p',
         description: '[path to a parameter file that overrides our defaults]',
       },
-      stdout: {
+      'no-output': {
         type: Boolean,
         optional: true,
-        alias: 's',
-        description: '[prints out to the console]',
+        alias: 'n',
+        description: '[prevent output to the console]',
       },
       help: {
         type: Boolean,

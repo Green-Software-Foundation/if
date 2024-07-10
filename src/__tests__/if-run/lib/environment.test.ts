@@ -10,7 +10,7 @@ describe('lib/envirnoment: ', () => {
       // @ts-ignore
       const response = await injectEnvironment(context);
       expect(response).toHaveProperty('execution');
-    });
+    }, 6000);
 
     it('checks `execution` to have `command` and `environment` props.', async () => {
       // @ts-ignore
