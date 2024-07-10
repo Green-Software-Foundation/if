@@ -11,10 +11,9 @@ const {ManifestValidationError} = ERRORS;
 import {
   tree,
   context,
-  outputs,
   aggregated,
   aggregation,
-} from '../../../__mocks__/builtins/export-csv';
+} from '../../../__mocks__/builtins/export-yaml';
 
 jest.mock('fs/promises', () => {
   const originalModule =
@@ -45,7 +44,6 @@ describe('if-csv/util/helpers: ', () => {
           4000.0000020256216,
         ],
       ];
-      const reformedContext = Object.assign({}, context, {outputs});
       const reformedTree = Object.assign({}, tree, {
         children: {
           ...tree.children,
@@ -62,7 +60,7 @@ describe('if-csv/util/helpers: ', () => {
 
       const options: CsvOptions = {
         tree: reformedTree,
-        context: reformedContext,
+        context,
         outputPath,
         params: 'carbon',
       };
@@ -142,12 +140,7 @@ describe('if-csv/util/helpers: ', () => {
         ],
       ];
 
-      const reformedContext = Object.assign(
-        {},
-        context,
-        {outputs},
-        {aggregation}
-      );
+      const reformedContext = Object.assign({}, context, {aggregation});
       const reformedTree = Object.assign({}, tree, {
         children: {
           ...tree.children,
@@ -221,10 +214,9 @@ describe('if-csv/util/helpers: ', () => {
         ],
       ];
 
-      const reformedContext = Object.assign({}, context, {outputs});
       const options: CsvOptions = {
         tree,
-        context: reformedContext,
+        context,
         outputPath,
         params: 'carbon',
       };
