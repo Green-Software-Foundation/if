@@ -2,13 +2,15 @@
 /* eslint-disable no-process-exit */
 import * as path from 'path';
 
-import {parseIfCheckArgs} from './util/args';
-import {logStdoutFailMessage} from './util/helpers';
 import {getYamlFiles, removeFileIfExists} from '../common/util/fs';
+import {debugLogger} from '../common/util/debug-logger';
 import {logger} from '../common/util/logger';
 
-import {STRINGS} from './config';
+import {logStdoutFailMessage} from './util/helpers';
+import {parseIfCheckArgs} from './util/args';
 import {executeCommands} from './util/npm';
+
+import {STRINGS} from './config';
 
 const {
   CHECKING,
@@ -19,6 +21,9 @@ const {
 } = STRINGS;
 
 const IfCheck = async () => {
+  // Call this function with false parameter to prevent log debug messages.
+  debugLogger.overrideConsoleMethods(false);
+
   const commandArgs = await parseIfCheckArgs();
 
   console.log(`${CHECKING}\n`);
@@ -51,8 +56,11 @@ const IfCheck = async () => {
     }
 
     for await (const file of files) {
-      const fileName = path.basename(file);
-      console.log(IF_CHECK_EXECUTING(fileName));
+      const fileRelativePath = path.relative(
+        process.env.CURRENT_DIR || process.cwd(),
+        file
+      );
+      console.log(IF_CHECK_EXECUTING(fileRelativePath));
 
       try {
         await executeCommands(file, true);
