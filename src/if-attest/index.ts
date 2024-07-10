@@ -82,19 +82,19 @@ const encodeSchema = (manifestInfo: ManifestInfo) => {
 };
 
 const getManifestStart = (manifest: Manifest): string => {
-  const firstChildName = Object.keys(manifest.tree.children)[0];
+  const firstChildName = Object.keys(manifest.tree.children)[0] ?? 0;
   const manifestStart =
-    manifest.tree.children[`${firstChildName}`].inputs[0].timestamp;
+    manifest.tree.children[`${firstChildName}`].inputs[0].timestamp ?? 0;
   return manifestStart;
 };
 
 const getManifestEnd = (manifest: Manifest): string => {
   const firstChildName = Object.keys(manifest.tree.children)[0];
   const inputsLength =
-    manifest.tree.children[`${firstChildName}`].inputs.length;
+    manifest.tree.children[`${firstChildName}`].inputs.length ?? '';
   const manifestEnd =
     manifest.tree.children[`${firstChildName}`].inputs[inputsLength - 1]
-      .timestamp;
+      .timestamp ?? '';
   return manifestEnd;
 };
 
@@ -114,11 +114,11 @@ const getManifestInfo = async (
     hash: GetManifestHash(manifest),
     if: GetIfVersion(),
     verified: await runIfCheck(manifestPath),
-    sci: manifest.tree.aggregated.sci,
-    unit: unit,
-    energy: manifest.tree.aggregated.energy,
-    carbon: manifest.tree.aggregated.carbon,
-    quality: manifest.tree.aggregated.quality,
+    sci: manifest.tree.aggregated.sci ?? 0,
+    unit: unit ?? '',
+    energy: manifest.tree.aggregated.energy ?? 0,
+    carbon: manifest.tree.aggregated.carbon ?? 0,
+    quality: manifest.tree.aggregated.quality ?? 0,
     level: level,
   };
 
