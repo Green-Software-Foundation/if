@@ -59,8 +59,6 @@ name: sum demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     sum:
       method: Sum
@@ -90,7 +88,6 @@ if-run --manifest ./examples/manifests/sum.yml --output ./examples/outputs/sum.y
 
 The results will be saved to a new `yaml` file in `./examples/outputs`.
 
-
 ## Errors
 
 `Sum` exposes two of the IF error classes.
@@ -100,6 +97,7 @@ The results will be saved to a new `yaml` file in `./examples/outputs`.
 You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
+
 - `input-parameters`: this must be an array of strings, each being the name of a value in the `inputs` array
 - `output-parameter`: this must be a string
 
@@ -113,6 +111,5 @@ Every element in the ``inputs` array must contain:
 - `timestamp`
 - `duration`
 - whatever values you passed to `input-parameters`
-
 
 For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors).

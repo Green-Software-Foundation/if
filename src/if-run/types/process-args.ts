@@ -2,7 +2,7 @@ export interface IfRunArgs {
   manifest?: string;
   output?: string;
   'override-params'?: string;
-  stdout?: boolean;
+  'no-output'?: boolean;
   debug?: boolean;
 }
 
@@ -10,7 +10,7 @@ export interface ProcessArgsOutputs {
   inputPath: string;
   outputOptions: {
     outputPath?: string;
-    stdout?: boolean;
+    noOutput?: boolean;
   };
   paramPath?: string;
   debug?: boolean;
@@ -18,5 +18,5 @@ export interface ProcessArgsOutputs {
 
 export interface Options {
   outputPath?: string;
-  stdout?: boolean;
+  noOutput?: boolean;
 }

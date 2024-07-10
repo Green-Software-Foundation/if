@@ -17,8 +17,6 @@ const logMessagesKeys: (keyof typeof STRINGS)[] = [
   'AGGREGATING_NODE',
   'PREPARING_OUTPUT_DATA',
   'EXPORTING_TO_YAML_FILE',
-  'EXPORTING_TO_CSV_FILE',
-  'EXPORTING_RAW_CSV_FILE',
 ];
 
 enum LogLevel {

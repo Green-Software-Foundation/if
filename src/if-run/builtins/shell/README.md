@@ -66,8 +66,6 @@ name: shell-demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     sampler:
       method: Shell
@@ -94,8 +92,6 @@ name: shell-demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     sampler:
       method: Shell
@@ -128,7 +124,6 @@ if-run --manifest manifests/plugins/shell.yml --output manifests/outputs/shell.y
 ```
 
 The results will be saved to a new `yaml` file.
-
 
 ## Errors
 

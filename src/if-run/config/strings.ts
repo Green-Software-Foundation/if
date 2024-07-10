@@ -37,9 +37,8 @@ export const STRINGS = {
   NOT_INITALIZED_PLUGIN: (name: string) =>
     `Not initalized plugin: ${name}. Check if ${name} is in 'manifest.initalize.plugins'.`,
   NO_OUTPUT: `
-You have not selected an output method. To see your output data, you can choose from:
---stdout: this will print your output data to the console
---output <savepath>: this will save your output data to the given filepath (do not provide file extension)
+You have not added an output command: 
+--output <savepath>: will save your output data to the given filepath (do not provide file extension)
 Note that for the '--output' option you also need to define the output type in your manifest file. See https://if.greensoftware.foundation/major-concepts/manifest-file#initialize`,
   UNSUPPORTED_ERROR: (errorName: string) =>
     `UnsupportedErrorClass: plugin threw error class: ${errorName} that is not recognized by Impact Framework`,
@@ -64,17 +63,9 @@ Note that for the '--output' option you also need to define the output type in y
   PREPARING_OUTPUT_DATA: 'Preparing output data',
   EXPORTING_TO_YAML_FILE: (savepath: string) =>
     `Exporting to yaml file: ${savepath}`,
-  EXPORTING_TO_CSV_FILE: (savepath: string) =>
-    `Exporting to csv file: ${savepath}`,
-  EXPORTING_RAW_CSV_FILE: (savepath: string) =>
-    `Exporting raw csv file: ${savepath}`,
   /** Exhaust messages */
   OUTPUT_REQUIRED:
     'Output path is required, please make sure output is configured properly.',
-  CSV_EXPORT:
-    'CSV export criteria is not found in output path. Please append it after --output <path>#.',
-  WRITE_CSV_ERROR: (outputPath: string, error: any) =>
-    `Failed to write CSV file to ${outputPath}: ${error}`,
   /** Plugins messages */
   INVALID_NAME:
     '`name` global config parameter is empty or contains all spaces',

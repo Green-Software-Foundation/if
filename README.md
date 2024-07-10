@@ -19,7 +19,7 @@ Read the [specification and design docs](https://if.greensoftware.foundation) to
 
 ## Get started
 
-IF is a framework for running pipelines of plugins that operate on a set of observations. This is all configured using a manifest file.  We provide a standard library of plugins that come bundled with IF - we refer to these as `builtins`. We also have an [Explorer](https://explorer.if.greensoftware.foundation) where anyone can list third party plugins you can install.
+IF is a framework for running pipelines of plugins that operate on a set of observations. This is all configured using a manifest file. We provide a standard library of plugins that come bundled with IF - we refer to these as `builtins`. We also have an [Explorer](https://explorer.if.greensoftware.foundation) where anyone can list third party plugins you can install.
 
 Start by installing the latest version of IF:
 
@@ -32,24 +32,16 @@ Then create a `manifest` file that describes your application (see our docs for 
 Then, run `if` using the following command:
 
 ```sh
-if-run --manifest <path-to-your-manifest-file> --stdout
-## or you can use aliases
-if-run -m <path-to-your-manifest-file> -s
+if-run --manifest <path-to-your-manifest-file>
+## or you can use alias
+if-run -m <path-to-your-manifest-file>
 
 ```
 
-Note that above command will print your outputs to the console. You can also provide the `--output` command to save your outputs to a yaml file:
+Note that above command will print your outputs to the console. If you do not want to print the outputs to the console, you need to provide `--no-output` command. You can also provide the `--output` command to save your outputs to a yaml file:
 
 ```sh
 if-run -m <path-to-your-manifest> -o <savepath>
-```
-
-Note that you also have to add configuration to your manifest to enable this, as follows:
-
-```yaml
-initialize:
-  output:
-    - yaml
 ```
 
 The `if-run` CLI tool will configure and run the plugins defined in your input `yaml` (`manifest`) and return the results as an output `yaml` (`output`).
@@ -72,18 +64,15 @@ if-run -h
 
 Please read our documentation at [if.greensoftware.foundation](https://if.greensoftware.foundation/)
 
-
 ## Video walk-through
 
 Watch this video to learn how to create and run a `manifest`.
 
 [![Watch the walk-through video](https://i3.ytimg.com/vi/R-6eDM8AsvY/maxresdefault.jpg)](https://youtu.be/GW37Qd4AQbU)
 
-
 ## Join our mailing list
 
 We have a public mailing list at [if-community@greensoftware.foundation](https://groups.google.com/u/1/a/greensoftware.foundation/g/if-community). We send out weekly updates that explain what we've shipped, what we're working on and how you can get involved each week!
-
 
 ## Contributing
 
@@ -92,7 +81,6 @@ To contribute to IF, please fork this repository and raise a pull request from y
 You can check our issue board for issues. We mark some issues `core-only` if they are somehow sensitive and we want one of our core developers to handle it. Any other issues are open for the community to work on. We recommend commenting on the issue to start a chat with the core team, then start working on the issue when you have been assigned to it. This process helps to ensure your work is aligned with our roadmap and makes it much more likely that your changes will get merged compared to unsolicited PRs.
 
 Please read the full contribution guidelines at [if.greensoftware.foundation](https://if.greensoftware.foundation/Contributing)
-
 
 ## Bug reports
 

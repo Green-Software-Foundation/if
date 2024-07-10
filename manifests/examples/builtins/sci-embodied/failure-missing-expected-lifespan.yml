@@ -2,7 +2,6 @@ name: sci-embodied
 description: missing device/expected-lifespan
 tags:
 initialize:
-  #outputs: ['yaml']
   plugins:
     "sci-embodied": # a model that calculates m from te, tir, el, rr and rtor
       method: SciEmbodied
