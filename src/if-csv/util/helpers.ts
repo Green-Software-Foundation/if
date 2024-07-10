@@ -12,13 +12,13 @@ const {FAILURE_MESSAGE_OUTPUTS} = STRINGS;
 const {ManifestValidationError} = ERRORS;
 
 /**
- * Gets the folder path of the manifest file, dependencies from manifest file and install argument from the given arguments.
+ * Gets the manifest data if `outputs` is present in it.
  */
 export const getManifestData = async (manifest: string) => {
   const {rawManifest} = await load(manifest);
-  const children = rawManifest.tree.children;
+  const {children} = rawManifest.tree;
 
-  if ((children.child || children['child-0']).outputs) {
+  if (children?.child?.outputs || children?.['child-0']?.outputs) {
     return rawManifest;
   }
 
