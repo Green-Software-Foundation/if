@@ -3,8 +3,6 @@ export const STRINGS = {
   MISSING_PATH: "Initalization param 'path' is missing.",
   UNSUPPORTED_PLUGIN:
     "Plugin interface doesn't implement 'execute' or 'metadata' methods.",
-  OVERRIDE_WARNING:
-    '\n**WARNING**: You are overriding the IF default parameters file. Please be extremely careful of unintended side-effects in your plugin pipeline!\n',
   NOT_NATIVE_PLUGIN: (path: string) =>
     `
   You are using plugin ${path} which is not part of the Impact Framework standard library. You should do your own research to ensure the plugins are up to date and accurate. They may not be actively maintained.`,
