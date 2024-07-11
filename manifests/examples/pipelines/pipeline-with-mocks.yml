@@ -3,7 +3,8 @@ description: a full pipeline seeded with data from mock-observations feature
 tags:
 aggregation:
   metrics:
-    - "carbon"
+    "carbon":
+      method: sum
   type: "both"
 initialize:
   plugins:
