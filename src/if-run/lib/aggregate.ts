@@ -143,7 +143,7 @@ export const getAggregationMethod = (unitName: string) => {
   memoizedLog(console.debug, CHECKING_AGGREGATION_METHOD(unitName));
   const aggregationMetricsStorage = storeAggregateMetrics();
 
-  if (`${unitName}` in aggregationMetricsStorage) {
+  if (aggregationMetricsStorage && `${unitName}` in aggregationMetricsStorage) {
     return aggregationMetricsStorage[unitName].method;
   }
 
