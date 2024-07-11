@@ -1,6 +1,3 @@
-jest.mock('../../../if-run/util/json', () =>
-  require('../../../__mocks__/json')
-);
 jest.mock(
   'mockavizta',
   () => ({
@@ -42,45 +39,17 @@ jest.mock('../../../common/util/yaml', () => ({
 
 import {PluginParams} from '@grnsft/if-core/types';
 
-import {PARAMETERS} from '../../../if-run/config';
 import {load} from '../../../common/lib/load';
 
 describe('lib/load: ', () => {
   describe('load(): ', () => {
-    it('loads yaml with default parameters.', async () => {
+    it('successfully loads yaml.', async () => {
       const inputPath = 'load-default.yml';
-      const paramPath = undefined;
 
-      const result = await load(inputPath, paramPath);
+      const result = await load(inputPath);
 
       const expectedValue = {
         rawManifest: 'raw-manifest',
-        parameters: PARAMETERS,
-      };
-
-      expect(result).toEqual(expectedValue);
-    });
-
-    it('loads yaml with custom parameters.', async () => {
-      const inputPath = 'load-default.yml';
-      const paramPath = 'param-mock.json';
-
-      const result = await load(inputPath, paramPath);
-
-      const expectedValue = {
-        rawManifest: 'raw-manifest',
-        parameters: {
-          'mock-carbon': {
-            description: 'an amount of carbon emitted into the atmosphere',
-            unit: 'gCO2e',
-            aggregation: 'sum',
-          },
-          'mock-cpu': {
-            description: 'number of cores available',
-            unit: 'cores',
-            aggregation: 'none',
-          },
-        },
       };
 
       expect(result).toEqual(expectedValue);

@@ -1,6 +1,3 @@
-jest.mock('../../../if-run/util/json', () =>
-  require('../../../__mocks__/json')
-);
 jest.mock(
   'mockavizta',
   () => ({

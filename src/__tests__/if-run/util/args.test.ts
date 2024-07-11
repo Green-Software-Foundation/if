@@ -21,11 +21,6 @@ jest.mock('ts-command-line-args', () => ({
           manifest: 'manifest-mock.yml',
           output: 'output-mock.yml',
         };
-      case 'override-params':
-        return {
-          manifest: 'manifest-mock.yml',
-          'override-params': 'override-params-mock.yml',
-        };
       case 'not-yaml':
         return {
           manifest: 'mock.notyaml',
@@ -113,22 +108,6 @@ describe('if-run/util/args: ', () => {
       const manifestPath = 'manifest-mock.yml';
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
-        outputOptions: {},
-      };
-
-      expect(result).toEqual(expectedResult);
-    });
-
-    it('returns manifest with `paramPath`.', () => {
-      expect.assertions(1);
-
-      process.env.result = 'override-params';
-
-      const result = parseIfRunProcessArgs();
-      const manifestPath = 'manifest-mock.yml';
-      const expectedResult = {
-        inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
-        paramPath: 'override-params-mock.yml',
         outputOptions: {},
       };
 

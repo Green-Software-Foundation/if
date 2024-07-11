@@ -1,8 +1,21 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import {aggregate} from '../../../if-run/lib/aggregate';
+import {AggregationParams} from '../../../common/types/manifest';
+
+import {aggregate, storeAggregateMetrics} from '../../../if-run/lib/aggregate';
 
 describe('lib/aggregate: ', () => {
+  beforeAll(() => {
+    const metricStorage: AggregationParams = {
+      metrics: {
+        carbon: {method: 'sum'},
+      },
+      type: 'horizontal',
+    };
+
+    storeAggregateMetrics(metricStorage);
+  });
+
   describe('aggregate(): ', () => {
     it('returns tree if aggregation is missing.', () => {
       const tree = {};
@@ -44,7 +57,7 @@ describe('lib/aggregate: ', () => {
       };
 
       const aggregatedTree = aggregate(tree, {
-        metrics: ['carbon'],
+        metrics: {carbon: {method: 'sum'}},
         type: 'horizontal',
       });
       const expectedAggregated = {
@@ -92,7 +105,7 @@ describe('lib/aggregate: ', () => {
       };
 
       const aggregatedTree = aggregate(tree, {
-        metrics: ['carbon'],
+        metrics: {carbon: {method: 'sum'}},
         type: 'vertical',
       });
       const expectedOutputs = [
@@ -153,7 +166,7 @@ describe('lib/aggregate: ', () => {
       };
 
       const aggregatedTree = aggregate(tree, {
-        metrics: ['carbon'],
+        metrics: {carbon: {method: 'sum'}},
         type: 'both',
       });
 
