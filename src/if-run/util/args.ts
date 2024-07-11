@@ -33,7 +33,7 @@ const validateAndParseProcessArgs = () => {
 };
 
 /**
- * 1. Parses process arguments like `manifest`, `output`, `override-params`, `help` and `debug`.
+ * 1. Parses process arguments like `manifest`, `output`, `help` and `debug`.
  * 2. Checks if `help` param is provided, then logs help message and exits.
  * 3. If output params are missing, warns user about it.
  * 3. Otherwise checks if `manifest` param is there, then processes with checking if it's a yaml file.
@@ -44,7 +44,6 @@ export const parseIfRunProcessArgs = (): ProcessArgsOutputs => {
   const {
     manifest,
     output,
-    'override-params': overrideParams,
     'no-output': noOutput,
     debug,
   } = validateAndParseProcessArgs();
@@ -61,7 +60,6 @@ export const parseIfRunProcessArgs = (): ProcessArgsOutputs => {
           ...(output && {outputPath: prependFullFilePath(output)}),
           ...(noOutput && {noOutput}),
         },
-        ...(overrideParams && {paramPath: overrideParams}),
         debug,
       };
     }
