@@ -10,7 +10,11 @@ describe('builtins/subtract: ', () => {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
       'output-parameter': 'energy/diff',
     };
-    const subtract = Subtract(globalConfig);
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
+    };
+    const subtract = Subtract(globalConfig, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -72,7 +76,7 @@ describe('builtins/subtract: ', () => {
           'input-parameters': ['carbon', 'other-carbon'],
           'output-parameter': 'carbon-diff',
         };
-        const subtract = Subtract(newConfig);
+        const subtract = Subtract(newConfig, parametersMetadata);
 
         const data = [
           {

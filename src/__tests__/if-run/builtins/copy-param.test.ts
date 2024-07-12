@@ -14,7 +14,11 @@ describe('builtins/copy: ', () => {
       from: 'original',
       to: 'copy',
     };
-    const copy = Copy(globalConfig);
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
+    };
+    const copy = Copy(globalConfig, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -49,7 +53,7 @@ describe('builtins/copy: ', () => {
 
       it('throws an error when global config is not provided.', () => {
         const config = undefined;
-        const copy = Copy(config!);
+        const copy = Copy(config!, parametersMetadata);
 
         expect.assertions(1);
 
@@ -74,7 +78,7 @@ describe('builtins/copy: ', () => {
           from: 'original',
           to: 'copy',
         };
-        const copy = Copy(globalConfig);
+        const copy = Copy(globalConfig, parametersMetadata);
         expect.assertions(1);
 
         try {
@@ -99,7 +103,7 @@ describe('builtins/copy: ', () => {
           from: 'original',
           to: 'copy',
         };
-        const copy = Copy(globalConfig);
+        const copy = Copy(globalConfig, parametersMetadata);
 
         const expectedResult = [
           {

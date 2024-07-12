@@ -13,7 +13,11 @@ describe('builtins/sum: ', () => {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
       'output-parameter': 'energy',
     };
-    const sum = Sum(globalConfig);
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
+    };
+    const sum = Sum(globalConfig, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -52,7 +56,7 @@ describe('builtins/sum: ', () => {
 
       it('throws an error when global config is not provided.', () => {
         const config = undefined;
-        const sum = Sum(config!);
+        const sum = Sum(config!, parametersMetadata);
 
         expect.assertions(1);
 
@@ -98,7 +102,7 @@ describe('builtins/sum: ', () => {
           'input-parameters': ['carbon', 'other-carbon'],
           'output-parameter': 'carbon-sum',
         };
-        const sum = Sum(newConfig);
+        const sum = Sum(newConfig, parametersMetadata);
 
         const data = [
           {
