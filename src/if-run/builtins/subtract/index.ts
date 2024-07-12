@@ -1,15 +1,21 @@
 import {z} from 'zod';
 import {
   ExecutePlugin,
+  PluginParametersMetadata,
   PluginParams,
   SubtractConfig,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
 
-export const Subtract = (globalConfig: SubtractConfig): ExecutePlugin => {
+export const Subtract = (
+  globalConfig: SubtractConfig,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**
