@@ -12,6 +12,19 @@ You provide the names of the values you want to divide, and a name to use to add
 - `denominator` - a parameter by a specific configured number or the number by which `numerator` is divided
 - `output` - the number to a configured output parameter
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description` and `unit` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameter of the `numerator` of the global config. The parameter has the following attributes:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+
+- `outputs`: describe the parameter of the `denominator` of the global config. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+
 ### Inputs
 
 - `numerator` - as input parameter, must be available in the input array
@@ -42,7 +55,7 @@ const globalConfig = {
   denominator: 2,
   output: 'cpu/number-cores',
 };
-const divide = Divide(globalConfig);
+const divide = Divide(globalConfig, parametersMetadata);
 
 const input = [
   {

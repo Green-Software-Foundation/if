@@ -39,6 +39,19 @@ Three parameters are required in config: `from` and `to` and `keep-existing`.
 `to`: a string defining the name to use to add the result of summing the input parameters to the output array.
 `keep-existing`: toggles whether to keep or delete the copied parameter (defined in `to`)
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description` and `unit` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameter of the `from` of the global config. The parameter has the following attributes:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+
+- `outputs`: describe the parameters of the `to` of the global config. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+
 ### Inputs
 
 As with all plugins, `timestamp` and `duration` are required. The key passed to `from` must exist in the `input` data.
@@ -47,24 +60,28 @@ As with all plugins, `timestamp` and `duration` are required. The key passed to 
 
 The plugin adds a new parameter with the name defined in `to` to the `input` data.
 
-
 ## Implementation
 
 To run the plugin, you must first create an instance of `Copy`. Then, you can call `execute()`.
 
 ```typescript
-import { Copy } from ".";
+import {Copy} from '.';
 
-const plugin = Copy({ 'keep-existing': true, from: 'from-param', to: 'to-param' });
+const plugin = Copy({
+  'keep-existing': true,
+  from: 'from-param',
+  to: 'to-param',
+});
 
-const result = plugin.execute([{
-    timestamp: "2023-12-12T00:00:13.000Z",
+const result = plugin.execute([
+  {
+    timestamp: '2023-12-12T00:00:13.000Z',
     duration: 30,
     'from-param': 'hello',
-}])
+  },
+]);
 
-console.log(result)
-
+console.log(result);
 ```
 
 ## Example manifest
@@ -90,9 +107,8 @@ tree:
       pipeline:
         - copy-param
       inputs:
-        - timestamp: "2023-12-12T00:00:00.000Z"
+        - timestamp: '2023-12-12T00:00:00.000Z'
           original: 'hello'
-
 ```
 
 You can run this example by saving it as `./manifests/examples/copy.yml` and executing the following command from the project root:
