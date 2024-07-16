@@ -3,7 +3,7 @@ import * as fs from 'fs/promises';
 import {stringify} from 'csv-stringify/sync';
 import {ERRORS} from '@grnsft/if-core/utils';
 
-import {executeCsv, getManifestData} from '../../../if-csv/util/helpers';
+import {generateCsv, getManifestData} from '../../../if-csv/util/helpers';
 import {CsvOptions} from '../../../if-csv/types/csv';
 
 const {ManifestValidationError} = ERRORS;
@@ -26,7 +26,7 @@ jest.mock('fs/promises', () => {
 });
 
 describe('if-csv/util/helpers: ', () => {
-  describe('executeCsv(): ', () => {
+  describe('generateCsv(): ', () => {
     it('generates CSV file with correct data.', async () => {
       const outputPath = 'output';
       const columns = ['Path', 'Aggregated', '2023-12-12T00:00:00.000Z'];
@@ -65,7 +65,7 @@ describe('if-csv/util/helpers: ', () => {
         params: 'carbon',
       };
 
-      await executeCsv(options);
+      await generateCsv(options);
 
       expect(fs.writeFile).toHaveBeenCalledWith(
         'output.csv',
@@ -112,7 +112,7 @@ describe('if-csv/util/helpers: ', () => {
         params: 'carbon',
       };
 
-      await executeCsv(options);
+      await generateCsv(options);
 
       expect.assertions(1);
 
@@ -162,7 +162,7 @@ describe('if-csv/util/helpers: ', () => {
         params: 'carbon',
       };
 
-      await executeCsv(options);
+      await generateCsv(options);
 
       expect.assertions(1);
       expect(fs.writeFile).toHaveBeenCalledWith(
@@ -190,7 +190,7 @@ describe('if-csv/util/helpers: ', () => {
         params: 'carbon',
       };
 
-      const result = await executeCsv(options);
+      const result = await generateCsv(options);
 
       expect.assertions(1);
       expect(result).toEqual(stringify(matrix, {columns}));
@@ -221,7 +221,7 @@ describe('if-csv/util/helpers: ', () => {
         params: 'carbon',
       };
 
-      await executeCsv(options);
+      await generateCsv(options);
 
       expect.assertions(1);
       expect(fs.writeFile).toHaveBeenCalledWith(

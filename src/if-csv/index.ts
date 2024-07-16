@@ -7,7 +7,7 @@ import {debugLogger} from '../common/util/debug-logger';
 import {Manifest} from '../common/types/manifest';
 import {logger} from '../common/util/logger';
 
-import {executeCsv, getManifestData} from './util/helpers';
+import {generateCsv, getManifestData} from './util/helpers';
 import {parseIfCsvArgs} from './util/args';
 import {CsvOptions} from './types/csv';
 
@@ -30,7 +30,7 @@ const IfCsv = async () => {
       outputPath: output,
       params,
     };
-    const result = await executeCsv(options);
+    const result = await generateCsv(options);
 
     if (!output && result) {
       console.log(result);

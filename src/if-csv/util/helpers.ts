@@ -26,9 +26,9 @@ export const getManifestData = async (manifest: string) => {
 };
 
 /**
- * Executes a CSV generation based on the provided tree structure, context, output path, and params.
+ * Generates a CSV file based on the provided tree structure, context, output path, and params.
  */
-export const executeCsv = async (options: CsvOptions) => {
+export const generateCsv = async (options: CsvOptions) => {
   const {tree, context, outputPath, params} = options;
   const columns = ['Path'];
   const matrix = [columns];
