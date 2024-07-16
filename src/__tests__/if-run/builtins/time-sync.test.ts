@@ -1,6 +1,9 @@
 import {ERRORS} from '@grnsft/if-core/utils';
 import {Settings, DateTime} from 'luxon';
 
+import {AggregationParams} from '../../../common/types/manifest';
+
+import {storeAggregateMetrics} from '../../../if-run/lib/aggregate';
 import {TimeSync} from '../../../if-run/builtins/time-sync';
 
 import {STRINGS} from '../../../if-run/config';
@@ -51,6 +54,20 @@ jest.mock('luxon', () => {
 });
 
 describe('builtins/time-sync:', () => {
+  beforeAll(() => {
+    const metricStorage: AggregationParams = {
+      metrics: {
+        carbon: {method: 'sum'},
+        'cpu/utilization': {method: 'sum'},
+        'time-reserved': {method: 'avg'},
+        'resources-total': {method: 'none'},
+      },
+      type: 'horizontal',
+    };
+
+    storeAggregateMetrics(metricStorage);
+  });
+
   describe('time-sync: ', () => {
     const basicConfig = {
       'start-time': '2023-12-12T00:01:00.000Z',

@@ -2,7 +2,8 @@ name: Aggregation
 description: Fails with invalid metric.
 aggregation:
   metrics:
-    - test
+    "test":
+      method: sum
   type: both
 initialize:
   plugins:

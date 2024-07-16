@@ -162,6 +162,6 @@ export const aggregated = {
 };
 
 export const aggregation = {
-  metrics: ['carbon'],
+  metrics: {carbon: {method: 'sum'}},
   type: 'both',
 };

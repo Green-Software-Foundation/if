@@ -6,9 +6,9 @@ tags:
   category: on-premise
 aggregation:
   metrics:
-    - "carbon"
+    "carbon":
+      method: sum
   type: "both"
-params:
 initialize:
   plugins:
     "interpolate":

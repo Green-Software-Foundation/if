@@ -1,10 +1,9 @@
 #!/usr/bin/env node
-import {aggregate} from './lib/aggregate';
+import {aggregate, storeAggregateMetrics} from './lib/aggregate';
 import {compute} from './lib/compute';
 import {injectEnvironment} from './lib/environment';
 import {exhaust} from './lib/exhaust';
 import {initialize} from './lib/initialize';
-import {parameterize} from './lib/parameterize';
 import {load} from '../common/lib/load';
 
 import {parseIfRunProcessArgs} from './util/args';
@@ -21,19 +20,22 @@ const {DISCLAIMER_MESSAGE} = COMMON_STRINGS;
 
 const impactEngine = async () => {
   const options = parseIfRunProcessArgs();
-  const {inputPath, paramPath, outputOptions, debug} = options;
+  const {inputPath, outputOptions, debug} = options;
 
   debugLogger.overrideConsoleMethods(!!debug);
 
   logger.info(DISCLAIMER_MESSAGE);
   console.info(STARTING_IF);
 
-  const {rawManifest, parameters} = await load(inputPath, paramPath);
+  const {rawManifest} = await load(inputPath);
   const envManifest = await injectEnvironment(rawManifest);
 
   try {
     const {tree, ...context} = validateManifest(envManifest);
-    parameterize.combine(context.params, parameters);
+
+    // TODO: remove this after resolving timeSync to be a builtin functionality.
+    storeAggregateMetrics(context.aggregation);
+
     const pluginStorage = await initialize(context.initialize.plugins);
     const computedTree = await compute(tree, {context, pluginStorage});
     const aggregatedTree = aggregate(computedTree, context.aggregation);

@@ -1,12 +1,8 @@
-import {ManifestParameter} from '../../common/types/manifest';
-
 export const STRINGS = {
   MISSING_METHOD: "Initalization param 'method' is missing.",
   MISSING_PATH: "Initalization param 'path' is missing.",
   UNSUPPORTED_PLUGIN:
     "Plugin interface doesn't implement 'execute' or 'metadata' methods.",
-  OVERRIDE_WARNING:
-    '\n**WARNING**: You are overriding the IF default parameters file. Please be extremely careful of unintended side-effects in your plugin pipeline!\n',
   NOT_NATIVE_PLUGIN: (path: string) =>
     `
   You are using plugin ${path} which is not part of the Impact Framework standard library. You should do your own research to ensure the plugins are up to date and accurate. They may not be actively maintained.`,
@@ -28,8 +24,6 @@ export const STRINGS = {
   METRIC_MISSING: (metric: string, index: number) =>
     `Aggregation metric ${metric} is not found in inputs[${index}].`,
   INVALID_GROUP_BY: (type: string) => `Invalid group ${type}.`,
-  REJECTING_OVERRIDE: (param: ManifestParameter) =>
-    `Rejecting overriding of canonical parameter: ${param.name}.`,
   INVALID_EXHAUST_PLUGIN: (pluginName: string) =>
     `Invalid exhaust plugin: ${pluginName}.`,
   UNKNOWN_PARAM: (name: string) =>
@@ -48,7 +42,6 @@ Note that for the '--output' option you also need to define the output type in y
   LOADING_MANIFEST: 'Loading manifest',
   VALIDATING_MANIFEST: 'Validating manifest',
   CAPTURING_RUNTIME_ENVIRONMENT_DATA: 'Capturing runtime environment data',
-  SYNCING_PARAMETERS: 'Syncing parameters',
   CHECKING_AGGREGATION_METHOD: (unitName: string) =>
     `Checking aggregation method for ${unitName}`,
   INITIALIZING_PLUGINS: 'Initializing plugins',
