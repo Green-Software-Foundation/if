@@ -14,7 +14,7 @@ jest.mock(
   }),
   {virtual: true}
 );
-jest.mock('../../../if-diff/util/helpers', () => ({
+jest.mock('../../../common/util/helpers', () => ({
   parseManifestFromStdin: () => {
     if (process.env.readline === 'valid-source') {
       return `

@@ -14,7 +14,7 @@ jest.mock(
   }),
   {virtual: true}
 );
-jest.mock('../../../if-diff/util/helpers', () => ({
+jest.mock('../../../common/util/helpers', () => ({
   parseManifestFromStdin: () => {
     if (process.env.readline === 'valid-source') {
       return `
@@ -44,7 +44,7 @@ import {PluginParams} from '@grnsft/if-core/types';
 
 import {loadIfDiffFiles} from '../../../if-diff/lib/load';
 
-import {parseManifestFromStdin} from '../../../if-diff/util/helpers';
+import {parseManifestFromStdin} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../../if-diff/config';
 
