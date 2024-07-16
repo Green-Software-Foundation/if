@@ -18,14 +18,11 @@ const IfCsv = async () => {
   const pipedManifest = await parseManifestFromStdin();
   const {manifest, output, params} = await parseIfCsvArgs();
   const resolvedManifest = manifest || pipedManifest;
-  let manifestData: Manifest;
 
   if (resolvedManifest) {
-    if (pipedManifest) {
-      manifestData = (await YAML.load(pipedManifest!)) as Manifest;
-    } else {
-      manifestData = await getManifestData(manifest!);
-    }
+    const manifestData = pipedManifest
+      ? ((await YAML.load(pipedManifest!)) as Manifest)
+      : await getManifestData(manifest!);
 
     const options: CsvOptions = {
       tree: manifestData.tree,
