@@ -95,17 +95,18 @@ tree:
         vcpus-allocated: 1
         vcpus-total: 8
       pipeline:
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
@@ -145,17 +146,18 @@ tree:
         vcpus-allocated: 1
         vcpus-total: 8
       pipeline:
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
@@ -197,17 +199,18 @@ tree:
             vcpus-allocated: 1
             vcpus-total: 8
           pipeline:
-            - interpolate
-            - cpu-factor-to-wattage
-            - wattage-times-duration
-            - wattage-to-energy-kwh
-            - calculate-vcpu-ratio
-            - correct-cpu-energy-for-vcpu-ratio
-            - sci-embodied
-            - operational-carbon
-            - sum-carbon
-            - time-sync
-            - sci
+            compute:
+              - interpolate
+              - cpu-factor-to-wattage
+              - wattage-times-duration
+              - wattage-to-energy-kwh
+              - calculate-vcpu-ratio
+              - correct-cpu-energy-for-vcpu-ratio
+              - sci-embodied
+              - operational-carbon
+              - sum-carbon
+              - time-sync
+              - sci
           inputs:
             - timestamp: "2023-12-12T00:00:00.000Z"
               cloud/instance-type: A1
@@ -247,17 +250,18 @@ tree:
             vcpus-allocated: 1
             vcpus-total: 8
           pipeline:
-            - interpolate
-            - cpu-factor-to-wattage
-            - wattage-times-duration
-            - wattage-to-energy-kwh
-            - calculate-vcpu-ratio
-            - correct-cpu-energy-for-vcpu-ratio
-            - sci-embodied
-            - operational-carbon
-            - sum-carbon
-            - time-sync
-            - sci
+            compute:
+              - interpolate
+              - cpu-factor-to-wattage
+              - wattage-times-duration
+              - wattage-to-energy-kwh
+              - calculate-vcpu-ratio
+              - correct-cpu-energy-for-vcpu-ratio
+              - sci-embodied
+              - operational-carbon
+              - sum-carbon
+              - time-sync
+              - sci
           inputs:
             - timestamp: "2023-12-12T00:00:00.000Z"
               cloud/instance-type: A1
