@@ -1,19 +1,21 @@
-import {PluginParams, GroupByConfig} from '@grnsft/if-core/types';
+import {PluginParams} from '@grnsft/if-core/types';
+
+import {Regroup} from './regroup';
 
 import {mergeObjects} from '../util/helpers';
 import {debugLogger} from '../../common/util/debug-logger';
 
 import {STRINGS} from '../config/strings';
 
-import {isExecute, isGroupBy} from '../types/interface';
-import {ComputeParams, Node, Params} from '../types/compute';
+import {isExecute} from '../types/interface';
+import {ComputeParams, Node, PhasedPipeline} from '../types/compute';
 
-const {MERGING_DEFAULTS_WITH_INPUT_DATA, COMPUTING_PIPELINE_FOR_NODE} = STRINGS;
+const {MERGING_DEFAULTS_WITH_INPUT_DATA} = STRINGS;
 
 /**
  * Traverses all child nodes based on children grouping.
  */
-const traverse = async (children: any, params: Params) => {
+const traverse = async (children: any, params: ComputeParams) => {
   for (const child in children) {
     await computeNode(children[child], params);
   }
@@ -48,12 +50,13 @@ const mergeDefaults = (
  * 4. Goes through the pipeline plugins, by checking if it's `execute` plugin. If so sets outputs.
  *    If is a `groupby` plugin, it will return child components rather than outputs.
  * 5. Since after `groupby`, there are new child components, then computes them.
- *    Note: `pipeline` now equals the remaining plu.gins to apply to each child
+ *    Note: `pipeline` now equals the remaining plugins to apply to each child
  */
-const computeNode = async (node: Node, params: Params): Promise<any> => {
-  const pipeline = (node.pipeline || params.pipeline) as string[];
+const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
+  const pipeline = node.pipeline || (params.pipeline as PhasedPipeline);
   const config = node.config || params.config;
   const defaults = node.defaults || params.defaults;
+  const noFlags = !params.observe && !params.regroup && !params.compute;
 
   if (node.children) {
     return traverse(node.children, {
@@ -68,39 +71,55 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
   inputStorage = mergeDefaults(inputStorage, defaults);
   const pipelineCopy = structuredClone(pipeline);
 
-  while (pipelineCopy.length !== 0) {
-    const pluginName = pipelineCopy.shift() as string;
-    const plugin = params.pluginStorage.get(pluginName);
-    const nodeConfig = config && config[pluginName];
+  /**
+   * If iteration is on observe pipeline, then executes observe plugins and sets the inputs value.
+   */
+  if ((noFlags || params.observe) && pipelineCopy.observe) {
+    while (pipelineCopy.observe.length !== 0) {
+      const pluginName = pipelineCopy.observe.shift() as string;
+      const plugin = params.pluginStorage.get(pluginName);
+      const nodeConfig = config && config[pluginName];
 
-    console.debug(COMPUTING_PIPELINE_FOR_NODE(pluginName));
-    debugLogger.setExecutingPluginName(pluginName);
-
-    if (isExecute(plugin)) {
-      inputStorage = await plugin.execute(inputStorage, nodeConfig);
-      debugLogger.setExecutingPluginName();
-
-      node.outputs = inputStorage;
+      if (isExecute(plugin)) {
+        inputStorage = await plugin.execute(inputStorage, nodeConfig);
+        node.inputs = inputStorage;
+      }
     }
+  }
 
-    if (isGroupBy(plugin)) {
-      node.children = await plugin.execute(
-        inputStorage,
-        nodeConfig as GroupByConfig
-      );
-      delete node.inputs;
-      delete node.outputs;
+  /**
+   * If regroup is requested, execute regroup strategy, delete child's inputs, outputs and empty regroup array.
+   */
+  if ((noFlags || params.regroup) && pipeline.regroup) {
+    node.children = Regroup(inputStorage, pipeline.regroup);
+    delete node.inputs;
+    delete node.outputs;
 
-      await traverse(node.children, {
-        ...params,
-        pipeline: pipelineCopy,
-        defaults,
-        config,
-      });
+    return traverse(node.children, {
+      ...params,
+      pipeline: {
+        ...pipelineCopy,
+        regroup: undefined,
+      },
+      defaults,
+      config,
+    });
+  }
 
-      debugLogger.setExecutingPluginName();
+  /**
+   * If iteration is on compute plugin, then executes compute plugins and sets the outputs value.
+   */
+  if ((noFlags || params.compute) && pipelineCopy.compute) {
+    while (pipelineCopy.compute.length !== 0) {
+      const pluginName = pipelineCopy.compute.shift() as string;
+      const plugin = params.pluginStorage.get(pluginName);
+      const nodeConfig = config && config[pluginName];
 
-      break;
+      if (isExecute(plugin)) {
+        inputStorage = await plugin.execute(inputStorage, nodeConfig);
+        node.outputs = inputStorage;
+        debugLogger.setExecutingPluginName();
+      }
     }
   }
 };
