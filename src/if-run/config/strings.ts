@@ -27,7 +27,9 @@ export const STRINGS = {
     `Aggregation is not possible for given ${metric} since method is 'none'.`,
   METRIC_MISSING: (metric: string, index: number) =>
     `Aggregation metric ${metric} is not found in inputs[${index}].`,
-  INVALID_GROUP_BY: (type: string) => `Invalid group ${type}.`,
+  INVALID_GROUP_KEY: (key: string) => `Invalid group ${key}.`,
+  REGROUP_ERROR:
+    'Regroup phase is not an array or should contain at least one key.',
   REJECTING_OVERRIDE: (param: ManifestParameter) =>
     `Rejecting overriding of canonical parameter: ${param.name}.`,
   INVALID_EXHAUST_PLUGIN: (pluginName: string) =>
