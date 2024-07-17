@@ -19,12 +19,6 @@ describe('lib/compute: ', () => {
       kind: 'execute',
     },
   });
-  const mockGroupByPlugin = () => ({
-    execute: (inputs: any) => ({children: inputs}),
-    metadata: {
-      kind: 'groupby',
-    },
-  });
   /**
    * Compute params.
    */
@@ -43,28 +37,13 @@ describe('lib/compute: ', () => {
     },
     pluginStorage: pluginStorage().set('mock', mockExecutePlugin()),
   };
-  const params: ComputeParams = {
-    // @ts-ignore
-    context: {
-      name: 'mock-name',
-      initialize: {
-        plugins: {
-          mock: {
-            path: 'mockavizta',
-            method: 'Mockavizta',
-          },
-        },
-      },
-    },
-    pluginStorage: pluginStorage().set('mock', mockGroupByPlugin()),
-  };
 
   describe('compute(): ', () => {
     it('computes simple tree with execute plugin.', async () => {
       const tree = {
         children: {
           mockChild: {
-            pipeline: ['mock'],
+            pipeline: {compute: ['mock']},
             inputs: [
               {timestamp: 'mock-timestamp-1', duration: 10},
               {timestamp: 'mock-timestamp-2', duration: 10},
@@ -85,7 +64,7 @@ describe('lib/compute: ', () => {
       const tree = {
         children: {
           mockChild: {
-            pipeline: ['mock'],
+            pipeline: {regroup: ['duration']},
             inputs: [
               {timestamp: 'mock-timestamp-1', duration: 10},
               {timestamp: 'mock-timestamp-2', duration: 10},
@@ -93,19 +72,24 @@ describe('lib/compute: ', () => {
           },
         },
       };
-      const response = await compute(tree, params);
-      const expectedResult = mockGroupByPlugin().execute(
-        tree.children.mockChild.inputs
-      );
+      const response = await compute(tree, paramsExecute);
+      const expectedResponse = {
+        '10': {
+          inputs: [
+            {duration: 10, timestamp: 'mock-timestamp-1'},
+            {duration: 10, timestamp: 'mock-timestamp-2'},
+          ],
+        },
+      };
 
-      expect(response.children.mockChild.children).toEqual(expectedResult);
+      expect(response.children.mockChild.children).toEqual(expectedResponse);
     });
 
     it('computes simple tree with defaults and execute plugin.', async () => {
       const tree = {
         children: {
           mockChild: {
-            pipeline: ['mock'],
+            pipeline: {compute: ['mock']},
             defaults: {
               'cpu/name': 'Intel CPU',
             },
@@ -132,7 +116,7 @@ describe('lib/compute: ', () => {
       const tree = {
         children: {
           mockChild1: {
-            pipeline: ['mock'],
+            pipeline: {compute: ['mock']},
             defaults: {
               'cpu/name': 'Intel CPU',
             },
@@ -144,7 +128,7 @@ describe('lib/compute: ', () => {
           mockChild2: {
             children: {
               mockChild21: {
-                pipeline: ['mock'],
+                pipeline: {compute: ['mock']},
                 defaults: {
                   'cpu/name': 'Intel CPU',
                 },
@@ -188,16 +172,17 @@ describe('lib/compute: ', () => {
         },
       };
       const response = await compute(tree, paramsExecute);
-      const expectedResult: any[] = [];
 
-      expect(response.children.mockChild.outputs).toEqual(expectedResult);
+      expect(response.children.mockChild.outputs).toBeUndefined();
     });
 
     it('computes simple tree with defaults and no inputs with execue plugin.', async () => {
       const tree = {
         children: {
           mockChild: {
-            pipeline: ['mock'],
+            pipeline: {
+              compute: ['mock'],
+            },
             defaults: {
               carbon: 10,
             },
@@ -215,7 +200,9 @@ describe('lib/compute: ', () => {
       const tree = {
         children: {
           mockChild: {
-            pipeline: ['mock'],
+            pipeline: {
+              compute: ['mock'],
+            },
             config: {
               'cpu/name': 'Intel CPU',
             },
