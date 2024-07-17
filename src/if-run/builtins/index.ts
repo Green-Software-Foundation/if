@@ -1,4 +1,3 @@
-export {GroupBy} from './group-by';
 export {TimeSync} from './time-sync';
 export {Interpolation} from './interpolation';
 export {MockObservations} from './mock-observations';
