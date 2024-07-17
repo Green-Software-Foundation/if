@@ -21,7 +21,15 @@ const {DISCLAIMER_MESSAGE} = COMMON_STRINGS;
 
 const impactEngine = async () => {
   const options = parseIfRunProcessArgs();
-  const {inputPath, paramPath, outputOptions, debug} = options;
+  const {
+    inputPath,
+    paramPath,
+    outputOptions,
+    debug,
+    observe,
+    regroup,
+    compute: computeFlag,
+  } = options;
 
   debugLogger.overrideConsoleMethods(!!debug);
 
@@ -35,7 +43,13 @@ const impactEngine = async () => {
     const {tree, ...context} = validateManifest(envManifest);
     parameterize.combine(context.params, parameters);
     const pluginStorage = await initialize(context.initialize.plugins);
-    const computedTree = await compute(tree, {context, pluginStorage});
+    const computedTree = await compute(tree, {
+      context,
+      pluginStorage,
+      observe,
+      regroup,
+      compute: computeFlag,
+    });
     const aggregatedTree = aggregate(computedTree, context.aggregation);
     await exhaust(aggregatedTree, context, outputOptions);
   } catch (error) {
