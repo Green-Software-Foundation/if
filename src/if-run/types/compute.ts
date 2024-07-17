@@ -7,24 +7,28 @@ export type NodeConfig = {
   [key: string]: Record<string, any>;
 };
 
-export type Params = {
+export type PhasedPipeline = {
+  observe?: string[];
+  regroup?: string[];
+  compute?: string[];
+};
+
+export type ComputeParams = {
   pluginStorage: PluginStorageInterface;
   context: Context;
-  pipeline?: string[];
+  pipeline?: PhasedPipeline;
   config?: NodeConfig;
   defaults?: PluginParams;
+  observe?: Boolean;
+  regroup?: Boolean;
+  compute?: Boolean;
 };
 
 export type Node = {
   children?: any;
-  pipeline?: string[];
+  pipeline?: PhasedPipeline;
   config?: NodeConfig;
   defaults?: PluginParams;
   inputs?: PluginParams[];
   outputs?: PluginParams[];
-};
-
-export type ComputeParams = {
-  context: Context;
-  pluginStorage: PluginStorageInterface;
 };
