@@ -201,6 +201,8 @@ This is a builtin feature of IF, meaning it does not have to be initialized as a
 
 - `metrics`: which metrics do you want to aggregate? Every metric you provide here must exist in the output array.
 
+  - `method`: the aggregation method for the specied metric
+
 - `type`: the options are `horizontal`, `vertical` or both. Horizontal aggregation is the type that condenses each time series into a single summary value. Vertical aggregation is aggregated across components.
 
 Here's what the config block should look like:
@@ -208,7 +210,8 @@ Here's what the config block should look like:
 ```yaml
 aggregation:
   metrics:
-    - 'carbon'
+    'carbon':
+      method: 'sum'
   type: 'both'
 ```
 

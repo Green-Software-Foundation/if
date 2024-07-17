@@ -10,27 +10,7 @@ export const readFile = async (filePath: string) => {
     return fs.readFileSync(updatedPath, 'utf8');
   }
 
-  /** mock for util/json */
-  if (filePath.includes('json-reject')) {
-    return Promise.reject(new Error('rejected'));
-  }
-
   if (filePath.includes('json')) {
-    if (filePath.includes('param')) {
-      return JSON.stringify({
-        'mock-carbon': {
-          description: 'an amount of carbon emitted into the atmosphere',
-          unit: 'gCO2e',
-          aggregation: 'sum',
-        },
-        'mock-cpu': {
-          description: 'number of cores available',
-          unit: 'cores',
-          aggregation: 'none',
-        },
-      });
-    }
-
     return JSON.stringify(filePath);
   }
 

@@ -1,7 +1,6 @@
 export interface IfRunArgs {
   manifest?: string;
   output?: string;
-  'override-params'?: string;
   'no-output'?: boolean;
   debug?: boolean;
   observe?: boolean;

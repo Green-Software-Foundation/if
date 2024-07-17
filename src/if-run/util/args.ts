@@ -43,7 +43,6 @@ export const parseIfRunProcessArgs = (): ProcessArgsOutputs => {
   const {
     manifest,
     output,
-    'override-params': overrideParams,
     'no-output': noOutput,
     debug,
     observe,
@@ -63,7 +62,6 @@ export const parseIfRunProcessArgs = (): ProcessArgsOutputs => {
           ...(output && {outputPath: prependFullFilePath(output)}),
           ...(noOutput && {noOutput}),
         },
-        ...(overrideParams && {paramPath: overrideParams}),
         debug,
         observe,
         regroup,

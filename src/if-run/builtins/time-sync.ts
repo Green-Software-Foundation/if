@@ -11,11 +11,10 @@ import {
   TimeParams,
 } from '@grnsft/if-core/types';
 
-import {parameterize} from '../lib/parameterize';
-
 import {validate} from '../../common/util/validations';
 
 import {STRINGS} from '../config';
+import {getAggregationMethod} from '../lib/aggregate';
 
 Settings.defaultZone = 'utc';
 
@@ -200,7 +199,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
     const inputKeys = Object.keys(input);
 
     return inputKeys.reduce((acc, key) => {
-      const method = parameterize.getAggregationMethod(key);
+      const method = getAggregationMethod(key);
 
       if (key === 'timestamp') {
         const perSecond = normalizeTimePerSecond(input.timestamp, i);
@@ -254,7 +253,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
         return acc;
       }
 
-      const method = parameterize.getAggregationMethod(metric);
+      const method = getAggregationMethod(metric);
 
       if (method === 'avg' || method === 'sum') {
         acc[metric] = 0;
@@ -313,7 +312,7 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
       const metrics = Object.keys(input);
 
       metrics.forEach(metric => {
-        const method = parameterize.getAggregationMethod(metric);
+        const method = getAggregationMethod(metric);
         acc[metric] = acc[metric] ?? 0;
 
         if (metric === 'timestamp') {

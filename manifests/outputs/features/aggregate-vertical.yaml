@@ -2,7 +2,8 @@ name: Aggregation
 description: Apply `vertical` aggregation
 aggregation:
   metrics:
-    - cpu/utilization
+    "cpu/utilization":
+      method: sum
   type: vertical
 initialize:
   plugins:

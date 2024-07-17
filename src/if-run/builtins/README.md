@@ -165,7 +165,7 @@ Note that when `error-on-padding` is `true` no padding is performed and the plug
 
 ##### Resampling rules
 
-Now we have synchronized, continuous, high resolution time series data, we can resample. To achieve this, we use `interval`, which sets the global temporal resolution for the final, processed time series. `intervalk` is expressed in units of seconds, which means we can simply batch `observations` together in groups of size `interval`. For each value in each object we either sum, average or copy the values into one single summary object representing each time bucket of size `interval` depending on their `aggregation-method` defined in `params.ts`. The returned array is the final, synchronized time series at the desired temporal resolution.
+Now we have synchronized, continuous, high resolution time series data, we can resample. To achieve this, we use `interval`, which sets the global temporal resolution for the final, processed time series. `interval` is expressed in units of seconds, which means we can simply batch `observations` together in groups of size `interval`. For each value in each object we either sum, average or copy the values into one single summary object representing each time bucket of size `interval` depending on their `aggregation-method` defined in `aggregation` section in the manifest file. The returned array is the final, synchronized time series at the desired temporal resolution.
 
 #### Assumptions and limitations
 
