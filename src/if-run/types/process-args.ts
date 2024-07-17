@@ -4,6 +4,9 @@ export interface IfRunArgs {
   'override-params'?: string;
   'no-output'?: boolean;
   debug?: boolean;
+  observe?: boolean;
+  regroup?: boolean;
+  compute?: boolean;
 }
 
 export interface ProcessArgsOutputs {
@@ -14,6 +17,9 @@ export interface ProcessArgsOutputs {
   };
   paramPath?: string;
   debug?: boolean;
+  observe?: boolean;
+  regroup?: boolean;
+  compute?: boolean;
 }
 
 export interface Options {
