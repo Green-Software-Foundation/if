@@ -59,7 +59,7 @@ describe('builtins/regex: ', () => {
           match: '/(?<=_)[^_]+?(?=_|$)/g',
           output: 'cloud/instance-type',
         };
-        const regex = Regex(globalConfig);
+        const regex = Regex(globalConfig, parametersMetadata);
 
         const expectedResult = [
           {
