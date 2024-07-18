@@ -4,7 +4,8 @@ import {loadIfDiffFiles} from './lib/load';
 import {compare} from './lib/compare';
 
 import {parseIfDiffArgs} from './util/args';
-import {formatNotMatchingLog, parseManifestFromStdin} from './util/helpers';
+import {formatNotMatchingLog} from './util/helpers';
+import {parseManifestFromStdin} from '../common/util/helpers';
 import {validateManifest} from '../common/util/validations';
 
 import {logger} from '../common/util/logger';
