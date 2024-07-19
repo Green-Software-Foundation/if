@@ -17,11 +17,7 @@ export const Regroup = (inputs: PluginParams[], groups: string[]) => {
   /**
    * Creates structure to insert inputs by groups.
    */
-  const appendGroup = (
-    value: PluginParams,
-    object: any,
-    groups: string[]
-  ): any => {
+  const appendGroup = (value: PluginParams, object: any, groups: string[]) => {
     if (groups.length > 0) {
       const group = groups.shift() as string;
 
@@ -46,26 +42,22 @@ export const Regroup = (inputs: PluginParams[], groups: string[]) => {
   };
 
   /**
-   * Validates config parameter.
+   * Validates groups array.
    */
   const validateGroups = (groups: string[]) => {
-    const inputData = {
-      groups,
-    };
-
+    const inputData = {groups};
     const validationSchema = z.record(
       z.string(),
       z.array(z.string()).min(1, REGROUP_ERROR)
     );
-
     validate(validationSchema, inputData);
 
     return groups;
   };
 
   /**
-   * Interates over inputs, grabs config-group types values for each one.
-   * Based on grouping types, initializes the structure grouped structure.
+   * Interates over inputs, grabs group values for each one.
+   * Based on grouping, initializes the structure.
    */
   return inputs.reduce((acc, input) => {
     const validtedGroups = validateGroups(groups);
