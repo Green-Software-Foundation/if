@@ -47,10 +47,15 @@ const mergeDefaults = (
  * 2. If it's a grouping node, then first of all computes all it's children.
  *    This is doing a depth first traversal.
  * 3. Otherwise merges the defaults into the inputs.
- * 4. Goes through the pipeline plugins, by checking if it's `execute` plugin. If so sets outputs.
- *    If is a `groupby` plugin, it will return child components rather than outputs.
- * 5. Since after `groupby`, there are new child components, then computes them.
- *    Note: `pipeline` now equals the remaining plugins to apply to each child
+ * 4. Iterates over pipeline phases (observe, regroup, compute).
+ * 5. Observe plugins are used to insert input values
+ *    (isolated execution can be achived by passing `--observe` flag to CLI command).
+ * 6. Regroup plugin is used to group existing inputs by criteria
+ *    (isolated execution can be achived by passing `--regroup` flag to CLI command).
+ *    Since it creates new children for node, existing inputs and outputs are dropped and recursive traversal is called
+ *    for newbord child component.
+ * 7. Compute plugins are used to do desired computations and appending the result to outputs
+ *    (isolated execution can be achived by passing `--compute` flag to CLI command).
  */
 const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   const pipeline = node.pipeline || (params.pipeline as PhasedPipeline);
