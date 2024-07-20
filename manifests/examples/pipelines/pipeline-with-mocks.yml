@@ -13,9 +13,9 @@ initialize:
       method: MockObservations
       path: "builtin"
       global-config:
-        timestamp-from: 2023-07-06T00:00
-        timestamp-to: 2023-07-06T00:10
-        duration: 60
+        timestamp-from: "2023-12-12T00:00:00.000Z"
+        timestamp-to: "2023-12-12T00:00:13.000Z"
+        duration: 30
         components:
           - cloud/instance-type: A1
         generators:
@@ -98,29 +98,27 @@ initialize:
         end-time: "2023-12-12T00:01:00.000Z"
         interval: 5
         allow-padding: true
-    "group-by":
-      path: builtin
-      method: GroupBy
 tree:
   children:
     child-1:
       pipeline:
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - instance-type
+        observe:
+          - mock-observations
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800
@@ -130,48 +128,25 @@ tree:
         vcpus-total: 8
         vcpus-allocated: 1
       inputs:
-        - timestamp: "2023-12-12T00:00:00.000Z"
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          duration: 1
-          cpu/utilization: 10
-          requests: 30
-        - timestamp: "2023-12-12T00:00:01.000Z"
-          duration: 5
-          cpu/utilization: 20
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          requests: 40
-        - timestamp: "2023-12-12T00:00:06.000Z"
-          duration: 7
-          cpu/utilization: 15
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          requests: 30
-        - timestamp: "2023-12-12T00:00:13.000Z"
-          duration: 30
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          cpu/utilization: 15
-          requests: 50
     child-2:
       pipeline:
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+        observe:
+          - mock-observations
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800
@@ -181,27 +156,3 @@ tree:
         vcpus-total: 8
         vcpus-allocated: 1
       inputs:
-        - timestamp: "2023-12-12T00:00:00.000Z"
-          duration: 1
-          cpu/utilization: 30
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          requests: 30
-        - timestamp: "2023-12-12T00:00:01.000Z"
-          duration: 5
-          cpu/utilization: 28
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          requests: 40
-        - timestamp: "2023-12-12T00:00:06.000Z"
-          duration: 7
-          cpu/utilization: 40
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          requests: 50
-        - timestamp: "2023-12-12T00:00:13.000Z"
-          duration: 30
-          cpu/utilization: 33
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          requests: 60
