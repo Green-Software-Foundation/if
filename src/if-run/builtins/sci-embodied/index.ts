@@ -1,5 +1,9 @@
 import {z} from 'zod';
-import {ExecutePlugin, PluginParams} from '@grnsft/if-core/types';
+import {
+  ExecutePlugin,
+  PluginParametersMetadata,
+  PluginParams,
+} from '@grnsft/if-core/types';
 
 import {validate, allDefined} from '../../../common/util/validations';
 
@@ -7,9 +11,43 @@ import {STRINGS} from '../../config';
 
 const {SCI_EMBODIED_ERROR} = STRINGS;
 
-export const SciEmbodied = (): ExecutePlugin => {
+export const SciEmbodied = (
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs || {
+      'device/emissions-embodied': {
+        description: 'total embodied emissions of some component',
+        unit: 'gCO2e',
+      },
+      'device/expected-lifespan': {
+        description: 'Total Expected Lifespan of the Component in Seconds',
+        unit: 'seconds',
+      },
+      'resources-reserved': {
+        description: 'resources reserved for an application',
+        unit: 'count',
+      },
+      'resources-total': {
+        description: 'total resources available',
+        unit: 'count',
+      },
+      'vcpus-allocated': {
+        description: 'number of vcpus allocated to particular resource',
+        unit: 'count',
+      },
+      'vcpus-total': {
+        description: 'total number of vcpus available on a particular resource',
+        unit: 'count',
+      },
+    },
+    outputs: parametersMetadata?.outputs || {
+      'carbon-embodied': {
+        description: 'embodied emissions of the component',
+        unit: 'gCO2e',
+      },
+    },
   };
 
   const METRICS = [

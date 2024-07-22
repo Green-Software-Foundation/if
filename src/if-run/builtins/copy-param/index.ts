@@ -1,6 +1,10 @@
 import {z} from 'zod';
 import {ERRORS} from '@grnsft/if-core/utils';
-import {ExecutePlugin, PluginParams} from '@grnsft/if-core/types';
+import {
+  ExecutePlugin,
+  PluginParametersMetadata,
+  PluginParams,
+} from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
 
@@ -12,9 +16,14 @@ const {GlobalConfigError} = ERRORS;
 //   from-param: the parameter you are copying from (e.g. cpu/name)
 //   to-field: the parameter you are copying to (e.g. cpu/processor-name)
 
-export const Copy = (globalConfig: Record<string, any>): ExecutePlugin => {
+export const Copy = (
+  globalConfig: Record<string, any>,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**

@@ -3,13 +3,19 @@ import {
   ExecutePlugin,
   PluginParams,
   ExponentConfig,
+  PluginParametersMetadata,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
 
-export const Exponent = (globalConfig: ExponentConfig): ExecutePlugin => {
+export const Exponent = (
+  globalConfig: ExponentConfig,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**

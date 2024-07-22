@@ -1,6 +1,11 @@
 import {z} from 'zod';
 import {ERRORS} from '@grnsft/if-core/utils';
-import {ExecutePlugin, PluginParams, SumConfig} from '@grnsft/if-core/types';
+import {
+  ExecutePlugin,
+  PluginParams,
+  SumConfig,
+  PluginParametersMetadata,
+} from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
 
@@ -9,9 +14,14 @@ import {STRINGS} from '../../config';
 const {GlobalConfigError} = ERRORS;
 const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
-export const Sum = (globalConfig: SumConfig): ExecutePlugin => {
+export const Sum = (
+  globalConfig: SumConfig,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**

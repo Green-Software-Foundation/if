@@ -6,6 +6,7 @@ import {
   PluginParams,
   ConfigParams,
   Method,
+  PluginParametersMetadata,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
@@ -20,7 +21,16 @@ const {
   WITHIN_THE_RANGE,
 } = STRINGS;
 
-export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
+export const Interpolation = (
+  globalConfig: ConfigParams,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
+  const metadata = {
+    kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
+  };
+
   /**
    * Executes the energy consumption calculation for an array of input parameters.
    */
@@ -189,9 +199,7 @@ export const Interpolation = (globalConfig: ConfigParams): ExecutePlugin => {
   };
 
   return {
-    metadata: {
-      kind: 'execute',
-    },
+    metadata,
     execute,
   };
 };

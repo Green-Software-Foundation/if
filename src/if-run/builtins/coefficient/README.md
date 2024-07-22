@@ -16,6 +16,20 @@ Three parameters are required in global config: `input-parameter`, `coefficient`
 - `coefficient`: the value to multiply `input-parameter` by.
 - `output-parameter`: a string defining the name to use to add the product of the input parameters to the output array.
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description` and `unit`
+of the parameters of the inputs and outputs
+
+- `inputs`: describe parameters of the `input-parameter` of the global config. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+
+- `outputs`: describe parameters of the `output-parameter` of the global config. Each parameter has:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+
 ### Inputs
 
 All of `input-parameters` must be available in the input array.
@@ -68,6 +82,15 @@ initialize:
         input-parameter: 'carbon'
         coefficient: 3
         output-parameter: 'carbon-product'
+       parameter-metadata:
+        inputs:
+          carbon:
+            description: "an amount of carbon emitted into the atmosphere"
+            unit: "gCO2e"
+        outputs:
+          carbon-product:
+            description: "a product of cabon property and the coefficient"
+            unit: "gCO2e"
 tree:
   children:
     child:
@@ -105,4 +128,4 @@ The required parameters are:
 
 You can fix this error by checking you are providing valid values for each parameter in the config.
 
-For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors)
