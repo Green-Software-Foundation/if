@@ -55,7 +55,7 @@ const config = {
 };
 
 const multiply = Multiply(config, parametersMetadata);
-const result = await mult.execute([
+const result = await multiply.execute([
   {
     duration: 3600,
     timestamp: '2021-01-01T00:00:00Z',
