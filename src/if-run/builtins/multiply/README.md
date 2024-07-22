@@ -54,7 +54,7 @@ const config = {
   outputParameter: 'energy-product',
 };
 
-const mult = Multiply(config, parametersMetadata);
+const multiply = Multiply(config, parametersMetadata);
 const result = await mult.execute([
   {
     duration: 3600,
