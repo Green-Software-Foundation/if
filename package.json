@@ -19,7 +19,7 @@
   "dependencies": {
     "@commitlint/cli": "^18.6.0",
     "@commitlint/config-conventional": "^18.6.0",
-    "@grnsft/if-core": "^0.0.12",
+    "@grnsft/if-core": "^0.0.13",
     "axios": "^1.7.2",
     "csv-parse": "^5.5.6",
     "csv-stringify": "^6.4.6",
