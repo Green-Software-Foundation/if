@@ -7,19 +7,36 @@ initialize:
       path: builtin
       method: MockObservations
       global-config:
-        timestamp-from: 2023-07-06T00:00
-        timestamp-to: 2023-07-06T00:10
+        timestamp-from: 2023-12-12T00:00
+        timestamp-to: 2023-12-12T00:10
         duration: 60
         components:
           - cloud/instance-type: A1
         generators:
           common:
             cloud/region: uk-west
-            common-key: common-val
           randint:
             cpu/utilization:
               min: 1
               max: 99
+      parameter-metadata:
+        inputs:
+          timestamp:
+            description: refers to the time of occurrence of the input
+            unit: RFC3339
+            aggregationMethod: none
+          duration:
+            description: refers to the duration of the input
+            unit: seconds
+            aggregationMethod: sum
+          cloud/instance-type:
+            description: type of Cloud Instance name used in the cloud provider APIs
+            unit: none
+            aggregationMethod: none
+          cloud/region:
+            description: region cloud instance
+            unit: none
+            aggregationMethod: none
     interpolate:
       path: builtin
       method: Interpolation
@@ -37,6 +54,12 @@ initialize:
           - 1.02
         input-parameter: cpu/utilization
         output-parameter: cpu-factor
+      parameter-metadata:
+        inputs:
+          cpu/utilization:
+            description: refers to CPU utilization.
+            unit: percentage
+            aggregationMethod: avg
     cpu-factor-to-wattage:
       path: builtin
       method: Multiply
@@ -45,6 +68,12 @@ initialize:
           - cpu-factor
           - cpu/thermal-design-power
         output-parameter: cpu-wattage
+      parameter-metadata:
+        inputs:
+          cpu/thermal-design-power:
+            description: thermal design power for a processor
+            unit: kwh
+            aggregationMethod: avg
     wattage-times-duration:
       path: builtin
       method: Multiply
@@ -67,6 +96,16 @@ initialize:
         numerator: vcpus-total
         denominator: vcpus-allocated
         output: vcpu-ratio
+      parameter-metadata:
+        inputs:
+          vcpus-total:
+            description: total number of vcpus available on a particular resource
+            unit: count
+            aggregationMethod: none
+          vcpus-allocated:
+            description: number of vcpus allocated to particular resource
+            unit: count
+            aggregationMethod: none
     correct-cpu-energy-for-vcpu-ratio:
       path: builtin
       method: Divide
@@ -100,7 +139,6 @@ execution:
       - "@commitlint/cli@18.6.0"
       - "@commitlint/config-conventional@18.6.0"
       - "@grnsft/if-core@0.0.10"
-
       - "@jest/globals@29.7.0"
       - "@types/jest@29.5.8"
       - "@types/js-yaml@4.0.9"
@@ -131,6 +169,7 @@ tree:
   children:
     child-1:
       pipeline:
+        - mock-observations
         - interpolate
         - cpu-factor-to-wattage
         - wattage-times-duration
