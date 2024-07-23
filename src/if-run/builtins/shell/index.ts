@@ -3,15 +3,25 @@ import {spawnSync, SpawnSyncReturns} from 'child_process';
 import {loadAll, dump} from 'js-yaml';
 import {z} from 'zod';
 import {ERRORS} from '@grnsft/if-core/utils';
-import {ExecutePlugin, PluginParams, ConfigParams} from '@grnsft/if-core/types';
+import {
+  ExecutePlugin,
+  PluginParams,
+  ConfigParams,
+  PluginParametersMetadata,
+} from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
 
 const {ProcessExecutionError} = ERRORS;
 
-export const Shell = (globalConfig: ConfigParams): ExecutePlugin => {
+export const Shell = (
+  globalConfig: ConfigParams,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**

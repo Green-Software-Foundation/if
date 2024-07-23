@@ -24,12 +24,14 @@ export const Coefficient = (
       carbon: {
         description: 'an amount of carbon emitted into the atmosphere',
         unit: 'gCO2e',
+        aggregationMethod: 'sum',
       },
     },
     outputs: parametersMetadata?.outputs || {
       'carbon-product': {
         description: 'a product of cabon property and the coefficient',
         unit: 'gCO2e',
+        aggregationMethod: 'sum',
       },
     },
   };
