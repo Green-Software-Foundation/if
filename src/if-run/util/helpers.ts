@@ -1,8 +1,11 @@
 import {ERRORS} from '@grnsft/if-core/utils';
 
-import {STRINGS} from '../config';
-
 import {logger} from '../../common/util/logger';
+import {GlobalPlugins} from '../../common/types/manifest';
+import {PluginStorageInterface} from '../types/plugin-storage';
+import {storeAggregationMetrics} from '../lib/aggregate';
+
+import {STRINGS} from '../config';
 
 const {UNSUPPORTED_ERROR} = STRINGS;
 
@@ -38,4 +41,34 @@ export const mergeObjects = (defaults: any, input: any) => {
   }
 
   return merged;
+};
+
+/**
+ * Stores `aggregationMethod` of the plugins in the pipeline.
+ */
+export const storeAggregationMethods = (
+  plugins: GlobalPlugins,
+  pluginStorage: PluginStorageInterface
+) => {
+  Object.keys(plugins).forEach(pluginName => {
+    const plugin = pluginStorage.get(pluginName);
+
+    if ('inputs' in plugin.metadata || 'outputs' in plugin.metadata) {
+      const pluginParameters =
+        {...plugin.metadata.inputs, ...plugin.metadata.outputs} || {};
+
+      Object.entries(pluginParameters).forEach(
+        ([parameterName, parameterMetadata]) => {
+          const {aggregationMethod} = parameterMetadata;
+
+          if (aggregationMethod) {
+            const metrics = {
+              [parameterName]: {method: aggregationMethod},
+            };
+            storeAggregationMetrics({metrics});
+          }
+        }
+      );
+    }
+  });
 };
