@@ -3,7 +3,7 @@ import {Settings, DateTime} from 'luxon';
 
 import {AggregationParams} from '../../../common/types/manifest';
 
-import {storeAggregateMetrics} from '../../../if-run/lib/aggregate';
+import {storeAggregationMetrics} from '../../../if-run/lib/aggregate';
 import {TimeSync} from '../../../if-run/builtins/time-sync';
 
 import {STRINGS} from '../../../if-run/config';
@@ -65,10 +65,14 @@ describe('builtins/time-sync:', () => {
       type: 'horizontal',
     };
 
-    storeAggregateMetrics(metricStorage);
+    storeAggregationMetrics(metricStorage);
   });
 
   describe('time-sync: ', () => {
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
+    };
     const basicConfig = {
       'start-time': '2023-12-12T00:01:00.000Z',
       'end-time': '2023-12-12T00:01:00.000Z',
@@ -76,7 +80,7 @@ describe('builtins/time-sync:', () => {
       'allow-padding': true,
     };
 
-    const timeSync = TimeSync(basicConfig);
+    const timeSync = TimeSync(basicConfig, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -88,6 +92,11 @@ describe('builtins/time-sync:', () => {
 });
 
 describe('execute(): ', () => {
+  const parametersMetadata = {
+    inputs: {},
+    outputs: {},
+  };
+
   it('throws error if `start-time` is missing.', async () => {
     const invalidStartTimeConfig = {
       'start-time': '',
@@ -96,7 +105,7 @@ describe('execute(): ', () => {
       'allow-padding': true,
     };
 
-    const timeModel = TimeSync(invalidStartTimeConfig);
+    const timeModel = TimeSync(invalidStartTimeConfig, parametersMetadata);
 
     expect.assertions(1);
 
@@ -131,7 +140,7 @@ describe('execute(): ', () => {
       interval: 5,
       'allow-padding': true,
     };
-    const timeModel = TimeSync(invalidEndTimeConfig);
+    const timeModel = TimeSync(invalidEndTimeConfig, parametersMetadata);
 
     expect.assertions(1);
 
@@ -160,7 +169,7 @@ describe('execute(): ', () => {
       interval: 5,
       'allow-padding': true,
     };
-    const timeModel = TimeSync(invalidStartTimeConfig);
+    const timeModel = TimeSync(invalidStartTimeConfig, parametersMetadata);
     expect.assertions(1);
     try {
       await timeModel.execute([
@@ -186,7 +195,7 @@ describe('execute(): ', () => {
       interval: 5,
       'allow-padding': true,
     };
-    const timeModel = TimeSync(invalidEndTimeConfig);
+    const timeModel = TimeSync(invalidEndTimeConfig, parametersMetadata);
 
     expect.assertions(1);
     try {
@@ -208,7 +217,7 @@ describe('execute(): ', () => {
 
   it('throws error on missing global config.', async () => {
     const config = undefined;
-    const timeModel = TimeSync(config!);
+    const timeModel = TimeSync(config!, parametersMetadata);
 
     expect.assertions(1);
 
@@ -240,7 +249,7 @@ describe('execute(): ', () => {
       'allow-padding': true,
     };
 
-    const timeModel = TimeSync(invalidIntervalConfig);
+    const timeModel = TimeSync(invalidIntervalConfig, parametersMetadata);
 
     expect.assertions(1);
 
@@ -272,7 +281,7 @@ describe('execute(): ', () => {
       'allow-padding': true,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     try {
       await timeModel.execute([
@@ -302,7 +311,7 @@ describe('execute(): ', () => {
       'allow-padding': true,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     try {
       await timeModel.execute([
@@ -334,7 +343,7 @@ describe('execute(): ', () => {
       'allow-padding': true,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     try {
       await timeModel.execute([
@@ -374,7 +383,7 @@ describe('execute(): ', () => {
       },
     ];
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
     expect.assertions(2);
 
     try {
@@ -395,7 +404,7 @@ describe('execute(): ', () => {
       'allow-padding': true,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     try {
       await timeModel.execute([
@@ -425,7 +434,7 @@ describe('execute(): ', () => {
       'allow-padding': false,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     const result = await timeModel.execute([
       {
@@ -464,7 +473,7 @@ describe('execute(): ', () => {
       'allow-padding': true,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     const result = await timeModel.execute([
       {
@@ -538,7 +547,7 @@ describe('execute(): ', () => {
       'allow-padding': true,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     const result = await timeModel.execute([
       {
@@ -578,7 +587,7 @@ describe('execute(): ', () => {
       'allow-padding': true,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     const result = await timeModel.execute([
       {
@@ -622,7 +631,7 @@ describe('execute(): ', () => {
       'allow-padding': true,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     try {
       await timeModel.execute([
@@ -651,7 +660,7 @@ describe('execute(): ', () => {
       'allow-padding': true,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     const result = await timeModel.execute([
       {
@@ -690,7 +699,7 @@ describe('execute(): ', () => {
       'allow-padding': false,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     try {
       await timeModel.execute([
@@ -720,7 +729,7 @@ describe('execute(): ', () => {
       'allow-padding': false,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     try {
       await timeModel.execute([
@@ -750,7 +759,7 @@ describe('execute(): ', () => {
       'allow-padding': false,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
 
     try {
       await timeModel.execute([
@@ -781,7 +790,7 @@ describe('execute(): ', () => {
       'allow-padding': true,
     };
 
-    const timeModel = TimeSync(basicConfig);
+    const timeModel = TimeSync(basicConfig, parametersMetadata);
     const result = await timeModel.execute([
       {
         timestamp: '2023-12-12T00:00:00.000Z',

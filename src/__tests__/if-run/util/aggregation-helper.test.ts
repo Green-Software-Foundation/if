@@ -5,7 +5,7 @@ import {AggregationParams} from '../../../common/types/manifest';
 
 import {aggregateInputsIntoOne} from '../../../if-run/util/aggregation-helper';
 import {AggregationMetric} from '../../../if-run/types/aggregation';
-import {storeAggregateMetrics} from '../../../if-run/lib/aggregate';
+import {storeAggregationMetrics} from '../../../if-run/lib/aggregate';
 
 import {STRINGS} from '../../../if-run/config';
 
@@ -23,7 +23,7 @@ describe('util/aggregation-helper: ', () => {
       type: 'horizontal',
     };
 
-    storeAggregateMetrics(metricStorage);
+    storeAggregationMetrics(metricStorage);
   });
 
   describe('aggregateInputsIntoOne(): ', () => {
@@ -105,7 +105,7 @@ describe('util/aggregation-helper: ', () => {
         type: 'horizontal',
       };
 
-      storeAggregateMetrics(metricStorage);
+      storeAggregationMetrics(metricStorage);
       const inputs: PluginParams[] = [
         {timestamp: '', duration: 10, 'cpu/utilization': 10},
         {timestamp: '', duration: 10, 'cpu/utilization': 90},
