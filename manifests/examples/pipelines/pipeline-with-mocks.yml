@@ -30,19 +30,19 @@ initialize:
           timestamp:
             description: refers to the time of occurrence of the input
             unit: RFC3339
-            aggregationMethod: none
+            aggregation-method: none
           duration:
             description: refers to the duration of the input
             unit: seconds
-            aggregationMethod: sum
+            aggregation-method: sum
           cloud/instance-type:
             description: type of Cloud Instance name used in the cloud provider APIs
             unit: none
-            aggregationMethod: none
+            aggregation-method: none
           cloud/region:
             description: region cloud instance
             unit: none
-            aggregationMethod: none
+            aggregation-method: none
     "interpolate":
       method: Interpolation
       path: "builtin"
@@ -57,12 +57,12 @@ initialize:
           cpu/utilization:
             description: refers to CPU utilization.
             unit: percentage
-            aggregationMethod: avg
+            aggregation-method: avg
         outputs:
           cpu-factor:
             description: result of interpolate
             unit: kWh
-            aggregationMethod: avg
+            aggregation-method: avg
     "cpu-factor-to-wattage":
       method: Multiply
       path: builtin
@@ -74,12 +74,12 @@ initialize:
           cpu/thermal-design-power:
             description: thermal design power for a processor
             unit: kwh
-            aggregationMethod: avg
+            aggregation-method: avg
         outputs:
           cpu-wattage:
             description: the energy used by the CPU
             unit: kwh
-            aggregationMethod: sum
+            aggregation-method: sum
     "wattage-times-duration":
       method: Multiply
       path: builtin
@@ -105,11 +105,11 @@ initialize:
           vcpus-total:
             description: total number of vcpus available on a particular resource
             unit: count
-            aggregationMethod: none
+            aggregation-method: none
           vcpus-allocated:
             description: number of vcpus allocated to particular resource
             unit: count
-            aggregationMethod: none
+            aggregation-method: none
     "correct-cpu-energy-for-vcpu-ratio":
       method: Divide
       path: "builtin"
@@ -131,7 +131,7 @@ initialize:
           grid/carbon-intensity:
             description: Carbon intensity for the grid
             unit: gCO2eq/kWh
-            aggregationMethod: avg
+            aggregation-method: avg
     "sum-carbon":
       path: "builtin"
       method: Sum
@@ -150,7 +150,7 @@ initialize:
           requests:
             description: expressed the final SCI value
             unit: none
-            aggregationMethod: sum
+            aggregation-method: sum
     "time-sync":
       method: TimeSync
       path: "builtin"
@@ -164,7 +164,7 @@ initialize:
           time-reserved:
             description: time reserved for a component
             unit: seconds
-            aggregationMethod: avg
+            aggregation-method: avg
     "group-by":
       path: builtin
       method: GroupBy

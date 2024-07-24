@@ -24,19 +24,19 @@ initialize:
           timestamp:
             description: refers to the time of occurrence of the input
             unit: RFC3339
-            aggregationMethod: none
+            aggregation-method: none
           duration:
             description: refers to the duration of the input
             unit: seconds
-            aggregationMethod: sum
+            aggregation-method: sum
           cloud/instance-type:
             description: type of Cloud Instance name used in the cloud provider APIs
             unit: none
-            aggregationMethod: none
+            aggregation-method: none
           cloud/region:
             description: region cloud instance
             unit: none
-            aggregationMethod: none
+            aggregation-method: none
     interpolate:
       path: builtin
       method: Interpolation
@@ -59,7 +59,7 @@ initialize:
           cpu/utilization:
             description: refers to CPU utilization.
             unit: percentage
-            aggregationMethod: avg
+            aggregation-method: avg
     cpu-factor-to-wattage:
       path: builtin
       method: Multiply
@@ -73,7 +73,7 @@ initialize:
           cpu/thermal-design-power:
             description: thermal design power for a processor
             unit: kwh
-            aggregationMethod: avg
+            aggregation-method: avg
     wattage-times-duration:
       path: builtin
       method: Multiply
@@ -101,11 +101,11 @@ initialize:
           vcpus-total:
             description: total number of vcpus available on a particular resource
             unit: count
-            aggregationMethod: none
+            aggregation-method: none
           vcpus-allocated:
             description: number of vcpus allocated to particular resource
             unit: count
-            aggregationMethod: none
+            aggregation-method: none
     correct-cpu-energy-for-vcpu-ratio:
       path: builtin
       method: Divide
