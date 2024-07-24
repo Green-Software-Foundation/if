@@ -362,7 +362,7 @@ describe('execute(): ', () => {
       expect(error).toBeInstanceOf(InputValidationError);
       expect(error).toStrictEqual(
         new InputValidationError(
-          '"timestamp" parameter is required in input[0]. Error code: invalid_union.'
+          '"timestamp" parameter is invalid datetime in input[0]. Error code: invalid_string.'
         )
       );
     }
@@ -645,7 +645,7 @@ describe('execute(): ', () => {
       expect(error).toBeInstanceOf(InputValidationError);
       expect(error).toStrictEqual(
         new InputValidationError(
-          '"timestamp" parameter is invalid datetime in input[1]. Error code: invalid_string.'
+          '"start-time" parameter is invalid datetime. Error code: invalid_string.'
         )
       );
     }
