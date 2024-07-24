@@ -46,12 +46,12 @@ export const TimeSync = (
       timestamp: {
         description: 'refers to the time of occurrence of the input',
         unit: 'RFC3339',
-        aggregationMethod: 'none',
+        'aggregation-method': 'none',
       },
       duration: {
         description: 'refers to the duration of the input',
         unit: 'seconds',
-        aggregationMethod: 'sum',
+        'aggregation-method': 'sum',
       },
     },
     outputs: parametersMetadata?.outputs,

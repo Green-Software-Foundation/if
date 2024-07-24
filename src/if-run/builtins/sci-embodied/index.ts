@@ -20,17 +20,17 @@ export const SciEmbodied = (
       'device/emissions-embodied': {
         description: 'total embodied emissions of some component',
         unit: 'gCO2e',
-        aggregationMethod: 'sum',
+        'aggregation-method': 'sum',
       },
       'device/expected-lifespan': {
         description: 'Total Expected Lifespan of the Component in Seconds',
         unit: 'seconds',
-        aggregationMethod: 'sum',
+        'aggregation-method': 'sum',
       },
       'resources-reserved': {
         description: 'resources reserved for an application',
         unit: 'count',
-        aggregationMethod: 'none',
+        'aggregation-method': 'none',
       },
       'resources-total': {
         description: 'total resources available',
@@ -39,19 +39,19 @@ export const SciEmbodied = (
       'vcpus-allocated': {
         description: 'number of vcpus allocated to particular resource',
         unit: 'count',
-        aggregationMethod: 'none',
+        'aggregation-method': 'none',
       },
       'vcpus-total': {
         description: 'total number of vcpus available on a particular resource',
         unit: 'count',
-        aggregationMethod: 'none',
+        'aggregation-method': 'none',
       },
     },
     outputs: parametersMetadata?.outputs || {
       'carbon-embodied': {
         description: 'embodied emissions of the component',
         unit: 'gCO2e',
-        aggregationMethod: 'sum',
+        'aggregation-method': 'sum',
       },
     },
   };
