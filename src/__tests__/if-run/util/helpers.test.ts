@@ -209,14 +209,14 @@ describe('if-run/util/helpers: ', () => {
             carbon: {
               description: 'mock description',
               unit: 'none',
-              aggregationMethod: 'sum',
+              'aggregation-method': 'sum',
             },
           },
           outputs: {
             cpu: {
               description: 'mock description',
               unit: 'none',
-              aggregationMethod: 'avg',
+              'aggregation-method': 'avg',
             },
           },
         },
@@ -226,7 +226,7 @@ describe('if-run/util/helpers: ', () => {
         metadata: {
           inputs: {},
           outputs: {
-            carbon: {aggregationMethod: 'none'},
+            carbon: {'aggregation-method': 'none'},
           },
         },
       };
