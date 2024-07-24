@@ -64,7 +64,7 @@ export const manifestSchema = z.object({
                 z.object({
                   unit: z.string(),
                   description: z.string(),
-                  aggregationMethod: z.string(),
+                  'aggregation-method': z.string(),
                 })
               )
               .optional()
@@ -75,7 +75,7 @@ export const manifestSchema = z.object({
                 z.object({
                   unit: z.string(),
                   description: z.string(),
-                  aggregationMethod: z.string(),
+                  'aggregation-method': z.string(),
                 })
               )
               .optional()

@@ -44,7 +44,7 @@ export const mergeObjects = (defaults: any, input: any) => {
 };
 
 /**
- * Stores `aggregationMethod` of the plugins in the pipeline.
+ * Stores `'aggregation-method'` of the plugins in the pipeline.
  */
 export const storeAggregationMethods = (
   plugins: GlobalPlugins,
@@ -59,7 +59,7 @@ export const storeAggregationMethods = (
 
       Object.entries(pluginParameters).forEach(
         ([parameterName, parameterMetadata]) => {
-          const {aggregationMethod} = parameterMetadata;
+          const {'aggregation-method': aggregationMethod} = parameterMetadata;
 
           if (aggregationMethod) {
             const metrics = {
