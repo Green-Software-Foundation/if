@@ -16,7 +16,7 @@ import {STRINGS} from '../config';
 
 import {EnvironmentOptions} from '../types/if-env';
 
-const {MissingPluginDependenciesError} = ERRORS;
+const {MissingManifestDependenciesError} = ERRORS;
 const {
   FAILURE_MESSAGE_DEPENDENCIES,
   FAILURE_MESSAGE,
@@ -38,7 +38,7 @@ export const getOptionsFromArgs = async (commandArgs: {
   const dependencies = rawManifest?.execution?.environment.dependencies || [];
 
   if (!dependencies.length) {
-    throw new MissingPluginDependenciesError(FAILURE_MESSAGE_DEPENDENCIES);
+    throw new MissingManifestDependenciesError(FAILURE_MESSAGE_DEPENDENCIES);
   }
 
   const pathsWithVersion = extractPathsWithVersion(plugins, dependencies);

@@ -7,6 +7,7 @@ import {STRINGS} from '../config/strings';
 
 import {isExecute, isGroupBy} from '../types/interface';
 import {ComputeParams, Node, Params} from '../types/compute';
+import {addExplainData} from './explain';
 
 const {MERGING_DEFAULTS_WITH_INPUT_DATA, COMPUTING_PIPELINE_FOR_NODE} = STRINGS;
 
@@ -78,6 +79,15 @@ const computeNode = async (node: Node, params: Params): Promise<any> => {
 
     if (isExecute(plugin)) {
       inputStorage = await plugin.execute(inputStorage, nodeConfig);
+
+      if (params.context.explainer) {
+        addExplainData({
+          pluginName,
+          metadata: plugin.metadata,
+          pluginData: params.context.initialize.plugins[pluginName],
+        });
+      }
+
       debugLogger.setExecutingPluginName();
 
       node.outputs = inputStorage;

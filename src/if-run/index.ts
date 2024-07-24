@@ -14,6 +14,7 @@ import {debugLogger} from '../common/util/debug-logger';
 
 import {STRINGS} from './config';
 import {STRINGS as COMMON_STRINGS} from '../common/config';
+import {explain} from './lib/explain';
 
 const {EXITING_IF, STARTING_IF} = STRINGS;
 const {DISCLAIMER_MESSAGE} = COMMON_STRINGS;
@@ -39,6 +40,9 @@ const impactEngine = async () => {
     const pluginStorage = await initialize(context.initialize.plugins);
     const computedTree = await compute(tree, {context, pluginStorage});
     const aggregatedTree = aggregate(computedTree, context.aggregation);
+
+    envManifest.explainer && (context.explain = explain());
+
     await exhaust(aggregatedTree, context, outputOptions);
   } catch (error) {
     if (error instanceof Error) {
