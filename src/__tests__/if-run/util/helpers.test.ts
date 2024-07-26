@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 const mockWarn = jest.fn();
 const mockError = jest.fn();
 
@@ -180,9 +181,10 @@ describe('if-run/util/helpers: ', () => {
   });
 
   describe('storeAggregationMethods(): ', () => {
+    // @typescript-eslint/no-unused-vars
     const mockPluginStorage = {
       get: jest.fn(),
-      set: jest.fn((_name, _plugin) => {}),
+      set: jest.fn(() => {}),
     };
 
     const mockPlugins: GlobalPlugins = {
