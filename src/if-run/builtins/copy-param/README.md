@@ -52,6 +52,15 @@ The `parameter-metadata` section contains information about `description` and `u
   - `description`: description of the parameter
   - `unit`: unit of the parameter
 
+### Mapping
+
+The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+
+```yaml
+mapping:
+  'old-name': 'new-name'
+```
+
 ### Inputs
 
 As with all plugins, `timestamp` and `duration` are required. The key passed to `from` must exist in the `input` data.
@@ -67,11 +76,17 @@ To run the plugin, you must first create an instance of `Copy`. Then, you can ca
 ```typescript
 import {Copy} from '.';
 
-const plugin = Copy({
-  'keep-existing': true,
-  from: 'from-param',
-  to: 'to-param',
-});
+const pluginSettings = {
+  'global-config': {
+    'keep-existing': true,
+    from: 'from-param',
+    to: 'to-param',
+  },
+  'parameter-metadata': {},
+  mapping: {},
+};
+
+const plugin = Copy(pluginSettings);
 
 const result = plugin.execute([
   {

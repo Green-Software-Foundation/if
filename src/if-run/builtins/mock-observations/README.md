@@ -29,19 +29,22 @@ The plugin's `global-config` section in the manifest file determines its behavio
 ### Typescript Usage
 
 ```typescript
-const mockObservations = MockObservations({
-  'timestamp-from': '2023-07-06T00:00',
-  'timestamp-to': '2023-07-06T00:10',
-  duration: 60,
-  components: {
-    'instance-type': 'A1',
-  },
-  generators: {
-    common: {
-      region: 'uk-west',
+const pluginSettings = {
+  'global-config': {
+    'timestamp-from': '2023-07-06T00:00',
+    'timestamp-to': '2023-07-06T00:10',
+    duration: 60,
+    components: {
+      'instance-type': 'A1',
+    },
+    generators: {
+      common: {
+        region: 'uk-west',
+      },
     },
   },
-});
+};
+const mockObservations = MockObservations(pluginSettings);
 const result = await mockObservations.execute([]);
 ```
 

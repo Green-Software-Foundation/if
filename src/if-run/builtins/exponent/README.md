@@ -29,6 +29,15 @@ The `parameter-metadata` section contains information about `description` and `u
   - `description`: description of the parameter
   - `unit`: unit of the parameter
 
+### Mapping
+
+The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+
+```yaml
+mapping:
+  'old-name': 'new-name'
+```
+
 ### Inputs
 
 `input-parameter` and `exponent` must be available in the input array.
@@ -50,13 +59,15 @@ To run the plugin, you must first create an instance of `Exponent`. Then, you ca
 ```typescript
 import {Exponent} from 'builtins';
 
-const config = {
-  inputParameter: ['cpu/energy'],
-  exponent: 2
-  outputParameter: 'energy',
+const pluginSettings = {
+  'global-config': {
+    inputParameter: ['cpu/energy'],
+    exponent: 2
+    outputParameter: 'energy',
+  },
 };
 
-const exponent = Exponent(config);
+const exponent = Exponent(pluginSettings);
 const result = await exponent.execute([
   {
     duration: 3600,

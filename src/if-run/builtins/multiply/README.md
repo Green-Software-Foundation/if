@@ -28,6 +28,15 @@ The `parameter-metadata` section contains information about `description` and `u
   - `description`: description of the parameter
   - `unit`: unit of the parameter
 
+### Mapping
+
+The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+
+```yaml
+mapping:
+  'old-name': 'new-name'
+```
+
 ### Inputs
 
 All of `input-parameters` must be available in the input array.
@@ -49,12 +58,16 @@ To run the plugin, you must first create an instance of `Multiply`. Then, you ca
 ```typescript
 import {Multiply} from 'builtins';
 
-const config = {
-  inputParameters: ['cpu/energy', 'network/energy'],
-  outputParameter: 'energy-product',
+const pluginSettings = {
+  'global-config': {
+    inputParameters: ['cpu/energy', 'network/energy'],
+    outputParameter: 'energy-product',
+  },
+  'parameter-metadata': {},
+  mapping: {},
 };
 
-const multiply = Multiply(config, parametersMetadata);
+const multiply = Multiply(pluginSettings);
 const result = await multiply.execute([
   {
     duration: 3600,

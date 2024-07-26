@@ -29,6 +29,15 @@ The `parameter-metadata` section contains information about `description` and `u
   - `description`: description of the parameter
   - `unit`: unit of the parameter
 
+### Mapping
+
+The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+
+```yaml
+mapping:
+  'old-name': 'new-name'
+```
+
 ### Inputs
 
 - `parameter` - as input parameter, must be available in the input array
@@ -37,18 +46,19 @@ The `parameter-metadata` section contains information about `description` and `u
 
 - `output`: The match of the `parameter` value using the `match` regex defined in the global config. If the `match` regex includes the global flag (`g`), a string containing all matches separated by spaces.
 
-
 ## Implementation
 
 To run the plugin, you must first create an instance of `Regex`. Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
-  parameter: 'physical-processor',
-  match: '^[^,]+',
-  output: 'cpu/name',
+const pluginSettings = {
+  'global-config': {
+    parameter: 'physical-processor',
+    match: '^[^,]+',
+    output: 'cpu/name',
+  },
 };
-const regex = Regex(globalConfig);
+const regex = Regex(pluginSettings);
 
 const input = [
   {

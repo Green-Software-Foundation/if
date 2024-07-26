@@ -28,6 +28,15 @@ The `parameter-metadata` section contains information about `description` and `u
   - `description`: description of the parameter
   - `unit`: unit of the parameter
 
+### Mapping
+
+The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+
+```yaml
+mapping:
+  'old-name': 'new-name'
+```
+
 ### Inputs
 
 All of `input-parameters` must be available in the input array.
@@ -49,12 +58,14 @@ To run the plugin, you must first create an instance of `Subtract`. Then, you ca
 ```typescript
 import {Subtract} from 'builtins';
 
-const config = {
-  inputParameters: ['cpu/energy', 'network/energy'],
-  outputParameter: 'offset/energy',
-};
+const pluginSettings = {
+  'global-config': {
+    inputParameters: ['cpu/energy', 'network/energy'],
+    outputParameter: 'offset/energy',
+  }
+}
 
-const subtract = Subtract(config);
+const subtract = Subtract(pluginSettings);
 const result = subtract subtract.execute([
   {
     duration: 3600,
@@ -112,4 +123,4 @@ The results will be saved to a new `yaml` file in `manifests/outputs`.
 
 This error arises when an invalid value is passed to `Subtract`. Typically, this can occur when a non-numeric value (such as a string made of alphabetic characters) is passed where a number or numeric string is expected. Please check that the types are correct for all the relevant fields in your `inputs` array.
 
-For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors)

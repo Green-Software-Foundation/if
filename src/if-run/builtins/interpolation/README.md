@@ -38,6 +38,15 @@ The `parameter-metadata` section contains information about `description` and `u
   - `description`: description of the parameter
   - `unit`: unit of the parameter
 
+### Mapping
+
+The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+
+```yaml
+mapping:
+  'old-name': 'new-name'
+```
+
 ## Input Parameters
 
 The plugin expects the following input parameters:
@@ -82,22 +91,23 @@ The plugin conducts input validation using the `zod` library and may throw error
 ### TypeScript Usage
 
 ```ts
-const globalConfig = {
-  method: 'linear',
-  x: [0, 10, 50, 100],
-  y: [0.12, 0.32, 0.75, 1.02],
-  'input-parameter': 'cpu/utilization'
-  'output-parameter': 'cpu/energy'
-
+const pluginSettings = {
+  'global-config': {
+    method: 'linear',
+    x: [0, 10, 50, 100],
+    y: [0.12, 0.32, 0.75, 1.02],
+    'input-parameter': 'cpu/utilization',
+    'output-parameter': 'cpu/energy',
+  },
 };
 
-const interpolationPlugin = Interpolation(globalConfig);
+const interpolationPlugin = Interpolation(pluginSettings);
 
 const inputs = [
   {
     timestamp: '2024-04-16T12:00:00Z',
     duration: 3600,
-    'cpu/utilization': 45
+    'cpu/utilization': 45,
   },
 ];
 

@@ -28,6 +28,15 @@ The `parameter-metadata` section contains information about `description` and `u
   - `description`: description of the parameter
   - `unit`: unit of the parameter
 
+### Mapping
+
+The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+
+```yaml
+mapping:
+  'old-name': 'new-name'
+```
+
 ### Inputs
 
 All of `input-parameters` must be available in the input array.
@@ -47,12 +56,19 @@ output = input0 + input1 + input2 ... inputN
 To run the plugin, you must first create an instance of `Sum`. Then, you can call `execute()`.
 
 ```typescript
-const config = {
-  inputParameters: ['cpu/energy', 'network/energy'],
-  outputParameter: 'energy',
+const pluginSettings = {
+  'global-config': {
+    inputParameters: ['cpu/energy', 'network/energy'],
+    outputParameter: 'energy',
+  },
+  'parameter-metadata': {},
+  mapping: {
+    'cpu/energy': 'energy-from-cpu',
+    'network/energy': 'energy-from-network',
+  },
 };
 
-const sum = Sum(config, parametersMetadata);
+const sum = Sum(pluginSettings);
 const result = sum.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',

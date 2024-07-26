@@ -53,6 +53,15 @@ All the following values are valid for the `output` field:
 - `["processor-name", "processor-model-id"]`
 - `[["processor-name", "processor-model-id"],["tdp","thermal-design-power"]]`
 
+### Mapping
+
+The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+
+```yaml
+mapping:
+  'old-name': 'new-name'
+```
+
 ### Inputs
 
 There are no strict requirements on input for this plugin because they depend upon the contents of the target CSV and your input data at the time the CSV lookup is invoked. Please make sure you are requesting data from columns that exist in the target csv file and that your query values are available in your `input` data.
@@ -84,7 +93,12 @@ const globalConfig = {
   },
   output: ['cpu-tdp', 'tdp'],
 };
-const csvLookup = CSVLookup(globalConfig);
+const pluginSettings = {
+  'global-config': globalConfig,
+  'parameter-metadata': {}
+  mapping: {}
+};
+const csvLookup = CSVLookup(pluginSettings);
 
 const input = [
   {

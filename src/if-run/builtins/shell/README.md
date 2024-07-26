@@ -29,6 +29,15 @@ The parameters included in the `inputs` field in the `manifest` depend entirely 
 - `timestamp`: A timestamp for the specific input
 - `duration`: The length of time these specific inputs cover
 
+### Mapping
+
+The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+
+```yaml
+mapping:
+  'old-name': 'new-name'
+```
+
 ## Returns
 
 The specific return types depend on the plugin being invoked. Typically, we would expect some kind of energy or carbon metric as an output, but it is also possible that plugins target different parts of the pipeline, such as data importers, adaptor plugins etc. Therefore, we do not specify return data for external plugins.
@@ -38,7 +47,12 @@ The specific return types depend on the plugin being invoked. Typically, we woul
 To run the plugin, you must first create an instance of `Shell` and call its `execute()` to run the external plugin.
 
 ```typescript
-const output = Shell({command: '/usr/local/bin/sampler'});
+const pluginSettings = {
+  'global-config': {
+    command: '/usr/local/bin/sampler',
+  },
+};
+const output = Shell(pluginSettings);
 const result = await output.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',

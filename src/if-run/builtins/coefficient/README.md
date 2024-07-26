@@ -18,8 +18,7 @@ Three parameters are required in global config: `input-parameter`, `coefficient`
 
 ### Plugin parameter metadata
 
-The `parameter-metadata` section contains information about `description` and `unit`
-of the parameters of the inputs and outputs
+The `parameter-metadata` section contains information about `description` and `unit` of the parameters of the inputs and outputs
 
 - `inputs`: describe parameters of the `input-parameter` of the global config. Each parameter has:
 
@@ -29,6 +28,15 @@ of the parameters of the inputs and outputs
 - `outputs`: describe parameters of the `output-parameter` of the global config. Each parameter has:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
+
+### Mapping
+
+The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+
+```yaml
+mapping:
+  'old-name': 'new-name'
+```
 
 ### Inputs
 
@@ -49,13 +57,17 @@ output = input * coefficient
 To run the plugin from a Typescript app, you must first create an instance of `Coefficient`. Then, you can call `execute()`.
 
 ```typescript
-const config = {
-  'input-parameter': 'carbon',
-  coefficient: 10,
-  'output-parameter': 'carbon-product',
+const pluginSettings = {
+  'global-config': {
+    'input-parameter': 'carbon',
+    coefficient: 10,
+    'output-parameter': 'carbon-product',
+  },
+  'parameter-metadata': {},
+  mapping: {},
 };
 
-const coeff = Coefficient(config);
+const coeff = Coefficient(pluginSettings);
 const result = coeff.execute([
   {
     duration: 3600,

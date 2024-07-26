@@ -22,8 +22,18 @@ The `parameter-metadata` section contains information about `description` and `u
   - `unit`: unit of the parameter
 
 - `outputs`: describe the parameter of the `denominator` of the global config. The parameter has the following attributes:
+
   - `description`: description of the parameter
   - `unit`: unit of the parameter
+
+### Mapping
+
+The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+
+```yaml
+mapping:
+  'old-name': 'new-name'
+```
 
 ### Inputs
 
@@ -50,12 +60,14 @@ output = input0 / input1
 To run the plugin, you must first create an instance of `Divide`. Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
-  numerator: 'vcpus-allocated',
-  denominator: 2,
-  output: 'cpu/number-cores',
+const pluginSettings = {
+  'global-config': {
+    numerator: 'vcpus-allocated',
+    denominator: 2,
+    output: 'cpu/number-cores',
+  },
 };
-const divide = Divide(globalConfig, parametersMetadata);
+const divide = Divide(pluginSettings);
 
 const input = [
   {

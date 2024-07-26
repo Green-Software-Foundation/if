@@ -23,6 +23,15 @@ The `parameter-metadata` section contains information about `description` and `u
   - `description`: description of the parameter
   - `unit`: unit of the parameter
 
+### Mapping
+
+The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+
+```yaml
+mapping:
+  'old-name': 'new-name'
+```
+
 ### Inputs
 
 - `device/emissions-embodied`: the sum of Life Cycle Assessment (LCA) emissions for the component
@@ -85,7 +94,7 @@ const results = await sciEmbodied.execute([
 
 ## Example manifest
 
-IF users will typically call the plugin as part of a pipeline defined in a `manifest` file. In this case, instantiating the plugin is handled by `ie` and does not have to be done explicitly by the user. The following is an example `manifest` that calls `sci-embodied`:
+IF users will typically call the plugin as part of a pipeline defined in a `manifest` file. In this case, instantiating the plugin is handled by `if-run` and does not have to be done explicitly by the user. The following is an example `manifest` that calls `sci-embodied`:
 
 ```yaml
 name: sci-embodied
@@ -130,4 +139,4 @@ This error class is used to describe a problem with one of the input values to `
 
 You will receive a specific error message explaining which parameter is problematic, and you can check and replace where appropriate.
 
-For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors)
