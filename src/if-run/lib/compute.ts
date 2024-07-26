@@ -112,6 +112,13 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   }
 
   /**
+   * Adds `time-sync` as the first plugin of compute phase if requested.
+   */
+  if (params.timeSync) {
+    pipelineCopy.compute = ['time-sync', ...(pipelineCopy.compute || [])];
+  }
+
+  /**
    * If iteration is on compute plugin, then executes compute plugins and sets the outputs value.
    */
   if ((noFlags || params.compute) && pipelineCopy.compute) {
