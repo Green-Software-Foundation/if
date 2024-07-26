@@ -38,6 +38,8 @@ export const manifestSchema = z.object({
     })
     .optional()
     .nullable(),
+  explainer: z.boolean().optional(),
+  explain: z.record(z.string(), z.any()).optional(),
   aggregation: z
     .object({
       metrics: z.record(

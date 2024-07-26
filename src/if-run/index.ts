@@ -10,6 +10,7 @@ import {injectEnvironment} from './lib/environment';
 import {initialize} from './lib/initialize';
 import {compute} from './lib/compute';
 import {exhaust} from './lib/exhaust';
+import {explain} from './lib/explain';
 
 import {parseIfRunProcessArgs} from './util/args';
 import {andHandle, storeAggregationMethods} from './util/helpers';
@@ -43,6 +44,9 @@ const impactEngine = async () => {
 
     const computedTree = await compute(tree, {context, pluginStorage});
     const aggregatedTree = aggregate(computedTree, context.aggregation);
+
+    envManifest.explainer && (context.explain = explain());
+
     await exhaust(aggregatedTree, context, outputOptions);
   } catch (error) {
     if (error instanceof Error) {
