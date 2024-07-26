@@ -9,7 +9,7 @@ import {pluginStorage} from '../util/plugin-storage';
 import {CONFIG, STRINGS} from '../config';
 
 import {PluginInterface} from '../types/interface';
-import {GlobalPlugins, PluginOptions} from '../../common/types/manifest';
+import {Context, PluginOptions} from '../../common/types/manifest';
 import {PluginStorageInterface} from '../types/plugin-storage';
 
 const {
@@ -27,6 +27,7 @@ const {
   LOADING_PLUGIN_FROM_PATH,
   INITIALIZING_PLUGIN,
   INITIALIZING_PLUGINS,
+  INITIALIZING_TIME_SYNC,
 } = STRINGS;
 
 /**
@@ -59,6 +60,8 @@ const handModule = (method: string, pluginPath: string) => {
 
   if (pluginPath === 'builtin') {
     pluginPath = path.normalize(`${__dirname}/../builtins`);
+  } else if (pluginPath === 'lib/time-sync') {
+    pluginPath = path.normalize(`${__dirname}/../${pluginPath}`);
   } else {
     if (pluginPath?.startsWith(GITHUB_PATH)) {
       const parts = pluginPath.split('/');
@@ -100,11 +103,23 @@ const initPlugin = async (
  * Registers all plugins from `manifest`.`initialize` property.
  */
 export const initialize = async (
-  plugins: GlobalPlugins
+  context: Context
 ): Promise<PluginStorageInterface> => {
   console.debug(INITIALIZING_PLUGINS);
-
+  const {plugins} = context.initialize;
   const storage = pluginStorage();
+
+  /**
+   * If `time-sync` is requested, then add it to plugins.
+   */
+  if (context['time-sync']) {
+    console.debug(INITIALIZING_TIME_SYNC);
+    plugins['time-sync'] = {
+      path: 'lib/time-sync',
+      method: 'TimeSync',
+      'global-config': context['time-sync'],
+    };
+  }
 
   for await (const pluginName of Object.keys(plugins)) {
     const plugin = await initPlugin(plugins[pluginName]);
