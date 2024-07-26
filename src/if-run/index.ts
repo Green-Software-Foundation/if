@@ -43,13 +43,14 @@ const impactEngine = async () => {
     // TODO: remove this after resolving timeSync to be a builtin functionality.
     storeAggregateMetrics(context.aggregation);
 
-    const pluginStorage = await initialize(context.initialize.plugins);
+    const pluginStorage = await initialize(context);
     const computedTree = await compute(tree, {
       context,
       pluginStorage,
       observe,
       regroup,
       compute: computeFlag,
+      timeSync: context['time-sync'],
     });
     const aggregatedTree = aggregate(computedTree, context.aggregation);
     await exhaust(aggregatedTree, context, outputOptions);
