@@ -2,6 +2,7 @@ import {createInterface} from 'node:readline/promises';
 import {exec} from 'child_process';
 import * as path from 'path';
 import {promisify} from 'util';
+import {MappingParams, PluginParams} from '@grnsft/if-core/types';
 
 /**
  * Promise version of Node's `exec` from `child-process`.
@@ -62,4 +63,20 @@ export const parseManifestFromStdin = async () => {
   }
 
   return match![1];
+};
+
+/**
+ * Maps the output of thr input if the `mapping` parameter is provided.
+ */
+export const mapOutput = (output: PluginParams, mapping: MappingParams) => {
+  if (!mapping) return output;
+
+  return Object.entries(output).reduce((acc, [key, value]) => {
+    if (key in mapping) {
+      acc[mapping[key]] = value;
+    } else {
+      acc[key] = value;
+    }
+    return acc;
+  }, {} as PluginParams);
 };
