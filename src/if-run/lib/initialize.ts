@@ -82,7 +82,12 @@ const handModule = (method: string, pluginPath: string) => {
 const initPlugin = async (
   initPluginParams: PluginOptions
 ): Promise<PluginInterface> => {
-  const {method, path, 'global-config': globalConfig} = initPluginParams;
+  const {
+    method,
+    path,
+    'global-config': globalConfig,
+    'parameter-metadata': parameterMetadata,
+  } = initPluginParams;
 
   console.debug(INITIALIZING_PLUGIN(method));
 
@@ -96,7 +101,7 @@ const initPlugin = async (
 
   const plugin = await handModule(method, path);
 
-  return plugin(globalConfig);
+  return plugin(globalConfig, parameterMetadata);
 };
 
 /**

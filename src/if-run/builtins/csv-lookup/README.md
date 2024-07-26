@@ -84,7 +84,7 @@ const globalConfig = {
   },
   output: ['cpu-tdp', 'tdp'],
 };
-const divide = CSVLookup(globalConfig);
+const csvLookup = CSVLookup(globalConfig);
 
 const input = [
   {
@@ -173,4 +173,4 @@ The required parameters are:
 
 You can fix this error by checking you are providing valid values for each parameter in the config.
 
-For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors)

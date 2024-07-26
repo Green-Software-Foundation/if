@@ -38,6 +38,8 @@ export const manifestSchema = z.object({
     })
     .optional()
     .nullable(),
+  explainer: z.boolean().optional(),
+  explain: z.record(z.string(), z.any()).optional(),
   aggregation: z
     .object({
       metrics: z.record(
@@ -65,6 +67,30 @@ export const manifestSchema = z.object({
         path: z.string(),
         method: z.string(),
         'global-config': z.record(z.string(), z.any()).optional(),
+        'parameter-metadata': z
+          .object({
+            inputs: z
+              .record(
+                z.string(),
+                z.object({
+                  unit: z.string(),
+                  description: z.string(),
+                })
+              )
+              .optional()
+              .nullable(),
+            outputs: z
+              .record(
+                z.string(),
+                z.object({
+                  unit: z.string(),
+                  description: z.string(),
+                })
+              )
+              .optional()
+              .nullable(),
+          })
+          .optional(),
       })
     ),
   }),

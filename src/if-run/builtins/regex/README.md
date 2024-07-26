@@ -16,6 +16,19 @@ Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-26
 - `match` - a regex by which needs to match the `parameter`
 - `output` - output parameter name in the input
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description` and `unit` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameter of the `parameter` value of the global config. The parameter has the following attributes:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+
+- `outputs`: describe the parameters of the `output` of the global config. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+
 ### Inputs
 
 - `parameter` - as input parameter, must be available in the input array

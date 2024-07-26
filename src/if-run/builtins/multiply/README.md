@@ -15,6 +15,19 @@ Two parameters are required in global config: `input-parameters` and `output-par
 `input-parameters`: an array of strings. Each string should match an existing key in the `inputs` array
 `output-parameter`: a string defining the name to use to add the product of the input parameters to the output array.
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description` and `unit` of the parameters of the inputs and outputs
+
+- `inputs`: describe parameters of the `input-parameters` of the global config. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+
+- `outputs`: describe the parameter of the `output-parameter` of the global config. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+
 ### Inputs
 
 All of `input-parameters` must be available in the input array.
@@ -41,8 +54,8 @@ const config = {
   outputParameter: 'energy-product',
 };
 
-const mult = Multiply(config);
-const result = await mult.execute([
+const multiply = Multiply(config, parametersMetadata);
+const result = await multiply.execute([
   {
     duration: 3600,
     timestamp: '2021-01-01T00:00:00Z',
