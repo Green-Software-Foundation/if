@@ -1,4 +1,3 @@
-export {TimeSync} from './time-sync';
 export {Interpolation} from './interpolation';
 export {MockObservations} from './mock-observations';
 export {Divide} from './divide';
