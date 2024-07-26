@@ -19,6 +19,59 @@ describe('lib/compute: ', () => {
       kind: 'execute',
     },
   });
+  const mockObservePlugin = () => ({
+    execute: () => [
+      {timestamp: '2024-09-02', duration: 40, 'cpu/utilization': 30},
+      {timestamp: '2024-09-03', duration: 60, 'cpu/utilization': 40},
+    ],
+    metadata: {
+      kind: 'execute',
+    },
+  });
+  const mockObservePluginTimeSync = () => ({
+    execute: () => [
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 60,
+        'cpu/utilization': 30,
+      },
+      {
+        timestamp: '2023-12-12T00:01:00.000Z',
+        duration: 60,
+        'cpu/utilization': 40,
+      },
+    ],
+    metadata: {
+      kind: 'execute',
+    },
+  });
+  const mockTimeSync = () => ({
+    execute: () => [
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 30,
+        'cpu/utilization': 30,
+      },
+      {
+        timestamp: '2023-12-12T00:00:30.000Z',
+        duration: 30,
+        'cpu/utilization': 30,
+      },
+      {
+        timestamp: '2023-12-12T00:01:00.000Z',
+        duration: 30,
+        'cpu/utilization': 40,
+      },
+      {
+        timestamp: '2023-12-12T00:01:30.000Z',
+        duration: 30,
+        'cpu/utilization': 40,
+      },
+    ],
+    metadata: {
+      kind: 'execute',
+    },
+  });
   /**
    * Compute params.
    */
@@ -35,7 +88,11 @@ describe('lib/compute: ', () => {
         },
       },
     },
-    pluginStorage: pluginStorage().set('mock', mockExecutePlugin()),
+    pluginStorage: pluginStorage()
+      .set('mock', mockExecutePlugin())
+      .set('mock-observe', mockObservePlugin())
+      .set('mock-observe-time-sync', mockObservePluginTimeSync())
+      .set('time-sync', mockTimeSync()),
   };
 
   describe('compute(): ', () => {
@@ -220,5 +277,78 @@ describe('lib/compute: ', () => {
 
       expect(response.children.mockChild.outputs).toEqual(expectedResult);
     });
+  });
+
+  it('computes simple tree with observe plugin.', async () => {
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {observe: ['mock-observe']},
+        },
+      },
+    };
+
+    const response = await compute(tree, paramsExecute);
+    const expectedResult = [
+      {timestamp: '2024-09-02', duration: 40, 'cpu/utilization': 30},
+      {timestamp: '2024-09-03', duration: 60, 'cpu/utilization': 40},
+    ];
+
+    expect(response.children.mockChild.inputs).toEqual(expectedResult);
+  });
+
+  it('computes simple tree with time sync plugin.', async () => {
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {observe: ['mock-observe-time-sync']},
+        },
+      },
+    };
+    const timeSync = {
+      'start-time': '2023-12-12T00:00:00.000Z',
+      'end-time': '2023-12-12T00:02:00.000Z',
+      interval: 5,
+      'allow-padding': true,
+    };
+
+    const response = await compute(tree, {...paramsExecute, timeSync});
+    const expectedInputs = [
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 60,
+        'cpu/utilization': 30,
+      },
+      {
+        timestamp: '2023-12-12T00:01:00.000Z',
+        duration: 60,
+        'cpu/utilization': 40,
+      },
+    ];
+    const expectedOutput = [
+      {
+        timestamp: '2023-12-12T00:00:00.000Z',
+        duration: 30,
+        'cpu/utilization': 30,
+      },
+      {
+        timestamp: '2023-12-12T00:00:30.000Z',
+        duration: 30,
+        'cpu/utilization': 30,
+      },
+      {
+        timestamp: '2023-12-12T00:01:00.000Z',
+        duration: 30,
+        'cpu/utilization': 40,
+      },
+      {
+        timestamp: '2023-12-12T00:01:30.000Z',
+        duration: 30,
+        'cpu/utilization': 40,
+      },
+    ];
+
+    expect(response.children.mockChild.inputs).toEqual(expectedInputs);
+    expect(response.children.mockChild.outputs).toEqual(expectedOutput);
   });
 });
