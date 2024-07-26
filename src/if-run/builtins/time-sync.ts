@@ -9,12 +9,16 @@ import {
   PaddingReceipt,
   TimeNormalizerConfig,
   TimeParams,
+  PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../common/util/validations';
 
 import {STRINGS} from '../config';
 import {getAggregationMethod} from '../lib/aggregate';
+import {PluginSettings} from '../../common/types/manifest';
+import {mapOutput} from '../../common/util/helpers';
 
 Settings.defaultZone = 'utc';
 
@@ -35,9 +39,20 @@ const {
   INVALID_DATETIME,
 } = STRINGS;
 
-export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
+export const TimeSync = (options: PluginSettings): ExecutePlugin => {
+  const {
+    'global-config': globalConfig,
+    'parameter-metadata': parametersMetadata,
+    mapping,
+  } = options as {
+    'global-config': TimeNormalizerConfig;
+    'parameter-metadata': PluginParametersMetadata;
+    mapping: MappingParams;
+  };
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**
@@ -111,7 +126,8 @@ export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
       parseDate(a.timestamp).diff(parseDate(b.timestamp)).as('seconds')
     );
 
-    return resampleInputs(sortedInputs, timeParams) as PluginParams[];
+    const outputs = resampleInputs(sortedInputs, timeParams) as PluginParams[];
+    return outputs.map(output => mapOutput(output, mapping));
   };
 
   const parseDate = (date: Date | string) => {

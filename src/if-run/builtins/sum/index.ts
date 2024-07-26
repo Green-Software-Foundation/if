@@ -5,19 +5,29 @@ import {
   PluginParams,
   SumConfig,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
+import {PluginSettings} from '../../../common/types/manifest';
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
 const {GlobalConfigError} = ERRORS;
 const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
-export const Sum = (
-  globalConfig: SumConfig,
-  parametersMetadata: PluginParametersMetadata
-): ExecutePlugin => {
+export const Sum = (options: PluginSettings): ExecutePlugin => {
+  const {
+    'global-config': globalConfig,
+    'parameter-metadata': parametersMetadata,
+    mapping,
+  } = options as {
+    'global-config': SumConfig;
+    'parameter-metadata': PluginParametersMetadata;
+    mapping: MappingParams;
+  };
+
   const metadata = {
     kind: 'execute',
     inputs: parametersMetadata?.inputs,
@@ -34,11 +44,12 @@ export const Sum = (
 
     return inputs.map(input => {
       validateSingleInput(input, inputParameters);
-
-      return {
+      const output = {
         ...input,
         [outputParameter]: calculateSum(input, inputParameters),
       };
+
+      return mapOutput(output, mapping);
     });
   };
 

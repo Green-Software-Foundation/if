@@ -1,25 +1,38 @@
 import {z} from 'zod';
 import {ERRORS} from '@grnsft/if-core/utils';
 import {
+  ConfigParams,
   ExecutePlugin,
+  MappingParams,
   PluginParametersMetadata,
   PluginParams,
 } from '@grnsft/if-core/types';
 
+import {PluginSettings} from '../../../common/types/manifest';
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
 const {MISSING_GLOBAL_CONFIG} = STRINGS;
 const {GlobalConfigError} = ERRORS;
-//   keep-existing: true/false (whether to remove the parameter you are copying from)
-//   from-param: the parameter you are copying from (e.g. cpu/name)
-//   to-field: the parameter you are copying to (e.g. cpu/processor-name)
 
-export const Copy = (
-  globalConfig: Record<string, any>,
-  parametersMetadata: PluginParametersMetadata
-): ExecutePlugin => {
+/**
+ * keep-existing: true/false (whether to remove the parameter you are copying from)
+ * from-param: the parameter you are copying from (e.g. cpu/name)
+ * to-field: the parameter you are copying to (e.g. cpu/processor-name)
+ */
+
+export const Copy = (options: PluginSettings): ExecutePlugin => {
+  const {
+    'global-config': globalConfig,
+    'parameter-metadata': parametersMetadata,
+    mapping,
+  } = options as {
+    'global-config': ConfigParams;
+    'parameter-metadata': PluginParametersMetadata;
+    mapping: MappingParams;
+  };
   const metadata = {
     kind: 'execute',
     inputs: parametersMetadata?.inputs,
@@ -85,10 +98,12 @@ export const Copy = (
         }
       }
 
-      return {
+      const output = {
         ...safeInput, // need to return or what you provide won't be outputted, don't be evil!
         [to]: outputValue,
       };
+
+      return mapOutput(output, mapping);
     });
   };
 

@@ -3,15 +3,34 @@ import {spawnSync, SpawnSyncReturns} from 'child_process';
 import {loadAll, dump} from 'js-yaml';
 import {z} from 'zod';
 import {ERRORS} from '@grnsft/if-core/utils';
-import {ExecutePlugin, PluginParams, ConfigParams} from '@grnsft/if-core/types';
+import {
+  ExecutePlugin,
+  PluginParams,
+  ConfigParams,
+  MappingParams,
+  PluginParametersMetadata,
+} from '@grnsft/if-core/types';
 
+import {PluginSettings} from '../../../common/types/manifest';
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 const {ProcessExecutionError} = ERRORS;
 
-export const Shell = (globalConfig: ConfigParams): ExecutePlugin => {
+export const Shell = (options: PluginSettings): ExecutePlugin => {
+  const {
+    'global-config': globalConfig,
+    'parameter-metadata': parametersMetadata,
+    mapping,
+  } = options as {
+    'global-config': ConfigParams;
+    'parameter-metadata': PluginParametersMetadata;
+    mapping: MappingParams;
+  };
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**
@@ -22,8 +41,9 @@ export const Shell = (globalConfig: ConfigParams): ExecutePlugin => {
     const command = inputWithConfig.command;
     const inputAsString: string = dump(inputs, {indent: 2});
     const results = runModelInShell(inputAsString, command);
+    const outputs = results?.outputs?.flat() as PluginParams[];
 
-    return results?.outputs?.flat();
+    return outputs.map(output => mapOutput(output, mapping));
   };
 
   /**

@@ -5,9 +5,16 @@ import axios from 'axios';
 import {z} from 'zod';
 import {parse} from 'csv-parse/sync';
 import {ERRORS} from '@grnsft/if-core/utils';
-import {ExecutePlugin, PluginParams} from '@grnsft/if-core/types';
+import {
+  ExecutePlugin,
+  MappingParams,
+  PluginParametersMetadata,
+  PluginParams,
+} from '@grnsft/if-core/types';
 
+import {PluginSettings} from '../../../common/types/manifest';
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -28,9 +35,21 @@ const {
   CSVParseError,
 } = ERRORS;
 
-export const CSVLookup = (globalConfig: any): ExecutePlugin => {
+export const CSVLookup = (options: PluginSettings): ExecutePlugin => {
+  const {
+    'global-config': globalConfig,
+    'parameter-metadata': parametersMetadata,
+    mapping,
+  } = options as {
+    'global-config': any;
+    'parameter-metadata': PluginParametersMetadata;
+    mapping: MappingParams;
+  };
+
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**
@@ -210,10 +229,12 @@ export const CSVLookup = (globalConfig: any): ExecutePlugin => {
         throw new QueryDataNotFoundError(NO_QUERY_DATA);
       }
 
-      return {
+      const result = {
         ...input,
         ...filterOutput(relatedData, {output, query}),
       };
+
+      return mapOutput(result, mapping);
     });
   };
 

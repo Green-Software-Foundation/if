@@ -5,18 +5,33 @@ import {
   PluginParams,
   ConfigParams,
   ObservationParams,
+  PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
+import {PluginSettings} from '../../../common/types/manifest';
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 import {CommonGenerator} from './helpers/common-generator';
 import {RandIntGenerator} from './helpers/rand-int-generator';
 
 import {Generator} from './interfaces/index';
 
-export const MockObservations = (globalConfig: ConfigParams): ExecutePlugin => {
+export const MockObservations = (options: PluginSettings): ExecutePlugin => {
+  const {
+    'global-config': globalConfig,
+    'parameter-metadata': parametersMetadata,
+    mapping,
+  } = options as {
+    'global-config': ConfigParams;
+    'parameter-metadata': PluginParametersMetadata;
+    mapping: MappingParams;
+  };
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**
@@ -33,19 +48,24 @@ export const MockObservations = (globalConfig: ConfigParams): ExecutePlugin => {
 
     const defaults = inputs && inputs[0];
 
-    return Object.entries(components).reduce((acc: PluginParams[], item) => {
-      const component = item[1];
-      timeBuckets.forEach(timeBucket => {
-        const observation = createObservation(
-          {duration, component, timeBucket, generators},
-          generatorToHistory
-        );
+    const outputs = Object.entries(components).reduce(
+      (acc: PluginParams[], item) => {
+        const component = item[1];
+        timeBuckets.forEach(timeBucket => {
+          const observation = createObservation(
+            {duration, component, timeBucket, generators},
+            generatorToHistory
+          );
 
-        acc.push(Object.assign({}, defaults, observation));
-      });
+          acc.push(Object.assign({}, defaults, observation));
+        });
 
-      return acc;
-    }, []);
+        return acc;
+      },
+      []
+    );
+
+    return outputs.map(output => mapOutput(output, mapping));
   };
 
   /**

@@ -7,9 +7,12 @@ import {
   ConfigParams,
   Method,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
+import {PluginSettings} from '../../../common/types/manifest';
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -21,10 +24,16 @@ const {
   WITHIN_THE_RANGE,
 } = STRINGS;
 
-export const Interpolation = (
-  globalConfig: ConfigParams,
-  parametersMetadata: PluginParametersMetadata
-): ExecutePlugin => {
+export const Interpolation = (options: PluginSettings): ExecutePlugin => {
+  const {
+    'global-config': globalConfig,
+    'parameter-metadata': parametersMetadata,
+    mapping,
+  } = options as {
+    'global-config': ConfigParams;
+    'parameter-metadata': PluginParametersMetadata;
+    mapping: MappingParams;
+  };
   const metadata = {
     kind: 'execute',
     inputs: parametersMetadata?.inputs,
@@ -41,10 +50,12 @@ export const Interpolation = (
       const safeInput = validateInput(input, index);
       const result = calculateResult(validatedConfig, safeInput);
 
-      return {
+      const output = {
         ...input,
         [validatedConfig['output-parameter']]: result,
       };
+
+      return mapOutput(output, mapping);
     });
   };
 

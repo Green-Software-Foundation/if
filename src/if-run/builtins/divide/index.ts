@@ -5,19 +5,29 @@ import {
   PluginParams,
   ConfigParams,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
+import {PluginSettings} from '../../../common/types/manifest';
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
 const {GlobalConfigError, MissingInputDataError} = ERRORS;
 const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
 
-export const Divide = (
-  globalConfig: ConfigParams,
-  parametersMetadata: PluginParametersMetadata
-): ExecutePlugin => {
+export const Divide = (options: PluginSettings): ExecutePlugin => {
+  const {
+    'global-config': globalConfig,
+    'parameter-metadata': parametersMetadata,
+    mapping,
+  } = options as {
+    'global-config': ConfigParams;
+    'parameter-metadata': PluginParametersMetadata;
+    mapping: MappingParams;
+  };
+
   const metadata = {
     kind: 'execute',
     inputs: parametersMetadata?.inputs,
@@ -38,10 +48,12 @@ export const Divide = (
         validateSingleInput(input, {numerator, denominator})
       );
 
-      return {
+      const result = {
         ...input,
         [output]: calculateDivide(safeInput, index, {numerator, denominator}),
       };
+
+      return mapOutput(result, mapping);
     });
   };
 
