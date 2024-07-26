@@ -14,11 +14,12 @@ describe('builtins/regex: ', () => {
       match: '^[^,]+',
       output: 'cpu/name',
     };
-    const parametersMetadata = {
-      inputs: {},
-      outputs: {},
+    const pluginSettings = {
+      'global-config': globalConfig,
+      'parameter-metadata': {},
+      mapping: {},
     };
-    const regex = Regex(globalConfig, parametersMetadata);
+    const regex = Regex(pluginSettings);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -59,7 +60,8 @@ describe('builtins/regex: ', () => {
           match: '/(?<=_)[^_]+?(?=_|$)/g',
           output: 'cloud/instance-type',
         };
-        const regex = Regex(globalConfig, parametersMetadata);
+        pluginSettings['global-config'] = globalConfig;
+        const regex = Regex(pluginSettings);
 
         const expectedResult = [
           {
@@ -90,7 +92,8 @@ describe('builtins/regex: ', () => {
           match: '[^,]+/',
           output: 'cpu/name',
         };
-        const regex = Regex(globalConfig, parametersMetadata);
+        pluginSettings['global-config'] = globalConfig;
+        const regex = Regex(pluginSettings);
 
         const expectedResult = [
           {
@@ -121,7 +124,8 @@ describe('builtins/regex: ', () => {
           match: '^(^:)+',
           output: 'cpu/name',
         };
-        const regex = Regex(globalConfig, parametersMetadata);
+        pluginSettings['global-config'] = globalConfig;
+        const regex = Regex(pluginSettings);
 
         expect.assertions(1);
 
@@ -144,7 +148,8 @@ describe('builtins/regex: ', () => {
 
       it('throws an error on missing global config.', async () => {
         const config = undefined;
-        const regex = Regex(config!, parametersMetadata);
+        pluginSettings['global-config'] = config!;
+        const regex = Regex(pluginSettings);
 
         expect.assertions(1);
 

@@ -9,11 +9,11 @@ const {SCI_EMBODIED_ERROR} = STRINGS;
 
 describe('builtins/sci-embodied:', () => {
   describe('SciEmbodied: ', () => {
-    const parametersMetadata = {
-      inputs: {},
-      outputs: {},
+    const pluginSettings = {
+      'parameter-metadata': {},
+      mapping: {},
     };
-    const sciEmbodied = SciEmbodied(parametersMetadata);
+    const sciEmbodied = SciEmbodied(pluginSettings);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {

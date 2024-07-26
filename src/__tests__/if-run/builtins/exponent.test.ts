@@ -11,11 +11,12 @@ describe('builtins/exponent: ', () => {
       exponent: 3,
       'output-parameter': 'energy',
     };
-    const parametersMetadata = {
-      inputs: {},
-      outputs: {},
+    const pluginSettings = {
+      'global-config': globalConfig,
+      'parameter-metadata': {},
+      mapping: {},
     };
-    const exponent = Exponent(globalConfig, parametersMetadata);
+    const exponent = Exponent(pluginSettings);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -95,7 +96,12 @@ describe('builtins/exponent: ', () => {
           exponent: 4,
           'output-parameter': 'carbon',
         };
-        const exponent = Exponent(newConfig, parametersMetadata);
+        const pluginSettings = {
+          'global-config': newConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const exponent = Exponent(pluginSettings);
 
         const data = [
           {

@@ -13,11 +13,12 @@ describe('builtins/sum: ', () => {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
       'output-parameter': 'energy',
     };
-    const parametersMetadata = {
-      inputs: {},
-      outputs: {},
+    const pluginSettings = {
+      'global-config': globalConfig,
+      'parameter-metadata': {},
+      mapping: {},
     };
-    const sum = Sum(globalConfig, parametersMetadata);
+    const sum = Sum(pluginSettings);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -54,9 +55,43 @@ describe('builtins/sum: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('successfully executes when mapping has valid data.', () => {
+        expect.assertions(1);
+        pluginSettings.mapping = {
+          'cpu/energy': 'energy-from-cpu',
+          'network/energy': 'energy-from-network',
+        };
+
+        const sum = Sum(pluginSettings);
+
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy-from-cpu': 1,
+            'energy-from-network': 1,
+            'memory/energy': 1,
+            energy: 3,
+          },
+        ];
+
+        const result = sum.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 1,
+            'network/energy': 1,
+            'memory/energy': 1,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('throws an error when global config is not provided.', () => {
         const config = undefined;
-        const sum = Sum(config!, parametersMetadata);
+        pluginSettings['global-config'] = config!;
+        const sum = Sum(pluginSettings);
 
         expect.assertions(1);
 
@@ -102,7 +137,8 @@ describe('builtins/sum: ', () => {
           'input-parameters': ['carbon', 'other-carbon'],
           'output-parameter': 'carbon-sum',
         };
-        const sum = Sum(newConfig, parametersMetadata);
+        pluginSettings['global-config'] = newConfig;
+        const sum = Sum(pluginSettings);
 
         const data = [
           {

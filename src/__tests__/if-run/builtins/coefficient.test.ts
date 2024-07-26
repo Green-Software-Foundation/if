@@ -18,7 +18,12 @@ describe('builtins/coefficient: ', () => {
       inputs: {},
       outputs: {},
     };
-    const coefficient = Coefficient(globalConfig, parametersMetadata);
+    const pluginSettings = {
+      'global-config': globalConfig,
+      'parameter-metadata': parametersMetadata,
+      mapping: {},
+    };
+    const coefficient = Coefficient(pluginSettings);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -55,7 +60,12 @@ describe('builtins/coefficient: ', () => {
 
       it('throws an error when global config is not provided.', () => {
         const config = undefined;
-        const coefficient = Coefficient(config!, parametersMetadata);
+        const pluginSettings = {
+          'global-config': config!,
+          'parameter-metadata': parametersMetadata,
+          mapping: {},
+        };
+        const coefficient = Coefficient(pluginSettings);
 
         expect.assertions(1);
 
@@ -80,7 +90,12 @@ describe('builtins/coefficient: ', () => {
           coefficient: 3,
           'output-parameter': 'carbon-product',
         };
-        const coefficient = Coefficient(invalidConfig, parametersMetadata);
+        const pluginSettings = {
+          'global-config': invalidConfig,
+          'parameter-metadata': parametersMetadata,
+          mapping: {},
+        };
+        const coefficient = Coefficient(pluginSettings);
         const expectedMessage =
           '"input-parameter" parameter is string must contain at least 1 character(s). Error code: too_small.';
 
@@ -107,7 +122,12 @@ describe('builtins/coefficient: ', () => {
           coefficient: 10,
           'output-parameter': '',
         };
-        const coefficient = Coefficient(invalidConfig, parametersMetadata);
+        const pluginSettings = {
+          'global-config': invalidConfig,
+          'parameter-metadata': parametersMetadata,
+          mapping: {},
+        };
+        const coefficient = Coefficient(pluginSettings);
         const expectedMessage =
           '"output-parameter" parameter is string must contain at least 1 character(s). Error code: too_small.';
 

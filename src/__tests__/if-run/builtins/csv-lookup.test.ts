@@ -35,7 +35,12 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
         expect(csvLookup).toHaveProperty('metadata');
         expect(csvLookup).toHaveProperty('execute');
       });
@@ -54,7 +59,12 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
 
         const responseData = `cpu-cores-available,cpu-cores-utilized,cpu-manufacturer,cpu-model-name,cpu-tdp,gpu-count,gpu-model-name,Hardware Information on AWS Documentation & Comments,instance-class,instance-storage,memory-available,platform-memory,release-date,storage-drives
 16,8,AWS,AWS Graviton,150.00,N/A,N/A,AWS Graviton (ARM),a1.2xlarge,EBS-Only,16,32,November 2018,0
@@ -93,7 +103,12 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
 
         const result = await csvLookup.execute([
           {
@@ -126,7 +141,12 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
         const input = [
           {
             timestamp: '2024-03-01',
@@ -155,7 +175,12 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
         const input = [
           {
             timestamp: '2024-03-01',
@@ -187,7 +212,12 @@ describe('builtins/CSVLookup: ', () => {
         };
         mock.onGet(globalConfig.filepath).reply(404);
 
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
         const input = [
           {
             timestamp: '2024-03-01',
@@ -217,7 +247,12 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: '*',
         };
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
 
         const result = await csvLookup.execute([
           {
@@ -265,7 +300,12 @@ describe('builtins/CSVLookup: ', () => {
             ['gpu-model-name', 'gpumodel'],
           ],
         };
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
 
         const result = await csvLookup.execute([
           {
@@ -300,7 +340,12 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: 'gpu-count',
         };
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
 
         const result = await csvLookup.execute([
           {
@@ -334,8 +379,12 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
         const input = [
           {
             timestamp: '2024-03-01',
@@ -360,7 +409,7 @@ describe('builtins/CSVLookup: ', () => {
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        const csvLookup = CSVLookup();
+        const csvLookup = CSVLookup({});
         const input = [
           {
             timestamp: '2024-03-01',
@@ -392,7 +441,12 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: 'mock',
         };
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
         const input = [
           {
             timestamp: '2024-03-01',
@@ -425,7 +479,12 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['gpu-count'],
         };
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
 
         const result = await csvLookup.execute([
           {
@@ -459,7 +518,12 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: [['gpu-count']],
         };
-        const csvLookup = CSVLookup(globalConfig);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const csvLookup = CSVLookup(pluginSettings);
 
         const result = await csvLookup.execute([
           {
@@ -495,7 +559,12 @@ describe('builtins/CSVLookup: ', () => {
         },
         output: [['gpu-count']],
       };
-      const csvLookup = CSVLookup(globalConfig);
+      const pluginSettings = {
+        'global-config': globalConfig,
+        'parameter-metadata': {},
+        mapping: {},
+      };
+      const csvLookup = CSVLookup(pluginSettings);
 
       try {
         await csvLookup.execute([

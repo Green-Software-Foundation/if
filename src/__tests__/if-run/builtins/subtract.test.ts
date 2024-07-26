@@ -10,11 +10,12 @@ describe('builtins/subtract: ', () => {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
       'output-parameter': 'energy/diff',
     };
-    const parametersMetadata = {
-      inputs: {},
-      outputs: {},
+    const pluginSettings = {
+      'global-config': globalConfig,
+      'parameter-metadata': {},
+      mapping: {},
     };
-    const subtract = Subtract(globalConfig, parametersMetadata);
+    const subtract = Subtract(pluginSettings);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -76,7 +77,8 @@ describe('builtins/subtract: ', () => {
           'input-parameters': ['carbon', 'other-carbon'],
           'output-parameter': 'carbon-diff',
         };
-        const subtract = Subtract(newConfig, parametersMetadata);
+        pluginSettings['global-config'] = newConfig;
+        const subtract = Subtract(pluginSettings);
 
         const data = [
           {

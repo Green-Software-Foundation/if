@@ -22,9 +22,10 @@ describe('builtins/interpolation: ', () => {
       'input-parameter': 'cpu/utilization',
       'output-parameter': 'interpolation-result',
     };
-    const parametersMetadata = {
-      inputs: {},
-      outputs: {},
+    const pluginSettings = {
+      'global-config': globalConfig,
+      'parameter-metadata': {},
+      mapping: {},
     };
     const inputs = [
       {
@@ -33,7 +34,7 @@ describe('builtins/interpolation: ', () => {
         'cpu/utilization': 45,
       },
     ];
-    const plugin = Interpolation(globalConfig, parametersMetadata);
+    const plugin = Interpolation(pluginSettings);
 
     describe('init Interpolation: ', () => {
       it('initalizes object with properties.', async () => {
@@ -63,7 +64,12 @@ describe('builtins/interpolation: ', () => {
           'input-parameter': 'cpu/utilization',
           'output-parameter': 'interpolation-result',
         };
-        const plugin = Interpolation(globalConfig, parametersMetadata);
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const plugin = Interpolation(pluginSettings);
 
         const outputs = [
           {
@@ -79,7 +85,12 @@ describe('builtins/interpolation: ', () => {
 
       it('returns result when the `method` is `spline`.', () => {
         const config = Object.assign({}, globalConfig, {method: Method.SPLINE});
-        const plugin = Interpolation(config, parametersMetadata);
+        const pluginSettings = {
+          'global-config': config,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const plugin = Interpolation(pluginSettings);
 
         const outputs = [
           {
@@ -97,7 +108,12 @@ describe('builtins/interpolation: ', () => {
         const config = Object.assign({}, globalConfig, {
           method: Method.POLYNOMIAL,
         });
-        const plugin = Interpolation(config, parametersMetadata);
+        const pluginSettings = {
+          'global-config': config,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const plugin = Interpolation(pluginSettings);
 
         const outputs = [
           {
@@ -115,7 +131,12 @@ describe('builtins/interpolation: ', () => {
         const config = Object.assign({}, globalConfig, {
           x: [0, 10, 100, 50],
         });
-        const plugin = Interpolation(config, parametersMetadata);
+        const pluginSettings = {
+          'global-config': config,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const plugin = Interpolation(pluginSettings);
 
         const outputs = [
           {
@@ -151,7 +172,12 @@ describe('builtins/interpolation: ', () => {
 
       it('throws an when the global config is not provided.', () => {
         const config = undefined;
-        const plugin = Interpolation(config!, parametersMetadata);
+        const pluginSettings = {
+          'global-config': config!,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const plugin = Interpolation(pluginSettings);
 
         expect.assertions(2);
         try {
@@ -167,7 +193,12 @@ describe('builtins/interpolation: ', () => {
           x: [0, 10, 100],
         });
 
-        const plugin = Interpolation(config, parametersMetadata);
+        const pluginSettings = {
+          'global-config': config,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const plugin = Interpolation(pluginSettings);
 
         expect.assertions(2);
         try {
@@ -202,7 +233,12 @@ describe('builtins/interpolation: ', () => {
           'output-parameter': 'interpolation-result',
         };
         const config = Object.assign({}, globalConfig, {method: Method.SPLINE});
-        const plugin = Interpolation(config, parametersMetadata);
+        const pluginSettings = {
+          'global-config': config,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const plugin = Interpolation(pluginSettings);
         const inputs = [
           {
             timestamp: '2023-07-06T00:00',

@@ -6,11 +6,12 @@ const {MissingInputDataError} = ERRORS;
 
 describe('builtins/sci:', () => {
   describe('Sci: ', () => {
-    const parametersMetadata = {
-      inputs: {},
-      outputs: {},
+    const pluginSettings = {
+      'global-config': {'functional-unit': 'users'},
+      'parameter-metadata': {},
+      mapping: {},
     };
-    const sci = Sci({'functional-unit': 'users'}, parametersMetadata);
+    const sci = Sci(pluginSettings);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -21,12 +22,7 @@ describe('builtins/sci:', () => {
 
     describe('execute():', () => {
       it('returns a result with valid inputs.', async () => {
-        const sci = Sci(
-          {
-            'functional-unit': 'users',
-          },
-          parametersMetadata
-        );
+        const sci = Sci(pluginSettings);
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -55,12 +51,8 @@ describe('builtins/sci:', () => {
       });
 
       it('returns the same result regardless of input duration.', async () => {
-        const sci = Sci(
-          {
-            'functional-unit': 'requests',
-          },
-          parametersMetadata
-        );
+        pluginSettings['global-config'] = {'functional-unit': 'requests'};
+        const sci = Sci(pluginSettings);
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -106,12 +98,8 @@ describe('builtins/sci:', () => {
       });
 
       it('throws exception on invalid functional unit data.', async () => {
-        const sci = Sci(
-          {
-            'functional-unit': 'requests',
-          },
-          parametersMetadata
-        );
+        pluginSettings['global-config'] = {'functional-unit': 'requests'};
+        const sci = Sci(pluginSettings);
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -131,12 +119,8 @@ describe('builtins/sci:', () => {
       });
 
       it('throws exception if functional unit value is not positive integer.', async () => {
-        const sci = Sci(
-          {
-            'functional-unit': 'requests',
-          },
-          parametersMetadata
-        );
+        pluginSettings['global-config'] = {'functional-unit': 'requests'};
+        const sci = Sci(pluginSettings);
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -158,12 +142,8 @@ describe('builtins/sci:', () => {
     });
 
     it('fallbacks to carbon value, if functional unit is 0.', async () => {
-      const sci = Sci(
-        {
-          'functional-unit': 'requests',
-        },
-        parametersMetadata
-      );
+      pluginSettings['global-config'] = {'functional-unit': 'requests'};
+      const sci = Sci(pluginSettings);
       const inputs = [
         {
           timestamp: '2021-01-01T00:00:00Z',

@@ -10,7 +10,7 @@ const {INVALID_MIN_MAX} = STRINGS;
 describe('builtins/mock-observations: ', () => {
   describe('init: ', () => {
     it('successfully initalized.', () => {
-      const mockObservations = MockObservations({
+      const globalConfig = {
         'timestamp-from': '2023-07-06T00:00',
         'timestamp-to': '2023-07-06T00:01',
         duration: 5,
@@ -25,7 +25,13 @@ describe('builtins/mock-observations: ', () => {
             'memory/utilization': {min: 10, max: 85},
           },
         },
-      });
+      };
+      const pluginSettings = {
+        'global-config': globalConfig,
+        'parameter-metadata': {},
+        mapping: {},
+      };
+      const mockObservations = MockObservations(pluginSettings);
 
       expect(mockObservations).toHaveProperty('metadata');
       expect(mockObservations).toHaveProperty('execute');
@@ -49,7 +55,12 @@ describe('builtins/mock-observations: ', () => {
           },
         },
       };
-      const mockObservations = MockObservations(config);
+      const pluginSettings = {
+        'global-config': config,
+        'parameter-metadata': {},
+        mapping: {},
+      };
+      const mockObservations = MockObservations(pluginSettings);
       const result = await mockObservations.execute([]);
 
       expect.assertions(1);
@@ -106,10 +117,15 @@ describe('builtins/mock-observations: ', () => {
           },
         },
       };
+      const pluginSettings = {
+        'global-config': config,
+        'parameter-metadata': {},
+        mapping: {},
+      };
 
       expect.assertions(2);
 
-      const mockObservations = MockObservations(config);
+      const mockObservations = MockObservations(pluginSettings);
       try {
         await mockObservations.execute([]);
       } catch (error) {
@@ -127,11 +143,16 @@ describe('builtins/mock-observations: ', () => {
         duration: 5,
         components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
       };
+      const pluginSettings = {
+        'global-config': config,
+        'parameter-metadata': {},
+        mapping: {},
+      };
 
       expect.assertions(2);
 
       try {
-        const mockObservations = MockObservations(config);
+        const mockObservations = MockObservations(pluginSettings);
         await mockObservations.execute([]);
       } catch (error) {
         expect(error).toBeInstanceOf(InputValidationError);
@@ -161,11 +182,16 @@ describe('builtins/mock-observations: ', () => {
           },
         },
       };
+      const pluginSettings = {
+        'global-config': config,
+        'parameter-metadata': {},
+        mapping: {},
+      };
 
       expect.assertions(2);
 
       try {
-        const mockObservations = MockObservations(config);
+        const mockObservations = MockObservations(pluginSettings);
         await mockObservations.execute([]);
       } catch (error) {
         expect(error).toBeInstanceOf(InputValidationError);
@@ -177,7 +203,7 @@ describe('builtins/mock-observations: ', () => {
       expect.assertions(2);
 
       try {
-        const mockObservations = MockObservations({
+        const globalConfig = {
           'timestamp-from': '2023-07-06T00:00',
           'timestamp-to': '2023-07-06T00:01',
           components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
@@ -191,7 +217,13 @@ describe('builtins/mock-observations: ', () => {
               'memory/utilization': {min: 10, max: 85},
             },
           },
-        });
+        };
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const mockObservations = MockObservations(pluginSettings);
         await mockObservations.execute([]);
       } catch (error) {
         expect(error).toBeInstanceOf(InputValidationError);
@@ -207,7 +239,7 @@ describe('builtins/mock-observations: ', () => {
       expect.assertions(2);
 
       try {
-        const mockObservations = MockObservations({
+        const globalConfig = {
           'timestamp-from': '2023-07-06T00:00',
           duration: 5,
           components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
@@ -221,7 +253,13 @@ describe('builtins/mock-observations: ', () => {
               'memory/utilization': {min: 10, max: 85},
             },
           },
-        });
+        };
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const mockObservations = MockObservations(pluginSettings);
         await mockObservations.execute([]);
       } catch (error) {
         expect(error).toBeInstanceOf(InputValidationError);
@@ -237,7 +275,7 @@ describe('builtins/mock-observations: ', () => {
       expect.assertions(2);
 
       try {
-        const mockObservations = MockObservations({
+        const globalConfig = {
           'timestamp-to': '2023-07-06T00:01',
           duration: 5,
           components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
@@ -251,7 +289,13 @@ describe('builtins/mock-observations: ', () => {
               'memory/utilization': {min: 10, max: 85},
             },
           },
-        });
+        };
+        const pluginSettings = {
+          'global-config': globalConfig,
+          'parameter-metadata': {},
+          mapping: {},
+        };
+        const mockObservations = MockObservations(pluginSettings);
         await mockObservations.execute([]);
       } catch (error) {
         expect(error).toBeInstanceOf(InputValidationError);
@@ -277,7 +321,12 @@ describe('builtins/mock-observations: ', () => {
           randint: null,
         },
       };
-      const mockObservations = MockObservations(config);
+      const pluginSettings = {
+        'global-config': config,
+        'parameter-metadata': {},
+        mapping: {},
+      };
+      const mockObservations = MockObservations(pluginSettings);
 
       expect.assertions(2);
 
@@ -307,7 +356,12 @@ describe('builtins/mock-observations: ', () => {
           },
         },
       };
-      const mockObservations = MockObservations(config);
+      const pluginSettings = {
+        'global-config': config,
+        'parameter-metadata': {},
+        mapping: {},
+      };
+      const mockObservations = MockObservations(pluginSettings);
 
       expect.assertions(2);
 
