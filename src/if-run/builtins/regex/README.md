@@ -18,16 +18,18 @@ Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-26
 
 ### Plugin parameter metadata
 
-The `parameter-metadata` section contains information about `description` and `unit` of the parameters of the inputs and outputs
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
 - `inputs`: describe the parameter of the `parameter` value of the global config. The parameter has the following attributes:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
 - `outputs`: describe the parameters of the `output` of the global config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
 ### Mapping
 

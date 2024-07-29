@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {explain, addExplainData} from '../../../if-run/lib/explain';
 
 describe('lib/explain: ', () => {

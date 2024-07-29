@@ -51,7 +51,18 @@ export const TimeSync = (options: PluginSettings): ExecutePlugin => {
   };
   const metadata = {
     kind: 'execute',
-    inputs: parametersMetadata?.inputs,
+    inputs: parametersMetadata?.inputs || {
+      timestamp: {
+        description: 'refers to the time of occurrence of the input',
+        unit: 'RFC3339',
+        'aggregation-method': 'none',
+      },
+      duration: {
+        description: 'refers to the duration of the input',
+        unit: 'seconds',
+        'aggregation-method': 'sum',
+      },
+    },
     outputs: parametersMetadata?.outputs,
   };
 

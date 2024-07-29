@@ -22,6 +22,21 @@ The `shell` plugin interface requires a path to the plugin command. This path is
 
 - `command`: the path to the plugin executable along with the execution command as it would be entered into a shell.
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameters of the `inputs`. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the output parameter. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ### Inputs
 
 The parameters included in the `inputs` field in the `manifest` depend entirely on the plugin itself. A typical plugin might expect the following common data to be provided as `inputs`:

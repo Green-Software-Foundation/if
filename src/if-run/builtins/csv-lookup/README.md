@@ -53,6 +53,21 @@ All the following values are valid for the `output` field:
 - `["processor-name", "processor-model-id"]`
 - `[["processor-name", "processor-model-id"],["tdp","thermal-design-power"]]`
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameters of the `inputs`. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the parameters in the `output` of the config block. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ### Mapping
 
 The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:

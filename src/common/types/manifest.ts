@@ -10,6 +10,11 @@ export type PluginOptions = GlobalPlugins[string];
 export type PluginSettings = Omit<PluginOptions, 'path' | 'method'>;
 
 export type AggregationParams = Manifest['aggregation'];
+export type AggregationParamsWithoutType = Omit<
+  Exclude<AggregationParams, null | undefined>,
+  'type'
+>;
+
 export type AggregationParamsSure = Extract<Manifest['aggregation'], {}>;
 
 export type Context = Omit<Manifest, 'tree'>;

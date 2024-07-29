@@ -18,16 +18,19 @@ Three parameters are required in global config: `input-parameter`, `coefficient`
 
 ### Plugin parameter metadata
 
-The `parameter-metadata` section contains information about `description` and `unit` of the parameters of the inputs and outputs
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method`
+of the parameters of the inputs and outputs
 
 - `inputs`: describe parameters of the `input-parameter` of the global config. Each parameter has:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
 - `outputs`: describe parameters of the `output-parameter` of the global config. Each parameter has:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
 ### Mapping
 
