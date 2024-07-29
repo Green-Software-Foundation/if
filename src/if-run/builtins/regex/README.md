@@ -16,6 +16,21 @@ Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-26
 - `match` - a regex by which needs to match the `parameter`
 - `output` - output parameter name in the input
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameter of the `parameter` value of the global config. The parameter has the following attributes:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the parameters of the `output` of the global config. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ### Inputs
 
 - `parameter` - as input parameter, must be available in the input array
@@ -23,7 +38,6 @@ Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-26
 ## Returns
 
 - `output`: The match of the `parameter` value using the `match` regex defined in the global config. If the `match` regex includes the global flag (`g`), a string containing all matches separated by spaces.
-
 
 ## Implementation
 

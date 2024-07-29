@@ -1,14 +1,15 @@
 import {PluginParams} from '@grnsft/if-core/types';
 
 import {Regroup} from './regroup';
+import {addExplainData} from './explain';
 
 import {mergeObjects} from '../util/helpers';
 import {debugLogger} from '../../common/util/debug-logger';
 
 import {STRINGS} from '../config/strings';
 
-import {isExecute} from '../types/interface';
 import {ComputeParams, Node, PhasedPipeline} from '../types/compute';
+import {isExecute} from '../types/interface';
 
 const {MERGING_DEFAULTS_WITH_INPUT_DATA} = STRINGS;
 
@@ -87,7 +88,18 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
 
       if (isExecute(plugin)) {
         inputStorage = await plugin.execute(inputStorage, nodeConfig);
-        node.inputs = inputStorage;
+
+        if (params.context.explainer) {
+          addExplainData({
+            pluginName,
+            metadata: plugin.metadata,
+            pluginData: params.context.initialize.plugins[pluginName],
+          });
+        }
+
+        debugLogger.setExecutingPluginName();
+
+        node.outputs = inputStorage;
       }
     }
   }

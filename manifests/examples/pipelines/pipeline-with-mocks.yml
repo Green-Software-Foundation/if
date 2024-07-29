@@ -13,19 +13,36 @@ initialize:
       method: MockObservations
       path: "builtin"
       global-config:
-        timestamp-from: 2023-07-06T00:00
-        timestamp-to: 2023-07-06T00:10
+        timestamp-from: 2023-12-12T00:00
+        timestamp-to: 2023-12-12T00:10
         duration: 60
         components:
           - cloud/instance-type: A1
         generators:
           common:
             cloud/region: uk-west
-            common-key: common-val
           randint:
             cpu/utilization:
               min: 1
               max: 99
+      parameter-metadata:
+        inputs:
+          timestamp:
+            description: refers to the time of occurrence of the input
+            unit: RFC3339
+            aggregation-method: none
+          duration:
+            description: refers to the duration of the input
+            unit: seconds
+            aggregation-method: sum
+          cloud/instance-type:
+            description: type of Cloud Instance name used in the cloud provider APIs
+            unit: none
+            aggregation-method: none
+          cloud/region:
+            description: region cloud instance
+            unit: none
+            aggregation-method: none
     "interpolate":
       method: Interpolation
       path: "builtin"
@@ -35,12 +52,34 @@ initialize:
         y: [0.12, 0.32, 0.75, 1.02]
         input-parameter: "cpu/utilization"
         output-parameter: "cpu-factor"
+      parameter-metadata:
+        inputs:
+          cpu/utilization:
+            description: refers to CPU utilization.
+            unit: percentage
+            aggregation-method: avg
+        outputs:
+          cpu-factor:
+            description: result of interpolate
+            unit: kWh
+            aggregation-method: avg
     "cpu-factor-to-wattage":
       method: Multiply
       path: builtin
       global-config:
         input-parameters: ["cpu-factor", "cpu/thermal-design-power"]
         output-parameter: "cpu-wattage"
+      parameter-metadata:
+        inputs:
+          cpu/thermal-design-power:
+            description: thermal design power for a processor
+            unit: kwh
+            aggregation-method: avg
+        outputs:
+          cpu-wattage:
+            description: the energy used by the CPU
+            unit: kwh
+            aggregation-method: sum
     "wattage-times-duration":
       method: Multiply
       path: builtin
@@ -61,6 +100,16 @@ initialize:
         numerator: vcpus-total
         denominator: vcpus-allocated
         output: vcpu-ratio
+      parameter-metadata:
+        inputs:
+          vcpus-total:
+            description: total number of vcpus available on a particular resource
+            unit: count
+            aggregation-method: none
+          vcpus-allocated:
+            description: number of vcpus allocated to particular resource
+            unit: count
+            aggregation-method: none
     "correct-cpu-energy-for-vcpu-ratio":
       method: Divide
       path: "builtin"
@@ -77,6 +126,12 @@ initialize:
       global-config:
         input-parameters: ["cpu-energy-kwh", "grid/carbon-intensity"]
         output-parameter: "carbon-operational"
+      parameter-metadata:
+        inputs:
+          grid/carbon-intensity:
+            description: Carbon intensity for the grid
+            unit: gCO2eq/kWh
+            aggregation-method: avg
     "sum-carbon":
       path: "builtin"
       method: Sum
@@ -90,6 +145,12 @@ initialize:
       method: Sci
       global-config:
         functional-unit: "requests"
+      parameter-metadata:
+        inputs:
+          requests:
+            description: expressed the final SCI value
+            unit: none
+            aggregation-method: sum
     "time-sync":
       method: TimeSync
       path: "builtin"
@@ -98,6 +159,12 @@ initialize:
         end-time: "2023-12-12T00:01:00.000Z"
         interval: 5
         allow-padding: true
+      parameter-metadata:
+        inputs:
+          time-reserved:
+            description: time reserved for a component
+            unit: seconds
+            aggregation-method: avg
     "group-by":
       path: builtin
       method: GroupBy
@@ -105,6 +172,7 @@ tree:
   children:
     child-1:
       pipeline:
+        - mock-observations
         - interpolate
         - cpu-factor-to-wattage
         - wattage-times-duration
@@ -156,6 +224,7 @@ tree:
           requests: 50
     child-2:
       pipeline:
+        - mock-observations
         - interpolate
         - cpu-factor-to-wattage
         - wattage-times-duration

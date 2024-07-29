@@ -53,6 +53,21 @@ All the following values are valid for the `output` field:
 - `["processor-name", "processor-model-id"]`
 - `[["processor-name", "processor-model-id"],["tdp","thermal-design-power"]]`
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameters of the `inputs`. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the parameters in the `output` of the config block. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ### Inputs
 
 There are no strict requirements on input for this plugin because they depend upon the contents of the target CSV and your input data at the time the CSV lookup is invoked. Please make sure you are requesting data from columns that exist in the target csv file and that your query values are available in your `input` data.
@@ -84,7 +99,7 @@ const globalConfig = {
   },
   output: ['cpu-tdp', 'tdp'],
 };
-const divide = CSVLookup(globalConfig);
+const csvLookup = CSVLookup(globalConfig);
 
 const input = [
   {
@@ -173,4 +188,4 @@ The required parameters are:
 
 You can fix this error by checking you are providing valid values for each parameter in the config.
 
-For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors)

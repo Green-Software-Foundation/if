@@ -1,6 +1,11 @@
 import {z} from 'zod';
 import {ERRORS} from '@grnsft/if-core/utils';
-import {ExecutePlugin, PluginParams, ConfigParams} from '@grnsft/if-core/types';
+import {
+  ExecutePlugin,
+  PluginParams,
+  ConfigParams,
+  PluginParametersMetadata,
+} from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
 
@@ -9,9 +14,14 @@ import {STRINGS} from '../../config';
 const {GlobalConfigError, MissingInputDataError} = ERRORS;
 const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
 
-export const Divide = (globalConfig: ConfigParams): ExecutePlugin => {
+export const Divide = (
+  globalConfig: ConfigParams,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**

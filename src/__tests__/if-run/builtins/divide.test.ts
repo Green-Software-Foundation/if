@@ -14,7 +14,11 @@ describe('builtins/divide: ', () => {
       denominator: 2,
       output: 'cpu/number-cores',
     };
-    const divide = Divide(globalConfig);
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
+    };
+    const divide = Divide(globalConfig, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -54,7 +58,7 @@ describe('builtins/divide: ', () => {
           denominator: 'duration',
           output: 'vcpus-allocated-per-second',
         };
-        const divide = Divide(globalConfig);
+        const divide = Divide(globalConfig, parametersMetadata);
 
         const input = [
           {
@@ -86,7 +90,7 @@ describe('builtins/divide: ', () => {
           denominator: 3600,
           output: 'vcpus-allocated-per-second',
         };
-        const divide = Divide(globalConfig);
+        const divide = Divide(globalConfig, parametersMetadata);
 
         expect.assertions(1);
 
@@ -107,7 +111,7 @@ describe('builtins/divide: ', () => {
 
     it('throws an error on missing global config.', async () => {
       const config = undefined;
-      const divide = Divide(config!);
+      const divide = Divide(config!, parametersMetadata);
 
       expect.assertions(1);
 
@@ -131,7 +135,7 @@ describe('builtins/divide: ', () => {
         denominator: 0,
         output: 'vcpus-allocated-per-second',
       };
-      const divide = Divide(globalConfig);
+      const divide = Divide(globalConfig, parametersMetadata);
 
       expect.assertions(1);
 
@@ -159,7 +163,7 @@ describe('builtins/divide: ', () => {
         denominator: '10',
         output: 'vcpus-allocated-per-second',
       };
-      const divide = Divide(globalConfig);
+      const divide = Divide(globalConfig, parametersMetadata);
 
       expect.assertions(1);
 

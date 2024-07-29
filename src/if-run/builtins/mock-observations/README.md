@@ -17,6 +17,21 @@ The mode currently mocks 2 types of observation data:
 - `generators` define which fields to generate for each observation
 - `components` define the components for which to generate observations. The observations generated according to `timestamp-from`, `timestamp-to`, `duration` and `generators` will be duplicated for each component.
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameters of the `inputs`. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the output parameters. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ### Authentication
 
 N/A

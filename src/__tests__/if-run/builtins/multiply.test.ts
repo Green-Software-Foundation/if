@@ -10,7 +10,11 @@ describe('builtins/multiply: ', () => {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
       'output-parameter': 'energy',
     };
-    const multiply = Multiply(globalConfig);
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
+    };
+    const multiply = Multiply(globalConfig, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -72,7 +76,7 @@ describe('builtins/multiply: ', () => {
           'input-parameters': ['carbon', 'other-carbon'],
           'output-parameter': 'carbon-product',
         };
-        const multiply = Multiply(newConfig);
+        const multiply = Multiply(newConfig, parametersMetadata);
 
         const data = [
           {

@@ -5,6 +5,7 @@ import {
   PluginParams,
   ConfigParams,
   ObservationParams,
+  PluginParametersMetadata,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
@@ -14,9 +15,14 @@ import {RandIntGenerator} from './helpers/rand-int-generator';
 
 import {Generator} from './interfaces/index';
 
-export const MockObservations = (globalConfig: ConfigParams): ExecutePlugin => {
+export const MockObservations = (
+  globalConfig: ConfigParams,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**
