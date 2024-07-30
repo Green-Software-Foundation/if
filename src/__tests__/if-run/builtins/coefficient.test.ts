@@ -14,7 +14,11 @@ describe('builtins/coefficient: ', () => {
       coefficient: 3,
       'output-parameter': 'carbon-product',
     };
-    const coefficient = Coefficient(globalConfig);
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
+    };
+    const coefficient = Coefficient(globalConfig, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -51,7 +55,7 @@ describe('builtins/coefficient: ', () => {
 
       it('throws an error when global config is not provided.', () => {
         const config = undefined;
-        const coefficient = Coefficient(config!);
+        const coefficient = Coefficient(config!, parametersMetadata);
 
         expect.assertions(1);
 
@@ -76,7 +80,7 @@ describe('builtins/coefficient: ', () => {
           coefficient: 3,
           'output-parameter': 'carbon-product',
         };
-        const coefficient = Coefficient(invalidConfig);
+        const coefficient = Coefficient(invalidConfig, parametersMetadata);
         const expectedMessage =
           '"input-parameter" parameter is string must contain at least 1 character(s). Error code: too_small.';
 
@@ -103,7 +107,7 @@ describe('builtins/coefficient: ', () => {
           coefficient: 10,
           'output-parameter': '',
         };
-        const coefficient = Coefficient(invalidConfig);
+        const coefficient = Coefficient(invalidConfig, parametersMetadata);
         const expectedMessage =
           '"output-parameter" parameter is string must contain at least 1 character(s). Error code: too_small.';
 

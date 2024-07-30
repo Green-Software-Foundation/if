@@ -22,6 +22,10 @@ describe('builtins/interpolation: ', () => {
       'input-parameter': 'cpu/utilization',
       'output-parameter': 'interpolation-result',
     };
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
+    };
     const inputs = [
       {
         timestamp: '2023-07-06T00:00',
@@ -29,7 +33,7 @@ describe('builtins/interpolation: ', () => {
         'cpu/utilization': 45,
       },
     ];
-    const plugin = Interpolation(globalConfig);
+    const plugin = Interpolation(globalConfig, parametersMetadata);
 
     describe('init Interpolation: ', () => {
       it('initalizes object with properties.', async () => {
@@ -59,7 +63,7 @@ describe('builtins/interpolation: ', () => {
           'input-parameter': 'cpu/utilization',
           'output-parameter': 'interpolation-result',
         };
-        const plugin = Interpolation(globalConfig);
+        const plugin = Interpolation(globalConfig, parametersMetadata);
 
         const outputs = [
           {
@@ -75,7 +79,7 @@ describe('builtins/interpolation: ', () => {
 
       it('returns result when the `method` is `spline`.', () => {
         const config = Object.assign({}, globalConfig, {method: Method.SPLINE});
-        const plugin = Interpolation(config);
+        const plugin = Interpolation(config, parametersMetadata);
 
         const outputs = [
           {
@@ -93,7 +97,7 @@ describe('builtins/interpolation: ', () => {
         const config = Object.assign({}, globalConfig, {
           method: Method.POLYNOMIAL,
         });
-        const plugin = Interpolation(config);
+        const plugin = Interpolation(config, parametersMetadata);
 
         const outputs = [
           {
@@ -111,7 +115,7 @@ describe('builtins/interpolation: ', () => {
         const config = Object.assign({}, globalConfig, {
           x: [0, 10, 100, 50],
         });
-        const plugin = Interpolation(config);
+        const plugin = Interpolation(config, parametersMetadata);
 
         const outputs = [
           {
@@ -147,7 +151,7 @@ describe('builtins/interpolation: ', () => {
 
       it('throws an when the global config is not provided.', () => {
         const config = undefined;
-        const plugin = Interpolation(config!);
+        const plugin = Interpolation(config!, parametersMetadata);
 
         expect.assertions(2);
         try {
@@ -163,7 +167,7 @@ describe('builtins/interpolation: ', () => {
           x: [0, 10, 100],
         });
 
-        const plugin = Interpolation(config);
+        const plugin = Interpolation(config, parametersMetadata);
 
         expect.assertions(2);
         try {
@@ -198,7 +202,7 @@ describe('builtins/interpolation: ', () => {
           'output-parameter': 'interpolation-result',
         };
         const config = Object.assign({}, globalConfig, {method: Method.SPLINE});
-        const plugin = Interpolation(config);
+        const plugin = Interpolation(config, parametersMetadata);
         const inputs = [
           {
             timestamp: '2023-07-06T00:00',

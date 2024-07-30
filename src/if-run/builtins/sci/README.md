@@ -8,6 +8,21 @@
 
 - `functional-unit`: the name of the functional unit in which to express the carbon impact (required)
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe parameters of the `inputs`. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the `sci` parameter which has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ### Inputs
 
 - `carbon`: total carbon in gCO2eq (required)

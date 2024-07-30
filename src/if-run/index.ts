@@ -1,19 +1,21 @@
 #!/usr/bin/env node
-import {aggregate, storeAggregateMetrics} from './lib/aggregate';
-import {compute} from './lib/compute';
-import {injectEnvironment} from './lib/environment';
-import {exhaust} from './lib/exhaust';
-import {initialize} from './lib/initialize';
-import {load} from '../common/lib/load';
-
-import {parseIfRunProcessArgs} from './util/args';
-import {andHandle} from './util/helpers';
-import {logger} from '../common/util/logger';
+import {STRINGS as COMMON_STRINGS} from '../common/config';
 import {validateManifest} from '../common/util/validations';
 import {debugLogger} from '../common/util/debug-logger';
+import {logger} from '../common/util/logger';
+import {load} from '../common/lib/load';
+
+import {aggregate, storeAggregationMetrics} from './lib/aggregate';
+import {injectEnvironment} from './lib/environment';
+import {initialize} from './lib/initialize';
+import {compute} from './lib/compute';
+import {exhaust} from './lib/exhaust';
+import {explain} from './lib/explain';
+
+import {parseIfRunProcessArgs} from './util/args';
+import {andHandle, storeAggregationMethods} from './util/helpers';
 
 import {STRINGS} from './config';
-import {STRINGS as COMMON_STRINGS} from '../common/config';
 
 const {EXITING_IF, STARTING_IF} = STRINGS;
 const {DISCLAIMER_MESSAGE} = COMMON_STRINGS;
@@ -32,13 +34,19 @@ const impactEngine = async () => {
 
   try {
     const {tree, ...context} = validateManifest(envManifest);
-
-    // TODO: remove this after resolving timeSync to be a builtin functionality.
-    storeAggregateMetrics(context.aggregation);
-
     const pluginStorage = await initialize(context.initialize.plugins);
+
+    if (context.aggregation) {
+      storeAggregationMetrics({metrics: context.aggregation?.metrics});
+    }
+
+    storeAggregationMethods(context.initialize.plugins, pluginStorage);
+
     const computedTree = await compute(tree, {context, pluginStorage});
     const aggregatedTree = aggregate(computedTree, context.aggregation);
+
+    envManifest.explainer && (context.explain = explain());
+
     await exhaust(aggregatedTree, context, outputOptions);
   } catch (error) {
     if (error instanceof Error) {

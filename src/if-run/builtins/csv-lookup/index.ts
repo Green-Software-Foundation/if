@@ -5,7 +5,11 @@ import axios from 'axios';
 import {z} from 'zod';
 import {parse} from 'csv-parse/sync';
 import {ERRORS} from '@grnsft/if-core/utils';
-import {ExecutePlugin, PluginParams} from '@grnsft/if-core/types';
+import {
+  ExecutePlugin,
+  PluginParametersMetadata,
+  PluginParams,
+} from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
 
@@ -28,9 +32,14 @@ const {
   CSVParseError,
 } = ERRORS;
 
-export const CSVLookup = (globalConfig: any): ExecutePlugin => {
+export const CSVLookup = (
+  globalConfig: any,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**

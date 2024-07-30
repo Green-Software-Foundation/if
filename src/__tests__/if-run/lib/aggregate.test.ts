@@ -2,7 +2,10 @@
 
 import {AggregationParams} from '../../../common/types/manifest';
 
-import {aggregate, storeAggregateMetrics} from '../../../if-run/lib/aggregate';
+import {
+  aggregate,
+  storeAggregationMetrics,
+} from '../../../if-run/lib/aggregate';
 
 describe('lib/aggregate: ', () => {
   beforeAll(() => {
@@ -13,7 +16,7 @@ describe('lib/aggregate: ', () => {
       type: 'horizontal',
     };
 
-    storeAggregateMetrics(metricStorage);
+    storeAggregationMetrics(metricStorage);
   });
 
   describe('aggregate(): ', () => {

@@ -9,6 +9,7 @@ import {
   PaddingReceipt,
   TimeNormalizerConfig,
   TimeParams,
+  PluginParametersMetadata,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../common/util/validations';
@@ -35,9 +36,25 @@ const {
   INVALID_DATETIME,
 } = STRINGS;
 
-export const TimeSync = (globalConfig: TimeNormalizerConfig): ExecutePlugin => {
+export const TimeSync = (
+  globalConfig: TimeNormalizerConfig,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs || {
+      timestamp: {
+        description: 'refers to the time of occurrence of the input',
+        unit: 'RFC3339',
+        'aggregation-method': 'none',
+      },
+      duration: {
+        description: 'refers to the duration of the input',
+        unit: 'seconds',
+        'aggregation-method': 'sum',
+      },
+    },
+    outputs: parametersMetadata?.outputs,
   };
 
   /**

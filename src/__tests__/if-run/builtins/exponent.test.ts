@@ -11,7 +11,11 @@ describe('builtins/exponent: ', () => {
       exponent: 3,
       'output-parameter': 'energy',
     };
-    const exponent = Exponent(globalConfig);
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
+    };
+    const exponent = Exponent(globalConfig, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -91,7 +95,7 @@ describe('builtins/exponent: ', () => {
           exponent: 4,
           'output-parameter': 'carbon',
         };
-        const exponent = Exponent(newConfig);
+        const exponent = Exponent(newConfig, parametersMetadata);
 
         const data = [
           {
