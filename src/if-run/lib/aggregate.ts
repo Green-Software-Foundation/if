@@ -5,6 +5,7 @@ import {logger} from '../../common/util/logger';
 import {
   AggregationParams,
   AggregationParamsSure,
+  AggregationParamsWithoutType,
 } from '../../common/types/manifest';
 
 import {aggregateInputsIntoOne} from '../util/aggregation-helper';
@@ -105,13 +106,15 @@ export const aggregate = (tree: any, aggregationParams: AggregationParams) => {
 
 /**
  * Gets or stores aggregation metrics.
- * @todo Remove these functions after resolving timeSync to be a builtin functionality.
  */
-export const storeAggregateMetrics = (
-  aggregationParams?: AggregationParams
+export const storeAggregationMetrics = (
+  aggregationParams?: AggregationParamsWithoutType
 ) => {
   if (aggregationParams?.metrics) {
-    metricManager.metrics = aggregationParams?.metrics;
+    metricManager.metrics = {
+      ...metricManager.metrics,
+      ...aggregationParams?.metrics,
+    };
   }
 
   return metricManager.metrics;
@@ -141,7 +144,7 @@ const metricManager = (() => {
 export const getAggregationMethod = (unitName: string) => {
   debugLogger.setExecutingPluginName();
   memoizedLog(console.debug, CHECKING_AGGREGATION_METHOD(unitName));
-  const aggregationMetricsStorage = storeAggregateMetrics();
+  const aggregationMetricsStorage = storeAggregationMetrics();
 
   if (aggregationMetricsStorage && `${unitName}` in aggregationMetricsStorage) {
     return aggregationMetricsStorage[unitName].method;

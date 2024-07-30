@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {explain, addExplainData} from '../../../if-run/lib/explain';
 
 describe('lib/explain: ', () => {
@@ -34,16 +35,19 @@ describe('lib/explain: ', () => {
           'cpu/energy': {
             unit: 'kWh',
             description: 'energy consumed by the cpu',
+            'aggregation-method': 'sum',
           },
           'network/energy': {
             unit: 'kWh',
             description: 'energy consumed by data ingress and egress',
+            'aggregation-method': 'sum',
           },
         },
         outputs: {
           'energy-sum': {
             unit: 'kWh',
             description: 'sum of energy components',
+            'aggregation-method': 'sum',
           },
         },
       },
@@ -66,20 +70,29 @@ describe('lib/explain: ', () => {
           'cpu/energy': {
             unit: 'kWh',
             description: 'energy consumed by the cpu',
+            'aggregation-method': 'sum',
           },
           'network/energy': {
             unit: 'kWh',
             description: 'energy consumed by data ingress and egress',
+            'aggregation-method': 'sum',
           },
         },
         outputs: {
-          'energy-sum': {unit: 'kWh', description: 'sum of energy components'},
+          'energy-sum': {
+            unit: 'kWh',
+            description: 'sum of energy components',
+            'aggregation-method': 'sum',
+          },
         },
       },
     };
 
+    // @ts-ignore
     addExplainData(mockData);
+
     const result = explain();
+
     expect.assertions(1);
     expect(result).toEqual(expectedResult);
   });

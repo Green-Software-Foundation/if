@@ -10,8 +10,12 @@ jest.mock('child_process');
 jest.mock('js-yaml');
 
 describe('builtins/shell', () => {
+  const parametersMetadata = {
+    inputs: {},
+    outputs: {},
+  };
   describe('Shell', () => {
-    const shell = Shell({});
+    const shell = Shell({}, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -22,7 +26,10 @@ describe('builtins/shell', () => {
 
     describe('execute(): ', () => {
       it('execute with valid inputs and command', async () => {
-        const shell = Shell({command: 'python3 /path/to/script.py'});
+        const shell = Shell(
+          {command: 'python3 /path/to/script.py'},
+          parametersMetadata
+        );
         const mockSpawnSync = spawnSync as jest.MockedFunction<
           typeof spawnSync
         >;
@@ -70,7 +77,10 @@ describe('builtins/shell', () => {
       });
 
       it('throw an error when shell could not run command.', async () => {
-        const shell = Shell({command: 'python3 /path/to/script.py'});
+        const shell = Shell(
+          {command: 'python3 /path/to/script.py'},
+          parametersMetadata
+        );
         (spawnSync as jest.Mock).mockImplementation(() => {
           throw new InputValidationError('Could not run the command');
         });
