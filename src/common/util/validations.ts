@@ -63,37 +63,39 @@ export const manifestSchema = z.object({
   initialize: z.object({
     plugins: z.record(
       z.string(),
-      z.object({
-        path: z.string(),
-        method: z.string(),
-        'global-config': z.record(z.string(), z.any()).optional(),
-        'parameter-metadata': z
-          .object({
-            inputs: z
-              .record(
-                z.string(),
-                z.object({
-                  unit: z.string(),
-                  description: z.string(),
-                  'aggregation-method': z.string(),
-                })
-              )
-              .optional()
-              .nullable(),
-            outputs: z
-              .record(
-                z.string(),
-                z.object({
-                  unit: z.string(),
-                  description: z.string(),
-                  'aggregation-method': z.string(),
-                })
-              )
-              .optional()
-              .nullable(),
-          })
-          .optional(),
-      })
+      z
+        .object({
+          path: z.string(),
+          method: z.string(),
+          'global-config': z.record(z.string(), z.any()).optional(),
+          'parameter-metadata': z
+            .object({
+              inputs: z
+                .record(
+                  z.string(),
+                  z.object({
+                    unit: z.string(),
+                    description: z.string(),
+                    'aggregation-method': z.string(),
+                  })
+                )
+                .optional()
+                .nullable(),
+              outputs: z
+                .record(
+                  z.string(),
+                  z.object({
+                    unit: z.string(),
+                    description: z.string(),
+                    'aggregation-method': z.string(),
+                  })
+                )
+                .optional()
+                .nullable(),
+            })
+            .optional(),
+        })
+        .optional()
     ),
   }),
   execution: z
