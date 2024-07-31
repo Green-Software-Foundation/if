@@ -51,6 +51,10 @@ const impactEngine = async () => {
       timeSync: context['time-sync'],
     });
 
+    if (context['time-sync']) {
+      delete context.initialize.plugins['time-sync'];
+    }
+
     if (context.aggregation) {
       storeAggregationMetrics({metrics: context.aggregation?.metrics});
     }
