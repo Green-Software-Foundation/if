@@ -87,7 +87,7 @@ const initPlugin = async (
     path,
     'global-config': globalConfig,
     'parameter-metadata': parameterMetadata,
-  } = initPluginParams;
+  } = initPluginParams!;
 
   console.debug(INITIALIZING_PLUGIN(method));
 
