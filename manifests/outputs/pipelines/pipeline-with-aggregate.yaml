@@ -189,11 +189,6 @@ initialize:
             unit: seconds
             description: time reserved for a component
             aggregation-method: avg
-        outputs:
-          synced-time:
-            unit: none
-            description: Synced time
-            aggregation-method: none
 execution:
   command: >-
     /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
