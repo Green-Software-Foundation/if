@@ -75,7 +75,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
 
   let inputStorage = structuredClone(node.inputs) as PluginParams[];
   inputStorage = mergeDefaults(inputStorage, defaults);
-  const pipelineCopy = structuredClone(pipeline);
+  const pipelineCopy = structuredClone(pipeline) || {};
 
   /**
    * If iteration is on observe pipeline, then executes observe plugins and sets the inputs value.
@@ -94,7 +94,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
           addExplainData({
             pluginName,
             metadata: plugin.metadata,
-            pluginData: params.context.initialize.plugins[pluginName],
+            pluginData: params.context.initialize!.plugins[pluginName],
           });
         }
 
@@ -106,8 +106,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   /**
    * If regroup is requested, execute regroup strategy, delete child's inputs, outputs and empty regroup array.
    */
-  if ((noFlags || params.regroup) && pipeline.regroup) {
-    node.children = Regroup(inputStorage, pipeline.regroup);
+  if ((noFlags || params.regroup) && pipelineCopy.regroup) {
+    node.children = Regroup(inputStorage, pipelineCopy.regroup);
     delete node.inputs;
     delete node.outputs;
 
@@ -126,7 +126,10 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
    * Adds `time-sync` as the first plugin of compute phase if requested.
    */
   if (params.timeSync) {
-    pipelineCopy.compute = ['time-sync', ...(pipelineCopy.compute || [])];
+    pipelineCopy.compute = [
+      'time-sync',
+      ...((pipelineCopy && pipelineCopy.compute) || []),
+    ];
   }
 
   /**
