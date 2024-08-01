@@ -11,8 +11,8 @@ import {IFMergeArgs} from '../types/process-args';
 /**
  * Merges the given manifests in the one file.
  */
-export const mergeManifests = async (commandArgs: IFMergeArgs) => {
-  const {manifests: commandManifests, name, description} = commandArgs;
+export const mergeManifests = async (mergeArgs: IFMergeArgs) => {
+  const {manifests: commandManifests, name, description} = mergeArgs;
   let manifests = commandManifests;
   let manifestPath = process.env.CURRENT_DIR || process.cwd();
 
@@ -20,13 +20,22 @@ export const mergeManifests = async (commandArgs: IFMergeArgs) => {
     manifests = await getYamlFiles(commandManifests[0]);
     manifestPath = commandManifests[0];
   }
-
   const context = {
     name: name || 'if-merge',
     description: description || 'merged manifest',
     tags: null,
     initialize: {plugins: {}},
   };
+  const tree = await mergeManifestsData(manifests, context);
+  const outputPath = getOutputPath(name, manifestPath);
+
+  await saveMergedManifest(tree, context, outputPath);
+};
+
+/**
+ * Merges manifests data.
+ */
+const mergeManifestsData = async (manifests: string[], context: Context) => {
   const tree: any = {children: {}};
 
   for await (const manifest of manifests) {
@@ -45,12 +54,17 @@ export const mergeManifests = async (commandArgs: IFMergeArgs) => {
       };
     });
   }
-  const manifestName = name
-    ? `${name.replace(' ', '-')}.yaml`
-    : 'merged-manifest.yaml';
-  const outputPath = path.join(manifestPath, manifestName);
 
-  await saveMergedManifest(tree, context, outputPath);
+  return tree;
+};
+
+/**
+ * Gets output path.
+ */
+const getOutputPath = (name: string | undefined, manifestPath: string) => {
+  const manifestName = `${(name || 'merged-manifest').replace(' ', '-')}.yaml`;
+
+  return path.join(manifestPath, manifestName);
 };
 
 /**
