@@ -1,6 +1,6 @@
 # Time Converter
 
-`time-coversion` is a generic plugin for converting energy values from a specifed time unit to a new given time unit.
+`time-conversion` is a generic plugin for converting time values from a specified time unit to a new given time unit.
 
 You provide the energy value, the time unit associated with this energy, and a new time unit to which you want to convert it.
 
