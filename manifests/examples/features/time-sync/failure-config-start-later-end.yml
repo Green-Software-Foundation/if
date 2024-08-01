@@ -1,24 +1,16 @@
 name: time-sync
 description: failure with `global-config.start-time` being later than `global-config.end-time`
 tags:
+'time-sync':
+  start-time: '2023-12-12T00:01:00.000Z'
+  end-time: '2023-12-12T00:00:00.000Z'
+  interval: 5
+  allow-padding: true
 initialize:
-  output:
-    - yaml
-  plugins:
-    'time-sync':
-      method: TimeSync
-      path: "builtin"
-      global-config: 
-        start-time: '2023-12-12T00:01:00.000Z'
-        end-time: '2023-12-12T00:00:00.000Z'
-        interval: 5
-        allow-padding: true
+  plugins: {}
 tree:
   children:
     child:
-      pipeline:
-        - time-sync
-      config:
       inputs:
         - timestamp: '2023-12-12T00:00:00.000Z'
           duration: 1
