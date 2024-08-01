@@ -151,7 +151,8 @@ export const readdir = (directoryPath: string) => {
 export const lstat = (filePath: string) => {
   if (
     filePath.includes('mock-directory') ||
-    filePath.includes('mock-sub-directory/subdir')
+    filePath.includes('mock-sub-directory/subdir') ||
+    filePath === 'true'
   ) {
     return {
       isDirectory: () => true,
