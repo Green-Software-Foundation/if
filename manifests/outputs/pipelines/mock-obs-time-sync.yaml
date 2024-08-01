@@ -207,181 +207,181 @@ tree:
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 5
-          cpu/utilization: 14
+          cpu/utilization: '*'
           cpu/thermal-design-power: 80
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0.662
-          cpu-wattage: 66.19999999999999
-          cpu-wattage-times-duration: 203
-          cpu-energy-raw: 0.0000563888888888889
-          vcpu-ratio: 14.399999999999999
-          cpu-energy-kwh: 0.000007048611111111113
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
         - timestamp: "2023-12-12T00:00:05.000Z"
           duration: 5
-          cpu/utilization: 13
+          cpu/utilization: '*'
           cloud/instance-type: A1
           cloud/region: uk-west
           cpu/thermal-design-power: 80
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0.29907142857142854
-          cpu-wattage: 29.907142857142862
-          cpu-wattage-times-duration: 192.25
-          cpu-energy-raw: 0.00005340277777777778
-          vcpu-ratio: 6.171428571428571
-          cpu-energy-kwh: 0.000006675347222222222
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
         - timestamp: "2023-12-12T00:00:10.000Z"
           duration: 5
-          cpu/utilization: 12
+          cpu/utilization: '*'
           cloud/instance-type: A1
           cloud/region: uk-west
           cpu/thermal-design-power: 80
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0.1850952380952381
-          cpu-wattage: 18.50952380952381
-          cpu-wattage-times-duration: 186.875
-          cpu-energy-raw: 0.00005190972222222222
-          vcpu-ratio: 3.9619047619047616
-          cpu-energy-kwh: 0.0000064887152777777775
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
         - timestamp: "2023-12-12T00:00:15.000Z"
           duration: 5
+          cpu/utilization: '*'
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
           cpu/thermal-design-power: 80
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0.06229166666666667
-          cpu-wattage: 6.229166666666667
-          cpu-wattage-times-duration: 186.875
-          cpu-energy-raw: 0.00005190972222222223
-          vcpu-ratio: 1.3333333333333333
-          cpu-energy-kwh: 0.000006488715277777778
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
         - timestamp: "2023-12-12T00:00:20.000Z"
           duration: 5
+          cpu/utilization: '*'
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
           cpu/thermal-design-power: 80
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0.06229166666666667
-          cpu-wattage: 6.229166666666667
-          cpu-wattage-times-duration: 186.875
-          cpu-energy-raw: 0.00005190972222222223
-          vcpu-ratio: 1.3333333333333333
-          cpu-energy-kwh: 0.000006488715277777778
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
         - timestamp: "2023-12-12T00:00:25.000Z"
           duration: 5
+          cpu/utilization: '*'
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
           cpu/thermal-design-power: 80
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0.06229166666666667
-          cpu-wattage: 6.229166666666667
-          cpu-wattage-times-duration: 186.875
-          cpu-energy-raw: 0.00005190972222222223
-          vcpu-ratio: 1.3333333333333333
-          cpu-energy-kwh: 0.000006488715277777778
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
         - timestamp: "2023-12-12T00:00:30.000Z"
           duration: 5
+          cpu/utilization: '*'
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
           cpu/thermal-design-power: 80
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0.06229166666666667
-          cpu-wattage: 6.229166666666667
-          cpu-wattage-times-duration: 186.875
-          cpu-energy-raw: 0.00005190972222222223
-          vcpu-ratio: 1.3333333333333333
-          cpu-energy-kwh: 0.000006488715277777778
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
         - timestamp: "2023-12-12T00:00:35.000Z"
           duration: 5
+          cpu/utilization: '*'
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
           cpu/thermal-design-power: 80
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0.06229166666666667
-          cpu-wattage: 6.229166666666667
-          cpu-wattage-times-duration: 186.875
-          cpu-energy-raw: 0.00005190972222222223
-          vcpu-ratio: 1.3333333333333333
-          cpu-energy-kwh: 0.000006488715277777778
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
         - timestamp: "2023-12-12T00:00:40.000Z"
           duration: 5
+          cpu/utilization: '*'
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 9
-          cpu/thermal-design-power: 60
+          cpu/thermal-design-power: 80
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0.037375
-          cpu-wattage: 3.7375
-          cpu-wattage-times-duration: 112.125
-          cpu-energy-raw: 0.000031145833333333336
-          vcpu-ratio: 0.8
-          cpu-energy-kwh: 0.000003893229166666667
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
         - timestamp: "2023-12-12T00:00:45.000Z"
           duration: 5
+          cpu/utilization: '*'
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 0
-          cpu/thermal-design-power: 0
+          cpu/thermal-design-power: 80
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0
-          cpu-wattage: 0
-          cpu-wattage-times-duration: 0
-          cpu-energy-raw: 0
-          vcpu-ratio: 0
-          cpu-energy-kwh: 0
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
         - timestamp: "2023-12-12T00:00:50.000Z"
           duration: 5
+          cpu/utilization: '*'
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 0
-          cpu/thermal-design-power: 0
+          cpu/thermal-design-power: 80
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0
-          cpu-wattage: 0
-          cpu-wattage-times-duration: 0
-          cpu-energy-raw: 0
-          vcpu-ratio: 0
-          cpu-energy-kwh: 0
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
         - timestamp: "2023-12-12T00:00:55.000Z"
           duration: 5
+          cpu/utilization: '*'
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 0
-          cpu/thermal-design-power: 0
+          cpu/thermal-design-power: 80
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0
-          cpu-wattage: 0
-          cpu-wattage-times-duration: 0
-          cpu-energy-raw: 0
-          vcpu-ratio: 0
-          cpu-energy-kwh: 0
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
         - timestamp: "2023-12-12T00:01:00.000Z"
           duration: 1
+          cpu/utilization: '*'
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 0
-          cpu/thermal-design-power: 0
+          cpu/thermal-design-power: 100
           vcpus-total: 8
           vcpus-allocated: 1
-          cpu-factor: 0
-          cpu-wattage: 0
-          cpu-wattage-times-duration: 0
-          cpu-energy-raw: 0
-          vcpu-ratio: 0
-          cpu-energy-kwh: 0
+          cpu-factor: '*'
+          cpu-wattage: '*'
+          cpu-wattage-times-duration: '*'
+          cpu-energy-raw: '*'
+          vcpu-ratio: '*'
+          cpu-energy-kwh: '*'
