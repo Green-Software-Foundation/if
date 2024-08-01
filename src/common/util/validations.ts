@@ -25,6 +25,36 @@ export const allDefined = (obj: Record<string | number | symbol, unknown>) =>
   Object.values(obj).every(v => v !== undefined);
 
 /**
+ * Schema for parameter metadata.
+ */
+const parameterMetadataSchema = z
+  .object({
+    inputs: z
+      .record(
+        z.string(),
+        z.object({
+          unit: z.string(),
+          description: z.string(),
+          'aggregation-method': z.string(),
+        })
+      )
+      .optional()
+      .nullable(),
+    outputs: z
+      .record(
+        z.string(),
+        z.object({
+          unit: z.string(),
+          description: z.string(),
+          'aggregation-method': z.string(),
+        })
+      )
+      .optional()
+      .nullable(),
+  })
+  .optional();
+
+/**
  * Validation schema for manifests.
  */
 export const manifestSchema = z.object({
@@ -57,6 +87,7 @@ export const manifestSchema = z.object({
       'end-time': z.string(),
       interval: z.number().gt(0),
       'allow-padding': z.boolean(),
+      'parameter-metadata': parameterMetadataSchema,
     })
     .optional(),
   initialize: z.object({
@@ -67,32 +98,7 @@ export const manifestSchema = z.object({
           path: z.string(),
           method: z.string(),
           'global-config': z.record(z.string(), z.any()).optional(),
-          'parameter-metadata': z
-            .object({
-              inputs: z
-                .record(
-                  z.string(),
-                  z.object({
-                    unit: z.string(),
-                    description: z.string(),
-                    'aggregation-method': z.string(),
-                  })
-                )
-                .optional()
-                .nullable(),
-              outputs: z
-                .record(
-                  z.string(),
-                  z.object({
-                    unit: z.string(),
-                    description: z.string(),
-                    'aggregation-method': z.string(),
-                  })
-                )
-                .optional()
-                .nullable(),
-            })
-            .optional(),
+          'parameter-metadata': parameterMetadataSchema,
         })
         .optional()
     ),

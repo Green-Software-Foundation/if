@@ -123,6 +123,7 @@ export const initialize = async (
       path: 'lib/time-sync',
       method: 'TimeSync',
       'global-config': context['time-sync'],
+      'parameter-metadata': context['time-sync']['parameter-metadata'],
     };
   }
 
