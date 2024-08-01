@@ -1,8 +1,8 @@
 import * as path from 'path';
 
 import {getFileName, getYamlFiles} from '../../common/util/fs';
-import {load} from '../../common/lib/load';
 import {Context} from '../../common/types/manifest';
+import {load} from '../../common/lib/load';
 
 import {ExportYaml} from '../../if-run/builtins/export-yaml';
 
