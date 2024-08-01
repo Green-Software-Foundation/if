@@ -1,4 +1,4 @@
-name: groupby
+name: regroup
 description: failure when `config->group-by->group` is not an array
 initialize:
   plugins: {}
