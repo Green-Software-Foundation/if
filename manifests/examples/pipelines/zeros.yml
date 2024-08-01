@@ -106,22 +106,21 @@ tree:
   children:
     child-1:
       pipeline:
-        - sum-zero-and-one
-        - sum-zero-and-zero
-        - subtract-one-and-zero
-        - subtract-zero-and-zero
-        - subtract-zero-and-one
-        - coefficient-one-times-zero
-        - coefficient-zero-times-one
-        - coefficient-zero-times-zero
-        - multiply-one-times-zero
-        - multiply-zero-times-one
-        - exponent-one-to-zero
-        - exponent-zero-to-one
-        - exponent-zero-to-zero
-        - sci
-      config:
-      defaults:
+        compute:
+          - sum-zero-and-one
+          - sum-zero-and-zero
+          - subtract-one-and-zero
+          - subtract-zero-and-zero
+          - subtract-zero-and-one
+          - coefficient-one-times-zero
+          - coefficient-zero-times-one
+          - coefficient-zero-times-zero
+          - multiply-one-times-zero
+          - multiply-zero-times-one
+          - exponent-one-to-zero
+          - exponent-zero-to-one
+          - exponent-zero-to-zero
+          - sci
       inputs:
         - timestamp: "2023-12-12T00:00:00.000Z"
           duration: 1
