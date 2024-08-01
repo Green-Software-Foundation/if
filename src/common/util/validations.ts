@@ -58,8 +58,7 @@ export const manifestSchema = z.object({
       interval: z.number().gt(0),
       'allow-padding': z.boolean(),
     })
-    .optional()
-    .nullable(),
+    .optional(),
   initialize: z.object({
     plugins: z.record(
       z.string(),
