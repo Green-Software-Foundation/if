@@ -9,4 +9,5 @@ Incubation projects are experimental, offer no support guarantee, have minimal g
   MANIFEST_NOT_FOUND: 'Manifest file not found.',
   SUCCESS_MESSAGE: 'The environment is successfully setup!',
   MANIFEST_IS_MISSING: 'Manifest is missing.',
+  DIRECTORY_NOT_FOUND: 'Directory not found.',
 };
