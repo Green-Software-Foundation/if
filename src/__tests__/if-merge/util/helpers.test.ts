@@ -15,6 +15,7 @@ jest.mock('../../../common/lib/load', () => ({
 
 jest.mock('../../../if-run/builtins/export-yaml', () => ({
   ExportYaml: jest.fn().mockImplementation(() => ({
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     execute: (tree, context, outputPath) => {
       const expectedContext = {
