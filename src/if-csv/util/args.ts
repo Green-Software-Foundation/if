@@ -4,7 +4,7 @@ import {ERRORS} from '@grnsft/if-core/utils';
 import {checkIfFileIsYaml} from '../../common/util/yaml';
 import {prependFullFilePath} from '../../common/util/helpers';
 
-import {CONFIG, STRINGS} from '../config';
+import {CONFIG} from '../config';
 import {STRINGS as COMMON_STRINGS} from '../../common/config';
 
 import {IFCsvArgs} from '../types/process-args';
@@ -13,7 +13,6 @@ import {isFileExists} from '../../common/util/fs';
 const {ParseCliParamsError, CliSourceFileError} = ERRORS;
 
 const {ARGS, HELP} = CONFIG;
-const {PARAMS_NOT_PRESENT} = STRINGS;
 const {SOURCE_IS_NOT_YAML, MANIFEST_NOT_FOUND} = COMMON_STRINGS;
 
 /**
@@ -36,10 +35,6 @@ const validateAndParseIfCsvArgs = () => {
  */
 export const parseIfCsvArgs = async () => {
   const {manifest, output, params} = validateAndParseIfCsvArgs();
-
-  if (!params) {
-    throw new ParseCliParamsError(PARAMS_NOT_PRESENT);
-  }
 
   if (manifest) {
     const response = prependFullFilePath(manifest);
