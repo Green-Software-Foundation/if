@@ -13,6 +13,13 @@ export type PhasedPipeline = {
   compute?: string[];
 };
 
+type TimeSyncConfig = {
+  'start-time': string;
+  'end-time': string;
+  interval: number;
+  'allow-padding': boolean;
+};
+
 export type ComputeParams = {
   pluginStorage: PluginStorageInterface;
   context: Context;
@@ -22,6 +29,7 @@ export type ComputeParams = {
   observe?: Boolean;
   regroup?: Boolean;
   compute?: Boolean;
+  timeSync?: TimeSyncConfig | undefined | null;
 };
 
 export type Node = {

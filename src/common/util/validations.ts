@@ -51,40 +51,51 @@ export const manifestSchema = z.object({
     })
     .optional()
     .nullable(),
+  'time-sync': z
+    .object({
+      'start-time': z.string(),
+      'end-time': z.string(),
+      interval: z.number().gt(0),
+      'allow-padding': z.boolean(),
+    })
+    .optional()
+    .nullable(),
   initialize: z.object({
     plugins: z.record(
       z.string(),
-      z.object({
-        path: z.string(),
-        method: z.string(),
-        'global-config': z.record(z.string(), z.any()).optional(),
-        'parameter-metadata': z
-          .object({
-            inputs: z
-              .record(
-                z.string(),
-                z.object({
-                  unit: z.string(),
-                  description: z.string(),
-                  'aggregation-method': z.string(),
-                })
-              )
-              .optional()
-              .nullable(),
-            outputs: z
-              .record(
-                z.string(),
-                z.object({
-                  unit: z.string(),
-                  description: z.string(),
-                  'aggregation-method': z.string(),
-                })
-              )
-              .optional()
-              .nullable(),
-          })
-          .optional(),
-      })
+      z
+        .object({
+          path: z.string(),
+          method: z.string(),
+          'global-config': z.record(z.string(), z.any()).optional(),
+          'parameter-metadata': z
+            .object({
+              inputs: z
+                .record(
+                  z.string(),
+                  z.object({
+                    unit: z.string(),
+                    description: z.string(),
+                    'aggregation-method': z.string(),
+                  })
+                )
+                .optional()
+                .nullable(),
+              outputs: z
+                .record(
+                  z.string(),
+                  z.object({
+                    unit: z.string(),
+                    description: z.string(),
+                    'aggregation-method': z.string(),
+                  })
+                )
+                .optional()
+                .nullable(),
+            })
+            .optional(),
+        })
+        .optional()
     ),
   }),
   execution: z
