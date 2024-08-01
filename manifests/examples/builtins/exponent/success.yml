@@ -14,9 +14,8 @@ tree:
   children:
     child:
       pipeline:
-        - exponent
-      config:
-        exponent:
+        compute:
+          - exponent
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
