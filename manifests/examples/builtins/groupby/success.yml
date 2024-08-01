@@ -9,12 +9,9 @@ tree:
   children:
     my-app:
       pipeline:
-        - group-by
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+        regroup:
+          - cloud/region
+          - cloud/instance-type
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 300
