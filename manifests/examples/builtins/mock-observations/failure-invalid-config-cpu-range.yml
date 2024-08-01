@@ -29,5 +29,6 @@ tree:
   children:
     child:
       pipeline:
-        - mock-observations
+        observe:
+          - mock-observations
       inputs:
