@@ -30,11 +30,14 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
 
 ```yaml
-mapping:
-  'old-name': 'new-name'
+divide:
+  method: Divide
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
 ```
 
 ### Inputs
@@ -62,14 +65,16 @@ output = input0 / input1
 To run the plugin, you must first create an instance of `Divide`. Then, you can call `execute()`.
 
 ```typescript
-const pluginSettings = {
-  'global-config': {
-    numerator: 'vcpus-allocated',
-    denominator: 2,
-    output: 'cpu/number-cores',
-  },
+const globalConfig = {
+  numerator: 'vcpus-allocated',
+  denominator: 2,
+  output: 'cpu/number-cores',
 };
-const divide = Divide(pluginSettings);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {
+  'vcpus-allocated': 'vcpus-distributed',
+};
+const divide = Divide(globalConfig, parametersMetadata, mapping);
 
 const input = [
   {
@@ -97,6 +102,8 @@ initialize:
         numerator: vcpus-allocated
         denominator: 2
         output: cpu/number-cores
+      mapping:
+        vcpus-allocated: vcpus-distributed
 tree:
   children:
     child:

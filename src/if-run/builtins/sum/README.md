@@ -32,11 +32,14 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
 
 ```yaml
-mapping:
-  'old-name': 'new-name'
+sum:
+  method: Sum
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
 ```
 
 ### Inputs
@@ -58,19 +61,17 @@ output = input0 + input1 + input2 ... inputN
 To run the plugin, you must first create an instance of `Sum`. Then, you can call `execute()`.
 
 ```typescript
-const pluginSettings = {
-  'global-config': {
-    inputParameters: ['cpu/energy', 'network/energy'],
-    outputParameter: 'energy',
-  },
-  'parameter-metadata': {},
-  mapping: {
-    'cpu/energy': 'energy-from-cpu',
-    'network/energy': 'energy-from-network',
-  },
+const globalConfig = {
+  inputParameters: ['cpu/energy', 'network/energy'],
+  outputParameter: 'energy',
+};
+const parametersMetadata = {inputs: {}, outputs: {}};
+const = mapping {
+  'cpu/energy': 'energy-from-cpu',
+  'network/energy': 'energy-from-network',
 };
 
-const sum = Sum(pluginSettings);
+const sum = Sum(globalConfig, parametersMetadata, mapping);
 const result = sum.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',
@@ -102,13 +103,19 @@ initialize:
           cpu/energy:
             description: energy consumed by the cpu
             unit: kWh
+            aggregation-method: sum
           network/energy:
             description: energy consumed by data ingress and egress
             unit: kWh
+            aggregation-method: sum
         outputs:
           energy:
             description: sum of energy components
             unit: kWh
+            aggregation-method: sum
+      mapping:
+        cpu/energy: energy-from-cpu
+        network/energy: energy-from-network
 tree:
   children:
     child:

@@ -26,11 +26,14 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
 
 ```yaml
-mapping:
-  'old-name': 'new-name'
+sci:
+  method: Sci
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
 ```
 
 ### Inputs
@@ -58,10 +61,10 @@ To run the plugin, you must first create an instance of `Sci`. Then, you can cal
 
 ```typescript
 import {Sci} from 'builtins';
-const pluginSettings = {
-  'global-config': {'functional-unit': 'requests'}
-}
-const sci = Sci();
+const globalConfig = {'functional-unit': 'requests'}
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const sci = Sci(globalConfig, parametersMetadata, mapping);
 const results = await sci.execute(
   [
     {
@@ -75,7 +78,7 @@ const results = await sci.execute(
 
 ## Example manifest
 
-IF users will typically call the plugin as part of a pipeline defined in a `manifest` file. In this case, instantiating the plugin is handled by `ie` and does not have to be done explicitly by the user.
+IF users will typically call the plugin as part of a pipeline defined in a `manifest` file. In this case, instantiating the plugin is handled by `if-run` and does not have to be done explicitly by the user.
 
 The following is an example `manifest` that calls `sci`:
 

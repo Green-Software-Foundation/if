@@ -33,11 +33,14 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
 
 ```yaml
-mapping:
-  'old-name': 'new-name'
+regex:
+  method: Regex
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
 ```
 
 ### Inputs
@@ -53,14 +56,14 @@ mapping:
 To run the plugin, you must first create an instance of `Regex`. Then, you can call `execute()`.
 
 ```typescript
-const pluginSettings = {
-  'global-config': {
-    parameter: 'physical-processor',
-    match: '^[^,]+',
-    output: 'cpu/name',
-  },
+const globalConfig = {
+  parameter: 'physical-processor',
+  match: '^[^,]+',
+  output: 'cpu/name',
 };
-const regex = Regex(pluginSettings);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const regex = Regex(globalConfig, parametersMetadata, mapping);
 
 const input = [
   {
@@ -89,6 +92,9 @@ initialize:
         parameter: physical-processor
         match: ^[^,]+
         output: cpu/name
+      mapping:
+        physical-processor: processor
+
 tree:
   children:
     child:

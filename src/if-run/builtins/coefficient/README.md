@@ -34,11 +34,14 @@ of the parameters of the inputs and outputs
 
 ### Mapping
 
-The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
 
 ```yaml
-mapping:
-  'old-name': 'new-name'
+coefficient:
+  method: Coefficient
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
 ```
 
 ### Inputs
@@ -60,17 +63,15 @@ output = input * coefficient
 To run the plugin from a Typescript app, you must first create an instance of `Coefficient`. Then, you can call `execute()`.
 
 ```typescript
-const pluginSettings = {
-  'global-config': {
-    'input-parameter': 'carbon',
-    coefficient: 10,
-    'output-parameter': 'carbon-product',
-  },
-  'parameter-metadata': {},
-  mapping: {},
+const globalConfig = {
+  'input-parameter': 'carbon',
+  coefficient: 10,
+  'output-parameter': 'carbon-product',
 };
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
 
-const coeff = Coefficient(pluginSettings);
+const coeff = Coefficient(globalConfig, parametersMetadata, mapping);
 const result = coeff.execute([
   {
     duration: 3600,
@@ -97,15 +98,20 @@ initialize:
         input-parameter: 'carbon'
         coefficient: 3
         output-parameter: 'carbon-product'
-       parameter-metadata:
+      parameter-metadata:
         inputs:
           carbon:
-            description: "an amount of carbon emitted into the atmosphere"
-            unit: "gCO2e"
+            description: 'an amount of carbon emitted into the atmosphere'
+            unit: 'gCO2e'
+            aggregation-method: sum
         outputs:
           carbon-product:
-            description: "a product of cabon property and the coefficient"
-            unit: "gCO2e"
+            description: 'a product of cabon property and the coefficient'
+            unit: 'gCO2e'
+            aggregation-method: sum
+      mapping:
+        carbon-product: calculated-carbon
+
 tree:
   children:
     child:

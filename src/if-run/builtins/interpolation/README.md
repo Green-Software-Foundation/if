@@ -42,11 +42,14 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
 
 ```yaml
-mapping:
-  'old-name': 'new-name'
+interpolation:
+  method: Interpolation
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
 ```
 
 ## Input Parameters
@@ -93,17 +96,21 @@ The plugin conducts input validation using the `zod` library and may throw error
 ### TypeScript Usage
 
 ```ts
-const pluginSettings = {
-  'global-config': {
-    method: 'linear',
-    x: [0, 10, 50, 100],
-    y: [0.12, 0.32, 0.75, 1.02],
-    'input-parameter': 'cpu/utilization',
-    'output-parameter': 'cpu/energy',
-  },
+const globalConfig = {
+  method: 'linear',
+  x: [0, 10, 50, 100],
+  y: [0.12, 0.32, 0.75, 1.02],
+  'input-parameter': 'cpu/utilization',
+  'output-parameter': 'cpu/energy',
 };
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
 
-const interpolationPlugin = Interpolation(pluginSettings);
+const interpolationPlugin = Interpolation(
+  globalConfig,
+  parametersMetadata,
+  mapping
+);
 
 const inputs = [
   {
@@ -137,6 +144,9 @@ initialize:
         y: [0.12, 0.32, 0.75, 1.02]
         input-parameter: 'cpu/utilization'
         output-parameter: 'cpu/energy'
+      mapping:
+        cpu/utilization: cpu/util
+        interpolation-result: result
 tree:
   children:
     child:

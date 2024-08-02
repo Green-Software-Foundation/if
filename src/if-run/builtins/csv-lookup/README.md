@@ -70,11 +70,14 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
 
 ```yaml
-mapping:
-  'old-name': 'new-name'
+cloud-metadata:
+  method: CSVLookup
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
 ```
 
 ### Inputs
@@ -108,12 +111,9 @@ const globalConfig = {
   },
   output: ['cpu-tdp', 'tdp'],
 };
-const pluginSettings = {
-  'global-config': globalConfig,
-  'parameter-metadata': {}
-  mapping: {}
-};
-const csvLookup = CSVLookup(pluginSettings);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const csvLookup = CSVLookup(globalConfig);
 
 const input = [
   {
@@ -145,6 +145,8 @@ initialize:
           cloud-provider: 'cloud/provider'
           cloud-region: 'cloud/region'
         output: '*'
+      mapping:
+        cloud/region: cloud/area
 tree:
   children:
     child:

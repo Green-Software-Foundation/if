@@ -56,11 +56,14 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
 
 ```yaml
-mapping:
-  'old-name': 'new-name'
+copy-param:
+  path: builtin
+  method: Copy
+  mapping:
+    'old-name': 'new-name'
 ```
 
 ### Inputs
@@ -78,17 +81,15 @@ To run the plugin, you must first create an instance of `Copy`. Then, you can ca
 ```typescript
 import {Copy} from '.';
 
-const pluginSettings = {
-  'global-config': {
-    'keep-existing': true,
-    from: 'from-param',
-    to: 'to-param',
-  },
-  'parameter-metadata': {},
-  mapping: {},
+const globalConfig = {
+  'keep-existing': true,
+  from: 'from-param',
+  to: 'to-param',
 };
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
 
-const plugin = Copy(pluginSettings);
+const plugin = Copy(globalConfig, parametersMetadata, mapping);
 
 const result = plugin.execute([
   {
@@ -118,6 +119,8 @@ initialize:
         keep-existing: true
         from: original
         to: copy
+      mapping:
+        original: from
 tree:
   children:
     child-1:

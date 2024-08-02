@@ -46,11 +46,14 @@ The parameters included in the `inputs` field in the `manifest` depend entirely 
 
 ### Mapping
 
-The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
 
 ```yaml
-mapping:
-  'old-name': 'new-name'
+sampler:
+  method: Shell
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
 ```
 
 ## Returns
@@ -62,12 +65,12 @@ The specific return types depend on the plugin being invoked. Typically, we woul
 To run the plugin, you must first create an instance of `Shell` and call its `execute()` to run the external plugin.
 
 ```typescript
-const pluginSettings = {
-  'global-config': {
-    command: '/usr/local/bin/sampler',
-  },
+const globalConfig = {
+  command: '/usr/local/bin/sampler',
 };
-const output = Shell(pluginSettings);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const output = Shell(globalConfig, parametersMetadata, mapping);
 const result = await output.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',
@@ -101,6 +104,8 @@ initialize:
       path: 'builtin'
       global-config:
         command: python3 /usr/local/bin/sampler
+      mapping:
+        cpu/energy: energy-for-cpu
 tree:
   children:
     child:

@@ -27,11 +27,14 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block allows to rename the parameters of the input and output with new names. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
 
 ```yaml
-mapping:
-  'old-name': 'new-name'
+sci-embodied:
+  method: SciEmbodied
+  path: 'builtins'
+  mapping:
+    'old-name': 'new-name'
 ```
 
 ### Inputs
@@ -82,7 +85,9 @@ The following snippet demonstrates how to call the `sci-embodied` plugin from Ty
 ```typescript
 import {SciEmbodied} from 'builtins';
 
-const sciEmbodied = SciEmbodied();
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const sciEmbodied = SciEmbodied(parametersMetadata, mapping);
 const results = await sciEmbodied.execute([
   {
     'device/emissions-embodied': 200, // in gCO2e for total resource units
@@ -107,6 +112,9 @@ initialize:
     sci-embodied:
       method: SciEmbodied
       path: 'builtins'
+      mapping:
+        device/emissions-embodied: device/carbon-footprint
+        carbon-embodied: carbon-footprint
 tree:
   children:
     child:
