@@ -60,7 +60,8 @@ tree:
   children:
     child:
       pipeline:
-        - sci-embodied
+        compute:
+          - sci-embodied
       defaults:
         device/emissions-embodied: 1533.12
         time-reserved: 3600

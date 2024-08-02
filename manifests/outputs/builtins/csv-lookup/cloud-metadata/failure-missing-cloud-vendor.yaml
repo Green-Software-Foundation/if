@@ -66,8 +66,8 @@ tree:
   children:
     child:
       pipeline:
-        - cloud-metadata
-      config: null
+        compute:
+          - cloud-metadata
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 100

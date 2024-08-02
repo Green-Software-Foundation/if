@@ -1,10 +1,7 @@
 name: groupby
 description: failure when `config->group-by->group` is not an array
 initialize:
-  plugins:
-    group-by:
-      path: builtin
-      method: GroupBy
+  plugins: {}
 execution:
   status: fail
   command: >-
@@ -24,7 +21,6 @@ execution:
       - "@commitlint/cli@18.6.0"
       - "@commitlint/config-conventional@18.6.0"
       - "@grnsft/if-core@0.0.10"
-
       - "@jest/globals@29.7.0"
       - "@types/jest@29.5.8"
       - "@types/js-yaml@4.0.9"
@@ -51,16 +47,14 @@ execution:
       - winston@3.11.0
       - zod@3.22.4
   error: >-
-    InputValidationError: "group" parameter is expected array, received string.
+    InputValidationError: "groups" parameter is expected array, received string.
     Error code: invalid_type.
 tree:
   children:
     my-app:
       pipeline:
-        - group-by
-      config:
-        group-by:
-          group: cloud/region
+        regroup:
+          cloud/region
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 300

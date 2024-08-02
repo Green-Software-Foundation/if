@@ -3,7 +3,7 @@ description: Apply `vertical` aggregation
 aggregation:
   metrics:
     "cpu/utilization":
-      method: sum
+      method: avg
   type: vertical
 initialize:
   plugins:
@@ -36,7 +36,6 @@ execution:
       - "@commitlint/cli@18.6.0"
       - "@commitlint/config-conventional@18.6.0"
       - "@grnsft/if-core@0.0.10"
-
       - "@jest/globals@29.7.0"
       - "@types/jest@29.5.8"
       - "@types/js-yaml@4.0.9"
@@ -67,7 +66,8 @@ tree:
   children:
     application:
       pipeline:
-        - cloud-metadata
+        compute:
+          - cloud-metadata
       children:
         uk-west:
           children:
