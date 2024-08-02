@@ -30,8 +30,8 @@ export const addExplainData = (params: ExplainParams) => {
   const {pluginName, pluginData, metadata} = params;
   const plugin = {
     [pluginName]: {
-      method: pluginData.method,
-      path: pluginData.path,
+      method: pluginData!.method,
+      path: pluginData!.path,
       inputs: metadata?.inputs || 'undefined',
       outputs: metadata?.outputs || 'undefined',
     },

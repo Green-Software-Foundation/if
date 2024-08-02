@@ -16,7 +16,8 @@ tree:
   children:
     child:
       pipeline:
-        - cloud-metadata
+        compute:
+          - cloud-metadata
       config:
       inputs:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred

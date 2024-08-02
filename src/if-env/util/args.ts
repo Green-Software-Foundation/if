@@ -12,7 +12,7 @@ import {STRINGS as COMMON_STRINGS} from '../../common/config';
 import {IFEnvArgs} from '../types/process-args';
 
 const {ParseCliParamsError, CliSourceFileError} = ERRORS;
-const {IF_ENV} = CONFIG;
+const {ARGS, HELP} = CONFIG;
 const {MANIFEST_NOT_FOUND, SOURCE_IS_NOT_YAML} = COMMON_STRINGS;
 
 /**
@@ -20,7 +20,7 @@ const {MANIFEST_NOT_FOUND, SOURCE_IS_NOT_YAML} = COMMON_STRINGS;
  */
 const validateAndParseIfEnvArgs = () => {
   try {
-    return parse<IFEnvArgs>(IF_ENV.ARGS, IF_ENV.HELP);
+    return parse<IFEnvArgs>(ARGS, HELP);
   } catch (error) {
     if (error instanceof Error) {
       throw new ParseCliParamsError(error.message);

@@ -65,8 +65,8 @@ tree:
   children:
     child:
       pipeline:
-        - tdp-finder
-      config: null
+        compute:
+          - tdp-finder
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 300

@@ -1,10 +1,7 @@
 name: groupby
 description: null
 initialize:
-  plugins:
-    group-by:
-      path: builtin
-      method: GroupBy
+  plugins: {}
 execution:
   status: fail
   command: >-
@@ -24,7 +21,6 @@ execution:
       - "@commitlint/cli@18.6.0"
       - "@commitlint/config-conventional@18.6.0"
       - "@grnsft/if-core@0.0.10"
-
       - "@jest/globals@29.7.0"
       - "@types/jest@29.5.8"
       - "@types/js-yaml@4.0.9"
@@ -55,12 +51,9 @@ tree:
   children:
     my-app:
       pipeline:
-        - group-by
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+        regroup:
+          - cloud/region
+          - cloud/instance-type     
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 300

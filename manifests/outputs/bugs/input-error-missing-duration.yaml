@@ -41,7 +41,6 @@ execution:
       - "@commitlint/cli@18.6.0"
       - "@commitlint/config-conventional@18.6.0"
       - "@grnsft/if-core@0.0.10"
-
       - "@jest/globals@29.7.0"
       - "@types/jest@29.5.8"
       - "@types/js-yaml@4.0.9"
@@ -76,7 +75,8 @@ tree:
       defaults:
         cpu/thermal-design-power: 100
       pipeline:
-        - interpolate
+        compute:
+          - interpolate
       inputs:
         - timestamp: 2023-07-06T00:00
           cpu/utilization: 20

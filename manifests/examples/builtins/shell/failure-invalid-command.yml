@@ -12,7 +12,8 @@ tree:
   children:
     child:
       pipeline:
-        - shell
+        compute:
+          - shell
       inputs:
         - timestamp: "2023-11-02T10:35:31.820Z"
           duration: 3600
