@@ -13,7 +13,8 @@ tree:
   children:
     child:
       pipeline:
-        - sci
+        compute:
+          - sci
       config:
         sci:
           functional-unit: 999 # factor to convert per time to per f.unit

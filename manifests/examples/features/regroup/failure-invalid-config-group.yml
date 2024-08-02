@@ -1,20 +1,13 @@
-name: groupby
-description: successful path
+name: regroup
+description: failure when `config->group-by->group` is not an array
 initialize:
-  plugins:
-    group-by:
-      path: "builtin"
-      method: GroupBy
+  plugins: {}
 tree:
   children:
     my-app:
       pipeline:
-        - group-by
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+        regroup:
+          cloud/region
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 300

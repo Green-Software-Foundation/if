@@ -14,7 +14,8 @@ tree:
   children:
     child:
       pipeline:
-        - coefficient
+        compute:
+          - coefficient
       config:
         sum:
       inputs:
