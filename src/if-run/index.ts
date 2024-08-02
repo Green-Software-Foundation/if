@@ -41,6 +41,11 @@ const impactEngine = async () => {
 
   try {
     const {tree, ...context} = validateManifest(envManifest);
+
+    if (context.aggregation) {
+      storeAggregationMetrics({metrics: context.aggregation?.metrics});
+    }
+
     const pluginStorage = await initialize(context);
     const computedTree = await compute(tree, {
       context,
@@ -48,16 +53,7 @@ const impactEngine = async () => {
       observe,
       regroup,
       compute: computeFlag,
-      timeSync: context['time-sync'],
     });
-
-    if (context['time-sync']) {
-      delete context.initialize.plugins['time-sync'];
-    }
-
-    if (context.aggregation) {
-      storeAggregationMetrics({metrics: context.aggregation?.metrics});
-    }
 
     const aggregatedTree = aggregate(computedTree, context.aggregation);
     envManifest.explainer && (context.explain = explain());

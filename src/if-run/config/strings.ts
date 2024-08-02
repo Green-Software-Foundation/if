@@ -47,7 +47,6 @@ Note that for the '--output' option you also need to define the output type in y
   CHECKING_AGGREGATION_METHOD: (unitName: string) =>
     `Checking aggregation method for ${unitName}`,
   INITIALIZING_PLUGINS: 'Initializing plugins',
-  INITIALIZING_TIME_SYNC: 'Initializing time synchronization',
   INITIALIZING_PLUGIN: (pluginName: string) => `Initializing ${pluginName}`,
   LOADING_PLUGIN_FROM_PATH: (pluginName: string, path: string) =>
     `Loading ${pluginName} from ${path}`,
