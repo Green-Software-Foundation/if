@@ -53,12 +53,7 @@ const impactEngine = async () => {
       observe,
       regroup,
       compute: computeFlag,
-      timeSync: context['time-sync'],
     });
-
-    if (context['time-sync']) {
-      delete context.initialize.plugins['time-sync'];
-    }
 
     const aggregatedTree = aggregate(computedTree, context.aggregation);
     envManifest.explainer && (context.explain = explain());
