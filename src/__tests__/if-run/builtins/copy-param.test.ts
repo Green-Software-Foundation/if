@@ -18,12 +18,7 @@ describe('builtins/copy: ', () => {
       inputs: {},
       outputs: {},
     };
-    const pluginSettings = {
-      'global-config': globalConfig,
-      'parameter-metadata': parametersMetadata,
-      mapping: {},
-    };
-    const copy = Copy(pluginSettings);
+    const copy = Copy(globalConfig, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -56,14 +51,37 @@ describe('builtins/copy: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('successfully executed when `mapping` has valid data.', () => {
+        expect.assertions(1);
+
+        const mapping = {
+          original: 'from',
+        };
+
+        const copy = Copy(globalConfig, parametersMetadata, mapping);
+        const expectedResult = [
+          {
+            duration: 3600,
+            from: 'hello',
+            copy: 'hello',
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = copy.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            original: 'hello',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('throws an error when global config is not provided.', () => {
         const config = undefined;
-        const pluginSettings = {
-          'global-config': config!,
-          'parameter-metadata': parametersMetadata,
-          mapping: {},
-        };
-        const copy = Copy(pluginSettings);
+        const copy = Copy(config!, parametersMetadata, {});
 
         expect.assertions(1);
 
@@ -88,12 +106,7 @@ describe('builtins/copy: ', () => {
           from: 'original',
           to: 'copy',
         };
-        const pluginSettings = {
-          'global-config': globalConfig,
-          'parameter-metadata': parametersMetadata,
-          mapping: {},
-        };
-        const copy = Copy(pluginSettings);
+        const copy = Copy(globalConfig, parametersMetadata, {});
         expect.assertions(1);
 
         try {
@@ -118,12 +131,7 @@ describe('builtins/copy: ', () => {
           from: 'original',
           to: 'copy',
         };
-        const pluginSettings = {
-          'global-config': globalConfig,
-          'parameter-metadata': parametersMetadata,
-          mapping: {},
-        };
-        const copy = Copy(pluginSettings);
+        const copy = Copy(globalConfig, parametersMetadata, {});
 
         const expectedResult = [
           {

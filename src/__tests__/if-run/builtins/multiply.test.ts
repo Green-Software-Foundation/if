@@ -10,12 +10,11 @@ describe('builtins/multiply: ', () => {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
       'output-parameter': 'energy',
     };
-    const pluginSettings = {
-      'global-config': globalConfig,
-      'parameter-metadata': {},
-      mapping: {},
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
     };
-    const multiply = Multiply(pluginSettings);
+    const multiply = Multiply(globalConfig, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -52,6 +51,39 @@ describe('builtins/multiply: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('successfully executes when `mapping` is provided.', async () => {
+        expect.assertions(1);
+        const mapping = {
+          'cpu/energy': 'energy-from-cpu',
+          'network/energy': 'energy-from-network',
+          'memory/energy': 'energy-from-memory',
+        };
+        const multiply = Multiply(globalConfig, parametersMetadata, mapping);
+
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy-from-cpu': 2,
+            'energy-from-network': 2,
+            'energy-from-memory': 2,
+            energy: 8,
+          },
+        ];
+
+        const result = await multiply.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 2,
+            'network/energy': 2,
+            'memory/energy': 2,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('throws an error on missing params in input.', async () => {
         expect.assertions(1);
 
@@ -77,8 +109,7 @@ describe('builtins/multiply: ', () => {
           'input-parameters': ['carbon', 'other-carbon'],
           'output-parameter': 'carbon-product',
         };
-        pluginSettings['global-config'] = newConfig;
-        const multiply = Multiply(pluginSettings);
+        const multiply = Multiply(newConfig, parametersMetadata, {});
 
         const data = [
           {

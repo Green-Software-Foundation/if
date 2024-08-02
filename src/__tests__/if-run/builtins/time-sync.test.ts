@@ -76,12 +76,11 @@ describe('builtins/time-sync:', () => {
       'allow-padding': true,
     };
 
-    const pluginSettings = {
-      'global-config': basicConfig,
-      'parameter-metadata': {},
-      mapping: {},
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
     };
-    const timeSync = TimeSync(pluginSettings);
+    const timeSync = TimeSync(basicConfig, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -98,8 +97,11 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
-        pluginSettings['global-config'] = invalidStartTimeConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(
+          invalidStartTimeConfig,
+          parametersMetadata,
+          {}
+        );
 
         expect.assertions(1);
 
@@ -134,8 +136,11 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
-        pluginSettings['global-config'] = invalidEndTimeConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(
+          invalidEndTimeConfig,
+          parametersMetadata,
+          {}
+        );
 
         expect.assertions(1);
 
@@ -164,8 +169,11 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
-        pluginSettings['global-config'] = invalidStartTimeConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(
+          invalidStartTimeConfig,
+          parametersMetadata,
+          {}
+        );
         expect.assertions(1);
         try {
           await timeModel.execute([
@@ -191,8 +199,11 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
-        pluginSettings['global-config'] = invalidEndTimeConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(
+          invalidEndTimeConfig,
+          parametersMetadata,
+          {}
+        );
 
         expect.assertions(1);
         try {
@@ -214,8 +225,7 @@ describe('builtins/time-sync:', () => {
 
       it('throws error on missing global config.', async () => {
         const config = undefined;
-        pluginSettings['global-config'] = config!;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(config!, parametersMetadata, {});
 
         expect.assertions(1);
 
@@ -246,8 +256,11 @@ describe('builtins/time-sync:', () => {
           interval: 0,
           'allow-padding': true,
         };
-        pluginSettings['global-config'] = invalidIntervalConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(
+          invalidIntervalConfig,
+          parametersMetadata,
+          {}
+        );
 
         expect.assertions(1);
 
@@ -278,9 +291,7 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
-
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         try {
           await timeModel.execute([
@@ -309,9 +320,7 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
-
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         try {
           await timeModel.execute([
@@ -342,8 +351,7 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         try {
           await timeModel.execute([
@@ -382,8 +390,7 @@ describe('builtins/time-sync:', () => {
             'cpu/utilization': 10,
           },
         ];
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
         expect.assertions(2);
 
         try {
@@ -403,9 +410,7 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
-
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         try {
           await timeModel.execute([
@@ -436,9 +441,7 @@ describe('builtins/time-sync:', () => {
           interval: 1,
           'allow-padding': false,
         };
-
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         const result = await timeModel.execute([
           {
@@ -476,8 +479,7 @@ describe('builtins/time-sync:', () => {
           interval: 1,
           'allow-padding': true,
         };
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         const result = await timeModel.execute([
           {
@@ -550,8 +552,7 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         const result = await timeModel.execute([
           {
@@ -590,9 +591,7 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
-
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         const result = await timeModel.execute([
           {
@@ -626,6 +625,50 @@ describe('builtins/time-sync:', () => {
 
         expect(result).toStrictEqual(expectedResult);
       });
+      it('returns a result when `mapping` has valid data.', async () => {
+        const basicConfig = {
+          'start-time': '2023-12-12T00:00:00.000Z',
+          'end-time': '2023-12-12T00:00:09.000Z',
+          interval: 5,
+          'allow-padding': true,
+        };
+        const mapping = {
+          'time-reserved': 'time-allocated',
+        };
+        const timeModel = TimeSync(basicConfig, parametersMetadata, mapping);
+
+        const result = await timeModel.execute([
+          {
+            timestamp: '2023-12-12T00:00:00.000Z',
+            duration: 3,
+            'time-reserved': 5,
+            'resources-total': 10,
+          },
+          {
+            timestamp: '2023-12-12T00:00:05.000Z',
+            duration: 3,
+            'time-reserved': 5,
+            'resources-total': 10,
+          },
+        ]);
+
+        const expectedResult = [
+          {
+            timestamp: '2023-12-12T00:00:00.000Z',
+            duration: 5,
+            'resources-total': 10,
+            'time-allocated': 3.2,
+          },
+          {
+            timestamp: '2023-12-12T00:00:05.000Z',
+            duration: 5,
+            'resources-total': 10,
+            'time-allocated': 3.2,
+          },
+        ];
+
+        expect(result).toStrictEqual(expectedResult);
+      });
 
       it('throws an error when `start-time` is wrong.', async () => {
         process.env.MOCK_INTERVAL = 'true';
@@ -635,8 +678,7 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         try {
           await timeModel.execute([
@@ -664,8 +706,7 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         const result = await timeModel.execute([
           {
@@ -703,8 +744,7 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': false,
         };
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         try {
           await timeModel.execute([
@@ -733,8 +773,7 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': false,
         };
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         try {
           await timeModel.execute([
@@ -763,8 +802,7 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': false,
         };
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         try {
           await timeModel.execute([
@@ -794,8 +832,7 @@ describe('builtins/time-sync:', () => {
           interval: 1,
           'allow-padding': true,
         };
-        pluginSettings['global-config'] = basicConfig;
-        const timeModel = TimeSync(pluginSettings);
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
         const result = await timeModel.execute([
           {
             timestamp: '2023-12-12T00:00:00.000Z',

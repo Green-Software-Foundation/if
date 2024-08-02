@@ -13,12 +13,11 @@ describe('builtins/sum: ', () => {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
       'output-parameter': 'energy',
     };
-    const pluginSettings = {
-      'global-config': globalConfig,
-      'parameter-metadata': {},
-      mapping: {},
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
     };
-    const sum = Sum(pluginSettings);
+    const sum = Sum(globalConfig, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -55,14 +54,14 @@ describe('builtins/sum: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('successfully executes when mapping has valid data.', () => {
+      it('successfully executes when `mapping` has valid data.', () => {
         expect.assertions(1);
-        pluginSettings.mapping = {
+        const mapping = {
           'cpu/energy': 'energy-from-cpu',
           'network/energy': 'energy-from-network',
         };
 
-        const sum = Sum(pluginSettings);
+        const sum = Sum(globalConfig, parametersMetadata, mapping);
 
         const expectedResult = [
           {
@@ -90,8 +89,7 @@ describe('builtins/sum: ', () => {
 
       it('throws an error when global config is not provided.', () => {
         const config = undefined;
-        pluginSettings['global-config'] = config!;
-        const sum = Sum(pluginSettings);
+        const sum = Sum(config!, parametersMetadata, {});
 
         expect.assertions(1);
 
@@ -137,8 +135,7 @@ describe('builtins/sum: ', () => {
           'input-parameters': ['carbon', 'other-carbon'],
           'output-parameter': 'carbon-sum',
         };
-        pluginSettings['global-config'] = newConfig;
-        const sum = Sum(pluginSettings);
+        const sum = Sum(newConfig, parametersMetadata, {});
 
         const data = [
           {
