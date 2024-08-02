@@ -11,6 +11,7 @@ import {CONFIG, STRINGS} from '../config';
 import {PluginInterface} from '../types/interface';
 import {Context, PluginOptions} from '../../common/types/manifest';
 import {PluginStorageInterface} from '../types/plugin-storage';
+import {storeAggregationMetrics} from './aggregate';
 
 const {
   PluginInitializationError,
@@ -129,6 +130,14 @@ export const initialize = async (
 
   for await (const pluginName of Object.keys(plugins)) {
     const plugin = await initPlugin(plugins[pluginName]);
+    const parameters = {...plugin.metadata.inputs, ...plugin.metadata.outputs};
+
+    Object.keys(parameters).forEach(key => {
+      storeAggregationMetrics({
+        metrics: {[key]: {method: parameters[key]['aggregation-method']}},
+      });
+    });
+
     storage.set(pluginName, plugin);
   }
 
