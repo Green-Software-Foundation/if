@@ -9,11 +9,7 @@ import {pluginStorage} from '../util/plugin-storage';
 import {CONFIG, STRINGS} from '../config';
 
 import {PluginInterface} from '../types/interface';
-import {
-  GlobalPlugins,
-  PluginOptions,
-  PluginSettings,
-} from '../../common/types/manifest';
+import {GlobalPlugins, PluginOptions} from '../../common/types/manifest';
 import {PluginStorageInterface} from '../types/plugin-storage';
 
 const {
@@ -103,12 +99,7 @@ const initPlugin = async (
 
   const plugin = await handModule(method, path);
 
-  const pluginOptions: PluginSettings = {
-    'global-config': globalConfig,
-    'parameter-metadata': parameterMetadata,
-    mapping,
-  };
-  return plugin(pluginOptions);
+  return plugin(globalConfig, parameterMetadata, mapping);
 };
 
 /**
