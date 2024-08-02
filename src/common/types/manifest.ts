@@ -7,7 +7,6 @@ export type Manifest = z.infer<typeof manifestSchema>;
 export type GlobalPlugins = Manifest['initialize']['plugins'];
 
 export type PluginOptions = GlobalPlugins[string];
-export type PluginSettings = Omit<PluginOptions, 'path' | 'method'>;
 
 export type AggregationParams = Manifest['aggregation'];
 export type AggregationParamsWithoutType = Omit<
