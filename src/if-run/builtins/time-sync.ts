@@ -17,7 +17,6 @@ import {validate} from '../../common/util/validations';
 
 import {STRINGS} from '../config';
 import {getAggregationMethod} from '../lib/aggregate';
-import {PluginSettings} from '../../common/types/manifest';
 import {mapOutput} from '../../common/util/helpers';
 
 Settings.defaultZone = 'utc';
@@ -39,16 +38,11 @@ const {
   INVALID_DATETIME,
 } = STRINGS;
 
-export const TimeSync = (options: PluginSettings): ExecutePlugin => {
-  const {
-    'global-config': globalConfig,
-    'parameter-metadata': parametersMetadata,
-    mapping,
-  } = options as {
-    'global-config': TimeNormalizerConfig;
-    'parameter-metadata': PluginParametersMetadata;
-    mapping: MappingParams;
-  };
+export const TimeSync = (
+  globalConfig: TimeNormalizerConfig,
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
     inputs: parametersMetadata?.inputs || {

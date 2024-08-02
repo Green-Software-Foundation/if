@@ -11,22 +11,16 @@ import {
   PluginParametersMetadata,
 } from '@grnsft/if-core/types';
 
-import {PluginSettings} from '../../../common/types/manifest';
 import {validate} from '../../../common/util/validations';
 import {mapOutput} from '../../../common/util/helpers';
 
 const {ProcessExecutionError} = ERRORS;
 
-export const Shell = (options: PluginSettings): ExecutePlugin => {
-  const {
-    'global-config': globalConfig,
-    'parameter-metadata': parametersMetadata,
-    mapping,
-  } = options as {
-    'global-config': ConfigParams;
-    'parameter-metadata': PluginParametersMetadata;
-    mapping: MappingParams;
-  };
+export const Shell = (
+  globalConfig: ConfigParams,
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
     inputs: parametersMetadata?.inputs,

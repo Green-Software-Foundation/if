@@ -12,7 +12,6 @@ import {
   PluginParams,
 } from '@grnsft/if-core/types';
 
-import {PluginSettings} from '../../../common/types/manifest';
 import {validate} from '../../../common/util/validations';
 import {mapOutput} from '../../../common/util/helpers';
 
@@ -35,17 +34,11 @@ const {
   CSVParseError,
 } = ERRORS;
 
-export const CSVLookup = (options: PluginSettings): ExecutePlugin => {
-  const {
-    'global-config': globalConfig,
-    'parameter-metadata': parametersMetadata,
-    mapping,
-  } = options as {
-    'global-config': any;
-    'parameter-metadata': PluginParametersMetadata;
-    mapping: MappingParams;
-  };
-
+export const CSVLookup = (
+  globalConfig: any,
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
     inputs: parametersMetadata?.inputs,

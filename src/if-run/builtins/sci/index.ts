@@ -8,7 +8,6 @@ import {
   MappingParams,
 } from '@grnsft/if-core/types';
 
-import {PluginSettings} from '../../../common/types/manifest';
 import {validate, allDefined} from '../../../common/util/validations';
 import {mapOutput} from '../../../common/util/helpers';
 
@@ -22,17 +21,11 @@ const {
   ZERO_DIVISION,
 } = STRINGS;
 
-export const Sci = (options: PluginSettings): ExecutePlugin => {
-  const {
-    'global-config': globalConfig,
-    'parameter-metadata': parametersMetadata,
-    mapping,
-  } = options as {
-    'global-config': ConfigParams;
-    'parameter-metadata': PluginParametersMetadata;
-    mapping: MappingParams;
-  };
-
+export const Sci = (
+  globalConfig: ConfigParams,
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
     inputs: parametersMetadata?.inputs || {

@@ -6,7 +6,6 @@ import {
   PluginParams,
 } from '@grnsft/if-core/types';
 
-import {PluginSettings} from '../../../common/types/manifest';
 import {validate, allDefined} from '../../../common/util/validations';
 import {mapOutput} from '../../../common/util/helpers';
 
@@ -14,12 +13,10 @@ import {STRINGS} from '../../config';
 
 const {SCI_EMBODIED_ERROR} = STRINGS;
 
-export const SciEmbodied = (options: PluginSettings): ExecutePlugin => {
-  const {'parameter-metadata': parametersMetadata, mapping} = options as {
-    'parameter-metadata': PluginParametersMetadata;
-    mapping: MappingParams;
-  };
-
+export const SciEmbodied = (
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
     inputs: parametersMetadata?.inputs || {
