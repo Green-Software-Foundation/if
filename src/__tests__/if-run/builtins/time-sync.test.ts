@@ -4,7 +4,7 @@ import {Settings, DateTime} from 'luxon';
 import {AggregationParams} from '../../../common/types/manifest';
 
 import {storeAggregationMetrics} from '../../../if-run/lib/aggregate';
-import {TimeSync} from '../../../if-run/lib/time-sync';
+import {TimeSync} from '../../../if-run/builtins/time-sync';
 
 import {STRINGS} from '../../../if-run/config';
 

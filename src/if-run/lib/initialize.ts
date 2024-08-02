@@ -11,6 +11,7 @@ import {CONFIG, STRINGS} from '../config';
 import {PluginInterface} from '../types/interface';
 import {Context, PluginOptions} from '../../common/types/manifest';
 import {PluginStorageInterface} from '../types/plugin-storage';
+import {storeAggregationMetrics} from './aggregate';
 
 const {
   PluginInitializationError,
@@ -27,7 +28,6 @@ const {
   LOADING_PLUGIN_FROM_PATH,
   INITIALIZING_PLUGIN,
   INITIALIZING_PLUGINS,
-  INITIALIZING_TIME_SYNC,
 } = STRINGS;
 
 /**
@@ -60,8 +60,6 @@ const handModule = (method: string, pluginPath: string) => {
 
   if (pluginPath === 'builtin') {
     pluginPath = path.normalize(`${__dirname}/../builtins`);
-  } else if (pluginPath === 'lib/time-sync') {
-    pluginPath = path.normalize(`${__dirname}/../${pluginPath}`);
   } else {
     if (pluginPath?.startsWith(GITHUB_PATH)) {
       const parts = pluginPath.split('/');
@@ -114,21 +112,16 @@ export const initialize = async (
   const {plugins} = context.initialize;
   const storage = pluginStorage();
 
-  /**
-   * If `time-sync` is requested, then add it to plugins.
-   */
-  if (context['time-sync']) {
-    console.debug(INITIALIZING_TIME_SYNC);
-    plugins['time-sync'] = {
-      path: 'lib/time-sync',
-      method: 'TimeSync',
-      'global-config': context['time-sync'],
-      'parameter-metadata': context['time-sync']['parameter-metadata'],
-    };
-  }
-
   for await (const pluginName of Object.keys(plugins)) {
     const plugin = await initPlugin(plugins[pluginName]);
+    const parameters = {...plugin.metadata.inputs, ...plugin.metadata.outputs};
+
+    Object.keys(parameters).forEach(key => {
+      storeAggregationMetrics({
+        metrics: {[key]: {method: parameters[key]['aggregation-method']}},
+      });
+    });
+
     storage.set(pluginName, plugin);
   }
 
