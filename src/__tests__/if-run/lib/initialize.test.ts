@@ -158,47 +158,6 @@ describe('lib/initalize: ', () => {
       expect(module).toHaveProperty('metadata');
     });
 
-    it('checks if time sync plugin is initalized.', async () => {
-      const context = {
-        initialize: {
-          plugins: {
-            'time-sync': {
-              path: 'lib/time-sync',
-              method: 'TimeSync',
-              'global-config': {},
-            },
-          },
-        },
-      };
-      // @ts-ignore
-      const storage = await initialize(context);
-
-      const pluginName = Object.keys(context.initialize.plugins)[0];
-      const module = storage.get(pluginName);
-      expect(module).toHaveProperty('execute');
-      expect(module).toHaveProperty('metadata');
-    });
-
-    it('initalizes time sync based on context.', async () => {
-      const context = {
-        initialize: {
-          plugins: {},
-        },
-        'time-sync': {
-          'start-time': '2024-09-04',
-          'end-time': '2024-09-05',
-          'allow-padding': true,
-          interval: 5,
-        },
-      };
-      // @ts-ignore
-      const storage = await initialize(context);
-      const module = storage.get('time-sync');
-
-      expect(module).toHaveProperty('execute');
-      expect(module).toHaveProperty('metadata');
-    });
-
     it('checks if github plugin is initalized.', async () => {
       const context = {
         initialize: {
