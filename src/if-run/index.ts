@@ -31,6 +31,7 @@ const impactEngine = async () => {
     observe,
     regroup,
     compute: computeFlag,
+    append,
   } = options;
 
   debugLogger.overrideConsoleMethods(!!debug);
@@ -61,6 +62,7 @@ const impactEngine = async () => {
       observe,
       regroup,
       compute: computeFlag,
+      append,
     });
 
     const aggregatedTree = aggregate(computedTree, context.aggregation);

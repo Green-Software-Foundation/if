@@ -38,6 +38,12 @@ export const CONFIG = {
       alias: 'h',
       description: '[prints out the above help instruction]',
     },
+    append: {
+      type: Boolean,
+      optional: true,
+      alias: 'a',
+      description: '[append to outputs, instead of overwriting]',
+    },
     debug: {
       type: Boolean,
       optional: true,

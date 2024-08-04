@@ -252,6 +252,40 @@ describe('lib/compute: ', () => {
 
       expect(response.children.mockChild.outputs).toEqual(expectedResult);
     });
+
+    it('computes simple tree with append and execute plugin.', async () => {
+      const tree = {
+        children: {
+          mockChild: {
+            pipeline: ['mock'],
+            inputs: [
+              {timestamp: 'mock-timestamp-1', duration: 10},
+              {timestamp: 'mock-timestamp-2', duration: 10},
+            ],
+            outputs: [
+              {
+                timestamp: 'mock-timestamp-1',
+                newField: 'mock-newField',
+                duration: 10,
+              },
+              {
+                timestamp: 'mock-timestamp-2',
+                newField: 'mock-newField',
+                duration: 10,
+              },
+            ],
+          },
+        },
+      };
+      const paramsExecuteWithAppend = {...paramsExecute, append: true};
+      const response = await compute(tree, paramsExecuteWithAppend);
+      const expectedResult = [
+        ...tree.children.mockChild.outputs,
+        ...mockExecutePlugin().execute(tree.children.mockChild.inputs),
+      ];
+      expect(response.children.mockChild.outputs).toHaveLength(4);
+      expect(response.children.mockChild.outputs).toEqual(expectedResult);
+    });
   });
 
   it('computes simple tree with observe plugin.', async () => {
