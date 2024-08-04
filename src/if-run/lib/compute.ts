@@ -100,6 +100,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   ) {
     logger.warn(EMPTY_PIPELINE);
   }
+  const originalOutputs = node.outputs || [];
 
   /**
    * If iteration is on observe pipeline, then executes observe plugins and sets the inputs value.
@@ -191,6 +192,9 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     if (params.append) {
       node.outputs = originalOutputs.concat(node.outputs || []);
     }
+  }
+  if (params.append) {
+    node.outputs = originalOutputs.concat(node.outputs || []);
   }
   console.debug('\n');
 };
