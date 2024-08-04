@@ -77,6 +77,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   inputStorage = mergeDefaults(inputStorage, defaults);
   const pipelineCopy = structuredClone(pipeline) || {};
 
+  const originalOutputs = node.outputs || [];
+
   /**
    * If iteration is on observe pipeline, then executes observe plugins and sets the inputs value.
    */
@@ -137,6 +139,9 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
         debugLogger.setExecutingPluginName();
       }
     }
+  }
+  if (params.append) {
+    node.outputs = originalOutputs.concat(node.outputs || []);
   }
 };
 

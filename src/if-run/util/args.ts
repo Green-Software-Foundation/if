@@ -48,6 +48,7 @@ export const parseIfRunProcessArgs = (): ProcessArgsOutputs => {
     observe,
     regroup,
     compute,
+    append,
   } = validateAndParseProcessArgs();
 
   if (!output && noOutput) {
@@ -66,6 +67,7 @@ export const parseIfRunProcessArgs = (): ProcessArgsOutputs => {
         observe,
         regroup,
         compute,
+        ...(append && {append}),
       };
     }
 

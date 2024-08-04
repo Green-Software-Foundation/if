@@ -6,6 +6,7 @@ export interface IfRunArgs {
   observe?: boolean;
   regroup?: boolean;
   compute?: boolean;
+  append?: boolean;
 }
 
 export interface ProcessArgsOutputs {
@@ -19,6 +20,7 @@ export interface ProcessArgsOutputs {
   observe?: boolean;
   regroup?: boolean;
   compute?: boolean;
+  append?: boolean;
 }
 
 export interface Options {
