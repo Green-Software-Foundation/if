@@ -131,7 +131,8 @@ tree:
   children:
     child:
       pipeline:
-        - interpolation
+        compute:
+          - interpolation
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600
@@ -159,7 +160,8 @@ tree:
   children:
     child:
       pipeline:
-        - interpolation
+        compute:
+          - interpolation
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600

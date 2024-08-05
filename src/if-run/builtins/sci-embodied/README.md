@@ -102,7 +102,8 @@ tree:
   children:
     child:
       pipeline:
-        - sci-embodied # duration & config -> embodied
+        compute:
+          - sci-embodied # duration & config -> embodied
       defaults:
         device/emissions-embodied: 1533.120 # gCO2eq
         device/expected-lifespan: 3 # 3 years in seconds
