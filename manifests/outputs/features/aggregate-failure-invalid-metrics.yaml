@@ -70,7 +70,8 @@ tree:
   children:
     application:
       pipeline:
-        - cloud-metadata
+        compute:
+          - cloud-metadata
       children:
         uk-west:
           children:

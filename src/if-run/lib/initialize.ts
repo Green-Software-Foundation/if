@@ -9,8 +9,9 @@ import {pluginStorage} from '../util/plugin-storage';
 import {CONFIG, STRINGS} from '../config';
 
 import {PluginInterface} from '../types/interface';
-import {GlobalPlugins, PluginOptions} from '../../common/types/manifest';
+import {Context, PluginOptions} from '../../common/types/manifest';
 import {PluginStorageInterface} from '../types/plugin-storage';
+import {storeAggregationMetrics} from './aggregate';
 
 const {
   PluginInitializationError,
@@ -85,7 +86,7 @@ const initPlugin = async (
     mapping,
     'global-config': globalConfig,
     'parameter-metadata': parameterMetadata,
-  } = initPluginParams;
+  } = initPluginParams!;
 
   console.debug(INITIALIZING_PLUGIN(method));
 
@@ -106,14 +107,22 @@ const initPlugin = async (
  * Registers all plugins from `manifest`.`initialize` property.
  */
 export const initialize = async (
-  plugins: GlobalPlugins
+  context: Context
 ): Promise<PluginStorageInterface> => {
   console.debug(INITIALIZING_PLUGINS);
-
+  const {plugins} = context.initialize;
   const storage = pluginStorage();
 
   for await (const pluginName of Object.keys(plugins)) {
     const plugin = await initPlugin(plugins[pluginName]);
+    const parameters = {...plugin.metadata.inputs, ...plugin.metadata.outputs};
+
+    Object.keys(parameters).forEach(key => {
+      storeAggregationMetrics({
+        metrics: {[key]: {method: parameters[key]['aggregation-method']}},
+      });
+    });
+
     storage.set(pluginName, plugin);
   }
 

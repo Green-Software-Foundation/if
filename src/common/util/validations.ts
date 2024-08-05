@@ -25,6 +25,36 @@ export const allDefined = (obj: Record<string | number | symbol, unknown>) =>
   Object.values(obj).every(v => v !== undefined);
 
 /**
+ * Schema for parameter metadata.
+ */
+const parameterMetadataSchema = z
+  .object({
+    inputs: z
+      .record(
+        z.string(),
+        z.object({
+          unit: z.string(),
+          description: z.string(),
+          'aggregation-method': z.string(),
+        })
+      )
+      .optional()
+      .nullable(),
+    outputs: z
+      .record(
+        z.string(),
+        z.object({
+          unit: z.string(),
+          description: z.string(),
+          'aggregation-method': z.string(),
+        })
+      )
+      .optional()
+      .nullable(),
+  })
+  .optional();
+
+/**
  * Validation schema for manifests.
  */
 export const manifestSchema = z.object({
@@ -54,38 +84,15 @@ export const manifestSchema = z.object({
   initialize: z.object({
     plugins: z.record(
       z.string(),
-      z.object({
-        path: z.string(),
-        method: z.string(),
-        mapping: z.record(z.string(), z.string()).optional(),
-        'global-config': z.record(z.string(), z.any()).optional(),
-        'parameter-metadata': z
-          .object({
-            inputs: z
-              .record(
-                z.string(),
-                z.object({
-                  unit: z.string(),
-                  description: z.string(),
-                  'aggregation-method': z.string(),
-                })
-              )
-              .optional()
-              .nullable(),
-            outputs: z
-              .record(
-                z.string(),
-                z.object({
-                  unit: z.string(),
-                  description: z.string(),
-                  'aggregation-method': z.string(),
-                })
-              )
-              .optional()
-              .nullable(),
-          })
-          .optional(),
-      })
+      z
+        .object({
+          path: z.string(),
+          method: z.string(),
+          mapping: z.record(z.string(), z.string()).optional(),
+          'global-config': z.record(z.string(), z.any()).optional(),
+          'parameter-metadata': parameterMetadataSchema,
+        })
+        .optional()
     ),
   }),
   execution: z

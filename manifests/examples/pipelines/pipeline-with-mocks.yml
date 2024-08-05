@@ -13,9 +13,9 @@ initialize:
       method: MockObservations
       path: "builtin"
       global-config:
-        timestamp-from: 2023-12-12T00:00
-        timestamp-to: 2023-12-12T00:10
-        duration: 60
+        timestamp-from: "2023-12-12T00:00:00.000Z"
+        timestamp-to: "2023-12-12T00:00:13.000Z"
+        duration: 30
         components:
           - cloud/instance-type: A1
         generators:
@@ -43,7 +43,7 @@ initialize:
             description: region cloud instance
             unit: none
             aggregation-method: none
-    "interpolate":
+    interpolate:
       method: Interpolation
       path: "builtin"
       global-config:
@@ -63,7 +63,7 @@ initialize:
             description: result of interpolate
             unit: kWh
             aggregation-method: avg
-    "cpu-factor-to-wattage":
+    cpu-factor-to-wattage:
       method: Multiply
       path: builtin
       global-config:
@@ -71,29 +71,59 @@ initialize:
         output-parameter: "cpu-wattage"
       parameter-metadata:
         inputs:
+          cpu-factor:
+            description: result of interpolate
+            unit: kWh
+            aggregation-method: avg
           cpu/thermal-design-power:
             description: thermal design power for a processor
-            unit: kwh
+            unit: kWh
             aggregation-method: avg
         outputs:
           cpu-wattage:
             description: the energy used by the CPU
-            unit: kwh
+            unit: kWh
             aggregation-method: sum
-    "wattage-times-duration":
+    wattage-times-duration:
       method: Multiply
       path: builtin
       global-config:
         input-parameters: ["cpu-wattage", "duration"]
         output-parameter: "cpu-wattage-times-duration"
-    "wattage-to-energy-kwh":
+      parameter-metadata:
+        inputs:
+          cpu-wattage:
+            description: Energy used by the CPU
+            unit: kWh
+            aggregation-method: sum
+          duration:
+            description: Duration of the observation
+            unit: seconds
+            aggregation-method: sum
+        outputs:
+          cpu-wattage-times-duration:
+            description: CPU wattage multiplied by duration
+            unit: kWh
+            aggregation-method: sum
+    wattage-to-energy-kwh:
       method: Divide
       path: "builtin"
       global-config:
         numerator: cpu-wattage-times-duration
         denominator: 3600000
         output: cpu-energy-raw
-    "calculate-vcpu-ratio":
+      parameter-metadata:
+        inputs:
+          cpu-wattage-times-duration:
+            description: CPU wattage multiplied by duration
+            unit: kWh
+            aggregation-method: sum
+        outputs:
+          cpu-energy-raw:
+            description: Raw energy used by CPU in kWh
+            unit: kWh
+            aggregation-method: sum
+    calculate-vcpu-ratio:
       method: Divide
       path: "builtin"
       global-config:
@@ -110,17 +140,37 @@ initialize:
             description: number of vcpus allocated to particular resource
             unit: count
             aggregation-method: none
-    "correct-cpu-energy-for-vcpu-ratio":
+        outputs:
+          vcpu-ratio:
+            description: Ratio of vCPUs
+            unit: none
+            aggregation-method: none
+    correct-cpu-energy-for-vcpu-ratio:
       method: Divide
       path: "builtin"
       global-config:
         numerator: cpu-energy-raw
         denominator: vcpu-ratio
         output: cpu-energy-kwh
-    "sci-embodied":
+      parameter-metadata:
+        inputs:
+          cpu-energy-raw:
+            description: Raw energy used by CPU in kWh
+            unit: kWh
+            aggregation-method: sum
+          vcpu-ratio:
+            description: Ratio of vCPUs
+            unit: none
+            aggregation-method: none
+        outputs:
+          cpu-energy-kwh:
+            description: Corrected CPU energy in kWh
+            unit: kWh
+            aggregation-method: sum
+    sci-embodied:
       path: "builtin"
       method: SciEmbodied
-    "operational-carbon":
+    operational-carbon:
       method: Multiply
       path: builtin
       global-config:
@@ -128,11 +178,20 @@ initialize:
         output-parameter: "carbon-operational"
       parameter-metadata:
         inputs:
+          cpu-energy-kwh:
+            description: Corrected CPU energy in kWh
+            unit: kWh
+            aggregation-method: sum
           grid/carbon-intensity:
             description: Carbon intensity for the grid
             unit: gCO2eq/kWh
             aggregation-method: avg
-    "sum-carbon":
+        outputs:
+          carbon-operational:
+            description: Operational carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+    sum-carbon:
       path: "builtin"
       method: Sum
       global-config:
@@ -140,7 +199,22 @@ initialize:
           - carbon-operational
           - carbon-embodied
         output-parameter: carbon
-    "sci":
+      parameter-metadata:
+        inputs:
+          carbon-operational:
+            description: Operational carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+          carbon-embodied:
+            description: Embodied carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+        outputs:
+          carbon:
+            description: Total carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+    sci:
       path: "builtin"
       method: Sci
       global-config:
@@ -151,7 +225,12 @@ initialize:
             description: expressed the final SCI value
             unit: none
             aggregation-method: sum
-    "time-sync":
+        outputs:
+          sci:
+            description: Scientific Carbon Intensity
+            unit: none
+            aggregation-method: none
+    time-sync:
       method: TimeSync
       path: "builtin"
       global-config:
@@ -159,36 +238,27 @@ initialize:
         end-time: "2023-12-12T00:01:00.000Z"
         interval: 5
         allow-padding: true
-      parameter-metadata:
-        inputs:
-          time-reserved:
-            description: time reserved for a component
-            unit: seconds
-            aggregation-method: avg
-    "group-by":
-      path: builtin
-      method: GroupBy
 tree:
   children:
     child-1:
       pipeline:
-        - mock-observations
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - instance-type
+        observe:
+          - mock-observations
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800
@@ -198,49 +268,25 @@ tree:
         vcpus-total: 8
         vcpus-allocated: 1
       inputs:
-        - timestamp: "2023-12-12T00:00:00.000Z"
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          duration: 1
-          cpu/utilization: 10
-          requests: 30
-        - timestamp: "2023-12-12T00:00:01.000Z"
-          duration: 5
-          cpu/utilization: 20
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          requests: 40
-        - timestamp: "2023-12-12T00:00:06.000Z"
-          duration: 7
-          cpu/utilization: 15
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          requests: 30
-        - timestamp: "2023-12-12T00:00:13.000Z"
-          duration: 30
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          cpu/utilization: 15
-          requests: 50
     child-2:
       pipeline:
-        - mock-observations
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+        observe:
+          - mock-observations
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800
@@ -250,27 +296,3 @@ tree:
         vcpus-total: 8
         vcpus-allocated: 1
       inputs:
-        - timestamp: "2023-12-12T00:00:00.000Z"
-          duration: 1
-          cpu/utilization: 30
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          requests: 30
-        - timestamp: "2023-12-12T00:00:01.000Z"
-          duration: 5
-          cpu/utilization: 28
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          requests: 40
-        - timestamp: "2023-12-12T00:00:06.000Z"
-          duration: 7
-          cpu/utilization: 40
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          requests: 50
-        - timestamp: "2023-12-12T00:00:13.000Z"
-          duration: 30
-          cpu/utilization: 33
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          requests: 60

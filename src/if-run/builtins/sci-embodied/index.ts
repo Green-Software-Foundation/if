@@ -38,6 +38,7 @@ export const SciEmbodied = (
       'resources-total': {
         description: 'total resources available',
         unit: 'count',
+        'aggregation-method': 'none',
       },
       'vcpus-allocated': {
         description: 'number of vcpus allocated to particular resource',

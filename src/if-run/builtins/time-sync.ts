@@ -38,6 +38,21 @@ const {
   INVALID_DATETIME,
 } = STRINGS;
 
+/**
+ * Time synchronization plugin converted into framework integrated tool.
+ * It can't be requested in `initialize.plugins` section anymore. Instead describe configuration in context.
+ * @example
+ * ```yaml
+ * name: time-sync
+ * description: sample in time sync lib
+ * tags: sample, time, sync
+ * time-sync:
+ *   start-time: '2023-12-12T00:00:00.000Z'
+ *   end-time: '2023-12-12T00:01:00.000Z'
+ *   interval: 5
+ *   allow-padding: true
+ * ```
+ */
 export const TimeSync = (
   globalConfig: TimeNormalizerConfig,
   parametersMetadata: PluginParametersMetadata,
@@ -135,14 +150,16 @@ export const TimeSync = (
     return outputs.map(output => mapOutput(output, mapping));
   };
 
+  /**
+   * Dates are passed to `time-sync` both in ISO 8601 format
+   * and as a Date object (from the deserialization of a YAML file).
+   * If the YAML parser fails to identify as a date, it passes as a string.
+   */
   const parseDate = (date: Date | string) => {
     if (!date) {
       return DateTime.invalid('Invalid date');
     }
 
-    // dates are passed to time-sync.ts both in ISO 8601 format
-    // and as a Date object (from the deserialization of a YAML file)
-    // if the YAML parser fails to identify as a date, it passes as a string
     if (isDate(date)) {
       return DateTime.fromJSDate(date);
     }
