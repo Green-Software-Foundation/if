@@ -52,8 +52,9 @@ cpu-cores-available,cpu-cores-utilized,cpu-manufacturer,cpu-model-name,cpu-tdp,g
   tree:
     children:
       front-end:
-        pipeline: 
-          - boavizta-cpu
+        pipeline:
+          compute:
+            - boavizta-cpu
         config:
           boavizta-cpu:
             core-units: 24
