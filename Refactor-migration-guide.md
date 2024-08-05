@@ -125,24 +125,23 @@ There have also been some changes to the structure of manifest files. Some of th
 
 - **Node level config**
 
-  We have also introduced the concept of node-level config. This is designed for pluin configuration that might vary between components in the tree. For example, for each child in the tree you might wish to use the `groupby` plugin to group the outputs according to a different set of keys.
+  We have also introduced the concept of node-level config. This is designed for pluin configuration that might vary between components in the tree. For example, for each child in the tree you might wish to use the `regroup` feature to group the outputs according to a different set of keys.
 
   ```yaml
   tree:
     children:
       child-1:
         pipeline:
-          - teads-curve
-          - sci-e
-          - sci-embodied
-          - sci-o
-          - time-sync
-          - sci
-        config:
-          group-by:
-            group:
-              - region
-              - cloud/instance-type
+          compute:
+            - teads-curve
+            - sci-e
+            - sci-embodied
+            - sci-o
+            - time-sync
+            - sci
+          regroup:
+            - region
+            - cloud/instance-type
   ```
 
 - **Defaults**
@@ -156,12 +155,13 @@ There have also been some changes to the structure of manifest files. Some of th
     children:
       child-1:
         pipeline:
-          - teads-curve
-          - sci-e
-          - sci-embodied
-          - sci-o
-          - time-sync
-          - sci
+          compute:
+            - teads-curve
+            - sci-e
+            - sci-embodied
+            - sci-o
+            - time-sync
+            - sci
        defaults:
           cpu/thermal-design-power: 100
           grid/carbon-intensity: 800
@@ -213,40 +213,6 @@ aggregation:
     'carbon':
       method: 'sum'
   type: 'both'
-```
-
-### Groupby
-
-Groupby allows you to regroup your outputs according to keys you define. For example, maybe you want to group your outputs by region (show me all the outputs for applications run in `uk-south` etc). Groupby _is_ a plugin that needs to be initialized in the manifest.
-
-You can initialize the plugin as follows:
-
-```yaml
-initialize:
-  plugins:
-    'group-by':
-      path: builtin
-      method: GroupBy
-```
-
-Then you configure groupby for each component in the node level config. In the following example we will regroup the outputs by the `region`:
-
-```yaml
-tree:
-  children:
-    child-1:
-      pipeline:
-        - teads-curve
-        - sci-e
-        - sci-embodied
-        - sci-o
-        - time-sync
-        - group-by
-        - sci
-      config:
-        group-by:
-          group:
-            - region
 ```
 
 ### Exhaust
