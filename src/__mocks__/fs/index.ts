@@ -81,6 +81,11 @@ export const writeFile = async (pathToFile: string, content: string) => {
     }
   } else if (pathToFile.includes('package.json-npm')) {
     const updatedPath = pathToFile.replace('-npm', '');
+    // try {
+    //   await fsAsync.appendFile(updatedPath, '\n');
+    // } catch (error) {
+    //   console.log('---error', error);
+    // }
     const fileContent = await fsAsync.readFile(updatedPath, 'utf8');
 
     expect(content).toBe(fileContent);
@@ -107,6 +112,9 @@ export const writeFile = async (pathToFile: string, content: string) => {
     expect(content).toBe(mockObject);
   }
 };
+
+export const appendFile = (file: string, appendContent: string) =>
+  `${file}${appendContent}`;
 
 export const stat = async (filePath: string) => {
   if (filePath === 'true') {
