@@ -1,13 +1,12 @@
 name: regroup
-description: failure when `config->group-by->group` is not an array
+description: failure when `regroup` is not an array
 initialize:
   plugins: {}
 tree:
   children:
     my-app:
       pipeline:
-        regroup:
-          cloud/region
+        regroup: cloud/region
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 300
