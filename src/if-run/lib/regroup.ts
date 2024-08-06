@@ -44,12 +44,13 @@ export const Regroup = (inputs: PluginParams[], groups: string[]) => {
   /**
    * Validates groups array.
    */
-  const validateGroups = (groups: string[]) => {
-    const inputData = {groups};
+  const validateGroups = (regroup: string[]) => {
+    const inputData = {regroup};
     const validationSchema = z.record(
       z.string(),
-      z.array(z.string()).min(1, REGROUP_ERROR)
+      z.array(z.string(), {message: REGROUP_ERROR}).min(1)
     );
+
     validate(validationSchema, inputData);
 
     return groups;
