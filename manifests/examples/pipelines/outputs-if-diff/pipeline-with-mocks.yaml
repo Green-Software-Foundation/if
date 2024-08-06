@@ -324,11 +324,12 @@ tree:
   children:
     child-1:
       pipeline:
+        observe:
+          - mock-observations
         regroup:
           - cloud/region
           - instance-type
         compute:
-          - mock-observations
           - interpolate
           - cpu-factor-to-wattage
           - wattage-times-duration
@@ -677,11 +678,12 @@ tree:
         carbon: '*'
     child-2:
       pipeline:
+        observe:
+          - mock-observations
         regroup:
           - cloud/region
           - instance-type
         compute:
-          - mock-observations
           - interpolate
           - cpu-factor-to-wattage
           - wattage-times-duration
@@ -692,7 +694,7 @@ tree:
           - operational-carbon
           - sum-carbon
           - time-sync
-          - sci 
+          - sci  
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800
