@@ -108,6 +108,9 @@ export const writeFile = async (pathToFile: string, content: string) => {
   }
 };
 
+export const appendFile = (file: string, appendContent: string) =>
+  `${file}${appendContent}`;
+
 export const stat = async (filePath: string) => {
   if (filePath === 'true') {
     return true;
