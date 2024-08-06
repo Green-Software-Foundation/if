@@ -24,8 +24,7 @@ export const STRINGS = {
   METRIC_MISSING: (metric: string, index: number) =>
     `Aggregation metric ${metric} is not found in inputs[${index}].`,
   INVALID_GROUP_KEY: (key: string) => `Invalid group ${key}.`,
-  REGROUP_ERROR:
-    'Regroup phase is not an array or should contain at least one key.',
+  REGROUP_ERROR: 'not an array or should contain at least one key',
   INVALID_EXHAUST_PLUGIN: (pluginName: string) =>
     `Invalid exhaust plugin: ${pluginName}.`,
   UNKNOWN_PARAM: (name: string) =>
