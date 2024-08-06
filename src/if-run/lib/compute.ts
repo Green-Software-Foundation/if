@@ -3,15 +3,17 @@ import {PluginParams} from '@grnsft/if-core/types';
 import {Regroup} from './regroup';
 import {addExplainData} from './explain';
 
-import {mergeObjects} from '../util/helpers';
 import {debugLogger} from '../../common/util/debug-logger';
+import {logger} from '../../common/util/logger';
+
+import {mergeObjects} from '../util/helpers';
 
 import {STRINGS} from '../config/strings';
 
 import {ComputeParams, Node, PhasedPipeline} from '../types/compute';
 import {isExecute} from '../types/interface';
 
-const {MERGING_DEFAULTS_WITH_INPUT_DATA} = STRINGS;
+const {MERGING_DEFAULTS_WITH_INPUT_DATA, CONFIG_WARN} = STRINGS;
 
 /**
  * Traverses all child nodes based on children grouping.
@@ -60,16 +62,16 @@ const mergeDefaults = (
  */
 const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   const pipeline = node.pipeline || (params.pipeline as PhasedPipeline);
-  const config = node.config || params.config;
   const defaults = node.defaults || params.defaults;
   const noFlags = !params.observe && !params.regroup && !params.compute;
+
+  warnIfConfigProvided(node);
 
   if (node.children) {
     return traverse(node.children, {
       ...params,
       pipeline,
       defaults,
-      config,
     });
   }
 
@@ -84,10 +86,9 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     while (pipelineCopy.observe.length !== 0) {
       const pluginName = pipelineCopy.observe.shift() as string;
       const plugin = params.pluginStorage.get(pluginName);
-      const nodeConfig = config && config[pluginName];
 
       if (isExecute(plugin)) {
-        inputStorage = await plugin.execute(inputStorage, nodeConfig);
+        inputStorage = await plugin.execute(inputStorage);
         node.inputs = inputStorage;
 
         if (params.context.explainer) {
@@ -118,7 +119,6 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
         regroup: undefined,
       },
       defaults,
-      config,
     });
   }
 
@@ -129,14 +129,26 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     while (pipelineCopy.compute.length !== 0) {
       const pluginName = pipelineCopy.compute.shift() as string;
       const plugin = params.pluginStorage.get(pluginName);
-      const nodeConfig = config && config[pluginName];
 
       if (isExecute(plugin)) {
-        inputStorage = await plugin.execute(inputStorage, nodeConfig);
+        inputStorage = await plugin.execute(inputStorage);
         node.outputs = inputStorage;
         debugLogger.setExecutingPluginName();
       }
     }
+  }
+};
+
+/**
+ * Warns if the `config` is provided in the manifest.
+ */
+const warnIfConfigProvided = (node: any) => {
+  if ('config' in node) {
+    const plugins = Object.keys(node.config);
+    const joinedPlugins = plugins.join(', ');
+    const isMore = plugins.length > 1;
+
+    logger.warn(CONFIG_WARN(joinedPlugins, isMore));
   }
 };
 
