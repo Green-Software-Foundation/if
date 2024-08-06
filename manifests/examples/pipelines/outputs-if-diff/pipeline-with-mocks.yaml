@@ -324,23 +324,23 @@ tree:
   children:
     child-1:
       pipeline:
-        - mock-observations
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - instance-type
+        observe:
+          - mock-observations
+        regroup:
+          - cloud/region
+          - instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci  
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800
@@ -678,23 +678,23 @@ tree:
         carbon: '*'
     child-2:
       pipeline:
-        - mock-observations
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+        observe:
+          - mock-observations
+        regroup:
+          - cloud/region
+          - instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci  
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800
