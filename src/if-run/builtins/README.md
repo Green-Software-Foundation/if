@@ -4,7 +4,6 @@ There are three built-in features of IF:
 
 - time-sync
 - CSV exporter
-- groupby
 
 On this page, you can find the documentation for each of these three builtins.
 
@@ -242,11 +241,12 @@ tree:
   children:
     child: # an advanced grouping node
       pipeline:
-        - teads-curve
-        - sci-e
-        - sci-embodied
-        - sci-o
-        - time-sync
+        compute:
+          - teads-curve
+          - sci-e
+          - sci-embodied
+          - sci-o
+          - time-sync
       config:
         teads-curve:
           cpu/thermal-design-power: 65
@@ -307,20 +307,19 @@ The CSV above is generated from the following yaml. The `carbon` metric is extra
 ```yaml
 tree:
   pipeline:
-    - mock-observations
-    - group-by
-    - cloud-metadata
-    - time-sync
-    - watttime
-    - teads-curve
-    - operational-carbon
+    observe:
+      - mock-observations
+    regroup:
+      - cloud/region
+      - name
+    compute:
+      - cloud-metadata
+      - time-sync
+      - watttime
+      - teads-curve
+      - operational-carbon
   defaults:
     grid/carbon-intensity: 500
-  config:
-    group-by:
-      group:
-        - cloud/region
-        - name
   children:
     westus3:
       children:
@@ -634,192 +633,3 @@ tree:
 ### CSV and aggregation
 
 The CSV representation of the output data is helpful for intuiting how the aggregation procedure works. What we refer to as "horizontal" aggregation is really an aggregation of the _rows_ of the CSV. You can replicate the IF aggregation function by summing the cells in each row of the CSV. Similarly, what we refer to as "vertical" aggregation can be replicated by summing the _columns_ in the CSV representation (this is not _exactly_ accurate because you have to skip summing both parent nodes and their children, both of which are represented in the CSV, but it is true conceptually).
-
-## Groupby
-
-Groupby is an IF plugin that reorganizes a tree according to keys provided by the user. This allows users to regroup their observations according to various properties of their application. For example, the following manifest file contains a flat array of observations. This is how you might expect data to arrive from an importer plugin, maybe one that hits a metrics API for a cloud service.
-
-```yaml
-name: if-demo
-description: demo pipeline
-graph:
-  children:
-    my-app:
-      pipeline:
-        - group-by
-        - teads-curve
-      config:
-        group-by:
-          - cloud/region
-          - instance-type
-      inputs:
-        - timestamp: 2023-07-06T00:00
-          duration: 300
-          instance-type: A1
-          cloud/region: uk-west
-          cpu-util: 99
-        - timestamp: 2023-07-06T05:00
-          duration: 300
-          instance-type: A1
-          cloud/region: uk-west
-          cpu-util: 23
-        - timestamp: 2023-07-06T10:00
-          duration: 300
-          instance-type: A1
-          cloud/region: uk-west
-          cpu-util: 12
-        - timestamp: 2023-07-06T00:00 # note this time restarts at the start timstamp
-          duration: 300
-          instance-type: B1
-          cloud/region: uk-west
-          cpu-util: 11
-        - timestamp: 2023-07-06T05:00
-          duration: 300
-          instance-type: B1
-          cloud/region: uk-west
-          cpu-util: 67
-        - timestamp: 2023-07-06T10:00
-          duration: 300
-          instance-type: B1
-          cloud/region: uk-west
-          cpu-util: 1
-```
-
-However, each observation contains an `instance-type` field that varies between observations. There are two instance types being represented in this array of observations. This means there are duplicate entries for the same timestamp in this array. This is the problem that `group-by` solves. You provide `instance-type` as a key to the `group-by` plugin and it extracts the data belonging to the different instances and separates them into independent arrays. The above example would be restructured so that instance types `A1` and `B1` have their own data, as follows:
-
-```yaml
-graph:
-  children:
-    my-app:
-      pipeline:
-        # - group-by
-        - teads-curve
-      config:
-        group-by:
-          groups:
-            - cloud/region
-            - instance-type
-      children:
-        A1:
-            inputs:
-            - timestamp: 2023-07-06T00:00
-                duration: 300
-                instance-type: A1
-                cloud/region: uk-west
-                cpu-util: 99
-            - timestamp: 2023-07-06T05:00
-                duration: 300
-                instance-type: A1
-                cloud/region: uk-west
-                cpu-util: 23
-            - timestamp: 2023-07-06T10:00
-                duration: 300
-                instance-type: A1
-                cloud/region: uk-west
-                cpu-util: 12
-        B1:
-            inputs:
-            - timestamp: 2023-07-06T00:00
-                duration: 300
-                instance-type: B1
-                cloud/region: uk-east
-                cpu-util: 11
-            - timestamp: 2023-07-06T05:00
-                duration: 300
-                instance-type: B1
-                cloud/region: uk-east
-                cpu-util: 67
-            - timestamp: 2023-07-06T10:00
-                duration: 300
-                instance-type: B1
-                cloud/region: uk-east
-                cpu-util: 1
-```
-
-### Using `group-by`
-
-To use `group-by`, you have to initialize it as a plugin and invoke it in a pipeline.
-
-The initialization looks as follows:
-
-```yaml
-initialize:
-plugins:
-group-by:
-  path: 'builtin'
-  method: GroupBy
-```
-
-You then have to provide config defining which keys to group by in each component. This is done at the component level (i.e. not global config).
-For example:
-
-```yaml
-tree:
-  children:
-    my-app:
-      pipeline:
-        - group-by
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - instance-type
-```
-
-In the example above, the plugin would regroup the input data for the specific component by `cloud/region` and by `instance-type`.
-
-Assuming the values `A1` and `B1` are found for `instance-type` and the values `uk-east` and `uk-west` are found for `cloud/region`, the result of `group-by` would look similar to the following:
-
-```yaml
-tree:
-  children:
-    my-app:
-      pipeline:
-        - group-by
-      config:
-        group-by:
-          groups:
-            - cloud/region
-            - instance-type
-      children:
-        uk-west:
-          children:
-            A1:
-              inputs:
-                - timestamp: 2023-07-06T00:00
-                  duration: 300
-                  instance-type: A1
-                  cloud/region: uk-west
-                  cpu-util: 99
-                - timestamp: 2023-07-06T05:00
-                  duration: 300
-                  instance-type: A1
-                  cloud/region: uk-west
-                  cpu-util: 23
-                - timestamp: 2023-07-06T10:00
-                  duration: 300
-                  instance-type: A1
-                  cloud/region: uk-west
-                  cpu-util: 12
-        uk-east:
-          children:
-            B1:
-              inputs:
-                - timestamp: 2023-07-06T00:00
-                  duration: 300
-                  instance-type: B1
-                  cloud/region: uk-east
-                  cpu-util: 11
-                - timestamp: 2023-07-06T05:00
-                  duration: 300
-                  instance-type: B1
-                  cloud/region: uk-east
-                  cpu-util: 67
-                - timestamp: 2023-07-06T10:00
-                  duration: 300
-                  instance-type: B1
-                  cloud/region: uk-east
-                  cpu-util: 1
-```
-
-This reorganized data can then be used to feed the rest of a computation pipeline.

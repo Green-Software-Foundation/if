@@ -2,9 +2,6 @@ name: regroup
 description: successful path
 initialize:
   plugins:
-    group-by:
-      path: "builtin"
-      method: GroupBy
 tree:
   children:
     my-app:
