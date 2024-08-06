@@ -26,8 +26,6 @@ tree:
         compute:
           - cloud-metadata
           - divide
-      config:
-        divide:
       defaults:
         cloud/vendor: aws
         cloud/instance-type: m5n.large
