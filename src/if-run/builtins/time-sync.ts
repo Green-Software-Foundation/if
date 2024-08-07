@@ -10,6 +10,7 @@ import {
   TimeNormalizerConfig,
   TimeParams,
   PluginParametersMetadata,
+  ParameterMetadata,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../common/util/validations';
@@ -57,17 +58,20 @@ export const TimeSync = (
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
-    inputs: parametersMetadata?.inputs || {
-      timestamp: {
-        description: 'refers to the time of occurrence of the input',
-        unit: 'RFC3339',
-        'aggregation-method': 'none',
-      },
-      duration: {
-        description: 'refers to the duration of the input',
-        unit: 'seconds',
-        'aggregation-method': 'sum',
-      },
+    inputs: {
+      ...({
+        timestamp: {
+          description: 'refers to the time of occurrence of the input',
+          unit: 'RFC3339',
+          'aggregation-method': 'none',
+        },
+        duration: {
+          description: 'refers to the duration of the input',
+          unit: 'seconds',
+          'aggregation-method': 'sum',
+        },
+      } as ParameterMetadata),
+      ...parametersMetadata?.inputs,
     },
     outputs: parametersMetadata?.outputs,
   };
