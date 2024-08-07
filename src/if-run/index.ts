@@ -12,6 +12,8 @@ import {compute} from './lib/compute';
 import {exhaust} from './lib/exhaust';
 import {explain} from './lib/explain';
 
+import {AGGREGATION_METHODS} from './types/aggregation';
+
 import {parseIfRunProcessArgs} from './util/args';
 import {andHandle} from './util/helpers';
 
@@ -43,7 +45,13 @@ const impactEngine = async () => {
     const {tree, ...context} = validateManifest(envManifest);
 
     if (context.aggregation) {
-      storeAggregationMetrics({metrics: context.aggregation?.metrics});
+      const convertMetrics = context.aggregation?.metrics.map(
+        (metric: string) => ({
+          [metric]: AGGREGATION_METHODS[2],
+        })
+      );
+
+      storeAggregationMetrics(...convertMetrics);
     }
 
     const pluginStorage = await initialize(context);
