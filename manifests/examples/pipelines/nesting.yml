@@ -6,8 +6,7 @@ tags:
   category: on-premise
 aggregation:
   metrics:
-    "carbon":
-      method: sum
+    - carbon
   type: "both"
 initialize:
   plugins:
@@ -139,6 +138,21 @@ initialize:
           - carbon-operational
           - carbon-embodied
         output-parameter: carbon
+      parameter-metadata:
+        inputs:
+          carbon-operational:
+            description: Operational carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+          carbon-embodied:
+            description: Embodied carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+        outputs:
+          carbon:
+            description: Total carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
     time-sync:
       method: TimeSync
       path: "builtin"
@@ -169,10 +183,10 @@ initialize:
             unit: seconds
             description: time reserved for a component
             aggregation-method: avg
-          network/energy: 
-            description: 'Energy consumed by the Network of the component'
-            unit: 'kWh'
-            aggregation-method: 'sum'
+          network/energy:
+            description: "Energy consumed by the Network of the component"
+            unit: "kWh"
+            aggregation-method: "sum"
 tree:
   children:
     child-0:

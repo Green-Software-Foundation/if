@@ -5,8 +5,7 @@ description: >-
 tags: null
 aggregation:
   metrics:
-    "dummy-param":
-      method: sum
+    - dummy-param
   type: both
 initialize:
   plugins:

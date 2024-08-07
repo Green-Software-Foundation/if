@@ -3,8 +3,7 @@ description: a full pipeline with the aggregate feature enabled
 tags: null
 aggregation:
   metrics:
-    carbon:
-      method: sum
+    - carbon
   type: both
 initialize:
   plugins:
@@ -159,6 +158,21 @@ initialize:
           - carbon-operational
           - carbon-embodied
         output-parameter: carbon
+      parameter-metadata:
+        inputs:
+          carbon-operational:
+            description: Operational carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+          carbon-embodied:
+            description: Embodied carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+        outputs:
+          carbon:
+            description: Total carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
     time-sync:
       path: builtin
       method: TimeSync

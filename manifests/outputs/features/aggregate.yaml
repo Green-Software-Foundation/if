@@ -2,8 +2,7 @@ name: Aggregation
 description: Apply both `horizontal` and `vertical` aggregations
 aggregation:
   metrics:
-    "cpu/utilization":
-      method: avg
+    - cpu/utilization
   type: both
 initialize:
   plugins:
@@ -18,6 +17,12 @@ initialize:
         output:
           - cpu-cores-utilized
           - vcpus-allocated
+      parameter-metadata:
+        inputs:
+          cpu/utilization:
+            unit: percentage
+            description: refers to CPU utilization.
+            aggregation-method: avg
 execution:
   command: >-
     /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
