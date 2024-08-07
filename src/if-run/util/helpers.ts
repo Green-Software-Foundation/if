@@ -62,10 +62,9 @@ export const storeAggregationMethods = (
           const {'aggregation-method': aggregationMethod} = parameterMetadata;
 
           if (aggregationMethod) {
-            const metrics = {
-              [parameterName]: {method: aggregationMethod},
-            };
-            storeAggregationMetrics({metrics});
+            const metrics = {[parameterName]: aggregationMethod};
+
+            storeAggregationMetrics(metrics);
           }
         }
       );
