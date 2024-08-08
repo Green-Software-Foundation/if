@@ -11,6 +11,12 @@ initialize:
         end-time: "2023-12-12T00:01:00.000Z"
         interval: 5
         allow-padding: true
+      parameter-metadata:
+        outputs:
+          energy-cpu:
+            unit: KWH
+            description: energy
+            aggregation-method: sum
 execution:
   command: >-
     /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
