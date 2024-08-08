@@ -58,7 +58,7 @@ Note that for the '--output' option you also need to define the output type in y
   PREPARING_OUTPUT_DATA: 'Preparing output data',
   EXPORTING_TO_YAML_FILE: (savepath: string) =>
     `Exporting to yaml file: ${savepath}`,
-  EMPTY_PIPELINE: `You've using an old style manifest. Please update for phased execution. More information can be found here: 
+  EMPTY_PIPELINE: `You're using an old style manifest. Please update for phased execution. More information can be found here: 
 https://if.greensoftware.foundation/major-concepts/manifest-file`,
   /** Exhaust messages */
   OUTPUT_REQUIRED:
