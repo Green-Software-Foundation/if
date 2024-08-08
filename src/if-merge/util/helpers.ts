@@ -1,3 +1,5 @@
+import * as path from 'path';
+
 import {getFileName, getYamlFiles} from '../../common/util/fs';
 import {Context} from '../../common/types/manifest';
 import {load} from '../../common/lib/load';
@@ -35,6 +37,8 @@ const mergeManifestsData = async (manifests: string[], context: Context) => {
   for await (const manifest of manifests) {
     const manifestName = getFileName(manifest);
     const {rawManifest} = await load(manifest);
+    const parentDir = path.basename(path.dirname(manifest));
+    const uniqueName = `${parentDir}-${manifestName}`;
 
     context.tags = Object.assign({}, context.tags, rawManifest.tags);
     context.initialize.plugins = {
@@ -43,7 +47,7 @@ const mergeManifestsData = async (manifests: string[], context: Context) => {
     };
 
     Object.keys(rawManifest.tree.children).forEach(child => {
-      tree.children[`${child}-${manifestName}`] = {
+      tree.children[`${child}-${uniqueName}`] = {
         ...rawManifest.tree.children[child],
       };
     });
