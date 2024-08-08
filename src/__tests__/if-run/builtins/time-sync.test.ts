@@ -7,6 +7,7 @@ import {storeAggregationMetrics} from '../../../if-run/lib/aggregate';
 import {TimeSync} from '../../../if-run/builtins/time-sync';
 
 import {STRINGS} from '../../../if-run/config';
+import {AGGREGATION_METHODS} from '../../../if-run/types/aggregation';
 
 Settings.defaultZone = 'utc';
 const {
@@ -56,16 +57,18 @@ jest.mock('luxon', () => {
 describe('builtins/time-sync:', () => {
   beforeAll(() => {
     const metricStorage: AggregationParams = {
-      metrics: {
-        carbon: {method: 'sum'},
-        'cpu/utilization': {method: 'sum'},
-        'time-reserved': {method: 'avg'},
-        'resources-total': {method: 'none'},
-      },
+      metrics: [
+        'carbon',
+        'cpu/utilization',
+        'time-reserved',
+        'resources-total',
+      ],
       type: 'horizontal',
     };
-
-    storeAggregationMetrics(metricStorage);
+    const convertedMetrics = metricStorage.metrics.map((metric: string) => ({
+      [metric]: AGGREGATION_METHODS[2],
+    }));
+    storeAggregationMetrics(...convertedMetrics);
   });
 
   describe('time-sync: ', () => {
@@ -453,12 +456,10 @@ describe('execute(): ', () => {
       {
         timestamp: '2023-12-12T00:00:00.000Z',
         duration: 1,
-        'cpu/utilization': 10,
       },
       {
         timestamp: '2023-12-12T00:00:01.000Z',
         duration: 1,
-        'cpu/utilization': 10,
       },
     ];
 
@@ -472,6 +473,7 @@ describe('execute(): ', () => {
       interval: 1,
       'allow-padding': true,
     };
+    storeAggregationMetrics({carbon: 'sum'});
 
     const timeModel = TimeSync(basicConfig, parametersMetadata);
 
@@ -562,17 +564,14 @@ describe('execute(): ', () => {
       },
     ]);
 
-    /**In each 5 second interval, 60% of the time cpu/utilization = 10, 40% of the time it is 0, so cpu/utilization in the averaged result be 6 */
     const expectedResult = [
       {
         timestamp: '2023-12-12T00:00:00.000Z',
         duration: 5,
-        'resources-total': 10,
       },
       {
         timestamp: '2023-12-12T00:00:05.000Z',
         duration: 5,
-        'resources-total': 10,
       },
     ];
 
@@ -586,6 +585,8 @@ describe('execute(): ', () => {
       interval: 5,
       'allow-padding': true,
     };
+    storeAggregationMetrics({'time-reserved': 'avg'});
+    storeAggregationMetrics({'resources-total': 'sum'});
 
     const timeModel = TimeSync(basicConfig, parametersMetadata);
 
@@ -659,6 +660,7 @@ describe('execute(): ', () => {
       interval: 5,
       'allow-padding': true,
     };
+    storeAggregationMetrics({'resources-total': 'none'});
 
     const timeModel = TimeSync(basicConfig, parametersMetadata);
 

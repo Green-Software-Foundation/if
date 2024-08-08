@@ -5,7 +5,7 @@ import {logger} from '../../common/util/logger';
 import {
   AggregationParams,
   AggregationParamsSure,
-  AggregationParamsWithoutType,
+  AggregationMetricsWithMethod,
 } from '../../common/types/manifest';
 
 import {aggregateInputsIntoOne} from '../util/aggregation-helper';
@@ -39,7 +39,7 @@ const getIthElementsFromChildren = (children: any, i: number) => {
  * 1. Gets the i'th element from each childrens outputs (treating children as rows and we are after a column of data).
  * 2. Now we just aggregate over the `ithSliceOfOutputs` the same as we did for the normal outputs.
  */
-const temporalAggregation = (node: any, metrics: AggregationMetric) => {
+const temporalAggregation = (node: any, metrics: AggregationMetric[]) => {
   const outputs: PluginParams[] = [];
   const values: any = Object.values(node.children);
 
@@ -63,7 +63,9 @@ const temporalAggregation = (node: any, metrics: AggregationMetric) => {
  * 5. Now a grouping node has it's own outputs, it can horizotnally aggregate them.
  */
 const aggregateNode = (node: any, aggregationParams: AggregationParamsSure) => {
-  const metrics = aggregationParams!.metrics;
+  const metrics: AggregationMetric[] = aggregationParams!.metrics.map(
+    metric => ({[metric]: 'none'})
+  );
   const type = aggregationParams!.type;
 
   if (node.children) {
@@ -108,12 +110,12 @@ export const aggregate = (tree: any, aggregationParams: AggregationParams) => {
  * Gets or stores aggregation metrics.
  */
 export const storeAggregationMetrics = (
-  aggregationParams?: AggregationParamsWithoutType
+  aggregationMetrics?: AggregationMetricsWithMethod
 ) => {
-  if (aggregationParams?.metrics) {
+  if (aggregationMetrics) {
     metricManager.metrics = {
       ...metricManager.metrics,
-      ...aggregationParams?.metrics,
+      ...aggregationMetrics,
     };
   }
 
@@ -146,11 +148,14 @@ export const getAggregationMethod = (unitName: string) => {
   memoizedLog(console.debug, CHECKING_AGGREGATION_METHOD(unitName));
   const aggregationMetricsStorage = storeAggregationMetrics();
 
-  if (aggregationMetricsStorage && `${unitName}` in aggregationMetricsStorage) {
-    return aggregationMetricsStorage[unitName].method;
+  if (
+    aggregationMetricsStorage &&
+    Object.keys(aggregationMetricsStorage).includes(unitName)
+  ) {
+    return aggregationMetricsStorage[unitName];
   }
 
   memoizedLog(logger.warn, UNKNOWN_PARAM(unitName));
 
-  return 'sum';
+  return undefined;
 };

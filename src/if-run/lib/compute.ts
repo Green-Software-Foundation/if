@@ -5,13 +5,14 @@ import {addExplainData} from './explain';
 
 import {mergeObjects} from '../util/helpers';
 import {debugLogger} from '../../common/util/debug-logger';
+import {logger} from '../../common/util/logger';
 
 import {STRINGS} from '../config/strings';
 
 import {ComputeParams, Node, PhasedPipeline} from '../types/compute';
 import {isExecute} from '../types/interface';
 
-const {MERGING_DEFAULTS_WITH_INPUT_DATA} = STRINGS;
+const {MERGING_DEFAULTS_WITH_INPUT_DATA, EMPTY_PIPELINE} = STRINGS;
 
 /**
  * Traverses all child nodes based on children grouping.
@@ -76,6 +77,16 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   let inputStorage = structuredClone(node.inputs) as PluginParams[];
   inputStorage = mergeDefaults(inputStorage, defaults);
   const pipelineCopy = structuredClone(pipeline) || {};
+
+  /** Checks if pipeline is not an array or empty object. */
+  if (
+    Array.isArray(pipelineCopy) ||
+    (typeof pipelineCopy === 'object' &&
+      pipelineCopy !== null &&
+      Object.keys(pipelineCopy).length === 0)
+  ) {
+    logger.warn(EMPTY_PIPELINE);
+  }
 
   /**
    * If iteration is on observe pipeline, then executes observe plugins and sets the inputs value.
