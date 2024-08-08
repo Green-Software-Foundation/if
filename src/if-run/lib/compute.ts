@@ -78,7 +78,13 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   inputStorage = mergeDefaults(inputStorage, defaults);
   const pipelineCopy = structuredClone(pipeline) || {};
 
-  if (Object.keys(pipelineCopy).length === 0) {
+  /** Checks if pipeline is not an array or empty object. */
+  if (
+    Array.isArray(pipelineCopy) ||
+    (typeof pipelineCopy === 'object' &&
+      pipelineCopy !== null &&
+      Object.keys(pipelineCopy).length === 0)
+  ) {
     logger.warn(EMPTY_PIPELINE);
   }
 
