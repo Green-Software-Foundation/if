@@ -28,7 +28,7 @@ export const STRINGS = {
   INVALID_EXHAUST_PLUGIN: (pluginName: string) =>
     `Invalid exhaust plugin: ${pluginName}.`,
   UNKNOWN_PARAM: (name: string) =>
-    `Unknown parameter: ${name}. Using 'sum' aggregation method.`,
+    `Unknown parameter: ${name}. Omitting from the output.`,
   NOT_INITALIZED_PLUGIN: (name: string) =>
     `Not initalized plugin: ${name}. Check if ${name} is in 'manifest.initalize.plugins'.`,
   NO_OUTPUT: `
