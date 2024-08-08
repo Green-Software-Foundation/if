@@ -3,10 +3,7 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {STRINGS} from '../../if-run/config';
 
-import {
-  AGGREGATION_METHODS,
-  AGGREGATION_TYPES,
-} from '../../if-run/types/aggregation';
+import {AGGREGATION_TYPES} from '../../if-run/types/aggregation';
 
 const {ManifestValidationError, InputValidationError} = ERRORS;
 const {VALIDATING_MANIFEST} = STRINGS;
@@ -23,6 +20,36 @@ export const atLeastOneDefined = (
  */
 export const allDefined = (obj: Record<string | number | symbol, unknown>) =>
   Object.values(obj).every(v => v !== undefined);
+
+/**
+ * Schema for parameter metadata.
+ */
+const parameterMetadataSchema = z
+  .object({
+    inputs: z
+      .record(
+        z.string(),
+        z.object({
+          unit: z.string(),
+          description: z.string(),
+          'aggregation-method': z.string(),
+        })
+      )
+      .optional()
+      .nullable(),
+    outputs: z
+      .record(
+        z.string(),
+        z.object({
+          unit: z.string(),
+          description: z.string(),
+          'aggregation-method': z.string(),
+        })
+      )
+      .optional()
+      .nullable(),
+  })
+  .optional();
 
 /**
  * Validation schema for manifests.
@@ -42,11 +69,7 @@ export const manifestSchema = z.object({
   explain: z.record(z.string(), z.any()).optional(),
   aggregation: z
     .object({
-      metrics: z.record(
-        z.object({
-          method: z.enum(AGGREGATION_METHODS),
-        })
-      ),
+      metrics: z.array(z.string()),
       type: z.enum(AGGREGATION_TYPES),
     })
     .optional()
@@ -54,37 +77,14 @@ export const manifestSchema = z.object({
   initialize: z.object({
     plugins: z.record(
       z.string(),
-      z.object({
-        path: z.string(),
-        method: z.string(),
-        'global-config': z.record(z.string(), z.any()).optional(),
-        'parameter-metadata': z
-          .object({
-            inputs: z
-              .record(
-                z.string(),
-                z.object({
-                  unit: z.string(),
-                  description: z.string(),
-                  'aggregation-method': z.string(),
-                })
-              )
-              .optional()
-              .nullable(),
-            outputs: z
-              .record(
-                z.string(),
-                z.object({
-                  unit: z.string(),
-                  description: z.string(),
-                  'aggregation-method': z.string(),
-                })
-              )
-              .optional()
-              .nullable(),
-          })
-          .optional(),
-      })
+      z
+        .object({
+          path: z.string(),
+          method: z.string(),
+          'global-config': z.record(z.string(), z.any()).optional(),
+          'parameter-metadata': parameterMetadataSchema,
+        })
+        .optional()
     ),
   }),
   execution: z

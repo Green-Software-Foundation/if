@@ -23,8 +23,9 @@ tree:
   children:
     child:
       pipeline:
-        - cloud-metadata
-        - divide
+        compute:
+          - cloud-metadata
+          - divide
       config:
         divide:
       defaults:

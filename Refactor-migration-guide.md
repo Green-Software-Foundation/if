@@ -125,24 +125,23 @@ There have also been some changes to the structure of manifest files. Some of th
 
 - **Node level config**
 
-  We have also introduced the concept of node-level config. This is designed for pluin configuration that might vary between components in the tree. For example, for each child in the tree you might wish to use the `groupby` plugin to group the outputs according to a different set of keys.
+  We have also introduced the concept of node-level config. This is designed for pluin configuration that might vary between components in the tree. For example, for each child in the tree you might wish to use the `regroup` feature to group the outputs according to a different set of keys.
 
   ```yaml
   tree:
     children:
       child-1:
         pipeline:
-          - teads-curve
-          - sci-e
-          - sci-embodied
-          - sci-o
-          - time-sync
-          - sci
-        config:
-          group-by:
-            group:
-              - region
-              - cloud/instance-type
+          compute:
+            - teads-curve
+            - sci-e
+            - sci-embodied
+            - sci-o
+            - time-sync
+            - sci
+          regroup:
+            - region
+            - cloud/instance-type
   ```
 
 - **Defaults**
@@ -156,12 +155,13 @@ There have also been some changes to the structure of manifest files. Some of th
     children:
       child-1:
         pipeline:
-          - teads-curve
-          - sci-e
-          - sci-embodied
-          - sci-o
-          - time-sync
-          - sci
+          compute:
+            - teads-curve
+            - sci-e
+            - sci-embodied
+            - sci-o
+            - time-sync
+            - sci
        defaults:
           cpu/thermal-design-power: 100
           grid/carbon-intensity: 800
@@ -199,9 +199,7 @@ The aggregate plugin aggregates data in two ways: first it condenses individual 
 
 This is a builtin feature of IF, meaning it does not have to be initialized as a plugin. Instead, you just have to include a short config block in the top of the manifest file. There are two pieces of information required:
 
-- `metrics`: which metrics do you want to aggregate? Every metric you provide here must exist in the output array.
-
-  - `method`: the aggregation method for the specied metric
+- `metrics`: which metrics do you want to aggregate? Every metric you provide here must exist in the output array and be described in the `parameter-metadata` of the plugin.
 
 - `type`: the options are `horizontal`, `vertical` or both. Horizontal aggregation is the type that condenses each time series into a single summary value. Vertical aggregation is aggregated across components.
 
@@ -210,43 +208,8 @@ Here's what the config block should look like:
 ```yaml
 aggregation:
   metrics:
-    'carbon':
-      method: 'sum'
+    - carbon
   type: 'both'
-```
-
-### Groupby
-
-Groupby allows you to regroup your outputs according to keys you define. For example, maybe you want to group your outputs by region (show me all the outputs for applications run in `uk-south` etc). Groupby _is_ a plugin that needs to be initialized in the manifest.
-
-You can initialize the plugin as follows:
-
-```yaml
-initialize:
-  plugins:
-    'group-by':
-      path: builtin
-      method: GroupBy
-```
-
-Then you configure groupby for each component in the node level config. In the following example we will regroup the outputs by the `region`:
-
-```yaml
-tree:
-  children:
-    child-1:
-      pipeline:
-        - teads-curve
-        - sci-e
-        - sci-embodied
-        - sci-o
-        - time-sync
-        - group-by
-        - sci
-      config:
-        group-by:
-          group:
-            - region
 ```
 
 ### Exhaust

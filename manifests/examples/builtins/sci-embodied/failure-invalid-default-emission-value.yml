@@ -10,7 +10,8 @@ tree:
   children:
     child:
       pipeline:
-        - sci-embodied # duration & config -> embodied
+        compute:
+          - sci-embodied # duration & config -> embodied
       defaults:
         device/emissions-embodied: "fail" # gCO2eq
         time-reserved: 3600 # 1hr in seconds

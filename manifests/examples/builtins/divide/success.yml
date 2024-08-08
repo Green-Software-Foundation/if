@@ -23,10 +23,9 @@ tree:
   children:
     child:
       pipeline:
-        - cloud-metadata
-        - divide
-      config:
-        divide:
+        compute:
+          - cloud-metadata
+          - divide
       defaults:
         cloud/vendor: aws
         cloud/instance-type: m5n.large

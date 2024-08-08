@@ -57,7 +57,8 @@ tree:
   children:
     child:
       pipeline:
-        - memory-energy-from-memory-util
+        compute:
+          - memory-energy-from-memory-util
       config: null
       inputs:
         - timestamp: 2023-12-12T00:00:00.000Z

@@ -4,52 +4,33 @@ import {PluginParams} from '@grnsft/if-core/types';
 import {AggregationParams} from '../../../common/types/manifest';
 
 import {aggregateInputsIntoOne} from '../../../if-run/util/aggregation-helper';
-import {AggregationMetric} from '../../../if-run/types/aggregation';
+import {
+  AGGREGATION_METHODS,
+  AggregationMetric,
+} from '../../../if-run/types/aggregation';
 import {storeAggregationMetrics} from '../../../if-run/lib/aggregate';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {InvalidAggregationMethodError, MissingAggregationParamError} = ERRORS;
-const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
+const {MissingAggregationParamError} = ERRORS;
+const {METRIC_MISSING} = STRINGS;
 
 describe('util/aggregation-helper: ', () => {
   beforeAll(() => {
     const metricStorage: AggregationParams = {
-      metrics: {
-        carbon: {method: 'sum'},
-        'cpu/number-cores': {method: 'none'},
-        'cpu/utilization': {method: 'sum'},
-      },
+      metrics: ['carbon', 'cpu/number-cores', 'cpu/utilization'],
       type: 'horizontal',
     };
-
-    storeAggregationMetrics(metricStorage);
+    const convertedMetrics = metricStorage.metrics.map((metric: string) => ({
+      [metric]: AGGREGATION_METHODS[2],
+    }));
+    storeAggregationMetrics(...convertedMetrics);
   });
 
   describe('aggregateInputsIntoOne(): ', () => {
-    it('throws error if aggregation method is none.', () => {
-      const inputs: PluginParams[] = [];
-      const metrics: AggregationMetric = {'cpu/number-cores': {method: 'none'}};
-      const isTemporal = false;
-
-      expect.assertions(2);
-
-      try {
-        aggregateInputsIntoOne(inputs, metrics, isTemporal);
-      } catch (error) {
-        expect(error).toBeInstanceOf(InvalidAggregationMethodError);
-
-        if (error instanceof InvalidAggregationMethodError) {
-          expect(error.message).toEqual(
-            INVALID_AGGREGATION_METHOD('cpu/number-cores')
-          );
-        }
-      }
-    });
-
     it('throws error if aggregation criteria is not found in input.', () => {
       const inputs: PluginParams[] = [{timestamp: '', duration: 10}];
-      const metrics: AggregationMetric = {'cpu/utilization': {method: 'sum'}};
+      const metrics: AggregationMetric[] = [{'cpu/utilization': 'sum'}];
       const isTemporal = false;
 
       expect.assertions(2);
@@ -70,7 +51,7 @@ describe('util/aggregation-helper: ', () => {
         {timestamp: '', duration: 10, carbon: 10},
         {timestamp: '', duration: 10, carbon: 20},
       ];
-      const metrics: AggregationMetric = {carbon: {method: 'sum'}};
+      const metrics: AggregationMetric[] = [{carbon: 'sum'}];
       const isTemporal = true;
 
       const expectedValue = {
@@ -87,7 +68,7 @@ describe('util/aggregation-helper: ', () => {
         {timestamp: '', duration: 10, carbon: 10},
         {timestamp: '', duration: 10, carbon: 20},
       ];
-      const metrics: AggregationMetric = {carbon: {method: 'sum'}};
+      const metrics: AggregationMetric[] = [{carbon: 'sum'}];
       const isTemporal = false;
 
       const expectedValue = {
@@ -99,18 +80,20 @@ describe('util/aggregation-helper: ', () => {
 
     it('calculates average of metrics.', () => {
       const metricStorage: AggregationParams = {
-        metrics: {
-          'cpu/utilization': {method: 'avg'},
-        },
+        metrics: ['cpu/utilization'],
         type: 'horizontal',
       };
+      const convertedMetrics = metricStorage.metrics.map((metric: string) => ({
+        [metric]: AGGREGATION_METHODS[2],
+      }));
+      storeAggregationMetrics(...convertedMetrics);
+      storeAggregationMetrics({'cpu/utilization': 'avg'});
 
-      storeAggregationMetrics(metricStorage);
       const inputs: PluginParams[] = [
         {timestamp: '', duration: 10, 'cpu/utilization': 10},
         {timestamp: '', duration: 10, 'cpu/utilization': 90},
       ];
-      const metrics: AggregationMetric = {'cpu/utilization': {method: 'avg'}};
+      const metrics: AggregationMetric[] = [{'cpu/utilization': 'avg'}];
       const isTemporal = false;
 
       const expectedValue = {
