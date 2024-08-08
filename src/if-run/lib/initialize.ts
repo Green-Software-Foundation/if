@@ -119,7 +119,7 @@ export const initialize = async (
 
     Object.keys(parameters).forEach(key => {
       storeAggregationMetrics({
-        metrics: {[key]: {method: parameters[key]['aggregation-method']}},
+        [key]: parameters[key]['aggregation-method'],
       });
     });
 

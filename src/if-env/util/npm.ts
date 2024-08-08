@@ -79,6 +79,7 @@ export const updatePackageJsonDependencies = async (
     packageJsonPath,
     JSON.stringify(parsedPackageJson, null, 2)
   );
+  await fs.appendFile(packageJsonPath, '\n');
 };
 
 /**

@@ -110,7 +110,8 @@ tree:
   children:
     child:
       pipeline:
-        - sampler
+        compute:
+          - sampler
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 1 # Secs
@@ -136,7 +137,8 @@ tree:
   children:
     child:
       pipeline:
-        - sampler
+        compute:
+          - sampler
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 1 # Secs

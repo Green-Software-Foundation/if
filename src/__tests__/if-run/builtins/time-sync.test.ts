@@ -7,6 +7,7 @@ import {storeAggregationMetrics} from '../../../if-run/lib/aggregate';
 import {TimeSync} from '../../../if-run/builtins/time-sync';
 
 import {STRINGS} from '../../../if-run/config';
+import {AGGREGATION_METHODS} from '../../../if-run/types/aggregation';
 
 Settings.defaultZone = 'utc';
 const {
@@ -56,16 +57,18 @@ jest.mock('luxon', () => {
 describe('builtins/time-sync:', () => {
   beforeAll(() => {
     const metricStorage: AggregationParams = {
-      metrics: {
-        carbon: {method: 'sum'},
-        'cpu/utilization': {method: 'sum'},
-        'time-reserved': {method: 'avg'},
-        'resources-total': {method: 'none'},
-      },
+      metrics: [
+        'carbon',
+        'cpu/utilization',
+        'time-reserved',
+        'resources-total',
+      ],
       type: 'horizontal',
     };
-
-    storeAggregationMetrics(metricStorage);
+    const convertedMetrics = metricStorage.metrics.map((metric: string) => ({
+      [metric]: AGGREGATION_METHODS[2],
+    }));
+    storeAggregationMetrics(...convertedMetrics);
   });
 
   describe('time-sync: ', () => {
@@ -479,6 +482,9 @@ describe('builtins/time-sync:', () => {
           interval: 1,
           'allow-padding': true,
         };
+
+        storeAggregationMetrics({carbon: 'sum'});
+
         const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         const result = await timeModel.execute([
@@ -591,6 +597,10 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
+
+        storeAggregationMetrics({'time-reserved': 'avg'});
+        storeAggregationMetrics({'resources-total': 'sum'});
+
         const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         const result = await timeModel.execute([
@@ -706,6 +716,9 @@ describe('builtins/time-sync:', () => {
           interval: 5,
           'allow-padding': true,
         };
+
+        storeAggregationMetrics({'resources-total': 'none'});
+
         const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
         const result = await timeModel.execute([

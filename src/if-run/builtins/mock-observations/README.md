@@ -82,7 +82,7 @@ const result = await mockObservations.execute([]);
 
 ### manifest Example
 
-IF users will typically call the plugin as part of a pipeline defined in a `manifest` file. In this case, instantiating the plugin is handled by `ie` and does not have to be done explicitly by the user. The following is an example `manifest` that calls `mock-observation`:
+IF users will typically call the plugin as part of a pipeline defined in a `manifest` file. In this case, instantiating the plugin is handled by `if-run` and does not have to be done explicitly by the user. The following is an example `manifest` that calls `mock-observation`:
 
 ```yaml
 name: mock-observation-demo
@@ -119,7 +119,8 @@ tree:
   children:
     child:
       pipeline:
-        - mock-observations
+        observe:
+          - mock-observations
       inputs:
 ```
 

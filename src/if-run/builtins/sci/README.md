@@ -97,8 +97,8 @@ tree:
   children:
     child:
       pipeline:
-        - sci
-      config:
+        compute:
+          - sci
       inputs:
         - timestamp: 2023-07-06T00:00
           carbon: 5

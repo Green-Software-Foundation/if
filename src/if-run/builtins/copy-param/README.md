@@ -125,7 +125,8 @@ tree:
   children:
     child-1:
       pipeline:
-        - copy-param
+        compute:
+          - copy-param
       inputs:
         - timestamp: '2023-12-12T00:00:00.000Z'
           original: 'hello'

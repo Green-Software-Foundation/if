@@ -99,9 +99,8 @@ tree:
   children:
     child:
       pipeline:
-        - regex
-      config:
-        regex:
+        compute:
+          - regex
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600

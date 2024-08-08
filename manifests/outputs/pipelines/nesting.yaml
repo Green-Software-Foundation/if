@@ -6,8 +6,7 @@ tags:
   category: on-premise
 aggregation:
   metrics:
-    carbon:
-      method: sum
+    - carbon
   type: both
 initialize:
   plugins:
@@ -21,7 +20,7 @@ initialize:
           - 10
           - 50
           - 100
-        'y':
+        "y":
           - 0.12
           - 0.32
           - 0.75
@@ -153,12 +152,27 @@ initialize:
           - carbon-operational
           - carbon-embodied
         output-parameter: carbon
+      parameter-metadata:
+        inputs:
+          carbon-operational:
+            description: Operational carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+          carbon-embodied:
+            description: Embodied carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+        outputs:
+          carbon:
+            description: Total carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
     time-sync:
       path: builtin
       method: TimeSync
       global-config:
-        start-time: '2023-12-12T00:00:00.000Z'
-        end-time: '2023-12-12T00:01:00.000Z'
+        start-time: "2023-12-12T00:00:00.000Z"
+        end-time: "2023-12-12T00:01:00.000Z"
         interval: 5
         allow-padding: true
       parameter-metadata:
@@ -196,20 +210,20 @@ execution:
   environment:
     if-version: 0.5.0
     os: macOS
-    os-version: '14.5'
+    os-version: "14.5"
     node-version: 18.14.2
     date-time: 2024-07-31T13:17:29.944Z (UTC)
     dependencies:
-      - '@babel/core@7.22.10'
-      - '@babel/preset-typescript@7.23.3'
-      - '@commitlint/cli@18.6.0'
-      - '@commitlint/config-conventional@18.6.0'
-      - '@grnsft/if-core@0.0.16'
-      - '@jest/globals@29.7.0'
-      - '@types/jest@29.5.8'
-      - '@types/js-yaml@4.0.9'
-      - '@types/luxon@3.4.2'
-      - '@types/node@20.9.0'
+      - "@babel/core@7.22.10"
+      - "@babel/preset-typescript@7.23.3"
+      - "@commitlint/cli@18.6.0"
+      - "@commitlint/config-conventional@18.6.0"
+      - "@grnsft/if-core@0.0.16"
+      - "@jest/globals@29.7.0"
+      - "@types/jest@29.5.8"
+      - "@types/js-yaml@4.0.9"
+      - "@types/luxon@3.4.2"
+      - "@types/node@20.9.0"
       - axios-mock-adapter@1.22.0
       - axios@1.7.2
       - cross-env@7.0.3
@@ -256,28 +270,28 @@ tree:
           - time-sync
           - sci
       inputs:
-        - timestamp: '2023-12-12T00:00:00.000Z'
+        - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 1
           cpu/utilization: 50
           network/energy: 0.000001
           requests: 50
-        - timestamp: '2023-12-12T00:00:01.000Z'
+        - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
           requests: 60
-        - timestamp: '2023-12-12T00:00:06.000Z'
+        - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
           requests: 70
-        - timestamp: '2023-12-12T00:00:13.000Z'
+        - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -285,7 +299,7 @@ tree:
           network/energy: 0.000001
           requests: 55
       outputs:
-        - timestamp: '2023-12-12T00:00:00.000Z'
+        - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 5
@@ -309,7 +323,7 @@ tree:
           carbon-operational: 0.006833333333333334
           carbon: 0.0068434614408929475
           sci: 0.00006983123919278518
-        - timestamp: '2023-12-12T00:00:05.000Z'
+        - timestamp: "2023-12-12T00:00:05.000Z"
           duration: 5
           cpu/utilization: 13
           cloud/instance-type: A1
@@ -333,7 +347,7 @@ tree:
           carbon-operational: 0.005340277777777777
           carbon: 0.005350405885337391
           sci: 0.0001028924208718729
-        - timestamp: '2023-12-12T00:00:10.000Z'
+        - timestamp: "2023-12-12T00:00:10.000Z"
           duration: 5
           cpu/utilization: 12
           cloud/instance-type: A1
@@ -357,7 +371,7 @@ tree:
           carbon-operational: 0.005190972222222222
           carbon: 0.0052011003297818366
           sci: 0.0001544881286073813
-        - timestamp: '2023-12-12T00:00:15.000Z'
+        - timestamp: "2023-12-12T00:00:15.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -381,7 +395,7 @@ tree:
           carbon-operational: 0.005190972222222222
           carbon: 0.005201100329781837
           sci: 0.0005673927632489277
-        - timestamp: '2023-12-12T00:00:20.000Z'
+        - timestamp: "2023-12-12T00:00:20.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -405,7 +419,7 @@ tree:
           carbon-operational: 0.005190972222222222
           carbon: 0.005201100329781837
           sci: 0.0005673927632489277
-        - timestamp: '2023-12-12T00:00:25.000Z'
+        - timestamp: "2023-12-12T00:00:25.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -429,7 +443,7 @@ tree:
           carbon-operational: 0.005190972222222222
           carbon: 0.005201100329781837
           sci: 0.0005673927632489277
-        - timestamp: '2023-12-12T00:00:30.000Z'
+        - timestamp: "2023-12-12T00:00:30.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -453,7 +467,7 @@ tree:
           carbon-operational: 0.005190972222222222
           carbon: 0.005201100329781837
           sci: 0.0005673927632489277
-        - timestamp: '2023-12-12T00:00:35.000Z'
+        - timestamp: "2023-12-12T00:00:35.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -477,7 +491,7 @@ tree:
           carbon-operational: 0.005190972222222222
           carbon: 0.005201100329781837
           sci: 0.0005673927632489277
-        - timestamp: '2023-12-12T00:00:40.000Z'
+        - timestamp: "2023-12-12T00:00:40.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -501,7 +515,7 @@ tree:
           carbon-operational: 0.0031145833333333334
           carbon: 0.003120660197869102
           sci: 0.0005673927632489276
-        - timestamp: '2023-12-12T00:00:45.000Z'
+        - timestamp: "2023-12-12T00:00:45.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -525,7 +539,7 @@ tree:
           carbon-operational: 0
           carbon: 0
           sci: 0
-        - timestamp: '2023-12-12T00:00:50.000Z'
+        - timestamp: "2023-12-12T00:00:50.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -549,7 +563,7 @@ tree:
           carbon-operational: 0
           carbon: 0
           sci: 0
-        - timestamp: '2023-12-12T00:00:55.000Z'
+        - timestamp: "2023-12-12T00:00:55.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -573,7 +587,7 @@ tree:
           carbon-operational: 0
           carbon: 0
           sci: 0
-        - timestamp: '2023-12-12T00:01:00.000Z'
+        - timestamp: "2023-12-12T00:01:00.000Z"
           duration: 1
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -609,40 +623,41 @@ tree:
         vcpus-allocated: 1
         vcpus-total: 8
       pipeline:
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci
       inputs:
-        - timestamp: '2023-12-12T00:00:00.000Z'
+        - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 1
           cpu/utilization: 50
           network/energy: 0.000001
           requests: 10
-        - timestamp: '2023-12-12T00:00:01.000Z'
+        - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
           requests: 90
-        - timestamp: '2023-12-12T00:00:06.000Z'
+        - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
           requests: 30
-        - timestamp: '2023-12-12T00:00:13.000Z'
+        - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -650,7 +665,7 @@ tree:
           network/energy: 0.000001
           requests: 22
       outputs:
-        - timestamp: '2023-12-12T00:00:00.000Z'
+        - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 5
@@ -674,7 +689,7 @@ tree:
           carbon-operational: 0.006833333333333334
           carbon: 0.0068434614408929475
           sci: 0.0000834568468401579
-        - timestamp: '2023-12-12T00:00:05.000Z'
+        - timestamp: "2023-12-12T00:00:05.000Z"
           duration: 5
           cpu/utilization: 13
           cloud/instance-type: A1
@@ -698,7 +713,7 @@ tree:
           carbon-operational: 0.005340277777777777
           carbon: 0.005350405885337391
           sci: 0.00015224732194049487
-        - timestamp: '2023-12-12T00:00:10.000Z'
+        - timestamp: "2023-12-12T00:00:10.000Z"
           duration: 5
           cpu/utilization: 12
           cloud/instance-type: A1
@@ -722,7 +737,7 @@ tree:
           carbon-operational: 0.005190972222222222
           carbon: 0.0052011003297818366
           sci: 0.000363108733129716
-        - timestamp: '2023-12-12T00:00:15.000Z'
+        - timestamp: "2023-12-12T00:00:15.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -746,7 +761,7 @@ tree:
           carbon-operational: 0.005190972222222222
           carbon: 0.005201100329781837
           sci: 0.0014184819081223194
-        - timestamp: '2023-12-12T00:00:20.000Z'
+        - timestamp: "2023-12-12T00:00:20.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -770,7 +785,7 @@ tree:
           carbon-operational: 0.005190972222222222
           carbon: 0.005201100329781837
           sci: 0.0014184819081223194
-        - timestamp: '2023-12-12T00:00:25.000Z'
+        - timestamp: "2023-12-12T00:00:25.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -794,7 +809,7 @@ tree:
           carbon-operational: 0.005190972222222222
           carbon: 0.005201100329781837
           sci: 0.0014184819081223194
-        - timestamp: '2023-12-12T00:00:30.000Z'
+        - timestamp: "2023-12-12T00:00:30.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -818,7 +833,7 @@ tree:
           carbon-operational: 0.005190972222222222
           carbon: 0.005201100329781837
           sci: 0.0014184819081223194
-        - timestamp: '2023-12-12T00:00:35.000Z'
+        - timestamp: "2023-12-12T00:00:35.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -842,7 +857,7 @@ tree:
           carbon-operational: 0.005190972222222222
           carbon: 0.005201100329781837
           sci: 0.0014184819081223194
-        - timestamp: '2023-12-12T00:00:40.000Z'
+        - timestamp: "2023-12-12T00:00:40.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -866,7 +881,7 @@ tree:
           carbon-operational: 0.0031145833333333334
           carbon: 0.003120660197869102
           sci: 0.0014184819081223194
-        - timestamp: '2023-12-12T00:00:45.000Z'
+        - timestamp: "2023-12-12T00:00:45.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -890,7 +905,7 @@ tree:
           carbon-operational: 0
           carbon: 0
           sci: 0
-        - timestamp: '2023-12-12T00:00:50.000Z'
+        - timestamp: "2023-12-12T00:00:50.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -914,7 +929,7 @@ tree:
           carbon-operational: 0
           carbon: 0
           sci: 0
-        - timestamp: '2023-12-12T00:00:55.000Z'
+        - timestamp: "2023-12-12T00:00:55.000Z"
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -938,7 +953,7 @@ tree:
           carbon-operational: 0
           carbon: 0
           sci: 0
-        - timestamp: '2023-12-12T00:01:00.000Z'
+        - timestamp: "2023-12-12T00:01:00.000Z"
           duration: 1
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -976,40 +991,41 @@ tree:
             vcpus-allocated: 1
             vcpus-total: 8
           pipeline:
-            - interpolate
-            - cpu-factor-to-wattage
-            - wattage-times-duration
-            - wattage-to-energy-kwh
-            - calculate-vcpu-ratio
-            - correct-cpu-energy-for-vcpu-ratio
-            - sci-embodied
-            - operational-carbon
-            - sum-carbon
-            - time-sync
-            - sci
+            compute:
+              - interpolate
+              - cpu-factor-to-wattage
+              - wattage-times-duration
+              - wattage-to-energy-kwh
+              - calculate-vcpu-ratio
+              - correct-cpu-energy-for-vcpu-ratio
+              - sci-embodied
+              - operational-carbon
+              - sum-carbon
+              - time-sync
+              - sci
           inputs:
-            - timestamp: '2023-12-12T00:00:00.000Z'
+            - timestamp: "2023-12-12T00:00:00.000Z"
               cloud/instance-type: A1
               cloud/region: uk-west
               duration: 1
               cpu/utilization: 50
               network/energy: 0.000001
               requests: 50
-            - timestamp: '2023-12-12T00:00:01.000Z'
+            - timestamp: "2023-12-12T00:00:01.000Z"
               duration: 5
               cpu/utilization: 20
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 0.000001
               requests: 65
-            - timestamp: '2023-12-12T00:00:06.000Z'
+            - timestamp: "2023-12-12T00:00:06.000Z"
               duration: 7
               cpu/utilization: 15
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 0.000001
               requests: 80
-            - timestamp: '2023-12-12T00:00:13.000Z'
+            - timestamp: "2023-12-12T00:00:13.000Z"
               duration: 30
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1017,7 +1033,7 @@ tree:
               network/energy: 0.000001
               requests: 40
           outputs:
-            - timestamp: '2023-12-12T00:00:00.000Z'
+            - timestamp: "2023-12-12T00:00:00.000Z"
               cloud/instance-type: A1
               cloud/region: uk-west
               duration: 5
@@ -1041,7 +1057,7 @@ tree:
               carbon-operational: 0.006833333333333334
               carbon: 0.0068434614408929475
               sci: 0.00006709275922444067
-            - timestamp: '2023-12-12T00:00:05.000Z'
+            - timestamp: "2023-12-12T00:00:05.000Z"
               duration: 5
               cpu/utilization: 13
               cloud/instance-type: A1
@@ -1065,7 +1081,7 @@ tree:
               carbon-operational: 0.005340277777777777
               carbon: 0.005350405885337391
               sci: 0.0000911261343001502
-            - timestamp: '2023-12-12T00:00:10.000Z'
+            - timestamp: "2023-12-12T00:00:10.000Z"
               duration: 5
               cpu/utilization: 12
               cloud/instance-type: A1
@@ -1089,7 +1105,7 @@ tree:
               carbon-operational: 0.005190972222222222
               carbon: 0.0052011003297818366
               sci: 0.00014075142645028166
-            - timestamp: '2023-12-12T00:00:15.000Z'
+            - timestamp: "2023-12-12T00:00:15.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1113,7 +1129,7 @@ tree:
               carbon-operational: 0.005190972222222222
               carbon: 0.005201100329781837
               sci: 0.0007801650494672756
-            - timestamp: '2023-12-12T00:00:20.000Z'
+            - timestamp: "2023-12-12T00:00:20.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1137,7 +1153,7 @@ tree:
               carbon-operational: 0.005190972222222222
               carbon: 0.005201100329781837
               sci: 0.0007801650494672756
-            - timestamp: '2023-12-12T00:00:25.000Z'
+            - timestamp: "2023-12-12T00:00:25.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1161,7 +1177,7 @@ tree:
               carbon-operational: 0.005190972222222222
               carbon: 0.005201100329781837
               sci: 0.0007801650494672756
-            - timestamp: '2023-12-12T00:00:30.000Z'
+            - timestamp: "2023-12-12T00:00:30.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1185,7 +1201,7 @@ tree:
               carbon-operational: 0.005190972222222222
               carbon: 0.005201100329781837
               sci: 0.0007801650494672756
-            - timestamp: '2023-12-12T00:00:35.000Z'
+            - timestamp: "2023-12-12T00:00:35.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1209,7 +1225,7 @@ tree:
               carbon-operational: 0.005190972222222222
               carbon: 0.005201100329781837
               sci: 0.0007801650494672756
-            - timestamp: '2023-12-12T00:00:40.000Z'
+            - timestamp: "2023-12-12T00:00:40.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1233,7 +1249,7 @@ tree:
               carbon-operational: 0.0031145833333333334
               carbon: 0.003120660197869102
               sci: 0.0007801650494672755
-            - timestamp: '2023-12-12T00:00:45.000Z'
+            - timestamp: "2023-12-12T00:00:45.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1257,7 +1273,7 @@ tree:
               carbon-operational: 0
               carbon: 0
               sci: 0
-            - timestamp: '2023-12-12T00:00:50.000Z'
+            - timestamp: "2023-12-12T00:00:50.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1281,7 +1297,7 @@ tree:
               carbon-operational: 0
               carbon: 0
               sci: 0
-            - timestamp: '2023-12-12T00:00:55.000Z'
+            - timestamp: "2023-12-12T00:00:55.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1305,7 +1321,7 @@ tree:
               carbon-operational: 0
               carbon: 0
               sci: 0
-            - timestamp: '2023-12-12T00:01:00.000Z'
+            - timestamp: "2023-12-12T00:01:00.000Z"
               duration: 1
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1341,40 +1357,41 @@ tree:
             vcpus-allocated: 1
             vcpus-total: 8
           pipeline:
-            - interpolate
-            - cpu-factor-to-wattage
-            - wattage-times-duration
-            - wattage-to-energy-kwh
-            - calculate-vcpu-ratio
-            - correct-cpu-energy-for-vcpu-ratio
-            - sci-embodied
-            - operational-carbon
-            - sum-carbon
-            - time-sync
-            - sci
+            compute:
+              - interpolate
+              - cpu-factor-to-wattage
+              - wattage-times-duration
+              - wattage-to-energy-kwh
+              - calculate-vcpu-ratio
+              - correct-cpu-energy-for-vcpu-ratio
+              - sci-embodied
+              - operational-carbon
+              - sum-carbon
+              - time-sync
+              - sci
           inputs:
-            - timestamp: '2023-12-12T00:00:00.000Z'
+            - timestamp: "2023-12-12T00:00:00.000Z"
               cloud/instance-type: A1
               cloud/region: uk-west
               duration: 1
               cpu/utilization: 50
               network/energy: 0.000001
               requests: 50
-            - timestamp: '2023-12-12T00:00:01.000Z'
+            - timestamp: "2023-12-12T00:00:01.000Z"
               duration: 5
               cpu/utilization: 20
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 0.000001
               requests: 50
-            - timestamp: '2023-12-12T00:00:06.000Z'
+            - timestamp: "2023-12-12T00:00:06.000Z"
               duration: 7
               cpu/utilization: 15
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 0.000001
               requests: 60
-            - timestamp: '2023-12-12T00:00:13.000Z'
+            - timestamp: "2023-12-12T00:00:13.000Z"
               duration: 30
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1382,7 +1399,7 @@ tree:
               network/energy: 0.000001
               requests: 40
           outputs:
-            - timestamp: '2023-12-12T00:00:00.000Z'
+            - timestamp: "2023-12-12T00:00:00.000Z"
               cloud/instance-type: A1
               cloud/region: uk-west
               duration: 5
@@ -1406,7 +1423,7 @@ tree:
               carbon-operational: 0.006833333333333334
               carbon: 0.0068434614408929475
               sci: 0.00007603846045436609
-            - timestamp: '2023-12-12T00:00:05.000Z'
+            - timestamp: "2023-12-12T00:00:05.000Z"
               duration: 5
               cpu/utilization: 13
               cloud/instance-type: A1
@@ -1430,7 +1447,7 @@ tree:
               carbon-operational: 0.005340277777777777
               carbon: 0.005350405885337391
               sci: 0.00012081561676568304
-            - timestamp: '2023-12-12T00:00:10.000Z'
+            - timestamp: "2023-12-12T00:00:10.000Z"
               duration: 5
               cpu/utilization: 12
               cloud/instance-type: A1
@@ -1454,7 +1471,7 @@ tree:
               carbon-operational: 0.005190972222222222
               carbon: 0.0052011003297818366
               sci: 0.0001832602465191587
-            - timestamp: '2023-12-12T00:00:15.000Z'
+            - timestamp: "2023-12-12T00:00:15.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1478,7 +1495,7 @@ tree:
               carbon-operational: 0.005190972222222222
               carbon: 0.005201100329781837
               sci: 0.0007801650494672756
-            - timestamp: '2023-12-12T00:00:20.000Z'
+            - timestamp: "2023-12-12T00:00:20.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1502,7 +1519,7 @@ tree:
               carbon-operational: 0.005190972222222222
               carbon: 0.005201100329781837
               sci: 0.0007801650494672756
-            - timestamp: '2023-12-12T00:00:25.000Z'
+            - timestamp: "2023-12-12T00:00:25.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1526,7 +1543,7 @@ tree:
               carbon-operational: 0.005190972222222222
               carbon: 0.005201100329781837
               sci: 0.0007801650494672756
-            - timestamp: '2023-12-12T00:00:30.000Z'
+            - timestamp: "2023-12-12T00:00:30.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1550,7 +1567,7 @@ tree:
               carbon-operational: 0.005190972222222222
               carbon: 0.005201100329781837
               sci: 0.0007801650494672756
-            - timestamp: '2023-12-12T00:00:35.000Z'
+            - timestamp: "2023-12-12T00:00:35.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1574,7 +1591,7 @@ tree:
               carbon-operational: 0.005190972222222222
               carbon: 0.005201100329781837
               sci: 0.0007801650494672756
-            - timestamp: '2023-12-12T00:00:40.000Z'
+            - timestamp: "2023-12-12T00:00:40.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1598,7 +1615,7 @@ tree:
               carbon-operational: 0.0031145833333333334
               carbon: 0.003120660197869102
               sci: 0.0007801650494672755
-            - timestamp: '2023-12-12T00:00:45.000Z'
+            - timestamp: "2023-12-12T00:00:45.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1622,7 +1639,7 @@ tree:
               carbon-operational: 0
               carbon: 0
               sci: 0
-            - timestamp: '2023-12-12T00:00:50.000Z'
+            - timestamp: "2023-12-12T00:00:50.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1646,7 +1663,7 @@ tree:
               carbon-operational: 0
               carbon: 0
               sci: 0
-            - timestamp: '2023-12-12T00:00:55.000Z'
+            - timestamp: "2023-12-12T00:00:55.000Z"
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1670,7 +1687,7 @@ tree:
               carbon-operational: 0
               carbon: 0
               sci: 0
-            - timestamp: '2023-12-12T00:01:00.000Z'
+            - timestamp: "2023-12-12T00:01:00.000Z"
               duration: 1
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1698,85 +1715,85 @@ tree:
             carbon: 0.04652112950279046
       outputs:
         - carbon: 0.013686922881785895
-          timestamp: '2023-12-12T00:00:00.000Z'
+          timestamp: "2023-12-12T00:00:00.000Z"
           duration: 5
         - carbon: 0.010700811770674782
-          timestamp: '2023-12-12T00:00:05.000Z'
+          timestamp: "2023-12-12T00:00:05.000Z"
           duration: 5
         - carbon: 0.010402200659563673
-          timestamp: '2023-12-12T00:00:10.000Z'
+          timestamp: "2023-12-12T00:00:10.000Z"
           duration: 5
         - carbon: 0.010402200659563675
-          timestamp: '2023-12-12T00:00:15.000Z'
+          timestamp: "2023-12-12T00:00:15.000Z"
           duration: 5
         - carbon: 0.010402200659563675
-          timestamp: '2023-12-12T00:00:20.000Z'
+          timestamp: "2023-12-12T00:00:20.000Z"
           duration: 5
         - carbon: 0.010402200659563675
-          timestamp: '2023-12-12T00:00:25.000Z'
+          timestamp: "2023-12-12T00:00:25.000Z"
           duration: 5
         - carbon: 0.010402200659563675
-          timestamp: '2023-12-12T00:00:30.000Z'
+          timestamp: "2023-12-12T00:00:30.000Z"
           duration: 5
         - carbon: 0.010402200659563675
-          timestamp: '2023-12-12T00:00:35.000Z'
+          timestamp: "2023-12-12T00:00:35.000Z"
           duration: 5
         - carbon: 0.006241320395738204
-          timestamp: '2023-12-12T00:00:40.000Z'
+          timestamp: "2023-12-12T00:00:40.000Z"
           duration: 5
         - carbon: 0
-          timestamp: '2023-12-12T00:00:45.000Z'
+          timestamp: "2023-12-12T00:00:45.000Z"
           duration: 5
         - carbon: 0
-          timestamp: '2023-12-12T00:00:50.000Z'
+          timestamp: "2023-12-12T00:00:50.000Z"
           duration: 5
         - carbon: 0
-          timestamp: '2023-12-12T00:00:55.000Z'
+          timestamp: "2023-12-12T00:00:55.000Z"
           duration: 5
         - carbon: 0
-          timestamp: '2023-12-12T00:01:00.000Z'
+          timestamp: "2023-12-12T00:01:00.000Z"
           duration: 1
       aggregated:
         carbon: 0.09304225900558093
   outputs:
     - carbon: 0.02737384576357179
-      timestamp: '2023-12-12T00:00:00.000Z'
+      timestamp: "2023-12-12T00:00:00.000Z"
       duration: 5
     - carbon: 0.021401623541349564
-      timestamp: '2023-12-12T00:00:05.000Z'
+      timestamp: "2023-12-12T00:00:05.000Z"
       duration: 5
     - carbon: 0.020804401319127346
-      timestamp: '2023-12-12T00:00:10.000Z'
+      timestamp: "2023-12-12T00:00:10.000Z"
       duration: 5
     - carbon: 0.02080440131912735
-      timestamp: '2023-12-12T00:00:15.000Z'
+      timestamp: "2023-12-12T00:00:15.000Z"
       duration: 5
     - carbon: 0.02080440131912735
-      timestamp: '2023-12-12T00:00:20.000Z'
+      timestamp: "2023-12-12T00:00:20.000Z"
       duration: 5
     - carbon: 0.02080440131912735
-      timestamp: '2023-12-12T00:00:25.000Z'
+      timestamp: "2023-12-12T00:00:25.000Z"
       duration: 5
     - carbon: 0.02080440131912735
-      timestamp: '2023-12-12T00:00:30.000Z'
+      timestamp: "2023-12-12T00:00:30.000Z"
       duration: 5
     - carbon: 0.02080440131912735
-      timestamp: '2023-12-12T00:00:35.000Z'
+      timestamp: "2023-12-12T00:00:35.000Z"
       duration: 5
     - carbon: 0.012482640791476408
-      timestamp: '2023-12-12T00:00:40.000Z'
+      timestamp: "2023-12-12T00:00:40.000Z"
       duration: 5
     - carbon: 0
-      timestamp: '2023-12-12T00:00:45.000Z'
+      timestamp: "2023-12-12T00:00:45.000Z"
       duration: 5
     - carbon: 0
-      timestamp: '2023-12-12T00:00:50.000Z'
+      timestamp: "2023-12-12T00:00:50.000Z"
       duration: 5
     - carbon: 0
-      timestamp: '2023-12-12T00:00:55.000Z'
+      timestamp: "2023-12-12T00:00:55.000Z"
       duration: 5
     - carbon: 0
-      timestamp: '2023-12-12T00:01:00.000Z'
+      timestamp: "2023-12-12T00:01:00.000Z"
       duration: 1
   aggregated:
     carbon: 0.18608451801116185

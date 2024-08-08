@@ -3,8 +3,7 @@ description: a full pipeline with the aggregate feature enabled
 tags: null
 aggregation:
   metrics:
-    carbon:
-      method: sum
+    - carbon
   type: both
 initialize:
   plugins:
@@ -159,6 +158,21 @@ initialize:
           - carbon-operational
           - carbon-embodied
         output-parameter: carbon
+      parameter-metadata:
+        inputs:
+          carbon-operational:
+            description: Operational carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+          carbon-embodied:
+            description: Embodied carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+        outputs:
+          carbon:
+            description: Total carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
     time-sync:
       path: builtin
       method: TimeSync
@@ -237,22 +251,21 @@ tree:
   children:
     child-1:
       pipeline:
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci  
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800
@@ -590,22 +603,21 @@ tree:
         carbon: 0.04532668505834602
     child-2:
       pipeline:
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800

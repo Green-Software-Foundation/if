@@ -52,8 +52,9 @@ cpu-cores-available,cpu-cores-utilized,cpu-manufacturer,cpu-model-name,cpu-tdp,g
   tree:
     children:
       front-end:
-        pipeline: 
-          - boavizta-cpu
+        pipeline:
+          compute:
+            - boavizta-cpu
         config:
           boavizta-cpu:
             core-units: 24
@@ -107,6 +108,9 @@ export const writeFile = async (pathToFile: string, content: string) => {
     expect(content).toBe(mockObject);
   }
 };
+
+export const appendFile = (file: string, appendContent: string) =>
+  `${file}${appendContent}`;
 
 export const stat = async (filePath: string) => {
   if (filePath === 'true') {

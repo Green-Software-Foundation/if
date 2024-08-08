@@ -108,9 +108,8 @@ tree:
   children:
     child:
       pipeline:
-        - divide
-      config:
-        divide:
+        compute:
+          - divide
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600

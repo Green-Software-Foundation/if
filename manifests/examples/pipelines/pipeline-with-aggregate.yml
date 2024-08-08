@@ -3,8 +3,7 @@ description: a full pipeline with the aggregate feature enabled
 tags:
 aggregation:
   metrics:
-    "carbon":
-      method: sum
+    - carbon
   type: "both"
 initialize:
   plugins:
@@ -145,6 +144,12 @@ initialize:
           - carbon-operational
           - carbon-embodied
         output-parameter: carbon
+      parameter-metadata:
+        outputs:
+          carbon:
+            unit: gCO2eq
+            description: product of carbon
+            aggregation-method: sum
     "time-sync":
       method: TimeSync
       path: "builtin"
