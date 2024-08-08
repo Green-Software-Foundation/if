@@ -68,6 +68,18 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
+
+```yaml
+cloud-metadata:
+  method: CSVLookup
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
+```
+
 ### Inputs
 
 There are no strict requirements on input for this plugin because they depend upon the contents of the target CSV and your input data at the time the CSV lookup is invoked. Please make sure you are requesting data from columns that exist in the target csv file and that your query values are available in your `input` data.
@@ -99,6 +111,8 @@ const globalConfig = {
   },
   output: ['cpu-tdp', 'tdp'],
 };
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
 const csvLookup = CSVLookup(globalConfig);
 
 const input = [
@@ -131,6 +145,8 @@ initialize:
           cloud-provider: 'cloud/provider'
           cloud-region: 'cloud/region'
         output: '*'
+      mapping:
+        cloud/region: cloud/area
 tree:
   children:
     child:

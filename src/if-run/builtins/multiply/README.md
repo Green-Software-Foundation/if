@@ -30,6 +30,18 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
+
+```yaml
+multiply:
+  method: Multiply
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
+```
+
 ### Inputs
 
 All of `input-parameters` must be available in the input array.
@@ -51,12 +63,14 @@ To run the plugin, you must first create an instance of `Multiply`. Then, you ca
 ```typescript
 import {Multiply} from 'builtins';
 
-const config = {
+const globalConfig = {
   inputParameters: ['cpu/energy', 'network/energy'],
   outputParameter: 'energy-product',
 };
 
-const multiply = Multiply(config, parametersMetadata);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const multiply = Multiply(globalConfig, parametersMetadata, mapping);
 const result = await multiply.execute([
   {
     duration: 3600,
@@ -69,7 +83,7 @@ const result = await multiply.execute([
 
 ## Example manifest
 
-IF users will typically call the plugin as part of a pipeline defined in a manifest file. In this case, instantiating the plugin is handled by `ie` and does not have to be done explicitly by the user. The following is an example manifest that calls `multiply`:
+IF users will typically call the plugin as part of a pipeline defined in a manifest file. In this case, instantiating the plugin is handled by `if-run` and does not have to be done explicitly by the user. The following is an example manifest that calls `multiply`:
 
 ```yaml
 name: multiply-demo
@@ -83,6 +97,9 @@ initialize:
       global-config:
         input-parameters: ['cpu/energy', 'network/energy']
         output-parameter: 'energy-product'
+      mapping:
+        cpu/energy: energy-from-cpu
+        network/energy: energy-from-network
 tree:
   children:
     child:

@@ -5,9 +5,11 @@ import {
   PluginParams,
   ConfigParams,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -16,7 +18,8 @@ const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
 
 export const Regex = (
   globalConfig: ConfigParams,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -66,10 +69,12 @@ export const Regex = (
         validateSingleInput(input, parameter)
       );
 
-      return {
+      const result = {
         ...input,
         [output]: extractMatching(safeInput, parameter, match),
       };
+
+      return mapOutput(result, mapping);
     });
   };
 

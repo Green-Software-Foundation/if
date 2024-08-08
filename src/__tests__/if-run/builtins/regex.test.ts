@@ -18,7 +18,7 @@ describe('builtins/regex: ', () => {
       inputs: {},
       outputs: {},
     };
-    const regex = Regex(globalConfig, parametersMetadata);
+    const regex = Regex(globalConfig, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -53,19 +53,50 @@ describe('builtins/regex: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('successfully applies regex strategy with multiple matches', async () => {
+      it('successfully applies regex strategy with multiple matches.', async () => {
         const globalConfig = {
           parameter: 'cloud/instance-type',
           match: '/(?<=_)[^_]+?(?=_|$)/g',
           output: 'cloud/instance-type',
         };
-        const regex = Regex(globalConfig, parametersMetadata);
+        const regex = Regex(globalConfig, parametersMetadata, {});
 
         const expectedResult = [
           {
             timestamp: '2023-08-06T00:00',
             duration: 3600,
             'cloud/instance-type': 'DS1 v2',
+          },
+        ];
+
+        const result = await regex.execute([
+          {
+            timestamp: '2023-08-06T00:00',
+            duration: 3600,
+            'cloud/instance-type': 'Standard_DS1_v2',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('successfully applies regex when `mapping` has valid data.', async () => {
+        const globalConfig = {
+          parameter: 'cloud/instance-type',
+          match: '/(?<=_)[^_]+?(?=_|$)/g',
+          output: 'cloud/instance-type',
+        };
+
+        const mapping = {
+          'cloud/instance-type': 'instance-type',
+        };
+        const regex = Regex(globalConfig, parametersMetadata, mapping);
+
+        const expectedResult = [
+          {
+            timestamp: '2023-08-06T00:00',
+            duration: 3600,
+            'instance-type': 'DS1 v2',
           },
         ];
 
@@ -90,7 +121,7 @@ describe('builtins/regex: ', () => {
           match: '[^,]+/',
           output: 'cpu/name',
         };
-        const regex = Regex(globalConfig, parametersMetadata);
+        const regex = Regex(globalConfig, parametersMetadata, {});
 
         const expectedResult = [
           {
@@ -121,7 +152,7 @@ describe('builtins/regex: ', () => {
           match: '^(^:)+',
           output: 'cpu/name',
         };
-        const regex = Regex(globalConfig, parametersMetadata);
+        const regex = Regex(globalConfig, parametersMetadata, {});
 
         expect.assertions(1);
 
@@ -144,7 +175,7 @@ describe('builtins/regex: ', () => {
 
       it('throws an error on missing global config.', async () => {
         const config = undefined;
-        const regex = Regex(config!, parametersMetadata);
+        const regex = Regex(config!, parametersMetadata, {});
 
         expect.assertions(1);
 

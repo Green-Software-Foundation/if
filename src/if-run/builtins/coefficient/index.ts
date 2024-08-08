@@ -3,11 +3,13 @@ import {ERRORS} from '@grnsft/if-core/utils';
 import {
   CoefficientConfig,
   ExecutePlugin,
+  MappingParams,
   PluginParametersMetadata,
   PluginParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -16,7 +18,8 @@ const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
 export const Coefficient = (
   globalConfig: CoefficientConfig,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -48,10 +51,12 @@ export const Coefficient = (
     return inputs.map(input => {
       validateSingleInput(input, inputParameter);
 
-      return {
+      const output = {
         ...input,
         [outputParameter]: calculateProduct(input, inputParameter, coefficient),
       };
+
+      return mapOutput(output, mapping);
     });
   };
 

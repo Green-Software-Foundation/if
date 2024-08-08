@@ -7,11 +7,13 @@ import {parse} from 'csv-parse/sync';
 import {ERRORS} from '@grnsft/if-core/utils';
 import {
   ExecutePlugin,
+  MappingParams,
   PluginParametersMetadata,
   PluginParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -34,7 +36,8 @@ const {
 
 export const CSVLookup = (
   globalConfig: any,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -219,10 +222,12 @@ export const CSVLookup = (
         throw new QueryDataNotFoundError(NO_QUERY_DATA);
       }
 
-      return {
+      const result = {
         ...input,
         ...filterOutput(relatedData, {output, query}),
       };
+
+      return mapOutput(result, mapping);
     });
   };
 

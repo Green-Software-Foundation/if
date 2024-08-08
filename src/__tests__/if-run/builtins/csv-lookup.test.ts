@@ -19,13 +19,13 @@ const {
 const {MISSING_GLOBAL_CONFIG, MISSING_CSV_COLUMN, NO_QUERY_DATA} = STRINGS;
 
 describe('builtins/CSVLookup: ', () => {
-  const parametersMetadata = {
-    inputs: {},
-    outputs: {},
-  };
   const mock = new AxiosMockAdapter(axios);
 
   describe('CSVLookup: ', () => {
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
+    };
     afterEach(() => {
       mock.reset();
     });
@@ -39,7 +39,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
         expect(csvLookup).toHaveProperty('metadata');
         expect(csvLookup).toHaveProperty('execute');
       });
@@ -58,7 +58,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
 
         const responseData = `cpu-cores-available,cpu-cores-utilized,cpu-manufacturer,cpu-model-name,cpu-tdp,gpu-count,gpu-model-name,Hardware Information on AWS Documentation & Comments,instance-class,instance-storage,memory-available,platform-memory,release-date,storage-drives
 16,8,AWS,AWS Graviton,150.00,N/A,N/A,AWS Graviton (ARM),a1.2xlarge,EBS-Only,16,32,November 2018,0
@@ -97,7 +97,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
 
         const result = await csvLookup.execute([
           {
@@ -120,6 +120,45 @@ describe('builtins/CSVLookup: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('successfully executes when `mapping` has valid data.', async () => {
+        expect.assertions(1);
+        const globalConfig = {
+          filepath: './file.csv',
+          query: {
+            'cpu-cores-available': 'cpu/available',
+            'cpu-cores-utilized': 'cpu/utilized',
+            'cpu-manufacturer': 'cpu/manufacturer',
+          },
+          output: ['cpu-tdp', 'tdp'],
+        };
+        const parameterMetadata = {inputs: {}, outputs: {}};
+        const mapping = {
+          tdp: 'cpu/tdp',
+          'cpu/utilized': 'cpu/util',
+        };
+        const csvLookup = CSVLookup(globalConfig, parameterMetadata, mapping);
+
+        const result = await csvLookup.execute([
+          {
+            timestamp: '2024-03-01',
+            'cpu/available': 16,
+            'cpu/utilized': 16,
+            'cpu/manufacturer': 'AWS',
+          },
+        ]);
+        const expectedResult = [
+          {
+            timestamp: '2024-03-01',
+            'cpu/available': 16,
+            'cpu/util': 16,
+            'cpu/manufacturer': 'AWS',
+            'cpu/tdp': 150,
+          },
+        ];
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('rejects with file not found error.', async () => {
         const globalConfig = {
           filepath: './file-fail.csv',
@@ -130,7 +169,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
         const input = [
           {
             timestamp: '2024-03-01',
@@ -159,7 +198,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
         const input = [
           {
             timestamp: '2024-03-01',
@@ -191,7 +230,7 @@ describe('builtins/CSVLookup: ', () => {
         };
         mock.onGet(globalConfig.filepath).reply(404);
 
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
         const input = [
           {
             timestamp: '2024-03-01',
@@ -221,7 +260,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: '*',
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
 
         const result = await csvLookup.execute([
           {
@@ -269,7 +308,7 @@ describe('builtins/CSVLookup: ', () => {
             ['gpu-model-name', 'gpumodel'],
           ],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
 
         const result = await csvLookup.execute([
           {
@@ -304,7 +343,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: 'gpu-count',
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
 
         const result = await csvLookup.execute([
           {
@@ -338,8 +377,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
         const input = [
           {
             timestamp: '2024-03-01',
@@ -396,7 +434,8 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: 'mock',
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
         const input = [
           {
             timestamp: '2024-03-01',
@@ -429,7 +468,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['gpu-count'],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
 
         const result = await csvLookup.execute([
           {
@@ -463,7 +502,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: [['gpu-count']],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
 
         const result = await csvLookup.execute([
           {
@@ -499,7 +538,7 @@ describe('builtins/CSVLookup: ', () => {
         },
         output: [['gpu-count']],
       };
-      const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+      const csvLookup = CSVLookup(globalConfig, parametersMetadata, {});
 
       try {
         await csvLookup.execute([

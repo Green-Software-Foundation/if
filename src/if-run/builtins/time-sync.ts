@@ -10,12 +10,14 @@ import {
   TimeNormalizerConfig,
   TimeParams,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../common/util/validations';
 
 import {STRINGS} from '../config';
 import {getAggregationMethod} from '../lib/aggregate';
+import {mapOutput} from '../../common/util/helpers';
 
 Settings.defaultZone = 'utc';
 
@@ -53,7 +55,8 @@ const {
  */
 export const TimeSync = (
   globalConfig: TimeNormalizerConfig,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -143,7 +146,8 @@ export const TimeSync = (
       parseDate(a.timestamp).diff(parseDate(b.timestamp)).as('seconds')
     );
 
-    return resampleInputs(sortedInputs, timeParams) as PluginParams[];
+    const outputs = resampleInputs(sortedInputs, timeParams) as PluginParams[];
+    return outputs.map(output => mapOutput(output, mapping));
   };
 
   /**

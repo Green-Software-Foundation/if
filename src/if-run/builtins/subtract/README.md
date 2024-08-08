@@ -30,6 +30,18 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
+
+```yaml
+subtract:
+  method: Subtract
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
+```
+
 ### Inputs
 
 All of `input-parameters` must be available in the input array.
@@ -51,12 +63,13 @@ To run the plugin, you must first create an instance of `Subtract`. Then, you ca
 ```typescript
 import {Subtract} from 'builtins';
 
-const config = {
+const globalConfig = {
   inputParameters: ['cpu/energy', 'network/energy'],
   outputParameter: 'offset/energy',
 };
-
-const subtract = Subtract(config);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const subtract = Subtract(globalConfig, parametersMetadata, mapping);
 const result = subtract subtract.execute([
   {
     duration: 3600,
@@ -83,6 +96,9 @@ initialize:
       global-config:
         input-parameters: ['cpu/energy', 'network/energy']
         output-parameter: 'energy/diff'
+      mapping:
+        cpu/energy: energy-for-cpu
+
 tree:
   children:
     child:
@@ -113,4 +129,4 @@ The results will be saved to a new `yaml` file in `manifests/outputs`.
 
 This error arises when an invalid value is passed to `Subtract`. Typically, this can occur when a non-numeric value (such as a string made of alphabetic characters) is passed where a number or numeric string is expected. Please check that the types are correct for all the relevant fields in your `inputs` array.
 
-For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors)

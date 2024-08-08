@@ -4,13 +4,16 @@ import {
   PluginParams,
   MultiplyConfig,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 export const Multiply = (
   globalConfig: MultiplyConfig,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -67,10 +70,12 @@ export const Multiply = (
     return inputs.map(input => {
       validateSingleInput(input, inputParameters);
 
-      return {
+      const output = {
         ...input,
         [outputParameter]: calculateProduct(input, inputParameters),
       };
+
+      return mapOutput(output, mapping);
     });
   };
 

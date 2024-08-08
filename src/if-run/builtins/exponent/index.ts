@@ -4,13 +4,16 @@ import {
   PluginParams,
   ExponentConfig,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 export const Exponent = (
   globalConfig: ExponentConfig,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -60,10 +63,12 @@ export const Exponent = (
     return inputs.map(input => {
       validateSingleInput(input, inputParameter);
 
-      return {
+      const output = {
         ...input,
         [outputParameter]: calculateExponent(input, inputParameter, exponent),
       };
+
+      return mapOutput(output, mapping);
     });
   };
 

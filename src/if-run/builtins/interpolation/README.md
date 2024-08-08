@@ -40,6 +40,18 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
+
+```yaml
+interpolation:
+  method: Interpolation
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
+```
+
 ## Input Parameters
 
 The plugin expects the following input parameters:
@@ -88,18 +100,23 @@ const globalConfig = {
   method: 'linear',
   x: [0, 10, 50, 100],
   y: [0.12, 0.32, 0.75, 1.02],
-  'input-parameter': 'cpu/utilization'
-  'output-parameter': 'cpu/energy'
-
+  'input-parameter': 'cpu/utilization',
+  'output-parameter': 'cpu/energy',
 };
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
 
-const interpolationPlugin = Interpolation(globalConfig);
+const interpolationPlugin = Interpolation(
+  globalConfig,
+  parametersMetadata,
+  mapping
+);
 
 const inputs = [
   {
     timestamp: '2024-04-16T12:00:00Z',
     duration: 3600,
-    'cpu/utilization': 45
+    'cpu/utilization': 45,
   },
 ];
 
@@ -127,6 +144,9 @@ initialize:
         y: [0.12, 0.32, 0.75, 1.02]
         input-parameter: 'cpu/utilization'
         output-parameter: 'cpu/energy'
+      mapping:
+        cpu/utilization: cpu/util
+        interpolation-result: result
 tree:
   children:
     child:

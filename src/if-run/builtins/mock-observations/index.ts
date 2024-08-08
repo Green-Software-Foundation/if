@@ -6,9 +6,11 @@ import {
   ConfigParams,
   ObservationParams,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 import {CommonGenerator} from './helpers/common-generator';
 import {RandIntGenerator} from './helpers/rand-int-generator';
@@ -17,7 +19,8 @@ import {Generator} from './interfaces/index';
 
 export const MockObservations = (
   globalConfig: ConfigParams,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -39,19 +42,24 @@ export const MockObservations = (
 
     const defaults = inputs && inputs[0];
 
-    return Object.entries(components).reduce((acc: PluginParams[], item) => {
-      const component = item[1];
-      timeBuckets.forEach(timeBucket => {
-        const observation = createObservation(
-          {duration, component, timeBucket, generators},
-          generatorToHistory
-        );
+    const outputs = Object.entries(components).reduce(
+      (acc: PluginParams[], item) => {
+        const component = item[1];
+        timeBuckets.forEach(timeBucket => {
+          const observation = createObservation(
+            {duration, component, timeBucket, generators},
+            generatorToHistory
+          );
 
-        acc.push(Object.assign({}, defaults, observation));
-      });
+          acc.push(Object.assign({}, defaults, observation));
+        });
 
-      return acc;
-    }, []);
+        return acc;
+      },
+      []
+    );
+
+    return outputs.map(output => mapOutput(output, mapping));
   };
 
   /**

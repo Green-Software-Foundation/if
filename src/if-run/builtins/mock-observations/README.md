@@ -32,6 +32,19 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
+
+```yaml
+mock-observations:
+  kind: plugin
+  method: MockObservations
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
+```
+
 ### Authentication
 
 N/A
@@ -44,7 +57,7 @@ The plugin's `global-config` section in the manifest file determines its behavio
 ### Typescript Usage
 
 ```typescript
-const mockObservations = MockObservations({
+const globalConfig = {
   'timestamp-from': '2023-07-06T00:00',
   'timestamp-to': '2023-07-06T00:10',
   duration: 60,
@@ -56,7 +69,14 @@ const mockObservations = MockObservations({
       region: 'uk-west',
     },
   },
-});
+};
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const mockObservations = MockObservations(
+  globalConfig,
+  parametersMetadata,
+  mapping
+);
 const result = await mockObservations.execute([]);
 ```
 
@@ -92,6 +112,9 @@ initialize:
             memory/utilization:
               min: 1
               max: 99
+      mapping:
+        cpu/utilization: cpu/util
+
 tree:
   children:
     child:

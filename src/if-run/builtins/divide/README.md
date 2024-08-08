@@ -23,9 +23,22 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
 - `outputs`: describe the parameter of the `denominator` of the global config. The parameter has the following attributes:
+
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
+
+```yaml
+divide:
+  method: Divide
+  path: 'builtin'
+  mapping:
+    'old-name': 'new-name'
+```
 
 ### Inputs
 
@@ -57,7 +70,11 @@ const globalConfig = {
   denominator: 2,
   output: 'cpu/number-cores',
 };
-const divide = Divide(globalConfig, parametersMetadata);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {
+  'vcpus-allocated': 'vcpus-distributed',
+};
+const divide = Divide(globalConfig, parametersMetadata, mapping);
 
 const input = [
   {
@@ -85,6 +102,8 @@ initialize:
         numerator: vcpus-allocated
         denominator: 2
         output: cpu/number-cores
+      mapping:
+        vcpus-allocated: vcpus-distributed
 tree:
   children:
     child:

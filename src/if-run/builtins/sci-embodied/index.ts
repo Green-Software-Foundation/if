@@ -1,18 +1,21 @@
 import {z} from 'zod';
 import {
   ExecutePlugin,
+  MappingParams,
   PluginParametersMetadata,
   PluginParams,
 } from '@grnsft/if-core/types';
 
 import {validate, allDefined} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
 const {SCI_EMBODIED_ERROR} = STRINGS;
 
 export const SciEmbodied = (
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -73,10 +76,12 @@ export const SciEmbodied = (
     inputs.map(input => {
       const safeInput = validateInput(input);
 
-      return {
+      const output = {
         ...input,
         'carbon-embodied': calculateEmbodiedCarbon(safeInput),
       };
+
+      return mapOutput(output, mapping);
     });
 
   /**

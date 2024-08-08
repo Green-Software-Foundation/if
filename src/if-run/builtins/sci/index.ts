@@ -5,9 +5,11 @@ import {
   PluginParams,
   ConfigParams,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate, allDefined} from '../../../common/util/validations';
+import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -21,7 +23,8 @@ const {
 
 export const Sci = (
   globalConfig: ConfigParams,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -79,10 +82,12 @@ export const Sci = (
         };
       }
 
-      return {
+      const output = {
         ...input,
         sci: safeInput['carbon'] / functionalUnit,
       };
+
+      return mapOutput(output, mapping);
     });
 
   /**

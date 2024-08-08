@@ -14,7 +14,7 @@ describe('builtins/subtract: ', () => {
       inputs: {},
       outputs: {},
     };
-    const subtract = Subtract(globalConfig, parametersMetadata);
+    const subtract = Subtract(globalConfig, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -31,6 +31,37 @@ describe('builtins/subtract: ', () => {
           {
             duration: 3600,
             'cpu/energy': 4,
+            'network/energy': 2,
+            'memory/energy': 1,
+            'energy/diff': 1,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = await subtract.execute([
+          {
+            duration: 3600,
+            'cpu/energy': 4,
+            'network/energy': 2,
+            'memory/energy': 1,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('successfully executes when `mapping` is provided.', async () => {
+        const mapping = {
+          'cpu/energy': 'energy-for-cpu',
+        };
+        const subtract = Subtract(globalConfig, parametersMetadata, mapping);
+        expect.assertions(1);
+
+        const expectedResult = [
+          {
+            duration: 3600,
+            'energy-for-cpu': 4,
             'network/energy': 2,
             'memory/energy': 1,
             'energy/diff': 1,
@@ -76,7 +107,7 @@ describe('builtins/subtract: ', () => {
           'input-parameters': ['carbon', 'other-carbon'],
           'output-parameter': 'carbon-diff',
         };
-        const subtract = Subtract(newConfig, parametersMetadata);
+        const subtract = Subtract(newConfig, parametersMetadata, {});
 
         const data = [
           {
