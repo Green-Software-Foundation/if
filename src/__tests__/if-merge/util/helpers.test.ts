@@ -39,9 +39,9 @@ jest.mock('../../../if-run/builtins/export-yaml', () => ({
       if (process.env.CONTEXT !== 'default-name-description') {
         expectedContext.name = 'mock name';
         expectedContext.description = 'mock description';
-        expect(outputPath).toBe('mock-dir/mock-name.yaml');
+        expect(outputPath).toBe('mock-outputPath');
       } else {
-        expect(outputPath).toBe('mock-dir/merged-manifest.yaml');
+        expect(outputPath).toBe('mock-outputPath');
       }
 
       expect(context).toEqual(expectedContext);
@@ -50,9 +50,16 @@ jest.mock('../../../if-run/builtins/export-yaml', () => ({
 }));
 
 describe('if-merge/util/helpers: ', () => {
+  const consopleSpy = jest.spyOn(global.console, 'log');
+
+  beforeEach(() => {
+    consopleSpy.mockReset();
+  });
+
   describe('mergeManifests(): ', () => {
     const mockCommandArgs = {
       manifests: ['manifest1.yaml', 'manifest2.yaml'],
+      output: 'mock-outputPath',
       name: 'mock name',
       description: 'mock description',
     };
@@ -128,9 +135,27 @@ describe('if-merge/util/helpers: ', () => {
       expect(load).toHaveBeenCalledTimes(2);
     });
 
+    it('successfully prints merged manifests when the `output` is not provided.', async () => {
+      (getFileName as jest.Mock).mockImplementation(file =>
+        file.replace('.yaml', '')
+      );
+      (load as jest.Mock).mockResolvedValue({rawManifest: mockRawManifest});
+
+      const mockCommandArgs = {
+        manifests: ['manifest1.yaml', 'manifest2.yaml'],
+        name: 'mock name',
+        description: 'mock description',
+      };
+      await mergeManifests(mockCommandArgs);
+
+      expect.assertions(1);
+      expect(consopleSpy).toHaveBeenCalledTimes(1);
+    });
+
     it('gets YAML files when there is only one manifest.', async () => {
       const singleManifestArgs = {
         manifests: ['mock-dir'],
+        output: 'mock-outputPath',
         name: 'mock name',
         description: 'mock description',
       };
@@ -153,7 +178,10 @@ describe('if-merge/util/helpers: ', () => {
     it('uses default values for name and description if not provided.', async () => {
       process.env.CONTEXT = 'default-name-description';
 
-      const defaultArgs = {manifests: ['manifest1.yaml', 'manifest2.yaml']};
+      const defaultArgs = {
+        manifests: ['manifest1.yaml', 'manifest2.yaml'],
+        output: 'mock-outputPath',
+      };
 
       (getFileName as jest.Mock).mockImplementation(file =>
         file.replace('.yaml', '')
