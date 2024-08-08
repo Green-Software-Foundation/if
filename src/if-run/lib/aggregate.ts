@@ -157,5 +157,5 @@ export const getAggregationMethod = (unitName: string) => {
 
   memoizedLog(logger.warn, UNKNOWN_PARAM(unitName));
 
-  return 'sum';
+  return undefined;
 };
