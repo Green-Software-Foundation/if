@@ -48,8 +48,7 @@ execution:
       - winston@3.11.0
       - zod@3.23.8
   error: >-
-    InputValidationError: "groups" parameter is expected array, received string.
-    Error code: invalid_type.
+    InputValidationError: "regroup" parameter is not an array or should contain at least one key. Error code: invalid_type.
 tree:
   children:
     my-app:
