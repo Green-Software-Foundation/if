@@ -3,10 +3,7 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {STRINGS} from '../../if-run/config';
 
-import {
-  AGGREGATION_METHODS,
-  AGGREGATION_TYPES,
-} from '../../if-run/types/aggregation';
+import {AGGREGATION_TYPES} from '../../if-run/types/aggregation';
 
 const {ManifestValidationError, InputValidationError} = ERRORS;
 const {VALIDATING_MANIFEST} = STRINGS;
@@ -72,11 +69,7 @@ export const manifestSchema = z.object({
   explain: z.record(z.string(), z.any()).optional(),
   aggregation: z
     .object({
-      metrics: z.record(
-        z.object({
-          method: z.enum(AGGREGATION_METHODS),
-        })
-      ),
+      metrics: z.array(z.string()),
       type: z.enum(AGGREGATION_TYPES),
     })
     .optional()
