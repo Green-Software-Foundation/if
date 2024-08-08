@@ -261,20 +261,6 @@ initialize:
             unit: none
             description: Synced time
             aggregation-method: none
-    group-by:
-      path: builtin
-      method: GroupBy
-      parameter-metadata:
-        inputs:
-          group:
-            unit: none
-            description: Group by fields
-            aggregation-method: none
-        outputs:
-          grouped-data:
-            unit: none
-            description: Grouped data
-            aggregation-method: none
 execution:
   command: >-
     /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
@@ -327,7 +313,7 @@ tree:
           - mock-observations
         regroup:
           - cloud/region
-          - instance-type
+          - cloud/instance-type
         compute:
           - interpolate
           - cpu-factor-to-wattage
@@ -681,7 +667,7 @@ tree:
           - mock-observations
         regroup:
           - cloud/region
-          - instance-type
+          - cloud/instance-type
         compute:
           - interpolate
           - cpu-factor-to-wattage
