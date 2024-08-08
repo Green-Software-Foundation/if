@@ -12,7 +12,7 @@ import {IFMergeArgs} from '../types/process-args';
 import {CONFIG, STRINGS} from '../config';
 
 const {ParseCliParamsError, InvalidDirectoryError, CliSourceFileError} = ERRORS;
-const {IF_MERGE} = CONFIG;
+const {ARGS, HELP} = CONFIG;
 const {MANIFEST_IS_NOT_YAML} = STRINGS;
 const {MANIFEST_NOT_FOUND, DIRECTORY_NOT_FOUND} = COMMON_STRINGS;
 
@@ -21,7 +21,7 @@ const {MANIFEST_NOT_FOUND, DIRECTORY_NOT_FOUND} = COMMON_STRINGS;
  */
 const validateAndParseIfMergeArgs = () => {
   try {
-    return parse<IFMergeArgs>(IF_MERGE.ARGS, IF_MERGE.HELP);
+    return parse<IFMergeArgs>(ARGS, HELP);
   } catch (error) {
     if (error instanceof Error) {
       throw new ParseCliParamsError(error.message);
@@ -35,7 +35,7 @@ const validateAndParseIfMergeArgs = () => {
  * Checks if the `manifests` command is provided and they are valid manifests files or a folder.
  */
 export const parseIfMergeArgs = async () => {
-  const {manifests, name, description} = validateAndParseIfMergeArgs();
+  const {manifests, output, name, description} = validateAndParseIfMergeArgs();
 
   const manifestsWithFullPath = [];
 
@@ -45,7 +45,7 @@ export const parseIfMergeArgs = async () => {
       throw new InvalidDirectoryError(DIRECTORY_NOT_FOUND);
     }
 
-    return {manifests, name, description};
+    return {manifests, output, name, description};
   }
 
   for await (const manifest of manifests) {
@@ -65,5 +65,6 @@ export const parseIfMergeArgs = async () => {
       manifestsWithFullPath.push(response);
     }
   }
-  return {manifests: manifestsWithFullPath, name, description};
+
+  return {manifests: manifestsWithFullPath, output, name, description};
 };
