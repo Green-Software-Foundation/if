@@ -2,7 +2,6 @@ name: coefficient-demo
 description: failure with ivalid `global-config.input-parameter`
 tags:
 initialize:
-  outputs: ['yaml']
   plugins:
     coefficient:
       method: Coefficient
@@ -15,7 +14,8 @@ tree:
   children:
     child:
       pipeline:
-        - coefficient
+        compute:
+          - coefficient
       config:
         sum:
       inputs:

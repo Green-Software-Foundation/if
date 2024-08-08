@@ -10,27 +10,7 @@ export const readFile = async (filePath: string) => {
     return fs.readFileSync(updatedPath, 'utf8');
   }
 
-  /** mock for util/json */
-  if (filePath.includes('json-reject')) {
-    return Promise.reject(new Error('rejected'));
-  }
-
   if (filePath.includes('json')) {
-    if (filePath.includes('param')) {
-      return JSON.stringify({
-        'mock-carbon': {
-          description: 'an amount of carbon emitted into the atmosphere',
-          unit: 'gCO2e',
-          aggregation: 'sum',
-        },
-        'mock-cpu': {
-          description: 'number of cores available',
-          unit: 'cores',
-          aggregation: 'none',
-        },
-      });
-    }
-
     return JSON.stringify(filePath);
   }
 
@@ -72,8 +52,9 @@ cpu-cores-available,cpu-cores-utilized,cpu-manufacturer,cpu-model-name,cpu-tdp,g
   tree:
     children:
       front-end:
-        pipeline: 
-          - boavizta-cpu
+        pipeline:
+          compute:
+            - boavizta-cpu
         config:
           boavizta-cpu:
             core-units: 24
@@ -127,6 +108,9 @@ export const writeFile = async (pathToFile: string, content: string) => {
     expect(content).toBe(mockObject);
   }
 };
+
+export const appendFile = (file: string, appendContent: string) =>
+  `${file}${appendContent}`;
 
 export const stat = async (filePath: string) => {
   if (filePath === 'true') {

@@ -12,12 +12,12 @@ initialize:
         y: [0.12, 0.32, 0.75, 1.02]
         input-parameter: "cpu/utilization"
         output-parameter: "result"
-
 tree:
   children:
     child:
       pipeline:
-        - interpolation
+        compute:
+          - interpolation
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600

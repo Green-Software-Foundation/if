@@ -2,7 +2,6 @@ name: sci-embodied
 description: successful path
 tags:
 initialize:
-  outputs: ['yaml']
   plugins:
     "sci-embodied": # a model that calculates m from te, tir, el, rr and rtor
       method: SciEmbodied
@@ -11,7 +10,8 @@ tree:
   children:
     child:
       pipeline:
-        - sci-embodied # duration & config -> embodied
+        compute:
+          - sci-embodied # duration & config -> embodied
       defaults:
         device/emissions-embodied: 1533.120 # gCO2eq
         time-reserved: 3600 # 1hr in seconds
