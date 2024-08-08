@@ -12,10 +12,10 @@ import {
   PluginParametersMetadata,
 } from '@grnsft/if-core/types';
 
-import {validate} from '../../common/util/validations';
+import {validate} from '../../../common/util/validations';
 
-import {STRINGS} from '../config';
-import {getAggregationMethod} from '../lib/aggregate';
+import {STRINGS} from '../../config';
+import {getAggregationMethod} from '../../lib/aggregate';
 
 Settings.defaultZone = 'utc';
 
@@ -346,14 +346,23 @@ export const TimeSync = (
       const metrics = Object.keys(input);
 
       metrics.forEach(metric => {
-        const method = getAggregationMethod(metric);
-        acc[metric] = acc[metric] ?? 0;
+        let method = getAggregationMethod(metric);
 
         if (metric === 'timestamp') {
           acc[metric] = inputs[0][metric];
 
           return;
         }
+
+        if (metric === 'duration') {
+          method = 'sum';
+        }
+
+        if (!method) {
+          return;
+        }
+
+        acc[metric] = acc[metric] ?? 0;
 
         if (method === 'sum') {
           acc[metric] += input[metric];
