@@ -35,12 +35,18 @@ export const aggregateInputsIntoOne = (
           acc[metric] = input[metric];
         }
       } else {
+        const method = getAggregationMethod(metric);
+
+        if (!method) {
+          return acc;
+        }
+
         acc[metric] = acc[metric] ?? 0;
         acc[metric] += parseFloat(input[metric]);
 
         /** Checks for the last iteration. */
         if (index === inputs.length - 1) {
-          if (getAggregationMethod(metric) === 'avg') {
+          if (method === 'avg') {
             acc[metric] /= inputs.length;
           }
         }

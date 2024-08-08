@@ -456,12 +456,10 @@ describe('execute(): ', () => {
       {
         timestamp: '2023-12-12T00:00:00.000Z',
         duration: 1,
-        'cpu/utilization': 10,
       },
       {
         timestamp: '2023-12-12T00:00:01.000Z',
         duration: 1,
-        'cpu/utilization': 10,
       },
     ];
 
@@ -566,17 +564,14 @@ describe('execute(): ', () => {
       },
     ]);
 
-    /**In each 5 second interval, 60% of the time cpu/utilization = 10, 40% of the time it is 0, so cpu/utilization in the averaged result be 6 */
     const expectedResult = [
       {
         timestamp: '2023-12-12T00:00:00.000Z',
         duration: 5,
-        'resources-total': 10,
       },
       {
         timestamp: '2023-12-12T00:00:05.000Z',
         duration: 5,
-        'resources-total': 10,
       },
     ];
 
