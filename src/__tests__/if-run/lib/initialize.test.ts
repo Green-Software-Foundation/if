@@ -18,7 +18,6 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {initialize} from '../../../if-run/lib/initialize';
 import {STRINGS} from '../../../if-run/config';
-import {GlobalPlugins} from '../../../common/types/manifest';
 
 const {
   MissingPluginPathError,
@@ -30,8 +29,9 @@ const {MISSING_METHOD, MISSING_PATH, INVALID_MODULE_PATH} = STRINGS;
 describe('lib/initalize: ', () => {
   describe('initalize(): ', () => {
     it('creates instance with get and set methods.', async () => {
-      const plugins = {};
-      const response = await initialize(plugins);
+      const context = {initialize: {plugins: {}}};
+      // @ts-ignore
+      const response = await initialize(context);
 
       expect(response).toHaveProperty('get');
       expect(response).toHaveProperty('set');
@@ -40,15 +40,20 @@ describe('lib/initalize: ', () => {
     });
 
     it('checks if plugin is initalized, warning is logged and plugin has execute and metadata props.', async () => {
-      const plugins: GlobalPlugins = {
-        mockavizta: {
-          path: 'mockavizta',
-          method: 'Mockavizta',
+      const context = {
+        initialize: {
+          plugins: {
+            mockavizta: {
+              path: 'mockavizta',
+              method: 'Mockavizta',
+            },
+          },
         },
       };
-      const storage = await initialize(plugins);
+      // @ts-ignore
+      const storage = await initialize(context);
 
-      const pluginName = Object.keys(plugins)[0];
+      const pluginName = Object.keys(context.initialize.plugins)[0];
       const module = storage.get(pluginName);
       expect(module).toHaveProperty('execute');
       expect(module).toHaveProperty('metadata');
@@ -56,36 +61,45 @@ describe('lib/initalize: ', () => {
     });
 
     it('checks if plugin is initalized with global config and has execute and metadata.', async () => {
-      const plugins: GlobalPlugins = {
-        mockavizta: {
-          path: 'mockavizta',
-          method: 'Mockavizta',
-          'global-config': {
-            verbose: true,
+      const context = {
+        initialize: {
+          plugins: {
+            mockavizta: {
+              path: 'mockavizta',
+              method: 'Mockavizta',
+              'global-config': {
+                verbose: true,
+              },
+            },
           },
         },
       };
-      const storage = await initialize(plugins);
+      // @ts-ignore
+      const storage = await initialize(context);
 
-      const pluginName = Object.keys(plugins)[0];
+      const pluginName = Object.keys(context.initialize.plugins)[0];
       const module = storage.get(pluginName);
       expect(module).toHaveProperty('execute');
       expect(module).toHaveProperty('metadata');
     });
 
     it('throws error if plugin does not have path property.', async () => {
-      const plugins: GlobalPlugins = {
-        // @ts-ignore
-        mockavizta: {
-          method: 'Mockavizta',
-          'global-config': {
-            verbose: true,
+      const context = {
+        initialize: {
+          plugins: {
+            mockavizta: {
+              method: 'Mockavizta',
+              'global-config': {
+                verbose: true,
+              },
+            },
           },
         },
       };
 
       try {
-        await initialize(plugins);
+        // @ts-ignore
+        await initialize(context);
       } catch (error) {
         expect(error).toBeInstanceOf(MissingPluginPathError);
 
@@ -96,18 +110,22 @@ describe('lib/initalize: ', () => {
     });
 
     it('throws error if plugin does not have path property.', async () => {
-      const plugins: GlobalPlugins = {
-        // @ts-ignore
-        mockavizta: {
-          path: 'mockavizta',
-          'global-config': {
-            verbose: true,
+      const context = {
+        initialize: {
+          plugins: {
+            mockavizta: {
+              path: 'mockavizta',
+              'global-config': {
+                verbose: true,
+              },
+            },
           },
         },
       };
 
       try {
-        await initialize(plugins);
+        // @ts-ignore
+        await initialize(context);
       } catch (error) {
         expect(error).toBeInstanceOf(MissingPluginMethodError);
 
@@ -118,59 +136,74 @@ describe('lib/initalize: ', () => {
     });
 
     it('checks if builtin plugin is initalized.', async () => {
-      const plugins: GlobalPlugins = {
-        mockavizta: {
-          path: 'builtin',
-          method: 'Mockavizta',
-          'global-config': {
-            verbose: true,
+      const context = {
+        initialize: {
+          plugins: {
+            mockavizta: {
+              path: 'builtin',
+              method: 'Mockavizta',
+              'global-config': {
+                verbose: true,
+              },
+            },
           },
         },
       };
-      const storage = await initialize(plugins);
+      // @ts-ignore
+      const storage = await initialize(context);
 
-      const pluginName = Object.keys(plugins)[0];
+      const pluginName = Object.keys(context.initialize.plugins)[0];
       const module = storage.get(pluginName);
       expect(module).toHaveProperty('execute');
       expect(module).toHaveProperty('metadata');
     });
 
     it('checks if github plugin is initalized.', async () => {
-      const plugins: GlobalPlugins = {
-        mockavizta: {
-          path: 'https://github.com/mockavizta',
-          method: 'Mockavizta',
-          'global-config': {
-            verbose: true,
+      const context = {
+        initialize: {
+          plugins: {
+            mockavizta: {
+              path: 'https://github.com/mockavizta',
+              method: 'Mockavizta',
+              'global-config': {
+                verbose: true,
+              },
+            },
           },
         },
       };
-      const storage = await initialize(plugins);
+      // @ts-ignore
+      const storage = await initialize(context);
 
-      const pluginName = Object.keys(plugins)[0];
+      const pluginName = Object.keys(context.initialize.plugins)[0];
       const module = storage.get(pluginName);
       expect(module).toHaveProperty('execute');
       expect(module).toHaveProperty('metadata');
     });
 
     it('throws error if plugin path is invalid.', async () => {
-      const plugins: GlobalPlugins = {
-        mockavizta: {
-          path: 'failing-mock',
-          method: 'Mockavizta',
-          'global-config': {
-            verbose: true,
+      const context = {
+        initialize: {
+          plugins: {
+            mockavizta: {
+              path: 'failing-mock',
+              method: 'Mockavizta',
+              'global-config': {
+                verbose: true,
+              },
+            },
           },
         },
       };
 
       try {
-        await initialize(plugins);
+        // @ts-ignore
+        await initialize(context);
       } catch (error: any) {
         expect(error).toBeInstanceOf(PluginInitializationError);
         expect(error.message).toEqual(
           INVALID_MODULE_PATH(
-            plugins.mockavizta.path,
+            context.initialize.plugins.mockavizta.path,
             new Error(
               "Cannot find module 'failing-mock' from 'src/if-run/lib/initialize.ts'"
             )

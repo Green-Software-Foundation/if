@@ -86,20 +86,22 @@ initialize:
           cpu/energy:
             description: energy consumed by the cpu
             unit: kWh
+            aggregation-method: sum
           network/energy:
             description: energy consumed by data ingress and egress
             unit: kWh
+            aggregation-method: sum
         outputs:
           energy:
             description: sum of energy components
             unit: kWh
+            aggregation-method: sum
 tree:
   children:
     child:
       pipeline:
-        - sum
-      config:
-        sum:
+        compute:
+          - sum
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600

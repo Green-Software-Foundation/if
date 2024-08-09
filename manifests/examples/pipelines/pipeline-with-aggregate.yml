@@ -3,8 +3,7 @@ description: a full pipeline with the aggregate feature enabled
 tags:
 aggregation:
   metrics:
-    "carbon":
-      method: sum
+    - carbon
   type: "both"
 initialize:
   plugins:
@@ -17,12 +16,38 @@ initialize:
         y: [0.12, 0.32, 0.75, 1.02]
         input-parameter: "cpu/utilization"
         output-parameter: "cpu-factor"
+      parameter-metadata:
+        inputs:
+          cpu/utilization:
+            unit: percentage
+            description: refers to CPU utilization.
+            aggregation-method: avg
+        outputs:
+          cpu-factor:
+            unit: kWh
+            description: result of interpolate
+            aggregation-method: avg
     "cpu-factor-to-wattage":
       method: Multiply
       path: builtin
       global-config:
         input-parameters: ["cpu-factor", "cpu/thermal-design-power"]
         output-parameter: "cpu-wattage"
+      parameter-metadata:
+        inputs:
+          cpu-factor:
+            unit: kWh
+            description: result of interpolate
+            aggregation-method: avg
+          cpu/thermal-design-power:
+            unit: kWh
+            description: thermal design power for a processor
+            aggregation-method: avg
+        outputs:
+          cpu-wattage:
+            unit: kWh
+            description: the energy used by the CPU
+            aggregation-method: sum
     "wattage-times-duration":
       method: Multiply
       path: builtin
@@ -36,6 +61,17 @@ initialize:
         numerator: cpu-wattage-times-duration
         denominator: 3600000
         output: cpu-energy-raw
+      parameter-metadata:
+        inputs:
+          cpu-wattage-times-duration:
+            unit: kWh
+            description: CPU wattage multiplied by duration
+            aggregation-method: sum
+        outputs:
+          cpu-energy-raw:
+            unit: kWh
+            description: Raw energy used by CPU in kWh
+            aggregation-method: sum
     "calculate-vcpu-ratio":
       method: Divide
       path: "builtin"
@@ -43,6 +79,21 @@ initialize:
         numerator: vcpus-total
         denominator: vcpus-allocated
         output: vcpu-ratio
+      parameter-metadata:
+        inputs:
+          vcpus-total:
+            unit: count
+            description: total number of vcpus available on a particular resource
+            aggregation-method: none
+          vcpus-allocated:
+            unit: count
+            description: number of vcpus allocated to particular resource
+            aggregation-method: none
+        outputs:
+          vcpu-ratio:
+            unit: none
+            description: Ratio of vCPUs
+            aggregation-method: none
     "correct-cpu-energy-for-vcpu-ratio":
       method: Divide
       path: "builtin"
@@ -59,11 +110,32 @@ initialize:
       global-config:
         input-parameters: ["cpu-energy-kwh", "grid/carbon-intensity"]
         output-parameter: "carbon-operational"
+      parameter-metadata:
+        inputs:
+          cpu-energy-kwh:
+            unit: kWh
+            description: Corrected CPU energy in kWh
+            aggregation-method: sum
+          grid/carbon-intensity:
+            unit: gCO2eq/kWh
+            description: Carbon intensity for the grid
+            aggregation-method: avg
+        outputs:
+          carbon-operational:
+            unit: gCO2eq
+            description: Operational carbon footprint
+            aggregation-method: sum
     "sci":
       path: "builtin"
       method: Sci
       global-config:
         functional-unit: requests # factor to convert per time to per f.unit
+      parameter-metadata:
+        inputs:
+          requests:
+            unit: none
+            description: expressed the final SCI value
+            aggregation-method: sum
     "sum-carbon":
       path: "builtin"
       method: Sum
@@ -72,6 +144,12 @@ initialize:
           - carbon-operational
           - carbon-embodied
         output-parameter: carbon
+      parameter-metadata:
+        outputs:
+          carbon:
+            unit: gCO2eq
+            description: product of carbon
+            aggregation-method: sum
     "time-sync":
       method: TimeSync
       path: "builtin"
@@ -84,22 +162,21 @@ tree:
   children:
     child-1:
       pipeline:
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800
@@ -135,22 +212,21 @@ tree:
           requests: 30
     child-2:
       pipeline:
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - sum-carbon
-        - time-sync
-        - sci
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800

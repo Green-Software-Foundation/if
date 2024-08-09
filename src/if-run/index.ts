@@ -12,8 +12,10 @@ import {compute} from './lib/compute';
 import {exhaust} from './lib/exhaust';
 import {explain} from './lib/explain';
 
+import {AGGREGATION_METHODS} from './types/aggregation';
+
 import {parseIfRunProcessArgs} from './util/args';
-import {andHandle, storeAggregationMethods} from './util/helpers';
+import {andHandle} from './util/helpers';
 
 import {STRINGS} from './config';
 
@@ -22,7 +24,14 @@ const {DISCLAIMER_MESSAGE} = COMMON_STRINGS;
 
 const impactEngine = async () => {
   const options = parseIfRunProcessArgs();
-  const {inputPath, outputOptions, debug} = options;
+  const {
+    inputPath,
+    outputOptions,
+    debug,
+    observe,
+    regroup,
+    compute: computeFlag,
+  } = options;
 
   debugLogger.overrideConsoleMethods(!!debug);
 
@@ -34,17 +43,27 @@ const impactEngine = async () => {
 
   try {
     const {tree, ...context} = validateManifest(envManifest);
-    const pluginStorage = await initialize(context.initialize.plugins);
 
     if (context.aggregation) {
-      storeAggregationMetrics({metrics: context.aggregation?.metrics});
+      const convertMetrics = context.aggregation?.metrics.map(
+        (metric: string) => ({
+          [metric]: AGGREGATION_METHODS[2],
+        })
+      );
+
+      storeAggregationMetrics(...convertMetrics);
     }
 
-    storeAggregationMethods(context.initialize.plugins, pluginStorage);
+    const pluginStorage = await initialize(context);
+    const computedTree = await compute(tree, {
+      context,
+      pluginStorage,
+      observe,
+      regroup,
+      compute: computeFlag,
+    });
 
-    const computedTree = await compute(tree, {context, pluginStorage});
     const aggregatedTree = aggregate(computedTree, context.aggregation);
-
     envManifest.explainer && (context.explain = explain());
 
     await exhaust(aggregatedTree, context, outputOptions);

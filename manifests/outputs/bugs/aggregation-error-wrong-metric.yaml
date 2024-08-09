@@ -5,8 +5,7 @@ description: >-
 tags: null
 aggregation:
   metrics:
-    "dummy-param":
-      method: sum
+    - dummy-param
   type: both
 initialize:
   plugins:
@@ -88,9 +87,6 @@ initialize:
         end-time: "2023-12-12T00:01:00.000Z"
         interval: 5
         allow-padding: true
-    group-by:
-      path: builtin
-      method: GroupBy
 execution:
   status: fail
   command: >-
@@ -136,27 +132,25 @@ execution:
       - winston@3.11.0
       - zod@3.22.4
   error: >-
-    MissingAggregationParamError: Aggregation metric dummy-param is not found in
-    inputs[0].
+    MissingInputDataError: `functional-unit` value is missing from input data or it is not a positive integer
 tree:
   children:
     child-1:
       pipeline:
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - time-sync
-        - sci
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - time-sync
+          - sci
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800
@@ -192,21 +186,20 @@ tree:
           requests: 100
     child-2:
       pipeline:
-        - interpolate
-        - cpu-factor-to-wattage
-        - wattage-times-duration
-        - wattage-to-energy-kwh
-        - calculate-vcpu-ratio
-        - correct-cpu-energy-for-vcpu-ratio
-        - sci-embodied
-        - operational-carbon
-        - time-sync
-        - sci
-      config:
-        group-by:
-          group:
-            - cloud/region
-            - cloud/instance-type
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - time-sync
+          - sci
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800
