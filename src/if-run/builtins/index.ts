@@ -14,4 +14,3 @@ export {Regex} from './regex';
 export {Copy} from './copy-param';
 export {TimeConverter} from './time-converter';
 export {TimeSync} from './time-sync';
-
