@@ -1,0 +1,106 @@
+name: generics
+description: a pipeline that does arbitrary calculations using our generic arithmetic builtins
+tags:
+initialize:
+  plugins:
+    "interpolate":
+      method: Interpolation
+      path: "builtin"
+      global-config:
+        method: linear
+        x: [0, 10, 50, 100]
+        y: [0.12, 0.32, 0.75, 1.02]
+        input-parameter: "cpu/utilization"
+        output-parameter: "cpu-factor"
+    "cpu-factor-to-wattage":
+      method: Multiply
+      path: builtin
+      global-config:
+        input-parameters: ["cpu-factor", "cpu/thermal-design-power"]
+        output-parameter: "cpu-wattage"
+    "wattage-times-duration":
+      method: Multiply
+      path: builtin
+      global-config:
+        input-parameters: ["cpu-wattage", "duration"]
+        output-parameter: "cpu-wattage-times-duration"
+    "wattage-to-energy-kwh":
+      method: Divide
+      path: "builtin"
+      global-config:
+        numerator: cpu-wattage-times-duration
+        denominator: 3600000
+        output: cpu-energy-raw
+    "calculate-vcpu-ratio":
+      method: Divide
+      path: "builtin"
+      global-config:
+        numerator: vcpus-total
+        denominator: vcpus-allocated
+        output: vcpu-ratio
+    "correct-cpu-energy-for-vcpu-ratio":
+      method: Divide
+      path: "builtin"
+      global-config:
+        numerator: cpu-energy-raw
+        denominator: vcpu-ratio
+        output: cpu-energy-kwh
+    "coefficient":
+      path: "builtin"
+      method: Coefficient
+      global-config:
+        input-parameter: cpu-energy-kwh
+        coefficient: 2
+        output-parameter: energy-doubled
+    "multiply":
+      path: "builtin"
+      method: Multiply
+      global-config:
+        input-parameters: ["cpu/utilization", "duration"]
+        output-parameter: "cpu-times-duration"
+tree:
+  children:
+    child-1:
+      pipeline:
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - coefficient
+          - multiply
+      defaults:
+        cpu/thermal-design-power: 100
+        vcpus-allocated: 1
+        vcpus-total: 8
+      inputs:
+        - timestamp: "2023-12-12T00:00:00.000Z"
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          duration: 1
+          cpu/utilization: 50
+          network/energy: 10
+          energy: 5
+        - timestamp: "2023-12-12T00:00:01.000Z"
+          duration: 5
+          cpu/utilization: 20
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          network/energy: 10
+          energy: 5
+        - timestamp: "2023-12-12T00:00:06.000Z"
+          duration: 7
+          cpu/utilization: 15
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          network/energy: 10
+          energy: 5
+        - timestamp: "2023-12-12T00:00:13.000Z"
+          duration: 30
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          cpu/utilization: 15
+          network/energy: 10
+          energy: 5

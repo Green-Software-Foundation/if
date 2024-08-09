@@ -1,0 +1,297 @@
+name: pipeline-with-mocks
+description: a full pipeline seeded with data from mock-observations feature
+tags:
+aggregation:
+  metrics:
+    - carbon
+  type: "both"
+initialize:
+  plugins:
+    mock-observations:
+      kind: plugin
+      method: MockObservations
+      path: "builtin"
+      global-config:
+        timestamp-from: "2023-12-12T00:00:00.000Z"
+        timestamp-to: "2023-12-12T00:00:13.000Z"
+        duration: 30
+        components:
+          - cloud/instance-type: A1
+        generators:
+          common:
+            cloud/region: uk-west
+          randint:
+            cpu/utilization:
+              min: 1
+              max: 99
+      parameter-metadata:
+        inputs:
+          timestamp:
+            description: refers to the time of occurrence of the input
+            unit: RFC3339
+            aggregation-method: none
+          duration:
+            description: refers to the duration of the input
+            unit: seconds
+            aggregation-method: sum
+          cloud/instance-type:
+            description: type of Cloud Instance name used in the cloud provider APIs
+            unit: none
+            aggregation-method: none
+          cloud/region:
+            description: region cloud instance
+            unit: none
+            aggregation-method: none
+    interpolate:
+      method: Interpolation
+      path: "builtin"
+      global-config:
+        method: linear
+        x: [0, 10, 50, 100]
+        y: [0.12, 0.32, 0.75, 1.02]
+        input-parameter: "cpu/utilization"
+        output-parameter: "cpu-factor"
+      parameter-metadata:
+        inputs:
+          cpu/utilization:
+            description: refers to CPU utilization.
+            unit: percentage
+            aggregation-method: avg
+        outputs:
+          cpu-factor:
+            description: result of interpolate
+            unit: kWh
+            aggregation-method: avg
+    cpu-factor-to-wattage:
+      method: Multiply
+      path: builtin
+      global-config:
+        input-parameters: ["cpu-factor", "cpu/thermal-design-power"]
+        output-parameter: "cpu-wattage"
+      parameter-metadata:
+        inputs:
+          cpu-factor:
+            description: result of interpolate
+            unit: kWh
+            aggregation-method: avg
+          cpu/thermal-design-power:
+            description: thermal design power for a processor
+            unit: kWh
+            aggregation-method: avg
+        outputs:
+          cpu-wattage:
+            description: the energy used by the CPU
+            unit: kWh
+            aggregation-method: sum
+    wattage-times-duration:
+      method: Multiply
+      path: builtin
+      global-config:
+        input-parameters: ["cpu-wattage", "duration"]
+        output-parameter: "cpu-wattage-times-duration"
+      parameter-metadata:
+        inputs:
+          cpu-wattage:
+            description: Energy used by the CPU
+            unit: kWh
+            aggregation-method: sum
+          duration:
+            description: Duration of the observation
+            unit: seconds
+            aggregation-method: sum
+        outputs:
+          cpu-wattage-times-duration:
+            description: CPU wattage multiplied by duration
+            unit: kWh
+            aggregation-method: sum
+    wattage-to-energy-kwh:
+      method: Divide
+      path: "builtin"
+      global-config:
+        numerator: cpu-wattage-times-duration
+        denominator: 3600000
+        output: cpu-energy-raw
+      parameter-metadata:
+        inputs:
+          cpu-wattage-times-duration:
+            description: CPU wattage multiplied by duration
+            unit: kWh
+            aggregation-method: sum
+        outputs:
+          cpu-energy-raw:
+            description: Raw energy used by CPU in kWh
+            unit: kWh
+            aggregation-method: sum
+    calculate-vcpu-ratio:
+      method: Divide
+      path: "builtin"
+      global-config:
+        numerator: vcpus-total
+        denominator: vcpus-allocated
+        output: vcpu-ratio
+      parameter-metadata:
+        inputs:
+          vcpus-total:
+            description: total number of vcpus available on a particular resource
+            unit: count
+            aggregation-method: none
+          vcpus-allocated:
+            description: number of vcpus allocated to particular resource
+            unit: count
+            aggregation-method: none
+        outputs:
+          vcpu-ratio:
+            description: Ratio of vCPUs
+            unit: none
+            aggregation-method: none
+    correct-cpu-energy-for-vcpu-ratio:
+      method: Divide
+      path: "builtin"
+      global-config:
+        numerator: cpu-energy-raw
+        denominator: vcpu-ratio
+        output: cpu-energy-kwh
+      parameter-metadata:
+        inputs:
+          cpu-energy-raw:
+            description: Raw energy used by CPU in kWh
+            unit: kWh
+            aggregation-method: sum
+          vcpu-ratio:
+            description: Ratio of vCPUs
+            unit: none
+            aggregation-method: none
+        outputs:
+          cpu-energy-kwh:
+            description: Corrected CPU energy in kWh
+            unit: kWh
+            aggregation-method: sum
+    sci-embodied:
+      path: "builtin"
+      method: SciEmbodied
+    operational-carbon:
+      method: Multiply
+      path: builtin
+      global-config:
+        input-parameters: ["cpu-energy-kwh", "grid/carbon-intensity"]
+        output-parameter: "carbon-operational"
+      parameter-metadata:
+        inputs:
+          cpu-energy-kwh:
+            description: Corrected CPU energy in kWh
+            unit: kWh
+            aggregation-method: sum
+          grid/carbon-intensity:
+            description: Carbon intensity for the grid
+            unit: gCO2eq/kWh
+            aggregation-method: avg
+        outputs:
+          carbon-operational:
+            description: Operational carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+    sum-carbon:
+      path: "builtin"
+      method: Sum
+      global-config:
+        input-parameters:
+          - carbon-operational
+          - carbon-embodied
+        output-parameter: carbon
+      parameter-metadata:
+        inputs:
+          carbon-operational:
+            description: Operational carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+          carbon-embodied:
+            description: Embodied carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+        outputs:
+          carbon:
+            description: Total carbon footprint
+            unit: gCO2eq
+            aggregation-method: sum
+    sci:
+      path: "builtin"
+      method: Sci
+      global-config:
+        functional-unit: "requests"
+      parameter-metadata:
+        inputs:
+          requests:
+            description: expressed the final SCI value
+            unit: none
+            aggregation-method: sum
+        outputs:
+          sci:
+            description: Scientific Carbon Intensity
+            unit: none
+            aggregation-method: none
+    time-sync:
+      method: TimeSync
+      path: "builtin"
+      global-config:
+        start-time: "2023-12-12T00:00:00.000Z"
+        end-time: "2023-12-12T00:01:00.000Z"
+        interval: 5
+        allow-padding: true
+tree:
+  children:
+    child-1:
+      pipeline:
+        observe:
+          - mock-observations
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci
+      defaults:
+        cpu/thermal-design-power: 100
+        grid/carbon-intensity: 800
+        device/emissions-embodied: 1533.120 # gCO2eq
+        time-reserved: 3600 # 1hr in seconds
+        device/expected-lifespan: 94608000 # 3 years in seconds
+        vcpus-total: 8
+        vcpus-allocated: 1
+      inputs:
+    child-2:
+      pipeline:
+        observe:
+          - mock-observations
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+          - sci-embodied
+          - operational-carbon
+          - sum-carbon
+          - time-sync
+          - sci
+      defaults:
+        cpu/thermal-design-power: 100
+        grid/carbon-intensity: 800
+        device/emissions-embodied: 1533.120 # gCO2eq
+        time-reserved: 3600 # 1hr in seconds
+        device/expected-lifespan: 94608000 # 3 years in seconds
+        vcpus-total: 8
+        vcpus-allocated: 1
+      inputs:

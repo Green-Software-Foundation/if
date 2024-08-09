@@ -1,14 +1,18 @@
 {
   "name": "@grnsft/if",
   "description": "Impact Framework",
-  "version": "0.4.0-beta.1",
+  "version": "0.6.0",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
   },
   "bin": {
-    "ie": "./build/index.js",
-    "if-diff": "./build/diff.js"
+    "if-diff": "./build/if-diff/index.js",
+    "if-run": "./build/if-run/index.js",
+    "if-env": "./build/if-env/index.js",
+    "if-check": "./build/if-check/index.js",
+    "if-csv": "./build/if-csv/index.js",
+    "if-merge": "./build/if-merge/index.js"
   },
   "bugs": {
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
@@ -16,6 +20,7 @@
   "dependencies": {
     "@commitlint/cli": "^18.6.0",
     "@commitlint/config-conventional": "^18.6.0",
+    "@grnsft/if-core": "^0.0.16",
     "axios": "^1.7.2",
     "csv-parse": "^5.5.6",
     "csv-stringify": "^6.4.6",
@@ -36,6 +41,7 @@
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.8.9",
     "axios-mock-adapter": "^1.22.0",
+    "cross-env": "7.0.3",
     "fixpack": "^4.0.0",
     "gts": "^5.0.0",
     "husky": "^8.0.0",
@@ -59,7 +65,6 @@
     "models"
   ],
   "license": "MIT",
-  "main": "build/index.js",
   "publishConfig": {
     "access": "public"
   },
@@ -69,19 +74,21 @@
   "scripts": {
     "build": "npm run clean && tsc --project tsconfig.build.json",
     "clean": "rimraf build/",
-    "coverage": "jest --verbose --coverage --testPathPattern=src/__tests__/unit",
+    "coverage": "jest --verbose --coverage --testPathPattern=src/__tests__/",
     "fix": "gts fix",
     "fix:package": "fixpack",
-    "ie": "npx ts-node src/index.ts",
-    "if-diff": "npx ts-node src/diff.ts",
+    "if-check": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-check/index.ts",
+    "if-csv": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-csv/index.ts",
+    "if-diff": "npx ts-node src/if-diff/index.ts",
+    "if-env": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-env/index.ts",
+    "if-merge": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-merge/index.ts",
+    "if-run": "npx ts-node src/if-run/index.ts",
     "lint": "gts lint",
     "pre-commit": "lint-staged",
     "prepare": "husky install",
     "prepublish": "npm run build",
     "release": "release-it",
-    "test": "jest --verbose --testPathPattern=src/__tests__/unit",
-    "test:integration": "jest --verbose --testPathPattern=src/__tests__/integration"
+    "test": "jest --verbose --testPathPattern=src/__tests__/"
   },
-  "stability": "stable",
-  "types": "src/index.d.ts"
+  "stability": "stable"
 }

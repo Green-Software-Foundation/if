@@ -1,0 +1,25 @@
+name: sci
+description: successful path
+tags:
+initialize:
+  plugins:
+    sci:
+      kind: plugin
+      method: Sci
+      path: "builtin"
+      global-config:
+        functional-unit: requests
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - sci
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
+          energy: 5
+          carbon-operational: 5
+          carbon-embodied: 0.02
+          carbon: 5.02
+          requests: 100

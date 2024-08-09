@@ -1,31 +1,28 @@
 import * as YAML from 'js-yaml';
+import * as fs from 'fs';
+import * as fsAsync from 'fs/promises';
+import * as path from 'path';
 
 export const readFile = async (filePath: string) => {
-  /** mock for util/json */
-  if (filePath.includes('json-reject')) {
-    return Promise.reject(new Error('rejected'));
+  /** mock for util/npm */
+  if (filePath.includes('package.json-npm')) {
+    const updatedPath = filePath.replace('-npm', '');
+    return fs.readFileSync(updatedPath, 'utf8');
   }
-  if (filePath.includes('json')) {
-    if (filePath.includes('param')) {
-      return JSON.stringify({
-        'mock-carbon': {
-          description: 'an amount of carbon emitted into the atmosphere',
-          unit: 'gCO2e',
-          aggregation: 'sum',
-        },
-        'mock-cpu': {
-          description: 'number of cores available',
-          unit: 'cores',
-          aggregation: 'none',
-        },
-      });
-    }
 
+  if (filePath.includes('json')) {
     return JSON.stringify(filePath);
   }
 
   if (filePath.includes('fail.csv')) {
     throw new Error('file not found');
+  }
+
+  if (filePath.includes('fail-csv-reader.csv')) {
+    return `
+cpu-cores-available,≈ç≈¬˚∆∑∂´®øˆ´cpu-cores-utilized,     ---- cpu-manufacturer,cpu-model-name,cpu-tdp,gpu-count,gpu-model-name,Hardware Information on AWS Documentation & Comments,instance-class,instance-storage,memory-available,platform-memory,release-date,storage-drives
+16,8,AWS,AWS Graviton
+16,16,AWS,AWS Graviton,150.00,N/A,N/A,AWS Graviton (ARM),a1.4xlarge,EBS-Only,32,32,November 2018,`;
   }
 
   /**
@@ -55,8 +52,9 @@ cpu-cores-available,cpu-cores-utilized,cpu-manufacturer,cpu-model-name,cpu-tdp,g
   tree:
     children:
       front-end:
-        pipeline: 
-          - boavizta-cpu
+        pipeline:
+          compute:
+            - boavizta-cpu
         config:
           boavizta-cpu:
             core-units: 24
@@ -73,16 +71,102 @@ cpu-cores-available,cpu-cores-utilized,cpu-manufacturer,cpu-model-name,cpu-tdp,g
 export const mkdir = (dirPath: string) => dirPath;
 
 export const writeFile = async (pathToFile: string, content: string) => {
-  if (pathToFile === 'reject') {
-    throw new Error('Wrong file path');
+  if (pathToFile.includes('package.json-npm1')) {
+    const updatedPath = pathToFile.replace('-npm1', '');
+    const fileContent = await fsAsync.readFile(updatedPath, 'utf8');
+    const fileContentObject = JSON.parse(fileContent);
+    const parsedContent = JSON.parse(content);
+
+    for (const property in fileContentObject) {
+      expect(parsedContent).toHaveProperty(property);
+    }
+  } else if (pathToFile.includes('package.json-npm')) {
+    const updatedPath = pathToFile.replace('-npm', '');
+    const fileContent = await fsAsync.readFile(updatedPath, 'utf8');
+
+    expect(content).toBe(fileContent);
+  } else if (pathToFile.includes('/manifest.yml')) {
+    const templateManifest = path.resolve(
+      __dirname,
+      '../../config/env-template.yml'
+    );
+    const fileContent = await fsAsync.readFile(templateManifest, 'utf8');
+
+    expect(content).toBe(fileContent);
+  } else {
+    if (pathToFile === 'reject') {
+      throw new Error('Wrong file path');
+    }
+
+    const mockPathToFile = 'mock-pathToFile';
+    const mockContent = {
+      name: 'mock-name',
+    };
+    const mockObject = YAML.dump(mockContent, {noRefs: true});
+
+    expect(pathToFile).toBe(mockPathToFile);
+    expect(content).toBe(mockObject);
+  }
+};
+
+export const appendFile = (file: string, appendContent: string) =>
+  `${file}${appendContent}`;
+
+export const stat = async (filePath: string) => {
+  if (filePath === 'true') {
+    return true;
+  } else {
+    throw new Error('File not found.');
+  }
+};
+
+export const access = async (directoryPath: string) => {
+  if (directoryPath === 'true') {
+    return true;
+  } else {
+    throw new Error('Directory not found.');
+  }
+};
+
+export const unlink = async (filePath: string) => {
+  if (filePath === 'true') {
+    return;
+  } else {
+    throw new Error('File not found.');
+  }
+};
+
+export const readdir = (directoryPath: string) => {
+  if (directoryPath.includes('mock-empty-directory')) {
+    return [];
   }
 
-  const mockPathToFile = 'mock-pathToFile';
-  const mockContent = {
-    name: 'mock-name',
-  };
-  const mockObject = YAML.dump(mockContent, {noRefs: true});
+  if (directoryPath.includes('mock-directory')) {
+    return ['file1.yaml', 'file2.yml', 'file3.txt'];
+  }
 
-  expect(pathToFile).toBe(mockPathToFile);
-  expect(content).toBe(mockObject);
+  if (directoryPath.includes('mock-sub-directory')) {
+    return ['subdir/file2.yml', 'file1.yaml'];
+  }
+
+  return [];
+};
+
+export const lstat = (filePath: string) => {
+  if (
+    filePath.includes('mock-directory') ||
+    filePath.includes('mock-sub-directory/subdir') ||
+    filePath === 'true'
+  ) {
+    return {
+      isDirectory: () => true,
+    };
+  }
+
+  if (filePath.includes('mock-file')) {
+    return {
+      isDirectory: () => false,
+    };
+  }
+  return;
 };

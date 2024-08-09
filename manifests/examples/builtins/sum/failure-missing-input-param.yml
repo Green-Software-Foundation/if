@@ -1,0 +1,22 @@
+name: sum
+description: failure with `inputs[0]` misses one of `global-config.input-parameters`
+tags:
+initialize:
+  plugins:
+    sum:
+      method: Sum
+      path: "builtin"
+      global-config:
+        input-parameters: ["cpu/energy", "network/energy"]
+        output-parameter: "energy"
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - sum
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          cpu: 0.001
+          network/energy: 0.001

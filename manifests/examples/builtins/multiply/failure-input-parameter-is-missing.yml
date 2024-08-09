@@ -1,0 +1,22 @@
+name: multiply
+description: failure `inputs` is missing `cpu/energy` parameter
+tags:
+initialize:
+  plugins:
+    multiply:
+      method: Multiply
+      path: "builtin"
+      global-config:
+        input-parameters: ["cpu/energy", "network/energy"]
+        output-parameter: "energy-product"
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - multiply
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          cpu: 0.001
+          network/energy: 0.002

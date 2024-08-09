@@ -1,0 +1,23 @@
+name: template manifest # rename me!
+description: auto-generated template # update description!
+tags: # add any tags that will help you to track your manifests
+initialize:
+  plugins: # add more plugins for your use-case
+    memory-energy-from-memory-util: # you can name this any way you like!
+      method: Coefficient # the name of the function exported from the plugin
+      path: "builtin" # the import path
+      global-config: # anmy config required by the plugin
+        input-parameter: "memory/utilization"
+        coefficient: 0.0001 #kwH/GB
+        output-parameter: "memory/energy"
+tree:
+  children: # add a chile for each distinct component you want to measure
+    child:
+      pipeline: # the pipeline is an ordered list of plugins you want to execute
+        compute:
+          - memory-energy-from-memory-util # must match the name in initialize!
+      config: # any plugin specific, node-level config
+      inputs:
+        - timestamp: 2023-12-12T00:00:00.000Z # ISO 8061 string
+          duration: 3600 # units of seconds
+          memory/utilization: 10
