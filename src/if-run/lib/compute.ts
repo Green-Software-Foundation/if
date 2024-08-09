@@ -108,8 +108,6 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
             pluginData: params.context.initialize!.plugins[pluginName],
           });
         }
-
-        node.outputs = inputStorage;
       }
     }
   }
