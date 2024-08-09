@@ -11,7 +11,8 @@
     "if-run": "./build/if-run/index.js",
     "if-env": "./build/if-env/index.js",
     "if-check": "./build/if-check/index.js",
-    "if-csv": "./build/if-csv/index.js"
+    "if-csv": "./build/if-csv/index.js",
+    "if-merge": "./build/if-merge/index.js"
   },
   "bugs": {
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
@@ -80,6 +81,7 @@
     "if-csv": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-csv/index.ts",
     "if-diff": "npx ts-node src/if-diff/index.ts",
     "if-env": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-env/index.ts",
+    "if-merge": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-merge/index.ts",
     "if-run": "npx ts-node src/if-run/index.ts",
     "lint": "gts lint",
     "pre-commit": "lint-staged",
