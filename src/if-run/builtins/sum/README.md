@@ -104,9 +104,11 @@ initialize:
             description: energy consumed by the cpu
             unit: kWh
             aggregation-method: sum
+            aggregation-method: sum
           network/energy:
             description: energy consumed by data ingress and egress
             unit: kWh
+            aggregation-method: sum
             aggregation-method: sum
         outputs:
           energy:

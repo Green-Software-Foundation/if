@@ -10,14 +10,14 @@ import {
   TimeNormalizerConfig,
   TimeParams,
   PluginParametersMetadata,
+  ParameterMetadata,
   MappingParams,
 } from '@grnsft/if-core/types';
 
-import {validate} from '../../common/util/validations';
+import {validate} from '../../../common/util/validations';
 
-import {STRINGS} from '../config';
-import {getAggregationMethod} from '../lib/aggregate';
-import {mapOutput} from '../../common/util/helpers';
+import {STRINGS} from '../../config';
+import {getAggregationMethod} from '../../lib/aggregate';
 
 Settings.defaultZone = 'utc';
 
@@ -56,21 +56,24 @@ const {
 export const TimeSync = (
   globalConfig: TimeNormalizerConfig,
   parametersMetadata: PluginParametersMetadata,
-  mapping: MappingParams
+  _mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
-    inputs: parametersMetadata?.inputs || {
-      timestamp: {
-        description: 'refers to the time of occurrence of the input',
-        unit: 'RFC3339',
-        'aggregation-method': 'none',
-      },
-      duration: {
-        description: 'refers to the duration of the input',
-        unit: 'seconds',
-        'aggregation-method': 'sum',
-      },
+    inputs: {
+      ...({
+        timestamp: {
+          description: 'refers to the time of occurrence of the input',
+          unit: 'RFC3339',
+          'aggregation-method': 'none',
+        },
+        duration: {
+          description: 'refers to the duration of the input',
+          unit: 'seconds',
+          'aggregation-method': 'sum',
+        },
+      } as ParameterMetadata),
+      ...parametersMetadata?.inputs,
     },
     outputs: parametersMetadata?.outputs,
   };
@@ -146,8 +149,7 @@ export const TimeSync = (
       parseDate(a.timestamp).diff(parseDate(b.timestamp)).as('seconds')
     );
 
-    const outputs = resampleInputs(sortedInputs, timeParams) as PluginParams[];
-    return outputs.map(output => mapOutput(output, mapping));
+    return resampleInputs(sortedInputs, timeParams) as PluginParams[];
   };
 
   /**
@@ -350,14 +352,23 @@ export const TimeSync = (
       const metrics = Object.keys(input);
 
       metrics.forEach(metric => {
-        const method = getAggregationMethod(metric);
-        acc[metric] = acc[metric] ?? 0;
+        let method = getAggregationMethod(metric);
 
         if (metric === 'timestamp') {
           acc[metric] = inputs[0][metric];
 
           return;
         }
+
+        if (metric === 'duration') {
+          method = 'sum';
+        }
+
+        if (!method) {
+          return;
+        }
+
+        acc[metric] = acc[metric] ?? 0;
 
         if (method === 'sum') {
           acc[metric] += input[metric];
