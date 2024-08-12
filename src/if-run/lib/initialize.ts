@@ -75,7 +75,7 @@ const handModule = (method: string, pluginPath: string) => {
 };
 
 /**
- * Initializes plugin with global config.
+ * Initializes plugin with config.
  */
 const initPlugin = async (
   initPluginParams: PluginOptions
@@ -83,7 +83,7 @@ const initPlugin = async (
   const {
     method,
     path,
-    'global-config': globalConfig,
+    config: config,
     'parameter-metadata': parameterMetadata,
   } = initPluginParams!;
 
@@ -99,7 +99,7 @@ const initPlugin = async (
 
   const plugin = await handModule(method, path);
 
-  return plugin(globalConfig, parameterMetadata);
+  return plugin(config, parameterMetadata);
 };
 
 /**
