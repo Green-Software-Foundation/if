@@ -10,7 +10,7 @@ For example, you could add `cpu/energy` and `network/energy` and name the result
 
 ### Plugin config
 
-Two parameters are required in global config: `input-parameters` and `output-parameter`.
+Two parameters are required in config: `input-parameters` and `output-parameter`.
 
 `input-parameters`: an array of strings. Each string should match an existing key in the `inputs` array
 `output-parameter`: a string defining the name to use to add the result of summing the input parameters to the output array.
@@ -19,13 +19,13 @@ Two parameters are required in global config: `input-parameters` and `output-par
 
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
-- `inputs`: describe parameters of the `input-parameters` of the global config. Each parameter has:
+- `inputs`: describe parameters of the `input-parameters` of the config. Each parameter has:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
-- `outputs`: describe the parameter of the `output-parameter` of the global config. The parameter has the following attributes:
+- `outputs`: describe the parameter of the `output-parameter` of the config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
@@ -36,7 +36,7 @@ All of `input-parameters` must be available in the input array.
 
 ## Returns
 
-- `output-parameter`: the sum of all `input-parameters` with the parameter name defined by `output-parameter` in global config.
+- `output-parameter`: the sum of all `input-parameters` with the parameter name defined by `output-parameter` in config.
 
 ## Calculation
 
@@ -78,7 +78,7 @@ initialize:
     sum:
       method: Sum
       path: 'builtin'
-      global-config:
+      config:
         input-parameters: ['cpu/energy', 'network/energy']
         output-parameter: 'energy'
       parameter-metadata:

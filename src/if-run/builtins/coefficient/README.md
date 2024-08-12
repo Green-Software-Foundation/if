@@ -8,9 +8,9 @@ For example, you could multiply `cpu/energy` by 10 and name the result `energy-p
 
 ## Parameters
 
-### Plugin global config
+### Plugin config
 
-Three parameters are required in global config: `input-parameter`, `coefficient` and `output-parameter`.
+Three parameters are required in config: `input-parameter`, `coefficient` and `output-parameter`.
 
 - `input-parameter`: a string matching an existing key in the `inputs` array
 - `coefficient`: the value to multiply `input-parameter` by.
@@ -21,13 +21,13 @@ Three parameters are required in global config: `input-parameter`, `coefficient`
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method`
 of the parameters of the inputs and outputs
 
-- `inputs`: describe parameters of the `input-parameter` of the global config. Each parameter has:
+- `inputs`: describe parameters of the `input-parameter` of the config. Each parameter has:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
-- `outputs`: describe parameters of the `output-parameter` of the global config. Each parameter has:
+- `outputs`: describe parameters of the `output-parameter` of the config. Each parameter has:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
@@ -38,7 +38,7 @@ All of `input-parameters` must be available in the input array.
 
 ## Returns
 
-- `output-parameter`: the product of all `input-parameters` with the parameter name defined by `output-parameter` in global config.
+- `output-parameter`: the product of all `input-parameters` with the parameter name defined by `output-parameter` in config.
 
 ## Calculation
 
@@ -80,7 +80,7 @@ initialize:
     coefficient:
       method: Coefficient
       path: 'builtin'
-      global-config:
+      config:
         input-parameter: 'carbon'
         coefficient: 3
         output-parameter: 'carbon-product'

@@ -20,13 +20,13 @@ Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-26
 
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
-- `inputs`: describe the parameter of the `parameter` value of the global config. The parameter has the following attributes:
+- `inputs`: describe the parameter of the `parameter` value of the config. The parameter has the following attributes:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
-- `outputs`: describe the parameters of the `output` of the global config. The parameter has the following attributes:
+- `outputs`: describe the parameters of the `output` of the config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
@@ -37,19 +37,19 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ## Returns
 
-- `output`: The match of the `parameter` value using the `match` regex defined in the global config. If the `match` regex includes the global flag (`g`), a string containing all matches separated by spaces.
+- `output`: The match of the `parameter` value using the `match` regex defined in the config. If the `match` regex includes the global flag (`g`), a string containing all matches separated by spaces.
 
 ## Implementation
 
 To run the plugin, you must first create an instance of `Regex`. Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
+const config = {
   parameter: 'physical-processor',
   match: '^[^,]+',
   output: 'cpu/name',
 };
-const regex = Regex(globalConfig);
+const regex = Regex(config);
 
 const input = [
   {
@@ -74,7 +74,7 @@ initialize:
     regex:
       method: Regex
       path: 'builtin'
-      global-config:
+      config:
         parameter: physical-processor
         match: ^[^,]+
         output: cpu/name

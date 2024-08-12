@@ -10,7 +10,7 @@ For example, you use `cpu/energy` as base and `network/energy` as and name the r
 
 ### Plugin config
 
-Three parameters are required in global config: `input-parameter`, `exponent` and `output-parameter`.
+Three parameters are required in config: `input-parameter`, `exponent` and `output-parameter`.
 
 `input-parameter`: a string defining the base. Must match an existing key in the `inputs` array
 `exponent`: a number defining the exponent.
@@ -20,13 +20,13 @@ Three parameters are required in global config: `input-parameter`, `exponent` an
 
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
-- `inputs`: describe the parameter of the `input-parameter` of the global config. The parameter has the following attributes:
+- `inputs`: describe the parameter of the `input-parameter` of the config. The parameter has the following attributes:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
-- `outputs`: describe the parameter of the `output-parameter` of the global config. The parameter has the following attributes::
+- `outputs`: describe the parameter of the `output-parameter` of the config. The parameter has the following attributes::
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
@@ -37,7 +37,7 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ## Returns
 
-- `output-parameter`: `input-parameter` raised by `exponent` with the parameter name defined by `output-parameter` in global config.
+- `output-parameter`: `input-parameter` raised by `exponent` with the parameter name defined by `output-parameter` in config.
 
 ## Calculation
 
@@ -82,7 +82,7 @@ initialize:
     exponent:
       method: Exponent
       path: 'builtin'
-      global-config:
+      config:
         input-parameter: 'cpu/energy'
         exponent: 2
         output-parameter: 'energy'

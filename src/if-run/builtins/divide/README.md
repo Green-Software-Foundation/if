@@ -16,13 +16,13 @@ You provide the names of the values you want to divide, and a name to use to add
 
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
-- `inputs`: describe the parameter of the `numerator` of the global config. The parameter has the following attributes:
+- `inputs`: describe the parameter of the `numerator` of the config. The parameter has the following attributes:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
-- `outputs`: describe the parameter of the `denominator` of the global config. The parameter has the following attributes:
+- `outputs`: describe the parameter of the `denominator` of the config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
@@ -35,7 +35,7 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ## Returns
 
-- `output`: the division of `numerator` with the parameter name into `denominator` with the parameter name defined by `output` in global config.
+- `output`: the division of `numerator` with the parameter name into `denominator` with the parameter name defined by `output` in config.
 
 The plugin throws an exception if the division result is not a number.
 
@@ -52,12 +52,12 @@ output = input0 / input1
 To run the plugin, you must first create an instance of `Divide`. Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
+const config = {
   numerator: 'vcpus-allocated',
   denominator: 2,
   output: 'cpu/number-cores',
 };
-const divide = Divide(globalConfig, parametersMetadata);
+const divide = Divide(config, parametersMetadata);
 
 const input = [
   {
@@ -81,7 +81,7 @@ initialize:
     divide:
       method: Divide
       path: 'builtin'
-      global-config:
+      config:
         numerator: vcpus-allocated
         denominator: 2
         output: cpu/number-cores

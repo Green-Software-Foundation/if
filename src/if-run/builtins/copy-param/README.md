@@ -43,13 +43,13 @@ Three parameters are required in config: `from` and `to` and `keep-existing`.
 
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
-- `inputs`: describe the parameter of the `from` of the global config. The parameter has the following attributes:
+- `inputs`: describe the parameter of the `from` of the config. The parameter has the following attributes:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
-- `outputs`: describe the parameters of the `to` of the global config. The parameter has the following attributes:
+- `outputs`: describe the parameters of the `to` of the config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
@@ -99,7 +99,7 @@ initialize:
     copy-param:
       path: builtin
       method: Copy
-      global-config:
+      config:
         keep-existing: true
         from: original
         to: copy

@@ -4,7 +4,7 @@ The `shell` is a wrapper enabling plugins implemented in any other programming l
 
 ## Parameters
 
-### Plugin global config
+### Plugin config
 
 The plugin should be initialized as follows:
 
@@ -14,7 +14,7 @@ initialize:
     shell:
       method: Shell
       path: 'builtin'
-      global-config:
+      config:
         command: python3 /usr/local/bin/sampler
 ```
 
@@ -85,7 +85,7 @@ initialize:
     sampler:
       method: Shell
       path: 'builtin'
-      global-config:
+      config:
         command: python3 /usr/local/bin/sampler
 tree:
   children:
@@ -112,7 +112,7 @@ initialize:
     sampler:
       method: Shell
       path: 'builtin'
-      global-config:
+      config:
         command: python3 /usr/local/bin/sampler
 tree:
   children:
