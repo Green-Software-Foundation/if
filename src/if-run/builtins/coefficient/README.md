@@ -34,14 +34,14 @@ of the parameters of the inputs and outputs
 
 ### Mapping
 
-The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
 
 ```yaml
 coefficient:
   method: Coefficient
   path: 'builtin'
   mapping:
-    'old-name': 'new-name'
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
 ```
 
 ### Inputs
@@ -109,9 +109,6 @@ initialize:
             description: 'a product of cabon property and the coefficient'
             unit: 'gCO2e'
             aggregation-method: sum
-      mapping:
-        carbon-product: calculated-carbon
-
 tree:
   children:
     child:

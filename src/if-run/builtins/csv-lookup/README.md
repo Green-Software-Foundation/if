@@ -70,14 +70,14 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
 
 ```yaml
 cloud-metadata:
   method: CSVLookup
   path: 'builtin'
   mapping:
-    'old-name': 'new-name'
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
 ```
 
 ### Inputs
@@ -113,7 +113,7 @@ const globalConfig = {
 };
 const parametersMetadata = {inputs: {}, outputs: {}};
 const mapping = {};
-const csvLookup = CSVLookup(globalConfig);
+const csvLookup = CSVLookup(globalConfig, parametersMetadata, mapping);
 
 const input = [
   {
@@ -157,7 +157,7 @@ tree:
         - timestamp: 2023-08-06T00:00
           duration: 3600
           cloud/provider: Google Cloud
-          cloud/region: europe-north1
+          cloud/area: europe-north1
 ```
 
 You can run this example by saving it as `./examples/manifests/csv-lookup.yml` and executing the following command from the project root:

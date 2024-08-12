@@ -27,14 +27,14 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block is an optional block. It is added in the plugin section and allows renaming the parameters of the input and output. The parameter with the new name will persist in the outputs. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
 
 ```yaml
 sci-embodied:
   method: SciEmbodied
   path: 'builtins'
   mapping:
-    'old-name': 'new-name'
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
 ```
 
 ### Inputs
@@ -87,7 +87,7 @@ import {SciEmbodied} from 'builtins';
 
 const parametersMetadata = {inputs: {}, outputs: {}};
 const mapping = {};
-const sciEmbodied = SciEmbodied(parametersMetadata, mapping);
+const sciEmbodied = SciEmbodied(undefined, parametersMetadata, mapping);
 const results = await sciEmbodied.execute([
   {
     'device/emissions-embodied': 200, // in gCO2e for total resource units
@@ -114,7 +114,6 @@ initialize:
       path: 'builtins'
       mapping:
         device/emissions-embodied: device/carbon-footprint
-        carbon-embodied: carbon-footprint
 tree:
   children:
     child:
@@ -122,7 +121,7 @@ tree:
         compute:
           - sci-embodied # duration & config -> embodied
       defaults:
-        device/emissions-embodied: 1533.120 # gCO2eq
+        device/carbon-footprint: 1533.120 # gCO2eq
         device/expected-lifespan: 3 # 3 years in seconds
         resources-reserved: 1
         resources-total: 8
