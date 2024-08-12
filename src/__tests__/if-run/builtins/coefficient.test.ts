@@ -57,6 +57,7 @@ describe('builtins/coefficient: ', () => {
         const mapping = {
           carbon: 'carbon-for-production',
         };
+
         const coefficient = Coefficient(
           globalConfig,
           parametersMetadata,
@@ -76,7 +77,7 @@ describe('builtins/coefficient: ', () => {
         const result = coefficient.execute([
           {
             duration: 3600,
-            carbon: 3,
+            'carbon-for-production': 3,
             timestamp: '2021-01-01T00:00:00Z',
           },
         ]);

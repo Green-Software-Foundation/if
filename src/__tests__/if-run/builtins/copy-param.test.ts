@@ -72,7 +72,7 @@ describe('builtins/copy: ', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
-            original: 'hello',
+            from: 'hello',
           },
         ]);
 

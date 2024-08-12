@@ -133,7 +133,6 @@ describe('builtins/CSVLookup: ', () => {
         };
         const parameterMetadata = {inputs: {}, outputs: {}};
         const mapping = {
-          tdp: 'cpu/tdp',
           'cpu/utilized': 'cpu/util',
         };
         const csvLookup = CSVLookup(globalConfig, parameterMetadata, mapping);
@@ -142,7 +141,7 @@ describe('builtins/CSVLookup: ', () => {
           {
             timestamp: '2024-03-01',
             'cpu/available': 16,
-            'cpu/utilized': 16,
+            'cpu/util': 16,
             'cpu/manufacturer': 'AWS',
           },
         ]);
@@ -152,7 +151,7 @@ describe('builtins/CSVLookup: ', () => {
             'cpu/available': 16,
             'cpu/util': 16,
             'cpu/manufacturer': 'AWS',
-            'cpu/tdp': 150,
+            tdp: 150,
           },
         ];
 

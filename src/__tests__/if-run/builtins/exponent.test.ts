@@ -53,6 +53,11 @@ describe('builtins/exponent: ', () => {
         const mapping = {
           'energy/base': 'energy/main',
         };
+        const globalConfig = {
+          'input-parameter': 'energy/base',
+          exponent: 3,
+          'output-parameter': 'energy',
+        };
         const exponent = Exponent(globalConfig, parametersMetadata, mapping);
         const expectedResult = [
           {
@@ -66,7 +71,7 @@ describe('builtins/exponent: ', () => {
         const result = await exponent.execute([
           {
             duration: 3600,
-            'energy/base': 2,
+            'energy/main': 2,
             timestamp: '2021-01-01T00:00:00Z',
           },
         ]);

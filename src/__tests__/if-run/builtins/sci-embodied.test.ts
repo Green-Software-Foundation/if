@@ -13,7 +13,7 @@ describe('builtins/sci-embodied:', () => {
       inputs: {},
       outputs: {},
     };
-    const sciEmbodied = SciEmbodied(parametersMetadata, {});
+    const sciEmbodied = SciEmbodied(undefined, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -72,14 +72,13 @@ describe('builtins/sci-embodied:', () => {
       it('executes when `mapping` has valid data.', async () => {
         const mapping = {
           'device/emissions-embodied': 'device/carbon-footprint',
-          'carbon-embodied': 'carbon-footprint',
         };
-        const sciEmbodied = SciEmbodied(parametersMetadata, mapping);
+        const sciEmbodied = SciEmbodied(undefined, parametersMetadata, mapping);
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 60 * 60 * 24 * 30,
-            'device/emissions-embodied': 200,
+            'device/carbon-footprint': 200,
             'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
             'resources-reserved': 1,
             'resources-total': 1,
@@ -87,7 +86,7 @@ describe('builtins/sci-embodied:', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 60 * 60 * 24 * 30 * 2,
-            'device/emissions-embodied': 200,
+            'device/carbon-footprint': 200,
             'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
             'resources-reserved': 1,
             'resources-total': 1,
@@ -106,7 +105,7 @@ describe('builtins/sci-embodied:', () => {
             'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
             'resources-reserved': 1,
             'resources-total': 1,
-            'carbon-footprint': 4.10958904109589,
+            'carbon-embodied': 4.10958904109589,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -115,7 +114,7 @@ describe('builtins/sci-embodied:', () => {
             'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
             'resources-reserved': 1,
             'resources-total': 1,
-            'carbon-footprint': 4.10958904109589 * 2,
+            'carbon-embodied': 4.10958904109589 * 2,
           },
         ]);
       });

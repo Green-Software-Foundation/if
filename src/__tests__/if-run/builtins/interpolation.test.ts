@@ -61,6 +61,20 @@ describe('builtins/interpolation: ', () => {
           'cpu/utilization': 'cpu/util',
           'interpolation-result': 'result',
         };
+        const globalConfig = {
+          method: Method.LINEAR,
+          x: [0, 10, 50, 100],
+          y: [0.12, 0.32, 0.75, 1.02],
+          'input-parameter': 'cpu/utilization',
+          'output-parameter': 'interpolation-result',
+        };
+        const inputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/util': 45,
+          },
+        ];
         const plugin = Interpolation(globalConfig, parametersMetadata, mapping);
         const outputs = [
           {

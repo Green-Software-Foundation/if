@@ -111,7 +111,7 @@ describe('builtins/mock-observations: ', () => {
             'common-key': 'common-val',
           },
           randint: {
-            'cpu/utilization': {min: 10, max: 11},
+            'cpu/util': {min: 10, max: 11},
           },
         },
       };

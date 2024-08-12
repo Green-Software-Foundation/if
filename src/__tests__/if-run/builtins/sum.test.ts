@@ -56,9 +56,14 @@ describe('builtins/sum: ', () => {
 
       it('successfully executes when `mapping` has valid data.', () => {
         expect.assertions(1);
+
         const mapping = {
           'cpu/energy': 'energy-from-cpu',
           'network/energy': 'energy-from-network',
+        };
+        const globalConfig = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': 'energy',
         };
 
         const sum = Sum(globalConfig, parametersMetadata, mapping);
@@ -78,8 +83,8 @@ describe('builtins/sum: ', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
-            'cpu/energy': 1,
-            'network/energy': 1,
+            'energy-from-cpu': 1,
+            'energy-from-network': 1,
             'memory/energy': 1,
           },
         ]);

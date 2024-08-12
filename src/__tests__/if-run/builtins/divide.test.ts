@@ -71,7 +71,7 @@ describe('builtins/divide: ', () => {
         const result = await divide.execute([
           {
             duration: 3600,
-            'vcpus-allocated': 24,
+            'vcpus-distributed': 24,
             timestamp: '2021-01-01T00:00:00Z',
           },
         ]);

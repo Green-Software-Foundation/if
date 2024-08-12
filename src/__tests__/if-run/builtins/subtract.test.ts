@@ -55,6 +55,10 @@ describe('builtins/subtract: ', () => {
         const mapping = {
           'cpu/energy': 'energy-for-cpu',
         };
+        const globalConfig = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': 'energy/diff',
+        };
         const subtract = Subtract(globalConfig, parametersMetadata, mapping);
         expect.assertions(1);
 
@@ -72,7 +76,7 @@ describe('builtins/subtract: ', () => {
         const result = await subtract.execute([
           {
             duration: 3600,
-            'cpu/energy': 4,
+            'energy-for-cpu': 4,
             'network/energy': 2,
             'memory/energy': 1,
             timestamp: '2021-01-01T00:00:00Z',

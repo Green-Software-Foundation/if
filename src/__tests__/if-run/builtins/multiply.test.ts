@@ -58,6 +58,10 @@ describe('builtins/multiply: ', () => {
           'network/energy': 'energy-from-network',
           'memory/energy': 'energy-from-memory',
         };
+        const globalConfig = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': 'energy',
+        };
         const multiply = Multiply(globalConfig, parametersMetadata, mapping);
 
         const expectedResult = [
@@ -75,9 +79,9 @@ describe('builtins/multiply: ', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
-            'cpu/energy': 2,
-            'network/energy': 2,
-            'memory/energy': 2,
+            'energy-from-cpu': 2,
+            'energy-from-network': 2,
+            'energy-from-memory': 2,
           },
         ]);
 

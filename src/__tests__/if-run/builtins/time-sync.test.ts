@@ -632,7 +632,7 @@ describe('builtins/time-sync:', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it.skip('returns a result when `mapping` has valid data.', async () => {
+      it('returns a result when `mapping` has valid data.', async () => {
         const basicConfig = {
           'start-time': '2023-12-12T00:00:00.000Z',
           'end-time': '2023-12-12T00:00:09.000Z',
@@ -642,19 +642,23 @@ describe('builtins/time-sync:', () => {
         const mapping = {
           'time-reserved': 'time-allocated',
         };
+
+        storeAggregationMetrics({'time-allocated': 'avg'});
+        storeAggregationMetrics({'resources-total': 'sum'});
+
         const timeModel = TimeSync(basicConfig, parametersMetadata, mapping);
 
         const result = await timeModel.execute([
           {
             timestamp: '2023-12-12T00:00:00.000Z',
             duration: 3,
-            'time-reserved': 5,
+            'time-allocated': 5,
             'resources-total': 10,
           },
           {
             timestamp: '2023-12-12T00:00:05.000Z',
             duration: 3,
-            'time-reserved': 5,
+            'time-allocated': 5,
             'resources-total': 10,
           },
         ]);

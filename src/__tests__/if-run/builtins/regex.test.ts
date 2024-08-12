@@ -104,7 +104,7 @@ describe('builtins/regex: ', () => {
           {
             timestamp: '2023-08-06T00:00',
             duration: 3600,
-            'cloud/instance-type': 'Standard_DS1_v2',
+            'instance-type': 'Standard_DS1_v2',
           },
         ]);
 
