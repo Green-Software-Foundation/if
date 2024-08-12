@@ -6,7 +6,7 @@ initialize:
     memory-energy-from-memory-util: # you can name this any way you like!
       method: Coefficient # the name of the function exported from the plugin
       path: "builtin" # the import path
-      global-config: # any config required by the plugin
+      config: # any config required by the plugin
         input-parameter: "memory/utilization"
         coefficient: 0.0001 #kwH/GB
         output-parameter: "memory/energy"
