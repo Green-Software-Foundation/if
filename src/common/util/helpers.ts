@@ -66,17 +66,49 @@ export const parseManifestFromStdin = async () => {
 };
 
 /**
- * Maps the output of thr input if the `mapping` parameter is provided.
+ * Maps input data if the mapping has valid data.
  */
-export const mapOutput = (output: PluginParams, mapping: MappingParams) => {
-  if (!mapping) return output;
+export const mapInputIfNeeded = (
+  input: PluginParams,
+  mapping: MappingParams
+) => {
+  const newInput = Object.assign({}, input);
 
-  return Object.entries(output).reduce((acc, [key, value]) => {
-    if (key in mapping) {
-      acc[mapping[key]] = value;
-    } else {
-      acc[key] = value;
+  Object.entries(mapping || {}).forEach(([key, value]) => {
+    if (value in newInput) {
+      const mappedKey = input[value];
+      newInput[key] = mappedKey;
+      delete newInput[value];
     }
-    return acc;
-  }, {} as PluginParams);
+  });
+
+  return newInput;
+};
+
+/**
+ * Maps config data if the mapping hass valid data.
+ */
+export const mapConfigIfNeeded = (config: any, mapping: MappingParams) => {
+  if (!mapping) {
+    return config;
+  }
+
+  if (typeof config !== 'object' || config === null) {
+    return config;
+  }
+
+  const result: Record<string, any> = Array.isArray(config) ? [] : {};
+
+  Object.entries(config).forEach(([key, value]) => {
+    const mappedKey = mapping[key] || key;
+
+    if (typeof value === 'object' && value !== null) {
+      result[mappedKey] = mapConfigIfNeeded(value, mapping);
+    } else {
+      result[mappedKey] =
+        typeof value === 'string' && value in mapping ? mapping[value] : value;
+    }
+  });
+
+  return result;
 };
