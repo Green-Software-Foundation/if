@@ -62,6 +62,7 @@ const mergeDefaults = (
  */
 const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   const pipeline = node.pipeline || (params.pipeline as PhasedPipeline);
+  const config = node.config || params.config;
   const defaults = node.defaults || params.defaults;
   const noFlags = !params.observe && !params.regroup && !params.compute;
 
@@ -72,6 +73,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       ...params,
       pipeline,
       defaults,
+      config,
     });
   }
 
@@ -86,9 +88,10 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     while (pipelineCopy.observe.length !== 0) {
       const pluginName = pipelineCopy.observe.shift() as string;
       const plugin = params.pluginStorage.get(pluginName);
+      const nodeConfig = config && config[pluginName];
 
       if (isExecute(plugin)) {
-        inputStorage = await plugin.execute(inputStorage);
+        inputStorage = await plugin.execute(inputStorage, nodeConfig);
         node.inputs = inputStorage;
 
         if (params.context.explainer) {
@@ -119,6 +122,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
         regroup: undefined,
       },
       defaults,
+      config,
     });
   }
 
@@ -129,9 +133,10 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     while (pipelineCopy.compute.length !== 0) {
       const pluginName = pipelineCopy.compute.shift() as string;
       const plugin = params.pluginStorage.get(pluginName);
+      const nodeConfig = config && config[pluginName];
 
       if (isExecute(plugin)) {
-        inputStorage = await plugin.execute(inputStorage);
+        inputStorage = await plugin.execute(inputStorage, nodeConfig);
         node.outputs = inputStorage;
         debugLogger.setExecutingPluginName();
       }
