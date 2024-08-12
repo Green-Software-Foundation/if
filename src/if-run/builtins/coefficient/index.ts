@@ -20,20 +20,8 @@ export const Coefficient = (
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
-    inputs: parametersMetadata?.inputs || {
-      carbon: {
-        description: 'an amount of carbon emitted into the atmosphere',
-        unit: 'gCO2e',
-        'aggregation-method': 'sum',
-      },
-    },
-    outputs: parametersMetadata?.outputs || {
-      'carbon-product': {
-        description: 'a product of cabon property and the coefficient',
-        unit: 'gCO2e',
-        'aggregation-method': 'sum',
-      },
-    },
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**

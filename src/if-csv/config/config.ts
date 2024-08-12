@@ -22,7 +22,6 @@ export const CONFIG = {
     },
     params: {
       type: String,
-      optional: false,
       alias: 'p',
       description: '[parameter to export]',
     },

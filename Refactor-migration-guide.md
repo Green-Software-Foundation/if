@@ -178,9 +178,7 @@ The aggregate plugin aggregates data in two ways: first it condenses individual 
 
 This is a builtin feature of IF, meaning it does not have to be initialized as a plugin. Instead, you just have to include a short config block in the top of the manifest file. There are two pieces of information required:
 
-- `metrics`: which metrics do you want to aggregate? Every metric you provide here must exist in the output array.
-
-  - `method`: the aggregation method for the specied metric
+- `metrics`: which metrics do you want to aggregate? Every metric you provide here must exist in the output array and be described in the `parameter-metadata` of the plugin.
 
 - `type`: the options are `horizontal`, `vertical` or both. Horizontal aggregation is the type that condenses each time series into a single summary value. Vertical aggregation is aggregated across components.
 
@@ -189,8 +187,7 @@ Here's what the config block should look like:
 ```yaml
 aggregation:
   metrics:
-    'carbon':
-      method: 'sum'
+    - carbon
   type: 'both'
 ```
 

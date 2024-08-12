@@ -24,12 +24,11 @@ export const STRINGS = {
   METRIC_MISSING: (metric: string, index: number) =>
     `Aggregation metric ${metric} is not found in inputs[${index}].`,
   INVALID_GROUP_KEY: (key: string) => `Invalid group ${key}.`,
-  REGROUP_ERROR:
-    'Regroup phase is not an array or should contain at least one key.',
+  REGROUP_ERROR: 'not an array or should contain at least one key',
   INVALID_EXHAUST_PLUGIN: (pluginName: string) =>
     `Invalid exhaust plugin: ${pluginName}.`,
   UNKNOWN_PARAM: (name: string) =>
-    `Unknown parameter: ${name}. Using 'sum' aggregation method.`,
+    `Unknown parameter: ${name}. Omitting from the output.`,
   NOT_INITALIZED_PLUGIN: (name: string) =>
     `Not initalized plugin: ${name}. Check if ${name} is in 'manifest.initalize.plugins'.`,
   NO_OUTPUT: `
@@ -58,6 +57,8 @@ Note that for the '--output' option you also need to define the output type in y
   PREPARING_OUTPUT_DATA: 'Preparing output data',
   EXPORTING_TO_YAML_FILE: (savepath: string) =>
     `Exporting to yaml file: ${savepath}`,
+  EMPTY_PIPELINE: `You're using an old style manifest. Please update for phased execution. More information can be found here: 
+https://if.greensoftware.foundation/major-concepts/manifest-file`,
   /** Exhaust messages */
   OUTPUT_REQUIRED:
     'Output path is required, please make sure output is configured properly.',

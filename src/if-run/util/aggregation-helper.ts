@@ -7,25 +7,9 @@ import {AggregationMetric, AggregationResult} from '../types/aggregation';
 
 import {getAggregationMethod} from '../lib/aggregate';
 
-const {InvalidAggregationMethodError, MissingAggregationParamError} = ERRORS;
-const {INVALID_AGGREGATION_METHOD, METRIC_MISSING} = STRINGS;
+const {MissingAggregationParamError} = ERRORS;
+const {METRIC_MISSING} = STRINGS;
 const {AGGREGATION_ADDITIONAL_PARAMS} = CONFIG;
-
-/**
- * Validates metrics array before applying aggregator.
- * If aggregation method is `none`, then throws error.
- */
-const checkIfMetricsAreValid = (metrics: AggregationMetric) => {
-  Object.keys(metrics).forEach(metric => {
-    const method = metrics[metric].method;
-
-    if (method === 'none') {
-      throw new InvalidAggregationMethodError(
-        INVALID_AGGREGATION_METHOD(metric)
-      );
-    }
-  });
-};
 
 /**
  * Aggregates child node level metrics. Validates if metric aggregation type is `none`, then rejects with error.
@@ -33,14 +17,11 @@ const checkIfMetricsAreValid = (metrics: AggregationMetric) => {
  */
 export const aggregateInputsIntoOne = (
   inputs: PluginParams[],
-  metrics: AggregationMetric,
+  metrics: AggregationMetric[],
   isTemporal?: boolean
 ) => {
-  checkIfMetricsAreValid(metrics);
-  const extendedMetrics = [
-    ...Object.keys(metrics),
-    ...AGGREGATION_ADDITIONAL_PARAMS,
-  ];
+  const metricsKeys: string[] = metrics.map(metric => Object.keys(metric)[0]);
+  const extendedMetrics = [...metricsKeys, ...AGGREGATION_ADDITIONAL_PARAMS];
 
   return inputs.reduce((acc, input, index) => {
     for (const metric of extendedMetrics) {
@@ -54,12 +35,18 @@ export const aggregateInputsIntoOne = (
           acc[metric] = input[metric];
         }
       } else {
+        const method = getAggregationMethod(metric);
+
+        if (!method) {
+          return acc;
+        }
+
         acc[metric] = acc[metric] ?? 0;
         acc[metric] += parseFloat(input[metric]);
 
         /** Checks for the last iteration. */
         if (index === inputs.length - 1) {
-          if (getAggregationMethod(metric) === 'avg') {
+          if (method === 'avg') {
             acc[metric] /= inputs.length;
           }
         }

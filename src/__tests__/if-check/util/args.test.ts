@@ -72,8 +72,9 @@ const {
   CliSourceFileError,
   ParseCliParamsError,
 } = ERRORS;
-const {DIRECTORY_NOT_FOUND, IF_CHECK_FLAGS_MISSING} = STRINGS;
-const {SOURCE_IS_NOT_YAML, MANIFEST_NOT_FOUND} = COMMON_STRINGS;
+const {IF_CHECK_FLAGS_MISSING} = STRINGS;
+const {SOURCE_IS_NOT_YAML, MANIFEST_NOT_FOUND, DIRECTORY_NOT_FOUND} =
+  COMMON_STRINGS;
 
 describe('if-check/util: ', () => {
   const originalEnv = process.env;

@@ -5,8 +5,7 @@ description: >-
 tags: null
 aggregation:
   metrics:
-    "dummy-param":
-      method: sum
+    - dummy-param
   type: both
 initialize:
   plugins:
@@ -133,8 +132,7 @@ execution:
       - winston@3.11.0
       - zod@3.22.4
   error: >-
-    MissingAggregationParamError: Aggregation metric dummy-param is not found in
-    inputs[0].
+    MissingInputDataError: `functional-unit` value is missing from input data or it is not a positive integer
 tree:
   children:
     child-1:

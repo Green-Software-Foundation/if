@@ -242,19 +242,13 @@ describe('if-run/util/helpers: ', () => {
 
       expect(storeAggregationMetrics).toHaveBeenCalledTimes(3);
       expect(storeAggregationMetrics).toHaveBeenNthCalledWith(1, {
-        metrics: {
-          carbon: {method: 'sum'},
-        },
+        carbon: 'sum',
       });
       expect(storeAggregationMetrics).toHaveBeenNthCalledWith(2, {
-        metrics: {
-          cpu: {method: 'avg'},
-        },
+        cpu: 'avg',
       });
       expect(storeAggregationMetrics).toHaveBeenNthCalledWith(3, {
-        metrics: {
-          carbon: {method: 'none'},
-        },
+        carbon: 'none',
       });
     });
 

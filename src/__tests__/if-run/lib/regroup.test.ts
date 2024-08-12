@@ -86,7 +86,7 @@ describe('lib/regroup: ', () => {
         expect(error).toBeInstanceOf(InputValidationError);
         expect(error).toEqual(
           new InputValidationError(
-            '"groups" parameter is required. Error code: invalid_type.'
+            '"regroup" parameter is not an array or should contain at least one key. Error code: invalid_type.'
           )
         );
       }
@@ -135,7 +135,7 @@ describe('lib/regroup: ', () => {
         expect(error).toBeInstanceOf(InputValidationError);
         expect(error).toEqual(
           new InputValidationError(
-            '"groups" parameter is regroup phase is not an array or should contain at least one key.. Error code: too_small.'
+            '"regroup" parameter is array must contain at least 1 element(s). Error code: too_small.'
           )
         );
       }

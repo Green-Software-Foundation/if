@@ -3,8 +3,7 @@ description: a full pipeline with the aggregate feature enabled
 tags:
 aggregation:
   metrics:
-    "carbon":
-      method: sum
+    - carbon
   type: "both"
 initialize:
   plugins:
@@ -145,6 +144,12 @@ initialize:
           - carbon-operational
           - carbon-embodied
         output-parameter: carbon
+      parameter-metadata:
+        outputs:
+          carbon:
+            unit: gCO2eq
+            description: product of carbon
+            aggregation-method: sum
     "time-sync":
       method: TimeSync
       path: "builtin"
@@ -153,33 +158,6 @@ initialize:
         end-time: "2023-12-12T00:01:00.000Z"
         interval: 5
         allow-padding: true
-      parameter-metadata:
-        inputs:
-          timestamp:
-            unit: RFC3339
-            description: refers to the time of occurrence of the input
-            aggregation-method: none
-          duration:
-            unit: seconds
-            description: refers to the duration of the input
-            aggregation-method: sum
-          cloud/instance-type:
-            unit: none
-            description: type of Cloud Instance name used in the cloud provider APIs
-            aggregation-method: none
-          cloud/region:
-            unit: none
-            description: region cloud instance
-            aggregation-method: none
-          time-reserved:
-            unit: seconds
-            description: time reserved for a component
-            aggregation-method: avg
-        outputs:
-          synced-time:
-            unit: none
-            description: Synced time
-            aggregation-method: none
 tree:
   children:
     child-1:

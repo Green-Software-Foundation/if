@@ -1,6 +1,7 @@
 import {z} from 'zod';
 import {
   ExecutePlugin,
+  ParameterMetadata,
   PluginParametersMetadata,
   PluginParams,
 } from '@grnsft/if-core/types';
@@ -16,37 +17,41 @@ export const SciEmbodied = (
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
-    inputs: parametersMetadata?.inputs || {
-      'device/emissions-embodied': {
-        description: 'total embodied emissions of some component',
-        unit: 'gCO2e',
-        'aggregation-method': 'sum',
-      },
-      'device/expected-lifespan': {
-        description: 'Total Expected Lifespan of the Component in Seconds',
-        unit: 'seconds',
-        'aggregation-method': 'sum',
-      },
-      'resources-reserved': {
-        description: 'resources reserved for an application',
-        unit: 'count',
-        'aggregation-method': 'none',
-      },
-      'resources-total': {
-        description: 'total resources available',
-        unit: 'count',
-        'aggregation-method': 'none',
-      },
-      'vcpus-allocated': {
-        description: 'number of vcpus allocated to particular resource',
-        unit: 'count',
-        'aggregation-method': 'none',
-      },
-      'vcpus-total': {
-        description: 'total number of vcpus available on a particular resource',
-        unit: 'count',
-        'aggregation-method': 'none',
-      },
+    inputs: {
+      ...({
+        'device/emissions-embodied': {
+          description: 'total embodied emissions of some component',
+          unit: 'gCO2e',
+          'aggregation-method': 'sum',
+        },
+        'device/expected-lifespan': {
+          description: 'Total Expected Lifespan of the Component in Seconds',
+          unit: 'seconds',
+          'aggregation-method': 'sum',
+        },
+        'resources-reserved': {
+          description: 'resources reserved for an application',
+          unit: 'count',
+          'aggregation-method': 'none',
+        },
+        'resources-total': {
+          description: 'total resources available',
+          unit: 'count',
+          'aggregation-method': 'none',
+        },
+        'vcpus-allocated': {
+          description: 'number of vcpus allocated to particular resource',
+          unit: 'count',
+          'aggregation-method': 'none',
+        },
+        'vcpus-total': {
+          description:
+            'total number of vcpus available on a particular resource',
+          unit: 'count',
+          'aggregation-method': 'none',
+        },
+      } as ParameterMetadata),
+      ...parametersMetadata?.inputs,
     },
     outputs: parametersMetadata?.outputs || {
       'carbon-embodied': {

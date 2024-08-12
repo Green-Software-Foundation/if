@@ -2,7 +2,6 @@ export const STRINGS = {
   CHECKING: 'Checking...',
   IF_CHECK_FLAGS_MISSING:
     'Either the `--manifest` or `--directory` command should be provided with a path',
-  DIRECTORY_NOT_FOUND: 'Directory not found.',
   DIRECTORY_YAML_FILES_NOT_FOUND:
     'The directory does not contain any YAML/YML files.\n',
   IF_CHECK_EXECUTING: (filename: string) => `Executing \`${filename}\``,

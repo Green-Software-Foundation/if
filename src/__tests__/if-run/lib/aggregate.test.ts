@@ -6,17 +6,19 @@ import {
   aggregate,
   storeAggregationMetrics,
 } from '../../../if-run/lib/aggregate';
+import {AGGREGATION_METHODS} from '../../../if-run/types/aggregation';
 
 describe('lib/aggregate: ', () => {
   beforeAll(() => {
     const metricStorage: AggregationParams = {
-      metrics: {
-        carbon: {method: 'sum'},
-      },
+      metrics: ['carbon'],
       type: 'horizontal',
     };
+    const convertedMetrics = metricStorage.metrics.map((metric: string) => ({
+      [metric]: AGGREGATION_METHODS[2],
+    }));
 
-    storeAggregationMetrics(metricStorage);
+    storeAggregationMetrics(...convertedMetrics);
   });
 
   describe('aggregate(): ', () => {
@@ -60,7 +62,7 @@ describe('lib/aggregate: ', () => {
       };
 
       const aggregatedTree = aggregate(tree, {
-        metrics: {carbon: {method: 'sum'}},
+        metrics: ['carbon'],
         type: 'horizontal',
       });
       const expectedAggregated = {
@@ -108,7 +110,7 @@ describe('lib/aggregate: ', () => {
       };
 
       const aggregatedTree = aggregate(tree, {
-        metrics: {carbon: {method: 'sum'}},
+        metrics: ['carbon'],
         type: 'vertical',
       });
       const expectedOutputs = [
@@ -169,7 +171,7 @@ describe('lib/aggregate: ', () => {
       };
 
       const aggregatedTree = aggregate(tree, {
-        metrics: {carbon: {method: 'sum'}},
+        metrics: ['carbon'],
         type: 'both',
       });
 

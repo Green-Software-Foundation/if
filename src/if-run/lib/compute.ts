@@ -13,7 +13,7 @@ import {STRINGS} from '../config/strings';
 import {ComputeParams, Node, PhasedPipeline} from '../types/compute';
 import {isExecute} from '../types/interface';
 
-const {MERGING_DEFAULTS_WITH_INPUT_DATA, CONFIG_WARN} = STRINGS;
+const {MERGING_DEFAULTS_WITH_INPUT_DATA, EMPTY_PIPELINE, CONFIG_WARN} = STRINGS;
 
 /**
  * Traverses all child nodes based on children grouping.
@@ -81,6 +81,16 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   inputStorage = mergeDefaults(inputStorage, defaults);
   const pipelineCopy = structuredClone(pipeline) || {};
 
+  /** Checks if pipeline is not an array or empty object. */
+  if (
+    Array.isArray(pipelineCopy) ||
+    (typeof pipelineCopy === 'object' &&
+      pipelineCopy !== null &&
+      Object.keys(pipelineCopy).length === 0)
+  ) {
+    logger.warn(EMPTY_PIPELINE);
+  }
+
   /**
    * If iteration is on observe pipeline, then executes observe plugins and sets the inputs value.
    */
@@ -101,8 +111,6 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
             pluginData: params.context.initialize!.plugins[pluginName],
           });
         }
-
-        node.outputs = inputStorage;
       }
     }
   }
@@ -138,6 +146,14 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       if (isExecute(plugin)) {
         inputStorage = await plugin.execute(inputStorage, nodeConfig);
         node.outputs = inputStorage;
+
+        if (params.context.explainer) {
+          addExplainData({
+            pluginName,
+            metadata: plugin.metadata,
+            pluginData: params.context.initialize!.plugins[pluginName],
+          });
+        }
         debugLogger.setExecutingPluginName();
       }
     }
