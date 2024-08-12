@@ -5,7 +5,7 @@ import {RandIntGenerator} from '../../../if-run/builtins/mock-observations/helpe
 import {STRINGS} from '../../../if-run/config';
 
 const {GlobalConfigError} = ERRORS;
-const {INVALID_NAME, MISSING_MIN_MAX, MISSING_GLOBAL_CONFIG} = STRINGS;
+const {INVALID_NAME, MISSING_MIN_MAX, MISSING_CONFIG} = STRINGS;
 
 describe('builtins/mock-observations/RandIntGenerator: ', () => {
   describe('initialize', () => {
@@ -23,7 +23,7 @@ describe('builtins/mock-observations/RandIntGenerator: ', () => {
       try {
         RandIntGenerator('generator-name', {});
       } catch (error) {
-        expect(error).toEqual(new GlobalConfigError(MISSING_GLOBAL_CONFIG));
+        expect(error).toEqual(new GlobalConfigError(MISSING_CONFIG));
       }
     });
 

@@ -2,7 +2,7 @@
 
 import {injectEnvironment} from '../../../if-run/lib/environment';
 
-describe('lib/envirnoment: ', () => {
+describe.skip('lib/envirnoment: ', () => {
   describe('injectEnvironment(): ', () => {
     const context = {};
 

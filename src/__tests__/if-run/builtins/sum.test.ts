@@ -5,11 +5,11 @@ import {Sum} from '../../../if-run/builtins/sum';
 import {STRINGS} from '../../../if-run/config';
 
 const {GlobalConfigError, InputValidationError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/sum: ', () => {
   describe('Sum: ', () => {
-    const globalConfig = {
+    const config = {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
       'output-parameter': 'energy',
     };
@@ -17,7 +17,7 @@ describe('builtins/sum: ', () => {
       inputs: {},
       outputs: {},
     };
-    const sum = Sum(globalConfig, parametersMetadata);
+    const sum = Sum(config, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -54,7 +54,7 @@ describe('builtins/sum: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error when global config is not provided.', () => {
+      it('throws an error when config is not provided.', () => {
         const config = undefined;
         const sum = Sum(config!, parametersMetadata);
 
@@ -71,9 +71,7 @@ describe('builtins/sum: ', () => {
             },
           ]);
         } catch (error) {
-          expect(error).toStrictEqual(
-            new GlobalConfigError(MISSING_GLOBAL_CONFIG)
-          );
+          expect(error).toStrictEqual(new GlobalConfigError(MISSING_CONFIG));
         }
       });
 

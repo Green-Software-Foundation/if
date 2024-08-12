@@ -16,7 +16,7 @@ const {
   MissingCSVColumnError,
   CSVParseError,
 } = ERRORS;
-const {MISSING_GLOBAL_CONFIG, MISSING_CSV_COLUMN, NO_QUERY_DATA} = STRINGS;
+const {MISSING_CONFIG, MISSING_CSV_COLUMN, NO_QUERY_DATA} = STRINGS;
 
 describe('builtins/CSVLookup: ', () => {
   const parametersMetadata = {
@@ -32,14 +32,14 @@ describe('builtins/CSVLookup: ', () => {
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
-        const globalConfig = {
+        const config = {
           filepath: '',
           query: {
             'cpu-cores-available': 'cpu/available',
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
         expect(csvLookup).toHaveProperty('metadata');
         expect(csvLookup).toHaveProperty('execute');
       });
@@ -48,7 +48,7 @@ describe('builtins/CSVLookup: ', () => {
     describe('execute(): ', () => {
       it('successfully applies CSVLookup `url` strategy to given input.', async () => {
         expect.assertions(1);
-        const globalConfig = {
+        const config = {
           filepath:
             'https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv',
           query: {
@@ -58,12 +58,12 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
 
         const responseData = `cpu-cores-available,cpu-cores-utilized,cpu-manufacturer,cpu-model-name,cpu-tdp,gpu-count,gpu-model-name,Hardware Information on AWS Documentation & Comments,instance-class,instance-storage,memory-available,platform-memory,release-date,storage-drives
 16,8,AWS,AWS Graviton,150.00,N/A,N/A,AWS Graviton (ARM),a1.2xlarge,EBS-Only,16,32,November 2018,0
 16,16,AWS,AWS Graviton,150.00,N/A,N/A,AWS Graviton (ARM),a1.4xlarge,EBS-Only,32,32,November 2018,0`;
-        mock.onGet(globalConfig.filepath).reply(200, responseData);
+        mock.onGet(config.filepath).reply(200, responseData);
 
         const result = await csvLookup.execute([
           {
@@ -88,7 +88,7 @@ describe('builtins/CSVLookup: ', () => {
 
       it('successfully applies CSVLookup `local file` strategy to given input.', async () => {
         expect.assertions(1);
-        const globalConfig = {
+        const config = {
           filepath: './file.csv',
           query: {
             'cpu-cores-available': 'cpu/available',
@@ -97,7 +97,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
 
         const result = await csvLookup.execute([
           {
@@ -121,7 +121,7 @@ describe('builtins/CSVLookup: ', () => {
       });
 
       it('rejects with file not found error.', async () => {
-        const globalConfig = {
+        const config = {
           filepath: './file-fail.csv',
           query: {
             'cpu-cores-available': 'cpu/available',
@@ -130,7 +130,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
         const input = [
           {
             timestamp: '2024-03-01',
@@ -150,7 +150,7 @@ describe('builtins/CSVLookup: ', () => {
       });
 
       it('rejects with file not found error.', async () => {
-        const globalConfig = {
+        const config = {
           filepath: './file-fail.csv',
           query: {
             'cpu-cores-available': 'cpu/available',
@@ -159,7 +159,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
         const input = [
           {
             timestamp: '2024-03-01',
@@ -179,7 +179,7 @@ describe('builtins/CSVLookup: ', () => {
       });
 
       it('rejects with axios error.', async () => {
-        const globalConfig = {
+        const config = {
           filepath:
             'https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv',
           query: {
@@ -189,9 +189,9 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['cpu-tdp', 'tdp'],
         };
-        mock.onGet(globalConfig.filepath).reply(404);
+        mock.onGet(config.filepath).reply(404);
 
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
         const input = [
           {
             timestamp: '2024-03-01',
@@ -212,7 +212,7 @@ describe('builtins/CSVLookup: ', () => {
 
       it('successfully applies CSVLookup if output is `*`.', async () => {
         expect.assertions(1);
-        const globalConfig = {
+        const config = {
           filepath: './file.csv',
           query: {
             'cpu-cores-available': 'cpu/available',
@@ -221,7 +221,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: '*',
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
 
         const result = await csvLookup.execute([
           {
@@ -257,7 +257,7 @@ describe('builtins/CSVLookup: ', () => {
 
       it('successfully applies CSVLookup if output is matrix.', async () => {
         expect.assertions(1);
-        const globalConfig = {
+        const config = {
           filepath: './file.csv',
           query: {
             'cpu-cores-available': 'cpu/available',
@@ -269,7 +269,7 @@ describe('builtins/CSVLookup: ', () => {
             ['gpu-model-name', 'gpumodel'],
           ],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
 
         const result = await csvLookup.execute([
           {
@@ -295,7 +295,7 @@ describe('builtins/CSVLookup: ', () => {
 
       it('successfully applies CSVLookup if output is exact string.', async () => {
         expect.assertions(1);
-        const globalConfig = {
+        const config = {
           filepath: './file.csv',
           query: {
             'cpu-cores-available': 'cpu/available',
@@ -304,7 +304,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: 'gpu-count',
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
 
         const result = await csvLookup.execute([
           {
@@ -329,7 +329,7 @@ describe('builtins/CSVLookup: ', () => {
 
       it('rejects with query data not found.', async () => {
         expect.assertions(2);
-        const globalConfig = {
+        const config = {
           filepath: './file.csv',
           query: {
             'fail-cpu-cores-available': 'cpu/available',
@@ -339,7 +339,7 @@ describe('builtins/CSVLookup: ', () => {
           output: ['cpu-tdp', 'tdp'],
         };
 
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
         const input = [
           {
             timestamp: '2024-03-01',
@@ -379,7 +379,7 @@ describe('builtins/CSVLookup: ', () => {
         } catch (error) {
           if (error instanceof Error) {
             expect(error).toBeInstanceOf(GlobalConfigError);
-            expect(error.message).toEqual(MISSING_GLOBAL_CONFIG);
+            expect(error.message).toEqual(MISSING_CONFIG);
           }
         }
       });
@@ -387,7 +387,7 @@ describe('builtins/CSVLookup: ', () => {
       it('rejects with no such column in csv error.', async () => {
         expect.assertions(2);
 
-        const globalConfig = {
+        const config = {
           filepath: './file.csv',
           query: {
             'cpu-cores-available': 'cpu/available',
@@ -396,7 +396,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: 'mock',
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
         const input = [
           {
             timestamp: '2024-03-01',
@@ -411,16 +411,14 @@ describe('builtins/CSVLookup: ', () => {
         } catch (error) {
           if (error instanceof Error) {
             expect(error).toBeInstanceOf(MissingCSVColumnError);
-            expect(error.message).toEqual(
-              MISSING_CSV_COLUMN(globalConfig.output)
-            );
+            expect(error.message).toEqual(MISSING_CSV_COLUMN(config.output));
           }
         }
       });
 
       it('successfully applies CSVLookup if output is array with string.', async () => {
         expect.assertions(1);
-        const globalConfig = {
+        const config = {
           filepath: './file.csv',
           query: {
             'cpu-cores-available': 'cpu/available',
@@ -429,7 +427,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: ['gpu-count'],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
 
         const result = await csvLookup.execute([
           {
@@ -454,7 +452,7 @@ describe('builtins/CSVLookup: ', () => {
 
       it('successfully applies CSVLookup if output is matrix with strings.', async () => {
         expect.assertions(1);
-        const globalConfig = {
+        const config = {
           filepath: './file.csv',
           query: {
             'cpu-cores-available': 'cpu/available',
@@ -463,7 +461,7 @@ describe('builtins/CSVLookup: ', () => {
           },
           output: [['gpu-count']],
         };
-        const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+        const csvLookup = CSVLookup(config, parametersMetadata);
 
         const result = await csvLookup.execute([
           {
@@ -490,7 +488,7 @@ describe('builtins/CSVLookup: ', () => {
     it('rejects with CSV parse error', async () => {
       process.env.csv = 'fail';
       expect.assertions(1);
-      const globalConfig = {
+      const config = {
         filepath: './fail-csv-reader.csv',
         query: {
           'cpu-cores-available': 'cpu/available',
@@ -499,7 +497,7 @@ describe('builtins/CSVLookup: ', () => {
         },
         output: [['gpu-count']],
       };
-      const csvLookup = CSVLookup(globalConfig, parametersMetadata);
+      const csvLookup = CSVLookup(config, parametersMetadata);
 
       try {
         await csvLookup.execute([

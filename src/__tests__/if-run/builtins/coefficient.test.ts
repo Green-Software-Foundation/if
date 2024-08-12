@@ -5,11 +5,11 @@ import {Coefficient} from '../../../if-run/builtins/coefficient';
 import {STRINGS} from '../../../if-run/config';
 
 const {InputValidationError, GlobalConfigError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/coefficient: ', () => {
   describe('Coefficient: ', () => {
-    const globalConfig = {
+    const config = {
       'input-parameter': 'carbon',
       coefficient: 3,
       'output-parameter': 'carbon-product',
@@ -18,7 +18,7 @@ describe('builtins/coefficient: ', () => {
       inputs: {},
       outputs: {},
     };
-    const coefficient = Coefficient(globalConfig, parametersMetadata);
+    const coefficient = Coefficient(config, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -53,7 +53,7 @@ describe('builtins/coefficient: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error when global config is not provided.', () => {
+      it('throws an error when config is not provided.', () => {
         const config = undefined;
         const coefficient = Coefficient(config!, parametersMetadata);
 
@@ -68,9 +68,7 @@ describe('builtins/coefficient: ', () => {
             },
           ]);
         } catch (error) {
-          expect(error).toStrictEqual(
-            new GlobalConfigError(MISSING_GLOBAL_CONFIG)
-          );
+          expect(error).toStrictEqual(new GlobalConfigError(MISSING_CONFIG));
         }
       });
 

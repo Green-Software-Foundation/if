@@ -218,7 +218,7 @@ describe('execute(): ', () => {
     }
   });
 
-  it('throws error on missing global config.', async () => {
+  it('throws error on missing config.', async () => {
     const config = undefined;
     const timeModel = TimeSync(config!, parametersMetadata);
 
@@ -399,7 +399,7 @@ describe('execute(): ', () => {
     }
   });
 
-  it('throws error if end is before start in global config.', async () => {
+  it('throws error if end is before start in config.', async () => {
     const basicConfig = {
       'start-time': '2023-12-12T00:00:10.000Z',
       'end-time': '2023-12-12T00:00:00.000Z',
