@@ -1,5 +1,3 @@
-export {GroupBy} from './group-by';
-export {TimeSync} from './time-sync';
 export {Interpolation} from './interpolation';
 export {MockObservations} from './mock-observations';
 export {Divide} from './divide';
@@ -14,3 +12,5 @@ export {CSVLookup} from './csv-lookup';
 export {Shell} from './shell';
 export {Regex} from './regex';
 export {Copy} from './copy-param';
+export {TimeConverter} from './time-converter';
+export {TimeSync} from './time-sync';

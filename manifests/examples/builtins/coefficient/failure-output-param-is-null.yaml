@@ -2,7 +2,6 @@ name: coefficient-demo
 description: value of output-param is missing
 tags:
 initialize:
-  outputs: ['yaml']
   plugins:
     coefficient:
       method: Coefficient
@@ -10,12 +9,13 @@ initialize:
       global-config:
         input-parameter: "carbon"
         coefficient: 3
-        output-parameter: 
+        output-parameter:
 tree:
   children:
     child:
       pipeline:
-        - coefficient
+        compute:
+          - coefficient
       config:
         sum:
       inputs:

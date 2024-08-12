@@ -16,6 +16,22 @@ Three parameters are required in global config: `input-parameter`, `coefficient`
 - `coefficient`: the value to multiply `input-parameter` by.
 - `output-parameter`: a string defining the name to use to add the product of the input parameters to the output array.
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method`
+of the parameters of the inputs and outputs
+
+- `inputs`: describe parameters of the `input-parameter` of the global config. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe parameters of the `output-parameter` of the global config. Each parameter has:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ### Inputs
 
 All of `input-parameters` must be available in the input array.
@@ -53,15 +69,13 @@ const result = coeff.execute([
 
 ## Example manifest
 
-IF users will typically call the plugin as part of a pipeline defined in a manifest file. In this case, instantiating the plugin is handled by `ie` and does not have to be done explicitly by the user. The following is an example manifest that calls `coefficient`:
+IF users will typically call the plugin as part of a pipeline defined in a manifest file. In this case, instantiating the plugin is handled by `if-run` and does not have to be done explicitly by the user. The following is an example manifest that calls `coefficient`:
 
 ```yaml
 name: coefficient-demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     coefficient:
       method: Coefficient
@@ -70,13 +84,21 @@ initialize:
         input-parameter: 'carbon'
         coefficient: 3
         output-parameter: 'carbon-product'
+       parameter-metadata:
+        inputs:
+          carbon:
+            description: "an amount of carbon emitted into the atmosphere"
+            unit: "gCO2e"
+        outputs:
+          carbon-product:
+            description: "a product of cabon property and the coefficient"
+            unit: "gCO2e"
 tree:
   children:
     child:
       pipeline:
-        - coefficient
-      config:
-        coefficient:
+        compute:
+          - coefficient
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
@@ -86,11 +108,10 @@ tree:
 You can run this example by saving it as `./examples/manifests/coefficient.yml` and executing the following command from the project root:
 
 ```sh
-if-run --manifest ./examples/manifests/coefficient.yml --output ./examples/outputs/coefficient.yml
+if-run --manifest ./examples/manifests/coefficient.yml --output ./examples/outputs/coefficient
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`
-
 
 ## Errors
 
@@ -101,10 +122,11 @@ The results will be saved to a new `yaml` file in `./examples/outputs`
 You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
+
 - `input-parameter`: this must be a string
 - `coefficient`: this must be a number
 - `output-parameter`: this must be a string
 
 You can fix this error by checking you are providing valid values for each parameter in the config.
 
-For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors)

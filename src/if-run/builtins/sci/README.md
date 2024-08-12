@@ -8,9 +8,22 @@
 
 - `functional-unit`: the name of the functional unit in which to express the carbon impact (required)
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe parameters of the `inputs`. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the `sci` parameter which has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
 ### Inputs
-
 
 - `carbon`: total carbon in gCO2eq (required)
 - `functional-unit`: whatever `functional-unit` you define in global config also has to be present in each input, for example if you provide `functional-unit: requests` in global config, `requests` must be present in your input data.
@@ -19,7 +32,7 @@
 
 - `sci`: carbon expressed in terms of the given functional unit
 
->Note: Plugin will warn and return `carbon` value in case if `functional-unit`'s value is zero.
+> Note: Plugin will warn and return `carbon` value in case if `functional-unit`'s value is zero.
 
 ## Calculation
 
@@ -28,7 +41,6 @@ SCI is calculated as:
 ```pseudocode
 sci = carbon / functional unit
 ```
-
 
 ## IF Implementation
 
@@ -60,8 +72,6 @@ name: sci-demo
 description: example invoking sci plugin
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     sci:
       method: Sci
@@ -72,8 +82,8 @@ tree:
   children:
     child:
       pipeline:
-        - sci
-      config:
+        compute:
+          - sci
       inputs:
         - timestamp: 2023-07-06T00:00
           carbon: 5
@@ -99,14 +109,14 @@ The results will be saved to a new `yaml` file.
 This error arises when a necessary piece of input data is missing from the `inputs` array.
 
 Every element in the `inputs` array must contain:
+
 - `timestamp`
 - `duration`
 - `carbon`: a numeric value named `carbon` must exist in the inputs array
 - whatever value you passed to `functional-unit`
 
-
 ### Validation errors
 
 There is also a validation step that checks that the `functional-unit` was provided in the plugin config. If you see an error reporting this value as missing, please check you have provided it.
 
-For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors)

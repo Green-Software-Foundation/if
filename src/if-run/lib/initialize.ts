@@ -9,8 +9,9 @@ import {pluginStorage} from '../util/plugin-storage';
 import {CONFIG, STRINGS} from '../config';
 
 import {PluginInterface} from '../types/interface';
-import {GlobalPlugins, PluginOptions} from '../../common/types/manifest';
+import {Context, PluginOptions} from '../../common/types/manifest';
 import {PluginStorageInterface} from '../types/plugin-storage';
+import {storeAggregationMetrics} from './aggregate';
 
 const {
   PluginInitializationError,
@@ -79,7 +80,12 @@ const handModule = (method: string, pluginPath: string) => {
 const initPlugin = async (
   initPluginParams: PluginOptions
 ): Promise<PluginInterface> => {
-  const {method, path, 'global-config': globalConfig} = initPluginParams;
+  const {
+    method,
+    path,
+    'global-config': globalConfig,
+    'parameter-metadata': parameterMetadata,
+  } = initPluginParams!;
 
   console.debug(INITIALIZING_PLUGIN(method));
 
@@ -93,21 +99,29 @@ const initPlugin = async (
 
   const plugin = await handModule(method, path);
 
-  return plugin(globalConfig);
+  return plugin(globalConfig, parameterMetadata);
 };
 
 /**
  * Registers all plugins from `manifest`.`initialize` property.
  */
 export const initialize = async (
-  plugins: GlobalPlugins
+  context: Context
 ): Promise<PluginStorageInterface> => {
   console.debug(INITIALIZING_PLUGINS);
-
+  const {plugins} = context.initialize;
   const storage = pluginStorage();
 
   for await (const pluginName of Object.keys(plugins)) {
     const plugin = await initPlugin(plugins[pluginName]);
+    const parameters = {...plugin.metadata.inputs, ...plugin.metadata.outputs};
+
+    Object.keys(parameters).forEach(key => {
+      storeAggregationMetrics({
+        [key]: parameters[key]['aggregation-method'],
+      });
+    });
+
     storage.set(pluginName, plugin);
   }
 

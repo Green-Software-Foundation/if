@@ -3,6 +3,7 @@ import {ERRORS} from '@grnsft/if-core/utils';
 import {
   CoefficientConfig,
   ExecutePlugin,
+  PluginParametersMetadata,
   PluginParams,
 } from '@grnsft/if-core/types';
 
@@ -13,9 +14,14 @@ import {STRINGS} from '../../config';
 const {GlobalConfigError} = ERRORS;
 const {MISSING_GLOBAL_CONFIG} = STRINGS;
 
-export const Coefficient = (globalConfig: CoefficientConfig): ExecutePlugin => {
+export const Coefficient = (
+  globalConfig: CoefficientConfig,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**

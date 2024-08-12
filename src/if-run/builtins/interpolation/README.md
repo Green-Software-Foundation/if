@@ -25,6 +25,21 @@ To employ the `Interpolation` plugin, adhere to these steps:
 
 `x` and `y` arrays must be equal lengths.
 
+## Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameter of the `input-parameter` of the global config. The parameter has the following attributes:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the parameters of the `output-parameter` of the global config. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ## Input Parameters
 
 The plugin expects the following input parameters:
@@ -102,8 +117,6 @@ name: interpolation-demo
 description: simple demo of interpolation plugin
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     interpolation:
       method: Interpolation
@@ -118,7 +131,8 @@ tree:
   children:
     child:
       pipeline:
-        - interpolation
+        compute:
+          - interpolation
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600
@@ -132,8 +146,6 @@ name: interpolation-demo
 description: simple demo of interpolation plugin
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     interpolation:
       method: Interpolation
@@ -148,7 +160,8 @@ tree:
   children:
     child:
       pipeline:
-        - interpolation
+        compute:
+          - interpolation
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600
@@ -178,6 +191,7 @@ if-run --manifest ./manifests/examples/interpolation.yml --output ./manifests/ou
 You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
+
 - `method`: a string containing either `linear`, `spline` or `polynomial`
 - `x`: an array of numbers
 - `y`: an array of numbers
@@ -189,6 +203,7 @@ You can fix this error by checking you are providing valid values for each param
 ### Validation errors
 
 There are also several validation errors that can arise, including:
+
 - if the lengths of `x` and `y` are not equal
 - if `x` or `y` are empty
 - if the requested point to interpolate at is outside the range of `x`

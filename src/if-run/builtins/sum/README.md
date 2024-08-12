@@ -15,6 +15,21 @@ Two parameters are required in global config: `input-parameters` and `output-par
 `input-parameters`: an array of strings. Each string should match an existing key in the `inputs` array
 `output-parameter`: a string defining the name to use to add the result of summing the input parameters to the output array.
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe parameters of the `input-parameters` of the global config. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the parameter of the `output-parameter` of the global config. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ### Inputs
 
 All of `input-parameters` must be available in the input array.
@@ -39,7 +54,7 @@ const config = {
   outputParameter: 'energy',
 };
 
-const sum = Sum(config);
+const sum = Sum(config, parametersMetadata);
 const result = sum.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',
@@ -59,8 +74,6 @@ name: sum demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     sum:
       method: Sum
@@ -68,13 +81,27 @@ initialize:
       global-config:
         input-parameters: ['cpu/energy', 'network/energy']
         output-parameter: 'energy'
+      parameter-metadata:
+        inputs:
+          cpu/energy:
+            description: energy consumed by the cpu
+            unit: kWh
+            aggregation-method: sum
+          network/energy:
+            description: energy consumed by data ingress and egress
+            unit: kWh
+            aggregation-method: sum
+        outputs:
+          energy:
+            description: sum of energy components
+            unit: kWh
+            aggregation-method: sum
 tree:
   children:
     child:
       pipeline:
-        - sum
-      config:
-        sum:
+        compute:
+          - sum
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
@@ -90,7 +117,6 @@ if-run --manifest ./examples/manifests/sum.yml --output ./examples/outputs/sum.y
 
 The results will be saved to a new `yaml` file in `./examples/outputs`.
 
-
 ## Errors
 
 `Sum` exposes two of the IF error classes.
@@ -100,6 +126,7 @@ The results will be saved to a new `yaml` file in `./examples/outputs`.
 You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
+
 - `input-parameters`: this must be an array of strings, each being the name of a value in the `inputs` array
 - `output-parameter`: this must be a string
 
@@ -113,6 +140,5 @@ Every element in the ``inputs` array must contain:
 - `timestamp`
 - `duration`
 - whatever values you passed to `input-parameters`
-
 
 For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors).

@@ -16,20 +16,34 @@ Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-26
 - `match` - a regex by which needs to match the `parameter`
 - `output` - output parameter name in the input
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameter of the `parameter` value of the global config. The parameter has the following attributes:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the parameters of the `output` of the global config. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ### Inputs
 
 - `parameter` - as input parameter, must be available in the input array
 
 ## Returns
 
-- `output`: the first match of `parameter` with the parameter name with `match` defined in global config.
+- `output`: The match of the `parameter` value using the `match` regex defined in the global config. If the `match` regex includes the global flag (`g`), a string containing all matches separated by spaces.
 
 ## Implementation
 
 To run the plugin, you must first create an instance of `Regex`. Then, you can call `execute()`.
 
 ```typescript
-
 const globalConfig = {
   parameter: 'physical-processor',
   match: '^[^,]+',
@@ -56,8 +70,6 @@ name: regex-demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     regex:
       method: Regex
@@ -70,9 +82,8 @@ tree:
   children:
     child:
       pipeline:
-        - regex
-      config:
-        regex:
+        compute:
+          - regex
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
@@ -96,10 +107,10 @@ The results will be saved to a new `yaml` file in `manifests/outputs`.
 
 This error arises when a necessary piece of input data is missing from the `inputs` array.
 Every element in the `inputs` array must contain:
+
 - `timestamp`
 - `duration`
 - whatever value you passed to `parameter`
-
 
 ### `GlobalConfigError`
 
@@ -112,7 +123,6 @@ The required parameters are:
 - `output`: a string
 
 You can fix this error by checking you are providing valid values for each parameter in the config.
-
 
 ### `RegexMismatchError`
 

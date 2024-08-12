@@ -5,6 +5,7 @@ import {
   PluginParams,
   ConfigParams,
   ObservationParams,
+  PluginParametersMetadata,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
@@ -14,9 +15,14 @@ import {RandIntGenerator} from './helpers/rand-int-generator';
 
 import {Generator} from './interfaces/index';
 
-export const MockObservations = (globalConfig: ConfigParams): ExecutePlugin => {
+export const MockObservations = (
+  globalConfig: ConfigParams,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**
@@ -55,7 +61,7 @@ export const MockObservations = (globalConfig: ConfigParams): ExecutePlugin => {
     const schema = z.object({
       'timestamp-from': z.string(),
       'timestamp-to': z.string(),
-      duration: z.number(),
+      duration: z.number().gt(0),
       components: z.array(z.record(z.string())),
       generators: z.object({
         common: z.record(z.string().or(z.number())),

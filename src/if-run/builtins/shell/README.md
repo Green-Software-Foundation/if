@@ -22,6 +22,21 @@ The `shell` plugin interface requires a path to the plugin command. This path is
 
 - `command`: the path to the plugin executable along with the execution command as it would be entered into a shell.
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameters of the `inputs`. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the output parameter. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ### Inputs
 
 The parameters included in the `inputs` field in the `manifest` depend entirely on the plugin itself. A typical plugin might expect the following common data to be provided as `inputs`:
@@ -66,8 +81,6 @@ name: shell-demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     sampler:
       method: Shell
@@ -78,7 +91,8 @@ tree:
   children:
     child:
       pipeline:
-        - sampler
+        compute:
+          - sampler
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 1 # Secs
@@ -94,8 +108,6 @@ name: shell-demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     sampler:
       method: Shell
@@ -106,7 +118,8 @@ tree:
   children:
     child:
       pipeline:
-        - sampler
+        compute:
+          - sampler
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 1 # Secs
@@ -128,7 +141,6 @@ if-run --manifest manifests/plugins/shell.yml --output manifests/outputs/shell.y
 ```
 
 The results will be saved to a new `yaml` file.
-
 
 ## Errors
 

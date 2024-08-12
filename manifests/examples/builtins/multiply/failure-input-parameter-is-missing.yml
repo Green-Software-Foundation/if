@@ -2,7 +2,6 @@ name: multiply
 description: failure `inputs` is missing `cpu/energy` parameter
 tags:
 initialize:
-  outputs: ['yaml']
   plugins:
     multiply:
       method: Multiply
@@ -14,9 +13,8 @@ tree:
   children:
     child:
       pipeline:
-        - multiply
-      config:
-        sum:
+        compute:
+          - multiply
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600

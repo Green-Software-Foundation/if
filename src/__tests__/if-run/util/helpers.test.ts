@@ -1,9 +1,18 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 const mockWarn = jest.fn();
 const mockError = jest.fn();
 
 import {ERRORS} from '@grnsft/if-core/utils';
 
-import {andHandle, mergeObjects} from '../../../if-run/util/helpers';
+import {GlobalPlugins} from '../../../common/types/manifest';
+
+import {storeAggregationMetrics} from '../../../if-run/lib/aggregate';
+
+import {
+  andHandle,
+  mergeObjects,
+  storeAggregationMethods,
+} from '../../../if-run/util/helpers';
 
 const {WriteFileError} = ERRORS;
 
@@ -12,6 +21,10 @@ jest.mock('../../../common/util/logger', () => ({
     warn: mockWarn,
     error: mockError,
   },
+}));
+
+jest.mock('../../../if-run/lib/aggregate', () => ({
+  storeAggregationMetrics: jest.fn(),
 }));
 
 describe('if-run/util/helpers: ', () => {
@@ -164,6 +177,98 @@ describe('if-run/util/helpers: ', () => {
       };
 
       expect(result).toEqual(expectedResult);
+    });
+  });
+
+  describe('storeAggregationMethods(): ', () => {
+    // @typescript-eslint/no-unused-vars
+    const mockPluginStorage = {
+      get: jest.fn(),
+      set: jest.fn(() => {}),
+    };
+
+    const mockPlugins: GlobalPlugins = {
+      multiply: {
+        path: 'builtin',
+        method: 'Multiply',
+      },
+      sci: {
+        path: 'builtin',
+        method: 'Sci',
+      },
+    };
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('succefully executes with correct metrics.', () => {
+      const mockPlugin1 = {
+        execute: () => [{}],
+        metadata: {
+          kind: 'execute',
+          inputs: {
+            carbon: {
+              description: 'mock description',
+              unit: 'none',
+              'aggregation-method': 'sum',
+            },
+          },
+          outputs: {
+            cpu: {
+              description: 'mock description',
+              unit: 'none',
+              'aggregation-method': 'avg',
+            },
+          },
+        },
+      };
+
+      const mockPlugin2 = {
+        metadata: {
+          inputs: {},
+          outputs: {
+            carbon: {'aggregation-method': 'none'},
+          },
+        },
+      };
+
+      mockPluginStorage.get
+        .mockReturnValueOnce(mockPlugin1)
+        .mockReturnValueOnce(mockPlugin2);
+
+      // @ts-ignore
+      storeAggregationMethods(mockPlugins, mockPluginStorage);
+
+      expect(storeAggregationMetrics).toHaveBeenCalledTimes(3);
+      expect(storeAggregationMetrics).toHaveBeenNthCalledWith(1, {
+        carbon: 'sum',
+      });
+      expect(storeAggregationMetrics).toHaveBeenNthCalledWith(2, {
+        cpu: 'avg',
+      });
+      expect(storeAggregationMetrics).toHaveBeenNthCalledWith(3, {
+        carbon: 'none',
+      });
+    });
+
+    it('does not execute if there are no inputs or outputs.', () => {
+      mockPluginStorage.get.mockReturnValueOnce({
+        execute: () => [{}],
+        metadata: {},
+      });
+
+      const mockPlugin = {
+        execute: () => [{}],
+        metadata: {
+          kind: 'execute',
+        },
+      };
+
+      mockPluginStorage.get.mockReturnValueOnce(mockPlugin);
+      // @ts-ignore
+      storeAggregationMethods(mockPlugins, mockPluginStorage);
+      expect(storeAggregationMetrics).not.toHaveBeenCalled();
     });
   });
 });

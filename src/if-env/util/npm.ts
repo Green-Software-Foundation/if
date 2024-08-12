@@ -79,6 +79,7 @@ export const updatePackageJsonDependencies = async (
     packageJsonPath,
     JSON.stringify(parsedPackageJson, null, 2)
   );
+  await fs.appendFile(packageJsonPath, '\n');
 };
 
 /**
@@ -122,7 +123,7 @@ export const updatePackageJsonProperties = async (
   const parsedPackageJsonContent = JSON.parse(packageJsonContent);
 
   const properties = {
-    name: 'if-environment',
+    name: packageJson.name || 'if-environment',
     description: packageJson.description,
     author: packageJson.author,
     bugs: packageJson.bugs,

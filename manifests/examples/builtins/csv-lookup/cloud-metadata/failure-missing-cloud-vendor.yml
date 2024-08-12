@@ -2,7 +2,6 @@ name: cloud-metadata
 description: failing because cloud/vendor is not provided
 tags:
 initialize:
-  # outputs: ['yaml']
   plugins:
     cloud-metadata:
       path: builtin
@@ -12,12 +11,13 @@ initialize:
           https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv
         query:
           instance-class: cloud/instance-type
-        output: ['cpu-cores-utilized', 'vcpus-allocated']
+        output: ["cpu-cores-utilized", "vcpus-allocated"]
 tree:
   children:
     child:
       pipeline:
-        - cloud-metadata
+        compute:
+          - cloud-metadata
       config:
       inputs:
         - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred

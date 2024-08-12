@@ -13,19 +13,17 @@ For example, for the following CSV:
 | 2022 | Google Cloud   | asia-east2      | Hong Kong  | HK         | HK           | Hong Kong | 22.3,114.2       | 0.28       |            |                        | 0          | 453                        |                                   |                                |                                  | 360                   |
 | 2022 | Google Cloud   | asia-northeast1 | Tokyo      | JP-TK      | JP-TK        | Tokyo     | 35.6897,139.692  | 0.28       |            |                        | 0          | 463                        |                                   |                                |                                  | 463                   |
 
-
 You could select all the data for the cloud provider `Google Cloud` in the region `asia-east2` using the following configuration:
 
 ```yaml
 filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
 query:
-  cloud-provider: "cloud/provider"
-  cloud-region: "cloud/region"
-output: "*"
+  cloud-provider: 'cloud/provider'
+  cloud-region: 'cloud/region'
+output: '*'
 ```
 
-Notice that the query parameters are key/value pairs where the key is the column name in the target CSV and the value is a **reference to a value** in your `input` data (*not* an actual value - a reference). This is to enable you to chain CSV lookups together based on information from other plugins in your pipeline.
-
+Notice that the query parameters are key/value pairs where the key is the column name in the target CSV and the value is a **reference to a value** in your `input` data (_not_ an actual value - a reference). This is to enable you to chain CSV lookups together based on information from other plugins in your pipeline.
 
 ## Parameters
 
@@ -33,27 +31,42 @@ Notice that the query parameters are key/value pairs where the key is the column
 
 - `filepath` - path to a csv file, either on the local filesystem or on the internet
 - `query` - an array of key/value pairs where the key is a column name in the target csv and the value is a parameter from inputs
-- `output` - the columns to grab data from and add to output data - should support wildcard or multiple values. 
+- `output` - the columns to grab data from and add to output data - should support wildcard or multiple values.
 
-The plugin also supports data renaming. This means you can grab data from a named column but push it into your manifest file data under another name, for example, maybe we want to grab data from the `processor-name` column int he target csv and add it to the manifest file data as `processor-id` because this is the name expected by some other plugin in your piepline. You can do this by passing comma separated values in arrays. 
+The plugin also supports data renaming. This means you can grab data from a named column but push it into your manifest file data under another name, for example, maybe we want to grab data from the `processor-name` column int he target csv and add it to the manifest file data as `processor-id` because this is the name expected by some other plugin in your piepline. You can do this by passing comma separated values in arrays.
 
 ```yaml
-output:
-  ["processor-name": "processor-id"]
+output: ['processor-name': 'processor-id']
 ```
 
 You can nest arrays to do this renaming for multiple columns.
 
 ```yaml
 output:
-  [["processor-name", "processor-model-id"],["tdp","thermal-design-power"]]
+  [['processor-name', 'processor-model-id'], ['tdp', 'thermal-design-power']]
 ```
 
 All the following values are valid for the `output` field:
+
 - `"*"`
 - `"tdp"`
 - `["processor-name", "processor-model-id"]`
 - `[["processor-name", "processor-model-id"],["tdp","thermal-design-power"]]`
+
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameters of the `inputs`. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the parameters in the `output` of the config block. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
 ### Inputs
 
@@ -86,7 +99,7 @@ const globalConfig = {
   },
   output: ['cpu-tdp', 'tdp'],
 };
-const divide = CSVLookup(globalConfig);
+const csvLookup = CSVLookup(globalConfig);
 
 const input = [
   {
@@ -108,8 +121,6 @@ name: csv-lookup-demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     cloud-metadata:
       method: CSVLookup
@@ -117,14 +128,15 @@ initialize:
       global-config:
         filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
         query:
-          cloud-provider: "cloud/provider"
-          cloud-region: "cloud/region"
-        output: "*"
+          cloud-provider: 'cloud/provider'
+          cloud-region: 'cloud/region'
+        output: '*'
 tree:
   children:
     child:
       pipeline:
-        - cloud-metadata
+        compute:
+          - cloud-metadata
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
@@ -140,7 +152,6 @@ if-run --manifest manifests/plugins/csv-lookup.yml --output manifests/outputs/cs
 ```
 
 The results will be saved to a new `yaml` file in `manifests/outputs`.
-
 
 ## Errors
 
@@ -171,10 +182,11 @@ This error arises due to problems parsing CSV data into IF. This can occur when 
 You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
+
 - `filepath`: This must be a path to a csv file
 - `query`: this must be an array of key-value pairs where the key is a string containing a column name an the value is a string containing the name of a value in `inputs`
 - `output`: this must be a string containing a name or a wildcard character (`"*"`)
 
 You can fix this error by checking you are providing valid values for each parameter in the config.
 
-For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors)

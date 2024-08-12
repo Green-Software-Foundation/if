@@ -3,8 +3,7 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {STRINGS} from '../../if-run/config';
 
-import {AGGREGATION_METHODS} from '../../if-run/types/aggregation';
-import {AGGREGATION_TYPES} from '../../if-run/types/parameters';
+import {AGGREGATION_TYPES} from '../../if-run/types/aggregation';
 
 const {ManifestValidationError, InputValidationError} = ERRORS;
 const {VALIDATING_MANIFEST} = STRINGS;
@@ -23,6 +22,36 @@ export const allDefined = (obj: Record<string | number | symbol, unknown>) =>
   Object.values(obj).every(v => v !== undefined);
 
 /**
+ * Schema for parameter metadata.
+ */
+const parameterMetadataSchema = z
+  .object({
+    inputs: z
+      .record(
+        z.string(),
+        z.object({
+          unit: z.string(),
+          description: z.string(),
+          'aggregation-method': z.string(),
+        })
+      )
+      .optional()
+      .nullable(),
+    outputs: z
+      .record(
+        z.string(),
+        z.object({
+          unit: z.string(),
+          description: z.string(),
+          'aggregation-method': z.string(),
+        })
+      )
+      .optional()
+      .nullable(),
+  })
+  .optional();
+
+/**
  * Validation schema for manifests.
  */
 export const manifestSchema = z.object({
@@ -36,34 +65,27 @@ export const manifestSchema = z.object({
     })
     .optional()
     .nullable(),
+  explainer: z.boolean().optional(),
+  explain: z.record(z.string(), z.any()).optional(),
   aggregation: z
     .object({
       metrics: z.array(z.string()),
-      type: z.enum(AGGREGATION_METHODS),
+      type: z.enum(AGGREGATION_TYPES),
     })
-    .optional()
-    .nullable(),
-  params: z
-    .array(
-      z.object({
-        name: z.string(),
-        description: z.string(),
-        aggregation: z.enum(AGGREGATION_TYPES),
-        unit: z.string(),
-      })
-    )
     .optional()
     .nullable(),
   initialize: z.object({
     plugins: z.record(
       z.string(),
-      z.object({
-        path: z.string(),
-        method: z.string(),
-        'global-config': z.record(z.string(), z.any()).optional(),
-      })
+      z
+        .object({
+          path: z.string(),
+          method: z.string(),
+          'global-config': z.record(z.string(), z.any()).optional(),
+          'parameter-metadata': parameterMetadataSchema,
+        })
+        .optional()
     ),
-    outputs: z.array(z.string()).optional(),
   }),
   execution: z
     .object({

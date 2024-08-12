@@ -1,12 +1,8 @@
-import {ManifestParameter} from '../../common/types/manifest';
-
 export const STRINGS = {
   MISSING_METHOD: "Initalization param 'method' is missing.",
   MISSING_PATH: "Initalization param 'path' is missing.",
   UNSUPPORTED_PLUGIN:
     "Plugin interface doesn't implement 'execute' or 'metadata' methods.",
-  OVERRIDE_WARNING:
-    '\n**WARNING**: You are overriding the IF default parameters file. Please be extremely careful of unintended side-effects in your plugin pipeline!\n',
   NOT_NATIVE_PLUGIN: (path: string) =>
     `
   You are using plugin ${path} which is not part of the Impact Framework standard library. You should do your own research to ensure the plugins are up to date and accurate. They may not be actively maintained.`,
@@ -27,19 +23,17 @@ export const STRINGS = {
     `Aggregation is not possible for given ${metric} since method is 'none'.`,
   METRIC_MISSING: (metric: string, index: number) =>
     `Aggregation metric ${metric} is not found in inputs[${index}].`,
-  INVALID_GROUP_BY: (type: string) => `Invalid group ${type}.`,
-  REJECTING_OVERRIDE: (param: ManifestParameter) =>
-    `Rejecting overriding of canonical parameter: ${param.name}.`,
+  INVALID_GROUP_KEY: (key: string) => `Invalid group ${key}.`,
+  REGROUP_ERROR: 'not an array or should contain at least one key',
   INVALID_EXHAUST_PLUGIN: (pluginName: string) =>
     `Invalid exhaust plugin: ${pluginName}.`,
   UNKNOWN_PARAM: (name: string) =>
-    `Unknown parameter: ${name}. Using 'sum' aggregation method.`,
+    `Unknown parameter: ${name}. Omitting from the output.`,
   NOT_INITALIZED_PLUGIN: (name: string) =>
     `Not initalized plugin: ${name}. Check if ${name} is in 'manifest.initalize.plugins'.`,
   NO_OUTPUT: `
-You have not selected an output method. To see your output data, you can choose from:
---stdout: this will print your output data to the console
---output <savepath>: this will save your output data to the given filepath (do not provide file extension)
+You have not added an output command: 
+--output <savepath>: will save your output data to the given filepath (do not provide file extension)
 Note that for the '--output' option you also need to define the output type in your manifest file. See https://if.greensoftware.foundation/major-concepts/manifest-file#initialize`,
   UNSUPPORTED_ERROR: (errorName: string) =>
     `UnsupportedErrorClass: plugin threw error class: ${errorName} that is not recognized by Impact Framework`,
@@ -49,7 +43,6 @@ Note that for the '--output' option you also need to define the output type in y
   LOADING_MANIFEST: 'Loading manifest',
   VALIDATING_MANIFEST: 'Validating manifest',
   CAPTURING_RUNTIME_ENVIRONMENT_DATA: 'Capturing runtime environment data',
-  SYNCING_PARAMETERS: 'Syncing parameters',
   CHECKING_AGGREGATION_METHOD: (unitName: string) =>
     `Checking aggregation method for ${unitName}`,
   INITIALIZING_PLUGINS: 'Initializing plugins',
@@ -64,17 +57,11 @@ Note that for the '--output' option you also need to define the output type in y
   PREPARING_OUTPUT_DATA: 'Preparing output data',
   EXPORTING_TO_YAML_FILE: (savepath: string) =>
     `Exporting to yaml file: ${savepath}`,
-  EXPORTING_TO_CSV_FILE: (savepath: string) =>
-    `Exporting to csv file: ${savepath}`,
-  EXPORTING_RAW_CSV_FILE: (savepath: string) =>
-    `Exporting raw csv file: ${savepath}`,
+  EMPTY_PIPELINE: `You're using an old style manifest. Please update for phased execution. More information can be found here: 
+https://if.greensoftware.foundation/major-concepts/manifest-file`,
   /** Exhaust messages */
   OUTPUT_REQUIRED:
     'Output path is required, please make sure output is configured properly.',
-  CSV_EXPORT:
-    'CSV export criteria is not found in output path. Please append it after --output <path>#.',
-  WRITE_CSV_ERROR: (outputPath: string, error: any) =>
-    `Failed to write CSV file to ${outputPath}: ${error}`,
   /** Plugins messages */
   INVALID_NAME:
     '`name` global config parameter is empty or contains all spaces',

@@ -10,6 +10,21 @@ Read more on [embodied carbon](https://github.com/Green-Software-Foundation/sci/
 
 Not Needed
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameters of the `inputs`. Each parameter has:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the `carbon-embodied` parameter. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ### Inputs
 
 - `device/emissions-embodied`: the sum of Life Cycle Assessment (LCA) emissions for the component
@@ -79,8 +94,6 @@ name: sci-embodied
 description: simple demo invoking sci-embodied
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     sci-embodied:
       method: SciEmbodied
@@ -89,7 +102,8 @@ tree:
   children:
     child:
       pipeline:
-        - sci-embodied # duration & config -> embodied
+        compute:
+          - sci-embodied # duration & config -> embodied
       defaults:
         device/emissions-embodied: 1533.120 # gCO2eq
         device/expected-lifespan: 3 # 3 years in seconds
@@ -109,7 +123,6 @@ if-run --manifest manifests/plugins/sci-embodied.yml --output manifests/outputs/
 
 The results will be saved to a new `yaml` file in `./examples/outputs`.
 
-
 ## Errors
 
 `SciEmbodied` uses one of IF's error classes
@@ -119,6 +132,5 @@ The results will be saved to a new `yaml` file in `./examples/outputs`.
 This error class is used to describe a problem with one of the input values to `sci-embodied`. This is typically due to an incorrect type or a reference to a value that is not available.
 
 You will receive a specific error message explaining which parameter is problematic, and you can check and replace where appropriate.
-
 
 For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

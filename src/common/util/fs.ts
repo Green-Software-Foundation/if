@@ -18,8 +18,8 @@ export const isFileExists = async (filePath: string) => {
  */
 export const isDirectoryExists = async (directoryPath: string) => {
   try {
-    await fs.access(directoryPath);
-    return true;
+    const stat = await fs.lstat(directoryPath);
+    return stat.isDirectory();
   } catch (error) {
     return false;
   }
@@ -35,9 +35,9 @@ export const getYamlFiles = async (directory: string) => {
 
   for (const file of files) {
     const fullPath = path.join(directory, file);
-    const stat = await fs.lstat(fullPath);
+    const isDirExists = await isDirectoryExists(fullPath);
 
-    if (stat.isDirectory()) {
+    if (isDirExists) {
       yamlFiles = yamlFiles.concat(await getYamlFiles(fullPath));
     } else {
       if (file.endsWith('.yml') || file.endsWith('.yaml')) {

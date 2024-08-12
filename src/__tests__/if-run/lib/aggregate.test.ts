@@ -1,8 +1,26 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import {aggregate} from '../../../if-run/lib/aggregate';
+import {AggregationParams} from '../../../common/types/manifest';
+
+import {
+  aggregate,
+  storeAggregationMetrics,
+} from '../../../if-run/lib/aggregate';
+import {AGGREGATION_METHODS} from '../../../if-run/types/aggregation';
 
 describe('lib/aggregate: ', () => {
+  beforeAll(() => {
+    const metricStorage: AggregationParams = {
+      metrics: ['carbon'],
+      type: 'horizontal',
+    };
+    const convertedMetrics = metricStorage.metrics.map((metric: string) => ({
+      [metric]: AGGREGATION_METHODS[2],
+    }));
+
+    storeAggregationMetrics(...convertedMetrics);
+  });
+
   describe('aggregate(): ', () => {
     it('returns tree if aggregation is missing.', () => {
       const tree = {};

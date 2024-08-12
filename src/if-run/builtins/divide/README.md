@@ -12,6 +12,21 @@ You provide the names of the values you want to divide, and a name to use to add
 - `denominator` - a parameter by a specific configured number or the number by which `numerator` is divided
 - `output` - the number to a configured output parameter
 
+### Plugin parameter metadata
+
+The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+
+- `inputs`: describe the parameter of the `numerator` of the global config. The parameter has the following attributes:
+
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+- `outputs`: describe the parameter of the `denominator` of the global config. The parameter has the following attributes:
+  - `description`: description of the parameter
+  - `unit`: unit of the parameter
+  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
 ### Inputs
 
 - `numerator` - as input parameter, must be available in the input array
@@ -24,7 +39,7 @@ You provide the names of the values you want to divide, and a name to use to add
 
 The plugin throws an exception if the division result is not a number.
 
->Note: Plugin will warn and return `numerator` value in case if `denominator` is zero.
+> Note: Plugin will warn and return `numerator` value in case if `denominator` is zero.
 
 ## Calculation
 
@@ -42,7 +57,7 @@ const globalConfig = {
   denominator: 2,
   output: 'cpu/number-cores',
 };
-const divide = Divide(globalConfig);
+const divide = Divide(globalConfig, parametersMetadata);
 
 const input = [
   {
@@ -62,8 +77,6 @@ name: divide-demo
 description:
 tags:
 initialize:
-  outputs:
-    - yaml
   plugins:
     divide:
       method: Divide
@@ -76,9 +89,8 @@ tree:
   children:
     child:
       pipeline:
-        - divide
-      config:
-        divide:
+        compute:
+          - divide
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
@@ -103,6 +115,7 @@ The results will be saved to a new `yaml` file in `./examples/outputs`.
 You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
+
 - `numerator`: a string containing the name of the input parameter whose value should be divided by `denominator`
 - `denominator`: a number to use as the denominator
 - ``output`: a string containing the name to assign the result of the division
@@ -113,9 +126,9 @@ You can fix this error by checking you are providing valid values for each param
 
 This error arises when a necessary piece of input data is missing from the `inputs` array.
 Every element in the ``inputs` array must contain:
+
 - `timestamp`
 - `duration`
 - whatever value you passed to `numerator`
-
 
 For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

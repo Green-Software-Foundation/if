@@ -1,6 +1,11 @@
 import {z} from 'zod';
 import {ERRORS} from '@grnsft/if-core/utils';
-import {ExecutePlugin, PluginParams, ConfigParams} from '@grnsft/if-core/types';
+import {
+  ExecutePlugin,
+  PluginParams,
+  ConfigParams,
+  PluginParametersMetadata,
+} from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
 
@@ -9,9 +14,14 @@ import {STRINGS} from '../../config';
 const {MissingInputDataError, GlobalConfigError, RegexMismatchError} = ERRORS;
 const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
 
-export const Regex = (globalConfig: ConfigParams): ExecutePlugin => {
+export const Regex = (
+  globalConfig: ConfigParams,
+  parametersMetadata: PluginParametersMetadata
+): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
+    inputs: parametersMetadata?.inputs,
+    outputs: parametersMetadata?.outputs,
   };
 
   /**
@@ -80,13 +90,13 @@ export const Regex = (globalConfig: ConfigParams): ExecutePlugin => {
     }
 
     const regex = eval(match);
-    const matchedItem = input[parameter].match(regex);
+    const matchedItems = input[parameter].match(regex);
 
-    if (!matchedItem || !matchedItem[0]) {
+    if (!matchedItems || matchedItems.length === 0) {
       throw new RegexMismatchError(REGEX_MISMATCH(input[parameter], match));
     }
 
-    return matchedItem[0];
+    return matchedItems.join(' ');
   };
 
   return {
