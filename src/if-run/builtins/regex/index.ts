@@ -9,7 +9,7 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -59,6 +59,8 @@ export const Regex = (
    * Executes the regex of the given parameter.
    */
   const execute = (inputs: PluginParams[]) => {
+    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
+
     const safeGlobalConfig = validateGlobalConfig();
     const {parameter: parameter, match, output} = safeGlobalConfig;
 
@@ -69,12 +71,10 @@ export const Regex = (
         validateSingleInput(input, parameter)
       );
 
-      const result = {
+      return {
         ...input,
         [output]: extractMatching(safeInput, parameter, match),
       };
-
-      return mapOutput(result, mapping);
     });
   };
 

@@ -8,7 +8,7 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 export const Multiply = (
   globalConfig: MultiplyConfig,
@@ -63,6 +63,8 @@ export const Multiply = (
    * Calculate the product of each input parameter.
    */
   const execute = (inputs: PluginParams[]): PluginParams[] => {
+    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
+
     const safeGlobalConfig = validateGlobalConfig();
     const inputParameters = safeGlobalConfig['input-parameters'];
     const outputParameter = safeGlobalConfig['output-parameter'];
@@ -70,12 +72,10 @@ export const Multiply = (
     return inputs.map(input => {
       validateSingleInput(input, inputParameters);
 
-      const output = {
+      return {
         ...input,
         [outputParameter]: calculateProduct(input, inputParameters),
       };
-
-      return mapOutput(output, mapping);
     });
   };
 

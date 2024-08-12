@@ -9,7 +9,7 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -31,18 +31,19 @@ export const Sum = (
    * Calculate the sum of each input-paramters.
    */
   const execute = (inputs: PluginParams[]) => {
+    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
+
     const safeGlobalConfig = validateGlobalConfig();
     const inputParameters = safeGlobalConfig['input-parameters'];
     const outputParameter = safeGlobalConfig['output-parameter'];
 
     return inputs.map(input => {
       validateSingleInput(input, inputParameters);
-      const output = {
+
+      return {
         ...input,
         [outputParameter]: calculateSum(input, inputParameters),
       };
-
-      return mapOutput(output, mapping);
     });
   };
 

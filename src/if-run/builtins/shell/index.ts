@@ -7,19 +7,16 @@ import {
   ExecutePlugin,
   PluginParams,
   ConfigParams,
-  MappingParams,
   PluginParametersMetadata,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
 
 const {ProcessExecutionError} = ERRORS;
 
 export const Shell = (
   globalConfig: ConfigParams,
-  parametersMetadata: PluginParametersMetadata,
-  mapping: MappingParams
+  parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -35,9 +32,8 @@ export const Shell = (
     const command = inputWithConfig.command;
     const inputAsString: string = dump(inputs, {indent: 2});
     const results = runModelInShell(inputAsString, command);
-    const outputs = results?.outputs?.flat() as PluginParams[];
 
-    return outputs.map(output => mapOutput(output, mapping));
+    return results?.outputs?.flat() as PluginParams[];
   };
 
   /**

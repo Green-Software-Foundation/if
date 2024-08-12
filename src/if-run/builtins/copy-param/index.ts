@@ -9,9 +9,9 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 const {MISSING_GLOBAL_CONFIG} = STRINGS;
 const {GlobalConfigError} = ERRORS;
@@ -77,6 +77,8 @@ export const Copy = (
   };
 
   const execute = (inputs: PluginParams[]) => {
+    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
+
     const safeGlobalConfig = validateGlobalConfig();
     const keepExisting = safeGlobalConfig['keep-existing'] === true;
     const from = safeGlobalConfig['from'];
@@ -92,12 +94,10 @@ export const Copy = (
         }
       }
 
-      const output = {
+      return {
         ...safeInput, // need to return or what you provide won't be outputted, don't be evil!
         [to]: outputValue,
       };
-
-      return mapOutput(output, mapping);
     });
   };
 

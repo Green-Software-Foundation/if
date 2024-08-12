@@ -10,7 +10,7 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate, allDefined} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
+import {mapInputIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -72,9 +72,10 @@ export const Sci = (
   /**
    * Calculate the total emissions for a list of inputs.
    */
-  const execute = (inputs: PluginParams[]): PluginParams[] =>
-    inputs.map((input, index) => {
-      const safeInput = validateInput(input);
+  const execute = (inputs: PluginParams[]): PluginParams[] => {
+    return inputs.map((input, index) => {
+      const mappedInput = mapInputIfNeeded(input, mapping);
+      const safeInput = validateInput(mappedInput);
       const functionalUnit = input[globalConfig['functional-unit']];
 
       if (functionalUnit === 0) {
@@ -86,14 +87,12 @@ export const Sci = (
         };
       }
 
-      const output = {
+      return {
         ...input,
         sci: safeInput['carbon'] / functionalUnit,
       };
-
-      return mapOutput(output, mapping);
     });
-
+  };
   /**
    * Checks for fields in input.
    */

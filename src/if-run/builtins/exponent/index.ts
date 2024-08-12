@@ -8,7 +8,7 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 export const Exponent = (
   globalConfig: ExponentConfig,
@@ -54,6 +54,8 @@ export const Exponent = (
    * Calculate the input param raised by to the power of the given exponent.
    */
   const execute = (inputs: PluginParams[]): PluginParams[] => {
+    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
+
     const {
       'input-parameter': inputParameter,
       exponent,
@@ -63,12 +65,10 @@ export const Exponent = (
     return inputs.map(input => {
       validateSingleInput(input, inputParameter);
 
-      const output = {
+      return {
         ...input,
         [outputParameter]: calculateExponent(input, inputParameter, exponent),
       };
-
-      return mapOutput(output, mapping);
     });
   };
 

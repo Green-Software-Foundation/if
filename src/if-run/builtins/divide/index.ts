@@ -9,9 +9,9 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 const {GlobalConfigError, MissingInputDataError} = ERRORS;
 const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
@@ -31,6 +31,8 @@ export const Divide = (
    * Calculate the division of each input parameter.
    */
   const execute = (inputs: PluginParams[]) => {
+    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
+
     const safeGlobalConfig = validateGlobalConfig();
     const {numerator, denominator, output} = safeGlobalConfig;
 
@@ -41,12 +43,10 @@ export const Divide = (
         validateSingleInput(input, {numerator, denominator})
       );
 
-      const result = {
+      return {
         ...input,
         [output]: calculateDivide(safeInput, index, {numerator, denominator}),
       };
-
-      return mapOutput(result, mapping);
     });
   };
 

@@ -8,7 +8,7 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 export const Subtract = (
   globalConfig: SubtractConfig,
@@ -63,6 +63,8 @@ export const Subtract = (
    * Subtract items from inputParams[1..n] from inputParams[0] and write the result in a new param outputParam.
    */
   const execute = (inputs: PluginParams[]): PluginParams[] => {
+    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
+
     const {
       'input-parameters': inputParameters,
       'output-parameter': outputParameter,
@@ -71,12 +73,10 @@ export const Subtract = (
     return inputs.map(input => {
       validateSingleInput(input, inputParameters);
 
-      const output = {
+      return {
         ...input,
         [outputParameter]: calculateDiff(input, inputParameters),
       };
-
-      return mapOutput(output, mapping);
     });
   };
 

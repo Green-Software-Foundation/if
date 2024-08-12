@@ -11,7 +11,7 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -38,18 +38,18 @@ export const Interpolation = (
    * Executes the energy consumption calculation for an array of input parameters.
    */
   const execute = (inputs: PluginParams[]) => {
+    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
+
     const validatedConfig = validateConfig();
 
     return inputs.map((input, index) => {
       const safeInput = validateInput(input, index);
       const result = calculateResult(validatedConfig, safeInput);
 
-      const output = {
+      return {
         ...input,
         [validatedConfig['output-parameter']]: result,
       };
-
-      return mapOutput(output, mapping);
     });
   };
 

@@ -10,7 +10,7 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 import {CommonGenerator} from './helpers/common-generator';
 import {RandIntGenerator} from './helpers/rand-int-generator';
@@ -32,6 +32,8 @@ export const MockObservations = (
    * Generate sets of mocked observations based on config.
    */
   const execute = (inputs: PluginParams[]) => {
+    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
+
     const {duration, timeBuckets, components, generators} =
       generateParamsFromConfig();
     const generatorToHistory = new Map<Generator, number[]>();
@@ -42,24 +44,19 @@ export const MockObservations = (
 
     const defaults = inputs && inputs[0];
 
-    const outputs = Object.entries(components).reduce(
-      (acc: PluginParams[], item) => {
-        const component = item[1];
-        timeBuckets.forEach(timeBucket => {
-          const observation = createObservation(
-            {duration, component, timeBucket, generators},
-            generatorToHistory
-          );
+    return Object.entries(components).reduce((acc: PluginParams[], item) => {
+      const component = item[1];
+      timeBuckets.forEach(timeBucket => {
+        const observation = createObservation(
+          {duration, component, timeBucket, generators},
+          generatorToHistory
+        );
 
-          acc.push(Object.assign({}, defaults, observation));
-        });
+        acc.push(Object.assign({}, defaults, observation));
+      });
 
-        return acc;
-      },
-      []
-    );
-
-    return outputs.map(output => mapOutput(output, mapping));
+      return acc;
+    }, []);
   };
 
   /**

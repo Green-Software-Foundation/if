@@ -8,13 +8,14 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate, allDefined} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
+import {mapInputIfNeeded} from '../../../common/util/helpers';
 
 const {SCI_EMBODIED_ERROR} = STRINGS;
 
 export const SciEmbodied = (
+  _config: undefined,
   parametersMetadata: PluginParametersMetadata,
   mapping: MappingParams
 ): ExecutePlugin => {
@@ -79,14 +80,13 @@ export const SciEmbodied = (
    */
   const execute = (inputs: PluginParams[]) =>
     inputs.map(input => {
-      const safeInput = validateInput(input);
+      const mappedInput = mapInputIfNeeded(input, mapping);
+      const safeInput = validateInput(mappedInput);
 
-      const output = {
+      return {
         ...input,
         'carbon-embodied': calculateEmbodiedCarbon(safeInput),
       };
-
-      return mapOutput(output, mapping);
     });
 
   /**

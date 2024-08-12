@@ -13,9 +13,9 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapOutput} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 const {
   FILE_FETCH_FAILED,
@@ -200,6 +200,8 @@ export const CSVLookup = (
    * 4. Filters requested information from CSV.
    */
   const execute = async (inputs: PluginParams[]) => {
+    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
+
     const safeGlobalConfig = validateGlobalConfig();
     const {filepath, query, output} = safeGlobalConfig;
 
@@ -222,12 +224,10 @@ export const CSVLookup = (
         throw new QueryDataNotFoundError(NO_QUERY_DATA);
       }
 
-      const result = {
+      return {
         ...input,
         ...filterOutput(relatedData, {output, query}),
       };
-
-      return mapOutput(result, mapping);
     });
   };
 
