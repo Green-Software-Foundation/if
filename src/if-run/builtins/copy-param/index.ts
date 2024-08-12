@@ -10,14 +10,14 @@ import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {MISSING_CONFIG} = STRINGS;
 const {GlobalConfigError} = ERRORS;
 //   keep-existing: true/false (whether to remove the parameter you are copying from)
 //   from-param: the parameter you are copying from (e.g. cpu/name)
 //   to-field: the parameter you are copying to (e.g. cpu/processor-name)
 
 export const Copy = (
-  globalConfig: Record<string, any>,
+  config: Record<string, any>,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -27,23 +27,20 @@ export const Copy = (
   };
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+  const validateConfig = () => {
+    if (!config) {
+      throw new GlobalConfigError(MISSING_CONFIG);
     }
 
-    const globalConfigSchema = z.object({
+    const configSchema = z.object({
       'keep-existing': z.boolean(),
       from: z.string().min(1),
       to: z.string().min(1),
     });
 
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
+    return validate<z.infer<typeof configSchema>>(configSchema, config);
   };
 
   /**
@@ -70,7 +67,7 @@ export const Copy = (
   };
 
   const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateGlobalConfig();
+    const safeGlobalConfig = validateConfig();
     const keepExisting = safeGlobalConfig['keep-existing'] === true;
     const from = safeGlobalConfig['from'];
     const to = safeGlobalConfig['to'];

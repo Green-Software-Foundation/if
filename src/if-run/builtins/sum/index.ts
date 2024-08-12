@@ -12,10 +12,10 @@ import {validate} from '../../../common/util/validations';
 import {STRINGS} from '../../config';
 
 const {GlobalConfigError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {MISSING_CONFIG} = STRINGS;
 
 export const Sum = (
-  globalConfig: SumConfig,
+  config: SumConfig,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -28,7 +28,7 @@ export const Sum = (
    * Calculate the sum of each input-paramters.
    */
   const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateGlobalConfig();
+    const safeGlobalConfig = validateConfig();
     const inputParameters = safeGlobalConfig['input-parameters'];
     const outputParameter = safeGlobalConfig['output-parameter'];
 
@@ -43,22 +43,19 @@ export const Sum = (
   };
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+  const validateConfig = () => {
+    if (!config) {
+      throw new GlobalConfigError(MISSING_CONFIG);
     }
 
-    const globalConfigSchema = z.object({
+    const configSchema = z.object({
       'input-parameters': z.array(z.string()),
       'output-parameter': z.string().min(1),
     });
 
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
+    return validate<z.infer<typeof configSchema>>(configSchema, config);
   };
 
   /**

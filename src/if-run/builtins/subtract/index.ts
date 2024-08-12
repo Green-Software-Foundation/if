@@ -9,7 +9,7 @@ import {
 import {validate} from '../../../common/util/validations';
 
 export const Subtract = (
-  globalConfig: SubtractConfig,
+  config: SubtractConfig,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -19,18 +19,15 @@ export const Subtract = (
   };
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    const globalConfigSchema = z.object({
+  const validateConfig = () => {
+    const configSchema = z.object({
       'input-parameters': z.array(z.string()),
       'output-parameter': z.string().min(1),
     });
 
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
+    return validate<z.infer<typeof configSchema>>(configSchema, config);
   };
 
   /**
@@ -63,7 +60,7 @@ export const Subtract = (
     const {
       'input-parameters': inputParameters,
       'output-parameter': outputParameter,
-    } = validateGlobalConfig();
+    } = validateConfig();
 
     return inputs.map(input => {
       validateSingleInput(input, inputParameters);

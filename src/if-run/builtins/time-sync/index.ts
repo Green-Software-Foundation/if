@@ -53,7 +53,7 @@ const {
  * ```
  */
 export const TimeSync = (
-  globalConfig: TimeNormalizerConfig,
+  config: TimeNormalizerConfig,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -80,7 +80,7 @@ export const TimeSync = (
    * Take input array and return time-synchronized input array.
    */
   const execute = (inputs: PluginParams[]): PluginParams[] => {
-    const validatedConfig = validateGlobalConfig();
+    const validatedConfig = validateConfig();
     const timeParams = {
       startTime: DateTime.fromISO(validatedConfig['start-time']),
       endTime: DateTime.fromISO(validatedConfig['end-time']),
@@ -191,10 +191,10 @@ export const TimeSync = (
   };
 
   /**
-   * Validates global config parameters.
+   * Validates config parameters.
    */
-  const validateGlobalConfig = () => {
-    if (globalConfig === undefined) {
+  const validateConfig = () => {
+    if (config === undefined) {
       throw new GlobalConfigError(INVALID_TIME_NORMALIZATION);
     }
 
@@ -209,7 +209,7 @@ export const TimeSync = (
         message: START_LOWER_END,
       });
 
-    return validate<z.infer<typeof schema>>(schema, globalConfig);
+    return validate<z.infer<typeof schema>>(schema, config);
   };
 
   /**

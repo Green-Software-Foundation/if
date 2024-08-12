@@ -12,10 +12,10 @@ import {validate} from '../../../common/util/validations';
 import {STRINGS} from '../../config';
 
 const {GlobalConfigError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {MISSING_CONFIG} = STRINGS;
 
 export const Coefficient = (
-  globalConfig: CoefficientConfig,
+  config: CoefficientConfig,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -28,7 +28,7 @@ export const Coefficient = (
    * Calculate the product of each input parameter.
    */
   const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateGlobalConfig();
+    const safeGlobalConfig = validateConfig();
     const inputParameter = safeGlobalConfig['input-parameter'];
     const outputParameter = safeGlobalConfig['output-parameter'];
     const coefficient = safeGlobalConfig['coefficient'];
@@ -66,23 +66,20 @@ export const Coefficient = (
   ) => input[inputParameter] * coefficient;
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+  const validateConfig = () => {
+    if (!config) {
+      throw new GlobalConfigError(MISSING_CONFIG);
     }
 
-    const globalConfigSchema = z.object({
+    const configSchema = z.object({
       coefficient: z.number(),
       'input-parameter': z.string().min(1),
       'output-parameter': z.string().min(1),
     });
 
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
+    return validate<z.infer<typeof configSchema>>(configSchema, config);
   };
 
   return {

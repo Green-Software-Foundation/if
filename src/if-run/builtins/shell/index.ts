@@ -15,7 +15,7 @@ import {validate} from '../../../common/util/validations';
 const {ProcessExecutionError} = ERRORS;
 
 export const Shell = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -44,7 +44,7 @@ export const Shell = (
       command: z.string(),
     });
 
-    return validate<z.infer<typeof schema>>(schema, globalConfig);
+    return validate<z.infer<typeof schema>>(schema, config);
   };
 
   /**

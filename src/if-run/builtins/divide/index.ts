@@ -12,10 +12,10 @@ import {validate} from '../../../common/util/validations';
 import {STRINGS} from '../../config';
 
 const {GlobalConfigError, MissingInputDataError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
+const {MISSING_CONFIG, MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
 
 export const Divide = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -28,7 +28,7 @@ export const Divide = (
    * Calculate the division of each input parameter.
    */
   const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateGlobalConfig();
+    const safeGlobalConfig = validateConfig();
     const {numerator, denominator, output} = safeGlobalConfig;
 
     return inputs.map((input, index) => {
@@ -46,11 +46,11 @@ export const Divide = (
   };
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+  const validateConfig = () => {
+    if (!config) {
+      throw new GlobalConfigError(MISSING_CONFIG);
     }
 
     const schema = z.object({
@@ -59,7 +59,7 @@ export const Divide = (
       output: z.string(),
     });
 
-    return validate<z.infer<typeof schema>>(schema, globalConfig);
+    return validate<z.infer<typeof schema>>(schema, config);
   };
 
   /**

@@ -6,7 +6,7 @@ import {STRINGS} from '../../../config';
 import {Generator} from '../interfaces';
 
 const {GlobalConfigError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {MISSING_CONFIG} = STRINGS;
 
 export const CommonGenerator = (config: ConfigParams): Generator => {
   /**
@@ -16,7 +16,7 @@ export const CommonGenerator = (config: ConfigParams): Generator => {
    */
   const validateConfig = (config: object) => {
     if (!config || Object.keys(config).length === 0) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+      throw new GlobalConfigError(MISSING_CONFIG);
     }
 
     return structuredClone(config);

@@ -7,7 +7,7 @@ import {Generator} from '../interfaces';
 
 const {GlobalConfigError} = ERRORS;
 
-const {MISSING_GLOBAL_CONFIG, MISSING_MIN_MAX, INVALID_MIN_MAX, INVALID_NAME} =
+const {MISSING_CONFIG, MISSING_MIN_MAX, INVALID_MIN_MAX, INVALID_NAME} =
   STRINGS;
 
 export const RandIntGenerator = (
@@ -28,7 +28,7 @@ export const RandIntGenerator = (
 
   const validateConfig = (config: ConfigParams): {min: number; max: number} => {
     if (!config || Object.keys(config).length === 0) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+      throw new GlobalConfigError(MISSING_CONFIG);
     }
 
     if (!config.min || !config.max) {

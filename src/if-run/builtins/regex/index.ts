@@ -12,10 +12,10 @@ import {validate} from '../../../common/util/validations';
 import {STRINGS} from '../../config';
 
 const {MissingInputDataError, GlobalConfigError, RegexMismatchError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
+const {MISSING_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
 
 export const Regex = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -25,11 +25,11 @@ export const Regex = (
   };
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+  const validateConfig = () => {
+    if (!config) {
+      throw new GlobalConfigError(MISSING_CONFIG);
     }
 
     const schema = z.object({
@@ -38,7 +38,7 @@ export const Regex = (
       output: z.string(),
     });
 
-    return validate<z.infer<typeof schema>>(schema, globalConfig);
+    return validate<z.infer<typeof schema>>(schema, config);
   };
 
   /**
@@ -56,7 +56,7 @@ export const Regex = (
    * Executes the regex of the given parameter.
    */
   const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateGlobalConfig();
+    const safeGlobalConfig = validateConfig();
     const {parameter: parameter, match, output} = safeGlobalConfig;
 
     return inputs.map(input => {

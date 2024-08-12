@@ -16,7 +16,7 @@ import {RandIntGenerator} from './helpers/rand-int-generator';
 import {Generator} from './interfaces/index';
 
 export const MockObservations = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -55,9 +55,9 @@ export const MockObservations = (
   };
 
   /**
-   * Validates global config parameters.
+   * Validates config parameters.
    */
-  const validateGlobalConfig = () => {
+  const validateConfig = () => {
     const schema = z.object({
       'timestamp-from': z.string(),
       'timestamp-to': z.string(),
@@ -69,7 +69,7 @@ export const MockObservations = (
       }),
     });
 
-    return validate<z.infer<typeof schema>>(schema, globalConfig);
+    return validate<z.infer<typeof schema>>(schema, config);
   };
 
   /**
@@ -82,7 +82,7 @@ export const MockObservations = (
       duration,
       generators,
       components,
-    } = validateGlobalConfig();
+    } = validateConfig();
     const convertedTimestampFrom = DateTime.fromISO(timestampFrom, {
       zone: 'UTC',
     });
