@@ -6,7 +6,7 @@ initialize:
     exponent:
       method: Exponent
       path: "builtin"
-      global-config:
+      config:
         input-parameter: "cpu/energy"
         exponent: 2
         output-parameter: "energy"

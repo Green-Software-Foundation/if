@@ -6,7 +6,7 @@ initialize:
     memory-energy-from-memory-util:
       path: builtin
       method: Coefficient
-      global-config:
+      config:
         input-parameter: memory/utilization
         coefficient: 0.0001
         output-parameter: memory/energy

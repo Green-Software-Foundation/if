@@ -6,7 +6,7 @@ initialize:
     coefficient:
       path: builtin
       method: Coefficient
-      global-config:
+      config:
         input-parameter: carbon
         coefficient: 3
         output-parameter: carbon-product

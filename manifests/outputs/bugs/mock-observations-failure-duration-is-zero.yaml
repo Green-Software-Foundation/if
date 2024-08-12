@@ -7,7 +7,7 @@ initialize:
       kind: plugin
       method: MockObservations
       path: builtin
-      global-config:
+      config:
         timestamp-from: 2023-07-06T00:00
         timestamp-to: 2023-07-06T00:10
         duration: 0
@@ -69,7 +69,7 @@ execution:
       - typescript@5.2.2
       - winston@3.11.0
       - zod@3.22.4
-  error: "InputValidationError: \"duration\" parameter is number must be greater than 0. Error code: too_small."
+  error: 'InputValidationError: "duration" parameter is number must be greater than 0. Error code: too_small.'
 tree:
   children:
     child:

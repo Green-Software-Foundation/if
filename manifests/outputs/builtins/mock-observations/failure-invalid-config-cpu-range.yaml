@@ -1,6 +1,6 @@
 name: mock-observation-demo
 description: >-
-  failure with `global-config->generators->randint->cpu/utilization->min` is
+  failure with `config->generators->randint->cpu/utilization->min` is
   greater than `max`
 tags: null
 initialize:
@@ -9,7 +9,7 @@ initialize:
       kind: plugin
       method: MockObservations
       path: builtin
-      global-config:
+      config:
         timestamp-from: 2023-07-06T00:00
         timestamp-to: 2023-07-06T00:10
         duration: 60

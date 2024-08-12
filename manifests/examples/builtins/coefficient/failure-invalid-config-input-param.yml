@@ -1,12 +1,12 @@
 name: coefficient-demo
-description: failure with ivalid `global-config.input-parameter`
+description: failure with ivalid `config.input-parameter`
 tags:
 initialize:
   plugins:
     coefficient:
       method: Coefficient
       path: "builtin"
-      global-config:
+      config:
         input-parameter: 4
         coefficient: 3
         output-parameter: "carbon-product"

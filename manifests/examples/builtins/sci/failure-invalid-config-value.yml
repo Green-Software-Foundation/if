@@ -7,7 +7,7 @@ initialize:
       kind: plugin
       method: Sci
       path: "builtin"
-      # global-config:
+      # config:
       #   functional-unit: 1 minute
 tree:
   children:

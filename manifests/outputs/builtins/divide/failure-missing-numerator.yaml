@@ -6,7 +6,7 @@ initialize:
     divide:
       method: Divide
       path: builtin
-      global-config:
+      config:
         denominator: 2
         output: cpu/number-cores
 execution:
