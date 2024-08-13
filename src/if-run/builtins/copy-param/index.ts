@@ -36,7 +36,7 @@ export const Copy = (
 
     const globalConfigSchema = z.object({
       'keep-existing': z.boolean(),
-      from: z.string().min(1),
+      from: z.string().min(1).or(z.number()),
       to: z.string().min(1),
     });
 
@@ -51,7 +51,7 @@ export const Copy = (
    */
   const validateSingleInput = (
     input: PluginParams,
-    inputParameters: string[]
+    inputParameters: (string | number)[]
   ) => {
     const inputData = inputParameters.reduce(
       (acc, param) => {
@@ -59,10 +59,10 @@ export const Copy = (
 
         return acc;
       },
-      {} as Record<string, string>
+      {} as Record<string, string | number>
     );
 
-    const validationSchema = z.record(z.string(), z.string());
+    const validationSchema = z.record(z.string(), z.string().or(z.number()));
 
     validate(validationSchema, inputData);
 
