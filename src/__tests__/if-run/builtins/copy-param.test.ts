@@ -91,7 +91,7 @@ describe('builtins/copy: ', () => {
         } catch (error) {
           expect(error).toStrictEqual(
             new InputValidationError(
-              '"original" parameter is required. Error code: invalid_type.'
+              '"original" parameter is required. Error code: invalid_union.'
             )
           );
         }
