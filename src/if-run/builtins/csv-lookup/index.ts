@@ -28,7 +28,7 @@ const {
   ReadFileError,
   MissingCSVColumnError,
   QueryDataNotFoundError,
-  GlobalConfigError,
+  ConfigError,
   CSVParseError,
 } = ERRORS;
 
@@ -231,7 +231,7 @@ export const CSVLookup = (
    */
   const validateConfig = () => {
     if (!config) {
-      throw new GlobalConfigError(MISSING_CONFIG);
+      throw new ConfigError(MISSING_CONFIG);
     }
 
     const configSchema = z.object({

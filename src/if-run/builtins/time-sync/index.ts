@@ -21,7 +21,7 @@ import {getAggregationMethod} from '../../lib/aggregate';
 Settings.defaultZone = 'utc';
 
 const {
-  GlobalConfigError,
+  ConfigError,
   InvalidDateInInputError,
   InvalidPaddingError,
   InvalidInputError,
@@ -195,7 +195,7 @@ export const TimeSync = (
    */
   const validateConfig = () => {
     if (config === undefined) {
-      throw new GlobalConfigError(INVALID_TIME_NORMALIZATION);
+      throw new ConfigError(INVALID_TIME_NORMALIZATION);
     }
 
     const schema = z

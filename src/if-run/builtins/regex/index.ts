@@ -11,7 +11,7 @@ import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
-const {MissingInputDataError, GlobalConfigError, RegexMismatchError} = ERRORS;
+const {MissingInputDataError, ConfigError, RegexMismatchError} = ERRORS;
 const {MISSING_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
 
 export const Regex = (
@@ -29,7 +29,7 @@ export const Regex = (
    */
   const validateConfig = () => {
     if (!config) {
-      throw new GlobalConfigError(MISSING_CONFIG);
+      throw new ConfigError(MISSING_CONFIG);
     }
 
     const schema = z.object({

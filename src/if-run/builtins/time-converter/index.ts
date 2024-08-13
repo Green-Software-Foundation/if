@@ -13,7 +13,7 @@ import {STRINGS} from '../../config';
 
 import {TIME_UNITS_IN_SECONDS} from './config';
 
-const {GlobalConfigError} = ERRORS;
+const {ConfigError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
 export const TimeConverter = (
@@ -74,7 +74,7 @@ export const TimeConverter = (
    */
   const validateConfig = () => {
     if (!config) {
-      throw new GlobalConfigError(MISSING_CONFIG);
+      throw new ConfigError(MISSING_CONFIG);
     }
 
     const timeUnitsValues = Object.keys(TIME_UNITS_IN_SECONDS);

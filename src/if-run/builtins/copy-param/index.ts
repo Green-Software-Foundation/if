@@ -11,7 +11,7 @@ import {validate} from '../../../common/util/validations';
 import {STRINGS} from '../../config';
 
 const {MISSING_CONFIG} = STRINGS;
-const {GlobalConfigError} = ERRORS;
+const {ConfigError} = ERRORS;
 //   keep-existing: true/false (whether to remove the parameter you are copying from)
 //   from-param: the parameter you are copying from (e.g. cpu/name)
 //   to-field: the parameter you are copying to (e.g. cpu/processor-name)
@@ -31,7 +31,7 @@ export const Copy = (
    */
   const validateConfig = () => {
     if (!config) {
-      throw new GlobalConfigError(MISSING_CONFIG);
+      throw new ConfigError(MISSING_CONFIG);
     }
 
     const configSchema = z.object({

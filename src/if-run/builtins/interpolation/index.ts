@@ -13,7 +13,7 @@ import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
-const {GlobalConfigError} = ERRORS;
+const {ConfigError} = ERRORS;
 const {MISSING_CONFIG, X_Y_EQUAL, ARRAY_LENGTH_NON_EMPTY, WITHIN_THE_RANGE} =
   STRINGS;
 
@@ -134,7 +134,7 @@ export const Interpolation = (
    */
   const validateConfig = () => {
     if (!config) {
-      throw new GlobalConfigError(MISSING_CONFIG);
+      throw new ConfigError(MISSING_CONFIG);
     }
 
     const schema = z

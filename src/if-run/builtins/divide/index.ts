@@ -11,7 +11,7 @@ import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
-const {GlobalConfigError, MissingInputDataError} = ERRORS;
+const {ConfigError, MissingInputDataError} = ERRORS;
 const {MISSING_CONFIG, MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
 
 export const Divide = (
@@ -50,7 +50,7 @@ export const Divide = (
    */
   const validateConfig = () => {
     if (!config) {
-      throw new GlobalConfigError(MISSING_CONFIG);
+      throw new ConfigError(MISSING_CONFIG);
     }
 
     const schema = z.object({

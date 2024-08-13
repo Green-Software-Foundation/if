@@ -11,7 +11,7 @@ import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
-const {GlobalConfigError} = ERRORS;
+const {ConfigError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
 export const Sum = (
@@ -47,7 +47,7 @@ export const Sum = (
    */
   const validateConfig = () => {
     if (!config) {
-      throw new GlobalConfigError(MISSING_CONFIG);
+      throw new ConfigError(MISSING_CONFIG);
     }
 
     const configSchema = z.object({
