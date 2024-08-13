@@ -112,9 +112,9 @@ Every element in the `inputs` array must contain:
 - `duration`
 - whatever value you passed to `parameter`
 
-### `GlobalConfigError`
+### `ConfigError`
 
-You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+You will receive an error starting `ConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
 

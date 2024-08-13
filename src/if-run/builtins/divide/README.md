@@ -110,9 +110,9 @@ The results will be saved to a new `yaml` file in `./examples/outputs`.
 
 `Divide` exposes two of IF's error classes.
 
-### GlobalConfigError
+### ConfigError
 
-You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+You will receive an error starting `ConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
 

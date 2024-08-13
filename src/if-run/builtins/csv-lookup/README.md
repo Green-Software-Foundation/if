@@ -177,9 +177,9 @@ This error is caused by the `CsvLookup` plugin failing to find data that matches
 
 This error arises due to problems parsing CSV data into IF. This can occur when the CSV data is incorrectly formatted or contains unexpected characters that IF does not recognize. These errors are expected to be unusual edge cases as incorrectly formatted data will usually be identified during file loading and cause a `ReadFileError`. To debug, check your CSV file for any unexpected formatting or unusual characters.
 
-### GlobalConfigError
+### ConfigError
 
-You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+You will receive an error starting `ConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
 
