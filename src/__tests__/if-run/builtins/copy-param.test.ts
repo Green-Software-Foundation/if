@@ -4,7 +4,7 @@ import {Copy} from '../../../if-run/builtins/copy-param';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {GlobalConfigError, InputValidationError} = ERRORS;
+const {ConfigError, InputValidationError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/copy: ', () => {
@@ -66,7 +66,7 @@ describe('builtins/copy: ', () => {
             },
           ]);
         } catch (error) {
-          expect(error).toStrictEqual(new GlobalConfigError(MISSING_CONFIG));
+          expect(error).toStrictEqual(new ConfigError(MISSING_CONFIG));
         }
       });
 

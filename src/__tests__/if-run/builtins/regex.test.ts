@@ -4,7 +4,7 @@ import {Regex} from '../../../if-run/builtins/regex';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {GlobalConfigError, MissingInputDataError, RegexMismatchError} = ERRORS;
+const {ConfigError, MissingInputDataError, RegexMismatchError} = ERRORS;
 const {MISSING_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
 
 describe('builtins/regex: ', () => {
@@ -156,7 +156,7 @@ describe('builtins/regex: ', () => {
             },
           ]);
         } catch (error) {
-          expect(error).toStrictEqual(new GlobalConfigError(MISSING_CONFIG));
+          expect(error).toStrictEqual(new ConfigError(MISSING_CONFIG));
         }
       });
 

@@ -4,7 +4,7 @@ import {MockObservations} from '../../../if-run/builtins/mock-observations';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {InputValidationError, GlobalConfigError} = ERRORS;
+const {InputValidationError, ConfigError} = ERRORS;
 const {INVALID_MIN_MAX} = STRINGS;
 
 describe('builtins/mock-observations: ', () => {
@@ -121,9 +121,9 @@ describe('builtins/mock-observations: ', () => {
       try {
         await mockObservations.execute([]);
       } catch (error) {
-        expect(error).toBeInstanceOf(GlobalConfigError);
+        expect(error).toBeInstanceOf(ConfigError);
         expect(error).toEqual(
-          new GlobalConfigError(INVALID_MIN_MAX('cpu/utilization'))
+          new ConfigError(INVALID_MIN_MAX('cpu/utilization'))
         );
       }
     });

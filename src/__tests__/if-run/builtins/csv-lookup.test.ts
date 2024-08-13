@@ -9,7 +9,7 @@ import {CSVLookup} from '../../../if-run/builtins';
 import {STRINGS} from '../../../if-run/config';
 
 const {
-  GlobalConfigError,
+  ConfigError,
   ReadFileError,
   FetchingFileError,
   QueryDataNotFoundError,
@@ -378,7 +378,7 @@ describe('builtins/CSVLookup: ', () => {
           await csvLookup.execute(input);
         } catch (error) {
           if (error instanceof Error) {
-            expect(error).toBeInstanceOf(GlobalConfigError);
+            expect(error).toBeInstanceOf(ConfigError);
             expect(error.message).toEqual(MISSING_CONFIG);
           }
         }

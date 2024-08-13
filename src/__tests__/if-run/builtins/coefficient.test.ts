@@ -4,7 +4,7 @@ import {Coefficient} from '../../../if-run/builtins/coefficient';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {InputValidationError, GlobalConfigError} = ERRORS;
+const {InputValidationError, ConfigError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/coefficient: ', () => {
@@ -68,7 +68,7 @@ describe('builtins/coefficient: ', () => {
             },
           ]);
         } catch (error) {
-          expect(error).toStrictEqual(new GlobalConfigError(MISSING_CONFIG));
+          expect(error).toStrictEqual(new ConfigError(MISSING_CONFIG));
         }
       });
 

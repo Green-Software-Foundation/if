@@ -5,7 +5,7 @@ import {Interpolation} from '../../../if-run/builtins';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {InputValidationError, GlobalConfigError} = ERRORS;
+const {InputValidationError, ConfigError} = ERRORS;
 const {MISSING_CONFIG, WITHIN_THE_RANGE, ARRAY_LENGTH_NON_EMPTY, X_Y_EQUAL} =
   STRINGS;
 
@@ -153,8 +153,8 @@ describe('builtins/interpolation: ', () => {
         try {
           plugin.execute(inputs);
         } catch (error) {
-          expect(error).toBeInstanceOf(GlobalConfigError);
-          expect(error).toEqual(new GlobalConfigError(MISSING_CONFIG));
+          expect(error).toBeInstanceOf(ConfigError);
+          expect(error).toEqual(new ConfigError(MISSING_CONFIG));
         }
       });
 

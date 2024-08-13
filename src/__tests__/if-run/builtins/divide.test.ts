@@ -4,7 +4,7 @@ import {Divide} from '../../../if-run/builtins';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {InputValidationError, GlobalConfigError, MissingInputDataError} = ERRORS;
+const {InputValidationError, ConfigError, MissingInputDataError} = ERRORS;
 const {MISSING_CONFIG, MISSING_INPUT_DATA} = STRINGS;
 
 describe('builtins/divide: ', () => {
@@ -123,7 +123,7 @@ describe('builtins/divide: ', () => {
           },
         ]);
       } catch (error) {
-        expect(error).toStrictEqual(new GlobalConfigError(MISSING_CONFIG));
+        expect(error).toStrictEqual(new ConfigError(MISSING_CONFIG));
       }
     });
 

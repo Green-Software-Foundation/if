@@ -15,7 +15,7 @@ const {
   InvalidPaddingError,
   InvalidDateInInputError,
   InvalidInputError,
-  GlobalConfigError,
+  ConfigError,
 } = ERRORS;
 
 const {
@@ -238,9 +238,7 @@ describe('execute(): ', () => {
         },
       ]);
     } catch (error) {
-      expect(error).toStrictEqual(
-        new GlobalConfigError(INVALID_TIME_NORMALIZATION)
-      );
+      expect(error).toStrictEqual(new ConfigError(INVALID_TIME_NORMALIZATION));
     }
   });
 
