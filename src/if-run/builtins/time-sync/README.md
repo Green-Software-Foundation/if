@@ -213,8 +213,8 @@ initialize:
       method: TeadsCurve
       path: '@grnsft/if-unofficial-plugins'
     sci-e:
-      method: SciE
-      path: '@grnsft/if-plugins'
+      method: SciEmbodied
+      path: 'builtin'
     sci-embodied:
       path: 'builtin'
       method: SciEmbodied
@@ -228,6 +228,7 @@ initialize:
         start-time: '2023-12-12T00:00:00.000Z' # ISO timestamp
         end-time: '2023-12-12T00:01:00.000Z' # ISO timestamp
         interval: 5 # seconds
+        allow-padding: true
 tree:
   children:
     child: # an advanced grouping node
@@ -238,19 +239,16 @@ tree:
           - sci-embodied
           - sci-o
           - time-sync
-      config:
-        teads-curve:
-          cpu/thermal-design-power: 65
-        sci-embodied:
-          device/emissions-embodied: 251000 # gCO2eq
-          time-reserved: 3600 # 1 hour in s
-          device/expected-lifespan: 126144000 # 4 years in seconds
-          resources-reserved: 1
-          resources-total: 1
-        sci-o:
-          grid/carbon-intensity: 457 # gCO2/kwh
       children:
         child-1:
+          defaults:
+            device/emissions-embodied: 251000 # gCO2eq
+            time-reserved: 3600 # 1 hour in s
+            device/expected-lifespan: 126144000 # 4 years in seconds
+            resources-reserved: 1
+            resources-total: 1
+            grid/carbon-intensity: 457 # gCO2/kwh
+            cpu/thermal-design-power: 65
           inputs:
             - timestamp: '2023-12-12T00:00:00.000Z'
               duration: 10
@@ -260,6 +258,7 @@ tree:
               requests: 300
             - timestamp: '2023-12-12T00:00:10.000Z'
               duration: 10
+              cpu/thermal-design-power: 65
               cpu/utilization: 20
               carbon: 200
               energy: 200

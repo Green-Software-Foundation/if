@@ -123,27 +123,6 @@ There have also been some changes to the structure of manifest files. Some of th
           allow-padding: true
   ```
 
-- **Node level config**
-
-  We have also introduced the concept of node-level config. This is designed for pluin configuration that might vary between components in the tree. For example, for each child in the tree you might wish to use the `regroup` feature to group the outputs according to a different set of keys.
-
-  ```yaml
-  tree:
-    children:
-      child-1:
-        pipeline:
-          compute:
-            - teads-curve
-            - sci-e
-            - sci-embodied
-            - sci-o
-            - time-sync
-            - sci
-          regroup:
-            - region
-            - cloud/instance-type
-  ```
-
 - **Defaults**
 
   We have also introduced the concept of `defaults`. This is a section in each component's definition that can be used to provide fallbacks for missing input data. For example, perhaps you have a value arriving from an external API that should be present in every observation in your inputs array, but for soem reason the API fails to deliver a value for some timestamps. In this case, IF would fallback to the value provided for that metric in the `defaults` section of the manifest for that component.
@@ -226,10 +205,7 @@ Instead of the old class-based model, plugins are now functions. They conform to
 
 ```ts
 export type PluginInterface = {
-  execute: (
-    inputs: PluginParams[],
-    config?: Record<string, any>
-  ) => PluginParams[];
+  execute: (inputs: PluginParams[]) => PluginParams[];
   metadata: {
     kind: string;
   };

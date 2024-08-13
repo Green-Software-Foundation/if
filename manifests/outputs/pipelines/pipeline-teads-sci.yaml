@@ -142,7 +142,6 @@ tree:
           - operational-carbon
           - sum-carbon
           - sci
-      config: null
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800

@@ -109,4 +109,10 @@ ${error}`,
   MISSING_GLOBAL_CONFIG: 'Global config is not provided.',
   MISSING_INPUT_DATA: (param: string) =>
     `${param} is missing from the input array, or has nullish value.`,
+  CONFIG_WARN: (plugins: string, isMore: boolean) =>
+    `You have included node-level config in your manifest to support \`${plugins}\` plugin${
+      isMore ? 's' : ''
+    }. IF no longer supports node-level config. \`${plugins}\` plugin${
+      isMore ? 's' : ''
+    } should be refactored to accept all its config from global config or input data.`,
 };

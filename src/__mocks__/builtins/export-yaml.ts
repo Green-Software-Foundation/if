@@ -6,7 +6,6 @@ export const tree = {
   children: {
     'child-1': {
       pipeline: ['teads-curve', 'sum', 'sci-embodied', 'sci-o', 'sci'],
-      config: null,
       defaults: {
         'cpu/thermal-design-power': 100,
         'grid/carbon-intensity': 800,
@@ -55,7 +54,6 @@ export const tree = {
     },
     'child-2': {
       pipeline: ['teads-curve', 'sum', 'sci-embodied', 'sci-o', 'sci'],
-      config: null,
       defaults: {
         'cpu/thermal-design-power': 100,
         'grid/carbon-intensity': 800,

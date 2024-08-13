@@ -252,31 +252,6 @@ describe('lib/compute: ', () => {
 
       expect(response.children.mockChild.outputs).toEqual(expectedResult);
     });
-
-    it('computes simple tree with node config and execute plugin.', async () => {
-      const tree = {
-        children: {
-          mockChild: {
-            pipeline: {
-              compute: ['mock'],
-            },
-            config: {
-              'cpu/name': 'Intel CPU',
-            },
-            inputs: [
-              {timestamp: 'mock-timestamp-1', duration: 10},
-              {timestamp: 'mock-timestamp-2', duration: 10},
-            ],
-          },
-        },
-      };
-      const response = await compute(tree, paramsExecute);
-      const expectedResult = mockExecutePlugin().execute(
-        tree.children.mockChild.inputs
-      );
-
-      expect(response.children.mockChild.outputs).toEqual(expectedResult);
-    });
   });
 
   it('computes simple tree with observe plugin.', async () => {

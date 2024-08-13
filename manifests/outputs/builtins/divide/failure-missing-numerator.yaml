@@ -62,8 +62,6 @@ tree:
       pipeline:
         compute:
           - divide
-      config:
-        divide: null
       defaults:
         cloud/vendor: aws
         cloud/instance-type: m5n.large
