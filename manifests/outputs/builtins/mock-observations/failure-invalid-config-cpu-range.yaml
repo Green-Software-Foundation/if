@@ -73,7 +73,7 @@ execution:
       - winston@3.11.0
       - zod@3.22.4
   error: >-
-    GlobalConfigError: Min value should not be greater than or equal to max
+    ConfigError: Min value should not be greater than or equal to max
     value of cpu/utilization
 tree:
   children:
