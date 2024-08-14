@@ -5,8 +5,14 @@ import {
   MultiplyConfig,
   PluginParametersMetadata,
 } from '@grnsft/if-core/types';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
+
+import {STRINGS} from '../../config';
+
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
 
 export const Multiply = (
   config: MultiplyConfig,
@@ -22,6 +28,10 @@ export const Multiply = (
    * Checks config value are valid.
    */
   const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
     const configSchema = z.object({
       'input-parameters': z.array(z.string()),
       'output-parameter': z.string().min(1),

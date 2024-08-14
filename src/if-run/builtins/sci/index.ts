@@ -12,6 +12,9 @@ import {validate, allDefined} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
+
 const {MissingInputDataError} = ERRORS;
 const {
   MISSING_FUNCTIONAL_UNIT_CONFIG,
@@ -52,9 +55,13 @@ export const Sci = (
   };
 
   /**
-   * Validates node and gloabl configs.
+   * Validates config.
    */
-  const validateConfig = (config?: ConfigParams) => {
+  const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
     const schema = z
       .object({
         'functional-unit': z.string(),
@@ -93,7 +100,7 @@ export const Sci = (
    * Checks for fields in input.
    */
   const validateInput = (input: PluginParams) => {
-    const validatedConfig = validateConfig(config);
+    const validatedConfig = validateConfig();
 
     if (
       !(
