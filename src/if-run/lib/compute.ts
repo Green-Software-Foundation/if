@@ -17,6 +17,7 @@ const {
   MERGING_DEFAULTS_WITH_INPUT_DATA,
   EMPTY_PIPELINE,
   CONFIG_WARN,
+  COMPUTING_PIPELINE_FOR_NODE,
   REGROUPING,
   OBSERVING,
 } = STRINGS;
@@ -72,6 +73,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   const defaults = node.defaults || params.defaults;
   const noFlags = !params.observe && !params.regroup && !params.compute;
 
+  debugLogger.setExecutingPluginName();
   warnIfConfigProvided(node);
 
   if (node.children) {
@@ -102,9 +104,10 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
    */
   if ((noFlags || params.observe) && pipelineCopy.observe) {
     while (pipelineCopy.observe.length !== 0) {
-      console.debug(OBSERVING);
-
       const pluginName = pipelineCopy.observe.shift() as string;
+      console.debug(OBSERVING(pluginName));
+      debugLogger.setExecutingPluginName(pluginName);
+
       const plugin = params.pluginStorage.get(pluginName);
       const nodeConfig = config && config[pluginName];
 
@@ -131,6 +134,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     delete node.inputs;
     delete node.outputs;
 
+    debugLogger.setExecutingPluginName();
     console.debug(REGROUPING);
 
     return traverse(node.children, {
@@ -165,7 +169,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
           });
         }
 
-        debugLogger.setExecutingPluginName();
+        console.debug(COMPUTING_PIPELINE_FOR_NODE(pluginName));
+        debugLogger.setExecutingPluginName(pluginName);
       }
     }
   }
