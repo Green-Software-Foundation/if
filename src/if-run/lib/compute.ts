@@ -157,8 +157,13 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       const plugin = params.pluginStorage.get(pluginName);
       const nodeConfig = config && config[pluginName];
 
+      console.debug(COMPUTING_PIPELINE_FOR_NODE(pluginName));
+      debugLogger.setExecutingPluginName(pluginName);
+
       if (isExecute(plugin)) {
         inputStorage = await plugin.execute(inputStorage, nodeConfig);
+        debugLogger.setExecutingPluginName();
+
         node.outputs = inputStorage;
 
         if (params.context.explainer) {
@@ -168,9 +173,6 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
             pluginData: params.context.initialize!.plugins[pluginName],
           });
         }
-
-        console.debug(COMPUTING_PIPELINE_FOR_NODE(pluginName));
-        debugLogger.setExecutingPluginName(pluginName);
       }
     }
   }
