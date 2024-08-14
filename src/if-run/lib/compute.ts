@@ -13,7 +13,13 @@ import {STRINGS} from '../config/strings';
 import {ComputeParams, Node, PhasedPipeline} from '../types/compute';
 import {isExecute} from '../types/interface';
 
-const {MERGING_DEFAULTS_WITH_INPUT_DATA, EMPTY_PIPELINE, CONFIG_WARN} = STRINGS;
+const {
+  MERGING_DEFAULTS_WITH_INPUT_DATA,
+  EMPTY_PIPELINE,
+  CONFIG_WARN,
+  REGROUPING,
+  OBSERVING,
+} = STRINGS;
 
 /**
  * Traverses all child nodes based on children grouping.
@@ -96,6 +102,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
    */
   if ((noFlags || params.observe) && pipelineCopy.observe) {
     while (pipelineCopy.observe.length !== 0) {
+      console.debug(OBSERVING);
+
       const pluginName = pipelineCopy.observe.shift() as string;
       const plugin = params.pluginStorage.get(pluginName);
       const nodeConfig = config && config[pluginName];
@@ -122,6 +130,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     node.children = Regroup(inputStorage, pipelineCopy.regroup);
     delete node.inputs;
     delete node.outputs;
+
+    console.debug(REGROUPING);
 
     return traverse(node.children, {
       ...params,
@@ -154,6 +164,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
             pluginData: params.context.initialize!.plugins[pluginName],
           });
         }
+
         debugLogger.setExecutingPluginName();
       }
     }

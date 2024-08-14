@@ -87,8 +87,6 @@ const initPlugin = async (
     'parameter-metadata': parameterMetadata,
   } = initPluginParams!;
 
-  console.debug(INITIALIZING_PLUGIN(method));
-
   if (!method) {
     throw new MissingPluginMethodError(MISSING_METHOD);
   }
@@ -113,6 +111,9 @@ export const initialize = async (
   const storage = pluginStorage();
 
   for await (const pluginName of Object.keys(plugins)) {
+    console.log('\n');
+    console.debug(INITIALIZING_PLUGIN(pluginName));
+
     const plugin = await initPlugin(plugins[pluginName]);
     const parameters = {...plugin.metadata.inputs, ...plugin.metadata.outputs};
 
