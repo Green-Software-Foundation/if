@@ -53,7 +53,7 @@ Note that for the '--output' option you also need to define the output type in y
   COMPUTING_PIPELINE_FOR_NODE: (nodeName: string) =>
     `Computing pipeline for \`${nodeName}\``,
   REGROUPING: 'Regrouping',
-  OBSERVING: 'Observing',
+  OBSERVING: (nodeName: string) => `Observing pipeline for \`${nodeName}\``,
   MERGING_DEFAULTS_WITH_INPUT_DATA: 'Merging defaults with input data',
   AGGREGATING_OUTPUTS: 'Aggregating outputs',
   AGGREGATING_NODE: (nodeName: string) => `Aggregating node ${nodeName}`,
