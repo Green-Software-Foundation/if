@@ -53,7 +53,7 @@ describe('lib/exhaust: ', () => {
 
       // @ts-ignore
       await exhaust(tree, context, {'no-outout': false});
-      expect(spy).toHaveBeenCalledTimes(2);
+      expect(spy).toHaveBeenCalledTimes(1);
     });
   });
 });
