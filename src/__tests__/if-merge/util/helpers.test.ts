@@ -50,10 +50,10 @@ jest.mock('../../../if-run/builtins/export-yaml', () => ({
 }));
 
 describe('if-merge/util/helpers: ', () => {
-  const consopleSpy = jest.spyOn(global.console, 'log');
+  const consoleSpy = jest.spyOn(global.console, 'log');
 
   beforeEach(() => {
-    consopleSpy.mockReset();
+    consoleSpy.mockReset();
   });
 
   describe('mergeManifests(): ', () => {
@@ -149,7 +149,7 @@ describe('if-merge/util/helpers: ', () => {
       await mergeManifests(mockCommandArgs);
 
       expect.assertions(1);
-      expect(consopleSpy).toHaveBeenCalledTimes(2);
+      expect(consoleSpy).toHaveBeenCalledTimes(2);
     });
 
     it('gets YAML files when there is only one manifest.', async () => {
