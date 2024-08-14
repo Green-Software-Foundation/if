@@ -111,7 +111,7 @@ export const initialize = async (
   const storage = pluginStorage();
 
   for await (const pluginName of Object.keys(plugins)) {
-    console.log('\n');
+    console.debug('\n');
     console.debug(INITIALIZING_PLUGIN(pluginName));
 
     const plugin = await initPlugin(plugins[pluginName]);
