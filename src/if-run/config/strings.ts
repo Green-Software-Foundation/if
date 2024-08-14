@@ -51,9 +51,10 @@ Note that for the '--output' option you also need to define the output type in y
   LOADING_PLUGIN_FROM_PATH: (pluginName: string, path: string) =>
     `Loading ${pluginName} from ${path}`,
   COMPUTING_PIPELINE_FOR_NODE: (nodeName: string) =>
-    `Computing pipeline for \`${nodeName}\``,
+    `Running compute pipeline: \`${nodeName}\` plugin`,
   REGROUPING: 'Regrouping',
-  OBSERVING: (nodeName: string) => `Observing pipeline for \`${nodeName}\``,
+  OBSERVING: (nodeName: string) =>
+    `Running observe pipeline: \`${nodeName}\` plugin`,
   MERGING_DEFAULTS_WITH_INPUT_DATA: 'Merging defaults with input data',
   AGGREGATING_OUTPUTS: 'Aggregating outputs',
   AGGREGATING_NODE: (nodeName: string) => `Aggregating node ${nodeName}`,
