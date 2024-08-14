@@ -149,7 +149,7 @@ describe('if-merge/util/helpers: ', () => {
       await mergeManifests(mockCommandArgs);
 
       expect.assertions(1);
-      expect(consopleSpy).toHaveBeenCalledTimes(1);
+      expect(consopleSpy).toHaveBeenCalledTimes(2);
     });
 
     it('gets YAML files when there is only one manifest.', async () => {
