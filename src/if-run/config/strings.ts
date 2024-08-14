@@ -46,11 +46,14 @@ Note that for the '--output' option you also need to define the output type in y
   CHECKING_AGGREGATION_METHOD: (unitName: string) =>
     `Checking aggregation method for ${unitName}`,
   INITIALIZING_PLUGINS: 'Initializing plugins',
-  INITIALIZING_PLUGIN: (pluginName: string) => `Initializing ${pluginName}`,
+  INITIALIZING_PLUGIN: (pluginName: string) =>
+    `Initializing \`${pluginName}\` plugin`,
   LOADING_PLUGIN_FROM_PATH: (pluginName: string, path: string) =>
     `Loading ${pluginName} from ${path}`,
   COMPUTING_PIPELINE_FOR_NODE: (nodeName: string) =>
     `Computing pipeline for \`${nodeName}\``,
+  REGROUPING: 'Regrouping',
+  OBSERVING: 'Observing',
   MERGING_DEFAULTS_WITH_INPUT_DATA: 'Merging defaults with input data',
   AGGREGATING_OUTPUTS: 'Aggregating outputs',
   AGGREGATING_NODE: (nodeName: string) => `Aggregating node ${nodeName}`,
