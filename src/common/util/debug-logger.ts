@@ -11,6 +11,8 @@ const logMessagesKeys: (keyof typeof STRINGS)[] = [
   'INITIALIZING_PLUGIN',
   'LOADING_PLUGIN_FROM_PATH',
   'COMPUTING_PIPELINE_FOR_NODE',
+  'REGROUPING',
+  'OBSERVING',
   'MERGING_DEFAULTS_WITH_INPUT_DATA',
   'AGGREGATING_OUTPUTS',
   'AGGREGATING_NODE',
@@ -98,6 +100,11 @@ const debugLog = (level: LogLevel, args: any[], debugMode: boolean) => {
 
   if (args[0].includes('# start')) {
     originalConsole.log(...args);
+    return;
+  }
+
+  if (args[0] === '\n') {
+    originalConsole.log();
     return;
   }
 
