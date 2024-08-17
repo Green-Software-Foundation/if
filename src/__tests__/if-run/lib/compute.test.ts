@@ -269,7 +269,7 @@ describe('lib/compute: ', () => {
       );
     });
 
-    it('computes simple tree with no defaults and no inputs with execue plugin.', async () => {
+    it('computes simple tree with no defaults and no inputs with execute plugin.', async () => {
       const tree = {
         children: {
           mockChild: {
@@ -284,7 +284,7 @@ describe('lib/compute: ', () => {
       expect(response.children.mockChild.outputs).toBeUndefined();
     });
 
-    it('computes simple tree with defaults and no inputs with execue plugin.', async () => {
+    it('computes simple tree with defaults and no inputs with execute plugin.', async () => {
       const tree = {
         children: {
           mockChild: {
