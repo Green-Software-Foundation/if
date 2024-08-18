@@ -145,6 +145,7 @@ const metricManager = (() => {
  */
 export const getAggregationMethod = (unitName: string) => {
   debugLogger.setExecutingPluginName();
+  memoizedLog(console.debug, '\n');
   memoizedLog(console.debug, CHECKING_AGGREGATION_METHOD(unitName));
   const aggregationMetricsStorage = storeAggregationMetrics();
 

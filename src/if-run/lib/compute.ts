@@ -46,7 +46,7 @@ const mergeDefaults = (
     return response;
   }
 
-  console.debug(MERGING_DEFAULTS_WITH_INPUT_DATA);
+  console.debug(MERGING_DEFAULTS_WITH_INPUT_DATA, '\n');
 
   return defaults ? [defaults] : [];
 };
@@ -148,6 +148,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     });
   }
 
+  console.debug('\n');
+
   /**
    * If iteration is on compute plugin, then executes compute plugins and sets the outputs value.
    */
@@ -176,6 +178,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       }
     }
   }
+  console.debug('\n');
 };
 
 /**
