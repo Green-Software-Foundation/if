@@ -63,16 +63,19 @@ export const Regroup = (inputs: PluginParams[], groups: string[]) => {
 
   const validatedGroups = validateGroups(groups);
 
+  const lookupGroupKey = (input: PluginParams, groupKey: string) => {
+    if (!input[groupKey]) {
+      throw new InvalidGroupingError(INVALID_GROUP_KEY(groupKey));
+    }
+
+    return input[groupKey];
+  };
+
   let acc = {} as any;
   for (const input of inputs) {
-    const groupsWithData = validatedGroups.map(groupType => {
-      if (!input[groupType]) {
-        throw new InvalidGroupingError(INVALID_GROUP_KEY(groupType));
-      }
-
-      return input[groupType];
-    });
-
+    const groupsWithData = validatedGroups.map(groupKey =>
+      lookupGroupKey(input, groupKey)
+    );
     acc = {
       ...acc,
       ...appendGroup(input, acc, groupsWithData),
