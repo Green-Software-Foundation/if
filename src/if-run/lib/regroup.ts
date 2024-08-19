@@ -76,10 +76,7 @@ export const Regroup = (inputs: PluginParams[], groups: string[]) => {
     const groupsWithData = validatedGroups.map(groupKey =>
       lookupGroupKey(input, groupKey)
     );
-    acc = {
-      ...acc,
-      ...appendGroup(input, acc, groupsWithData),
-    };
+    acc = appendGroup(input, acc, groupsWithData);
   }
 
   return acc.children;
