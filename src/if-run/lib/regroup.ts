@@ -60,9 +60,12 @@ export const Regroup = (inputs: PluginParams[], groups: string[]) => {
    * Interates over inputs, grabs group values for each one.
    * Based on grouping, initializes the structure.
    */
-  return inputs.reduce((acc, input) => {
-    const validtedGroups = validateGroups(groups);
-    const groupsWithData = validtedGroups.map(groupType => {
+
+  const validatedGroups = validateGroups(groups);
+
+  let acc = {} as any;
+  for (const input of inputs) {
+    const groupsWithData = validatedGroups.map(groupType => {
       if (!input[groupType]) {
         throw new InvalidGroupingError(INVALID_GROUP_KEY(groupType));
       }
@@ -74,7 +77,7 @@ export const Regroup = (inputs: PluginParams[], groups: string[]) => {
       ...acc,
       ...appendGroup(input, acc, groupsWithData),
     };
+  }
 
-    return acc;
-  }, {} as any).children;
+  return acc.children;
 };
