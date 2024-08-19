@@ -4,7 +4,7 @@
 
 ## Parameters
 
-### Plugin global config
+### Plugin config
 
 - `functional-unit`: the name of the functional unit in which to express the carbon impact (required)
 
@@ -39,7 +39,7 @@ sci:
 ### Inputs
 
 - `carbon`: total carbon in gCO2eq (required)
-- `functional-unit`: whatever `functional-unit` you define in global config also has to be present in each input, for example if you provide `functional-unit: requests` in global config, `requests` must be present in your input data.
+- `functional-unit`: whatever `functional-unit` you define in config also has to be present in each input, for example if you provide `functional-unit: requests` in config, `requests` must be present in your input data.
 
 ## Returns
 
@@ -91,7 +91,7 @@ initialize:
     sci:
       method: Sci
       path: 'builtin'
-      global-config:
+      config:
         functional-unit: 'requests'
 tree:
   children:

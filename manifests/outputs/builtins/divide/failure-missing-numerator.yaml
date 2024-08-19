@@ -6,7 +6,7 @@ initialize:
     divide:
       method: Divide
       path: builtin
-      global-config:
+      config:
         denominator: 2
         output: cpu/number-cores
 execution:
@@ -62,8 +62,6 @@ tree:
       pipeline:
         compute:
           - divide
-      config:
-        divide: null
       defaults:
         cloud/vendor: aws
         cloud/instance-type: m5n.large

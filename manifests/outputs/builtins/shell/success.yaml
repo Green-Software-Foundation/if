@@ -6,7 +6,7 @@ initialize:
     shell:
       path: builtin
       method: Shell
-      global-config:
+      config:
         command: python3 /usr/local/bin/sampler
 execution:
   command: >-

@@ -4,12 +4,12 @@ import {Regex} from '../../../if-run/builtins/regex';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {GlobalConfigError, MissingInputDataError, RegexMismatchError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
+const {ConfigError, MissingInputDataError, RegexMismatchError} = ERRORS;
+const {MISSING_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
 
 describe('builtins/regex: ', () => {
   describe('Regex: ', () => {
-    const globalConfig = {
+    const config = {
       parameter: 'physical-processor',
       match: '^[^,]+',
       output: 'cpu/name',
@@ -18,7 +18,7 @@ describe('builtins/regex: ', () => {
       inputs: {},
       outputs: {},
     };
-    const regex = Regex(globalConfig, parametersMetadata, {});
+    const regex = Regex(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -53,14 +53,13 @@ describe('builtins/regex: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('successfully applies regex strategy with multiple matches.', async () => {
-        const globalConfig = {
+      it('successfully applies regex strategy with multiple matches', async () => {
+        const config = {
           parameter: 'cloud/instance-type',
           match: '/(?<=_)[^_]+?(?=_|$)/g',
           output: 'cloud/instance-type',
         };
-        const regex = Regex(globalConfig, parametersMetadata, {});
-
+        const regex = Regex(config, parametersMetadata, {});
         const expectedResult = [
           {
             timestamp: '2023-08-06T00:00',
@@ -116,13 +115,12 @@ describe('builtins/regex: ', () => {
           'Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz';
         expect.assertions(1);
 
-        const globalConfig = {
+        const config = {
           parameter: 'physical-processor',
           match: '[^,]+/',
           output: 'cpu/name',
         };
-        const regex = Regex(globalConfig, parametersMetadata, {});
-
+        const regex = Regex(config, parametersMetadata, {});
         const expectedResult = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -147,12 +145,13 @@ describe('builtins/regex: ', () => {
         const physicalProcessor =
           'Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz';
 
-        const globalConfig = {
+        const config = {
           parameter: 'physical-processor',
           match: '^(^:)+',
           output: 'cpu/name',
         };
-        const regex = Regex(globalConfig, parametersMetadata, {});
+
+        const regex = Regex(config, parametersMetadata, {});
 
         expect.assertions(1);
 
@@ -173,7 +172,7 @@ describe('builtins/regex: ', () => {
         }
       });
 
-      it('throws an error on missing global config.', async () => {
+      it('throws an error on missing config.', async () => {
         const config = undefined;
         const regex = Regex(config!, parametersMetadata, {});
 
@@ -187,9 +186,7 @@ describe('builtins/regex: ', () => {
             },
           ]);
         } catch (error) {
-          expect(error).toStrictEqual(
-            new GlobalConfigError(MISSING_GLOBAL_CONFIG)
-          );
+          expect(error).toStrictEqual(new ConfigError(MISSING_CONFIG));
         }
       });
 

@@ -27,7 +27,7 @@ jest.mock('../../../if-run/builtins/export-yaml', () => ({
             multiply: {
               path: 'builtin',
               method: 'Multiply',
-              'global-config': {
+              config: {
                 'input-parameters': ['cpu/utilization', 'duration'],
                 'output-parameter': 'cpu-times-duration',
               },
@@ -103,7 +103,7 @@ describe('if-merge/util/helpers: ', () => {
           multiply: {
             path: 'builtin',
             method: 'Multiply',
-            'global-config': {
+            config: {
               'input-parameters': ['cpu/utilization', 'duration'],
               'output-parameter': 'cpu-times-duration',
             },

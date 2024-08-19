@@ -6,7 +6,7 @@ initialize:
     cloud-metadata:
       path: builtin
       method: CSVLookup
-      global-config:
+      config:
         filepath: >-
           https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
         query:

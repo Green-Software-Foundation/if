@@ -23,7 +23,7 @@ import {mapInputIfNeeded} from '../../../common/util/helpers';
 Settings.defaultZone = 'utc';
 
 const {
-  GlobalConfigError,
+  ConfigError,
   InvalidDateInInputError,
   InvalidPaddingError,
   InvalidInputError,
@@ -55,7 +55,7 @@ const {
  * ```
  */
 export const TimeSync = (
-  globalConfig: TimeNormalizerConfig,
+  config: TimeNormalizerConfig,
   parametersMetadata: PluginParametersMetadata,
   mapping: MappingParams
 ): ExecutePlugin => {
@@ -83,7 +83,7 @@ export const TimeSync = (
    * Take input array and return time-synchronized input array.
    */
   const execute = (inputs: PluginParams[]): PluginParams[] => {
-    const validatedConfig = validateGlobalConfig();
+    const validatedConfig = validateConfig();
     const timeParams = {
       startTime: DateTime.fromISO(validatedConfig['start-time']),
       endTime: DateTime.fromISO(validatedConfig['end-time']),
@@ -199,11 +199,11 @@ export const TimeSync = (
   };
 
   /**
-   * Validates global config parameters.
+   * Validates config parameters.
    */
-  const validateGlobalConfig = () => {
-    if (globalConfig === undefined) {
-      throw new GlobalConfigError(INVALID_TIME_NORMALIZATION);
+  const validateConfig = () => {
+    if (config === undefined) {
+      throw new ConfigError(INVALID_TIME_NORMALIZATION);
     }
 
     const schema = z
@@ -217,7 +217,7 @@ export const TimeSync = (
         message: START_LOWER_END,
       });
 
-    return validate<z.infer<typeof schema>>(schema, globalConfig);
+    return validate<z.infer<typeof schema>>(schema, config);
   };
 
   /**

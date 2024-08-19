@@ -22,7 +22,7 @@ const {
   FILE_READ_FAILED,
   MISSING_CSV_COLUMN,
   NO_QUERY_DATA,
-  MISSING_GLOBAL_CONFIG,
+  MISSING_CONFIG,
 } = STRINGS;
 
 const {
@@ -30,12 +30,12 @@ const {
   ReadFileError,
   MissingCSVColumnError,
   QueryDataNotFoundError,
-  GlobalConfigError,
+  ConfigError,
   CSVParseError,
 } = ERRORS;
 
 export const CSVLookup = (
-  globalConfig: any,
+  config: any,
   parametersMetadata: PluginParametersMetadata,
   mapping: MappingParams
 ): ExecutePlugin => {
@@ -194,17 +194,14 @@ export const CSVLookup = (
   };
 
   /**
-   * 1. Validates global config.
+   * 1. Validates config.
    * 2. Tries to retrieve given file (with url or local path).
    * 3. Parses given CSV.
    * 4. Filters requested information from CSV.
    */
   const execute = async (inputs: PluginParams[]) => {
-    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
-
-    const safeGlobalConfig = validateGlobalConfig();
+    const safeGlobalConfig = validateConfig();
     const {filepath, query, output} = safeGlobalConfig;
-
     const file = await retrieveFile(filepath);
     const parsedCSV = parseCSVFile(file);
 
@@ -232,14 +229,15 @@ export const CSVLookup = (
   };
 
   /**
-   * Checks for `filepath`, `query` and `output` fields in global config.
+   * Checks for `filepath`, `query` and `output` fields in config.
    */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+  const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
     }
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
 
-    const globalConfigSchema = z.object({
+    const configSchema = z.object({
       filepath: z.string(),
       query: z.record(z.string(), z.string()),
       output: z
@@ -248,10 +246,7 @@ export const CSVLookup = (
         .or(z.array(z.array(z.string()))),
     });
 
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
+    return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
   };
 
   return {

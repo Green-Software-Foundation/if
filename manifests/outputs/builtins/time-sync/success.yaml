@@ -6,7 +6,7 @@ initialize:
     time-sync:
       path: builtin
       method: TimeSync
-      global-config:
+      config:
         start-time: "2023-12-12T00:00:00.000Z"
         end-time: "2023-12-12T00:01:00.000Z"
         interval: 5

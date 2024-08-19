@@ -1,12 +1,12 @@
 name: divide
-description: failure when `global-config.denominator` is string
+description: failure when `config.denominator` is string
 tags: null
 initialize:
   plugins:
     divide:
       method: Divide
       path: builtin
-      global-config:
+      config:
         numerator: cpu/utilization
         denominator: test
         output: cpu/divided-two

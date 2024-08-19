@@ -1,14 +1,14 @@
 name: time-sync
-description: missing global config
+description: missing config
 tags:
 initialize:
   output:
     - yaml
   plugins:
-    'time-sync':
+    "time-sync":
       method: TimeSync
       path: "builtin"
-      global-config: 
+      config:
         # start-time: '2023-12-12T00:00:00.000Z'
         # end-time: '2023-12-12T00:01:00.000Z'
         # interval: 5
@@ -20,15 +20,15 @@ tree:
         compute:
           - time-sync
       inputs:
-        - timestamp: '2023-12-12T00:00:00.000Z'
+        - timestamp: "2023-12-12T00:00:00.000Z"
           duration: 3
           energy-cpu: 0.001
-        - timestamp: '2023-12-12T00:00:01.000Z'
+        - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           energy-cpu: 0.001
-        - timestamp: '2023-12-12T00:00:06.000Z'
+        - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           energy-cpu: 0.001
-        - timestamp: '2023-12-12T00:00:13.000Z'
+        - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           energy-cpu: 0.001

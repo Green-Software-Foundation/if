@@ -13,11 +13,11 @@ import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
-const {GlobalConfigError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
 
 export const Sum = (
-  globalConfig: SumConfig,
+  config: SumConfig,
   parametersMetadata: PluginParametersMetadata,
   mapping: MappingParams
 ): ExecutePlugin => {
@@ -31,9 +31,7 @@ export const Sum = (
    * Calculate the sum of each input-paramters.
    */
   const execute = (inputs: PluginParams[]) => {
-    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
-
-    const safeGlobalConfig = validateGlobalConfig();
+    const safeGlobalConfig = validateConfig();
     const inputParameters = safeGlobalConfig['input-parameters'];
     const outputParameter = safeGlobalConfig['output-parameter'];
 
@@ -48,22 +46,21 @@ export const Sum = (
   };
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+  const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
     }
 
-    const globalConfigSchema = z.object({
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
+
+    const configSchema = z.object({
       'input-parameters': z.array(z.string()),
       'output-parameter': z.string().min(1),
     });
 
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
+    return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
   };
 
   /**

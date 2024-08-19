@@ -4,12 +4,12 @@ import {TimeConverter} from '../../../if-run/builtins/time-converter';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {GlobalConfigError, InputValidationError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {ConfigError, InputValidationError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/time-converter: ', () => {
   describe('TimeConverter: ', () => {
-    const globalConfig = {
+    const config = {
       'input-parameter': 'energy-per-year',
       'original-time-unit': 'year',
       'new-time-unit': 'duration',
@@ -19,7 +19,7 @@ describe('builtins/time-converter: ', () => {
       inputs: {},
       outputs: {},
     };
-    const timeConverter = TimeConverter(globalConfig, parametersMetadata);
+    const timeConverter = TimeConverter(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -52,9 +52,9 @@ describe('builtins/time-converter: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error when global config is not provided.', () => {
+      it('throws an error when config is not provided.', () => {
         const config = undefined;
-        const timeConverter = TimeConverter(config!, parametersMetadata);
+        const timeConverter = TimeConverter(config!, parametersMetadata, {});
 
         expect.assertions(1);
 
@@ -67,9 +67,7 @@ describe('builtins/time-converter: ', () => {
             },
           ]);
         } catch (error) {
-          expect(error).toStrictEqual(
-            new GlobalConfigError(MISSING_GLOBAL_CONFIG)
-          );
+          expect(error).toStrictEqual(new ConfigError(MISSING_CONFIG));
         }
       });
 
@@ -100,7 +98,7 @@ describe('builtins/time-converter: ', () => {
           'new-time-unit': 'month',
           'output-parameter': 'energy-per-duration',
         };
-        const timeConverter = TimeConverter(newConfig, parametersMetadata);
+        const timeConverter = TimeConverter(newConfig, parametersMetadata, {});
 
         const data = [
           {

@@ -9,7 +9,7 @@ initialize:
     cloud-metadata:
       path: builtin
       method: CSVLookup
-      global-config:
+      config:
         filepath: >-
           https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv
         query:

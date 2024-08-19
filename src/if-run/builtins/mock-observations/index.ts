@@ -8,17 +8,23 @@ import {
   PluginParametersMetadata,
   MappingParams,
 } from '@grnsft/if-core/types';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
 import {mapConfigIfNeeded} from '../../../common/util/helpers';
+
+import {STRINGS} from '../../config';
 
 import {CommonGenerator} from './helpers/common-generator';
 import {RandIntGenerator} from './helpers/rand-int-generator';
 
 import {Generator} from './interfaces/index';
 
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
+
 export const MockObservations = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata,
   mapping: MappingParams
 ): ExecutePlugin => {
@@ -32,8 +38,6 @@ export const MockObservations = (
    * Generate sets of mocked observations based on config.
    */
   const execute = (inputs: PluginParams[]) => {
-    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
-
     const {duration, timeBuckets, components, generators} =
       generateParamsFromConfig();
     const generatorToHistory = new Map<Generator, number[]>();
@@ -60,9 +64,15 @@ export const MockObservations = (
   };
 
   /**
-   * Validates global config parameters.
+   * Validates config parameters.
    */
-  const validateGlobalConfig = () => {
+  const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
+
     const schema = z.object({
       'timestamp-from': z.string(),
       'timestamp-to': z.string(),
@@ -74,7 +84,7 @@ export const MockObservations = (
       }),
     });
 
-    return validate<z.infer<typeof schema>>(schema, globalConfig);
+    return validate<z.infer<typeof schema>>(schema, mappedConfig);
   };
 
   /**
@@ -87,7 +97,8 @@ export const MockObservations = (
       duration,
       generators,
       components,
-    } = validateGlobalConfig();
+    } = validateConfig();
+
     const convertedTimestampFrom = DateTime.fromISO(timestampFrom, {
       zone: 'UTC',
     });

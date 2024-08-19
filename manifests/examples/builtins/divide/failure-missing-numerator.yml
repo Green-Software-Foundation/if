@@ -6,7 +6,7 @@ initialize:
     cloud-metadata:
       path: builtin
       method: CSVLookup
-      global-config:
+      config:
         filepath: >-
           https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv
         query:
@@ -15,7 +15,7 @@ initialize:
     divide:
       method: Divide
       path: "builtin"
-      global-config:
+      config:
         #numerator: vcpus-allocated
         denominator: 2
         output: cpu/number-cores
@@ -26,8 +26,6 @@ tree:
         compute:
           - cloud-metadata
           - divide
-      config:
-        divide:
       defaults:
         cloud/vendor: aws
         cloud/instance-type: m5n.large

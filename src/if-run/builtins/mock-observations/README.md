@@ -11,7 +11,7 @@ The mode currently mocks 2 types of observation data:
 - Common key-value pairs, that are generated statically and are the same for each generated observation/input (see 'helpers/CommonGenerator.ts')
 - Randomly generated integer values for predefined keys (see 'helpers/RandIntGenerator.ts')
 
-### Plugin global config
+### Plugin config
 
 - `timestamp-from`, `timestamp-to` and `duration` define time buckets for which to generate observations.
 - `generators` define which fields to generate for each observation
@@ -51,7 +51,7 @@ N/A
 
 ### Inputs
 
-The plugin's `global-config` section in the manifest file determines its behaviour.
+The plugin's `config` section in the manifest file determines its behaviour.
 'inputs' section is ignored.
 
 ### Typescript Usage
@@ -94,7 +94,7 @@ initialize:
       kind: plugin
       method: MockObservations
       path: 'builtin'
-      global-config:
+      config:
         timestamp-from: 2023-07-06T00:00
         timestamp-to: 2023-07-06T00:10
         duration: 60

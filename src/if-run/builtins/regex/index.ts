@@ -13,11 +13,11 @@ import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
-const {MissingInputDataError, GlobalConfigError, RegexMismatchError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
+const {MissingInputDataError, ConfigError, RegexMismatchError} = ERRORS;
+const {MISSING_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
 
 export const Regex = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata,
   mapping: MappingParams
 ): ExecutePlugin => {
@@ -28,12 +28,14 @@ export const Regex = (
   };
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+  const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
     }
+
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
 
     const schema = z.object({
       parameter: z.string().min(1),
@@ -41,7 +43,7 @@ export const Regex = (
       output: z.string(),
     });
 
-    return validate<z.infer<typeof schema>>(schema, globalConfig);
+    return validate<z.infer<typeof schema>>(schema, mappedConfig);
   };
 
   /**
@@ -59,9 +61,7 @@ export const Regex = (
    * Executes the regex of the given parameter.
    */
   const execute = (inputs: PluginParams[]) => {
-    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
-
-    const safeGlobalConfig = validateGlobalConfig();
+    const safeGlobalConfig = validateConfig();
     const {parameter: parameter, match, output} = safeGlobalConfig;
 
     return inputs.map(input => {

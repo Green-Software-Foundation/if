@@ -6,7 +6,7 @@ const {InputValidationError} = ERRORS;
 
 describe('builtins/exponent: ', () => {
   describe('Exponent: ', () => {
-    const globalConfig = {
+    const config = {
       'input-parameter': 'energy/base',
       exponent: 3,
       'output-parameter': 'energy',
@@ -15,7 +15,8 @@ describe('builtins/exponent: ', () => {
       inputs: {},
       outputs: {},
     };
-    const exponent = Exponent(globalConfig, parametersMetadata, {});
+
+    const exponent = Exponent(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {

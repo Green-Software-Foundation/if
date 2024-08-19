@@ -6,7 +6,7 @@ const {InputValidationError} = ERRORS;
 
 describe('builtins/multiply: ', () => {
   describe('Multiply: ', () => {
-    const globalConfig = {
+    const config = {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
       'output-parameter': 'energy',
     };
@@ -14,7 +14,8 @@ describe('builtins/multiply: ', () => {
       inputs: {},
       outputs: {},
     };
-    const multiply = Multiply(globalConfig, parametersMetadata, {});
+
+    const multiply = Multiply(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {

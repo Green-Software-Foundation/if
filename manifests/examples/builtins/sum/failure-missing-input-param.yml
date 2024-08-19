@@ -1,12 +1,12 @@
 name: sum
-description: failure with `inputs[0]` misses one of `global-config.input-parameters`
+description: failure with `inputs[0]` misses one of `config.input-parameters`
 tags:
 initialize:
   plugins:
     sum:
       method: Sum
       path: "builtin"
-      global-config:
+      config:
         input-parameters: ["cpu/energy", "network/energy"]
         output-parameter: "energy"
 tree:

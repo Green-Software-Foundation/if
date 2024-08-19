@@ -9,13 +9,13 @@ This plugin provides the `y` value at a given `x` by interpolating between known
 
 To employ the `Interpolation` plugin, adhere to these steps:
 
-1. **Initialize Plugin**: Import the `Interpolation` function and initialize it with global configuration parameters `method`, `x`, `y`, `input-parameter` and `output-parameter`.
+1. **Initialize Plugin**: Import the `Interpolation` function and initialize it with configuration parameters `method`, `x`, `y`, `input-parameter` and `output-parameter`.
 
 2. **Execute Plugin**: Invoke the `execute` method of the initialized plugin instance with an array of input parameters. Each input parameter should include a `timestamp`, `duration` and `[input-parameter]` information.
 
 3. **Result**: The plugin will return an array of plugin parameters enriched with the calculated average carbon intensity for each input.
 
-## Global Config
+## Config
 
 - `method`: specifies the interpolation method for the data. Acceptable values are 'linear', 'spline', or 'polynomial'. The default method is linear. (optional)
 - `x`: array of x points. Numbers should be in ascending order (required).
@@ -29,13 +29,13 @@ To employ the `Interpolation` plugin, adhere to these steps:
 
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
-- `inputs`: describe the parameter of the `input-parameter` of the global config. The parameter has the following attributes:
+- `inputs`: describe the parameter of the `input-parameter` of the config. The parameter has the following attributes:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
-- `outputs`: describe the parameters of the `output-parameter` of the global config. The parameter has the following attributes:
+- `outputs`: describe the parameters of the `output-parameter` of the config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
@@ -58,7 +58,7 @@ The plugin expects the following input parameters:
 
 - `timestamp`: a timestamp for the input (required)
 - `duration`: the amount of time, in seconds, that the input covers. (required)
-- `[input-parameter]` - a field whose name matches the string provided to input-parameter in global config (i.e. if the input-parameter in global config is cpu/utilisation then cpu-utilisation must exist in the input data)
+- `[input-parameter]` - a field whose name matches the string provided to input-parameter in config (i.e. if the input-parameter in config is cpu/utilisation then cpu-utilisation must exist in the input data)
 
 ## Output
 
@@ -72,7 +72,7 @@ The plugin conducts input validation using the `zod` library and may throw error
 
 1. **Execution**:
 
-   - Validate Global config
+   - Validate config
 
      - `method` - validates if the method is one of these methods: `linear`, `spline`, or `polynomial`. If the method isn’t provided, it sets to `linear`.
      - `x` and `y` should be arrays of numbers, the length should be equal, and elements should be ordered in the ascendant order.
@@ -96,7 +96,7 @@ The plugin conducts input validation using the `zod` library and may throw error
 ### TypeScript Usage
 
 ```ts
-const globalConfig = {
+const config = {
   method: 'linear',
   x: [0, 10, 50, 100],
   y: [0.12, 0.32, 0.75, 1.02],
@@ -104,13 +104,7 @@ const globalConfig = {
   'output-parameter': 'cpu/energy',
 };
 const parametersMetadata = {inputs: {}, outputs: {}};
-const mapping = {};
-
-const interpolationPlugin = Interpolation(
-  globalConfig,
-  parametersMetadata,
-  mapping
-);
+const interpolationPlugin = Interpolation(config, parametersMetadata, {});
 
 const inputs = [
   {
@@ -138,7 +132,7 @@ initialize:
     interpolation:
       method: Interpolation
       path: 'builtin'
-      global-config:
+      config:
         method: linear
         x: [0, 10, 50, 100]
         y: [0.12, 0.32, 0.75, 1.02]
@@ -167,7 +161,7 @@ initialize:
     interpolation:
       method: Interpolation
       path: 'builtin'
-      global-config:
+      config:
         method: linear
         x: [0, 10, 50, 100]
         y: [0.12, 0.32, 0.75, 1.02]
@@ -201,11 +195,11 @@ if-run --manifest ./manifests/examples/interpolation.yml --output ./manifests/ou
 
 `Interpolation` exposes one of IF's error classes.
 
-## `GlobalConfigError`
+## `ConfigError`
 
-### GlobalConfigError
+### ConfigError
 
-You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+You will receive an error starting `ConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
 

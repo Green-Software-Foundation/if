@@ -10,7 +10,7 @@ initialize:
     "interpolate":
       method: Interpolation
       path: "builtin"
-      global-config:
+      config:
         method: linear
         x: [0, 10, 50, 100]
         y: [0.12, 0.32, 0.75, 1.02]
@@ -30,7 +30,7 @@ initialize:
     "cpu-factor-to-wattage":
       method: Multiply
       path: builtin
-      global-config:
+      config:
         input-parameters: ["cpu-factor", "cpu/thermal-design-power"]
         output-parameter: "cpu-wattage"
       parameter-metadata:
@@ -51,13 +51,13 @@ initialize:
     "wattage-times-duration":
       method: Multiply
       path: builtin
-      global-config:
+      config:
         input-parameters: ["cpu-wattage", "duration"]
         output-parameter: "cpu-wattage-times-duration"
     "wattage-to-energy-kwh":
       method: Divide
       path: "builtin"
-      global-config:
+      config:
         numerator: cpu-wattage-times-duration
         denominator: 3600000
         output: cpu-energy-raw
@@ -75,7 +75,7 @@ initialize:
     "calculate-vcpu-ratio":
       method: Divide
       path: "builtin"
-      global-config:
+      config:
         numerator: vcpus-total
         denominator: vcpus-allocated
         output: vcpu-ratio
@@ -97,7 +97,7 @@ initialize:
     "correct-cpu-energy-for-vcpu-ratio":
       method: Divide
       path: "builtin"
-      global-config:
+      config:
         numerator: cpu-energy-raw
         denominator: vcpu-ratio
         output: cpu-energy-kwh
@@ -107,7 +107,7 @@ initialize:
     "operational-carbon":
       method: Multiply
       path: builtin
-      global-config:
+      config:
         input-parameters: ["cpu-energy-kwh", "grid/carbon-intensity"]
         output-parameter: "carbon-operational"
       parameter-metadata:
@@ -128,7 +128,7 @@ initialize:
     "sci":
       path: "builtin"
       method: Sci
-      global-config:
+      config:
         functional-unit: requests # factor to convert per time to per f.unit
       parameter-metadata:
         inputs:
@@ -139,7 +139,7 @@ initialize:
     "sum-carbon":
       path: "builtin"
       method: Sum
-      global-config:
+      config:
         input-parameters:
           - carbon-operational
           - carbon-embodied
@@ -153,7 +153,7 @@ initialize:
     "time-sync":
       method: TimeSync
       path: "builtin"
-      global-config:
+      config:
         start-time: "2023-12-12T00:00:00.000Z"
         end-time: "2023-12-12T00:01:00.000Z"
         interval: 5

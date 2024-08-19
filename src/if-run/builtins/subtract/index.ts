@@ -6,12 +6,18 @@ import {
   PluginParams,
   SubtractConfig,
 } from '@grnsft/if-core/types';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
 import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
+import {STRINGS} from '../../config';
+
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
+
 export const Subtract = (
-  globalConfig: SubtractConfig,
+  config: SubtractConfig,
   parametersMetadata: PluginParametersMetadata,
   mapping: MappingParams
 ): ExecutePlugin => {
@@ -22,18 +28,21 @@ export const Subtract = (
   };
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    const globalConfigSchema = z.object({
+  const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
+
+    const configSchema = z.object({
       'input-parameters': z.array(z.string()),
       'output-parameter': z.string().min(1),
     });
 
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
+    return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
   };
 
   /**
@@ -63,12 +72,10 @@ export const Subtract = (
    * Subtract items from inputParams[1..n] from inputParams[0] and write the result in a new param outputParam.
    */
   const execute = (inputs: PluginParams[]): PluginParams[] => {
-    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
-
     const {
       'input-parameters': inputParameters,
       'output-parameter': outputParameter,
-    } = validateGlobalConfig();
+    } = validateConfig();
 
     return inputs.map(input => {
       validateSingleInput(input, inputParameters);

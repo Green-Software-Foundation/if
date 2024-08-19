@@ -8,14 +8,14 @@ initialize:
     interpolate:
       path: builtin
       method: Interpolation
-      global-config:
+      config:
         method: linear
         x:
           - 0
           - 10
           - 50
           - 100
-        'y':
+        "y":
           - 0.12
           - 0.32
           - 0.75
@@ -25,7 +25,7 @@ initialize:
     cpu-factor-to-wattage:
       path: builtin
       method: Multiply
-      global-config:
+      config:
         input-parameters:
           - cpu-factor
           - cpu/thermal-design-power
@@ -33,7 +33,7 @@ initialize:
     wattage-times-duration:
       path: builtin
       method: Multiply
-      global-config:
+      config:
         input-parameters:
           - cpu-wattage
           - duration
@@ -41,28 +41,28 @@ initialize:
     wattage-to-energy-kwh:
       path: builtin
       method: Divide
-      global-config:
+      config:
         numerator: cpu-wattage-times-duration
         denominator: 3600000
         output: cpu-energy-raw
     calculate-vcpu-ratio:
       path: builtin
       method: Divide
-      global-config:
+      config:
         numerator: vcpus-total
         denominator: vcpus-allocated
         output: vcpu-ratio
     correct-cpu-energy-for-vcpu-ratio:
       path: builtin
       method: Divide
-      global-config:
+      config:
         numerator: cpu-energy-raw
         denominator: vcpu-ratio
         output: cpu/energy
     sum-energy-components:
       path: builtin
       method: Sum
-      global-config:
+      config:
         input-parameters:
           - cpu/energy
           - network/energy
@@ -73,7 +73,7 @@ initialize:
     operational-carbon:
       path: builtin
       method: Multiply
-      global-config:
+      config:
         input-parameters:
           - energy
           - grid/carbon-intensity
@@ -81,7 +81,7 @@ initialize:
     sum-carbon:
       path: builtin
       method: Sum
-      global-config:
+      config:
         input-parameters:
           - carbon-operational
           - carbon-embodied
@@ -89,7 +89,7 @@ initialize:
     sci:
       path: builtin
       method: Sci
-      global-config:
+      config:
         functional-unit: component
 execution:
   command: >-
@@ -99,20 +99,20 @@ execution:
   environment:
     if-version: 0.5.0
     os: macOS
-    os-version: '14.5'
+    os-version: "14.5"
     node-version: 18.14.2
     date-time: 2024-07-19T06:34:45.027Z (UTC)
     dependencies:
-      - '@babel/core@7.22.10'
-      - '@babel/preset-typescript@7.23.3'
-      - '@commitlint/cli@18.6.0'
-      - '@commitlint/config-conventional@18.6.0'
-      - '@grnsft/if-core@0.0.10'
-      - '@jest/globals@29.7.0'
-      - '@types/jest@29.5.8'
-      - '@types/js-yaml@4.0.9'
-      - '@types/luxon@3.4.2'
-      - '@types/node@20.9.0'
+      - "@babel/core@7.22.10"
+      - "@babel/preset-typescript@7.23.3"
+      - "@commitlint/cli@18.6.0"
+      - "@commitlint/config-conventional@18.6.0"
+      - "@grnsft/if-core@0.0.10"
+      - "@jest/globals@29.7.0"
+      - "@types/jest@29.5.8"
+      - "@types/js-yaml@4.0.9"
+      - "@types/luxon@3.4.2"
+      - "@types/node@20.9.0"
       - axios-mock-adapter@1.22.0
       - axios@1.7.2
       - cross-env@7.0.3
@@ -162,32 +162,32 @@ tree:
         resources-total: vcpus-total
         component: 1
       inputs:
-        - timestamp: '2023-12-12T00:00:00.000Z'
+        - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 1
           cpu/utilization: 50
           network/energy: 0.000001
-        - timestamp: '2023-12-12T00:00:01.000Z'
+        - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
-        - timestamp: '2023-12-12T00:00:06.000Z'
+        - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
-        - timestamp: '2023-12-12T00:00:13.000Z'
+        - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
           cpu/utilization: 15
           network/energy: 0.000001
       outputs:
-        - timestamp: '2023-12-12T00:00:00.000Z'
+        - timestamp: "2023-12-12T00:00:00.000Z"
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 1
@@ -214,7 +214,7 @@ tree:
           carbon-operational: 0.004966666666666666
           carbon: 0.004970717909690512
           sci: 0.004970717909690512
-        - timestamp: '2023-12-12T00:00:01.000Z'
+        - timestamp: "2023-12-12T00:00:01.000Z"
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
@@ -241,7 +241,7 @@ tree:
           carbon-operational: 0.012674999999999999
           carbon: 0.012695256215119228
           sci: 0.012695256215119228
-        - timestamp: '2023-12-12T00:00:06.000Z'
+        - timestamp: "2023-12-12T00:00:06.000Z"
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
@@ -268,7 +268,7 @@ tree:
           carbon-operational: 0.015334722222222222
           carbon: 0.015363080923389142
           sci: 0.015363080923389142
-        - timestamp: '2023-12-12T00:00:13.000Z'
+        - timestamp: "2023-12-12T00:00:13.000Z"
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west

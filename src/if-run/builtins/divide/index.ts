@@ -13,11 +13,11 @@ import {validate} from '../../../common/util/validations';
 import {STRINGS} from '../../config';
 import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
-const {GlobalConfigError, MissingInputDataError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
+const {ConfigError, MissingInputDataError} = ERRORS;
+const {MISSING_CONFIG, MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
 
 export const Divide = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata,
   mapping: MappingParams
 ): ExecutePlugin => {
@@ -31,9 +31,7 @@ export const Divide = (
    * Calculate the division of each input parameter.
    */
   const execute = (inputs: PluginParams[]) => {
-    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
-
-    const safeGlobalConfig = validateGlobalConfig();
+    const safeGlobalConfig = validateConfig();
     const {numerator, denominator, output} = safeGlobalConfig;
 
     return inputs.map((input, index) => {
@@ -51,20 +49,21 @@ export const Divide = (
   };
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+  const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
     }
 
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
     const schema = z.object({
       numerator: z.string().min(1),
       denominator: z.string().or(z.number()),
       output: z.string(),
     });
 
-    return validate<z.infer<typeof schema>>(schema, globalConfig);
+    return validate<z.infer<typeof schema>>(schema, mappedConfig);
   };
 
   /**

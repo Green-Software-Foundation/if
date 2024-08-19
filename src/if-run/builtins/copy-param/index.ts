@@ -13,8 +13,8 @@ import {validate} from '../../../common/util/validations';
 import {STRINGS} from '../../config';
 import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
-const {GlobalConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
+const {ConfigError} = ERRORS;
 
 /**
  * keep-existing: true/false (whether to remove the parameter you are copying from)
@@ -23,7 +23,7 @@ const {GlobalConfigError} = ERRORS;
  */
 
 export const Copy = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata,
   mapping: MappingParams
 ): ExecutePlugin => {
@@ -34,23 +34,22 @@ export const Copy = (
   };
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+  const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
     }
 
-    const globalConfigSchema = z.object({
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
+
+    const configSchema = z.object({
       'keep-existing': z.boolean(),
-      from: z.string().min(1),
+      from: z.string().min(1).or(z.number()),
       to: z.string().min(1),
     });
 
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
+    return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
   };
 
   /**
@@ -58,7 +57,7 @@ export const Copy = (
    */
   const validateSingleInput = (
     input: PluginParams,
-    inputParameters: string[]
+    inputParameters: (string | number)[]
   ) => {
     const inputData = inputParameters.reduce(
       (acc, param) => {
@@ -66,10 +65,10 @@ export const Copy = (
 
         return acc;
       },
-      {} as Record<string, string>
+      {} as Record<string, string | number>
     );
 
-    const validationSchema = z.record(z.string(), z.string());
+    const validationSchema = z.record(z.string(), z.string().or(z.number()));
 
     validate(validationSchema, inputData);
 
@@ -77,9 +76,7 @@ export const Copy = (
   };
 
   const execute = (inputs: PluginParams[]) => {
-    globalConfig = mapConfigIfNeeded(globalConfig, mapping);
-
-    const safeGlobalConfig = validateGlobalConfig();
+    const safeGlobalConfig = validateConfig();
     const keepExisting = safeGlobalConfig['keep-existing'] === true;
     const from = safeGlobalConfig['from'];
     const to = safeGlobalConfig['to'];

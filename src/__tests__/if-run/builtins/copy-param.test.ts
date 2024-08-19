@@ -4,12 +4,12 @@ import {Copy} from '../../../if-run/builtins/copy-param';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {GlobalConfigError, InputValidationError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {ConfigError, InputValidationError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/copy: ', () => {
   describe('Copy: ', () => {
-    const globalConfig = {
+    const config = {
       'keep-existing': true,
       from: 'original',
       to: 'copy',
@@ -18,7 +18,7 @@ describe('builtins/copy: ', () => {
       inputs: {},
       outputs: {},
     };
-    const copy = Copy(globalConfig, parametersMetadata, {});
+    const copy = Copy(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -58,7 +58,7 @@ describe('builtins/copy: ', () => {
           original: 'from',
         };
 
-        const copy = Copy(globalConfig, parametersMetadata, mapping);
+        const copy = Copy(config, parametersMetadata, mapping);
         const expectedResult = [
           {
             duration: 3600,
@@ -79,7 +79,7 @@ describe('builtins/copy: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error when global config is not provided.', () => {
+      it('throws an error when config is not provided.', () => {
         const config = undefined;
         const copy = Copy(config!, parametersMetadata, {});
 
@@ -94,19 +94,17 @@ describe('builtins/copy: ', () => {
             },
           ]);
         } catch (error) {
-          expect(error).toStrictEqual(
-            new GlobalConfigError(MISSING_GLOBAL_CONFIG)
-          );
+          expect(error).toStrictEqual(new ConfigError(MISSING_CONFIG));
         }
       });
 
       it('throws an error on missing params in input.', () => {
-        const globalConfig = {
+        const config = {
           'keep-existing': true,
           from: 'original',
           to: 'copy',
         };
-        const copy = Copy(globalConfig, parametersMetadata, {});
+        const copy = Copy(config, parametersMetadata, {});
         expect.assertions(1);
 
         try {
@@ -119,20 +117,20 @@ describe('builtins/copy: ', () => {
         } catch (error) {
           expect(error).toStrictEqual(
             new InputValidationError(
-              '"original" parameter is required. Error code: invalid_type.'
+              '"original" parameter is required. Error code: invalid_union.'
             )
           );
         }
       });
       it('does not persist the original value when keep-existing==false.', () => {
         expect.assertions(1);
-        const globalConfig = {
+        const config = {
           'keep-existing': false,
           from: 'original',
           to: 'copy',
         };
-        const copy = Copy(globalConfig, parametersMetadata, {});
 
+        const copy = Copy(config, parametersMetadata, {});
         const expectedResult = [
           {
             duration: 3600,

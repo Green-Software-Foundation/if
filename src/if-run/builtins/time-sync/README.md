@@ -118,7 +118,7 @@ Note that when `error-on-padding` is `true` no gap-filling is performed and the 
 
 ##### Trimming and padding
 
-To ensure parity across all the components in a tree, we need to synchronize the start and end times for all time series. To do this, we pass the `time-sync` plugin plugin some global config: `startTime`, `endTime` and `interval`. The `startTime` is the timestamp where _all_ input arrays across the entire tree should begin, and `endTime` is the timestamp where _all_ input arrays across the entire tree should end. `interval` is the time resolution we ultimately want to resample to.
+To ensure parity across all the components in a tree, we need to synchronize the start and end times for all time series. To do this, we pass the `time-sync` plugin plugin some config: `startTime`, `endTime` and `interval`. The `startTime` is the timestamp where _all_ input arrays across the entire tree should begin, and `endTime` is the timestamp where _all_ input arrays across the entire tree should end. `interval` is the time resolution we ultimately want to resample to.
 
 To synchronize the time series start and end we check the first element of `inputs` for each node in the tree and determine whether it is earlier, later or equal to the global start time. If it is equal then no action is required. If the `input` start time is earlier than the global start time, we simply discard entries from the front of the array until the start times are aligned. If the `input` start time is after the global start time, then we pad with our "zero-observation" object - one for every second separating the global start time from the `input` start time. The same process is repeated for the end time - we either trim away `input` data or pad it out with "zero-observation" objects.
 
@@ -170,12 +170,12 @@ To run the plugin, you must first create an instance of `TimeSync`.
 Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
+const config = {
   'start-time': '2023-12-12T00:00:00.000Z',
   'end-time': '2023-12-12T00:00:30.000Z',
   interval: 10
 }
-const timeSync = TimeSync(globalConfig);
+const timeSync = TimeSync(config);
 const results = timeSync.execute([
   {
     timestamp: '2023-12-12T00:00:00.000Z'
@@ -213,8 +213,8 @@ initialize:
       method: TeadsCurve
       path: '@grnsft/if-unofficial-plugins'
     sci-e:
-      method: SciE
-      path: '@grnsft/if-plugins'
+      method: SciEmbodied
+      path: 'builtin'
     sci-embodied:
       path: 'builtin'
       method: SciEmbodied
@@ -224,10 +224,11 @@ initialize:
     time-sync:
       method: TimeSync
       path: builtin
-      global-config:
+      config:
         start-time: '2023-12-12T00:00:00.000Z' # ISO timestamp
         end-time: '2023-12-12T00:01:00.000Z' # ISO timestamp
         interval: 5 # seconds
+        allow-padding: true
 tree:
   children:
     child: # an advanced grouping node
@@ -238,19 +239,16 @@ tree:
           - sci-embodied
           - sci-o
           - time-sync
-      config:
-        teads-curve:
-          cpu/thermal-design-power: 65
-        sci-embodied:
-          device/emissions-embodied: 251000 # gCO2eq
-          time-reserved: 3600 # 1 hour in s
-          device/expected-lifespan: 126144000 # 4 years in seconds
-          resources-reserved: 1
-          resources-total: 1
-        sci-o:
-          grid/carbon-intensity: 457 # gCO2/kwh
       children:
         child-1:
+          defaults:
+            device/emissions-embodied: 251000 # gCO2eq
+            time-reserved: 3600 # 1 hour in s
+            device/expected-lifespan: 126144000 # 4 years in seconds
+            resources-reserved: 1
+            resources-total: 1
+            grid/carbon-intensity: 457 # gCO2/kwh
+            cpu/thermal-design-power: 65
           inputs:
             - timestamp: '2023-12-12T00:00:00.000Z'
               duration: 10
@@ -260,6 +258,7 @@ tree:
               requests: 300
             - timestamp: '2023-12-12T00:00:10.000Z'
               duration: 10
+              cpu/thermal-design-power: 65
               cpu/utilization: 20
               carbon: 200
               energy: 200

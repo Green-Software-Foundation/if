@@ -6,7 +6,6 @@ export const tree = {
   children: {
     'child-1': {
       pipeline: ['teads-curve', 'sum', 'sci-embodied', 'sci-o', 'sci'],
-      config: null,
       defaults: {
         'cpu/thermal-design-power': 100,
         'grid/carbon-intensity': 800,
@@ -55,7 +54,6 @@ export const tree = {
     },
     'child-2': {
       pipeline: ['teads-curve', 'sum', 'sci-embodied', 'sci-o', 'sci'],
-      config: null,
       defaults: {
         'cpu/thermal-design-power': 100,
         'grid/carbon-intensity': 800,
@@ -126,14 +124,14 @@ export const context: Context = {
       'teads-curve': {
         path: '@grnsft/if-unofficial-plugins',
         method: 'TeadsCurve',
-        'global-config': {
+        config: {
           interpolation: 'spline',
         },
       },
       sum: {
         path: '@grnsft/if-plugins',
         method: 'Sum',
-        'global-config': {
+        config: {
           'input-parameters': ['cpu/energy', 'network/energy'],
           'output-parameter': "carbon-plus-energy'",
         },
@@ -149,7 +147,7 @@ export const context: Context = {
       sci: {
         path: '@grnsft/if-plugins',
         method: 'Sci',
-        'global-config': {
+        config: {
           'functional-unit': 'requests',
         },
       },

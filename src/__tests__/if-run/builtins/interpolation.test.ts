@@ -5,17 +5,13 @@ import {Interpolation} from '../../../if-run/builtins';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {InputValidationError, GlobalConfigError} = ERRORS;
-const {
-  MISSING_GLOBAL_CONFIG,
-  WITHIN_THE_RANGE,
-  ARRAY_LENGTH_NON_EMPTY,
-  X_Y_EQUAL,
-} = STRINGS;
+const {InputValidationError, ConfigError} = ERRORS;
+const {MISSING_CONFIG, WITHIN_THE_RANGE, ARRAY_LENGTH_NON_EMPTY, X_Y_EQUAL} =
+  STRINGS;
 
 describe('builtins/interpolation: ', () => {
   describe('Interpolation: ', () => {
-    const globalConfig = {
+    const config = {
       method: Method.LINEAR,
       x: [0, 10, 50, 100],
       y: [0.12, 0.32, 0.75, 1.02],
@@ -33,7 +29,8 @@ describe('builtins/interpolation: ', () => {
         'cpu/utilization': 45,
       },
     ];
-    const plugin = Interpolation(globalConfig, parametersMetadata, {});
+
+    const plugin = Interpolation(config, parametersMetadata, {});
 
     describe('init Interpolation: ', () => {
       it('initalizes object with properties.', async () => {
@@ -61,7 +58,7 @@ describe('builtins/interpolation: ', () => {
           'cpu/utilization': 'cpu/util',
           'interpolation-result': 'result',
         };
-        const globalConfig = {
+        const config = {
           method: Method.LINEAR,
           x: [0, 10, 50, 100],
           y: [0.12, 0.32, 0.75, 1.02],
@@ -75,7 +72,7 @@ describe('builtins/interpolation: ', () => {
             'cpu/util': 45,
           },
         ];
-        const plugin = Interpolation(globalConfig, parametersMetadata, mapping);
+        const plugin = Interpolation(config, parametersMetadata, mapping);
         const outputs = [
           {
             timestamp: '2023-07-06T00:00',
@@ -88,15 +85,15 @@ describe('builtins/interpolation: ', () => {
         expect(plugin.execute(inputs)).toEqual(outputs);
       });
 
-      it('returns result when the `method` is not provided in the global config.', () => {
-        const globalConfig = {
+      it('returns result when the `method` is not provided in the config.', () => {
+        const config = {
           x: [0, 10, 50, 100],
           y: [0.12, 0.32, 0.75, 1.02],
           'input-parameter': 'cpu/utilization',
           'output-parameter': 'interpolation-result',
         };
-        const plugin = Interpolation(globalConfig, parametersMetadata, {});
 
+        const plugin = Interpolation(config, parametersMetadata, {});
         const outputs = [
           {
             timestamp: '2023-07-06T00:00',
@@ -110,8 +107,8 @@ describe('builtins/interpolation: ', () => {
       });
 
       it('returns result when the `method` is `spline`.', () => {
-        const config = Object.assign({}, globalConfig, {method: Method.SPLINE});
-        const plugin = Interpolation(config, parametersMetadata, {});
+        const newConfig = Object.assign({}, config, {method: Method.SPLINE});
+        const plugin = Interpolation(newConfig, parametersMetadata, {});
 
         const outputs = [
           {
@@ -126,10 +123,10 @@ describe('builtins/interpolation: ', () => {
       });
 
       it('returns result when the `method` is `polynomial`.', () => {
-        const config = Object.assign({}, globalConfig, {
+        const newConfig = Object.assign({}, config, {
           method: Method.POLYNOMIAL,
         });
-        const plugin = Interpolation(config, parametersMetadata, {});
+        const plugin = Interpolation(newConfig, parametersMetadata, {});
 
         const outputs = [
           {
@@ -144,11 +141,10 @@ describe('builtins/interpolation: ', () => {
       });
 
       it('returns result when the elements of `x` is not in acsending order.', () => {
-        const config = Object.assign({}, globalConfig, {
+        const newConfig = Object.assign({}, config, {
           x: [0, 10, 100, 50],
         });
-        const plugin = Interpolation(config, parametersMetadata, {});
-
+        const plugin = Interpolation(newConfig, parametersMetadata, {});
         const outputs = [
           {
             timestamp: '2023-07-06T00:00',
@@ -181,7 +177,7 @@ describe('builtins/interpolation: ', () => {
         expect(plugin.execute(inputs)).toEqual(outputs);
       });
 
-      it('throws an when the global config is not provided.', () => {
+      it('throws an when the config is not provided.', () => {
         const config = undefined;
         const plugin = Interpolation(config!, parametersMetadata, {});
 
@@ -189,16 +185,16 @@ describe('builtins/interpolation: ', () => {
         try {
           plugin.execute(inputs);
         } catch (error) {
-          expect(error).toBeInstanceOf(GlobalConfigError);
-          expect(error).toEqual(new GlobalConfigError(MISSING_GLOBAL_CONFIG));
+          expect(error).toBeInstanceOf(ConfigError);
+          expect(error).toEqual(new ConfigError(MISSING_CONFIG));
         }
       });
 
       it('throws an error when `x` and `y` points not equal.', () => {
-        const config = Object.assign({}, globalConfig, {
+        const newConfig = Object.assign({}, config, {
           x: [0, 10, 100],
         });
-        const plugin = Interpolation(config, parametersMetadata, {});
+        const plugin = Interpolation(newConfig, parametersMetadata, {});
 
         expect.assertions(2);
         try {
@@ -226,13 +222,14 @@ describe('builtins/interpolation: ', () => {
         }
       });
       it('throws an error when the the length of the input arrays is <2', () => {
-        const globalConfig = {
+        const basicConfig = {
           x: [0],
           y: [0.12],
           'input-parameter': 'cpu/utilization',
           'output-parameter': 'interpolation-result',
         };
-        const config = Object.assign({}, globalConfig, {method: Method.SPLINE});
+
+        const config = Object.assign({}, basicConfig, {method: Method.SPLINE});
         const plugin = Interpolation(config, parametersMetadata, {});
         const inputs = [
           {

@@ -15,7 +15,7 @@ const {
   InvalidPaddingError,
   InvalidDateInInputError,
   InvalidInputError,
-  GlobalConfigError,
+  ConfigError,
 } = ERRORS;
 
 const {
@@ -226,7 +226,7 @@ describe('builtins/time-sync:', () => {
         }
       });
 
-      it('throws error on missing global config.', async () => {
+      it('throws error on missing config.', async () => {
         const config = undefined;
         const timeModel = TimeSync(config!, parametersMetadata, {});
 
@@ -247,7 +247,7 @@ describe('builtins/time-sync:', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new GlobalConfigError(INVALID_TIME_NORMALIZATION)
+            new ConfigError(INVALID_TIME_NORMALIZATION)
           );
         }
       });

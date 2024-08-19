@@ -55,10 +55,9 @@ cpu-cores-available,cpu-cores-utilized,cpu-manufacturer,cpu-model-name,cpu-tdp,g
         pipeline:
           compute:
             - boavizta-cpu
-        config:
-          boavizta-cpu:
-            core-units: 24
-            processor: Intel® Core™ i7-1185G7
+        defaults:
+          core-units: 24
+          processor: Intel® Core™ i7-1185G7
         inputs:
           - timestamp: 2023-07-06T00:00
             duration: 3600 # Secs

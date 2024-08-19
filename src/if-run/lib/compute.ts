@@ -3,16 +3,17 @@ import {PluginParams} from '@grnsft/if-core/types';
 import {Regroup} from './regroup';
 import {addExplainData} from './explain';
 
-import {mergeObjects} from '../util/helpers';
 import {debugLogger} from '../../common/util/debug-logger';
 import {logger} from '../../common/util/logger';
+
+import {mergeObjects} from '../util/helpers';
 
 import {STRINGS} from '../config/strings';
 
 import {ComputeParams, Node, PhasedPipeline} from '../types/compute';
 import {isExecute} from '../types/interface';
 
-const {MERGING_DEFAULTS_WITH_INPUT_DATA, EMPTY_PIPELINE} = STRINGS;
+const {MERGING_DEFAULTS_WITH_INPUT_DATA, EMPTY_PIPELINE, CONFIG_WARN} = STRINGS;
 
 /**
  * Traverses all child nodes based on children grouping.
@@ -64,6 +65,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   const config = node.config || params.config;
   const defaults = node.defaults || params.defaults;
   const noFlags = !params.observe && !params.regroup && !params.compute;
+
+  warnIfConfigProvided(node);
 
   if (node.children) {
     return traverse(node.children, {
@@ -154,6 +157,19 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
         debugLogger.setExecutingPluginName();
       }
     }
+  }
+};
+
+/**
+ * Warns if the `config` is provided in the manifest.
+ */
+const warnIfConfigProvided = (node: any) => {
+  if ('config' in node) {
+    const plugins = Object.keys(node.config);
+    const joinedPlugins = plugins.join(', ');
+    const isMore = plugins.length > 1;
+
+    logger.warn(CONFIG_WARN(joinedPlugins, isMore));
   }
 };
 

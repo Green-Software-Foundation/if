@@ -6,7 +6,7 @@ initialize:
     regex:
       method: Regex
       path: "builtin"
-      global-config:
+      config:
         parameter: physical-processor
         match: ^(.*),
         output: cpu/name

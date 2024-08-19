@@ -16,14 +16,13 @@ You provide the names of the values you want to divide, and a name to use to add
 
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
-- `inputs`: describe the parameter of the `numerator` of the global config. The parameter has the following attributes:
+- `inputs`: describe the parameter of the `numerator` of the config. The parameter has the following attributes:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
 - `outputs`: describe the parameter of the `denominator` of the global config. The parameter has the following attributes:
-
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
@@ -48,7 +47,7 @@ divide:
 
 ## Returns
 
-- `output`: the division of `numerator` with the parameter name into `denominator` with the parameter name defined by `output` in global config.
+- `output`: the division of `numerator` with the parameter name into `denominator` with the parameter name defined by `output` in config.
 
 The plugin throws an exception if the division result is not a number.
 
@@ -65,7 +64,7 @@ output = input0 / input1
 To run the plugin, you must first create an instance of `Divide`. Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
+const config = {
   numerator: 'vcpus-allocated',
   denominator: 2,
   output: 'cpu/number-cores',
@@ -74,7 +73,7 @@ const parametersMetadata = {inputs: {}, outputs: {}};
 const mapping = {
   'vcpus-allocated': 'vcpus-distributed',
 };
-const divide = Divide(globalConfig, parametersMetadata, mapping);
+const divide = Divide(config, parametersMetadata, mapping);
 
 const input = [
   {
@@ -98,7 +97,7 @@ initialize:
     divide:
       method: Divide
       path: 'builtin'
-      global-config:
+      config:
         numerator: vcpus-allocated
         denominator: 2
         output: cpu/number-cores
@@ -129,9 +128,9 @@ The results will be saved to a new `yaml` file in `./examples/outputs`.
 
 `Divide` exposes two of IF's error classes.
 
-### GlobalConfigError
+### ConfigError
 
-You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+You will receive an error starting `ConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
 
