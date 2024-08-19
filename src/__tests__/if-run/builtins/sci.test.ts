@@ -6,11 +6,9 @@ const {MissingInputDataError} = ERRORS;
 
 describe('builtins/sci:', () => {
   describe('Sci: ', () => {
-    const parametersMetadata = {
-      inputs: {},
-      outputs: {},
-    };
-    const sci = Sci({'functional-unit': 'users'}, parametersMetadata);
+    const config = {'functional-unit': 'users'};
+    const parametersMetadata = {inputs: {}, outputs: {}};
+    const sci = Sci(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -21,12 +19,6 @@ describe('builtins/sci:', () => {
 
     describe('execute():', () => {
       it('returns a result with valid inputs.', async () => {
-        const sci = Sci(
-          {
-            'functional-unit': 'users',
-          },
-          parametersMetadata
-        );
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -54,13 +46,41 @@ describe('builtins/sci:', () => {
         ]);
       });
 
-      it('returns the same result regardless of input duration.', async () => {
-        const sci = Sci(
+      it('successfully executes when `mapping` has valid data.', async () => {
+        const mapping = {
+          'carbon-footprint': 'carbon-embodied',
+        };
+        const sci = Sci(config, parametersMetadata, mapping);
+        const inputs = [
           {
-            'functional-unit': 'requests',
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 1,
+            'carbon-operational': 0.02,
+            'carbon-embodied': 5,
+            carbon: 5.02,
+            users: 100,
           },
-          parametersMetadata
-        );
+        ];
+        const result = await sci.execute(inputs);
+
+        expect.assertions(1);
+
+        expect(result).toStrictEqual([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            'carbon-operational': 0.02,
+            'carbon-embodied': 5,
+            carbon: 5.02,
+            users: 100,
+            duration: 1,
+            sci: 0.050199999999999995,
+          },
+        ]);
+      });
+
+      it('returns the same result regardless of input duration.', async () => {
+        const config = {'functional-unit': 'requests'};
+        const sci = Sci(config, parametersMetadata, {});
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -106,12 +126,8 @@ describe('builtins/sci:', () => {
       });
 
       it('throws exception on invalid functional unit data.', async () => {
-        const sci = Sci(
-          {
-            'functional-unit': 'requests',
-          },
-          parametersMetadata
-        );
+        const config = {'functional-unit': 'requests'};
+        const sci = Sci(config, parametersMetadata, {});
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -131,12 +147,8 @@ describe('builtins/sci:', () => {
       });
 
       it('throws exception if functional unit value is not positive integer.', async () => {
-        const sci = Sci(
-          {
-            'functional-unit': 'requests',
-          },
-          parametersMetadata
-        );
+        const config = {'functional-unit': 'requests'};
+        const sci = Sci(config, parametersMetadata, {});
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -158,12 +170,8 @@ describe('builtins/sci:', () => {
     });
 
     it('fallbacks to carbon value, if functional unit is 0.', async () => {
-      const sci = Sci(
-        {
-          'functional-unit': 'requests',
-        },
-        parametersMetadata
-      );
+      const config = {'functional-unit': 'requests'};
+      const sci = Sci(config, parametersMetadata, {});
       const inputs = [
         {
           timestamp: '2021-01-01T00:00:00Z',

@@ -3,11 +3,13 @@ import {ERRORS} from '@grnsft/if-core/utils';
 import {
   CoefficientConfig,
   ExecutePlugin,
+  MappingParams,
   PluginParametersMetadata,
   PluginParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -16,7 +18,8 @@ const {MISSING_CONFIG} = STRINGS;
 
 export const Coefficient = (
   config: CoefficientConfig,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -73,13 +76,15 @@ export const Coefficient = (
       throw new ConfigError(MISSING_CONFIG);
     }
 
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
+
     const configSchema = z.object({
       coefficient: z.number(),
       'input-parameter': z.string().min(1),
       'output-parameter': z.string().min(1),
     });
 
-    return validate<z.infer<typeof configSchema>>(configSchema, config);
+    return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
   };
 
   return {

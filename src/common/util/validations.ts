@@ -81,6 +81,7 @@ export const manifestSchema = z.object({
         .object({
           path: z.string(),
           method: z.string(),
+          mapping: z.record(z.string(), z.string()).optional(),
           config: z.record(z.string(), z.any()).optional(),
           'parameter-metadata': parameterMetadataSchema,
         })

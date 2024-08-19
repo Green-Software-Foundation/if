@@ -83,7 +83,8 @@ const initPlugin = async (
   const {
     method,
     path,
-    config: config,
+    mapping,
+    config,
     'parameter-metadata': parameterMetadata,
   } = initPluginParams!;
 
@@ -99,7 +100,7 @@ const initPlugin = async (
 
   const plugin = await handModule(method, path);
 
-  return plugin(config, parameterMetadata);
+  return plugin(config, parameterMetadata, mapping);
 };
 
 /**

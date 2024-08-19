@@ -10,12 +10,13 @@ jest.mock('child_process');
 jest.mock('js-yaml');
 
 describe('builtins/shell', () => {
-  const parametersMetadata = {
-    inputs: {},
-    outputs: {},
-  };
   describe('Shell', () => {
-    const shell = Shell({}, parametersMetadata);
+    const globalConfig = {command: 'python3 /path/to/script.py'};
+    const parametersMetadata = {
+      inputs: {},
+      outputs: {},
+    };
+    const shell = Shell(globalConfig, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -25,11 +26,7 @@ describe('builtins/shell', () => {
     });
 
     describe('execute(): ', () => {
-      it('execute with valid inputs and command', async () => {
-        const shell = Shell(
-          {command: 'python3 /path/to/script.py'},
-          parametersMetadata
-        );
+      it('executes with valid inputs and command.', async () => {
         const mockSpawnSync = spawnSync as jest.MockedFunction<
           typeof spawnSync
         >;
@@ -59,11 +56,13 @@ describe('builtins/shell', () => {
         expect(mockLoadAll).toHaveBeenCalledWith('mocked stdout');
       });
 
-      it('throw an error if validation fails', async () => {
+      it('throws an error if validation fails.', async () => {
+        const shell = Shell({}, parametersMetadata);
         const invalidInputs = [
           {duration: 3600, timestamp: '2022-01-01T00:00:00Z', command: 123},
         ];
 
+        expect.assertions(2);
         try {
           await shell.execute(invalidInputs);
         } catch (error) {
@@ -76,11 +75,8 @@ describe('builtins/shell', () => {
         }
       });
 
-      it('throw an error when shell could not run command.', async () => {
-        const shell = Shell(
-          {command: 'python3 /path/to/script.py'},
-          parametersMetadata
-        );
+      it('throws an error when shell could not run command.', async () => {
+        const shell = Shell(globalConfig, parametersMetadata);
         (spawnSync as jest.Mock).mockImplementation(() => {
           throw new InputValidationError('Could not run the command');
         });

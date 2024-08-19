@@ -5,9 +5,11 @@ import {
   PluginParams,
   ConfigParams,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -16,7 +18,8 @@ const {MISSING_CONFIG, MISSING_INPUT_DATA, REGEX_MISMATCH} = STRINGS;
 
 export const Regex = (
   config: ConfigParams,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -32,13 +35,15 @@ export const Regex = (
       throw new ConfigError(MISSING_CONFIG);
     }
 
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
+
     const schema = z.object({
       parameter: z.string().min(1),
       match: z.string().min(1),
       output: z.string(),
     });
 
-    return validate<z.infer<typeof schema>>(schema, config);
+    return validate<z.infer<typeof schema>>(schema, mappedConfig);
   };
 
   /**

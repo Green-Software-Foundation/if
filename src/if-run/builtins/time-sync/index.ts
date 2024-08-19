@@ -11,12 +11,14 @@ import {
   TimeParams,
   PluginParametersMetadata,
   ParameterMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 import {getAggregationMethod} from '../../lib/aggregate';
+import {mapInputIfNeeded} from '../../../common/util/helpers';
 
 Settings.defaultZone = 'utc';
 
@@ -54,7 +56,8 @@ const {
  */
 export const TimeSync = (
   config: TimeNormalizerConfig,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -95,7 +98,12 @@ export const TimeSync = (
 
     const flattenInputs = paddedInputs.reduce(
       (acc: PluginParams[], input, index) => {
-        const safeInput = Object.assign({}, input, validateInput(input, index));
+        const mappedInput = mapInputIfNeeded(input, mapping);
+        const safeInput = Object.assign(
+          {},
+          mappedInput,
+          validateInput(mappedInput, index)
+        );
         const currentMoment = parseDate(safeInput.timestamp);
 
         /** Checks if not the first input, then check consistency with previous ones. */
@@ -126,14 +134,14 @@ export const TimeSync = (
               ...getZeroishInputPerSecondBetweenRange(
                 compareableTime,
                 currentMoment,
-                safeInput
+                input
               )
             );
           }
         }
         /** Break down current observation. */
-        for (let i = 0; i < safeInput.duration; i++) {
-          const normalizedInput = breakDownInput(safeInput, i);
+        for (let i = 0; i < input.duration; i++) {
+          const normalizedInput = breakDownInput(input, i);
 
           acc.push(normalizedInput);
         }
@@ -285,7 +293,12 @@ export const TimeSync = (
         return acc;
       }
 
-      if (metric === 'time-reserved') {
+      if (
+        metric === 'time-reserved' ||
+        (mapping &&
+          mapping['time-reserved'] &&
+          metric === mapping['time-reserved'])
+      ) {
         acc[metric] = acc['duration'];
 
         return acc;

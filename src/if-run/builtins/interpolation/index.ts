@@ -7,9 +7,11 @@ import {
   ConfigParams,
   Method,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -19,7 +21,8 @@ const {MISSING_CONFIG, X_Y_EQUAL, ARRAY_LENGTH_NON_EMPTY, WITHIN_THE_RANGE} =
 
 export const Interpolation = (
   config: ConfigParams,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -136,6 +139,8 @@ export const Interpolation = (
     if (!config) {
       throw new ConfigError(MISSING_CONFIG);
     }
+
+    config = mapConfigIfNeeded(config, mapping);
 
     const schema = z
       .object({

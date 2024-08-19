@@ -5,18 +5,21 @@ import {
   PluginParams,
   ConfigParams,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 const {ConfigError, MissingInputDataError} = ERRORS;
 const {MISSING_CONFIG, MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
 
 export const Divide = (
   config: ConfigParams,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -53,13 +56,14 @@ export const Divide = (
       throw new ConfigError(MISSING_CONFIG);
     }
 
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
     const schema = z.object({
       numerator: z.string().min(1),
       denominator: z.string().or(z.number()),
       output: z.string(),
     });
 
-    return validate<z.infer<typeof schema>>(schema, config);
+    return validate<z.infer<typeof schema>>(schema, mappedConfig);
   };
 
   /**

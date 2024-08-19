@@ -68,6 +68,18 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+
+```yaml
+cloud-metadata:
+  method: CSVLookup
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
+
 ### Inputs
 
 There are no strict requirements on input for this plugin because they depend upon the contents of the target CSV and your input data at the time the CSV lookup is invoked. Please make sure you are requesting data from columns that exist in the target csv file and that your query values are available in your `input` data.
@@ -99,7 +111,9 @@ const config = {
   },
   output: ['cpu-tdp', 'tdp'],
 };
-const csvLookup = CSVLookup(config);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const csvLookup = CSVLookup(config, parametersMetadata, mapping);
 
 const input = [
   {
@@ -131,6 +145,8 @@ initialize:
           cloud-provider: 'cloud/provider'
           cloud-region: 'cloud/region'
         output: '*'
+      mapping:
+        cloud/region: cloud/area
 tree:
   children:
     child:
@@ -141,7 +157,7 @@ tree:
         - timestamp: 2023-08-06T00:00
           duration: 3600
           cloud/provider: Google Cloud
-          cloud/region: europe-north1
+          cloud/area: europe-north1
 ```
 
 You can run this example by saving it as `./examples/manifests/csv-lookup.yml` and executing the following command from the project root:

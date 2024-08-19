@@ -31,6 +31,18 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+
+```yaml
+regex:
+  method: Regex
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
+
 ### Inputs
 
 - `parameter` - as input parameter, must be available in the input array
@@ -49,7 +61,9 @@ const config = {
   match: '^[^,]+',
   output: 'cpu/name',
 };
-const regex = Regex(config);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const regex = Regex(config, parametersMetadata, mapping);
 
 const input = [
   {

@@ -14,7 +14,8 @@ describe('builtins/multiply: ', () => {
       inputs: {},
       outputs: {},
     };
-    const multiply = Multiply(config, parametersMetadata);
+
+    const multiply = Multiply(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -51,6 +52,43 @@ describe('builtins/multiply: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('successfully executes when `mapping` is provided.', async () => {
+        expect.assertions(1);
+        const mapping = {
+          'cpu/energy': 'energy-from-cpu',
+          'network/energy': 'energy-from-network',
+          'memory/energy': 'energy-from-memory',
+        };
+        const globalConfig = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': 'energy',
+        };
+        const multiply = Multiply(globalConfig, parametersMetadata, mapping);
+
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy-from-cpu': 2,
+            'energy-from-network': 2,
+            'energy-from-memory': 2,
+            energy: 8,
+          },
+        ];
+
+        const result = await multiply.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy-from-cpu': 2,
+            'energy-from-network': 2,
+            'energy-from-memory': 2,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('throws an error on missing params in input.', async () => {
         expect.assertions(1);
 
@@ -76,7 +114,7 @@ describe('builtins/multiply: ', () => {
           'input-parameters': ['carbon', 'other-carbon'],
           'output-parameter': 'carbon-product',
         };
-        const multiply = Multiply(newConfig, parametersMetadata);
+        const multiply = Multiply(newConfig, parametersMetadata, {});
 
         const data = [
           {

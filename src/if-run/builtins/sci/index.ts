@@ -6,9 +6,11 @@ import {
   ConfigParams,
   PluginParametersMetadata,
   ParameterMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate, allDefined} from '../../../common/util/validations';
+import {mapInputIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -25,7 +27,8 @@ const {
 
 export const Sci = (
   config: ConfigParams,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -76,9 +79,10 @@ export const Sci = (
   /**
    * Calculate the total emissions for a list of inputs.
    */
-  const execute = (inputs: PluginParams[]): PluginParams[] =>
-    inputs.map((input, index) => {
-      const safeInput = validateInput(input);
+  const execute = (inputs: PluginParams[]): PluginParams[] => {
+    return inputs.map((input, index) => {
+      const mappedInput = mapInputIfNeeded(input, mapping);
+      const safeInput = validateInput(mappedInput);
       const functionalUnit = input[config['functional-unit']];
 
       if (functionalUnit === 0) {
@@ -95,7 +99,7 @@ export const Sci = (
         sci: safeInput['carbon'] / functionalUnit,
       };
     });
-
+  };
   /**
    * Checks for fields in input.
    */

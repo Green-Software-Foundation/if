@@ -32,6 +32,18 @@ of the parameters of the inputs and outputs
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+
+```yaml
+coefficient:
+  method: Coefficient
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
+
 ### Inputs
 
 All of `input-parameters` must be available in the input array.
@@ -51,13 +63,15 @@ output = input * coefficient
 To run the plugin from a Typescript app, you must first create an instance of `Coefficient`. Then, you can call `execute()`.
 
 ```typescript
-const config = {
+const globalConfig = {
   'input-parameter': 'carbon',
   coefficient: 10,
   'output-parameter': 'carbon-product',
 };
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
 
-const coeff = Coefficient(config);
+const coeff = Coefficient(globalConfig, parametersMetadata, mapping);
 const result = coeff.execute([
   {
     duration: 3600,
@@ -84,15 +98,17 @@ initialize:
         input-parameter: 'carbon'
         coefficient: 3
         output-parameter: 'carbon-product'
-       parameter-metadata:
+      parameter-metadata:
         inputs:
           carbon:
-            description: "an amount of carbon emitted into the atmosphere"
-            unit: "gCO2e"
+            description: 'an amount of carbon emitted into the atmosphere'
+            unit: 'gCO2e'
+            aggregation-method: sum
         outputs:
           carbon-product:
-            description: "a product of cabon property and the coefficient"
-            unit: "gCO2e"
+            description: 'a product of cabon property and the coefficient'
+            unit: 'gCO2e'
+            aggregation-method: sum
 tree:
   children:
     child:

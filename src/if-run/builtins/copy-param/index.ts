@@ -1,7 +1,9 @@
 import {z} from 'zod';
 import {ERRORS} from '@grnsft/if-core/utils';
 import {
+  ConfigParams,
   ExecutePlugin,
+  MappingParams,
   PluginParametersMetadata,
   PluginParams,
 } from '@grnsft/if-core/types';
@@ -9,16 +11,21 @@ import {
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 const {MISSING_CONFIG} = STRINGS;
 const {ConfigError} = ERRORS;
-//   keep-existing: true/false (whether to remove the parameter you are copying from)
-//   from-param: the parameter you are copying from (e.g. cpu/name)
-//   to-field: the parameter you are copying to (e.g. cpu/processor-name)
+
+/**
+ * keep-existing: true/false (whether to remove the parameter you are copying from)
+ * from-param: the parameter you are copying from (e.g. cpu/name)
+ * to-field: the parameter you are copying to (e.g. cpu/processor-name)
+ */
 
 export const Copy = (
-  config: Record<string, any>,
-  parametersMetadata: PluginParametersMetadata
+  config: ConfigParams,
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -34,13 +41,15 @@ export const Copy = (
       throw new ConfigError(MISSING_CONFIG);
     }
 
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
+
     const configSchema = z.object({
       'keep-existing': z.boolean(),
       from: z.string().min(1).or(z.number()),
       to: z.string().min(1),
     });
 
-    return validate<z.infer<typeof configSchema>>(configSchema, config);
+    return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
   };
 
   /**

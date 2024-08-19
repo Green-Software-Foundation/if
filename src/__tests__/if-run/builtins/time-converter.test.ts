@@ -19,7 +19,7 @@ describe('builtins/time-converter: ', () => {
       inputs: {},
       outputs: {},
     };
-    const timeConverter = TimeConverter(config, parametersMetadata);
+    const timeConverter = TimeConverter(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -54,7 +54,7 @@ describe('builtins/time-converter: ', () => {
 
       it('throws an error when config is not provided.', () => {
         const config = undefined;
-        const timeConverter = TimeConverter(config!, parametersMetadata);
+        const timeConverter = TimeConverter(config!, parametersMetadata, {});
 
         expect.assertions(1);
 
@@ -98,7 +98,7 @@ describe('builtins/time-converter: ', () => {
           'new-time-unit': 'month',
           'output-parameter': 'energy-per-duration',
         };
-        const timeConverter = TimeConverter(newConfig, parametersMetadata);
+        const timeConverter = TimeConverter(newConfig, parametersMetadata, {});
 
         const data = [
           {

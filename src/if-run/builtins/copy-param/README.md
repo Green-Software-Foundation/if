@@ -54,6 +54,18 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+
+```yaml
+copy-param:
+  path: builtin
+  method: Copy
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
+
 ### Inputs
 
 As with all plugins, `timestamp` and `duration` are required. The key passed to `from` must exist in the `input` data.
@@ -69,11 +81,15 @@ To run the plugin, you must first create an instance of `Copy`. Then, you can ca
 ```typescript
 import {Copy} from '.';
 
-const plugin = Copy({
+const globalConfig = {
   'keep-existing': true,
   from: 'from-param',
   to: 'to-param',
-});
+};
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+
+const plugin = Copy(globalConfig, parametersMetadata, mapping);
 
 const result = plugin.execute([
   {

@@ -17,7 +17,7 @@ describe('builtins/sum: ', () => {
       inputs: {},
       outputs: {},
     };
-    const sum = Sum(config, parametersMetadata);
+    const sum = Sum(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -54,9 +54,47 @@ describe('builtins/sum: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('successfully executes when `mapping` has valid data.', () => {
+        expect.assertions(1);
+
+        const mapping = {
+          'cpu/energy': 'energy-from-cpu',
+          'network/energy': 'energy-from-network',
+        };
+        const config = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': 'energy',
+        };
+
+        const sum = Sum(config, parametersMetadata, mapping);
+
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy-from-cpu': 1,
+            'energy-from-network': 1,
+            'memory/energy': 1,
+            energy: 3,
+          },
+        ];
+
+        const result = sum.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy-from-cpu': 1,
+            'energy-from-network': 1,
+            'memory/energy': 1,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('throws an error when config is not provided.', () => {
         const config = undefined;
-        const sum = Sum(config!, parametersMetadata);
+        const sum = Sum(config!, parametersMetadata, {});
 
         expect.assertions(1);
 
@@ -100,7 +138,7 @@ describe('builtins/sum: ', () => {
           'input-parameters': ['carbon', 'other-carbon'],
           'output-parameter': 'carbon-sum',
         };
-        const sum = Sum(newConfig, parametersMetadata);
+        const sum = Sum(newConfig, parametersMetadata, {});
 
         const data = [
           {

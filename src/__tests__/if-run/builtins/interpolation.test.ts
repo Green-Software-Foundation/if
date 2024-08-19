@@ -29,7 +29,8 @@ describe('builtins/interpolation: ', () => {
         'cpu/utilization': 45,
       },
     ];
-    const plugin = Interpolation(config, parametersMetadata);
+
+    const plugin = Interpolation(config, parametersMetadata, {});
 
     describe('init Interpolation: ', () => {
       it('initalizes object with properties.', async () => {
@@ -52,6 +53,38 @@ describe('builtins/interpolation: ', () => {
         expect(plugin.execute(inputs)).toEqual(outputs);
       });
 
+      it('returns result when `mapping` has valid data.', () => {
+        const mapping = {
+          'cpu/utilization': 'cpu/util',
+          'interpolation-result': 'result',
+        };
+        const config = {
+          method: Method.LINEAR,
+          x: [0, 10, 50, 100],
+          y: [0.12, 0.32, 0.75, 1.02],
+          'input-parameter': 'cpu/utilization',
+          'output-parameter': 'interpolation-result',
+        };
+        const inputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/util': 45,
+          },
+        ];
+        const plugin = Interpolation(config, parametersMetadata, mapping);
+        const outputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/util': 45,
+            result: 0.69625,
+          },
+        ];
+
+        expect(plugin.execute(inputs)).toEqual(outputs);
+      });
+
       it('returns result when the `method` is not provided in the config.', () => {
         const config = {
           x: [0, 10, 50, 100],
@@ -59,8 +92,8 @@ describe('builtins/interpolation: ', () => {
           'input-parameter': 'cpu/utilization',
           'output-parameter': 'interpolation-result',
         };
-        const plugin = Interpolation(config, parametersMetadata);
 
+        const plugin = Interpolation(config, parametersMetadata, {});
         const outputs = [
           {
             timestamp: '2023-07-06T00:00',
@@ -75,7 +108,7 @@ describe('builtins/interpolation: ', () => {
 
       it('returns result when the `method` is `spline`.', () => {
         const newConfig = Object.assign({}, config, {method: Method.SPLINE});
-        const plugin = Interpolation(newConfig, parametersMetadata);
+        const plugin = Interpolation(newConfig, parametersMetadata, {});
 
         const outputs = [
           {
@@ -93,7 +126,7 @@ describe('builtins/interpolation: ', () => {
         const newConfig = Object.assign({}, config, {
           method: Method.POLYNOMIAL,
         });
-        const plugin = Interpolation(newConfig, parametersMetadata);
+        const plugin = Interpolation(newConfig, parametersMetadata, {});
 
         const outputs = [
           {
@@ -111,8 +144,7 @@ describe('builtins/interpolation: ', () => {
         const newConfig = Object.assign({}, config, {
           x: [0, 10, 100, 50],
         });
-        const plugin = Interpolation(newConfig, parametersMetadata);
-
+        const plugin = Interpolation(newConfig, parametersMetadata, {});
         const outputs = [
           {
             timestamp: '2023-07-06T00:00',
@@ -147,7 +179,7 @@ describe('builtins/interpolation: ', () => {
 
       it('throws an when the config is not provided.', () => {
         const config = undefined;
-        const plugin = Interpolation(config!, parametersMetadata);
+        const plugin = Interpolation(config!, parametersMetadata, {});
 
         expect.assertions(2);
         try {
@@ -162,8 +194,7 @@ describe('builtins/interpolation: ', () => {
         const newConfig = Object.assign({}, config, {
           x: [0, 10, 100],
         });
-
-        const plugin = Interpolation(newConfig, parametersMetadata);
+        const plugin = Interpolation(newConfig, parametersMetadata, {});
 
         expect.assertions(2);
         try {
@@ -197,8 +228,9 @@ describe('builtins/interpolation: ', () => {
           'input-parameter': 'cpu/utilization',
           'output-parameter': 'interpolation-result',
         };
+
         const config = Object.assign({}, basicConfig, {method: Method.SPLINE});
-        const plugin = Interpolation(config, parametersMetadata);
+        const plugin = Interpolation(config, parametersMetadata, {});
         const inputs = [
           {
             timestamp: '2023-07-06T00:00',

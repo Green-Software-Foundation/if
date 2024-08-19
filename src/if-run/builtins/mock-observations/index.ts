@@ -6,10 +6,12 @@ import {
   ConfigParams,
   ObservationParams,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -23,7 +25,8 @@ const {MISSING_CONFIG} = STRINGS;
 
 export const MockObservations = (
   config: ConfigParams,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -68,6 +71,8 @@ export const MockObservations = (
       throw new ConfigError(MISSING_CONFIG);
     }
 
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
+
     const schema = z.object({
       'timestamp-from': z.string(),
       'timestamp-to': z.string(),
@@ -79,7 +84,7 @@ export const MockObservations = (
       }),
     });
 
-    return validate<z.infer<typeof schema>>(schema, config);
+    return validate<z.infer<typeof schema>>(schema, mappedConfig);
   };
 
   /**
@@ -93,6 +98,7 @@ export const MockObservations = (
       generators,
       components,
     } = validateConfig();
+
     const convertedTimestampFrom = DateTime.fromISO(timestampFrom, {
       zone: 'UTC',
     });

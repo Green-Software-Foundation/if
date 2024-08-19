@@ -40,6 +40,18 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+
+```yaml
+interpolation:
+  method: Interpolation
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
+
 ## Input Parameters
 
 The plugin expects the following input parameters:
@@ -88,18 +100,17 @@ const config = {
   method: 'linear',
   x: [0, 10, 50, 100],
   y: [0.12, 0.32, 0.75, 1.02],
-  'input-parameter': 'cpu/utilization'
-  'output-parameter': 'cpu/energy'
-
+  'input-parameter': 'cpu/utilization',
+  'output-parameter': 'cpu/energy',
 };
-
-const interpolationPlugin = Interpolation(config);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const interpolationPlugin = Interpolation(config, parametersMetadata, {});
 
 const inputs = [
   {
     timestamp: '2024-04-16T12:00:00Z',
     duration: 3600,
-    'cpu/utilization': 45
+    'cpu/utilization': 45,
   },
 ];
 

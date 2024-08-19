@@ -7,6 +7,7 @@ import {parse} from 'csv-parse/sync';
 import {ERRORS} from '@grnsft/if-core/utils';
 import {
   ExecutePlugin,
+  MappingParams,
   PluginParametersMetadata,
   PluginParams,
 } from '@grnsft/if-core/types';
@@ -14,6 +15,7 @@ import {
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
+import {mapConfigIfNeeded} from '../../../common/util/helpers';
 
 const {
   FILE_FETCH_FAILED,
@@ -34,7 +36,8 @@ const {
 
 export const CSVLookup = (
   config: any,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -199,7 +202,6 @@ export const CSVLookup = (
   const execute = async (inputs: PluginParams[]) => {
     const safeGlobalConfig = validateConfig();
     const {filepath, query, output} = safeGlobalConfig;
-
     const file = await retrieveFile(filepath);
     const parsedCSV = parseCSVFile(file);
 
@@ -233,6 +235,7 @@ export const CSVLookup = (
     if (!config) {
       throw new ConfigError(MISSING_CONFIG);
     }
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
 
     const configSchema = z.object({
       filepath: z.string(),
@@ -243,7 +246,7 @@ export const CSVLookup = (
         .or(z.array(z.array(z.string()))),
     });
 
-    return validate<z.infer<typeof configSchema>>(configSchema, config);
+    return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
   };
 
   return {

@@ -18,7 +18,7 @@ describe('builtins/divide: ', () => {
       inputs: {},
       outputs: {},
     };
-    const divide = Divide(config, parametersMetadata);
+    const divide = Divide(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -51,6 +51,34 @@ describe('builtins/divide: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('successfully executes when `mapping` has valid data.', async () => {
+        expect.assertions(1);
+        const mapping = {
+          'vcpus-allocated': 'vcpus-distributed',
+        };
+
+        const divide = Divide(config, parametersMetadata, mapping);
+
+        const expectedResult = [
+          {
+            duration: 3600,
+            'vcpus-distributed': 24,
+            'cpu/number-cores': 12,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = await divide.execute([
+          {
+            duration: 3600,
+            'vcpus-distributed': 24,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('returns a result when `denominator` is provded in input.', async () => {
         expect.assertions(1);
         const config = {
@@ -58,8 +86,8 @@ describe('builtins/divide: ', () => {
           denominator: 'duration',
           output: 'vcpus-allocated-per-second',
         };
-        const divide = Divide(config, parametersMetadata);
 
+        const divide = Divide(config, parametersMetadata, {});
         const input = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -90,7 +118,8 @@ describe('builtins/divide: ', () => {
           denominator: 3600,
           output: 'vcpus-allocated-per-second',
         };
-        const divide = Divide(config, parametersMetadata);
+
+        const divide = Divide(config, parametersMetadata, {});
 
         expect.assertions(1);
 
@@ -111,7 +140,7 @@ describe('builtins/divide: ', () => {
 
     it('throws an error on missing config.', async () => {
       const config = undefined;
-      const divide = Divide(config!, parametersMetadata);
+      const divide = Divide(config!, parametersMetadata, {});
 
       expect.assertions(1);
 
@@ -133,7 +162,7 @@ describe('builtins/divide: ', () => {
         denominator: 0,
         output: 'vcpus-allocated-per-second',
       };
-      const divide = Divide(config, parametersMetadata);
+      const divide = Divide(config, parametersMetadata, {});
 
       expect.assertions(1);
 
@@ -161,7 +190,8 @@ describe('builtins/divide: ', () => {
         denominator: '10',
         output: 'vcpus-allocated-per-second',
       };
-      const divide = Divide(config, parametersMetadata);
+
+      const divide = Divide(config, parametersMetadata, {});
 
       expect.assertions(1);
 

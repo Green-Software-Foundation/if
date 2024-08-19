@@ -25,6 +25,18 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+
+```yaml
+sci-embodied:
+  method: SciEmbodied
+  path: 'builtins'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
+
 ### Inputs
 
 - `device/emissions-embodied`: the sum of Life Cycle Assessment (LCA) emissions for the component
@@ -73,7 +85,9 @@ The following snippet demonstrates how to call the `sci-embodied` plugin from Ty
 ```typescript
 import {SciEmbodied} from 'builtins';
 
-const sciEmbodied = SciEmbodied();
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const sciEmbodied = SciEmbodied(undefined, parametersMetadata, mapping);
 const results = await sciEmbodied.execute([
   {
     'device/emissions-embodied': 200, // in gCO2e for total resource units
@@ -87,7 +101,7 @@ const results = await sciEmbodied.execute([
 
 ## Example manifest
 
-IF users will typically call the plugin as part of a pipeline defined in a `manifest` file. In this case, instantiating the plugin is handled by `ie` and does not have to be done explicitly by the user. The following is an example `manifest` that calls `sci-embodied`:
+IF users will typically call the plugin as part of a pipeline defined in a `manifest` file. In this case, instantiating the plugin is handled by `if-run` and does not have to be done explicitly by the user. The following is an example `manifest` that calls `sci-embodied`:
 
 ```yaml
 name: sci-embodied
@@ -98,6 +112,8 @@ initialize:
     sci-embodied:
       method: SciEmbodied
       path: 'builtins'
+      mapping:
+        device/emissions-embodied: device/carbon-footprint
 tree:
   children:
     child:
@@ -105,7 +121,7 @@ tree:
         compute:
           - sci-embodied # duration & config -> embodied
       defaults:
-        device/emissions-embodied: 1533.120 # gCO2eq
+        device/carbon-footprint: 1533.120 # gCO2eq
         device/expected-lifespan: 3 # 3 years in seconds
         resources-reserved: 1
         resources-total: 8
@@ -133,4 +149,4 @@ This error class is used to describe a problem with one of the input values to `
 
 You will receive a specific error message explaining which parameter is problematic, and you can check and replace where appropriate.
 
-For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors
+For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors)

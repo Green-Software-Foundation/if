@@ -22,10 +22,22 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
-- `outputs`: describe the parameter of the `denominator` of the config. The parameter has the following attributes:
+- `outputs`: describe the parameter of the `denominator` of the global config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+
+```yaml
+divide:
+  method: Divide
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
 
 ### Inputs
 
@@ -57,7 +69,11 @@ const config = {
   denominator: 2,
   output: 'cpu/number-cores',
 };
-const divide = Divide(config, parametersMetadata);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {
+  'vcpus-allocated': 'vcpus-distributed',
+};
+const divide = Divide(config, parametersMetadata, mapping);
 
 const input = [
   {
@@ -85,6 +101,8 @@ initialize:
         numerator: vcpus-allocated
         denominator: 2
         output: cpu/number-cores
+      mapping:
+        vcpus-allocated: vcpus-distributed
 tree:
   children:
     child:
@@ -94,7 +112,7 @@ tree:
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
-          vcpus-allocated: 24
+          vcpus-distributed: 24
 ```
 
 You can run this example by saving it as `./examples/manifests/divide.yml` and executing the following command from the project root:

@@ -2,6 +2,7 @@ import {z} from 'zod';
 import {
   ExecutePlugin,
   ParameterMetadata,
+  MappingParams,
   PluginParametersMetadata,
   PluginParams,
 } from '@grnsft/if-core/types';
@@ -9,11 +10,14 @@ import {
 import {validate, allDefined} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
+import {mapInputIfNeeded} from '../../../common/util/helpers';
 
 const {SCI_EMBODIED_ERROR} = STRINGS;
 
 export const SciEmbodied = (
-  parametersMetadata: PluginParametersMetadata
+  _config: undefined,
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -76,7 +80,8 @@ export const SciEmbodied = (
    */
   const execute = (inputs: PluginParams[]) =>
     inputs.map(input => {
-      const safeInput = validateInput(input);
+      const mappedInput = mapInputIfNeeded(input, mapping);
+      const safeInput = validateInput(mappedInput);
 
       return {
         ...input,

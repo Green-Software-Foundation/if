@@ -18,7 +18,7 @@ describe('builtins/coefficient: ', () => {
       inputs: {},
       outputs: {},
     };
-    const coefficient = Coefficient(config, parametersMetadata);
+    const coefficient = Coefficient(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -53,9 +53,39 @@ describe('builtins/coefficient: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error when config is not provided.', () => {
+      it('succcessfully executes when the mapping has data.', () => {
+        const mapping = {
+          carbon: 'carbon-for-production',
+        };
+
+        const coefficient = Coefficient(config, parametersMetadata, mapping);
+        expect.assertions(1);
+
+        const expectedResult = [
+          {
+            duration: 3600,
+            'carbon-for-production': 3,
+            'carbon-product': 9,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = coefficient.execute([
+          {
+            duration: 3600,
+            'carbon-for-production': 3,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ]);
+
+        expect.assertions(1);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('throws an error when global config is not provided.', () => {
         const config = undefined;
-        const coefficient = Coefficient(config!, parametersMetadata);
+        const coefficient = Coefficient(config!, parametersMetadata, {});
 
         expect.assertions(1);
 
@@ -78,7 +108,7 @@ describe('builtins/coefficient: ', () => {
           coefficient: 3,
           'output-parameter': 'carbon-product',
         };
-        const coefficient = Coefficient(invalidConfig, parametersMetadata);
+        const coefficient = Coefficient(invalidConfig, parametersMetadata, {});
         const expectedMessage =
           '"input-parameter" parameter is string must contain at least 1 character(s). Error code: too_small.';
 
@@ -105,7 +135,7 @@ describe('builtins/coefficient: ', () => {
           coefficient: 10,
           'output-parameter': '',
         };
-        const coefficient = Coefficient(invalidConfig, parametersMetadata);
+        const coefficient = Coefficient(invalidConfig, parametersMetadata, {});
         const expectedMessage =
           '"output-parameter" parameter is string must contain at least 1 character(s). Error code: too_small.';
 

@@ -18,7 +18,7 @@ describe('builtins/regex: ', () => {
       inputs: {},
       outputs: {},
     };
-    const regex = Regex(config, parametersMetadata);
+    const regex = Regex(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -59,8 +59,7 @@ describe('builtins/regex: ', () => {
           match: '/(?<=_)[^_]+?(?=_|$)/g',
           output: 'cloud/instance-type',
         };
-        const regex = Regex(config, parametersMetadata);
-
+        const regex = Regex(config, parametersMetadata, {});
         const expectedResult = [
           {
             timestamp: '2023-08-06T00:00',
@@ -80,6 +79,37 @@ describe('builtins/regex: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('successfully applies regex when `mapping` has valid data.', async () => {
+        const globalConfig = {
+          parameter: 'cloud/instance-type',
+          match: '/(?<=_)[^_]+?(?=_|$)/g',
+          output: 'cloud/instance-type',
+        };
+
+        const mapping = {
+          'cloud/instance-type': 'instance-type',
+        };
+        const regex = Regex(globalConfig, parametersMetadata, mapping);
+
+        const expectedResult = [
+          {
+            timestamp: '2023-08-06T00:00',
+            duration: 3600,
+            'instance-type': 'DS1 v2',
+          },
+        ];
+
+        const result = await regex.execute([
+          {
+            timestamp: '2023-08-06T00:00',
+            duration: 3600,
+            'instance-type': 'Standard_DS1_v2',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('returns a result when regex is not started and ended with ``.', async () => {
         const physicalProcessor =
           'Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz';
@@ -90,8 +120,7 @@ describe('builtins/regex: ', () => {
           match: '[^,]+/',
           output: 'cpu/name',
         };
-        const regex = Regex(config, parametersMetadata);
-
+        const regex = Regex(config, parametersMetadata, {});
         const expectedResult = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -121,7 +150,8 @@ describe('builtins/regex: ', () => {
           match: '^(^:)+',
           output: 'cpu/name',
         };
-        const regex = Regex(config, parametersMetadata);
+
+        const regex = Regex(config, parametersMetadata, {});
 
         expect.assertions(1);
 
@@ -144,7 +174,7 @@ describe('builtins/regex: ', () => {
 
       it('throws an error on missing config.', async () => {
         const config = undefined;
-        const regex = Regex(config!, parametersMetadata);
+        const regex = Regex(config!, parametersMetadata, {});
 
         expect.assertions(1);
 

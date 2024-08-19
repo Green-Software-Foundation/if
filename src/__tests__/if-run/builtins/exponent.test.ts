@@ -15,7 +15,8 @@ describe('builtins/exponent: ', () => {
       inputs: {},
       outputs: {},
     };
-    const exponent = Exponent(config, parametersMetadata);
+
+    const exponent = Exponent(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -41,6 +42,37 @@ describe('builtins/exponent: ', () => {
           {
             duration: 3600,
             'energy/base': 2,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('successfully executes when `mapping` has valid data.', async () => {
+        expect.assertions(1);
+        const mapping = {
+          'energy/base': 'energy/main',
+        };
+        const globalConfig = {
+          'input-parameter': 'energy/base',
+          exponent: 3,
+          'output-parameter': 'energy',
+        };
+        const exponent = Exponent(globalConfig, parametersMetadata, mapping);
+        const expectedResult = [
+          {
+            duration: 3600,
+            'energy/main': 2,
+            energy: 8,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = await exponent.execute([
+          {
+            duration: 3600,
+            'energy/main': 2,
             timestamp: '2021-01-01T00:00:00Z',
           },
         ]);
@@ -95,7 +127,7 @@ describe('builtins/exponent: ', () => {
           exponent: 4,
           'output-parameter': 'carbon',
         };
-        const exponent = Exponent(newConfig, parametersMetadata);
+        const exponent = Exponent(newConfig, parametersMetadata, {});
 
         const data = [
           {

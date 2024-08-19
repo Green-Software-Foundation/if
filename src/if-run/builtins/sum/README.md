@@ -30,6 +30,18 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
 
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+
+```yaml
+sum:
+  method: Sum
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
+
 ### Inputs
 
 All of `input-parameters` must be available in the input array.
@@ -49,12 +61,17 @@ output = input0 + input1 + input2 ... inputN
 To run the plugin, you must first create an instance of `Sum`. Then, you can call `execute()`.
 
 ```typescript
-const config = {
+const globalConfig = {
   inputParameters: ['cpu/energy', 'network/energy'],
   outputParameter: 'energy',
 };
+const parametersMetadata = {inputs: {}, outputs: {}};
+const = mapping {
+  'cpu/energy': 'energy-from-cpu',
+  'network/energy': 'energy-from-network',
+};
 
-const sum = Sum(config, parametersMetadata);
+const sum = Sum(globalConfig, parametersMetadata, mapping);
 const result = sum.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',
@@ -87,9 +104,11 @@ initialize:
             description: energy consumed by the cpu
             unit: kWh
             aggregation-method: sum
+            aggregation-method: sum
           network/energy:
             description: energy consumed by data ingress and egress
             unit: kWh
+            aggregation-method: sum
             aggregation-method: sum
         outputs:
           energy:
