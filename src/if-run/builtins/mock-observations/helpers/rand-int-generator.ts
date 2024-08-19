@@ -5,9 +5,9 @@ import {STRINGS} from '../../../config';
 
 import {Generator} from '../interfaces';
 
-const {GlobalConfigError} = ERRORS;
+const {ConfigError} = ERRORS;
 
-const {MISSING_GLOBAL_CONFIG, MISSING_MIN_MAX, INVALID_MIN_MAX, INVALID_NAME} =
+const {MISSING_CONFIG, MISSING_MIN_MAX, INVALID_MIN_MAX, INVALID_NAME} =
   STRINGS;
 
 export const RandIntGenerator = (
@@ -20,7 +20,7 @@ export const RandIntGenerator = (
 
   const validateName = (name: string | null): string => {
     if (!name || name.trim() === '') {
-      throw new GlobalConfigError(INVALID_NAME);
+      throw new ConfigError(INVALID_NAME);
     }
 
     return name;
@@ -28,15 +28,15 @@ export const RandIntGenerator = (
 
   const validateConfig = (config: ConfigParams): {min: number; max: number} => {
     if (!config || Object.keys(config).length === 0) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+      throw new ConfigError(MISSING_CONFIG);
     }
 
     if (!config.min || !config.max) {
-      throw new GlobalConfigError(MISSING_MIN_MAX);
+      throw new ConfigError(MISSING_MIN_MAX);
     }
 
     if (config.min >= config.max) {
-      throw new GlobalConfigError(INVALID_MIN_MAX(validatedName));
+      throw new ConfigError(INVALID_MIN_MAX(validatedName));
     }
 
     return {min: config.min, max: config.max};

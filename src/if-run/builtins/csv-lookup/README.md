@@ -78,7 +78,7 @@ The input data with the requested csv content appended to it.
 
 ## Plugin logic
 
-1. Validates global config which contains `filepath`, `query` and `output`.
+1. Validates config which contains `filepath`, `query` and `output`.
 2. Tries to retrieve given file (with url or local path).
 3. Parses given CSV.
 4. Filters requested information from CSV.
@@ -90,7 +90,7 @@ The input data with the requested csv content appended to it.
 To run the plugin, you must first create an instance of `CSVLookup`. Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
+const config = {
   filepath: 'https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv',
   query: {
     'cloud-provider': 'cloud/provider'
@@ -99,7 +99,7 @@ const globalConfig = {
   },
   output: ['cpu-tdp', 'tdp'],
 };
-const csvLookup = CSVLookup(globalConfig);
+const csvLookup = CSVLookup(config);
 
 const input = [
   {
@@ -125,7 +125,7 @@ initialize:
     cloud-metadata:
       method: CSVLookup
       path: 'builtin'
-      global-config:
+      config:
         filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
         query:
           cloud-provider: 'cloud/provider'
@@ -177,9 +177,9 @@ This error is caused by the `CsvLookup` plugin failing to find data that matches
 
 This error arises due to problems parsing CSV data into IF. This can occur when the CSV data is incorrectly formatted or contains unexpected characters that IF does not recognize. These errors are expected to be unusual edge cases as incorrectly formatted data will usually be identified during file loading and cause a `ReadFileError`. To debug, check your CSV file for any unexpected formatting or unusual characters.
 
-### GlobalConfigError
+### ConfigError
 
-You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+You will receive an error starting `ConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
 

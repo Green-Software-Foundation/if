@@ -105,10 +105,10 @@ There have also been some changes to the structure of manifest files. Some of th
     method: SciEmbodied
   ```
 
-- **Global config**
-  We have introduced the concept of global config to the plugins. This is truly global configuration data that should be kept constant regardless of where the plugin is invoked across the manifest file.
+- **Config**
+  We have introduced the concept of config to the plugins. This is truly configuration data that should be kept constant regardless of where the plugin is invoked across the manifest file.
 
-  A good example is the `interpolation` method to use in the Teads curve plugin - this is not expected to vary from component to component and can therefore be defined in global config. The plugin code itself must expect the global config. Then, the config can be passed in the `Initialize` block, for example:
+  A good example is the `interpolation` method to use in the Teads curve plugin - this is not expected to vary from component to component and can therefore be defined in config. The plugin code itself must expect the config. Then, the config can be passed in the `Initialize` block, for example:
 
   ```yaml
   initialize:
@@ -116,7 +116,7 @@ There have also been some changes to the structure of manifest files. Some of th
       'time-sync':
         method: TimeSync
         path: 'builtin'
-        global-config:
+        config:
           start-time: '2023-12-12T00:00:00.000Z'
           end-time: '2023-12-12T00:01:00.000Z'
           interval: 5
@@ -157,7 +157,7 @@ There have also been some changes to the structure of manifest files. Some of th
 
 Technically time-sync is not a new feature as it was present in IF before the refactor, but there are some tweaks to how the plugin is configured that are worth explaining here. Time sync snaps all input arrays across an entire graph to a common time grid.
 
-This means you have to define a global start time, end time and interval to use everywhere. There is also a boolean to toggle whether you should allow the time sync model to pad the start and end of your time series with zeroes. You should default to `true` unless you have a specific reason not to. In the refactored IF we expect this information to be provided in global config, as follows:
+This means you have to define a start time, end time and interval to use everywhere. There is also a boolean to toggle whether you should allow the time sync model to pad the start and end of your time series with zeroes. You should default to `true` unless you have a specific reason not to. In the refactored IF we expect this information to be provided in config, as follows:
 
 ```yaml
 initialize:
@@ -165,7 +165,7 @@ initialize:
     'time-sync':
       method: TimeSync
       path: 'builtin'
-      global-config:
+      config:
         start-time: '2023-12-12T00:00:00.000Z'
         end-time: '2023-12-12T00:01:00.000Z'
         interval: 5
@@ -215,13 +215,13 @@ export type PluginInterface = {
 
 The plugin still requires an execute function. This is where you implement the plugin logic.
 
-Here's a minimal example for a plugin that sums some inputs defined in global config - see inline comments for some important notes:
+Here's a minimal example for a plugin that sums some inputs defined in config - see inline comments for some important notes:
 
 ```ts
-// Here's the function definition - notice that global config is passed in here!
-export const Sum = (globalConfig: SumConfig): PluginInterface => {
-  const inputParameters = globalConfig['input-parameters'] || [];
-  const outputParameter = globalConfig['output-parameter'];
+// Here's the function definition - notice that config is passed in here!
+export const Sum = (config: SumConfig): PluginInterface => {
+  const inputParameters = config['input-parameters'] || [];
+  const outputParameter = config['output-parameter'];
 
   // we also return metadata now too - you can add more or just use this default
   const metadata = {

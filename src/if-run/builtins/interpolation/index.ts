@@ -13,16 +13,12 @@ import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
-const {GlobalConfigError} = ERRORS;
-const {
-  MISSING_GLOBAL_CONFIG,
-  X_Y_EQUAL,
-  ARRAY_LENGTH_NON_EMPTY,
-  WITHIN_THE_RANGE,
-} = STRINGS;
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG, X_Y_EQUAL, ARRAY_LENGTH_NON_EMPTY, WITHIN_THE_RANGE} =
+  STRINGS;
 
 export const Interpolation = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -68,7 +64,7 @@ export const Interpolation = (
     config: ConfigParams,
     input: PluginParams
   ) => {
-    const parameter = input[globalConfig['input-parameter']];
+    const parameter = input[config['input-parameter']];
     const xPoints: number[] = config.x;
     const yPoints: number[] = config.y;
 
@@ -98,7 +94,7 @@ export const Interpolation = (
     config: ConfigParams,
     input: PluginParams
   ) => {
-    const parameter = input[globalConfig['input-parameter']];
+    const parameter = input[config['input-parameter']];
     const xPoints: number[] = config.x;
     const yPoints: number[] = config.y;
     const spline: any = new Spline(xPoints, yPoints);
@@ -113,7 +109,7 @@ export const Interpolation = (
     config: ConfigParams,
     input: PluginParams
   ) => {
-    const parameter = input[globalConfig['input-parameter']];
+    const parameter = input[config['input-parameter']];
     const xPoints: number[] = config.x;
     const yPoints: number[] = config.y;
 
@@ -133,12 +129,12 @@ export const Interpolation = (
   };
 
   /**
-   * Validates global config parameters.
+   * Validates config parameters.
    * Sorts elements of `x` and `y`.
    */
   const validateConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
     }
 
     const schema = z
@@ -156,16 +152,11 @@ export const Interpolation = (
         message: ARRAY_LENGTH_NON_EMPTY,
       });
 
-    const defaultMethod = globalConfig.method ?? Method.LINEAR;
-    const updatedConfig = Object.assign(
-      {},
-      {method: defaultMethod},
-      globalConfig,
-      {
-        x: sortPoints(globalConfig.x),
-        y: sortPoints(globalConfig.y),
-      }
-    );
+    const defaultMethod = config.method ?? Method.LINEAR;
+    const updatedConfig = Object.assign({}, {method: defaultMethod}, config, {
+      x: sortPoints(config.x),
+      y: sortPoints(config.y),
+    });
 
     return validate<z.infer<typeof schema>>(schema, updatedConfig);
   };
@@ -179,7 +170,7 @@ export const Interpolation = (
    * Validates inputes parameters.
    */
   const validateInput = (input: PluginParams, index: number) => {
-    const inputParameter = globalConfig['input-parameter'];
+    const inputParameter = config['input-parameter'];
     const schema = z
       .object({
         timestamp: z.string().or(z.date()),
@@ -188,8 +179,8 @@ export const Interpolation = (
       })
       .refine(
         data =>
-          data[inputParameter] >= globalConfig.x[0] &&
-          data[inputParameter] <= globalConfig.x[globalConfig.x.length - 1],
+          data[inputParameter] >= config.x[0] &&
+          data[inputParameter] <= config.x[config.x.length - 1],
         {
           message: WITHIN_THE_RANGE,
         }

@@ -60,14 +60,14 @@ describe('lib/initalize: ', () => {
       expect(mockLog).toHaveBeenCalledTimes(1); // checks if logger is called
     });
 
-    it('checks if plugin is initalized with global config and has execute and metadata.', async () => {
+    it('checks if plugin is initalized with config and has execute and metadata.', async () => {
       const context = {
         initialize: {
           plugins: {
             mockavizta: {
               path: 'mockavizta',
               method: 'Mockavizta',
-              'global-config': {
+              config: {
                 verbose: true,
               },
             },
@@ -89,7 +89,7 @@ describe('lib/initalize: ', () => {
           plugins: {
             mockavizta: {
               method: 'Mockavizta',
-              'global-config': {
+              config: {
                 verbose: true,
               },
             },
@@ -115,7 +115,7 @@ describe('lib/initalize: ', () => {
           plugins: {
             mockavizta: {
               path: 'mockavizta',
-              'global-config': {
+              config: {
                 verbose: true,
               },
             },
@@ -142,7 +142,7 @@ describe('lib/initalize: ', () => {
             mockavizta: {
               path: 'builtin',
               method: 'Mockavizta',
-              'global-config': {
+              config: {
                 verbose: true,
               },
             },
@@ -165,7 +165,7 @@ describe('lib/initalize: ', () => {
             mockavizta: {
               path: 'https://github.com/mockavizta',
               method: 'Mockavizta',
-              'global-config': {
+              config: {
                 verbose: true,
               },
             },
@@ -188,7 +188,7 @@ describe('lib/initalize: ', () => {
             mockavizta: {
               path: 'failing-mock',
               method: 'Mockavizta',
-              'global-config': {
+              config: {
                 verbose: true,
               },
             },

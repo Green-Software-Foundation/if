@@ -4,8 +4,8 @@ import {CommonGenerator} from '../../../if-run/builtins/mock-observations/helper
 
 import {STRINGS} from '../../../if-run/config';
 
-const {GlobalConfigError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/mock-observations/CommonGenerator: ', () => {
   describe('initialize: ', () => {
@@ -17,7 +17,7 @@ describe('builtins/mock-observations/CommonGenerator: ', () => {
       try {
         commonGenerator.next([]);
       } catch (error) {
-        expect(error).toEqual(new GlobalConfigError(MISSING_GLOBAL_CONFIG));
+        expect(error).toEqual(new ConfigError(MISSING_CONFIG));
       }
     });
   });

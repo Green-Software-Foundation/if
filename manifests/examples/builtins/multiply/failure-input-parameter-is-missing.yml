@@ -6,7 +6,7 @@ initialize:
     multiply:
       method: Multiply
       path: "builtin"
-      global-config:
+      config:
         input-parameters: ["cpu/energy", "network/energy"]
         output-parameter: "energy-product"
 tree:

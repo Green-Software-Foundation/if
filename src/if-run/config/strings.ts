@@ -63,8 +63,7 @@ https://if.greensoftware.foundation/major-concepts/manifest-file`,
   OUTPUT_REQUIRED:
     'Output path is required, please make sure output is configured properly.',
   /** Plugins messages */
-  INVALID_NAME:
-    '`name` global config parameter is empty or contains all spaces',
+  INVALID_NAME: '`name` config parameter is empty or contains all spaces',
   START_LOWER_END: '`start-time` should be lower than `end-time`',
   TIMESTAMP_REQUIRED: (index: number) => `required in input[${index}]`,
   INVALID_DATETIME: (index: number) => `invalid datetime in input[${index}]`,
@@ -84,7 +83,7 @@ https://if.greensoftware.foundation/major-concepts/manifest-file`,
   SCI_MISSING_FN_UNIT: (functionalUnit: string) =>
     `'carbon' and ${functionalUnit} should be present in your input data.`,
   MISSING_FUNCTIONAL_UNIT_CONFIG:
-    '`functional-unit` should be provided in your global config',
+    '`functional-unit` should be provided in your config',
   MISSING_FUNCTIONAL_UNIT_INPUT:
     '`functional-unit` value is missing from input data or it is not a positive integer',
   REGEX_MISMATCH: (input: any, match: string) =>
@@ -106,7 +105,7 @@ ${message}`,
 ${error}`,
   ZERO_DIVISION: (moduleName: string, index: number) =>
     `-- SKIPPING -- DivisionByZero: you are attempting to divide by zero in ${moduleName} plugin : inputs[${index}]\n`,
-  MISSING_GLOBAL_CONFIG: 'Global config is not provided.',
+  MISSING_CONFIG: 'Config is not provided.',
   MISSING_INPUT_DATA: (param: string) =>
     `${param} is missing from the input array, or has nullish value.`,
   CONFIG_WARN: (plugins: string, isMore: boolean) =>
@@ -114,5 +113,5 @@ ${error}`,
       isMore ? 's' : ''
     }. IF no longer supports node-level config. \`${plugins}\` plugin${
       isMore ? 's' : ''
-    } should be refactored to accept all its config from global config or input data.`,
+    } should be refactored to accept all its config from config or input data.`,
 };

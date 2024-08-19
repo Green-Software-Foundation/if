@@ -6,7 +6,7 @@ initialize:
     mock-observations:
       path: builtin
       method: MockObservations
-      global-config:
+      config:
         timestamp-from: 2023-07-06T00:00
         timestamp-to: 2023-07-06T00:10
         duration: 60
@@ -33,20 +33,20 @@ execution:
   environment:
     if-version: 0.5.0
     os: macOS
-    os-version: '14.5'
+    os-version: "14.5"
     node-version: 18.14.2
     date-time: 2024-08-02T15:04:18.262Z (UTC)
     dependencies:
-      - '@babel/core@7.22.10'
-      - '@babel/preset-typescript@7.23.3'
-      - '@commitlint/cli@18.6.0'
-      - '@commitlint/config-conventional@18.6.0'
-      - '@grnsft/if-core@0.0.16'
-      - '@jest/globals@29.7.0'
-      - '@types/jest@29.5.8'
-      - '@types/js-yaml@4.0.9'
-      - '@types/luxon@3.4.2'
-      - '@types/node@20.9.0'
+      - "@babel/core@7.22.10"
+      - "@babel/preset-typescript@7.23.3"
+      - "@commitlint/cli@18.6.0"
+      - "@commitlint/config-conventional@18.6.0"
+      - "@grnsft/if-core@0.0.16"
+      - "@jest/globals@29.7.0"
+      - "@types/jest@29.5.8"
+      - "@types/js-yaml@4.0.9"
+      - "@types/luxon@3.4.2"
+      - "@types/node@20.9.0"
       - axios-mock-adapter@1.22.0
       - axios@1.7.2
       - cross-env@7.0.3
@@ -75,284 +75,284 @@ tree:
         observe:
           - mock-observations
       inputs:
-        - timestamp: '2023-07-06T00:00:00.000Z'
+        - timestamp: "2023-07-06T00:00:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:01:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:01:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:02:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:02:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:03:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:03:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:04:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:04:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:05:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:05:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:06:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:06:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:07:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:07:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:08:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:08:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:09:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:09:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:00:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:00:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:01:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:01:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:02:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:02:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:03:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:03:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:04:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:04:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:05:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:05:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:06:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:06:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:07:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:07:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:08:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:08:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:09:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:09:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
+          cpu/utilization: "*"
+          memory/utilization: "*"
       outputs:
-        - timestamp: '2023-07-06T00:00:00.000Z'
+        - timestamp: "2023-07-06T00:00:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:01:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:01:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:02:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:02:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:03:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:03:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:04:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:04:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:05:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:05:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:06:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:06:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:07:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:07:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:08:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:08:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:09:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:09:00.000Z"
           duration: 60
           cloud/instance-type: A1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:00:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:00:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:01:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:01:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:02:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:02:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:03:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:03:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:04:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:04:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:05:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:05:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:06:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:06:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:07:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:07:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:08:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:08:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
-        - timestamp: '2023-07-06T00:09:00.000Z'
+          cpu/utilization: "*"
+          memory/utilization: "*"
+        - timestamp: "2023-07-06T00:09:00.000Z"
           duration: 60
           cloud/instance-type: B1
           region: uk-west
           common-key: common-val
-          cpu/utilization: '*'
-          memory/utilization: '*'
+          cpu/utilization: "*"
+          memory/utilization: "*"

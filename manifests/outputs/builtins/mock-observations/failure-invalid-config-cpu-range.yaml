@@ -1,6 +1,6 @@
 name: mock-observation-demo
 description: >-
-  failure with `global-config->generators->randint->cpu/utilization->min` is
+  failure with `config->generators->randint->cpu/utilization->min` is
   greater than `max`
 tags: null
 initialize:
@@ -9,7 +9,7 @@ initialize:
       kind: plugin
       method: MockObservations
       path: builtin
-      global-config:
+      config:
         timestamp-from: 2023-07-06T00:00
         timestamp-to: 2023-07-06T00:10
         duration: 60
@@ -73,7 +73,7 @@ execution:
       - winston@3.11.0
       - zod@3.22.4
   error: >-
-    GlobalConfigError: Min value should not be greater than or equal to max
+    ConfigError: Min value should not be greater than or equal to max
     value of cpu/utilization
 tree:
   children:

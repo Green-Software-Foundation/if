@@ -12,10 +12,13 @@ import {
 
 import {validate} from '../../../common/util/validations';
 
-const {ProcessExecutionError} = ERRORS;
+import {STRINGS} from '../../config';
+
+const {ProcessExecutionError, ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
 
 export const Shell = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -40,11 +43,15 @@ export const Shell = (
    * Checks for required fields in input.
    */
   const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
     const schema = z.object({
       command: z.string(),
     });
 
-    return validate<z.infer<typeof schema>>(schema, globalConfig);
+    return validate<z.infer<typeof schema>>(schema, config);
   };
 
   /**

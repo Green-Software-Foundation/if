@@ -5,11 +5,17 @@ import {
   MultiplyConfig,
   PluginParametersMetadata,
 } from '@grnsft/if-core/types';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
 
+import {STRINGS} from '../../config';
+
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
+
 export const Multiply = (
-  globalConfig: MultiplyConfig,
+  config: MultiplyConfig,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -19,18 +25,19 @@ export const Multiply = (
   };
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    const globalConfigSchema = z.object({
+  const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
+    const configSchema = z.object({
       'input-parameters': z.array(z.string()),
       'output-parameter': z.string().min(1),
     });
 
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
+    return validate<z.infer<typeof configSchema>>(configSchema, config);
   };
 
   /**
@@ -60,7 +67,7 @@ export const Multiply = (
    * Calculate the product of each input parameter.
    */
   const execute = (inputs: PluginParams[]): PluginParams[] => {
-    const safeGlobalConfig = validateGlobalConfig();
+    const safeGlobalConfig = validateConfig();
     const inputParameters = safeGlobalConfig['input-parameters'];
     const outputParameter = safeGlobalConfig['output-parameter'];
 

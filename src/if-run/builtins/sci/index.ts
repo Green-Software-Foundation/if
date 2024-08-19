@@ -12,6 +12,9 @@ import {validate, allDefined} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
+
 const {MissingInputDataError} = ERRORS;
 const {
   MISSING_FUNCTIONAL_UNIT_CONFIG,
@@ -21,7 +24,7 @@ const {
 } = STRINGS;
 
 export const Sci = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -52,9 +55,13 @@ export const Sci = (
   };
 
   /**
-   * Validates node and gloabl configs.
+   * Validates config.
    */
-  const validateConfig = (config?: ConfigParams) => {
+  const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
     const schema = z
       .object({
         'functional-unit': z.string(),
@@ -72,7 +79,7 @@ export const Sci = (
   const execute = (inputs: PluginParams[]): PluginParams[] =>
     inputs.map((input, index) => {
       const safeInput = validateInput(input);
-      const functionalUnit = input[globalConfig['functional-unit']];
+      const functionalUnit = input[config['functional-unit']];
 
       if (functionalUnit === 0) {
         console.warn(ZERO_DIVISION(Sci.name, index));
@@ -93,7 +100,7 @@ export const Sci = (
    * Checks for fields in input.
    */
   const validateInput = (input: PluginParams) => {
-    const validatedConfig = validateConfig(globalConfig);
+    const validatedConfig = validateConfig();
 
     if (
       !(
@@ -110,7 +117,7 @@ export const Sci = (
         duration: z.number().gte(1),
       })
       .refine(allDefined, {
-        message: SCI_MISSING_FN_UNIT(globalConfig['functional-unit']),
+        message: SCI_MISSING_FN_UNIT(config['functional-unit']),
       });
 
     return validate<z.infer<typeof schema>>(schema, input);

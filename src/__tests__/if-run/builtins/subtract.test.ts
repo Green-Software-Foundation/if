@@ -6,7 +6,7 @@ const {InputValidationError} = ERRORS;
 
 describe('builtins/subtract: ', () => {
   describe('Subtract: ', () => {
-    const globalConfig = {
+    const config = {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
       'output-parameter': 'energy/diff',
     };
@@ -14,7 +14,7 @@ describe('builtins/subtract: ', () => {
       inputs: {},
       outputs: {},
     };
-    const subtract = Subtract(globalConfig, parametersMetadata);
+    const subtract = Subtract(config, parametersMetadata);
 
     describe('init: ', () => {
       it('successfully initalized.', () => {

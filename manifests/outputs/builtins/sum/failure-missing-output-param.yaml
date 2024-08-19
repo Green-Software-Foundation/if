@@ -1,12 +1,12 @@
 name: sum
-description: missing `output-parameter` in global-config
+description: missing `output-parameter` in config
 tags: null
 initialize:
   plugins:
     sum:
       method: Sum
       path: builtin
-      global-config:
+      config:
         input-parameters:
           - cpu/energy
           - network/energy

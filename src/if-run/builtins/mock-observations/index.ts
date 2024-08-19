@@ -7,16 +7,22 @@ import {
   ObservationParams,
   PluginParametersMetadata,
 } from '@grnsft/if-core/types';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
+
+import {STRINGS} from '../../config';
 
 import {CommonGenerator} from './helpers/common-generator';
 import {RandIntGenerator} from './helpers/rand-int-generator';
 
 import {Generator} from './interfaces/index';
 
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
+
 export const MockObservations = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -55,9 +61,13 @@ export const MockObservations = (
   };
 
   /**
-   * Validates global config parameters.
+   * Validates config parameters.
    */
-  const validateGlobalConfig = () => {
+  const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
     const schema = z.object({
       'timestamp-from': z.string(),
       'timestamp-to': z.string(),
@@ -69,7 +79,7 @@ export const MockObservations = (
       }),
     });
 
-    return validate<z.infer<typeof schema>>(schema, globalConfig);
+    return validate<z.infer<typeof schema>>(schema, config);
   };
 
   /**
@@ -82,7 +92,7 @@ export const MockObservations = (
       duration,
       generators,
       components,
-    } = validateGlobalConfig();
+    } = validateConfig();
     const convertedTimestampFrom = DateTime.fromISO(timestampFrom, {
       zone: 'UTC',
     });

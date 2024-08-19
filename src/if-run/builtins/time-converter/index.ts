@@ -13,11 +13,11 @@ import {STRINGS} from '../../config';
 
 import {TIME_UNITS_IN_SECONDS} from './config';
 
-const {GlobalConfigError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
 
 export const TimeConverter = (
-  globalConfig: ConfigParams,
+  config: ConfigParams,
   parametersMetadata: PluginParametersMetadata
 ): ExecutePlugin => {
   const metadata = {
@@ -27,7 +27,7 @@ export const TimeConverter = (
   };
 
   const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateGlobalConfig();
+    const safeGlobalConfig = validateConfig();
     const inputParameter = safeGlobalConfig['input-parameter'];
     const outputParameter = safeGlobalConfig['output-parameter'];
 
@@ -45,13 +45,13 @@ export const TimeConverter = (
    * Calculates the energy for given period.
    */
   const calculateEnergy = (input: PluginParams) => {
-    const originalTimeUnit = globalConfig['original-time-unit'];
+    const originalTimeUnit = config['original-time-unit'];
     const originalTimeUnitInSeoncds = TIME_UNITS_IN_SECONDS[originalTimeUnit];
-    const energyPerPeriod = input[globalConfig['input-parameter']];
+    const energyPerPeriod = input[config['input-parameter']];
     const newTimeUnit =
-      globalConfig['new-time-unit'] === 'duration'
+      config['new-time-unit'] === 'duration'
         ? input.duration
-        : TIME_UNITS_IN_SECONDS[globalConfig['new-time-unit']];
+        : TIME_UNITS_IN_SECONDS[config['new-time-unit']];
     const result = (energyPerPeriod / originalTimeUnitInSeoncds) * newTimeUnit;
 
     return Number(result.toFixed(6));
@@ -70,11 +70,11 @@ export const TimeConverter = (
   };
 
   /**
-   * Checks global config value are valid.
+   * Checks config value are valid.
    */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+  const validateConfig = () => {
+    if (!config) {
+      throw new ConfigError(MISSING_CONFIG);
     }
 
     const timeUnitsValues = Object.keys(TIME_UNITS_IN_SECONDS);
@@ -84,17 +84,14 @@ export const TimeConverter = (
     ] as const;
     const originalTimeUnitValues = timeUnitsValues as [string, ...string[]];
 
-    const globalConfigSchema = z.object({
+    const configSchema = z.object({
       'input-parameter': z.string(),
       'original-time-unit': z.enum(originalTimeUnitValues),
       'new-time-unit': z.enum(originalTimeUnitValuesWithDuration),
       'output-parameter': z.string().min(1),
     });
 
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
+    return validate<z.infer<typeof configSchema>>(configSchema, config);
   };
   return {
     metadata,
