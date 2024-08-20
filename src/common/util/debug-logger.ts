@@ -11,6 +11,7 @@ const logMessagesKeys: (keyof typeof STRINGS)[] = [
   'INITIALIZING_PLUGIN',
   'LOADING_PLUGIN_FROM_PATH',
   'COMPUTING_PIPELINE_FOR_NODE',
+  'COMPUTING_COMPONENT_PIPELINE',
   'REGROUPING',
   'OBSERVING',
   'MERGING_DEFAULTS_WITH_INPUT_DATA',
@@ -110,9 +111,12 @@ const debugLog = (level: LogLevel, args: any[], debugMode: boolean) => {
 
   const date = new Date().toISOString();
   const plugin = pluginNameManager.currentPluginName;
-  const formattedMessage = `${level}: ${date}: ${
-    plugin ? plugin + ': ' : ''
-  }${args.join(', ')}`;
+  const isExeption = args[0].includes('**Computing');
+  const message = `${level}: ${date}: ${plugin ? plugin + ': ' : ''}${args.join(
+    ', '
+  )}`;
+
+  const formattedMessage = isExeption ? args.join(', ') : message;
 
   if (debugMode) {
     switch (level) {
