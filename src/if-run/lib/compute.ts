@@ -18,6 +18,7 @@ const {
   EMPTY_PIPELINE,
   CONFIG_WARN,
   COMPUTING_PIPELINE_FOR_NODE,
+  COMPUTING_COMPONENT_PIPELINE,
   REGROUPING,
   OBSERVING,
 } = STRINGS;
@@ -27,6 +28,7 @@ const {
  */
 const traverse = async (children: any, params: ComputeParams) => {
   for (const child in children) {
+    console.debug(COMPUTING_COMPONENT_PIPELINE(child));
     await computeNode(children[child], params);
   }
 };
