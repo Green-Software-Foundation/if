@@ -109,7 +109,8 @@ ${error}`,
   MISSING_INPUT_DATA: (param: string) =>
     `${param} is missing from the input array, or has nullish value.`,
   CONFIG_WARN: (plugins: string, isMore: boolean) => {
-    const withoutPlugins = `You have included node-level config in your manifest. IF no longer supports node-level config. The manifest should be refactored to accept all its node-level config from config or input data.`;
+    const withoutPlugins =
+      'You have included node-level config in your manifest. IF no longer supports node-level config. The manifest should be refactored to accept all its node-level config from config or input data.';
     const withPlugins = `You have included node-level config in your manifest to support \`${plugins}\` plugin${
       isMore ? 's' : ''
     }. IF no longer supports node-level config. \`${plugins}\` plugin${
