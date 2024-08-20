@@ -94,6 +94,7 @@ describe('lib/compute: ', () => {
       .set('mock-observe-time-sync', mockObservePluginTimeSync())
       .set('time-sync', mockTimeSync()),
   };
+  const paramsExecuteWithAppend = {...paramsExecute, append: true};
 
   describe('compute(): ', () => {
     it('computes simple tree with execute plugin.', async () => {
@@ -117,7 +118,7 @@ describe('lib/compute: ', () => {
       expect(response.children.mockChild.outputs).toEqual(expectedResult);
     });
 
-    it('computes simple tree with regroup.', async () => {
+    it('computes simple tree with regroup on inputs only (no compute).', async () => {
       const tree = {
         children: {
           mockChild: {
@@ -146,7 +147,7 @@ describe('lib/compute: ', () => {
       expect(response.children.mockChild.children).toEqual(expectedResponse);
     });
 
-    it('computes tree with regroup and compute.', async () => {
+    it('computes simple tree with regroup, grouping inputs and outputs.', async () => {
       const tree = {
         children: {
           mockChild: {
@@ -304,31 +305,30 @@ describe('lib/compute: ', () => {
       expect(response.children.mockChild.outputs).toEqual(expectedResult);
     });
 
-    it('computes simple tree with append and execute plugin.', async () => {
+    it('computes simple tree with append, preserving existing outputs.', async () => {
       const tree = {
         children: {
           mockChild: {
-            pipeline: ['mock'],
+            pipeline: {compute: ['mock']},
             inputs: [
-              {timestamp: 'mock-timestamp-1', duration: 10},
-              {timestamp: 'mock-timestamp-2', duration: 10},
+              {timestamp: 'mock-timestamp-1', region: 'eu-west'},
+              {timestamp: 'mock-timestamp-2', region: 'eu-west'},
             ],
             outputs: [
               {
-                timestamp: 'mock-timestamp-1',
+                timestamp: 'mock-timestamp-preexisting-1',
                 newField: 'mock-newField',
-                duration: 10,
+                region: 'eu-west',
               },
               {
-                timestamp: 'mock-timestamp-2',
+                timestamp: 'mock-timestamp-preexisting-2',
                 newField: 'mock-newField',
-                duration: 10,
+                region: 'eu-west',
               },
             ],
           },
         },
       };
-      const paramsExecuteWithAppend = {...paramsExecute, append: true};
       const response = await compute(tree, paramsExecuteWithAppend);
       const expectedResult = [
         ...tree.children.mockChild.outputs,
@@ -337,6 +337,66 @@ describe('lib/compute: ', () => {
       expect(response.children.mockChild.outputs).toHaveLength(4);
       expect(response.children.mockChild.outputs).toEqual(expectedResult);
     });
+  });
+
+  it('computes simple tree with regroup and append, with existing outputs preserved and regrouped without re-computing.', async () => {
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {regroup: ['region'], compute: ['mock']},
+          inputs: [{timestamp: 'mock-timestamp-1', region: 'uk-east'}],
+          outputs: [
+            {timestamp: 'mock-timestamp-preexisting-1', region: 'uk-east'},
+          ],
+        },
+      },
+    };
+    const response = await compute(tree, paramsExecuteWithAppend);
+    const expectedResponse = {
+      'uk-east': {
+        inputs: [{region: 'uk-east', timestamp: 'mock-timestamp-1'}],
+        outputs: [
+          {
+            region: 'uk-east',
+            timestamp: 'mock-timestamp-preexisting-1',
+          },
+          {
+            region: 'uk-east',
+            timestamp: 'mock-timestamp-1',
+            newField: 'mock-newField',
+          },
+        ],
+      },
+    };
+    expect(response.children.mockChild.children).toEqual(expectedResponse);
+  });
+
+  it('computes simple tree with regroup and no append, with existing outputs that are removed.', async () => {
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {regroup: ['region'], compute: ['mock']},
+          inputs: [{timestamp: 'mock-timestamp-1', region: 'uk-east'}],
+          outputs: [
+            {timestamp: 'mock-timestamp-preexisting-1', region: 'uk-east'},
+          ],
+        },
+      },
+    };
+    const response = await compute(tree, paramsExecute);
+    const expectedResponse = {
+      'uk-east': {
+        inputs: [{region: 'uk-east', timestamp: 'mock-timestamp-1'}],
+        outputs: [
+          {
+            region: 'uk-east',
+            timestamp: 'mock-timestamp-1',
+            newField: 'mock-newField',
+          },
+        ],
+      },
+    };
+    expect(response.children.mockChild.children).toEqual(expectedResponse);
   });
 
   it('computes simple tree with observe plugin.', async () => {
