@@ -56,14 +56,13 @@ describe('builtins/interpolation: ', () => {
       it('returns result when `mapping` has valid data.', () => {
         const mapping = {
           'cpu/utilization': 'cpu/util',
-          'interpolation-result': 'result',
         };
         const config = {
           method: Method.LINEAR,
           x: [0, 10, 50, 100],
           y: [0.12, 0.32, 0.75, 1.02],
           'input-parameter': 'cpu/utilization',
-          'output-parameter': 'interpolation-result',
+          'output-parameter': 'result',
         };
         const inputs = [
           {
@@ -78,6 +77,37 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/util': 45,
+            result: 0.69625,
+          },
+        ];
+
+        expect(plugin.execute(inputs)).toEqual(outputs);
+      });
+
+      it('returns result when the `mapping` maps output parameter.', () => {
+        const mapping = {
+          'interpolation-result': 'result',
+        };
+        const config = {
+          method: Method.LINEAR,
+          x: [0, 10, 50, 100],
+          y: [0.12, 0.32, 0.75, 1.02],
+          'input-parameter': 'cpu/utilization',
+          'output-parameter': 'interpolation-result',
+        };
+        const inputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/utilization': 45,
+          },
+        ];
+        const plugin = Interpolation(config, parametersMetadata, mapping);
+        const outputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/utilization': 45,
             result: 0.69625,
           },
         ];

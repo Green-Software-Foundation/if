@@ -79,6 +79,34 @@ describe('builtins/copy: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('successfully executed when the `mapping` map output parameter.', () => {
+        expect.assertions(1);
+
+        const mapping = {
+          copy: 'result',
+        };
+
+        const copy = Copy(config, parametersMetadata, mapping);
+        const expectedResult = [
+          {
+            duration: 3600,
+            original: 'hello',
+            result: 'hello',
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = copy.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            original: 'hello',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('throws an error when config is not provided.', () => {
         const config = undefined;
         const copy = Copy(config!, parametersMetadata, {});

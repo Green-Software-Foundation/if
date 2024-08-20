@@ -59,11 +59,11 @@ describe('builtins/multiply: ', () => {
           'network/energy': 'energy-from-network',
           'memory/energy': 'energy-from-memory',
         };
-        const globalConfig = {
+        const config = {
           'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
           'output-parameter': 'energy',
         };
-        const multiply = Multiply(globalConfig, parametersMetadata, mapping);
+        const multiply = Multiply(config, parametersMetadata, mapping);
 
         const expectedResult = [
           {
@@ -83,6 +83,41 @@ describe('builtins/multiply: ', () => {
             'energy-from-cpu': 2,
             'energy-from-network': 2,
             'energy-from-memory': 2,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('successfully executes when the `mapping` maps output parameter.', async () => {
+        expect.assertions(1);
+        const mapping = {
+          energy: 'total/energy',
+        };
+        const config = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': 'energy',
+        };
+        const multiply = Multiply(config, parametersMetadata, mapping);
+
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 2,
+            'network/energy': 2,
+            'memory/energy': 2,
+            'total/energy': 8,
+          },
+        ];
+
+        const result = await multiply.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 2,
+            'network/energy': 2,
+            'memory/energy': 2,
           },
         ]);
 

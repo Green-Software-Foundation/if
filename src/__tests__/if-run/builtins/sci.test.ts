@@ -78,6 +78,38 @@ describe('builtins/sci:', () => {
         ]);
       });
 
+      it('successfully executes when the `mapping` maps output parameter.', async () => {
+        const mapping = {
+          sci: 'sci-result',
+        };
+        const sci = Sci(config, parametersMetadata, mapping);
+        const inputs = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 1,
+            'carbon-operational': 0.02,
+            'carbon-footprint': 5,
+            carbon: 5.02,
+            users: 100,
+          },
+        ];
+        const result = await sci.execute(inputs);
+
+        expect.assertions(1);
+
+        expect(result).toStrictEqual([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            'carbon-operational': 0.02,
+            'carbon-footprint': 5,
+            carbon: 5.02,
+            users: 100,
+            duration: 1,
+            'sci-result': 0.050199999999999995,
+          },
+        ]);
+      });
+
       it('returns the same result regardless of input duration.', async () => {
         const config = {'functional-unit': 'requests'};
         const sci = Sci(config, parametersMetadata, {});

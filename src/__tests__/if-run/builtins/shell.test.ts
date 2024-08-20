@@ -11,12 +11,12 @@ jest.mock('js-yaml');
 
 describe('builtins/shell', () => {
   describe('Shell', () => {
-    const globalConfig = {command: 'python3 /path/to/script.py'};
+    const config = {command: 'python3 /path/to/script.py'};
     const parametersMetadata = {
       inputs: {},
       outputs: {},
     };
-    const shell = Shell(globalConfig, parametersMetadata);
+    const shell = Shell(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -57,7 +57,7 @@ describe('builtins/shell', () => {
       });
 
       it('throws an error if validation fails.', async () => {
-        const shell = Shell({}, parametersMetadata);
+        const shell = Shell({}, parametersMetadata, {});
         const invalidInputs = [
           {duration: 3600, timestamp: '2022-01-01T00:00:00Z', command: 123},
         ];
@@ -76,7 +76,7 @@ describe('builtins/shell', () => {
       });
 
       it('throws an error when shell could not run command.', async () => {
-        const shell = Shell(globalConfig, parametersMetadata);
+        const shell = Shell(config, parametersMetadata, {});
         (spawnSync as jest.Mock).mockImplementation(() => {
           throw new InputValidationError('Could not run the command');
         });

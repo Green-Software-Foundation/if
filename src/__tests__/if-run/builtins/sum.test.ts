@@ -92,6 +92,43 @@ describe('builtins/sum: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('successfully executes when the `mapping` maps output parameter.', () => {
+        expect.assertions(1);
+
+        const mapping = {
+          energy: 'total/energy',
+        };
+        const config = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': 'energy',
+        };
+
+        const sum = Sum(config, parametersMetadata, mapping);
+
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 1,
+            'network/energy': 1,
+            'memory/energy': 1,
+            'total/energy': 3,
+          },
+        ];
+
+        const result = sum.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 1,
+            'network/energy': 1,
+            'memory/energy': 1,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('throws an error when config is not provided.', () => {
         const config = undefined;
         const sum = Sum(config!, parametersMetadata, {});

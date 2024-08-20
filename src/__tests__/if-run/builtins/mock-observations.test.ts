@@ -14,7 +14,7 @@ describe('builtins/mock-observations: ', () => {
   };
   describe('init: ', () => {
     it('successfully initalized.', () => {
-      const globalConfig = {
+      const config = {
         'timestamp-from': '2023-07-06T00:00',
         'timestamp-to': '2023-07-06T00:01',
         duration: 5,
@@ -30,11 +30,7 @@ describe('builtins/mock-observations: ', () => {
           },
         },
       };
-      const mockObservations = MockObservations(
-        globalConfig,
-        parametersMetadata,
-        {}
-      );
+      const mockObservations = MockObservations(config, parametersMetadata, {});
 
       expect(mockObservations).toHaveProperty('metadata');
       expect(mockObservations).toHaveProperty('execute');
@@ -256,7 +252,7 @@ describe('builtins/mock-observations: ', () => {
       expect.assertions(2);
 
       try {
-        const globalConfig = {
+        const config = {
           'timestamp-from': '2023-07-06T00:00',
           'timestamp-to': '2023-07-06T00:01',
           components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
@@ -272,7 +268,7 @@ describe('builtins/mock-observations: ', () => {
           },
         };
         const mockObservations = MockObservations(
-          globalConfig,
+          config,
           parametersMetadata,
           {}
         );
@@ -291,7 +287,7 @@ describe('builtins/mock-observations: ', () => {
       expect.assertions(2);
 
       try {
-        const globalConfig = {
+        const config = {
           'timestamp-from': '2023-07-06T00:00',
           duration: 5,
           components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
@@ -307,7 +303,7 @@ describe('builtins/mock-observations: ', () => {
           },
         };
         const mockObservations = MockObservations(
-          globalConfig,
+          config,
           parametersMetadata,
           {}
         );
@@ -326,7 +322,7 @@ describe('builtins/mock-observations: ', () => {
       expect.assertions(2);
 
       try {
-        const globalConfig = {
+        const config = {
           'timestamp-to': '2023-07-06T00:01',
           duration: 5,
           components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
@@ -342,7 +338,7 @@ describe('builtins/mock-observations: ', () => {
           },
         };
         const mockObservations = MockObservations(
-          globalConfig,
+          config,
           parametersMetadata,
           {}
         );

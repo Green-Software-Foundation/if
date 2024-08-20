@@ -119,6 +119,56 @@ describe('builtins/sci-embodied:', () => {
         ]);
       });
 
+      it('executes when the `mapping` maps output parameter.', async () => {
+        const mapping = {
+          'carbon-embodied': 'carbon',
+        };
+        const sciEmbodied = SciEmbodied(undefined, parametersMetadata, mapping);
+        const inputs = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 60 * 60 * 24 * 30,
+            'device/emissions-embodied': 200,
+            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
+            'resources-reserved': 1,
+            'resources-total': 1,
+          },
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 60 * 60 * 24 * 30 * 2,
+            'device/emissions-embodied': 200,
+            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
+            'resources-reserved': 1,
+            'resources-total': 1,
+          },
+        ];
+
+        const result = await sciEmbodied.execute(inputs);
+
+        expect.assertions(1);
+
+        expect(result).toStrictEqual([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 60 * 60 * 24 * 30,
+            'device/emissions-embodied': 200,
+            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
+            'resources-reserved': 1,
+            'resources-total': 1,
+            carbon: 4.10958904109589,
+          },
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 60 * 60 * 24 * 30 * 2,
+            'device/emissions-embodied': 200,
+            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
+            'resources-reserved': 1,
+            'resources-total': 1,
+            carbon: 4.10958904109589 * 2,
+          },
+        ]);
+      });
+
       it('returns a result when `vcpus-allocated` and `vcpus-total` are in the input.', async () => {
         const inputs = [
           {
