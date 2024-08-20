@@ -34,7 +34,7 @@ of the parameters of the inputs and outputs
 
 ### Mapping
 
-The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
 
 ```yaml
 coefficient:
@@ -63,7 +63,7 @@ output = input * coefficient
 To run the plugin from a Typescript app, you must first create an instance of `Coefficient`. Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
+const config = {
   'input-parameter': 'carbon',
   coefficient: 10,
   'output-parameter': 'carbon-product',
@@ -71,7 +71,7 @@ const globalConfig = {
 const parametersMetadata = {inputs: {}, outputs: {}};
 const mapping = {};
 
-const coeff = Coefficient(globalConfig, parametersMetadata, mapping);
+const coeff = Coefficient(config, parametersMetadata, mapping);
 const result = coeff.execute([
   {
     duration: 3600,

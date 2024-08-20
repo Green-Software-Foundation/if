@@ -34,7 +34,7 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
 
 ```yaml
 mock-observations:
@@ -57,7 +57,7 @@ The plugin's `config` section in the manifest file determines its behaviour.
 ### Typescript Usage
 
 ```typescript
-const globalConfig = {
+const config = {
   'timestamp-from': '2023-07-06T00:00',
   'timestamp-to': '2023-07-06T00:10',
   duration: 60,
@@ -72,11 +72,7 @@ const globalConfig = {
 };
 const parametersMetadata = {inputs: {}, outputs: {}};
 const mapping = {};
-const mockObservations = MockObservations(
-  globalConfig,
-  parametersMetadata,
-  mapping
-);
+const mockObservations = MockObservations(config, parametersMetadata, mapping);
 const result = await mockObservations.execute([]);
 ```
 

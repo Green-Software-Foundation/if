@@ -32,7 +32,7 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
 
 ```yaml
 sum:
@@ -61,7 +61,7 @@ output = input0 + input1 + input2 ... inputN
 To run the plugin, you must first create an instance of `Sum`. Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
+const config = {
   inputParameters: ['cpu/energy', 'network/energy'],
   outputParameter: 'energy',
 };
@@ -71,7 +71,7 @@ const = mapping {
   'network/energy': 'energy-from-network',
 };
 
-const sum = Sum(globalConfig, parametersMetadata, mapping);
+const sum = Sum(config, parametersMetadata, mapping);
 const result = sum.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',

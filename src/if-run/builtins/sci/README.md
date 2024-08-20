@@ -26,7 +26,7 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
 
 ```yaml
 sci:
@@ -61,10 +61,10 @@ To run the plugin, you must first create an instance of `Sci`. Then, you can cal
 
 ```typescript
 import {Sci} from 'builtins';
-const globalConfig = {'functional-unit': 'requests'}
+const config = {'functional-unit': 'requests'}
 const parametersMetadata = {inputs: {}, outputs: {}};
 const mapping = {};
-const sci = Sci(globalConfig, parametersMetadata, mapping);
+const sci = Sci(config, parametersMetadata, mapping);
 const results = await sci.execute(
   [
     {
