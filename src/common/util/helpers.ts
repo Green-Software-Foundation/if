@@ -112,3 +112,22 @@ export const mapConfigIfNeeded = (config: any, mapping: MappingParams) => {
 
   return result;
 };
+
+/**
+ * Maps the output parameter of the plugin if the `mapping` parameter is provided.
+ */
+export const mapOutputIfNeeded = (
+  output: PluginParams,
+  mapping: MappingParams
+) => {
+  if (!mapping) return output;
+
+  return Object.entries(output).reduce((acc, [key, value]) => {
+    if (key in mapping) {
+      acc[mapping[key]] = value;
+    } else {
+      acc[key] = value;
+    }
+    return acc;
+  }, {} as PluginParams);
+};
