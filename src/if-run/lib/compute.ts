@@ -13,7 +13,14 @@ import {STRINGS} from '../config/strings';
 import {ComputeParams, Node, PhasedPipeline} from '../types/compute';
 import {isExecute} from '../types/interface';
 
-const {MERGING_DEFAULTS_WITH_INPUT_DATA, EMPTY_PIPELINE, CONFIG_WARN} = STRINGS;
+const {
+  MERGING_DEFAULTS_WITH_INPUT_DATA,
+  EMPTY_PIPELINE,
+  CONFIG_WARN,
+  COMPUTING_PIPELINE_FOR_NODE,
+  REGROUPING,
+  OBSERVING,
+} = STRINGS;
 
 /**
  * Traverses all child nodes based on children grouping.
@@ -39,7 +46,7 @@ const mergeDefaults = (
     return response;
   }
 
-  console.debug(MERGING_DEFAULTS_WITH_INPUT_DATA);
+  console.debug(MERGING_DEFAULTS_WITH_INPUT_DATA, '\n');
 
   return defaults ? [defaults] : [];
 };
@@ -66,6 +73,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   const defaults = node.defaults || params.defaults;
   const noFlags = !params.observe && !params.regroup && !params.compute;
 
+  debugLogger.setExecutingPluginName();
   warnIfConfigProvided(node);
 
   if (node.children) {
@@ -97,6 +105,9 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   if ((noFlags || params.observe) && pipelineCopy.observe) {
     while (pipelineCopy.observe.length !== 0) {
       const pluginName = pipelineCopy.observe.shift() as string;
+      console.debug(OBSERVING(pluginName));
+      debugLogger.setExecutingPluginName(pluginName);
+
       const plugin = params.pluginStorage.get(pluginName);
       const nodeConfig = config && config[pluginName];
 
@@ -123,6 +134,9 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     delete node.inputs;
     delete node.outputs;
 
+    debugLogger.setExecutingPluginName();
+    console.debug(REGROUPING);
+
     return traverse(node.children, {
       ...params,
       pipeline: {
@@ -134,6 +148,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     });
   }
 
+  console.debug('\n');
+
   /**
    * If iteration is on compute plugin, then executes compute plugins and sets the outputs value.
    */
@@ -143,8 +159,13 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       const plugin = params.pluginStorage.get(pluginName);
       const nodeConfig = config && config[pluginName];
 
+      console.debug(COMPUTING_PIPELINE_FOR_NODE(pluginName));
+      debugLogger.setExecutingPluginName(pluginName);
+
       if (isExecute(plugin)) {
         inputStorage = await plugin.execute(inputStorage, nodeConfig);
+        debugLogger.setExecutingPluginName();
+
         node.outputs = inputStorage;
 
         if (params.context.explainer) {
@@ -154,10 +175,10 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
             pluginData: params.context.initialize!.plugins[pluginName],
           });
         }
-        debugLogger.setExecutingPluginName();
       }
     }
   }
+  console.debug('\n');
 };
 
 /**

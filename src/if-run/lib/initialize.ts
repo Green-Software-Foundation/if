@@ -56,7 +56,7 @@ const importAndVerifyModule = async (method: string, path: string) => {
  * Imports module, then checks if it's a valid plugin.
  */
 const handModule = (method: string, pluginPath: string) => {
-  console.debug(LOADING_PLUGIN_FROM_PATH(method, pluginPath));
+  console.debug(LOADING_PLUGIN_FROM_PATH(method, pluginPath), '\n');
 
   if (pluginPath === 'builtin') {
     pluginPath = path.normalize(`${__dirname}/../builtins`);
@@ -88,8 +88,6 @@ const initPlugin = async (
     'parameter-metadata': parameterMetadata,
   } = initPluginParams!;
 
-  console.debug(INITIALIZING_PLUGIN(method));
-
   if (!method) {
     throw new MissingPluginMethodError(MISSING_METHOD);
   }
@@ -109,11 +107,13 @@ const initPlugin = async (
 export const initialize = async (
   context: Context
 ): Promise<PluginStorageInterface> => {
-  console.debug(INITIALIZING_PLUGINS);
+  console.debug(INITIALIZING_PLUGINS, '\n');
   const {plugins} = context.initialize;
   const storage = pluginStorage();
 
   for await (const pluginName of Object.keys(plugins)) {
+    console.debug(INITIALIZING_PLUGIN(pluginName));
+
     const plugin = await initPlugin(plugins[pluginName]);
     const parameters = {...plugin.metadata.inputs, ...plugin.metadata.outputs};
 

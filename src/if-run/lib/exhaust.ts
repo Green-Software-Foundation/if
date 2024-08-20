@@ -20,7 +20,7 @@ export const exhaust = async (
   context: Context,
   outputOptions: Options
 ) => {
-  console.debug(PREPARING_OUTPUT_DATA);
+  console.debug(PREPARING_OUTPUT_DATA(), '\n');
 
   if (!outputOptions.noOutput && !outputOptions.outputPath) {
     ExportLog().execute(tree, context);

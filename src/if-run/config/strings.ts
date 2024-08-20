@@ -46,15 +46,22 @@ Note that for the '--output' option you also need to define the output type in y
   CHECKING_AGGREGATION_METHOD: (unitName: string) =>
     `Checking aggregation method for ${unitName}`,
   INITIALIZING_PLUGINS: 'Initializing plugins',
-  INITIALIZING_PLUGIN: (pluginName: string) => `Initializing ${pluginName}`,
+  INITIALIZING_PLUGIN: (pluginName: string) =>
+    `Initializing \`${pluginName}\` instance`,
   LOADING_PLUGIN_FROM_PATH: (pluginName: string, path: string) =>
     `Loading ${pluginName} from ${path}`,
   COMPUTING_PIPELINE_FOR_NODE: (nodeName: string) =>
-    `Computing pipeline for \`${nodeName}\``,
+    `Running compute pipeline: \`${nodeName}\` plugin`,
+  REGROUPING: 'Regrouping',
+  OBSERVING: (nodeName: string) =>
+    `Running observe pipeline: \`${nodeName}\` plugin`,
   MERGING_DEFAULTS_WITH_INPUT_DATA: 'Merging defaults with input data',
   AGGREGATING_OUTPUTS: 'Aggregating outputs',
   AGGREGATING_NODE: (nodeName: string) => `Aggregating node ${nodeName}`,
-  PREPARING_OUTPUT_DATA: 'Preparing output data',
+  PREPARING_OUTPUT_DATA: () => {
+    console.debug('\n');
+    return 'Preparing output data';
+  },
   EXPORTING_TO_YAML_FILE: (savepath: string) =>
     `Exporting to yaml file: ${savepath}`,
   EMPTY_PIPELINE: `You're using an old style manifest. Please update for phased execution. More information can be found here: 
