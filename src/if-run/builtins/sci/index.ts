@@ -10,7 +10,10 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate, allDefined} from '../../../common/util/validations';
-import {mapInputIfNeeded} from '../../../common/util/helpers';
+import {
+  mapInputIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -94,10 +97,12 @@ export const Sci = (
         };
       }
 
-      return {
+      const result = {
         ...input,
         sci: safeInput['carbon'] / functionalUnit,
       };
+
+      return mapOutputIfNeeded(result, mapping);
     });
   };
   /**

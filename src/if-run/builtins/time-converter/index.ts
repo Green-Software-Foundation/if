@@ -13,7 +13,10 @@ import {validate} from '../../../common/util/validations';
 import {STRINGS} from '../../config';
 
 import {TIME_UNITS_IN_SECONDS} from './config';
-import {mapConfigIfNeeded} from '../../../common/util/helpers';
+import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 const {ConfigError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
@@ -37,10 +40,12 @@ export const TimeConverter = (
     return inputs.map(input => {
       validateInput(input, inputParameter);
 
-      return {
+      const result = {
         ...input,
         [outputParameter]: calculateEnergy(input),
       };
+
+      return mapOutputIfNeeded(result, mapping);
     });
   };
 
@@ -80,7 +85,7 @@ export const TimeConverter = (
       throw new ConfigError(MISSING_CONFIG);
     }
 
-    const mappedConfig = mapConfigIfNeeded(config, mapping);
+    config = mapConfigIfNeeded(config, mapping);
     const timeUnitsValues = Object.keys(TIME_UNITS_IN_SECONDS);
     const originalTimeUnitValuesWithDuration = [
       'duration',
@@ -95,7 +100,7 @@ export const TimeConverter = (
       'output-parameter': z.string().min(1),
     });
 
-    return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
+    return validate<z.infer<typeof configSchema>>(configSchema, config);
   };
   return {
     metadata,

@@ -11,7 +11,10 @@ import {
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
-import {mapConfigIfNeeded} from '../../../common/util/helpers';
+import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -48,19 +51,24 @@ export const MockObservations = (
 
     const defaults = inputs && inputs[0];
 
-    return Object.entries(components).reduce((acc: PluginParams[], item) => {
-      const component = item[1];
-      timeBuckets.forEach(timeBucket => {
-        const observation = createObservation(
-          {duration, component, timeBucket, generators},
-          generatorToHistory
-        );
+    const result = Object.entries(components).reduce(
+      (acc: PluginParams[], item) => {
+        const component = item[1];
+        timeBuckets.forEach(timeBucket => {
+          const observation = createObservation(
+            {duration, component, timeBucket, generators},
+            generatorToHistory
+          );
 
-        acc.push(Object.assign({}, defaults, observation));
-      });
+          acc.push(Object.assign({}, defaults, observation));
+        });
 
-      return acc;
-    }, []);
+        return acc;
+      },
+      []
+    );
+
+    return result.map(output => mapOutputIfNeeded(output, mapping));
   };
 
   /**

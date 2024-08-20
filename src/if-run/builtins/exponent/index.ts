@@ -9,7 +9,10 @@ import {
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
-import {mapConfigIfNeeded} from '../../../common/util/helpers';
+import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -71,10 +74,12 @@ export const Exponent = (
     return inputs.map(input => {
       validateSingleInput(input, inputParameter);
 
-      return {
+      const result = {
         ...input,
         [outputParameter]: calculateExponent(input, inputParameter, exponent),
       };
+
+      return mapOutputIfNeeded(result, mapping);
     });
   };
 

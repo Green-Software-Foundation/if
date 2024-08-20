@@ -11,7 +11,10 @@ import {
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
-import {mapConfigIfNeeded} from '../../../common/util/helpers';
+import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 const {MISSING_CONFIG} = STRINGS;
 const {ConfigError} = ERRORS;
@@ -91,10 +94,12 @@ export const Copy = (
         }
       }
 
-      return {
+      const result = {
         ...safeInput, // need to return or what you provide won't be outputted, don't be evil!
         [to]: outputValue,
       };
+
+      return mapOutputIfNeeded(result, mapping);
     });
   };
 

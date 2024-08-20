@@ -11,7 +11,10 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapConfigIfNeeded} from '../../../common/util/helpers';
+import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -38,12 +41,16 @@ export const Interpolation = (
 
     return inputs.map((input, index) => {
       const safeInput = validateInput(input, index);
-      const result = calculateResult(validatedConfig, safeInput);
 
-      return {
+      const result = {
         ...input,
-        [validatedConfig['output-parameter']]: result,
+        [validatedConfig['output-parameter']]: calculateResult(
+          validatedConfig,
+          safeInput
+        ),
       };
+
+      return mapOutputIfNeeded(result, mapping);
     });
   };
 
