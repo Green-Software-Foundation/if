@@ -11,7 +11,10 @@ import {
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
-import {mapConfigIfNeeded} from '../../../common/util/helpers';
+import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 const {ConfigError, MissingInputDataError} = ERRORS;
 const {MISSING_CONFIG, MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
@@ -41,10 +44,12 @@ export const Divide = (
         validateSingleInput(input, {numerator, denominator})
       );
 
-      return {
+      const result = {
         ...input,
         [output]: calculateDivide(safeInput, index, {numerator, denominator}),
       };
+
+      return mapOutputIfNeeded(result, mapping);
     });
   };
 

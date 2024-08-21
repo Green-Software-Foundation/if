@@ -53,11 +53,11 @@ The specific return types depend on the plugin being invoked. Typically, we woul
 To run the plugin, you must first create an instance of `Shell` and call its `execute()` to run the external plugin.
 
 ```typescript
-const globalConfig = {
+const config = {
   command: '/usr/local/bin/sampler',
 };
 const parametersMetadata = {inputs: {}, outputs: {}};
-const output = Shell(globalConfig, parametersMetadata);
+const output = Shell(config, parametersMetadata);
 const result = await output.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',

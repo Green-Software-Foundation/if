@@ -10,7 +10,10 @@ import {
 import {validate, allDefined} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
-import {mapInputIfNeeded} from '../../../common/util/helpers';
+import {
+  mapInputIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 const {SCI_EMBODIED_ERROR} = STRINGS;
 
@@ -83,10 +86,12 @@ export const SciEmbodied = (
       const mappedInput = mapInputIfNeeded(input, mapping);
       const safeInput = validateInput(mappedInput);
 
-      return {
+      const result = {
         ...input,
         'carbon-embodied': calculateEmbodiedCarbon(safeInput),
       };
+
+      return mapOutputIfNeeded(result, mapping);
     });
 
   /**

@@ -124,7 +124,7 @@ describe('builtins/CSVLookup: ', () => {
 
       it('successfully executes when `mapping` has valid data.', async () => {
         expect.assertions(1);
-        const globalConfig = {
+        const config = {
           filepath: './file.csv',
           query: {
             'cpu-cores-available': 'cpu/available',
@@ -137,7 +137,7 @@ describe('builtins/CSVLookup: ', () => {
         const mapping = {
           'cpu/utilized': 'cpu/util',
         };
-        const csvLookup = CSVLookup(globalConfig, parameterMetadata, mapping);
+        const csvLookup = CSVLookup(config, parameterMetadata, mapping);
 
         const result = await csvLookup.execute([
           {
@@ -154,6 +154,44 @@ describe('builtins/CSVLookup: ', () => {
             'cpu/util': 16,
             'cpu/manufacturer': 'AWS',
             tdp: 150,
+          },
+        ];
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('successfully executes when the `mapping` map output parameter.', async () => {
+        expect.assertions(1);
+        const config = {
+          filepath: './file.csv',
+          query: {
+            'cpu-cores-available': 'cpu/available',
+            'cpu-cores-utilized': 'cpu/utilized',
+            'cpu-manufacturer': 'cpu/manufacturer',
+          },
+          output: ['cpu-tdp', 'tdp'],
+        };
+        const parameterMetadata = {inputs: {}, outputs: {}};
+        const mapping = {
+          tdp: 'tdp-finder',
+        };
+        const csvLookup = CSVLookup(config, parameterMetadata, mapping);
+
+        const result = await csvLookup.execute([
+          {
+            timestamp: '2024-03-01',
+            'cpu/available': 16,
+            'cpu/utilized': 16,
+            'cpu/manufacturer': 'AWS',
+          },
+        ]);
+        const expectedResult = [
+          {
+            timestamp: '2024-03-01',
+            'cpu/available': 16,
+            'cpu/utilized': 16,
+            'cpu/manufacturer': 'AWS',
+            'tdp-finder': 150,
           },
         ];
 

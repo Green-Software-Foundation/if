@@ -9,7 +9,10 @@ import {
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
-import {mapConfigIfNeeded} from '../../../common/util/helpers';
+import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -79,10 +82,12 @@ export const Multiply = (
     return inputs.map(input => {
       validateSingleInput(input, inputParameters);
 
-      return {
+      const result = {
         ...input,
         [outputParameter]: calculateProduct(input, inputParameters),
       };
+
+      return mapOutputIfNeeded(result, mapping);
     });
   };
 

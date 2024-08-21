@@ -188,7 +188,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
  */
 const warnIfConfigProvided = (node: any) => {
   if ('config' in node) {
-    const plugins = Object.keys(node.config);
+    const plugins = Object.keys(node.config || {});
     const joinedPlugins = plugins.join(', ');
     const isMore = plugins.length > 1;
 

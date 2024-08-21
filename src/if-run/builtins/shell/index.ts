@@ -8,9 +8,11 @@ import {
   PluginParams,
   ConfigParams,
   PluginParametersMetadata,
+  MappingParams,
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
+import {mapOutputIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -19,7 +21,8 @@ const {MISSING_CONFIG} = STRINGS;
 
 export const Shell = (
   config: ConfigParams,
-  parametersMetadata: PluginParametersMetadata
+  parametersMetadata: PluginParametersMetadata,
+  mapping: MappingParams
 ): ExecutePlugin => {
   const metadata = {
     kind: 'execute',
@@ -35,8 +38,9 @@ export const Shell = (
     const command = inputWithConfig.command;
     const inputAsString: string = dump(inputs, {indent: 2});
     const results = runModelInShell(inputAsString, command);
+    const outputs = results?.outputs?.flat() as PluginParams[];
 
-    return results?.outputs?.flat() as PluginParams[];
+    return outputs.map(output => mapOutputIfNeeded(output, mapping));
   };
 
   /**

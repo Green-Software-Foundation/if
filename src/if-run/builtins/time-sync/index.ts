@@ -18,7 +18,10 @@ import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 import {getAggregationMethod} from '../../lib/aggregate';
-import {mapInputIfNeeded} from '../../../common/util/helpers';
+import {
+  mapInputIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 Settings.defaultZone = 'utc';
 
@@ -155,7 +158,8 @@ export const TimeSync = (
       parseDate(a.timestamp).diff(parseDate(b.timestamp)).as('seconds')
     );
 
-    return resampleInputs(sortedInputs, timeParams) as PluginParams[];
+    const outputs = resampleInputs(sortedInputs, timeParams) as PluginParams[];
+    return outputs.map(output => mapOutputIfNeeded(output, mapping));
   };
 
   /**

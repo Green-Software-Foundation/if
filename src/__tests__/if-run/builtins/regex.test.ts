@@ -80,7 +80,7 @@ describe('builtins/regex: ', () => {
       });
 
       it('successfully applies regex when `mapping` has valid data.', async () => {
-        const globalConfig = {
+        const config = {
           parameter: 'cloud/instance-type',
           match: '/(?<=_)[^_]+?(?=_|$)/g',
           output: 'cloud/instance-type',
@@ -89,7 +89,7 @@ describe('builtins/regex: ', () => {
         const mapping = {
           'cloud/instance-type': 'instance-type',
         };
-        const regex = Regex(globalConfig, parametersMetadata, mapping);
+        const regex = Regex(config, parametersMetadata, mapping);
 
         const expectedResult = [
           {
@@ -104,6 +104,38 @@ describe('builtins/regex: ', () => {
             timestamp: '2023-08-06T00:00',
             duration: 3600,
             'instance-type': 'Standard_DS1_v2',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('successfully applies regex when the `mapping` maps output parameter.', async () => {
+        const config = {
+          parameter: 'cloud/instance-type',
+          match: '/(?<=_)[^_]+?(?=_|$)/g',
+          output: 'cloud/instance-name',
+        };
+
+        const mapping = {
+          'cloud/instance-name': 'instance-name',
+        };
+        const regex = Regex(config, parametersMetadata, mapping);
+
+        const expectedResult = [
+          {
+            timestamp: '2023-08-06T00:00',
+            duration: 3600,
+            'cloud/instance-type': 'Standard_DS1_v2',
+            'instance-name': 'DS1 v2',
+          },
+        ];
+
+        const result = await regex.execute([
+          {
+            timestamp: '2023-08-06T00:00',
+            duration: 3600,
+            'cloud/instance-type': 'Standard_DS1_v2',
           },
         ]);
 

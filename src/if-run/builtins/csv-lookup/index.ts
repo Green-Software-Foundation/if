@@ -15,7 +15,10 @@ import {
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
-import {mapConfigIfNeeded} from '../../../common/util/helpers';
+import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 const {
   FILE_FETCH_FAILED,
@@ -221,10 +224,12 @@ export const CSVLookup = (
         throw new QueryDataNotFoundError(NO_QUERY_DATA);
       }
 
-      return {
+      const result = {
         ...input,
         ...filterOutput(relatedData, {output, query}),
       };
+
+      return mapOutputIfNeeded(result, mapping);
     });
   };
 

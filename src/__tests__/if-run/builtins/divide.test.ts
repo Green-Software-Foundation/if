@@ -79,6 +79,34 @@ describe('builtins/divide: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('successfully executes when the `mapping` map output parameter.', async () => {
+        expect.assertions(1);
+        const mapping = {
+          'cpu/number-cores': 'cpu-number-cores',
+        };
+
+        const divide = Divide(config, parametersMetadata, mapping);
+
+        const expectedResult = [
+          {
+            duration: 3600,
+            'vcpus-allocated': 24,
+            'cpu-number-cores': 12,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = await divide.execute([
+          {
+            duration: 3600,
+            'vcpus-allocated': 24,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('returns a result when `denominator` is provded in input.', async () => {
         expect.assertions(1);
         const config = {

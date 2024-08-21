@@ -52,6 +52,68 @@ describe('builtins/time-converter: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('successfully executes when the `mapping` is not empty object.', () => {
+        expect.assertions(1);
+
+        const mapping = {
+          'energy-per-year': 'energy/year',
+        };
+        const timeConverter = TimeConverter(
+          config,
+          parametersMetadata,
+          mapping
+        );
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy/year': 10000,
+            'energy-per-duration': 1.140795,
+          },
+        ];
+
+        const result = timeConverter.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy/year': 10000,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('successfully executes when the `mapping` maps output parameter.', () => {
+        expect.assertions(1);
+
+        const mapping = {
+          'energy-per-duration': 'energy/duration',
+        };
+        const timeConverter = TimeConverter(
+          config,
+          parametersMetadata,
+          mapping
+        );
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy-per-year': 10000,
+            'energy/duration': 1.140795,
+          },
+        ];
+
+        const result = timeConverter.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy-per-year': 10000,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('throws an error when config is not provided.', () => {
         const config = undefined;
         const timeConverter = TimeConverter(config!, parametersMetadata, {});

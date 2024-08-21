@@ -56,7 +56,7 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ### Mapping
 
-The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. The structure of the `mapping` block is:
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
 
 ```yaml
 copy-param:
@@ -81,7 +81,7 @@ To run the plugin, you must first create an instance of `Copy`. Then, you can ca
 ```typescript
 import {Copy} from '.';
 
-const globalConfig = {
+const config = {
   'keep-existing': true,
   from: 'from-param',
   to: 'to-param',
@@ -89,7 +89,7 @@ const globalConfig = {
 const parametersMetadata = {inputs: {}, outputs: {}};
 const mapping = {};
 
-const plugin = Copy(globalConfig, parametersMetadata, mapping);
+const plugin = Copy(config, parametersMetadata, mapping);
 
 const result = plugin.execute([
   {

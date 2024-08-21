@@ -9,7 +9,10 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapConfigIfNeeded} from '../../../common/util/helpers';
+import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -71,10 +74,12 @@ export const Regex = (
         validateSingleInput(input, parameter)
       );
 
-      return {
+      const result = {
         ...input,
         [output]: extractMatching(safeInput, parameter, match),
       };
+
+      return mapOutputIfNeeded(result, mapping);
     });
   };
 

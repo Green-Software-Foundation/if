@@ -83,6 +83,36 @@ describe('builtins/coefficient: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
+      it('succcessfully executes when the mapping map output parameter.', () => {
+        const mapping = {
+          'carbon-product': 'carbon-result',
+        };
+
+        const coefficient = Coefficient(config, parametersMetadata, mapping);
+        expect.assertions(1);
+
+        const expectedResult = [
+          {
+            duration: 3600,
+            carbon: 3,
+            'carbon-result': 9,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = coefficient.execute([
+          {
+            duration: 3600,
+            carbon: 3,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ]);
+
+        expect.assertions(1);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
       it('throws an error when global config is not provided.', () => {
         const config = undefined;
         const coefficient = Coefficient(config!, parametersMetadata, {});

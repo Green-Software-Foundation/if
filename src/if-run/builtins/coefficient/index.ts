@@ -9,7 +9,10 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapConfigIfNeeded} from '../../../common/util/helpers';
+import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 
@@ -39,10 +42,12 @@ export const Coefficient = (
     return inputs.map(input => {
       validateSingleInput(input, inputParameter);
 
-      return {
+      const result = {
         ...input,
         [outputParameter]: calculateProduct(input, inputParameter, coefficient),
       };
+
+      return mapOutputIfNeeded(result, mapping);
     });
   };
 
