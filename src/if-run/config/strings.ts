@@ -10,6 +10,8 @@ export const STRINGS = {
     `Provided module \`${path}\` is invalid or not found. ${error ?? ''}
 `,
   INVALID_TIME_NORMALIZATION: 'Start time or end time is missing.',
+  INVALID_UPSAMPLING_RESOLUTION:
+    'Upsampling resolution does not adhere to all constraints',
   UNEXPECTED_TIME_CONFIG:
     'Unexpected node-level config provided for time-sync plugin.',
   INVALID_TIME_INTERVAL: 'Interval is missing.',

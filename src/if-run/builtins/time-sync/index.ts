@@ -11,12 +11,12 @@ import {
   ExecutePlugin,
   PluginParams,
   PaddingReceipt,
-  TimeNormalizerConfig,
-  TimeParams,
   PluginParametersMetadata,
   ParameterMetadata,
   MappingParams,
 } from '@grnsft/if-core/types';
+
+import {TimeParams, TimeNormalizerConfig} from '../../types/time-sync';
 
 import {validate} from '../../../common/util/validations';
 
@@ -33,6 +33,7 @@ const {
 } = ERRORS;
 
 const {
+  INVALID_UPSAMPLING_RESOLUTION,
   INVALID_TIME_NORMALIZATION,
   INVALID_OBSERVATION_OVERLAP,
   AVOIDING_PADDING_BY_EDGES,
@@ -98,11 +99,16 @@ export const TimeSync = (
       endTime: DateTime.fromISO(validatedConfig['end-time']),
       interval: validatedConfig.interval,
       allowPadding: validatedConfig['allow-padding'],
+      upsamplingResolution: validatedConfig['upsampling-resolution']
+        ? validatedConfig['upsampling-resolution']
+        : 1,
     };
-
+    validateIntervalForResample(
+      timeParams.interval,
+      timeParams.upsamplingResolution
+    );
     const pad = checkForPadding(inputs, timeParams);
     validatePadding(pad, timeParams);
-
     const paddedInputs = padInputs(inputs, pad, timeParams);
 
     const flattenInputs = paddedInputs.reduce(
@@ -137,20 +143,33 @@ export const TimeSync = (
             .diff(compareableTime)
             .as('seconds');
 
-          /** Checks if there is gap in timeline. */
+          validateIntervalForResample(
+            input.duration,
+            timeParams.upsamplingResolution
+          );
+
           if (timelineGapSize > 1) {
+            /** Checks if there is gap in timeline. */
             acc.push(
               ...getZeroishInputPerSecondBetweenRange(
-                compareableTime,
-                currentMoment,
+                {
+                  startDate: compareableTime,
+                  endDate: currentMoment,
+                  timeStep: timeParams.upsamplingResolution,
+                },
                 safeInput
               )
             );
           }
         }
+
         /** Break down current observation. */
-        for (let i = 0; i < safeInput.duration; i++) {
-          const normalizedInput = breakDownInput(safeInput, i);
+        for (
+          let i = 0;
+          i <= safeInput.duration - timeParams.upsamplingResolution;
+          i += timeParams.upsamplingResolution
+        ) {
+          const normalizedInput = breakDownInput(safeInput, i, timeParams);
 
           acc.push(normalizedInput);
         }
@@ -163,9 +182,17 @@ export const TimeSync = (
     const sortedInputs = flattenInputs.sort((a, b) =>
       parseDate(a.timestamp).diff(parseDate(b.timestamp)).as('seconds')
     );
-
     const outputs = resampleInputs(sortedInputs, timeParams) as PluginParams[];
     return outputs.map(output => mapOutputIfNeeded(output, mapping));
+  };
+
+  /**
+   * Checks if a given duration is compatible with a given timeStep. If not, throws an error
+   */
+  const validateIntervalForResample = (duration: number, timeStep: number) => {
+    if (duration % timeStep !== 0) {
+      throw new ConfigError(INVALID_UPSAMPLING_RESOLUTION);
+    }
   };
 
   /**
@@ -224,6 +251,7 @@ export const TimeSync = (
         'end-time': z.string().datetime(),
         interval: z.number(),
         'allow-padding': z.boolean(),
+        'upsampling-resolution': z.number().min(1).optional(),
       })
       .refine(data => data['start-time'] < data['end-time'], {
         message: START_LOWER_END,
@@ -235,8 +263,14 @@ export const TimeSync = (
   /**
    * Calculates minimal factor.
    */
-  const convertPerInterval = (value: number, duration: number) =>
-    value / duration;
+  const convertPerInterval = (
+    value: number,
+    duration: number,
+    timeStep: number
+  ) => {
+    const samplesNumber = duration / timeStep;
+    return value / samplesNumber;
+  };
 
   /**
    * Normalize time per given second.
@@ -253,9 +287,14 @@ export const TimeSync = (
   /**
    * Breaks down input per minimal time unit.
    */
-  const breakDownInput = (input: PluginParams, i: number) => {
+  const breakDownInput = (
+    input: PluginParams,
+    i: number,
+    params: TimeParams
+  ) => {
     const evaluatedInput = evaluateInput(input);
     const metrics = Object.keys(evaluatedInput);
+    const timeStep = params.upsamplingResolution;
 
     return metrics.reduce((acc, metric) => {
       const aggregationParams = getAggregationInfoFor(metric);
@@ -267,9 +306,8 @@ export const TimeSync = (
         return acc;
       }
 
-      /** @todo use user defined resolution later */
       if (metric === 'duration') {
-        acc[metric] = 1;
+        acc[metric] = timeStep;
 
         return acc;
       }
@@ -284,7 +322,8 @@ export const TimeSync = (
         aggregationParams.time === 'sum'
           ? convertPerInterval(
               evaluatedInput[metric],
-              evaluatedInput['duration']
+              evaluatedInput['duration'],
+              timeStep
             )
           : evaluatedInput[metric];
 
@@ -297,10 +336,10 @@ export const TimeSync = (
    */
   const fillWithZeroishInput = (
     input: PluginParams,
-    missingTimestamp: DateTimeMaybeValid
+    missingTimestamp: DateTimeMaybeValid,
+    timeStep: number
   ) => {
     const metrics = Object.keys(input);
-
     return metrics.reduce((acc, metric) => {
       if (metric === 'timestamp') {
         acc[metric] = missingTimestamp.startOf('second').toUTC().toISO() ?? '';
@@ -308,9 +347,8 @@ export const TimeSync = (
         return acc;
       }
 
-      /** @todo later will be changed to user defined interval */
       if (metric === 'duration') {
-        acc[metric] = 1;
+        acc[metric] = timeStep;
 
         return acc;
       }
@@ -381,7 +419,6 @@ export const TimeSync = (
       .plus({second: eval(lastInput.duration)})
       .diff(params.endTime)
       .as('seconds');
-
     return {
       start: startDiffInSeconds > 0,
       end: endDiffInSeconds < 0,
@@ -452,10 +489,11 @@ export const TimeSync = (
    */
   const resampleInputs = (inputs: PluginParams[], params: TimeParams) =>
     inputs.reduce((acc: PluginParams[], _input, index, inputs) => {
-      const frameStart = index * params.interval;
-      const frameEnd = (index + 1) * params.interval;
+      const frameStart =
+        (index * params.interval) / params.upsamplingResolution;
+      const frameEnd =
+        ((index + 1) * params.interval) / params.upsamplingResolution;
       const inputsFrame = inputs.slice(frameStart, frameEnd);
-
       const resampledInput = resampleInputFrame(inputsFrame);
 
       /** Checks if resampled input is not empty, then includes in result. */
@@ -480,8 +518,11 @@ export const TimeSync = (
     if (start) {
       paddedFromBeginning.push(
         ...getZeroishInputPerSecondBetweenRange(
-          params.startTime,
-          parseDate(inputs[0].timestamp),
+          {
+            startDate: params.startTime,
+            endDate: parseDate(inputs[0].timestamp),
+            timeStep: params.upsamplingResolution,
+          },
           inputs[0]
         )
       );
@@ -496,8 +537,11 @@ export const TimeSync = (
       });
       paddedArray.push(
         ...getZeroishInputPerSecondBetweenRange(
-          lastInputEnd,
-          params.endTime,
+          {
+            startDate: lastInputEnd,
+            endDate: params.endTime,
+            timeStep: params.upsamplingResolution,
+          },
           lastInput
         )
       );
@@ -510,21 +554,25 @@ export const TimeSync = (
    * Brakes down the given range by 1 second, and generates zeroish values.
    */
   const getZeroishInputPerSecondBetweenRange = (
-    startDate: DateTimeMaybeValid,
-    endDate: DateTimeMaybeValid,
-    templateInput: PluginParams
+    params: PluginParams,
+    input: PluginParams
   ) => {
     const array: PluginParams[] = [];
-    const dateRange = Interval.fromDateTimes(startDate, endDate);
+    validateIntervalForResample(
+      params.endDate.diff(params.startDate).as('seconds'),
+      params.timeStep
+    );
+    const dateRange = Interval.fromDateTimes(params.startDate, params.endDate);
 
-    for (const interval of dateRange.splitBy({second: 1})) {
+    for (const interval of dateRange.splitBy({second: params.timeStep})) {
       array.push(
         fillWithZeroishInput(
-          templateInput,
+          input,
           // as far as I can tell, start will never be null
           // because if we pass an invalid start/endDate to
           // Interval, we get a zero length array as the range
-          interval.start || DateTime.invalid('not expected - start is null')
+          interval.start || DateTime.invalid('not expected - start is null'),
+          params.timeStep
         )
       );
     }

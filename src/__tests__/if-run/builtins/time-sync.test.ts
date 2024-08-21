@@ -19,6 +19,7 @@ const {
 } = ERRORS;
 
 const {
+  INVALID_UPSAMPLING_RESOLUTION,
   INVALID_OBSERVATION_OVERLAP,
   INVALID_TIME_NORMALIZATION,
   AVOIDING_PADDING_BY_EDGES,
@@ -34,17 +35,17 @@ jest.mock('luxon', () => {
       fromDateTimes: jest.fn((start, end) => ({
         start,
         end,
-        splitBy: jest.fn(() => {
+        splitBy: jest.fn(duration => {
           const intervals = [];
           let current = start;
 
           while (current < end) {
             intervals.push({
               start: process.env.MOCK_INTERVAL === 'true' ? null : current,
-              end: current.plus({seconds: 1}),
+              end: current.plus(duration),
             });
 
-            current = current.plus({seconds: 1});
+            current = current.plus(duration);
           }
 
           return intervals;
@@ -941,6 +942,157 @@ describe('builtins/time-sync:', () => {
         ];
 
         expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('should throw an error if the upsampling resolution is not compatible with the interval', async () => {
+        const basicConfig = {
+          'start-time': '2023-12-12T00:00:00.000Z',
+          'end-time': '2023-12-12T00:00:03.000Z',
+          interval: 3,
+          'allow-padding': true,
+          'upsampling-resolution': 2,
+        };
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
+        expect.assertions(1);
+        try {
+          await timeModel.execute([
+            {
+              timestamp: '2023-12-12T00:00:02.000Z',
+              duration: 10,
+              'cpu/utilization': 10,
+            },
+          ]);
+        } catch (error) {
+          expect(error).toStrictEqual(
+            new ConfigError(INVALID_UPSAMPLING_RESOLUTION)
+          );
+        }
+      });
+
+      it('should throw an error if the upsampling resolution is not compatible with paddings', async () => {
+        const basicConfig = {
+          'start-time': '2023-12-12T00:00:00.000Z',
+          'end-time': '2023-12-12T00:00:12.000Z',
+          interval: 2,
+          'allow-padding': true,
+          'upsampling-resolution': 2,
+        };
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
+        expect.assertions(1);
+        try {
+          await timeModel.execute([
+            {
+              timestamp: '2023-12-12T00:00:05.000Z',
+              duration: 10,
+              'cpu/utilization': 10,
+            },
+          ]);
+        } catch (error) {
+          expect(error).toStrictEqual(
+            new ConfigError(INVALID_UPSAMPLING_RESOLUTION)
+          );
+        }
+      });
+
+      it('should throw an error if the upsampling resolution is not compatible with gaps', async () => {
+        const basicConfig = {
+          'start-time': '2023-12-12T00:00:00.000Z',
+          'end-time': '2023-12-12T00:00:12.000Z',
+          interval: 5,
+          'allow-padding': true,
+          'upsampling-resolution': 5,
+        };
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
+        expect.assertions(1);
+        try {
+          await timeModel.execute([
+            {
+              timestamp: '2023-12-12T00:00:00.000Z',
+              duration: 5,
+            },
+            {
+              timestamp: '2023-12-12T00:00:07.000Z',
+              duration: 5,
+            },
+          ]);
+        } catch (error) {
+          expect(error).toStrictEqual(
+            new ConfigError(INVALID_UPSAMPLING_RESOLUTION)
+          );
+        }
+      });
+
+      it('should upsample and resample correctly with a custom upsampling resolution given', async () => {
+        const basicConfig = {
+          'start-time': '2023-12-12T00:00:00.000Z',
+          'end-time': '2023-12-12T00:00:20.000Z',
+          interval: 5,
+          'allow-padding': true,
+          'upsampling-resolution': 5,
+        };
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
+        const result = await timeModel.execute([
+          {
+            timestamp: '2023-12-12T00:00:00.000Z',
+            duration: 15,
+          },
+        ]);
+        const expected = [
+          {
+            timestamp: '2023-12-12T00:00:00.000Z',
+            duration: 5,
+          },
+          {
+            timestamp: '2023-12-12T00:00:05.000Z',
+            duration: 5,
+          },
+          {
+            timestamp: '2023-12-12T00:00:10.000Z',
+            duration: 5,
+          },
+          {
+            timestamp: '2023-12-12T00:00:15.000Z',
+            duration: 5,
+          },
+        ];
+        expect(result).toEqual(expected);
+      });
+
+      it('checks that metric carbon with aggregation == sum is properly spread over interpolated time points with custom upsampling resolution given', async () => {
+        const basicConfig = {
+          'start-time': '2023-12-12T00:00:00.000Z',
+          'end-time': '2023-12-12T00:00:15.000Z',
+          interval: 5,
+          'allow-padding': true,
+          'upsampling-resolution': 5,
+        };
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
+        const result = await timeModel.execute([
+          {
+            timestamp: '2023-12-12T00:00:00.000Z',
+            duration: 15,
+            carbon: 3,
+          },
+        ]);
+
+        const expected = [
+          {
+            timestamp: '2023-12-12T00:00:00.000Z',
+            duration: 5,
+            carbon: 1,
+          },
+          {
+            timestamp: '2023-12-12T00:00:05.000Z',
+            duration: 5,
+            carbon: 1,
+          },
+          {
+            timestamp: '2023-12-12T00:00:10.000Z',
+            duration: 5,
+            carbon: 1,
+          },
+        ];
+        expect(result).toEqual(expected);
       });
     });
   });
