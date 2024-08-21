@@ -2,6 +2,10 @@ import Spline from 'typescript-cubic-spline';
 import {z} from 'zod';
 import {ERRORS} from '@grnsft/if-core/utils';
 import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '@grnsft/if-core/utils/helpers';
+import {
   ExecutePlugin,
   PluginParams,
   ConfigParams,
@@ -11,10 +15,6 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {
-  mapConfigIfNeeded,
-  mapOutputIfNeeded,
-} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 

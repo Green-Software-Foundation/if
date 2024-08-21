@@ -3,6 +3,7 @@ import {spawnSync, SpawnSyncReturns} from 'child_process';
 import {loadAll, dump} from 'js-yaml';
 import {z} from 'zod';
 import {ERRORS} from '@grnsft/if-core/utils';
+import {mapOutputIfNeeded} from '@grnsft/if-core/utils/helpers';
 import {
   ExecutePlugin,
   PluginParams,
@@ -12,7 +13,6 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {mapOutputIfNeeded} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 

@@ -1,5 +1,9 @@
 import {z} from 'zod';
 import {
+  mapInputIfNeeded,
+  mapOutputIfNeeded,
+} from '@grnsft/if-core/utils/helpers';
+import {
   ExecutePlugin,
   ParameterMetadata,
   MappingParams,
@@ -10,10 +14,6 @@ import {
 import {validate, allDefined} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
-import {
-  mapInputIfNeeded,
-  mapOutputIfNeeded,
-} from '../../../common/util/helpers';
 
 const {SCI_EMBODIED_ERROR} = STRINGS;
 
