@@ -52,6 +52,8 @@ Note that for the '--output' option you also need to define the output type in y
     `Loading ${pluginName} from ${path}`,
   COMPUTING_PIPELINE_FOR_NODE: (nodeName: string) =>
     `Running compute pipeline: \`${nodeName}\` plugin`,
+  COMPUTING_COMPONENT_PIPELINE: (component: string) =>
+    `**Computing \`${component}\` pipeline**`,
   REGROUPING: 'Regrouping',
   OBSERVING: (nodeName: string) =>
     `Running observe pipeline: \`${nodeName}\` plugin`,
