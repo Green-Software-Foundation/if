@@ -1,6 +1,10 @@
 import {z} from 'zod';
 import {ERRORS} from '@grnsft/if-core/utils';
 import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '@grnsft/if-core/utils/helpers';
+import {
   ExecutePlugin,
   PluginParams,
   SumConfig,
@@ -9,10 +13,6 @@ import {
 } from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
-import {
-  mapConfigIfNeeded,
-  mapOutputIfNeeded,
-} from '../../../common/util/helpers';
 
 import {STRINGS} from '../../config';
 

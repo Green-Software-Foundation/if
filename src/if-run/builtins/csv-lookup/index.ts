@@ -6,6 +6,10 @@ import {z} from 'zod';
 import {parse} from 'csv-parse/sync';
 import {ERRORS} from '@grnsft/if-core/utils';
 import {
+  mapConfigIfNeeded,
+  mapOutputIfNeeded,
+} from '@grnsft/if-core/utils/helpers';
+import {
   ExecutePlugin,
   MappingParams,
   PluginParametersMetadata,
@@ -15,10 +19,6 @@ import {
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
-import {
-  mapConfigIfNeeded,
-  mapOutputIfNeeded,
-} from '../../../common/util/helpers';
 
 const {
   FILE_FETCH_FAILED,
