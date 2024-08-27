@@ -97,8 +97,6 @@ https://if.greensoftware.foundation/major-concepts/manifest-file`,
     '`functional-unit` value is missing from input data or it is not a positive integer',
   REGEX_MISMATCH: (input: any, match: string) =>
     `\`${input}\` does not match the ${match} regex expression`,
-  SCI_EMBODIED_ERROR: (unit: string) =>
-    `invalid number. please provide it as \`${unit}\` to input`,
   MISSING_MIN_MAX: 'Config is missing min or max value',
   INVALID_MIN_MAX: (name: string) =>
     `Min value should not be greater than or equal to max value of ${name}`,
