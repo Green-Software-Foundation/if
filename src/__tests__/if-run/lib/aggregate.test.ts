@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import {AGGREGATION_METHODS} from '@grnsft/if-core/consts';
 
 import {AggregationParams} from '../../../common/types/manifest';
 
@@ -6,7 +7,6 @@ import {
   aggregate,
   storeAggregationMetrics,
 } from '../../../if-run/lib/aggregate';
-import {AGGREGATION_METHODS} from '../../../if-run/types/aggregation';
 
 describe('lib/aggregate: ', () => {
   beforeAll(() => {
@@ -22,6 +22,10 @@ describe('lib/aggregate: ', () => {
   });
 
   describe('aggregate(): ', () => {
+    beforeAll(() => {
+      storeAggregationMetrics({carbon: 'sum'});
+    });
+
     it('returns tree if aggregation is missing.', () => {
       const tree = {};
       const aggregation = undefined;
