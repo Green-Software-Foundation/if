@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import {AGGREGATION_METHODS} from '@grnsft/if-core/consts';
+
 import {STRINGS as COMMON_STRINGS} from '../common/config';
 import {validateManifest} from '../common/util/validations';
 import {debugLogger} from '../common/util/debug-logger';
@@ -11,8 +13,6 @@ import {initialize} from './lib/initialize';
 import {compute} from './lib/compute';
 import {exhaust} from './lib/exhaust';
 import {explain} from './lib/explain';
-
-import {AGGREGATION_METHODS} from './types/aggregation';
 
 import {parseIfRunProcessArgs} from './util/args';
 import {andHandle} from './util/helpers';
