@@ -1,3 +1,4 @@
+import {AGGREGATION_METHODS} from '@grnsft/if-core/consts';
 import {PluginParams} from '@grnsft/if-core/types';
 
 import {debugLogger} from '../../common/util/debug-logger';
@@ -158,5 +159,5 @@ export const getAggregationMethod = (unitName: string) => {
 
   memoizedLog(logger.warn, UNKNOWN_PARAM(unitName));
 
-  return undefined;
+  return AGGREGATION_METHODS[2];
 };
