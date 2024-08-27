@@ -1,6 +1,5 @@
 import {z} from 'zod';
-
-import {AggregationMethodTypes} from '../../if-run/types/aggregation';
+import {AggregationMethodTypes} from '@grnsft/if-core/types';
 
 import {manifestSchema} from '../util/validations';
 
