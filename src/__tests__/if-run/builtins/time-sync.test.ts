@@ -1,3 +1,4 @@
+import {AGGREGATION_METHODS} from '@grnsft/if-core/consts';
 import {ERRORS} from '@grnsft/if-core/utils';
 import {Settings, DateTime} from 'luxon';
 
@@ -7,7 +8,6 @@ import {storeAggregationMetrics} from '../../../if-run/lib/aggregate';
 import {TimeSync} from '../../../if-run/builtins/time-sync';
 
 import {STRINGS} from '../../../if-run/config';
-import {AGGREGATION_METHODS} from '../../../if-run/types/aggregation';
 
 Settings.defaultZone = 'utc';
 const {
@@ -463,10 +463,12 @@ describe('builtins/time-sync:', () => {
           {
             timestamp: '2023-12-12T00:00:00.000Z',
             duration: 1,
+            'cpu/utilization': null,
           },
           {
             timestamp: '2023-12-12T00:00:01.000Z',
             duration: 1,
+            'cpu/utilization': null,
           },
         ];
 
@@ -576,10 +578,12 @@ describe('builtins/time-sync:', () => {
           {
             timestamp: '2023-12-12T00:00:00.000Z',
             duration: 5,
+            'resources-total': null,
           },
           {
             timestamp: '2023-12-12T00:00:05.000Z',
             duration: 5,
+            'resources-total': null,
           },
         ];
 
@@ -739,12 +743,12 @@ describe('builtins/time-sync:', () => {
           {
             timestamp: '2023-12-12T00:00:00.000Z',
             duration: 5,
-            'resources-total': 10,
+            'resources-total': null,
           },
           {
             timestamp: '2023-12-12T00:00:05.000Z',
             duration: 5,
-            'resources-total': 10,
+            'resources-total': null,
           },
         ];
 
