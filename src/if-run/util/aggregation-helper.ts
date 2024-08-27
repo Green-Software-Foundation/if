@@ -23,8 +23,6 @@ export const aggregateInputsIntoOne = (
   const metricsKeys: string[] = metrics.map(metric => Object.keys(metric)[0]);
   const extendedMetrics = [...metricsKeys, ...AGGREGATION_ADDITIONAL_PARAMS];
 
-  console.log(extendedMetrics);
-
   return inputs.reduce((acc, input, index) => {
     for (const metric of extendedMetrics) {
       if (!(metric in input)) {
