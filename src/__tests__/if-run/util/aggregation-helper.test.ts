@@ -1,13 +1,11 @@
+import {AGGREGATION_METHODS} from '@grnsft/if-core/consts';
 import {ERRORS} from '@grnsft/if-core/utils';
 import {PluginParams} from '@grnsft/if-core/types';
 
 import {AggregationParams} from '../../../common/types/manifest';
 
 import {aggregateInputsIntoOne} from '../../../if-run/util/aggregation-helper';
-import {
-  AGGREGATION_METHODS,
-  AggregationMetric,
-} from '../../../if-run/types/aggregation';
+import {AggregationMetric} from '../../../if-run/types/aggregation';
 import {storeAggregationMetrics} from '../../../if-run/lib/aggregate';
 
 import {STRINGS} from '../../../if-run/config';
@@ -25,6 +23,7 @@ describe('util/aggregation-helper: ', () => {
       [metric]: AGGREGATION_METHODS[2],
     }));
     storeAggregationMetrics(...convertedMetrics);
+    storeAggregationMetrics({carbon: 'sum'});
   });
 
   describe('aggregateInputsIntoOne(): ', () => {
@@ -47,6 +46,7 @@ describe('util/aggregation-helper: ', () => {
     });
 
     it('passes `timestamp`, `duration` to aggregator if aggregation is temporal.', () => {
+      storeAggregationMetrics({carbon: 'sum'});
       const inputs: PluginParams[] = [
         {timestamp: '', duration: 10, carbon: 10},
         {timestamp: '', duration: 10, carbon: 20},
