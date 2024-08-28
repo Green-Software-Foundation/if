@@ -141,8 +141,6 @@ export const SciEmbodied = (
           safeConfig['baseline-memory']) /
           16) *
         1000;
-      // (safeInput.memory - safeConfig['baseline-memory']) *
-      // safeConfig['memory-emissions-constant'];
       const hddE = safeInput.hdd * safeConfig['hdd-emissions-constant'];
       const gpuE = safeInput.gpu * safeConfig['gpu-emissions-constant'];
       const ssdE = safeInput.ssd * safeConfig['ssd-emissions-constant'];
