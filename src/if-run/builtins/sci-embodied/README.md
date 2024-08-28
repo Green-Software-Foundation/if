@@ -4,7 +4,7 @@ Software systems cause emissions through the hardware that they operate on, both
 
 Read more on [embodied carbon](https://github.com/Green-Software-Foundation/sci/blob/main/Software_Carbon_Intensity/Software_Carbon_Intensity_Specification.md#embodied-emissions).
 
-Our plugin follows the Cloud Carbon Footprint methodology for calculating embodied carbon and extends it to scale down the total embodied carbon for a poiece of hardware by the portion of it that should be allocated to a particular application, using a `usage-ratio` and `time`. The `usage-ratio` is a term that can be used to scale by, for example, the storage you actually use on a shared server, rather than the total storage available fir that hardware, or the time you are active compared to the hardware lifespan.
+Our plugin follows the Cloud Carbon Footprint methodology for calculating embodied carbon and extends it to scale down the total embodied carbon for a piece of hardware by the portion of it that should be allocated to a particular application, using a `usage-ratio` and `time`. The `usage-ratio` is a term that can be used to scale by, for example, the storage you actually use on a shared server, rather than the total storage available for that hardware, or the time you are active compared to the hardware lifespan.
 
 
 ## Parameters
