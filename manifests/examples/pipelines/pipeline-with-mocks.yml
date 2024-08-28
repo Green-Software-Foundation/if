@@ -266,6 +266,7 @@ tree:
         device/expected-lifespan: 94608000 # 3 years in seconds
         vcpus-total: 8
         vcpus-allocated: 1
+        requests: 50
       inputs:
     child-2:
       pipeline:
@@ -294,4 +295,5 @@ tree:
         device/expected-lifespan: 94608000 # 3 years in seconds
         vcpus-total: 8
         vcpus-allocated: 1
+        requests: 50
       inputs:

@@ -15,8 +15,8 @@ tree:
   children:
     child:
       pipeline:
-        - time-converter
-      config:
+        compute:
+          - time-converter
       defaults:
         energy-per-year: 10000
       inputs:
