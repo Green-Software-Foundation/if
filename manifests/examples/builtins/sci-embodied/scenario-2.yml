@@ -23,13 +23,13 @@ tree:
       pipeline:
         compute:
           - embodied-carbon
-        defaults:
-          vCPUs: 4
-          memory: 32
-          ssd: 1
-          hdd: 1
-          gpu: 1
-          total-vcpus: 16
+      defaults:
+        vCPUs: 4
+        memory: 32
+        ssd: 1
+        hdd: 1
+        gpu: 1
+        total-vcpus: 16
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
