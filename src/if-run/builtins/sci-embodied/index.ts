@@ -1,24 +1,23 @@
-import {z} from 'zod';
+import {z, ZodType} from 'zod';
+
 import {
+  mapConfigIfNeeded,
   mapInputIfNeeded,
   mapOutputIfNeeded,
 } from '@grnsft/if-core/utils/helpers';
 import {
   ExecutePlugin,
+  ConfigParams,
   ParameterMetadata,
   MappingParams,
   PluginParametersMetadata,
   PluginParams,
 } from '@grnsft/if-core/types';
 
-import {validate, allDefined} from '../../../common/util/validations';
-
-import {STRINGS} from '../../config';
-
-const {SCI_EMBODIED_ERROR} = STRINGS;
+import {validate} from '../../../common/util/validations';
 
 export const SciEmbodied = (
-  _config: undefined,
+  config: ConfigParams = {},
   parametersMetadata: PluginParametersMetadata,
   mapping: MappingParams
 ): ExecutePlugin => {
@@ -26,165 +25,149 @@ export const SciEmbodied = (
     kind: 'execute',
     inputs: {
       ...({
-        'device/emissions-embodied': {
-          description: 'total embodied emissions of some component',
-          unit: 'gCO2e',
-          'aggregation-method': 'sum',
+        vCPUs: {
+          description: 'number of CPUs allocated to an application',
+          unit: 'CPUs',
+          'aggregation-method': 'copy',
         },
-        'device/expected-lifespan': {
-          description: 'Total Expected Lifespan of the Component in Seconds',
-          unit: 'seconds',
-          'aggregation-method': 'sum',
+        memory: {
+          description: 'RAM available for a resource, in GB',
+          unit: 'GB',
+          'aggregation-method': 'copy',
         },
-        'resources-reserved': {
-          description: 'resources reserved for an application',
-          unit: 'count',
-          'aggregation-method': 'none',
+        ssd: {
+          description: 'number of SSDs available for a resource',
+          unit: 'SSDs',
+          'aggregation-method': 'copy',
         },
-        'resources-total': {
-          description: 'total resources available',
-          unit: 'count',
-          'aggregation-method': 'none',
+        hdd: {
+          description: 'number of HDDs available for a resource',
+          unit: 'HDDs',
+          'aggregation-method': 'copy',
         },
-        'vcpus-allocated': {
-          description: 'number of vcpus allocated to particular resource',
-          unit: 'count',
-          'aggregation-method': 'none',
+        gpu: {
+          description: 'number of GPUs available for a resource',
+          unit: 'GPUs',
+          'aggregation-method': 'copy',
         },
-        'vcpus-total': {
+        'usage-ratio': {
           description:
-            'total number of vcpus available on a particular resource',
-          unit: 'count',
-          'aggregation-method': 'none',
+            'a scaling factor that can be used to describe the ratio of actual resource usage comapred to real device usage, e.g. 0.25 if you are using 2 out of 8 vCPUs, 0.1 if you are responsible for 1 out of 10 GB of storage, etc',
+          unit: 'dimensionless',
+          'aggregation-method': 'copy',
+        },
+        time: {
+          description:
+            'a time unit to scale the embodied carbon by, in seconds. If not provided,time defaults to the value of the timestep duration.',
+          unit: 'seconds',
+          'aggregation-method': 'copy',
         },
       } as ParameterMetadata),
       ...parametersMetadata?.inputs,
     },
     outputs: parametersMetadata?.outputs || {
-      'carbon-embodied': {
-        description: 'embodied emissions of the component',
+      'embodied-carbon': {
+        description: 'embodied carbon for a resource, scaled by usage',
         unit: 'gCO2e',
         'aggregation-method': 'sum',
       },
     },
   };
 
-  const METRICS = [
-    'device/emissions-embodied',
-    'device/expected-lifespan',
-    'resources-reserved',
-    'vcpus-allocated',
-    'resources-total',
-    'vcpus-total',
-  ];
-
   /**
-   * Calculate the Embodied carbon for a list of inputs.
+   * Checks for required fields in input.
    */
-  const execute = (inputs: PluginParams[]) =>
-    inputs.map(input => {
-      const mappedInput = mapInputIfNeeded(input, mapping);
-      const safeInput = validateInput(mappedInput);
-
-      const result = {
-        ...input,
-        'carbon-embodied': calculateEmbodiedCarbon(safeInput),
-      };
-
-      return mapOutputIfNeeded(result, mapping);
+  const validateConfig = () => {
+    const schema = z.object({
+      'baseline-vcpus': z.number().gte(0).default(1),
+      'baseline-memory': z.number().gte(0).default(16),
+      'baseline-emissions': z.number().gte(0).default(1000000),
+      lifespan: z.number().gt(0).default(126144000),
+      'vcpu-emissions-constant': z.number().gte(0).default(100000),
+      'memory-emissions-constant': z
+        .number()
+        .gte(0)
+        .default(533 / 384),
+      'ssd-emissions-constant': z.number().gte(0).default(50000),
+      'hdd-emissions-constant': z.number().gte(0).default(100000),
+      'gpu-emissions-constant': z.number().gte(0).default(150000),
+      'output-parameter': z.string().optional(),
     });
 
-  /**
-   * Calculate the Embodied carbon for the input.
-   * M = totalEmissions * (duration/ExpectedLifespan) * (resourcesReserved/totalResources)
-   */
-  const calculateEmbodiedCarbon = (input: PluginParams) => {
-    const totalEmissions = input['device/emissions-embodied'];
-    const duration = input['duration'];
-    const expectedLifespan = input['device/expected-lifespan'];
-    const resourcesReserved =
-      input['vcpus-allocated'] || input['resources-reserved'];
-    const totalResources = input['vcpus-total'] || input['resources-total'];
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
 
-    return (
-      totalEmissions *
-      (duration / expectedLifespan) *
-      (resourcesReserved / totalResources)
+    return validate<z.infer<typeof schema>>(
+      schema as ZodType<any>,
+      mappedConfig
     );
   };
 
   /**
-   * Checks for required fields in input.
+   * Validates single observation for safe calculation.
    */
   const validateInput = (input: PluginParams) => {
-    const commonSchemaPart = (errorMessage: (unit: string) => string) => ({
-      'device/emissions-embodied': z
-        .number({
-          invalid_type_error: errorMessage('gCO2e'),
-        })
-        .gte(0)
-        .min(0),
-      'device/expected-lifespan': z
-        .number({
-          invalid_type_error: errorMessage('gCO2e'),
-        })
-        .gte(0)
-        .min(0),
-      duration: z
-        .number({
-          invalid_type_error: errorMessage('seconds'),
-        })
-        .gte(1),
+    const schema = z.object({
+      duration: z.number().gt(0),
+      vCPUs: z.number().gt(0).default(1),
+      memory: z.number().gt(0).default(16),
+      ssd: z.number().gte(0).default(0),
+      hdd: z.number().gte(0).default(0),
+      gpu: z.number().gte(0).default(0),
+      'usage-ratio': z.number().gt(0).default(1),
+      time: z.number().gt(0).optional(),
     });
 
-    const vcpusSchemaPart = {
-      'vcpus-allocated': z
-        .number({
-          invalid_type_error: SCI_EMBODIED_ERROR('count'),
-        })
-        .gte(0)
-        .min(0),
-      'vcpus-total': z
-        .number({
-          invalid_type_error: SCI_EMBODIED_ERROR('count'),
-        })
-        .gte(0)
-        .min(0),
-    };
+    return validate<z.infer<typeof schema>>(schema as ZodType<any>, input);
+  };
 
-    const resourcesSchemaPart = {
-      'resources-reserved': z
-        .number({
-          invalid_type_error: SCI_EMBODIED_ERROR('count'),
-        })
-        .gte(0)
-        .min(0),
-      'resources-total': z
-        .number({
-          invalid_type_error: SCI_EMBODIED_ERROR('count'),
-        })
-        .gte(0)
-        .min(0),
-    };
+  /**
+   * 1. Validates configuration and assigns defaults values if not provided.
+   * 2. Maps through observations and validates them.
+   * 3. Calculates total embodied carbon by substracting and the difference between baseline server and given one.
+   */
+  const execute = (inputs: PluginParams[]) => {
+    const safeConfig = validateConfig();
 
-    const schemaWithVcpus = z.object({
-      ...commonSchemaPart(SCI_EMBODIED_ERROR),
-      ...vcpusSchemaPart,
+    return inputs.map(input => {
+      const mappedInput = mapInputIfNeeded(input, mapping);
+      const safeInput = validateInput(mappedInput);
+
+      const cpuE =
+        (safeInput.vCPUs - safeConfig['baseline-vcpus']) *
+        safeConfig['vcpu-emissions-constant'];
+      const memoryE =
+        (safeInput.memory - safeConfig['baseline-memory']) *
+        ((safeConfig['memory-emissions-constant'] *
+          safeConfig['baseline-memory']) /
+          16) *
+        1000;
+      const hddE = safeInput.hdd * safeConfig['hdd-emissions-constant'];
+      const gpuE = safeInput.gpu * safeConfig['gpu-emissions-constant'];
+      const ssdE = safeInput.ssd * safeConfig['ssd-emissions-constant'];
+      const time = safeInput['time'] || safeInput.duration;
+
+      const totalEmbodied =
+        safeConfig['baseline-emissions'] + cpuE + memoryE + ssdE + hddE + gpuE;
+
+      const totalEmbodiedScaledByUsage =
+        totalEmbodied * safeInput['usage-ratio'];
+
+      const totalEmbodiedScaledByUsageAndTime =
+        totalEmbodiedScaledByUsage * (time / safeConfig['lifespan']);
+
+      const embodiedCarbonKey =
+        safeConfig['output-parameter'] || 'embodied-carbon';
+      const result = {
+        ...input,
+        [embodiedCarbonKey]: totalEmbodiedScaledByUsageAndTime,
+      };
+
+      return mapOutputIfNeeded(result, mapping);
     });
-    const schemaWithResources = z.object({
-      ...commonSchemaPart(SCI_EMBODIED_ERROR),
-      ...resourcesSchemaPart,
-    });
-
-    const schema = schemaWithVcpus.or(schemaWithResources).refine(allDefined, {
-      message: `All ${METRICS} should be present.`,
-    });
-
-    return validate<z.infer<typeof schema>>(schema, input);
   };
 
   return {
-    metadata,
     execute,
+    metadata,
   };
 };

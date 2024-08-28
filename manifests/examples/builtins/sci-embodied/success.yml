@@ -3,7 +3,16 @@ description: successful path
 tags:
 initialize:
   plugins:
-    "sci-embodied": # a model that calculates m from te, tir, el, rr and rtor
+    "csv-lookup":
+      path: builtin
+      method: CSVLookup
+      config:
+        filepath: >-
+          https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-azure-instances.csv
+        query:
+          instance-class: cloud/instance-type
+        output: ["cpu-cores-utilized", "vcpus-allocated"]
+    "sci-embodied-new": # a model that calculates m from te, tir, el, rr and rtor
       method: SciEmbodied
       path: "builtin"
 tree:
@@ -11,6 +20,7 @@ tree:
     child:
       pipeline:
         compute:
+          - csv-lookup
           - sci-embodied # duration & config -> embodied
       defaults:
         device/emissions-embodied: 1533.120 # gCO2eq

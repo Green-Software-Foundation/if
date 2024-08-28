@@ -265,6 +265,12 @@ export const TimeSync = (
         return acc;
       }
 
+      if (method === 'none') {
+        acc[key] = null;
+
+        return acc;
+      }
+
       acc[key] =
         method === 'sum'
           ? convertPerInterval(input[key], input['duration'])
@@ -310,13 +316,22 @@ export const TimeSync = (
 
       const method = getAggregationMethod(metric);
 
+      if (method === 'none') {
+        acc[metric] = null;
+
+        return acc;
+      }
+
       if (method === 'avg' || method === 'sum') {
         acc[metric] = 0;
 
         return acc;
       }
 
-      acc[metric] = input[metric];
+      if (method === 'copy') {
+        acc[metric] = input[metric];
+        return acc;
+      }
 
       return acc;
     }, {} as PluginParams);
@@ -379,7 +394,8 @@ export const TimeSync = (
           method = 'sum';
         }
 
-        if (!method) {
+        if (method === 'none') {
+          acc[metric] = null;
           return;
         }
 
@@ -391,7 +407,7 @@ export const TimeSync = (
           return;
         }
 
-        if (method === 'none') {
+        if (method === 'copy') {
           acc[metric] = input[metric];
 
           return;
