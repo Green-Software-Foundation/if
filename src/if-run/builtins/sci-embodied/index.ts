@@ -50,9 +50,16 @@ export const SciEmbodied = (
           unit: 'GPUs',
           'aggregation-method': 'copy',
         },
-        'total-vcpus': {
-          description: 'total number of CPUs or vCPUs available for a resource',
-          unit: 'CPUs',
+        'usage-ratio': {
+          description:
+            'a scaling factor that can be used to describe the ratio of actual resource usage comapred to real device usage, e.g. 0.25 if you are using 2 out of 8 vCPUs, 0.1 if you are responsible for 1 out of 10 GB of storage, etc',
+          unit: 'dimensionless',
+          'aggregation-method': 'copy',
+        },
+        time: {
+          description:
+            'a time unit to scale the embodied carbon by, in seconds. If not provided,time defaults to the value of the timestep duration.',
+          unit: 'seconds',
           'aggregation-method': 'copy',
         },
       } as ParameterMetadata),
@@ -76,7 +83,6 @@ export const SciEmbodied = (
       'baseline-memory': z.number().gte(0).default(16),
       'baseline-emissions': z.number().gte(0).default(1000000),
       lifespan: z.number().gt(0).default(126144000),
-      time: z.number().gt(0).optional(),
       'vcpu-emissions-constant': z.number().gte(0).default(100000),
       'memory-emissions-constant': z
         .number()
@@ -107,7 +113,8 @@ export const SciEmbodied = (
       ssd: z.number().gte(0).default(0),
       hdd: z.number().gte(0).default(0),
       gpu: z.number().gte(0).default(0),
-      'total-vcpus': z.number().gte(0).default(8),
+      'usage-ratio': z.number().gt(0).default(1),
+      time: z.number().gt(0).optional(),
     });
 
     return validate<z.infer<typeof schema>>(schema as ZodType<any>, input);
@@ -130,27 +137,31 @@ export const SciEmbodied = (
         safeConfig['vcpu-emissions-constant'];
       const memoryE =
         (safeInput.memory - safeConfig['baseline-memory']) *
-        safeConfig['memory-emissions-constant'];
-      const hddE = safeInput.hdd - safeConfig['hdd-emissions-constant'];
-      const gpuE = safeInput.gpu - safeConfig['gpu-emissions-constant'];
-      const ssdE = safeInput.ssd - safeConfig['ssd-emissions-constant'];
-      const time = safeConfig['time'] || safeInput.duration;
+        ((safeConfig['memory-emissions-constant'] *
+          safeConfig['baseline-memory']) /
+          16) *
+        1000;
+      // (safeInput.memory - safeConfig['baseline-memory']) *
+      // safeConfig['memory-emissions-constant'];
+      const hddE = safeInput.hdd * safeConfig['hdd-emissions-constant'];
+      const gpuE = safeInput.gpu * safeConfig['gpu-emissions-constant'];
+      const ssdE = safeInput.ssd * safeConfig['ssd-emissions-constant'];
+      const time = safeInput['time'] || safeInput.duration;
 
       const totalEmbodied =
-        (safeConfig['baseline-emissions'] +
-          cpuE +
-          memoryE +
-          ssdE +
-          hddE +
-          gpuE) *
-        (safeInput.vCPUs / safeInput['total-vcpus']) *
-        (time / safeConfig['lifespan']);
+        safeConfig['baseline-emissions'] + cpuE + memoryE + ssdE + hddE + gpuE;
+
+      const totalEmbodiedScaledByUsage =
+        totalEmbodied * safeInput['usage-ratio'];
+
+      const totalEmbodiedScaledByUsageAndTime =
+        totalEmbodiedScaledByUsage * (time / safeConfig['lifespan']);
 
       const embodiedCarbonKey =
         safeConfig['output-parameter'] || 'embodied-carbon';
       const result = {
         ...input,
-        [embodiedCarbonKey]: totalEmbodied,
+        [embodiedCarbonKey]: totalEmbodiedScaledByUsageAndTime,
       };
 
       return mapOutputIfNeeded(result, mapping);

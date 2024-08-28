@@ -43,13 +43,13 @@ describe('builtins/sci-embodied:', () => {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             vCPUs: 2,
-            'embodied-carbon': 5.707762557077626,
+            'embodied-carbon': 31.39269406392694,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             vCPUs: 4,
-            'embodied-carbon': 14.269406392694064,
+            'embodied-carbon': 37.10045662100457,
           },
         ]);
       });
@@ -79,13 +79,13 @@ describe('builtins/sci-embodied:', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
-            'embodied-carbon': 2.497146118721461,
+            'embodied-carbon': 28.538812785388128,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             'device/cpu-cores': 2,
-            'embodied-carbon': 5.707762557077626,
+            'embodied-carbon': 31.39269406392694,
           },
         ]);
       });
@@ -115,44 +115,13 @@ describe('builtins/sci-embodied:', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
-            carbon: 2.497146118721461,
+            carbon: 28.538812785388128,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             'device/cpu-cores': 2,
-            carbon: 2.497146118721461,
-          },
-        ]);
-      });
-
-      it('returns a result with `vCPUs` in input and `total-vcpus` in config.', async () => {
-        const sciEmbodied = SciEmbodied(
-          {
-            'total-vcpus': 1,
-            lifespan: 60 * 60 * 24 * 365 * 4,
-          },
-          parametersMetadata,
-          {}
-        );
-        const inputs = [
-          {
-            timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            vCPUs: 1,
-          },
-        ];
-
-        const result = await sciEmbodied.execute(inputs);
-
-        expect.assertions(1);
-
-        expect(result).toStrictEqual([
-          {
-            timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            vCPUs: 1,
-            'embodied-carbon': 1797.945205479452,
+            carbon: 28.538812785388128,
           },
         ]);
       });
