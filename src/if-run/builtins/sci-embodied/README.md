@@ -53,7 +53,7 @@ sci-embodied:
 `gpu-emissions-constant`: emissions for a GPU in gCO2e. Defaults tothe CCF value (150000),
 `output-parameter`: name to give the output value, defaults to `embodied-carbon`
 
-Note that if you do not provide any config at all, we will fallback to defaults for everything, equivalen to setting the baseline server equal to the CCF version, which has 1000000g of embnodied emissions.
+Note that if you do not provide any config at all, we will fallback to defaults for everything, equivalent to setting the baseline server equal to the CCF version, which has 1000000g of embodied emissions.
 
 ### Inputs
 
