@@ -1,0 +1,37 @@
+name: embodied-carbon demo
+description:
+tags:
+initialize:
+  plugins:
+    embodied-carbon:
+      method: SciEmbodied
+      path: builtin
+      global-config:
+        baseline-vcpus: 1
+        baseline-memory: 16
+        lifespan: 157680000 
+        baseline-emissions: 2000000
+        vcpu-emissions-constant: 100000
+        memory-emissions-constant: 1172
+        ssd-emissions-constant: 50000
+        hdd-emissions-constant: 100000 
+        gpu-emissions-constant: 150000
+        output-parameter: "embodied-carbon"
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - embodied-carbon
+        defaults:
+          vCPUs: 4
+          memory: 32
+          ssd: 1
+          hdd: 1
+          gpu: 1
+          total-vcpus: 16
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+        - timestamp: 2023-08-06T10:00
+          duration: 3600

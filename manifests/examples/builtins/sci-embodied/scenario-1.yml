@@ -1,0 +1,27 @@
+name: embodied-carbon demo
+description:
+tags:
+aggregation:
+  metrics:
+    - embodied-carbon
+  type: "both"
+initialize:
+  plugins:
+    embodied-carbon:
+      method: SciEmbodied
+      path: builtin
+      global-config:
+        output-parameter: "embodied-carbon"
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - embodied-carbon
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          hdd: 2
+        - timestamp: 2023-08-06T10:00
+          duration: 3600
+          hdd: 2
