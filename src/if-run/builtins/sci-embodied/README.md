@@ -4,6 +4,9 @@ Software systems cause emissions through the hardware that they operate on, both
 
 Read more on [embodied carbon](https://github.com/Green-Software-Foundation/sci/blob/main/Software_Carbon_Intensity/Software_Carbon_Intensity_Specification.md#embodied-emissions).
 
+Our plugin follows the Cloud Carbon Footprint methodology for calculating embodied carbon and extends it to scale down the total embodied carbon for a poiece of hardware by the portion of it that should be allocated to a particular application, using a `usage-ratio` and `time`. The `usage-ratio` is a term that can be used to scale by, for example, the storage you actually use on a shared server, rather than the total storage available fir that hardware, or the time you are active compared to the hardware lifespan.
+
+
 ## Parameters
 
 ### Plugin Configuration
@@ -36,19 +39,38 @@ sci-embodied:
     'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
 ```
 
+### Config
+
+`baseline-vcpus`: the number of CPUs to use in the baseline server, defaults tothe CCF value of 1,
+`baseline-memory`: the amount of memory to use in the baseline server, defaults tothe CCF value of 16,
+`baseline-emissions`: the embodied carbon assumed to represent a baseline server, in g
+`lifespan`: the lifespan of the device, in seconds. Defaults to 4 years (126144000 seconds),
+`time`: the time to consider when scaling the total device embodied carbon, if not given defaults to `duration`
+`vcpu-emissions-constant`: emissions for a CPU in gCO2e. Defaults tothe CCF value (100000),
+`memory-emissions-constant`: value used in calculating emissions due to memory, defaults to the CCf value of 533/384
+`ssd-emissions-constant`: emissions for a SSD in gCO2e. Defaults tothe CCF value (50000),
+`hdd-emissions-constant`: emissions for a CPU in gCO2e. Defaults tothe CCF value (100000),
+`gpu-emissions-constant`: emissions for a GPU in gCO2e. Defaults tothe CCF value (150000),
+`output-parameter`: name to give the output value, defaults to `embodied-carbon`
+
+Note that if you do not provide any config at all, we will fallback to defaults for everything, equivalen to setting the baseline server equal to the CCF version, which has 1000000g of embnodied emissions.
+
 ### Inputs
 
-- `device/emissions-embodied`: The total embodied emissions for the component, measured in gCO2e.
-- `device/expected-lifespan`: The expected lifespan of the component, in seconds.
-- `resources-reserved`: The number of resources reserved for use by the software.
-- `resources-total`: The total number of resources available.
-- `vcpus-allocated`: The number of virtual CPUs allocated to a particular resource.
-- `vcpus-total`: The total number of virtual CPUs available on a particular resource.
+- `vCPUs`: number of CPUs available on device
+- `memory`: amount of RAM available on device, in GB
+- `ssd`: number of SSD drives mounted on device
+- `hdd`: number of HDD drives mounted on device
+- `gpu`: number of GPUs available on device
 - `duration`: The length of time the hardware is reserved for use by the software, in seconds.
+- `time`: the time to use for scalign the total embodied carbon per timestap, if you do not want to use `duration`
+- `usage-ratio`: the ratio by which to scale down the total embodied carbon according to your usage, e.g. for a shared storage server the total storage divided by your actual storage.
+
+Note that if you do not provide any inputs at all, we fall back to defaults that are equivalent to using the full resources of the baseline server, scaled only by `duration`.
 
 ### Outputs
 
-- `carbon-embodied`: The total embodied emissions for the component, measured in gCO2e.
+- `carbon-embodied`: The total embodied emissions for the component, measured in gCO2e, per timestep.
 
 ## Calculation
 
@@ -57,7 +79,7 @@ The plugin calculates the total embodied carbon emissions using the following st
    - CPU emissions (`cpuE`) are calculated based on the difference between allocated vCPUs and baseline vCPUs.
    - Memory emissions (`memoryE`) are calculated based on the difference between allocated memory and baseline memory.
    - Emissions for HDD, SSD, and GPU are also calculated based on their respective differences from baseline values.
-   - The total embodied emissions are calculated by summing the baseline emissions with the above components and adjusting for the lifespan and time duration.
+   - The total embodied emissions are calculated by summing the baseline emissions with the above components scaling by the usage ratio and time.
 
 ## Implementation
 
@@ -75,7 +97,6 @@ const results = await sciEmbodied.execute([
     ssd: 100,       // allocated SSD storage in GB
     hdd: 1000,      // allocated HDD storage in GB
     gpu: 1,         // allocated GPUs
-    'total-vcpus': 8, // total available vCPUs
   },
 ]);
 
