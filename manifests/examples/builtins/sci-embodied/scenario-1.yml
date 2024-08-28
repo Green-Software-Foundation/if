@@ -10,7 +10,7 @@ initialize:
     embodied-carbon:
       method: SciEmbodied
       path: builtin
-      global-config:
+      config:
         output-parameter: "embodied-carbon"
 tree:
   children:

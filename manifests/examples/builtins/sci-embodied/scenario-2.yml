@@ -6,7 +6,7 @@ initialize:
     embodied-carbon:
       method: SciEmbodied
       path: builtin
-      global-config:
+      config:
         baseline-vcpus: 1
         baseline-memory: 16
         lifespan: 157680000 
