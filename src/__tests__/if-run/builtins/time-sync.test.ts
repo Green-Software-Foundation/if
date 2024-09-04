@@ -463,12 +463,12 @@ describe('builtins/time-sync:', () => {
           {
             timestamp: '2023-12-12T00:00:00.000Z',
             duration: 1,
-            'cpu/utilization': null,
+            'cpu/utilization': 10,
           },
           {
             timestamp: '2023-12-12T00:00:01.000Z',
             duration: 1,
-            'cpu/utilization': null,
+            'cpu/utilization': 10,
           },
         ];
 
@@ -578,12 +578,12 @@ describe('builtins/time-sync:', () => {
           {
             timestamp: '2023-12-12T00:00:00.000Z',
             duration: 5,
-            'resources-total': null,
+            'resources-total': 10,
           },
           {
             timestamp: '2023-12-12T00:00:05.000Z',
-            duration: 5,
-            'resources-total': null,
+            duration: 4,
+            'resources-total': 10,
           },
         ];
 
@@ -627,9 +627,9 @@ describe('builtins/time-sync:', () => {
           },
           {
             timestamp: '2023-12-12T00:00:05.000Z',
-            duration: 5,
+            duration: 4,
             'resources-total': 10,
-            'time-reserved': 3.2,
+            'time-reserved': 3.75,
           },
         ];
 
@@ -676,9 +676,9 @@ describe('builtins/time-sync:', () => {
           },
           {
             timestamp: '2023-12-12T00:00:05.000Z',
-            duration: 5,
+            duration: 4,
             'resources-total': 10,
-            'time-allocated': 3.2,
+            'time-allocated': 3.75,
           },
         ];
 
