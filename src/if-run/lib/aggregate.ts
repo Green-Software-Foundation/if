@@ -159,5 +159,5 @@ export const getAggregationMethod = (unitName: string) => {
 
   memoizedLog(logger.warn, UNKNOWN_PARAM(unitName));
 
-  return AGGREGATION_METHODS[2];
+  return AGGREGATION_METHODS[AGGREGATION_METHODS.length - 1];
 };
