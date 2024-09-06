@@ -1,6 +1,13 @@
 import Spline from 'typescript-cubic-spline';
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  ERRORS,
+  evaluateInput,
+  evaluateConfig,
+  evaluateArithmeticOutput,
+  validateArithmeticExpression,
+  getParameterFromArithmeticExpression,
+} from '@grnsft/if-core/utils';
 import {
   mapConfigIfNeeded,
   mapOutputIfNeeded,
@@ -38,16 +45,22 @@ export const Interpolation = (
    */
   const execute = (inputs: PluginParams[]) => {
     const validatedConfig = validateConfig();
+    const {'output-parameter': outputParameter} = validatedConfig;
 
     return inputs.map((input, index) => {
+      const calculatedConfig = evaluateConfig({
+        config: validatedConfig,
+        input,
+        parametersToEvaluate: ['input-parameter'],
+      });
       const safeInput = validateInput(input, index);
+
+      const calculatedResult = calculateResult(calculatedConfig, safeInput);
 
       const result = {
         ...input,
-        [validatedConfig['output-parameter']]: calculateResult(
-          validatedConfig,
-          safeInput
-        ),
+        ...safeInput,
+        ...evaluateArithmeticOutput(outputParameter, calculatedResult),
       };
 
       return mapOutputIfNeeded(result, mapping);
@@ -74,7 +87,10 @@ export const Interpolation = (
     config: ConfigParams,
     input: PluginParams
   ) => {
-    const parameter = input[config['input-parameter']];
+    const parameter =
+      typeof config['input-parameter'] === 'number'
+        ? config['input-parameter']
+        : input[config['input-parameter']];
     const xPoints: number[] = config.x;
     const yPoints: number[] = config.y;
 
@@ -104,7 +120,10 @@ export const Interpolation = (
     config: ConfigParams,
     input: PluginParams
   ) => {
-    const parameter = input[config['input-parameter']];
+    const parameter =
+      typeof config['input-parameter'] === 'number'
+        ? config['input-parameter']
+        : input[config['input-parameter']];
     const xPoints: number[] = config.x;
     const yPoints: number[] = config.y;
     const spline: any = new Spline(xPoints, yPoints);
@@ -119,7 +138,10 @@ export const Interpolation = (
     config: ConfigParams,
     input: PluginParams
   ) => {
-    const parameter = input[config['input-parameter']];
+    const parameter =
+      typeof config['input-parameter'] === 'number'
+        ? config['input-parameter']
+        : input[config['input-parameter']];
     const xPoints: number[] = config.x;
     const yPoints: number[] = config.y;
 
@@ -154,7 +176,11 @@ export const Interpolation = (
         method: z.nativeEnum(Method),
         x: z.array(z.number()),
         y: z.array(z.number()),
-        'input-parameter': z.string(),
+        'input-parameter': z
+          .string()
+          .refine(param =>
+            validateArithmeticExpression('input-parameter', param)
+          ),
         'output-parameter': z.string(),
       })
       .refine(data => data.x && data.y && data.x.length === data.y.length, {
@@ -182,7 +208,10 @@ export const Interpolation = (
    * Validates inputes parameters.
    */
   const validateInput = (input: PluginParams, index: number) => {
-    const inputParameter = config['input-parameter'];
+    const inputParameter = getParameterFromArithmeticExpression(
+      config['input-parameter']
+    );
+
     const schema = z
       .object({
         timestamp: z.string().or(z.date()),
@@ -198,7 +227,8 @@ export const Interpolation = (
         }
       );
 
-    return validate<z.infer<typeof schema>>(schema, input, index);
+    const evaluatedInput = evaluateInput(input);
+    return validate<z.infer<typeof schema>>(schema, evaluatedInput, index);
   };
 
   return {

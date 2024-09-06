@@ -1,8 +1,16 @@
-import {z} from 'zod';
+import {z, ZodType} from 'zod';
 import {
   mapConfigIfNeeded,
   mapOutputIfNeeded,
 } from '@grnsft/if-core/utils/helpers';
+import {
+  ERRORS,
+  evaluateInput,
+  evaluateConfig,
+  evaluateArithmeticOutput,
+  getParameterFromArithmeticExpression,
+  validateArithmeticExpression,
+} from '@grnsft/if-core/utils';
 import {
   ExecutePlugin,
   PluginParams,
@@ -10,7 +18,6 @@ import {
   PluginParametersMetadata,
   MappingParams,
 } from '@grnsft/if-core/types';
-import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
 
@@ -39,44 +46,82 @@ export const Exponent = (
     }
 
     const mappedConfig = mapConfigIfNeeded(config, mapping);
-    const configSchema = z.object({
-      'input-parameter': z.string().min(1),
-      exponent: z.number(),
-      'output-parameter': z.string().min(1),
-    });
+    const configSchema = z
+      .object({
+        'input-parameter': z.string().min(1),
+        exponent: z.preprocess(
+          value => validateArithmeticExpression('exponent', value),
+          z.number()
+        ),
+        'output-parameter': z.string().min(1),
+      })
+      .refine(params => {
+        Object.entries(params).forEach(([param, value]) =>
+          validateArithmeticExpression(param, value)
+        );
 
-    return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
+        return true;
+      });
+
+    return validate<z.infer<typeof configSchema>>(
+      configSchema as ZodType<any>,
+      mappedConfig
+    );
   };
 
   /**
    * Checks for required fields in input.
    */
-  const validateSingleInput = (input: PluginParams, inputParameter: string) => {
+  const validateSingleInput = (
+    input: PluginParams,
+    configInputParameter: string | number
+  ) => {
+    const inputParameter =
+      typeof configInputParameter === 'number'
+        ? configInputParameter
+        : getParameterFromArithmeticExpression(configInputParameter);
+    const evaluatedInput = evaluateInput(input);
+
     const inputData = {
-      'input-parameter': input[inputParameter],
+      [inputParameter]:
+        typeof inputParameter === 'number'
+          ? inputParameter
+          : evaluatedInput[inputParameter],
     };
     const validationSchema = z.record(z.string(), z.number());
-    validate(validationSchema, inputData);
 
-    return input;
+    return validate(validationSchema, inputData);
   };
 
   /**
    * Calculate the input param raised by to the power of the given exponent.
    */
   const execute = (inputs: PluginParams[]): PluginParams[] => {
+    const safeConfig = validateConfig();
     const {
       'input-parameter': inputParameter,
       exponent,
       'output-parameter': outputParameter,
-    } = validateConfig();
+    } = safeConfig;
 
     return inputs.map(input => {
-      validateSingleInput(input, inputParameter);
+      const safeInput = validateSingleInput(input, inputParameter);
+      const evaluatedConfig = evaluateConfig({
+        config: safeConfig,
+        input,
+        parametersToEvaluate: ['input-parameter', 'exponent'],
+      });
+
+      const calculatedResult = calculateExponent(
+        safeInput,
+        evaluatedConfig['input-parameter'] || inputParameter,
+        evaluatedConfig.exponent || exponent
+      );
 
       const result = {
         ...input,
-        [outputParameter]: calculateExponent(input, inputParameter, exponent),
+        ...safeInput,
+        ...evaluateArithmeticOutput(outputParameter, calculatedResult),
       };
 
       return mapOutputIfNeeded(result, mapping);
@@ -88,10 +133,13 @@ export const Exponent = (
    */
   const calculateExponent = (
     input: PluginParams,
-    inputParameter: string,
+    inputParameter: string | number,
     exponent: number
   ) => {
-    const base = input[inputParameter];
+    const base =
+      typeof inputParameter === 'number'
+        ? inputParameter
+        : input[inputParameter];
 
     return Math.pow(base, exponent);
   };

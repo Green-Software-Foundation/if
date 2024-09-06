@@ -2,7 +2,7 @@ import {isDate} from 'node:util/types';
 
 import {Settings, DateTime, DateTimeMaybeValid, Interval} from 'luxon';
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
+import {ERRORS, evaluateInput} from '@grnsft/if-core/utils';
 import {
   mapInputIfNeeded,
   mapOutputIfNeeded,
@@ -117,14 +117,14 @@ export const TimeSync = (
           /** Checks for timestamps overlap. */
           if (
             parseDate(previousInput.timestamp).plus({
-              seconds: previousInput.duration,
+              seconds: eval(previousInput.duration),
             }) > currentMoment
           ) {
             throw new InvalidInputError(INVALID_OBSERVATION_OVERLAP);
           }
 
           const compareableTime = previousInputTimestamp.plus({
-            seconds: previousInput.duration,
+            seconds: eval(previousInput.duration),
           });
 
           const timelineGapSize = currentMoment
@@ -137,14 +137,14 @@ export const TimeSync = (
               ...getZeroishInputPerSecondBetweenRange(
                 compareableTime,
                 currentMoment,
-                input
+                safeInput
               )
             );
           }
         }
         /** Break down current observation. */
-        for (let i = 0; i < input.duration; i++) {
-          const normalizedInput = breakDownInput(input, i);
+        for (let i = 0; i < safeInput.duration; i++) {
+          const normalizedInput = breakDownInput(safeInput, i);
 
           acc.push(normalizedInput);
         }
@@ -199,7 +199,9 @@ export const TimeSync = (
       duration: z.number(),
     });
 
-    return validate<z.infer<typeof schema>>(schema, input);
+    const evaluatedInput = evaluateInput(input);
+
+    return validate<z.infer<typeof schema>>(schema, evaluatedInput);
   };
 
   /**
@@ -246,7 +248,8 @@ export const TimeSync = (
    * Breaks down input per minimal time unit.
    */
   const breakDownInput = (input: PluginParams, i: number) => {
-    const inputKeys = Object.keys(input);
+    const evaluatedInput = evaluateInput(input);
+    const inputKeys = Object.keys(evaluatedInput);
 
     return inputKeys.reduce((acc, key) => {
       const method = getAggregationMethod(key);
@@ -273,8 +276,8 @@ export const TimeSync = (
 
       acc[key] =
         method === 'sum'
-          ? convertPerInterval(input[key], input['duration'])
-          : input[key];
+          ? convertPerInterval(evaluatedInput[key], evaluatedInput['duration'])
+          : evaluatedInput[key];
 
       return acc;
     }, {} as PluginParams);
@@ -363,7 +366,7 @@ export const TimeSync = (
     const lastInput = inputs[inputs.length - 1];
 
     const endDiffInSeconds = parseDate(lastInput.timestamp)
-      .plus({second: lastInput.duration})
+      .plus({second: eval(lastInput.duration)})
       .diff(params.endTime)
       .as('seconds');
 
@@ -477,7 +480,7 @@ export const TimeSync = (
     if (end) {
       const lastInput = inputs[inputs.length - 1];
       const lastInputEnd = parseDate(lastInput.timestamp).plus({
-        seconds: lastInput.duration,
+        seconds: eval(lastInput.duration),
       });
       paddedArray.push(
         ...getZeroishInputPerSecondBetweenRange(

@@ -1,5 +1,11 @@
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  ERRORS,
+  evaluateInput,
+  evaluateConfig,
+  evaluateArithmeticOutput,
+  getParameterFromArithmeticExpression,
+} from '@grnsft/if-core/utils';
 import {
   mapConfigIfNeeded,
   mapOutputIfNeeded,
@@ -60,43 +66,54 @@ export const Copy = (
    */
   const validateSingleInput = (
     input: PluginParams,
-    inputParameters: (string | number)[]
+    configInputParameter: string | number
   ) => {
-    const inputData = inputParameters.reduce(
-      (acc, param) => {
-        acc[param] = input[param];
-
-        return acc;
-      },
-      {} as Record<string, string | number>
+    const inputParameter = getParameterFromArithmeticExpression(
+      configInputParameter.toString()
     );
+    const evaluatedInput = evaluateInput(input);
+    const inputData = {
+      [inputParameter]: evaluatedInput[inputParameter],
+    };
 
     const validationSchema = z.record(z.string(), z.string().or(z.number()));
 
     validate(validationSchema, inputData);
 
-    return input;
+    return evaluatedInput;
   };
 
   const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateConfig();
-    const keepExisting = safeGlobalConfig['keep-existing'] === true;
-    const from = safeGlobalConfig['from'];
-    const to = safeGlobalConfig['to'];
+    const safeConfig = validateConfig();
+    const keepExisting = safeConfig['keep-existing'] === true;
+    const from = safeConfig['from'];
+    const to = safeConfig['to'];
 
     return inputs.map(input => {
-      const safeInput = validateSingleInput(input, [from]);
+      const evaluatedConfig = evaluateConfig({
+        config: safeConfig,
+        input,
+        parametersToEvaluate: ['from'],
+      });
 
-      const outputValue = safeInput[from];
-      if (safeInput[from]) {
+      const safeInput = validateSingleInput(input, from);
+      const safeFrom = getParameterFromArithmeticExpression(from.toString());
+
+      const outputValue = !isNaN(evaluatedConfig?.from)
+        ? evaluatedConfig.from
+        : safeInput[safeFrom];
+
+      if (safeInput[safeFrom]) {
         if (!keepExisting) {
-          delete safeInput[from];
+          delete input[safeFrom];
+          delete safeInput[safeFrom];
         }
       }
 
       const result = {
-        ...safeInput, // need to return or what you provide won't be outputted, don't be evil!
-        [to]: outputValue,
+        ...input,
+        ...safeInput,
+        ...evaluateArithmeticOutput(to, outputValue),
       };
 
       return mapOutputIfNeeded(result, mapping);

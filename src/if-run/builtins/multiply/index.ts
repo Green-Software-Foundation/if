@@ -1,5 +1,10 @@
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  ERRORS,
+  evaluateInput,
+  evaluateArithmeticOutput,
+  validateArithmeticExpression,
+} from '@grnsft/if-core/utils';
 import {
   mapConfigIfNeeded,
   mapOutputIfNeeded,
@@ -42,7 +47,12 @@ export const Multiply = (
 
     const configSchema = z.object({
       'input-parameters': z.array(z.string()),
-      'output-parameter': z.string().min(1),
+      'output-parameter': z
+        .string()
+        .min(1)
+        .refine(param =>
+          validateArithmeticExpression('output-parameter', param)
+        ),
     });
 
     return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
@@ -55,9 +65,11 @@ export const Multiply = (
     input: PluginParams,
     inputParameters: string[]
   ) => {
+    const evaluatedInput = evaluateInput(input);
+
     const inputData = inputParameters.reduce(
       (acc, param) => {
-        acc[param] = input[param];
+        acc[param] = evaluatedInput[param];
 
         return acc;
       },
@@ -66,25 +78,27 @@ export const Multiply = (
 
     const validationSchema = z.record(z.string(), z.number());
 
-    validate(validationSchema, inputData);
-
-    return input;
+    return validate(validationSchema, inputData);
   };
 
   /**
    * Calculate the product of each input parameter.
    */
   const execute = (inputs: PluginParams[]): PluginParams[] => {
-    const safeGlobalConfig = validateConfig();
-    const inputParameters = safeGlobalConfig['input-parameters'];
-    const outputParameter = safeGlobalConfig['output-parameter'];
+    const safeConfig = validateConfig();
+    const {
+      'input-parameters': inputParameters,
+      'output-parameter': outputParameter,
+    } = safeConfig;
 
     return inputs.map(input => {
-      validateSingleInput(input, inputParameters);
+      const safeInput = validateSingleInput(input, inputParameters);
+      const calculatedResult = calculateProduct(safeInput, inputParameters);
 
       const result = {
         ...input,
-        [outputParameter]: calculateProduct(input, inputParameters),
+        ...safeInput,
+        ...evaluateArithmeticOutput(outputParameter, calculatedResult),
       };
 
       return mapOutputIfNeeded(result, mapping);
