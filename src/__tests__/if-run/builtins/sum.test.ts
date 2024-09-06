@@ -199,6 +199,69 @@ describe('builtins/sum: ', () => {
 
         expect(response).toEqual(expectedResult);
       });
+
+      it('successfully executes when the config output parameter contains an arithmetic expression.', () => {
+        expect.assertions(1);
+
+        const config = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': "=2*'energy'",
+        };
+
+        const sum = Sum(config, parametersMetadata, {});
+        const expectedResult = [
+          {
+            duration: 3600,
+            'cpu/energy': 1,
+            'network/energy': 1,
+            'memory/energy': 1,
+            energy: 6,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = sum.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 1,
+            'network/energy': 1,
+            'memory/energy': 1,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('throws an error the config output parameter has wrong arithmetic expression.', () => {
+        expect.assertions(2);
+
+        const config = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': "2*'energy'",
+        };
+
+        const sum = Sum(config, parametersMetadata, {});
+
+        try {
+          sum.execute([
+            {
+              timestamp: '2021-01-01T00:00:00Z',
+              duration: 3600,
+              'cpu/energy': 1,
+              'network/energy': 1,
+              'memory/energy': 1,
+            },
+          ]);
+        } catch (error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error).toEqual(
+            new InputValidationError(
+              'The `output-parameter` contains an invalid arithmetic expression. It should start with `=` and include the symbols `*`, `+`, `-` and `/`.'
+            )
+          );
+        }
+      });
     });
   });
 });

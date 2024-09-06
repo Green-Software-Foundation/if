@@ -3,6 +3,7 @@ import {ERRORS} from '@grnsft/if-core/utils';
 import {Coefficient} from '../../../if-run/builtins/coefficient';
 
 import {STRINGS} from '../../../if-run/config';
+import {CoefficientConfig} from '@grnsft/if-core/types';
 
 const {InputValidationError, ConfigError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
@@ -113,7 +114,78 @@ describe('builtins/coefficient: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error when global config is not provided.', () => {
+      it('successfully executes when a parameter has an arithmetic expression.', () => {
+        expect.assertions(1);
+        const config = {
+          'input-parameter': '=3*carbon',
+          coefficient: 3,
+          'output-parameter': 'carbon-product',
+        };
+        const parametersMetadata = {
+          inputs: {},
+          outputs: {},
+        };
+        const coefficient = Coefficient(config, parametersMetadata, {});
+
+        const expectedResult = [
+          {
+            duration: 3600,
+            carbon: 3,
+            'carbon-product': 27,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = coefficient.execute([
+          {
+            duration: 3600,
+            carbon: 3,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ]);
+
+        expect.assertions(1);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('throws an error when the `coefficient` has wrong arithmetic expression.', () => {
+        const config = {
+          'input-parameter': 'carbon',
+          coefficient: 'mock-param',
+          'output-parameter': 'carbon-product',
+        };
+        const parametersMetadata = {
+          inputs: {},
+          outputs: {},
+        };
+        const coefficient = Coefficient(
+          config as any as CoefficientConfig,
+          parametersMetadata,
+          {}
+        );
+
+        expect.assertions(2);
+
+        try {
+          coefficient.execute([
+            {
+              duration: 3600,
+              carbon: 'some-param',
+              timestamp: '2021-01-01T00:00:00Z',
+            },
+          ]);
+        } catch (error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error).toEqual(
+            new InputValidationError(
+              '"coefficient" parameter is expected number, received string. Error code: invalid_type.'
+            )
+          );
+        }
+      });
+
+      it('throws an error when config is not provided.', () => {
         const config = undefined;
         const coefficient = Coefficient(config!, parametersMetadata, {});
 

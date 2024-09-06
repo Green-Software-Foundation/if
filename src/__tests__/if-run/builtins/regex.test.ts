@@ -53,7 +53,7 @@ describe('builtins/regex: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('successfully applies regex strategy with multiple matches', async () => {
+      it('successfully applies regex strategy with multiple matches.', async () => {
         const config = {
           parameter: 'cloud/instance-type',
           match: '/(?<=_)[^_]+?(?=_|$)/g',

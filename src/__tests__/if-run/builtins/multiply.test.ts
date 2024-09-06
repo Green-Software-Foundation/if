@@ -1,8 +1,11 @@
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {Multiply} from '../../../if-run/builtins/multiply';
+import {STRINGS} from '../../../if-run/config';
 
-const {InputValidationError} = ERRORS;
+const {InputValidationError, ConfigError} = ERRORS;
+
+const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/multiply: ', () => {
   describe('Multiply: ', () => {
@@ -172,6 +175,86 @@ describe('builtins/multiply: ', () => {
         ];
 
         expect(response).toEqual(expectedResult);
+      });
+
+      it('successfully executes when the config output parameter contains arithmetic expression.', () => {
+        expect.assertions(1);
+
+        const config = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': '=2*energy',
+        };
+        const multiply = Multiply(config, parametersMetadata, {});
+        const inputs = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 2,
+            'network/energy': 2,
+            'memory/energy': 2,
+          },
+        ];
+        const response = multiply.execute(inputs);
+
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 2,
+            'network/energy': 2,
+            'memory/energy': 2,
+            energy: 16,
+          },
+        ];
+
+        expect(response).toEqual(expectedResult);
+      });
+
+      it('throws an error the config output parameter has wrong arithmetic expression.', () => {
+        const config = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': '2*energy',
+        };
+
+        const multiply = Multiply(config, parametersMetadata, {});
+        const inputs = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 2,
+            'network/energy': 2,
+            'memory/energy': 2,
+          },
+        ];
+        expect.assertions(2);
+        try {
+          multiply.execute(inputs);
+        } catch (error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error).toEqual(
+            new InputValidationError(
+              'The `output-parameter` contains an invalid arithmetic expression. It should start with `=` and include the symbols `*`, `+`, `-` and `/`.'
+            )
+          );
+        }
+      });
+
+      it('throws an error on missing config.', async () => {
+        const config = undefined;
+        const multiply = Multiply(config!, parametersMetadata, {});
+
+        expect.assertions(1);
+
+        try {
+          await multiply.execute([
+            {
+              timestamp: '2021-01-01T00:00:00Z',
+              duration: 3600,
+            },
+          ]);
+        } catch (error) {
+          expect(error).toStrictEqual(new ConfigError(MISSING_CONFIG));
+        }
       });
     });
   });
