@@ -15,7 +15,10 @@ describe('lib/aggregate: ', () => {
       type: 'horizontal',
     };
     const convertedMetrics = metricStorage.metrics.map((metric: string) => ({
-      [metric]: AGGREGATION_METHODS[2],
+      [metric]: {
+        time: AGGREGATION_METHODS[2],
+        component: AGGREGATION_METHODS[2],
+      },
     }));
 
     storeAggregationMetrics(...convertedMetrics);
@@ -23,7 +26,12 @@ describe('lib/aggregate: ', () => {
 
   describe('aggregate(): ', () => {
     beforeAll(() => {
-      storeAggregationMetrics({carbon: 'sum'});
+      storeAggregationMetrics({
+        carbon: {
+          time: 'sum',
+          component: 'sum',
+        },
+      });
     });
 
     it('returns tree if aggregation is missing.', () => {
