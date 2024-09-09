@@ -40,7 +40,7 @@ export const addExplainData = (params: ExplainParams) => {
   const allParameters = {
     ...parameterMetadata?.inputs,
     ...parameterMetadata?.outputs,
-  };
+  } as ExplainStorageType;
 
   Object.entries(allParameters).forEach(([name, meta]) => {
     const existingParameter = parameters[name];
@@ -55,7 +55,10 @@ export const addExplainData = (params: ExplainParams) => {
       }
 
       if (
-        meta['aggregation-method'] !== existingParameter['aggregation-method']
+        meta['aggregation-method'].component !==
+          existingParameter['aggregation-method'].component ||
+        meta['aggregation-method'].time !==
+          existingParameter['aggregation-method'].time
       ) {
         throw new ManifestValidationError(AGGREGATION_METHODS_NOT_MATCH(name));
       }
