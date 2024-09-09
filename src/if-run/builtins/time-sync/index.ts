@@ -482,7 +482,7 @@ export const TimeSync = (
       paddedArray.push(
         ...getZeroishInputPerSecondBetweenRange(
           lastInputEnd,
-          params.endTime.plus({seconds: 1}),
+          params.endTime,
           lastInput
         )
       );
@@ -491,6 +491,9 @@ export const TimeSync = (
     return paddedArray;
   };
 
+  /**
+   * Brakes down the given range by 1 second, and generates zeroish values.
+   */
   const getZeroishInputPerSecondBetweenRange = (
     startDate: DateTimeMaybeValid,
     endDate: DateTimeMaybeValid,
