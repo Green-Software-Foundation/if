@@ -81,7 +81,7 @@ initialize:
       config:
         input-parameters:
           - carbon-operational
-          - carbon-embodied
+          - embodied-carbon
         output-parameter: carbon
 execution:
   command: >-
@@ -197,7 +197,7 @@ tree:
           cpu-energy-raw: 0.000020833333333333333
           vcpu-ratio: 8
           cpu-energy-kwh: 0.0000026041666666666666
-          carbon-embodied: 0.0000020256215119228817
+          embodied-carbon: 0.0000020256215119228817
           carbon-operational: 0.0020833333333333333
           carbon: 0.002085358954845256
           sci: 0.002085358954845256
@@ -221,7 +221,7 @@ tree:
           cpu-energy-raw: 0.000059375
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000007421875
-          carbon-embodied: 0.000010128107559614407
+          embodied-carbon: 0.000010128107559614407
           carbon-operational: 0.0059375
           carbon: 0.005947628107559615
           sci: 0.005947628107559615
@@ -245,7 +245,7 @@ tree:
           cpu-energy-raw: 0.00007267361111111111
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000009084201388888889
-          carbon-embodied: 0.00001417935058346017
+          embodied-carbon: 0.00001417935058346017
           carbon-operational: 0.007267361111111111
           carbon: 0.007281540461694571
           sci: 0.007281540461694571
@@ -269,7 +269,7 @@ tree:
           cpu-energy-raw: 0.00031145833333333335
           vcpu-ratio: 8
           cpu-energy-kwh: 0.00003893229166666667
-          carbon-embodied: 0.00006076864535768645
+          embodied-carbon: 0.00006076864535768645
           carbon-operational: 0.031145833333333334
           carbon: 0.03120660197869102
           sci: 0.03120660197869102

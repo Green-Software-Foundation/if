@@ -209,7 +209,7 @@ initialize:
       config:
         input-parameters:
           - carbon-operational
-          - carbon-embodied
+          - embodied-carbon
         output-parameter: carbon
       parameter-metadata:
         inputs:
@@ -217,7 +217,7 @@ initialize:
             unit: gCO2eq
             description: Operational carbon footprint
             aggregation-method: sum
-          carbon-embodied:
+          embodied-carbon:
             unit: gCO2eq
             description: Embodied carbon footprint
             aggregation-method: sum
@@ -379,7 +379,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.000010128107559614409
+          embodied-carbon: 0.000010128107559614409
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -402,7 +402,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.000010128107559614409
+          embodied-carbon: 0.000010128107559614409
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -425,7 +425,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.000010128107559614409
+          embodied-carbon: 0.000010128107559614409
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -448,7 +448,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.000010128107559614409
+          embodied-carbon: 0.000010128107559614409
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -471,7 +471,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.000010128107559614409
+          embodied-carbon: 0.000010128107559614409
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -494,7 +494,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.000010128107559614409
+          embodied-carbon: 0.000010128107559614409
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -517,7 +517,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.000010128107559614409
+          embodied-carbon: 0.000010128107559614409
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -540,7 +540,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.000010128107559614409
+          embodied-carbon: 0.000010128107559614409
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -563,7 +563,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.000010128107559614409
+          embodied-carbon: 0.000010128107559614409
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -586,7 +586,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.000010128107559614409
+          embodied-carbon: 0.000010128107559614409
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -609,7 +609,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.000010128107559614409
+          embodied-carbon: 0.000010128107559614409
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -632,7 +632,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.000010128107559614409
+          embodied-carbon: 0.000010128107559614409
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -655,7 +655,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: 0.0000020256215119228817
+          embodied-carbon: 0.0000020256215119228817
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -733,7 +733,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -756,7 +756,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -779,7 +779,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -802,7 +802,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -825,7 +825,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -848,7 +848,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -871,7 +871,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -894,7 +894,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -917,7 +917,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -940,7 +940,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -963,7 +963,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -986,7 +986,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
@@ -1009,7 +1009,7 @@ tree:
           cpu-energy-raw: "*"
           vcpu-ratio: 8
           cpu-energy-kwh: "*"
-          carbon-embodied: "*"
+          embodied-carbon: "*"
           carbon-operational: "*"
           carbon: "*"
           sci: "*"
