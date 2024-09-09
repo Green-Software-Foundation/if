@@ -21,7 +21,7 @@ import {
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
-import {getAggregationMethod} from '../../lib/aggregate';
+import {getAggregationInfoFor} from '../../lib/aggregate';
 
 Settings.defaultZone = 'utc';
 
@@ -69,12 +69,18 @@ export const TimeSync = (
         timestamp: {
           description: 'refers to the time of occurrence of the input',
           unit: 'RFC3339',
-          'aggregation-method': 'none',
+          'aggregation-method': {
+            time: 'none',
+            component: 'none',
+          },
         },
         duration: {
           description: 'refers to the duration of the input',
           unit: 'seconds',
-          'aggregation-method': 'sum',
+          'aggregation-method': {
+            time: 'sum',
+            component: 'none',
+          },
         },
       } as ParameterMetadata),
       ...parametersMetadata?.inputs,
@@ -249,35 +255,35 @@ export const TimeSync = (
    */
   const breakDownInput = (input: PluginParams, i: number) => {
     const evaluatedInput = evaluateInput(input);
-    const inputKeys = Object.keys(evaluatedInput);
+    const metrics = Object.keys(evaluatedInput);
 
-    return inputKeys.reduce((acc, key) => {
-      const method = getAggregationMethod(key);
+    return metrics.reduce((acc, metric) => {
+      const aggregationParams = getAggregationInfoFor(metric);
 
-      if (key === 'timestamp') {
+      if (metric === 'timestamp') {
         const perSecond = normalizeTimePerSecond(input.timestamp, i);
-        acc[key] = perSecond.toUTC().toISO() ?? '';
+        acc[metric] = perSecond.toUTC().toISO() ?? '';
 
         return acc;
       }
 
       /** @todo use user defined resolution later */
-      if (key === 'duration') {
-        acc[key] = 1;
+      if (metric === 'duration') {
+        acc[metric] = 1;
 
         return acc;
       }
 
-      if (method === 'none') {
-        acc[key] = null;
+      if (aggregationParams.time === 'none') {
+        acc[metric] = null;
 
         return acc;
       }
 
-      acc[key] =
-        method === 'sum'
-          ? convertPerInterval(evaluatedInput[key], evaluatedInput['duration'])
-          : evaluatedInput[key];
+      acc[metric] =
+        aggregationParams.time === 'sum'
+          ? convertPerInterval(evaluatedInput[metric], evaluatedInput['duration'])
+          : evaluatedInput[metric];
 
       return acc;
     }, {} as PluginParams);
@@ -317,21 +323,24 @@ export const TimeSync = (
         return acc;
       }
 
-      const method = getAggregationMethod(metric);
+      const aggregationParams = getAggregationInfoFor(metric);
 
-      if (method === 'none') {
+      if (aggregationParams.time === 'none') {
         acc[metric] = null;
 
         return acc;
       }
 
-      if (method === 'avg' || method === 'sum') {
+      if (
+        aggregationParams.time === 'avg' ||
+        aggregationParams.time === 'sum'
+      ) {
         acc[metric] = 0;
 
         return acc;
       }
 
-      if (method === 'copy') {
+      if (aggregationParams.time === 'copy') {
         acc[metric] = input[metric];
         return acc;
       }
@@ -385,7 +394,7 @@ export const TimeSync = (
       const metrics = Object.keys(input);
 
       metrics.forEach(metric => {
-        let method = getAggregationMethod(metric);
+        const aggregationParams = getAggregationInfoFor(metric);
 
         if (metric === 'timestamp') {
           acc[metric] = inputs[0][metric];
@@ -394,23 +403,23 @@ export const TimeSync = (
         }
 
         if (metric === 'duration') {
-          method = 'sum';
+          aggregationParams.time = 'sum';
         }
 
-        if (method === 'none') {
+        if (aggregationParams.time === 'none') {
           acc[metric] = null;
           return;
         }
 
         acc[metric] = acc[metric] ?? 0;
 
-        if (method === 'sum') {
+        if (aggregationParams.time === 'sum') {
           acc[metric] += input[metric];
 
           return;
         }
 
-        if (method === 'copy') {
+        if (aggregationParams.time === 'copy') {
           acc[metric] = input[metric];
 
           return;
