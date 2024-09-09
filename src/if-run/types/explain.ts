@@ -1,4 +1,4 @@
-import {ParameterMetadata} from '@grnsft/if-core/types';
+import {AggregationOptions, ParameterMetadata} from '@grnsft/if-core/types';
 
 import {PluginOptions} from '../../common/types/manifest';
 
@@ -14,6 +14,6 @@ export type ExplainStorageType = Record<
     plugins: string[];
     unit: string;
     description: string;
-    'aggregation-method': string;
+    'aggregation-method': AggregationOptions;
   }
 >;
