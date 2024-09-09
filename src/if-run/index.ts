@@ -1,13 +1,11 @@
 #!/usr/bin/env node
-import {AGGREGATION_METHODS} from '@grnsft/if-core/consts';
-
 import {STRINGS as COMMON_STRINGS} from '../common/config';
 import {validateManifest} from '../common/util/validations';
 import {debugLogger} from '../common/util/debug-logger';
 import {logger} from '../common/util/logger';
 import {load} from '../common/lib/load';
 
-import {aggregate, storeAggregationMetrics} from './lib/aggregate';
+import {aggregate} from './lib/aggregate';
 import {injectEnvironment} from './lib/environment';
 import {initialize} from './lib/initialize';
 import {compute} from './lib/compute';
@@ -44,16 +42,6 @@ const impactEngine = async () => {
   try {
     const {tree, ...context} = validateManifest(envManifest);
 
-    if (context.aggregation) {
-      const convertMetrics = context.aggregation?.metrics.map(
-        (metric: string) => ({
-          [metric]: AGGREGATION_METHODS[2],
-        })
-      );
-
-      storeAggregationMetrics(...convertMetrics);
-    }
-
     const pluginStorage = await initialize(context);
     const computedTree = await compute(tree, {
       context,
@@ -69,6 +57,7 @@ const impactEngine = async () => {
     await exhaust(aggregatedTree, context, outputOptions);
   } catch (error) {
     if (error instanceof Error) {
+      /** Execution block exists because manifest is already processed. Set's status to `fail`. */
       envManifest.execution!.status = 'fail';
       envManifest.execution!.error = error.toString();
       logger.error(error);
