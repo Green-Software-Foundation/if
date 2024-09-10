@@ -96,7 +96,10 @@ export const SciEmbodied = (
       'embodied-carbon': {
         description: 'embodied carbon for a resource, scaled by usage',
         unit: 'gCO2e',
-        'aggregation-method': 'sum',
+        'aggregation-method': {
+          time: 'sum',
+          component: 'sum',
+        },
       },
     },
   };
