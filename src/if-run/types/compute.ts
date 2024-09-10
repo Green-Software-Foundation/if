@@ -25,6 +25,7 @@ export type ComputeParams = {
   observe?: Boolean;
   regroup?: Boolean;
   compute?: Boolean;
+  append?: boolean;
 };
 
 export type Node = {
