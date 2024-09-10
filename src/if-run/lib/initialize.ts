@@ -103,6 +103,10 @@ const initPlugin = async (
 
 /**
  * Registers all plugins from `manifest`.`initialize` property.
+ * 1. Initalizes plugin storage.
+ * 2. Iterates over plugin names array.
+ * 3. While iteration, initalizes current plugin, gathers it's parameters (input/output).
+ *    Then stores the aggregation metrics for each parameter to override stub values.
  */
 export const initialize = async (
   context: Context
@@ -117,9 +121,9 @@ export const initialize = async (
     const plugin = await initPlugin(plugins[pluginName]);
     const parameters = {...plugin.metadata.inputs, ...plugin.metadata.outputs};
 
-    Object.keys(parameters).forEach(key => {
+    Object.keys(parameters).forEach(current => {
       storeAggregationMetrics({
-        [key]: parameters[key]['aggregation-method'],
+        [current]: parameters[current]['aggregation-method'],
       });
     });
 

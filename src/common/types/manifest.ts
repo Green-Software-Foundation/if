@@ -1,5 +1,5 @@
 import {z} from 'zod';
-import {AggregationMethodTypes} from '@grnsft/if-core/types';
+import {AggregationOptions} from '@grnsft/if-core/types';
 
 import {manifestSchema} from '../util/validations';
 
@@ -11,7 +11,7 @@ export type PluginOptions = GlobalPlugins[string];
 
 export type AggregationParams = Manifest['aggregation'];
 export type AggregationMetricsWithMethod = {
-  [key: string]: AggregationMethodTypes;
+  [key: string]: AggregationOptions;
 };
 
 export type AggregationParamsSure = Extract<Manifest['aggregation'], {}>;

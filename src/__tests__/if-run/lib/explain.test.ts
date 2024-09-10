@@ -214,19 +214,28 @@ describe('lib/explain: ', () => {
           'cpu/energy': {
             unit: 'kWh',
             description: 'energy consumed by the cpu',
-            'aggregation-method': 'avg',
+            'aggregation-method': {
+              time: 'avg',
+              component: 'avg',
+            },
           },
           'memory/energy': {
             unit: 'kWh',
             description: 'energy consumed by data from memory',
-            'aggregation-method': 'sum',
+            'aggregation-method': {
+              time: 'sum',
+              component: 'sum',
+            },
           },
         },
         outputs: {
           'total/energy': {
             unit: 'kWh',
             description: 'sum of energy components',
-            'aggregation-method': 'sum',
+            'aggregation-method': {
+              time: 'sum',
+              component: 'sum',
+            },
           },
         },
       },

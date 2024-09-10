@@ -71,5 +71,5 @@ export const CONFIG = {
   } as ParseOptions<any>,
   GITHUB_PATH: 'https://github.com',
   NATIVE_PLUGIN: 'if-plugins',
-  AGGREGATION_ADDITIONAL_PARAMS: ['timestamp', 'duration'],
+  AGGREGATION_TIME_METRICS: ['timestamp', 'duration'],
 };

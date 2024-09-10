@@ -66,7 +66,10 @@ describe('builtins/time-sync:', () => {
       type: 'horizontal',
     };
     const convertedMetrics = metricStorage.metrics.map((metric: string) => ({
-      [metric]: AGGREGATION_METHODS[2],
+      [metric]: {
+        time: AGGREGATION_METHODS[2],
+        component: AGGREGATION_METHODS[2],
+      },
     }));
     storeAggregationMetrics(...convertedMetrics);
   });
@@ -483,7 +486,12 @@ describe('builtins/time-sync:', () => {
           'allow-padding': true,
         };
 
-        storeAggregationMetrics({carbon: 'sum'});
+        storeAggregationMetrics({
+          carbon: {
+            time: 'sum',
+            component: 'sum',
+          },
+        });
 
         const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
@@ -598,8 +606,18 @@ describe('builtins/time-sync:', () => {
           'allow-padding': true,
         };
 
-        storeAggregationMetrics({'time-reserved': 'avg'});
-        storeAggregationMetrics({'resources-total': 'sum'});
+        storeAggregationMetrics({
+          'time-reserved': {
+            time: 'avg',
+            component: 'avg',
+          },
+        });
+        storeAggregationMetrics({
+          'resources-total': {
+            time: 'sum',
+            component: 'sum',
+          },
+        });
 
         const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
@@ -647,8 +665,18 @@ describe('builtins/time-sync:', () => {
           'time-reserved': 'time-allocated',
         };
 
-        storeAggregationMetrics({'time-allocated': 'avg'});
-        storeAggregationMetrics({'resources-total': 'sum'});
+        storeAggregationMetrics({
+          'time-allocated': {
+            time: 'avg',
+            component: 'avg',
+          },
+        });
+        storeAggregationMetrics({
+          'resources-total': {
+            time: 'sum',
+            component: 'sum',
+          },
+        });
 
         const timeModel = TimeSync(basicConfig, parametersMetadata, mapping);
 
@@ -722,7 +750,12 @@ describe('builtins/time-sync:', () => {
           'allow-padding': true,
         };
 
-        storeAggregationMetrics({'resources-total': 'none'});
+        storeAggregationMetrics({
+          'resources-total': {
+            time: 'none',
+            component: 'none',
+          },
+        });
 
         const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
