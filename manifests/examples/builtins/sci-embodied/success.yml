@@ -12,7 +12,7 @@ initialize:
         query:
           instance-class: cloud/instance-type
         output: ["cpu-cores-utilized", "vcpus-allocated"]
-    "sci-embodied-new": # a model that calculates m from te, tir, el, rr and rtor
+    "sci-embodied": # a model that calculates m from te, tir, el, rr and rtor
       method: SciEmbodied
       path: "builtin"
 tree:
@@ -21,7 +21,7 @@ tree:
       pipeline:
         compute:
           - csv-lookup
-          - sci-embodied-new # duration & config -> embodied
+          - sci-embodied # duration & config -> embodied
       defaults:
         device/emissions-embodied: 1533.120 # gCO2eq
         time-reserved: 3600 # 1hr in seconds
