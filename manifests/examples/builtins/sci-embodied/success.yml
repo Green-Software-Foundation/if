@@ -12,7 +12,7 @@ initialize:
         query:
           instance-class: cloud/instance-type
         output: ["cpu-cores-utilized", "vcpus-allocated"]
-    "sci-embodied-new": # a model that calculates m from te, tir, el, rr and rtor
+    "sci-embodied": # a model that calculates m from te, tir, el, rr and rtor
       method: SciEmbodied
       path: "builtin"
 tree:
@@ -31,3 +31,6 @@ tree:
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600
+          cloud/vendor: intel
+          cloud/instance-type: Standard_A1_v2
+          cpu/utilization: 10
