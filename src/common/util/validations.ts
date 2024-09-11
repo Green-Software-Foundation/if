@@ -1,4 +1,5 @@
 import {ZodIssue, ZodIssueCode, ZodSchema, z} from 'zod';
+import {AGGREGATION_METHODS} from '@grnsft/if-core/consts';
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {STRINGS} from '../../if-run/config';
@@ -22,32 +23,35 @@ export const allDefined = (obj: Record<string | number | symbol, unknown>) =>
   Object.values(obj).every(v => v !== undefined);
 
 /**
- * Schema for parameter metadata.
+ * Reusabe aggregation method schema for parameter metadata.
+ */
+const aggregationMethodSchema = z.object({
+  time: z.enum(AGGREGATION_METHODS),
+  component: z.enum(AGGREGATION_METHODS),
+});
+
+/**
+ * Reusable metadata schema.
+ */
+const metadataSchema = z
+  .record(
+    z.string(),
+    z.object({
+      unit: z.string(),
+      description: z.string(),
+      'aggregation-method': aggregationMethodSchema,
+    })
+  )
+  .optional()
+  .nullable();
+
+/**
+ * Reusable parameter metadata schema.
  */
 const parameterMetadataSchema = z
   .object({
-    inputs: z
-      .record(
-        z.string(),
-        z.object({
-          unit: z.string(),
-          description: z.string(),
-          'aggregation-method': z.string(),
-        })
-      )
-      .optional()
-      .nullable(),
-    outputs: z
-      .record(
-        z.string(),
-        z.object({
-          unit: z.string(),
-          description: z.string(),
-          'aggregation-method': z.string(),
-        })
-      )
-      .optional()
-      .nullable(),
+    inputs: metadataSchema,
+    outputs: metadataSchema,
   })
   .optional();
 
@@ -71,6 +75,7 @@ export const manifestSchema = z.object({
     .object({
       metrics: z.array(z.string()),
       type: z.enum(AGGREGATION_TYPES),
+      'skip-components': z.array(z.string()).optional(),
     })
     .optional()
     .nullable(),

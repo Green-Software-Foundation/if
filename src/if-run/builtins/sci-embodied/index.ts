@@ -28,39 +28,60 @@ export const SciEmbodied = (
         vCPUs: {
           description: 'number of CPUs allocated to an application',
           unit: 'CPUs',
-          'aggregation-method': 'copy',
+          'aggregation-method': {
+            time: 'copy',
+            component: 'copy',
+          },
         },
         memory: {
           description: 'RAM available for a resource, in GB',
           unit: 'GB',
-          'aggregation-method': 'copy',
+          'aggregation-method': {
+            time: 'copy',
+            component: 'copy',
+          },
         },
         ssd: {
           description: 'number of SSDs available for a resource',
           unit: 'SSDs',
-          'aggregation-method': 'copy',
+          'aggregation-method': {
+            time: 'copy',
+            component: 'copy',
+          },
         },
         hdd: {
           description: 'number of HDDs available for a resource',
           unit: 'HDDs',
-          'aggregation-method': 'copy',
+          'aggregation-method': {
+            time: 'copy',
+            component: 'copy',
+          },
         },
         gpu: {
           description: 'number of GPUs available for a resource',
           unit: 'GPUs',
-          'aggregation-method': 'copy',
+          'aggregation-method': {
+            time: 'copy',
+            component: 'copy',
+          },
         },
         'usage-ratio': {
           description:
             'a scaling factor that can be used to describe the ratio of actual resource usage comapred to real device usage, e.g. 0.25 if you are using 2 out of 8 vCPUs, 0.1 if you are responsible for 1 out of 10 GB of storage, etc',
           unit: 'dimensionless',
-          'aggregation-method': 'copy',
+          'aggregation-method': {
+            time: 'copy',
+            component: 'copy',
+          },
         },
         time: {
           description:
             'a time unit to scale the embodied carbon by, in seconds. If not provided,time defaults to the value of the timestep duration.',
           unit: 'seconds',
-          'aggregation-method': 'copy',
+          'aggregation-method': {
+            time: 'copy',
+            component: 'copy',
+          },
         },
       } as ParameterMetadata),
       ...parametersMetadata?.inputs,
@@ -69,7 +90,10 @@ export const SciEmbodied = (
       'embodied-carbon': {
         description: 'embodied carbon for a resource, scaled by usage',
         unit: 'gCO2e',
-        'aggregation-method': 'sum',
+        'aggregation-method': {
+          time: 'sum',
+          component: 'sum',
+        },
       },
     },
   };

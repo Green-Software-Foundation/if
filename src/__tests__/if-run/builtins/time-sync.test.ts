@@ -66,7 +66,10 @@ describe('builtins/time-sync:', () => {
       type: 'horizontal',
     };
     const convertedMetrics = metricStorage.metrics.map((metric: string) => ({
-      [metric]: AGGREGATION_METHODS[2],
+      [metric]: {
+        time: AGGREGATION_METHODS[2],
+        component: AGGREGATION_METHODS[2],
+      },
     }));
     storeAggregationMetrics(...convertedMetrics);
   });
@@ -463,12 +466,12 @@ describe('builtins/time-sync:', () => {
           {
             timestamp: '2023-12-12T00:00:00.000Z',
             duration: 1,
-            'cpu/utilization': null,
+            'cpu/utilization': 10,
           },
           {
             timestamp: '2023-12-12T00:00:01.000Z',
             duration: 1,
-            'cpu/utilization': null,
+            'cpu/utilization': 10,
           },
         ];
 
@@ -483,7 +486,12 @@ describe('builtins/time-sync:', () => {
           'allow-padding': true,
         };
 
-        storeAggregationMetrics({carbon: 'sum'});
+        storeAggregationMetrics({
+          carbon: {
+            time: 'sum',
+            component: 'sum',
+          },
+        });
 
         const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
@@ -578,12 +586,12 @@ describe('builtins/time-sync:', () => {
           {
             timestamp: '2023-12-12T00:00:00.000Z',
             duration: 5,
-            'resources-total': null,
+            'resources-total': 10,
           },
           {
             timestamp: '2023-12-12T00:00:05.000Z',
-            duration: 5,
-            'resources-total': null,
+            duration: 4,
+            'resources-total': 10,
           },
         ];
 
@@ -598,8 +606,18 @@ describe('builtins/time-sync:', () => {
           'allow-padding': true,
         };
 
-        storeAggregationMetrics({'time-reserved': 'avg'});
-        storeAggregationMetrics({'resources-total': 'sum'});
+        storeAggregationMetrics({
+          'time-reserved': {
+            time: 'avg',
+            component: 'avg',
+          },
+        });
+        storeAggregationMetrics({
+          'resources-total': {
+            time: 'sum',
+            component: 'sum',
+          },
+        });
 
         const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
@@ -627,9 +645,9 @@ describe('builtins/time-sync:', () => {
           },
           {
             timestamp: '2023-12-12T00:00:05.000Z',
-            duration: 5,
+            duration: 4,
             'resources-total': 10,
-            'time-reserved': 3.2,
+            'time-reserved': 3.75,
           },
         ];
 
@@ -647,8 +665,18 @@ describe('builtins/time-sync:', () => {
           'time-reserved': 'time-allocated',
         };
 
-        storeAggregationMetrics({'time-allocated': 'avg'});
-        storeAggregationMetrics({'resources-total': 'sum'});
+        storeAggregationMetrics({
+          'time-allocated': {
+            time: 'avg',
+            component: 'avg',
+          },
+        });
+        storeAggregationMetrics({
+          'resources-total': {
+            time: 'sum',
+            component: 'sum',
+          },
+        });
 
         const timeModel = TimeSync(basicConfig, parametersMetadata, mapping);
 
@@ -676,9 +704,9 @@ describe('builtins/time-sync:', () => {
           },
           {
             timestamp: '2023-12-12T00:00:05.000Z',
-            duration: 5,
+            duration: 4,
             'resources-total': 10,
-            'time-allocated': 3.2,
+            'time-allocated': 3.75,
           },
         ];
 
@@ -722,7 +750,12 @@ describe('builtins/time-sync:', () => {
           'allow-padding': true,
         };
 
-        storeAggregationMetrics({'resources-total': 'none'});
+        storeAggregationMetrics({
+          'resources-total': {
+            time: 'none',
+            component: 'none',
+          },
+        });
 
         const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 

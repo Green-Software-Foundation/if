@@ -40,13 +40,19 @@ export const Sci = (
         carbon: {
           description: 'an amount of carbon emitted into the atmosphere',
           unit: 'gCO2e',
-          'aggregation-method': 'sum',
+          'aggregation-method': {
+            time: 'sum',
+            component: 'sum',
+          },
         },
         'functional-unit': {
           description:
             'the name of the functional unit in which the final SCI value should be expressed, e.g. requests, users',
           unit: 'none',
-          'aggregation-method': 'sum',
+          'aggregation-method': {
+            time: 'sum',
+            component: 'sum',
+          },
         },
       } as ParameterMetadata),
       ...parametersMetadata?.inputs,
@@ -55,7 +61,10 @@ export const Sci = (
       sci: {
         description: 'carbon expressed in terms of the given functional unit',
         unit: 'gCO2e',
-        'aggregation-method': 'sum',
+        'aggregation-method': {
+          time: 'avg',
+          component: 'sum',
+        },
       },
     },
   };

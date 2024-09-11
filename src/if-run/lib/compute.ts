@@ -132,7 +132,14 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
    * If regroup is requested, execute regroup strategy, delete child's inputs, outputs and empty regroup array.
    */
   if ((noFlags || params.regroup) && pipelineCopy.regroup) {
-    node.children = Regroup(inputStorage, pipelineCopy.regroup);
+    const originalOutputs = params.append ? node.outputs || [] : [];
+
+    node.children = Regroup(
+      inputStorage,
+      originalOutputs,
+      pipelineCopy.regroup
+    );
+
     delete node.inputs;
     delete node.outputs;
 
@@ -156,6 +163,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
    * If iteration is on compute plugin, then executes compute plugins and sets the outputs value.
    */
   if ((noFlags || params.compute) && pipelineCopy.compute) {
+    const originalOutputs = params.append ? node.outputs || [] : [];
     while (pipelineCopy.compute.length !== 0) {
       const pluginName = pipelineCopy.compute.shift() as string;
       const plugin = params.pluginStorage.get(pluginName);
@@ -178,6 +186,10 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
           });
         }
       }
+    }
+
+    if (params.append) {
+      node.outputs = originalOutputs.concat(node.outputs || []);
     }
   }
   console.debug('\n');
