@@ -196,7 +196,7 @@ initialize:
       config:
         input-parameters:
           - carbon-operational
-          - carbon-embodied
+          - embodied-carbon
         output-parameter: carbon
       parameter-metadata:
         inputs:
@@ -204,7 +204,7 @@ initialize:
             description: Operational carbon footprint
             unit: gCO2eq
             aggregation-method: sum
-          carbon-embodied:
+          embodied-carbon:
             description: Embodied carbon footprint
             unit: gCO2eq
             aggregation-method: sum
