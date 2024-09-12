@@ -103,18 +103,28 @@ initialize:
           cpu/energy:
             description: energy consumed by the cpu
             unit: kWh
-            aggregation-method: sum
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
+            aggregation-method:
+              time: sum
+              component: sum
           network/energy:
             description: energy consumed by data ingress and egress
             unit: kWh
-            aggregation-method: sum
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
+            aggregation-method:
+              time: sum
+              component: sum
         outputs:
           energy:
             description: sum of energy components
             unit: kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
 tree:
   children:
     child:
