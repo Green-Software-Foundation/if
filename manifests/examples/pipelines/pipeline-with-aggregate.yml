@@ -21,12 +21,16 @@ initialize:
           cpu/utilization:
             unit: percentage
             description: refers to CPU utilization.
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
         outputs:
           cpu-factor:
             unit: kWh
             description: result of interpolate
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
     "cpu-factor-to-wattage":
       method: Multiply
       path: builtin
@@ -38,16 +42,22 @@ initialize:
           cpu-factor:
             unit: kWh
             description: result of interpolate
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
           cpu/thermal-design-power:
             unit: kWh
             description: thermal design power for a processor
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
         outputs:
           cpu-wattage:
             unit: kWh
             description: the energy used by the CPU
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     "wattage-times-duration":
       method: Multiply
       path: builtin
@@ -66,12 +76,16 @@ initialize:
           cpu-wattage-times-duration:
             unit: kWh
             description: CPU wattage multiplied by duration
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
         outputs:
           cpu-energy-raw:
             unit: kWh
             description: Raw energy used by CPU in kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     "calculate-vcpu-ratio":
       method: Divide
       path: "builtin"
@@ -84,16 +98,22 @@ initialize:
           vcpus-total:
             unit: count
             description: total number of vcpus available on a particular resource
-            aggregation-method: none
+            aggregation-method:
+              time: copy
+              component: copy
           vcpus-allocated:
             unit: count
             description: number of vcpus allocated to particular resource
-            aggregation-method: none
+            aggregation-method:
+              time: copy
+              component: copy
         outputs:
           vcpu-ratio:
             unit: none
             description: Ratio of vCPUs
-            aggregation-method: none
+            aggregation-method:
+              time: copy
+              component: copy
     "correct-cpu-energy-for-vcpu-ratio":
       method: Divide
       path: "builtin"
@@ -115,16 +135,22 @@ initialize:
           cpu-energy-kwh:
             unit: kWh
             description: Corrected CPU energy in kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
           grid/carbon-intensity:
             unit: gCO2eq/kWh
             description: Carbon intensity for the grid
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
         outputs:
           carbon-operational:
             unit: gCO2eq
             description: Operational carbon footprint
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     "sci":
       path: "builtin"
       method: Sci
@@ -135,7 +161,9 @@ initialize:
           requests:
             unit: none
             description: expressed the final SCI value
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     "sum-carbon":
       path: "builtin"
       method: Sum
@@ -149,7 +177,9 @@ initialize:
           carbon:
             unit: gCO2eq
             description: product of carbon
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     "time-sync":
       method: TimeSync
       path: "builtin"

@@ -29,12 +29,16 @@ initialize:
           cpu/utilization:
             unit: percentage
             description: refers to CPU utilization.
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
         outputs:
           cpu-factor:
             unit: kWh
             description: result of interpolate
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
     cpu-factor-to-wattage:
       path: builtin
       method: Multiply
@@ -48,16 +52,22 @@ initialize:
           cpu-factor:
             unit: kWh
             description: result of interpolate
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
           cpu/thermal-design-power:
             unit: kWh
             description: thermal design power for a processor
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
         outputs:
           cpu-wattage:
             unit: kWh
             description: the energy used by the CPU
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     wattage-times-duration:
       path: builtin
       method: Multiply
@@ -78,12 +88,16 @@ initialize:
           cpu-wattage-times-duration:
             unit: kWh
             description: CPU wattage multiplied by duration
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
         outputs:
           cpu-energy-raw:
             unit: kWh
             description: Raw energy used by CPU in kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     calculate-vcpu-ratio:
       path: builtin
       method: Divide
@@ -96,16 +110,22 @@ initialize:
           vcpus-total:
             unit: count
             description: total number of vcpus available on a particular resource
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
           vcpus-allocated:
             unit: count
             description: number of vcpus allocated to particular resource
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
         outputs:
           vcpu-ratio:
             unit: none
             description: Ratio of vCPUs
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
     correct-cpu-energy-for-vcpu-ratio:
       path: builtin
       method: Divide
@@ -129,16 +149,22 @@ initialize:
           cpu-energy-kwh:
             unit: kWh
             description: Corrected CPU energy in kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
           grid/carbon-intensity:
             unit: gCO2eq/kWh
             description: Carbon intensity for the grid
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
         outputs:
           carbon-operational:
             unit: gCO2eq
             description: Operational carbon footprint
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     sci:
       path: builtin
       method: Sci
@@ -149,7 +175,9 @@ initialize:
           requests:
             unit: none
             description: expressed the final SCI value
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     sum-carbon:
       path: builtin
       method: Sum
@@ -163,16 +191,22 @@ initialize:
           carbon-operational:
             description: Operational carbon footprint
             unit: gCO2eq
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
           embodied-carbon:
             description: Embodied carbon footprint
             unit: gCO2eq
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
         outputs:
           carbon:
             description: Total carbon footprint
             unit: gCO2eq
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     time-sync:
       path: builtin
       method: TimeSync
@@ -186,23 +220,33 @@ initialize:
           timestamp:
             unit: RFC3339
             description: refers to the time of occurrence of the input
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
           duration:
             unit: seconds
             description: refers to the duration of the input
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
           cloud/instance-type:
             unit: none
             description: type of Cloud Instance name used in the cloud provider APIs
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
           cloud/region:
             unit: none
             description: region cloud instance
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
           time-reserved:
             unit: seconds
             description: time reserved for a component
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
 execution:
   command: >-
     /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
