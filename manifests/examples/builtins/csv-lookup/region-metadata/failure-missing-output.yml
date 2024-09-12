@@ -11,7 +11,7 @@ initialize:
         query:
           cloud-provider: "cloud/provider"
           cloud-region: "cloud/region"
-        output: "*"
+        output:
 tree:
   children:
     child:

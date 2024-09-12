@@ -10,8 +10,8 @@ initialize:
         filepath: >-
           https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv
         query:
-          instance-class: cloud/instance-type
-        output: ["cpu-cores-utilized", "vcpus-allocated"]
+          instance-class: cloud/vendor
+        output: ["cpu-cores-utilized", "cloud/instance-type"]
 tree:
   children:
     child:
