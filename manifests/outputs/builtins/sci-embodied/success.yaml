@@ -3,32 +3,43 @@ description: successful path
 tags: null
 initialize:
   plugins:
+    csv-lookup:
+      path: builtin
+      method: CSVLookup
+      config:
+        filepath: >-
+          https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-azure-instances.csv
+        query:
+          instance-class: cloud/instance-type
+        output:
+          - cpu-cores-utilized
+          - vcpus-allocated
     sci-embodied:
       path: builtin
       method: SciEmbodied
 execution:
   command: >-
-    /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
-    /Users/mariamkhalatova/Projects/UK/if/src/index.ts -m
-    manifests/outputs/plugins/sci-embodied/success.yml -o
-    manifests/outputs/plugins/sci-embodied/success
+    /Users/manushak/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
+    /Users/manushak/Documents/Projects/Green-Software/if/src/if-run/index.ts -m
+    manifests/examples/builtins/sci-embodied/success.yml -o
+    manifests/outputs/builtins/sci-embodied/success.yml
   environment:
-    if-version: 0.4.0
+    if-version: 0.6.0
     os: macOS
-    os-version: "13.2"
-    node-version: 18.14.2
-    date-time: 2024-07-02T20:42:03.186Z (UTC)
+    os-version: 14.6.1
+    node-version: 18.20.4
+    date-time: 2024-09-12T06:14:11.145Z (UTC)
     dependencies:
-      - "@babel/core@7.22.10"
-      - "@babel/preset-typescript@7.23.3"
-      - "@commitlint/cli@18.6.0"
-      - "@commitlint/config-conventional@18.6.0"
-      - "@grnsft/if-core@0.0.10"
-      - "@jest/globals@29.7.0"
-      - "@types/jest@29.5.8"
-      - "@types/js-yaml@4.0.9"
-      - "@types/luxon@3.4.2"
-      - "@types/node@20.9.0"
+      - '@babel/core@7.22.10'
+      - '@babel/preset-typescript@7.23.3'
+      - '@commitlint/cli@18.6.0'
+      - '@commitlint/config-conventional@18.6.0'
+      - '@grnsft/if-core@0.0.22'
+      - '@jest/globals@29.7.0'
+      - '@types/jest@29.5.8'
+      - '@types/js-yaml@4.0.9'
+      - '@types/luxon@3.4.2'
+      - '@types/node@20.9.0'
       - axios-mock-adapter@1.22.0
       - axios@1.7.2
       - cross-env@7.0.3
@@ -48,13 +59,14 @@ execution:
       - typescript-cubic-spline@1.0.1
       - typescript@5.2.2
       - winston@3.11.0
-      - zod@3.22.4
+      - zod@3.23.8
   status: success
 tree:
   children:
     child:
       pipeline:
         compute:
+          - csv-lookup
           - sci-embodied
       defaults:
         device/emissions-embodied: 1533.12
@@ -65,12 +77,19 @@ tree:
       inputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600
+          cloud/vendor: intel
+          cloud/instance-type: Standard_A1_v2
+          cpu/utilization: 10
       outputs:
         - timestamp: 2023-07-06T00:00
           duration: 3600
+          cloud/vendor: intel
+          cloud/instance-type: Standard_A1_v2
+          cpu/utilization: 10
           device/emissions-embodied: 1533.12
           time-reserved: 3600
           device/expected-lifespan: 94608000
           resources-reserved: 1
           resources-total: 8
-          carbon-embodied: 0.007292237442922374
+          vcpus-allocated: 1
+          embodied-carbon: 28.538812785388128

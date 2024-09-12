@@ -15,7 +15,7 @@ initialize:
           - 10
           - 50
           - 100
-        "y":
+        'y':
           - 0.12
           - 0.32
           - 0.75
@@ -93,26 +93,26 @@ initialize:
         functional-unit: component
 execution:
   command: >-
-    /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
-    /Users/mariamkhalatova/Projects/UK/if/src/if-run/index.ts -m
-    manifests/examples/pipelines/sci.yml -o manifests/outputs/pipelines/sci
+    /Users/manushak/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
+    /Users/manushak/Documents/Projects/Green-Software/if/src/if-run/index.ts -m
+    manifests/examples/pipelines/sci.yml -o manifests/outputs/pipelines/sci.yml
   environment:
-    if-version: 0.5.0
+    if-version: 0.6.0
     os: macOS
-    os-version: "14.5"
-    node-version: 18.14.2
-    date-time: 2024-07-19T06:34:45.027Z (UTC)
+    os-version: 14.6.1
+    node-version: 18.20.4
+    date-time: 2024-09-12T06:13:59.916Z (UTC)
     dependencies:
-      - "@babel/core@7.22.10"
-      - "@babel/preset-typescript@7.23.3"
-      - "@commitlint/cli@18.6.0"
-      - "@commitlint/config-conventional@18.6.0"
-      - "@grnsft/if-core@0.0.10"
-      - "@jest/globals@29.7.0"
-      - "@types/jest@29.5.8"
-      - "@types/js-yaml@4.0.9"
-      - "@types/luxon@3.4.2"
-      - "@types/node@20.9.0"
+      - '@babel/core@7.22.10'
+      - '@babel/preset-typescript@7.23.3'
+      - '@commitlint/cli@18.6.0'
+      - '@commitlint/config-conventional@18.6.0'
+      - '@grnsft/if-core@0.0.22'
+      - '@jest/globals@29.7.0'
+      - '@types/jest@29.5.8'
+      - '@types/js-yaml@4.0.9'
+      - '@types/luxon@3.4.2'
+      - '@types/node@20.9.0'
       - axios-mock-adapter@1.22.0
       - axios@1.7.2
       - cross-env@7.0.3
@@ -132,7 +132,7 @@ execution:
       - typescript-cubic-spline@1.0.1
       - typescript@5.2.2
       - winston@3.11.0
-      - zod@3.22.4
+      - zod@3.23.8
   status: success
 tree:
   children:
@@ -162,32 +162,32 @@ tree:
         resources-total: vcpus-total
         component: 1
       inputs:
-        - timestamp: "2023-12-12T00:00:00.000Z"
+        - timestamp: '2023-12-12T00:00:00.000Z'
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 1
           cpu/utilization: 50
           network/energy: 0.000001
-        - timestamp: "2023-12-12T00:00:01.000Z"
+        - timestamp: '2023-12-12T00:00:01.000Z'
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
-        - timestamp: "2023-12-12T00:00:06.000Z"
+        - timestamp: '2023-12-12T00:00:06.000Z'
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
-        - timestamp: "2023-12-12T00:00:13.000Z"
+        - timestamp: '2023-12-12T00:00:13.000Z'
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
           cpu/utilization: 15
           network/energy: 0.000001
       outputs:
-        - timestamp: "2023-12-12T00:00:00.000Z"
+        - timestamp: '2023-12-12T00:00:00.000Z'
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 1
@@ -210,11 +210,11 @@ tree:
           vcpu-ratio: 4
           cpu/energy: 0.000005208333333333333
           energy: 0.000006208333333333333
-          embodied-carbon: 0.000004051243023845763
+          embodied-carbon: 0.007927447995941146
           carbon-operational: 0.004966666666666666
-          carbon: 0.004970717909690512
-          sci: 0.004970717909690512
-        - timestamp: "2023-12-12T00:00:01.000Z"
+          carbon: 0.012894114662607812
+          sci: 0.012894114662607812
+        - timestamp: '2023-12-12T00:00:01.000Z'
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
@@ -237,11 +237,11 @@ tree:
           vcpu-ratio: 4
           cpu/energy: 0.00001484375
           energy: 0.00001584375
-          embodied-carbon: 0.000020256215119228814
+          embodied-carbon: 0.03963723997970574
           carbon-operational: 0.012674999999999999
-          carbon: 0.012695256215119228
-          sci: 0.012695256215119228
-        - timestamp: "2023-12-12T00:00:06.000Z"
+          carbon: 0.05231223997970574
+          sci: 0.05231223997970574
+        - timestamp: '2023-12-12T00:00:06.000Z'
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
@@ -264,11 +264,11 @@ tree:
           vcpu-ratio: 4
           cpu/energy: 0.000018168402777777778
           energy: 0.000019168402777777778
-          embodied-carbon: 0.00002835870116692034
+          embodied-carbon: 0.05549213597158803
           carbon-operational: 0.015334722222222222
-          carbon: 0.015363080923389142
-          sci: 0.015363080923389142
-        - timestamp: "2023-12-12T00:00:13.000Z"
+          carbon: 0.07082685819381025
+          sci: 0.07082685819381025
+        - timestamp: '2023-12-12T00:00:13.000Z'
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -291,7 +291,7 @@ tree:
           vcpu-ratio: 4
           cpu/energy: 0.00007786458333333334
           energy: 0.00007886458333333333
-          embodied-carbon: 0.0001215372907153729
+          embodied-carbon: 0.2378234398782344
           carbon-operational: 0.06309166666666667
-          carbon: 0.06321320395738204
-          sci: 0.06321320395738204
+          carbon: 0.30091510654490106
+          sci: 0.30091510654490106
