@@ -8,7 +8,7 @@ initialize:
       path: "builtin"
       config:
         parameter: physical-processor
-        match: ^
+        match: ^$
         output: cpu/name
 tree:
   children:

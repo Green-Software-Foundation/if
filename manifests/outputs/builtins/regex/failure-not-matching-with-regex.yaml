@@ -1,28 +1,28 @@
-name: time-converter demo
-description: successful path
+name: regex
+description: physical processor doesn't match the regex expression
 tags: null
 initialize:
   plugins:
-    time-converter:
+    regex:
+      method: Regex
       path: builtin
-      method: TimeConverter
       config:
-        input-parameter: energy-per-year
-        original-time-unit: year
-        new-time-unit: duration
-        output-parameter: energy-per-duration
+        parameter: physical-processor
+        match: ^$
+        output: cpu/name
 execution:
+  status: fail
   command: >-
     /Users/manushak/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
     /Users/manushak/Documents/Projects/Green-Software/if/src/if-run/index.ts -m
-    manifests/examples/builtins/time-converter/success.yaml -o
-    manifests/outputs/builtins/time-converter/success.yaml
+    manifests/examples/builtins/regex/failure-not-matching-with-regex.yml -o
+    manifests/outputs/builtins/regex/failure-not-matching-with-regex.yaml
   environment:
     if-version: 0.6.0
     os: macOS
     os-version: 14.6.1
     node-version: 18.20.4
-    date-time: 2024-09-12T06:14:08.350Z (UTC)
+    date-time: 2024-09-12T11:17:40.549Z (UTC)
     dependencies:
       - '@babel/core@7.22.10'
       - '@babel/preset-typescript@7.23.3'
@@ -54,20 +54,19 @@ execution:
       - typescript@5.2.2
       - winston@3.11.0
       - zod@3.23.8
-  status: success
+  error: >-
+    RegexMismatchError: `Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1
+    GHz,Intel® Xeon® E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz` does
+    not match the /^$/ regex expression
 tree:
   children:
     child:
       pipeline:
         compute:
-          - time-converter
-      defaults:
-        energy-per-year: 10000
+          - regex
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
-      outputs:
-        - timestamp: 2023-08-06T00:00
-          duration: 3600
-          energy-per-year: 10000
-          energy-per-duration: 1.140795
+          physical-processor: >-
+            Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon®
+            E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz

@@ -2,8 +2,6 @@ name: time-sync
 description: failure with `config.start-time` being later than `config.end-time`
 tags:
 initialize:
-  output:
-    - yaml
   plugins:
     "time-sync":
       method: TimeSync

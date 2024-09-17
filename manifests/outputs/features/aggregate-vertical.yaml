@@ -22,7 +22,9 @@ initialize:
           cpu/utilization:
             unit: percentage
             description: refers to CPU utilization.
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
 execution:
   command: >-
     /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
