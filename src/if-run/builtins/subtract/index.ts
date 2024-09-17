@@ -1,5 +1,11 @@
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  ERRORS,
+  evaluateInput,
+  evaluateConfig,
+  evaluateArithmeticOutput,
+  validateArithmeticExpression,
+} from '@grnsft/if-core/utils';
 import {
   mapConfigIfNeeded,
   mapOutputIfNeeded,
@@ -42,7 +48,12 @@ export const Subtract = (
 
     const configSchema = z.object({
       'input-parameters': z.array(z.string()),
-      'output-parameter': z.string().min(1),
+      'output-parameter': z
+        .string()
+        .min(1)
+        .refine(value =>
+          validateArithmeticExpression('output-parameter', value)
+        ),
     });
 
     return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
@@ -55,9 +66,11 @@ export const Subtract = (
     input: PluginParams,
     inputParameters: string[]
   ) => {
+    const evaluatedInput = evaluateInput(input);
+
     const inputData = inputParameters.reduce(
       (acc, param) => {
-        acc[param] = input[param];
+        acc[param] = evaluatedInput[param];
 
         return acc;
       },
@@ -66,26 +79,39 @@ export const Subtract = (
 
     const validationSchema = z.record(z.string(), z.number());
 
-    validate(validationSchema, inputData);
-
-    return input;
+    return validate(validationSchema, inputData);
   };
 
   /**
    * Subtract items from inputParams[1..n] from inputParams[0] and write the result in a new param outputParam.
    */
   const execute = (inputs: PluginParams[]): PluginParams[] => {
+    const safeConfig = validateConfig();
     const {
       'input-parameters': inputParameters,
       'output-parameter': outputParameter,
-    } = validateConfig();
+    } = safeConfig;
 
     return inputs.map(input => {
-      validateSingleInput(input, inputParameters);
+      const calculatedConfig = evaluateConfig({
+        config: safeConfig,
+        input,
+        parametersToEvaluate: safeConfig['input-parameters'],
+      });
+      const safeInput = Object.assign(
+        {},
+        input,
+        validateSingleInput(input, inputParameters)
+      );
+      const calculatedResult = calculateDiff(
+        safeInput,
+        calculatedConfig['input-parameters'] || inputParameters
+      );
 
       const result = {
         ...input,
-        [outputParameter]: calculateDiff(input, inputParameters),
+        ...safeInput,
+        ...evaluateArithmeticOutput(outputParameter, calculatedResult),
       };
 
       return mapOutputIfNeeded(result, mapping);

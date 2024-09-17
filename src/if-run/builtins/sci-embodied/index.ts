@@ -1,6 +1,12 @@
 import {z, ZodType} from 'zod';
 
 import {
+  evaluateInput,
+  evaluateConfig,
+  evaluateArithmeticOutput,
+  validateArithmeticExpression,
+} from '@grnsft/if-core/utils';
+import {
   mapConfigIfNeeded,
   mapInputIfNeeded,
   mapOutputIfNeeded,
@@ -101,28 +107,63 @@ export const SciEmbodied = (
   /**
    * Checks for required fields in input.
    */
-  const validateConfig = () => {
+  const validateConfig = (input: PluginParams) => {
     const schema = z.object({
-      'baseline-vcpus': z.number().gte(0).default(1),
-      'baseline-memory': z.number().gte(0).default(16),
-      'baseline-emissions': z.number().gte(0).default(1000000),
-      lifespan: z.number().gt(0).default(126144000),
-      'vcpu-emissions-constant': z.number().gte(0).default(100000),
-      'memory-emissions-constant': z
-        .number()
-        .gte(0)
-        .default(533 / 384),
-      'ssd-emissions-constant': z.number().gte(0).default(50000),
-      'hdd-emissions-constant': z.number().gte(0).default(100000),
-      'gpu-emissions-constant': z.number().gte(0).default(150000),
+      'baseline-vcpus': z.preprocess(
+        value => validateArithmeticExpression('baseline-vcpus', value),
+        z.number().gte(0).default(1)
+      ),
+      'baseline-memory': z.preprocess(
+        value => validateArithmeticExpression('baseline-memory', value),
+        z.number().gte(0).default(16)
+      ),
+      'baseline-emissions': z.preprocess(
+        value => validateArithmeticExpression('baseline-emissions', value),
+        z.number().gte(0).default(1000000)
+      ),
+      lifespan: z.preprocess(
+        value => validateArithmeticExpression('lifespan', value),
+        z.number().gt(0).default(126144000)
+      ),
+      'vcpu-emissions-constant': z.preprocess(
+        value => validateArithmeticExpression('vcpu-emissions-constant', value),
+        z.number().gte(0).default(100000)
+      ),
+      'memory-emissions-constant': z.preprocess(
+        value =>
+          validateArithmeticExpression('memory-emissions-constant', value),
+        z
+          .number()
+          .gte(0)
+          .default(533 / 384)
+      ),
+      'ssd-emissions-constant': z.preprocess(
+        value => validateArithmeticExpression('ssd-emissions-constant', value),
+        z.number().gte(0).default(50000)
+      ),
+      'hdd-emissions-constant': z.preprocess(
+        value => validateArithmeticExpression('hdd-emissions-constant', value),
+        z.number().gte(0).default(100000)
+      ),
+      'gpu-emissions-constant': z.preprocess(
+        value => validateArithmeticExpression('gpu-emissions-constant', value),
+        z.number().gte(0).default(150000)
+      ),
       'output-parameter': z.string().optional(),
     });
 
     const mappedConfig = mapConfigIfNeeded(config, mapping);
+    const evaluatedConfig = evaluateConfig({
+      config: mappedConfig,
+      input,
+      parametersToEvaluate: Object.keys(config).filter(
+        key => key !== 'output-parameter'
+      ),
+    });
 
     return validate<z.infer<typeof schema>>(
       schema as ZodType<any>,
-      mappedConfig
+      evaluatedConfig
     );
   };
 
@@ -141,7 +182,11 @@ export const SciEmbodied = (
       time: z.number().gt(0).optional(),
     });
 
-    return validate<z.infer<typeof schema>>(schema as ZodType<any>, input);
+    const evaluatedInput = evaluateInput(input);
+    return validate<z.infer<typeof schema>>(
+      schema as ZodType<any>,
+      evaluatedInput
+    );
   };
 
   /**
@@ -150,9 +195,8 @@ export const SciEmbodied = (
    * 3. Calculates total embodied carbon by substracting and the difference between baseline server and given one.
    */
   const execute = (inputs: PluginParams[]) => {
-    const safeConfig = validateConfig();
-
     return inputs.map(input => {
+      const safeConfig = validateConfig(input);
       const mappedInput = mapInputIfNeeded(input, mapping);
       const safeInput = validateInput(mappedInput);
 
@@ -181,9 +225,13 @@ export const SciEmbodied = (
 
       const embodiedCarbonKey =
         safeConfig['output-parameter'] || 'embodied-carbon';
+
       const result = {
         ...input,
-        [embodiedCarbonKey]: totalEmbodiedScaledByUsageAndTime,
+        ...evaluateArithmeticOutput(
+          embodiedCarbonKey,
+          totalEmbodiedScaledByUsageAndTime
+        ),
       };
 
       return mapOutputIfNeeded(result, mapping);

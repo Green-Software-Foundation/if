@@ -177,6 +177,36 @@ describe('builtins/copy: ', () => {
 
         expect(result).toStrictEqual(expectedResult);
       });
+
+      it('successfully executes when the `from` contains arithmetic expression', () => {
+        const config = {
+          'keep-existing': false,
+          from: '=3*size',
+          to: 'if-size',
+        };
+        const copy = Copy(config, parametersMetadata, {});
+
+        const inputs = [
+          {
+            timestamp: '2024-07-05T13:45:48.398Z',
+            duration: 3600,
+            size: 0.05,
+          },
+        ];
+
+        const expectedResult = [
+          {
+            timestamp: '2024-07-05T13:45:48.398Z',
+            duration: 3600,
+            'if-size': 0.15000000000000002,
+          },
+        ];
+
+        expect.assertions(1);
+        const result = copy.execute(inputs);
+
+        expect(result).toEqual(expectedResult);
+      });
     });
   });
 });

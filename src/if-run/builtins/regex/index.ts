@@ -64,8 +64,8 @@ export const Regex = (
    * Executes the regex of the given parameter.
    */
   const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateConfig();
-    const {parameter: parameter, match, output} = safeGlobalConfig;
+    const safeConfig = validateConfig();
+    const {parameter: parameter, match, output} = safeConfig;
 
     return inputs.map(input => {
       const safeInput = Object.assign(

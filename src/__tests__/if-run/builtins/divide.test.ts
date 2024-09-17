@@ -107,7 +107,7 @@ describe('builtins/divide: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('returns a result when `denominator` is provded in input.', async () => {
+      it('returns a result when `denominator` is provided in input.', async () => {
         expect.assertions(1);
         const config = {
           numerator: 'vcpus-allocated',
@@ -135,6 +135,65 @@ describe('builtins/divide: ', () => {
         ];
 
         expect(response).toEqual(expectedResult);
+      });
+
+      it('successfully executes when a parameter contains arithmetic expression.', () => {
+        expect.assertions(1);
+
+        const config = {
+          numerator: '=3*"vcpus-allocated"',
+          denominator: 'duration',
+          output: 'vcpus-allocated-per-second',
+        };
+
+        const divide = Divide(config, parametersMetadata, {});
+        const input = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'vcpus-allocated': 24,
+          },
+        ];
+        const response = divide.execute(input);
+
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'vcpus-allocated': 24,
+            'vcpus-allocated-per-second': 72 / 3600,
+          },
+        ];
+
+        expect(response).toEqual(expectedResult);
+      });
+
+      it('throws an error the `numerator` parameter has wrong arithmetic expression.', () => {
+        const config = {
+          numerator: '3*"vcpus-allocated"',
+          denominator: 'duration',
+          output: 'vcpus-allocated-per-second',
+        };
+
+        const divide = Divide(config, parametersMetadata, {});
+        const inputs = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'vcpus-allocated': 24,
+          },
+        ];
+        expect.assertions(2);
+        try {
+          divide.execute(inputs);
+        } catch (error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error).toEqual(
+            new InputValidationError(
+              'The `numerator` contains an invalid arithmetic expression. It should start with `=` and include the symbols `*`, `+`, `-` and `/`.'
+            )
+          );
+        }
       });
 
       it('throws an error on missing params in input.', async () => {

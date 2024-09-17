@@ -207,6 +207,67 @@ describe('builtins/interpolation: ', () => {
         expect(plugin.execute(inputs)).toEqual(outputs);
       });
 
+      it('successfully executes when the config parameter contains an arithmetic expression.', () => {
+        const config = {
+          method: Method.LINEAR,
+          x: [0, 10, 50, 100],
+          y: [0.12, 0.32, 0.75, 1.02],
+          'input-parameter': "=2*'cpu/utilization'",
+          'output-parameter': 'interpolation-result',
+        };
+        const inputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/utilization': 90,
+          },
+        ];
+
+        const plugin = Interpolation(config, parametersMetadata, {});
+        const outputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/utilization': 90,
+            'interpolation-result': 0,
+          },
+        ];
+
+        expect.assertions(1);
+        expect(plugin.execute(inputs)).toEqual(outputs);
+      });
+
+      it('throws an error the config parameter contains wrong arithmetic expression.', () => {
+        const config = {
+          method: Method.LINEAR,
+          x: [0, 10, 50, 100],
+          y: [0.12, 0.32, 0.75, 1.02],
+          'input-parameter': "2*'cpu/utilization'",
+          'output-parameter': 'interpolation-result',
+        };
+        const inputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/utilization': 90,
+          },
+        ];
+
+        const plugin = Interpolation(config, parametersMetadata, {});
+
+        expect.assertions(2);
+        try {
+          plugin.execute(inputs);
+        } catch (error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error).toEqual(
+            new InputValidationError(
+              'The `input-parameter` contains an invalid arithmetic expression. It should start with `=` and include the symbols `*`, `+`, `-` and `/`.'
+            )
+          );
+        }
+      });
+
       it('throws an when the config is not provided.', () => {
         const config = undefined;
         const plugin = Interpolation(config!, parametersMetadata, {});

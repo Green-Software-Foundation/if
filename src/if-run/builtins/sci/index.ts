@@ -1,7 +1,15 @@
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  ERRORS,
+  evaluateInput,
+  evaluateConfig,
+  evaluateArithmeticOutput,
+  validateArithmeticExpression,
+  getParameterFromArithmeticExpression,
+} from '@grnsft/if-core/utils';
 import {
   mapInputIfNeeded,
+  mapConfigIfNeeded,
   mapOutputIfNeeded,
 } from '@grnsft/if-core/utils/helpers';
 import {
@@ -77,55 +85,76 @@ export const Sci = (
       throw new ConfigError(MISSING_CONFIG);
     }
 
+    const mappedConfig = mapConfigIfNeeded(config, mapping);
     const schema = z
       .object({
-        'functional-unit': z.string(),
+        'functional-unit': z
+          .string()
+          .refine(param =>
+            validateArithmeticExpression('functional-unit', param)
+          ),
       })
       .refine(data => data['functional-unit'], {
         message: MISSING_FUNCTIONAL_UNIT_CONFIG,
       });
 
-    return validate<z.infer<typeof schema>>(schema, config);
+    return validate<z.infer<typeof schema>>(schema, mappedConfig);
   };
 
   /**
    * Calculate the total emissions for a list of inputs.
    */
   const execute = (inputs: PluginParams[]): PluginParams[] => {
+    const safeConfig = validateConfig();
+
     return inputs.map((input, index) => {
-      const mappedInput = mapInputIfNeeded(input, mapping);
-      const safeInput = validateInput(mappedInput);
-      const functionalUnit = input[config['functional-unit']];
+      const safeInput = Object.assign(
+        {},
+        input,
+        validateInput(input, safeConfig)
+      );
+
+      const evaluatedConfig = evaluateConfig({
+        config: safeConfig,
+        input: safeInput,
+        parametersToEvaluate: ['functional-unit'],
+      });
+      const functionalUnit = isNaN(evaluatedConfig['functional-unit'])
+        ? safeInput[evaluatedConfig['functional-unit']]
+        : evaluatedConfig['functional-unit'];
 
       if (functionalUnit === 0) {
         console.warn(ZERO_DIVISION(Sci.name, index));
 
         return {
           ...input,
+          ...safeInput,
           sci: safeInput['carbon'],
         };
       }
+      const calculatedResult = safeInput['carbon'] / functionalUnit;
 
       const result = {
         ...input,
-        sci: safeInput['carbon'] / functionalUnit,
+        ...safeInput,
+        ...evaluateArithmeticOutput('sci', calculatedResult),
       };
 
       return mapOutputIfNeeded(result, mapping);
     });
   };
+
   /**
    * Checks for fields in input.
    */
-  const validateInput = (input: PluginParams) => {
-    const validatedConfig = validateConfig();
+  const validateInput = (input: PluginParams, safeConfig: ConfigParams) => {
+    const mappedInput = mapInputIfNeeded(input, mapping);
 
-    if (
-      !(
-        validatedConfig['functional-unit'] in input &&
-        input[validatedConfig['functional-unit']] >= 0
-      )
-    ) {
+    const functionalUnit = getParameterFromArithmeticExpression(
+      safeConfig['functional-unit']
+    );
+
+    if (!(functionalUnit in mappedInput && mappedInput[functionalUnit] >= 0)) {
       throw new MissingInputDataError(MISSING_FUNCTIONAL_UNIT_INPUT);
     }
 
@@ -138,7 +167,9 @@ export const Sci = (
         message: SCI_MISSING_FN_UNIT(config['functional-unit']),
       });
 
-    return validate<z.infer<typeof schema>>(schema, input);
+    const evaluatedInput = evaluateInput(mappedInput);
+
+    return validate<z.infer<typeof schema>>(schema, evaluatedInput);
   };
 
   return {

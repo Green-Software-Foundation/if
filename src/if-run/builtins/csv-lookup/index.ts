@@ -203,8 +203,8 @@ export const CSVLookup = (
    * 4. Filters requested information from CSV.
    */
   const execute = async (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateConfig();
-    const {filepath, query, output} = safeGlobalConfig;
+    const safeConfig = validateConfig();
+    const {filepath, query, output} = safeConfig;
     const file = await retrieveFile(filepath);
     const parsedCSV = parseCSVFile(file);
 

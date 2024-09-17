@@ -1,5 +1,12 @@
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  ERRORS,
+  evaluateInput,
+  evaluateConfig,
+  evaluateArithmeticOutput,
+  validateArithmeticExpression,
+  getParameterFromArithmeticExpression,
+} from '@grnsft/if-core/utils';
 import {
   mapConfigIfNeeded,
   mapOutputIfNeeded,
@@ -33,16 +40,31 @@ export const TimeConverter = (
   };
 
   const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateConfig();
-    const inputParameter = safeGlobalConfig['input-parameter'];
-    const outputParameter = safeGlobalConfig['output-parameter'];
+    const safeConfig = validateConfig();
+    const {
+      'input-parameter': inputParameter,
+      'output-parameter': outputParameter,
+    } = safeConfig;
 
     return inputs.map(input => {
-      validateInput(input, inputParameter);
+      const safeInput = Object.assign(
+        {},
+        input,
+        validateInput(input, inputParameter)
+      );
+      const calculatedConfig = evaluateConfig({
+        config: safeConfig,
+        input: safeInput,
+        parametersToEvaluate: ['input-parameter'],
+      });
 
       const result = {
         ...input,
-        [outputParameter]: calculateEnergy(input),
+        ...safeInput,
+        ...evaluateArithmeticOutput(
+          outputParameter,
+          calculateEnergy(safeInput, calculatedConfig['input-parameter'])
+        ),
       };
 
       return mapOutputIfNeeded(result, mapping);
@@ -52,14 +74,20 @@ export const TimeConverter = (
   /**
    * Calculates the energy for given period.
    */
-  const calculateEnergy = (input: PluginParams) => {
+  const calculateEnergy = (
+    input: PluginParams,
+    inputParameter: string | number
+  ) => {
     const originalTimeUnit = config['original-time-unit'];
     const originalTimeUnitInSeoncds = TIME_UNITS_IN_SECONDS[originalTimeUnit];
-    const energyPerPeriod = input[config['input-parameter']];
+    const energyPerPeriod = isNaN(Number(inputParameter))
+      ? input[inputParameter]
+      : inputParameter;
     const newTimeUnit =
       config['new-time-unit'] === 'duration'
         ? input.duration
         : TIME_UNITS_IN_SECONDS[config['new-time-unit']];
+
     const result = (energyPerPeriod / originalTimeUnitInSeoncds) * newTimeUnit;
 
     return Number(result.toFixed(6));
@@ -68,13 +96,17 @@ export const TimeConverter = (
   /**
    * Checks for required fields in input.
    */
-  const validateInput = (input: PluginParams, inputParameter: string) => {
+  const validateInput = (input: PluginParams, configInputParameter: string) => {
+    const inputParameter =
+      getParameterFromArithmeticExpression(configInputParameter);
+
     const schema = z.object({
       duration: z.number().gte(1),
       [inputParameter]: z.number(),
     });
 
-    return validate<z.infer<typeof schema>>(schema, input);
+    const evaluatedInput = evaluateInput(input);
+    return validate<z.infer<typeof schema>>(schema, evaluatedInput);
   };
 
   /**
@@ -93,12 +125,20 @@ export const TimeConverter = (
     ] as const;
     const originalTimeUnitValues = timeUnitsValues as [string, ...string[]];
 
-    const configSchema = z.object({
-      'input-parameter': z.string(),
-      'original-time-unit': z.enum(originalTimeUnitValues),
-      'new-time-unit': z.enum(originalTimeUnitValuesWithDuration),
-      'output-parameter': z.string().min(1),
-    });
+    const configSchema = z
+      .object({
+        'input-parameter': z.string(),
+        'original-time-unit': z.enum(originalTimeUnitValues),
+        'new-time-unit': z.enum(originalTimeUnitValuesWithDuration),
+        'output-parameter': z.string().min(1),
+      })
+      .refine(params => {
+        Object.entries(params).forEach(([param, value]) =>
+          validateArithmeticExpression(param, value)
+        );
+
+        return true;
+      });
 
     return validate<z.infer<typeof configSchema>>(configSchema, config);
   };

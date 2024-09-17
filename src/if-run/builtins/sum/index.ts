@@ -1,5 +1,11 @@
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  ERRORS,
+  evaluateInput,
+  evaluateConfig,
+  evaluateArithmeticOutput,
+  validateArithmeticExpression,
+} from '@grnsft/if-core/utils';
 import {
   mapConfigIfNeeded,
   mapOutputIfNeeded,
@@ -34,16 +40,30 @@ export const Sum = (
    * Calculate the sum of each input-paramters.
    */
   const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateConfig();
-    const inputParameters = safeGlobalConfig['input-parameters'];
-    const outputParameter = safeGlobalConfig['output-parameter'];
+    const safeConfig = validateConfig();
+    const {
+      'input-parameters': inputParameters,
+      'output-parameter': outputParameter,
+    } = safeConfig;
 
     return inputs.map(input => {
-      validateSingleInput(input, inputParameters);
+      const safeInput = validateSingleInput(input, inputParameters);
+
+      const calculatedConfig = evaluateConfig({
+        config: safeConfig,
+        input,
+        parametersToEvaluate: config['input-parameters'],
+      });
+
+      const calculatedResult = calculateSum(
+        safeInput,
+        calculatedConfig['input-parameters'] || inputParameters
+      );
 
       const result = {
         ...input,
-        [outputParameter]: calculateSum(input, inputParameters),
+        ...safeInput,
+        ...evaluateArithmeticOutput(outputParameter, calculatedResult),
       };
 
       return mapOutputIfNeeded(result, mapping);
@@ -62,7 +82,12 @@ export const Sum = (
 
     const configSchema = z.object({
       'input-parameters': z.array(z.string()),
-      'output-parameter': z.string().min(1),
+      'output-parameter': z
+        .string()
+        .min(1)
+        .refine(value =>
+          validateArithmeticExpression('output-parameter', value)
+        ),
     });
 
     return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
@@ -75,18 +100,17 @@ export const Sum = (
     input: PluginParams,
     inputParameters: string[]
   ) => {
+    const evaluatedInput = evaluateInput(input);
     const inputData = inputParameters.reduce(
       (acc, param) => {
-        acc[param] = input[param];
+        acc[param] = evaluatedInput[param];
 
         return acc;
       },
       {} as Record<string, number>
     );
     const validationSchema = z.record(z.string(), z.number());
-    validate(validationSchema, inputData);
-
-    return input;
+    return validate(validationSchema, inputData);
   };
 
   /**

@@ -1,5 +1,12 @@
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
+import {
+  ERRORS,
+  evaluateInput,
+  evaluateConfig,
+  evaluateArithmeticOutput,
+  validateArithmeticExpression,
+  getParameterFromArithmeticExpression,
+} from '@grnsft/if-core/utils';
 import {
   mapConfigIfNeeded,
   mapOutputIfNeeded,
@@ -34,19 +41,25 @@ export const Divide = (
    * Calculate the division of each input parameter.
    */
   const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateConfig();
-    const {numerator, denominator, output} = safeGlobalConfig;
+    const safeConfig = validateConfig();
+    const {numerator, denominator, output} = safeConfig;
 
     return inputs.map((input, index) => {
-      const safeInput = Object.assign(
-        {},
+      const evaluatedConfig = evaluateConfig({
+        config: safeConfig,
         input,
-        validateSingleInput(input, {numerator, denominator})
-      );
+        parametersToEvaluate: ['numerator', 'denominator'],
+      });
+      const safeInput = validateSingleInput(input, safeConfig);
+      const calculatedResult = calculateDivide(safeInput, index, {
+        numerator: evaluatedConfig.numerator || numerator,
+        denominator: evaluatedConfig.denominator || denominator,
+      });
 
       const result = {
         ...input,
-        [output]: calculateDivide(safeInput, index, {numerator, denominator}),
+        ...safeInput,
+        ...evaluateArithmeticOutput(output, calculatedResult),
       };
 
       return mapOutputIfNeeded(result, mapping);
@@ -62,11 +75,19 @@ export const Divide = (
     }
 
     const mappedConfig = mapConfigIfNeeded(config, mapping);
-    const schema = z.object({
-      numerator: z.string().min(1),
-      denominator: z.string().or(z.number()),
-      output: z.string(),
-    });
+    const schema = z
+      .object({
+        numerator: z.string().min(1),
+        denominator: z.string().or(z.number()),
+        output: z.string(),
+      })
+      .refine(params => {
+        Object.entries(params).forEach(([param, value]) =>
+          validateArithmeticExpression(param, value)
+        );
+
+        return true;
+      });
 
     return validate<z.infer<typeof schema>>(schema, mappedConfig);
   };
@@ -76,12 +97,14 @@ export const Divide = (
    */
   const validateSingleInput = (
     input: PluginParams,
-    params: {
-      numerator: string;
-      denominator: number | string;
-    }
+    safeConfig: ConfigParams
   ) => {
-    const {numerator, denominator} = params;
+    const numerator = getParameterFromArithmeticExpression(
+      safeConfig.numerator
+    );
+    const denominator = getParameterFromArithmeticExpression(
+      safeConfig.denominator
+    );
 
     const schema = z
       .object({
@@ -96,7 +119,8 @@ export const Divide = (
         return true;
       });
 
-    return validate<z.infer<typeof schema>>(schema, input);
+    const evaluatedInput = evaluateInput(input);
+    return validate<z.infer<typeof schema>>(schema, evaluatedInput);
   };
 
   /**
@@ -106,19 +130,24 @@ export const Divide = (
     input: PluginParams,
     index: number,
     params: {
-      numerator: string;
+      numerator: number | string;
       denominator: number | string;
     }
   ) => {
     const {denominator, numerator} = params;
-    const finalDenominator = input[denominator] || denominator;
+    const finalDenominator =
+      typeof denominator === 'number'
+        ? denominator
+        : input[denominator] || denominator;
+    const finalNumerator =
+      typeof numerator === 'number' ? numerator : input[numerator];
 
     if (finalDenominator === 0) {
       console.warn(ZERO_DIVISION(Divide.name, index));
-      return input[numerator];
+      return finalNumerator;
     }
 
-    return input[numerator] / finalDenominator;
+    return finalNumerator / finalDenominator;
   };
 
   return {

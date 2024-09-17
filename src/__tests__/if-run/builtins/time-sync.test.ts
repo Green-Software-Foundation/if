@@ -897,6 +897,51 @@ describe('builtins/time-sync:', () => {
         );
         expect(DateTime.fromISO(result[0].timestamp).offset === 0);
       });
+
+      it('successfully executes when the `duration` contains an arithmetic expression.', () => {
+        expect.assertions(1);
+
+        const basicConfig = {
+          'start-time': '2023-12-12T00:00:00.000Z',
+          'end-time': '2023-12-12T00:00:10.000Z',
+          interval: 5,
+          'allow-padding': true,
+        };
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
+
+        const result = timeModel.execute([
+          {
+            timestamp: '2023-12-12T00:00:00.000Z',
+            duration: 3,
+            'resources-total': 10,
+          },
+          {
+            timestamp: '2023-12-12T00:00:05.000Z',
+            duration: 3 * 2,
+            'resources-total': 10,
+          },
+        ]);
+
+        const expectedResult = [
+          {
+            timestamp: '2023-12-12T00:00:00.000Z',
+            duration: 5,
+            'resources-total': null,
+          },
+          {
+            timestamp: '2023-12-12T00:00:05.000Z',
+            duration: 5,
+            'resources-total': null,
+          },
+          {
+            timestamp: '2023-12-12T00:00:10.000Z',
+            duration: 1,
+            'resources-total': null,
+          },
+        ];
+
+        expect(result).toStrictEqual(expectedResult);
+      });
     });
   });
 });

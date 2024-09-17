@@ -181,6 +181,66 @@ describe('builtins/time-converter: ', () => {
 
         expect(response).toEqual(expectedResult);
       });
+
+      it('successfully executes when the config output parameter contains an arithmetic expression.', () => {
+        expect.assertions(1);
+
+        const config = {
+          'input-parameter': '=2 * "energy-per-year"',
+          'original-time-unit': 'year',
+          'new-time-unit': 'duration',
+          'output-parameter': 'energy-per-duration',
+        };
+
+        const timeConverter = TimeConverter(config, parametersMetadata, {});
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy-per-year': 10000,
+            'energy-per-duration': 2.281589,
+          },
+        ];
+
+        const result = timeConverter.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy-per-year': 10000,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('throws an error the config input parameter has wrong arithmetic expression.', () => {
+        expect.assertions(2);
+        const config = {
+          'input-parameter': '2*"energy-per-year"',
+          'original-time-unit': 'year',
+          'new-time-unit': 'duration',
+          'output-parameter': 'energy-per-duration',
+        };
+
+        const timeConverter = TimeConverter(config, parametersMetadata, {});
+
+        try {
+          timeConverter.execute([
+            {
+              timestamp: '2021-01-01T00:00:00Z',
+              duration: 3600,
+              'energy-per-year': 10000,
+            },
+          ]);
+        } catch (error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error).toEqual(
+            new InputValidationError(
+              'The `input-parameter` contains an invalid arithmetic expression. It should start with `=` and include the symbols `*`, `+`, `-` and `/`.'
+            )
+          );
+        }
+      });
     });
   });
 });

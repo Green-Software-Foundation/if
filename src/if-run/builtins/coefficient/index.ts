@@ -1,5 +1,13 @@
-import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
+import {z, ZodType} from 'zod';
+
+import {
+  ERRORS,
+  evaluateInput,
+  evaluateConfig,
+  evaluateArithmeticOutput,
+  getParameterFromArithmeticExpression,
+  validateArithmeticExpression,
+} from '@grnsft/if-core/utils';
 import {
   mapConfigIfNeeded,
   mapOutputIfNeeded,
@@ -34,17 +42,30 @@ export const Coefficient = (
    * Calculate the product of each input parameter.
    */
   const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateConfig();
-    const inputParameter = safeGlobalConfig['input-parameter'];
-    const outputParameter = safeGlobalConfig['output-parameter'];
-    const coefficient = safeGlobalConfig['coefficient'];
-
+    const safeConfig = validateConfig();
+    const {
+      'input-parameter': inputParameter,
+      'output-parameter': outputParameter,
+    } = safeConfig;
     return inputs.map(input => {
-      validateSingleInput(input, inputParameter);
+      const calculatedConfig = evaluateConfig({
+        config: safeConfig,
+        input,
+        parametersToEvaluate: ['input-parameter', 'coefficient'],
+      });
+
+      const safeInput = validateSingleInput(input, inputParameter);
+      const coefficient = Number(calculatedConfig['coefficient']);
+      const calculatedResult = calculateProduct(
+        safeInput,
+        calculatedConfig['input-parameter'],
+        coefficient
+      );
 
       const result = {
         ...input,
-        [outputParameter]: calculateProduct(input, inputParameter, coefficient),
+        ...safeInput,
+        ...evaluateArithmeticOutput(outputParameter, calculatedResult),
       };
 
       return mapOutputIfNeeded(result, mapping);
@@ -54,14 +75,21 @@ export const Coefficient = (
   /**
    * Checks for required fields in input.
    */
-  const validateSingleInput = (input: PluginParams, inputParameter: string) => {
+  const validateSingleInput = (
+    input: PluginParams,
+    configInputParameter: string
+  ) => {
+    const inputParameter =
+      getParameterFromArithmeticExpression(configInputParameter);
+    const evaluatedInput = evaluateInput(input);
+
     const inputData = {
-      'input-parameter': input[inputParameter],
+      [inputParameter]: evaluatedInput[inputParameter],
     };
     const validationSchema = z.record(z.string(), z.number());
     validate(validationSchema, inputData);
 
-    return input;
+    return evaluatedInput;
   };
 
   /**
@@ -69,9 +97,11 @@ export const Coefficient = (
    */
   const calculateProduct = (
     input: PluginParams,
-    inputParameter: string,
+    inputParameter: string | number,
     coefficient: number
-  ) => input[inputParameter] * coefficient;
+  ) =>
+    (isNaN(Number(inputParameter)) ? input[inputParameter] : inputParameter) *
+    coefficient;
 
   /**
    * Checks config value are valid.
@@ -83,13 +113,27 @@ export const Coefficient = (
 
     const mappedConfig = mapConfigIfNeeded(config, mapping);
 
-    const configSchema = z.object({
-      coefficient: z.number(),
-      'input-parameter': z.string().min(1),
-      'output-parameter': z.string().min(1),
-    });
+    const configSchema = z
+      .object({
+        coefficient: z.preprocess(
+          value => validateArithmeticExpression('coefficient', value),
+          z.number()
+        ),
+        'input-parameter': z.string().min(1),
+        'output-parameter': z.string().min(1),
+      })
+      .refine(params => {
+        Object.entries(params).forEach(([param, value]) =>
+          validateArithmeticExpression(param, value)
+        );
 
-    return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
+        return true;
+      });
+
+    return validate<z.infer<typeof configSchema>>(
+      configSchema as ZodType<any>,
+      mappedConfig
+    );
   };
 
   return {
