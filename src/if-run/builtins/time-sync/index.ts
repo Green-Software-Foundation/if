@@ -282,7 +282,10 @@ export const TimeSync = (
 
       acc[metric] =
         aggregationParams.time === 'sum'
-          ? convertPerInterval(evaluatedInput[metric], evaluatedInput['duration'])
+          ? convertPerInterval(
+              evaluatedInput[metric],
+              evaluatedInput['duration']
+            )
           : evaluatedInput[metric];
 
       return acc;
