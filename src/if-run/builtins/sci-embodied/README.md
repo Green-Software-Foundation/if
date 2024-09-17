@@ -22,7 +22,7 @@ The `parameter-metadata` section contains information about the `description`, `
   - `unit`: The unit of measurement for the parameter.
   - `aggregation-method`: The method used to aggregate this parameter (`sum`, `avg`, or `none`).
 
-- `outputs`: Describes the `carbon-embodied` parameter, which includes:
+- `outputs`: Describes the `embodied-carbon` parameter, which includes:
   - `description`: A brief description of the parameter.
   - `unit`: The unit of measurement for the parameter.
   - `aggregation-method`: The method used to aggregate this parameter (`sum`, `avg`, or `none`).
@@ -70,7 +70,7 @@ Note that if you do not provide any inputs at all, we fall back to defaults that
 
 ### Outputs
 
-- `carbon-embodied`: The total embodied emissions for the component, measured in gCO2e, per timestep.
+- `embodied-carbon`: The total embodied emissions for the component, measured in gCO2e, per timestep.
 
 ## Calculation
 
@@ -123,7 +123,7 @@ tree:
     child:
       pipeline:
         compute:
-          - sci-embodied 
+          - sci-embodied
       inputs:
         - timestamp: 2024-08-19T00:00
           duration: 3600
