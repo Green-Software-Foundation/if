@@ -1,186 +1,27 @@
 import Spline from 'typescript-cubic-spline';
 import {z} from 'zod';
-import {
-  ERRORS,
-  evaluateInput,
-  evaluateConfig,
-  evaluateArithmeticOutput,
-  validateArithmeticExpression,
-  getParameterFromArithmeticExpression,
-} from '@grnsft/if-core/utils';
-import {
-  mapConfigIfNeeded,
-  mapOutputIfNeeded,
-} from '@grnsft/if-core/utils/helpers';
-import {
-  ExecutePlugin,
-  PluginParams,
-  ConfigParams,
-  Method,
-  PluginParametersMetadata,
-  MappingParams,
-} from '@grnsft/if-core/types';
+
+import {PluginParams, ConfigParams, Method} from '@grnsft/if-core/types';
+import {PluginFactory} from '@grnsft/if-core/interfaces';
 
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
-const {ConfigError} = ERRORS;
-const {MISSING_CONFIG, X_Y_EQUAL, ARRAY_LENGTH_NON_EMPTY, WITHIN_THE_RANGE} =
-  STRINGS;
+const {X_Y_EQUAL, ARRAY_LENGTH_NON_EMPTY, WITHIN_THE_RANGE} = STRINGS;
 
-export const Interpolation = (
-  config: ConfigParams,
-  parametersMetadata: PluginParametersMetadata,
-  mapping: MappingParams
-): ExecutePlugin => {
-  const metadata = {
-    kind: 'execute',
-    inputs: parametersMetadata?.inputs,
-    outputs: parametersMetadata?.outputs,
-  };
-
-  /**
-   * Executes the energy consumption calculation for an array of input parameters.
-   */
-  const execute = (inputs: PluginParams[]) => {
-    const validatedConfig = validateConfig();
-    const {'output-parameter': outputParameter} = validatedConfig;
-
-    return inputs.map((input, index) => {
-      const calculatedConfig = evaluateConfig({
-        config: validatedConfig,
-        input,
-        parametersToEvaluate: ['input-parameter'],
-      });
-      const safeInput = validateInput(input, index);
-
-      const calculatedResult = calculateResult(calculatedConfig, safeInput);
-
-      const result = {
-        ...input,
-        ...safeInput,
-        ...evaluateArithmeticOutput(outputParameter, calculatedResult),
-      };
-
-      return mapOutputIfNeeded(result, mapping);
-    });
-  };
-
-  /**
-   * Calculates the appropriate interpolation value based on the specified method type in the config and input parameters.
-   */
-  const calculateResult = (config: ConfigParams, input: PluginParams) => {
-    const methodType: {[key: string]: number} = {
-      linear: getLinearInterpolation(config, input),
-      spline: getSplineInterpolation(config, input),
-      polynomial: getPolynomialInterpolation(config, input),
-    };
-
-    return methodType[config.method];
-  };
-
-  /**
-   * Calculates the interpolation when the method is linear.
-   */
-  const getLinearInterpolation = (
-    config: ConfigParams,
-    input: PluginParams
-  ) => {
-    const parameter =
-      typeof config['input-parameter'] === 'number'
-        ? config['input-parameter']
-        : input[config['input-parameter']];
-    const xPoints: number[] = config.x;
-    const yPoints: number[] = config.y;
-
-    const result = xPoints.reduce(
-      (acc, xPoint, i) => {
-        if (parameter === xPoint) {
-          acc.baseCpu = xPoint;
-          acc.baseRate = yPoints[i];
-        } else if (parameter > xPoint && parameter < xPoints[i + 1]) {
-          acc.baseCpu = xPoint;
-          acc.baseRate = yPoints[i];
-          acc.ratio = (yPoints[i + 1] - yPoints[i]) / (xPoints[i + 1] - xPoint);
-        }
-
-        return acc;
-      },
-      {baseRate: 0, baseCpu: 0, ratio: 0}
-    );
-
-    return result.baseRate + (parameter - result.baseCpu) * result.ratio;
-  };
-
-  /**
-   * Calculates the interpolation when the method is spline.
-   */
-  const getSplineInterpolation = (
-    config: ConfigParams,
-    input: PluginParams
-  ) => {
-    const parameter =
-      typeof config['input-parameter'] === 'number'
-        ? config['input-parameter']
-        : input[config['input-parameter']];
-    const xPoints: number[] = config.x;
-    const yPoints: number[] = config.y;
-    const spline: any = new Spline(xPoints, yPoints);
-
-    return spline.at(parameter);
-  };
-
-  /**
-   * Calculates the interpolation when the method is polynomial.
-   */
-  const getPolynomialInterpolation = (
-    config: ConfigParams,
-    input: PluginParams
-  ) => {
-    const parameter =
-      typeof config['input-parameter'] === 'number'
-        ? config['input-parameter']
-        : input[config['input-parameter']];
-    const xPoints: number[] = config.x;
-    const yPoints: number[] = config.y;
-
-    const result = xPoints.reduce((acc, x, i) => {
-      const term =
-        yPoints[i] *
-        xPoints.reduce((prod, xPoint, j) => {
-          if (j !== i) {
-            return (prod * (parameter - xPoint)) / (x - xPoint);
-          }
-          return prod;
-        }, 1);
-      return acc + term;
-    }, 0);
-
-    return result;
-  };
-
-  /**
-   * Validates config parameters.
-   * Sorts elements of `x` and `y`.
-   */
-  const validateConfig = () => {
-    if (!config) {
-      throw new ConfigError(MISSING_CONFIG);
-    }
-
-    config = mapConfigIfNeeded(config, mapping);
-
+export const Interpolation = PluginFactory({
+  metadata: {
+    inputs: {},
+    outputs: {},
+  },
+  configValidation: (config: ConfigParams) => {
     const schema = z
       .object({
         method: z.nativeEnum(Method),
         x: z.array(z.number()),
         y: z.array(z.number()),
-        'input-parameter': z
-          .string()
-          .refine(param =>
-            validateArithmeticExpression('input-parameter', param)
-          ),
+        'input-parameter': z.string(),
         'output-parameter': z.string(),
       })
       .refine(data => data.x && data.y && data.x.length === data.y.length, {
@@ -197,20 +38,9 @@ export const Interpolation = (
     });
 
     return validate<z.infer<typeof schema>>(schema, updatedConfig);
-  };
-
-  const sortPoints = (items: number[]) =>
-    items.sort((a: number, b: number) => {
-      return a - b;
-    });
-
-  /**
-   * Validates inputes parameters.
-   */
-  const validateInput = (input: PluginParams, index: number) => {
-    const inputParameter = getParameterFromArithmeticExpression(
-      config['input-parameter']
-    );
+  },
+  inputValidation: async (input: PluginParams, config: ConfigParams = {}) => {
+    const inputParameter = config['input-parameter'];
 
     const schema = z
       .object({
@@ -227,12 +57,111 @@ export const Interpolation = (
         }
       );
 
-    const evaluatedInput = evaluateInput(input);
-    return validate<z.infer<typeof schema>>(schema, evaluatedInput, index);
+    return validate<z.infer<typeof schema>>(schema, input);
+  },
+  implementation: async (inputs: PluginParams[], config: ConfigParams) => {
+    const {'output-parameter': outputParameter} = config;
+
+    return inputs.map(input => {
+      const calculatedResult = calculateResult(config, input);
+
+      return {
+        ...input,
+        [outputParameter]: calculatedResult,
+      };
+    });
+  },
+  allowArithmeticExpressions: ['input-parameter'],
+});
+
+/**
+ * Calculates the appropriate interpolation value based on the specified method type in the config and input parameters.
+ */
+const calculateResult = (config: ConfigParams, input: PluginParams) => {
+  const methodType: {[key: string]: number} = {
+    linear: getLinearInterpolation(config, input),
+    spline: getSplineInterpolation(config, input),
+    polynomial: getPolynomialInterpolation(config, input),
   };
 
-  return {
-    metadata,
-    execute,
-  };
+  return methodType[config.method];
 };
+
+/**
+ * Calculates the interpolation when the method is linear.
+ */
+const getLinearInterpolation = (config: ConfigParams, input: PluginParams) => {
+  const parameter =
+    typeof config['input-parameter'] === 'number'
+      ? config['input-parameter']
+      : input[config['input-parameter']];
+  const xPoints: number[] = config.x;
+  const yPoints: number[] = config.y;
+
+  const result = xPoints.reduce(
+    (acc, xPoint, i) => {
+      if (parameter === xPoint) {
+        acc.baseCpu = xPoint;
+        acc.baseRate = yPoints[i];
+      } else if (parameter > xPoint && parameter < xPoints[i + 1]) {
+        acc.baseCpu = xPoint;
+        acc.baseRate = yPoints[i];
+        acc.ratio = (yPoints[i + 1] - yPoints[i]) / (xPoints[i + 1] - xPoint);
+      }
+
+      return acc;
+    },
+    {baseRate: 0, baseCpu: 0, ratio: 0}
+  );
+
+  return result.baseRate + (parameter - result.baseCpu) * result.ratio;
+};
+
+/**
+ * Calculates the interpolation when the method is spline.
+ */
+const getSplineInterpolation = (config: ConfigParams, input: PluginParams) => {
+  const parameter =
+    typeof config['input-parameter'] === 'number'
+      ? config['input-parameter']
+      : input[config['input-parameter']];
+  const xPoints: number[] = config.x;
+  const yPoints: number[] = config.y;
+  const spline: any = new Spline(xPoints, yPoints);
+
+  return spline.at(parameter);
+};
+
+/**
+ * Calculates the interpolation when the method is polynomial.
+ */
+const getPolynomialInterpolation = (
+  config: ConfigParams,
+  input: PluginParams
+) => {
+  const parameter =
+    typeof config['input-parameter'] === 'number'
+      ? config['input-parameter']
+      : input[config['input-parameter']];
+  const xPoints: number[] = config.x;
+  const yPoints: number[] = config.y;
+
+  const result = xPoints.reduce((acc, x, i) => {
+    const term =
+      yPoints[i] *
+      xPoints.reduce((prod, xPoint, j) => {
+        if (j !== i) {
+          return (prod * (parameter - xPoint)) / (x - xPoint);
+        }
+        return prod;
+      }, 1);
+    return acc + term;
+  }, 0);
+
+  return result;
+};
+
+const sortPoints = (items: number[]) =>
+  items.sort((a: number, b: number) => {
+    return a - b;
+  });

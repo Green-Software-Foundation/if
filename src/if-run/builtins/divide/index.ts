@@ -38,7 +38,7 @@ export const Divide = PluginFactory({
 
     return validate<z.infer<typeof schema>>(schema, input);
   },
-  implementation: async (inputs: PluginParams[], config: ConfigParams) => {
+  implementation: async (inputs: PluginParams[], config: ConfigParams = {}) => {
     const {numerator, denominator, output} = config;
 
     return inputs.map((input, index) => {

@@ -24,18 +24,16 @@ export const Coefficient = PluginFactory({
     return input;
   },
   implementation: async (inputs: PluginParams[], config: ConfigParams = {}) => {
-    const inputParameter = config['input-parameter'];
-    const outputParameter = config['output-parameter'];
-    const coefficient = config['coefficient'];
+    const {
+      'input-parameter': inputParameter,
+      'output-parameter': outputParameter,
+      coefficient,
+    } = config;
 
-    return inputs.map(input => {
-      const result = {
-        ...input,
-        [outputParameter]: calculateProduct(input, inputParameter, coefficient),
-      };
-
-      return result;
-    });
+    return inputs.map(input => ({
+      ...input,
+      [outputParameter]: calculateProduct(input, inputParameter, coefficient),
+    }));
   },
   allowArithmeticExpressions: ['input-parameter', 'coefficient'],
 });
