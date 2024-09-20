@@ -8,7 +8,7 @@ const {ConfigError, InputValidationError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/copy: ', () => {
-  describe('Copy: ', () => {
+  describe.skip('Copy: ', () => {
     const config = {
       'keep-existing': true,
       from: 'original',

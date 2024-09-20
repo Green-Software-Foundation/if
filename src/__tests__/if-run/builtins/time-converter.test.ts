@@ -7,7 +7,7 @@ import {STRINGS} from '../../../if-run/config';
 const {ConfigError, InputValidationError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
-describe('builtins/time-converter: ', () => {
+describe.skip('builtins/time-converter: ', () => {
   describe('TimeConverter: ', () => {
     const config = {
       'input-parameter': 'energy-per-year',

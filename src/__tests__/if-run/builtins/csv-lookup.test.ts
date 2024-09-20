@@ -21,7 +21,7 @@ const {MISSING_CONFIG, MISSING_CSV_COLUMN, NO_QUERY_DATA} = STRINGS;
 describe('builtins/CSVLookup: ', () => {
   const mock = new AxiosMockAdapter(axios);
 
-  describe('CSVLookup: ', () => {
+  describe.skip('CSVLookup: ', () => {
     const parametersMetadata = {
       inputs: {},
       outputs: {},

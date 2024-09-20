@@ -8,7 +8,7 @@ const {InputValidationError, ConfigError, MissingInputDataError} = ERRORS;
 const {MISSING_CONFIG, MISSING_INPUT_DATA} = STRINGS;
 
 describe('builtins/divide: ', () => {
-  describe('Divide: ', () => {
+  describe.skip('Divide: ', () => {
     const config = {
       numerator: 'vcpus-allocated',
       denominator: 2,

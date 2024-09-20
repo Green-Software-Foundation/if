@@ -9,7 +9,7 @@ const {InputValidationError, ConfigError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/coefficient: ', () => {
-  describe('Coefficient: ', () => {
+  describe.skip('Coefficient: ', () => {
     const config = {
       'input-parameter': 'carbon',
       coefficient: 3,

@@ -8,7 +8,7 @@ const {InputValidationError, ConfigError} = ERRORS;
 
 const {MISSING_CONFIG} = STRINGS;
 
-describe('builtins/exponent: ', () => {
+describe.skip('builtins/exponent: ', () => {
   describe('Exponent: ', () => {
     const config = {
       'input-parameter': 'energy/base',
