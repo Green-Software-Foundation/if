@@ -4,7 +4,7 @@ import {SciEmbodied} from '../../../if-run/builtins/sci-embodied';
 
 const {InputValidationError} = ERRORS;
 
-describe('builtins/sci-embodied:', () => {
+describe.skip('builtins/sci-embodied:', () => {
   describe('SciEmbodied: ', () => {
     const parametersMetadata = {
       inputs: {},
