@@ -33,7 +33,9 @@ const {
 } = ERRORS;
 
 const {
-  INVALID_UPSAMPLING_RESOLUTION,
+  INCOMPATIBLE_RESOLUTION_WITH_INTERVAL,
+  INCOMPATIBLE_RESOLUTION_WITH_GAPS,
+  INCOMPATIBLE_RESOLUTION_WITH_INPUTS,
   INVALID_TIME_NORMALIZATION,
   INVALID_OBSERVATION_OVERLAP,
   AVOIDING_PADDING_BY_EDGES,
@@ -105,7 +107,8 @@ export const TimeSync = (
     };
     validateIntervalForResample(
       timeParams.interval,
-      timeParams.upsamplingResolution
+      timeParams.upsamplingResolution,
+      INCOMPATIBLE_RESOLUTION_WITH_INTERVAL
     );
     const pad = checkForPadding(inputs, timeParams);
     validatePadding(pad, timeParams);
@@ -145,7 +148,8 @@ export const TimeSync = (
 
           validateIntervalForResample(
             input.duration,
-            timeParams.upsamplingResolution
+            timeParams.upsamplingResolution,
+            INCOMPATIBLE_RESOLUTION_WITH_INPUTS
           );
 
           if (timelineGapSize > 1) {
@@ -189,9 +193,13 @@ export const TimeSync = (
   /**
    * Checks if a given duration is compatible with a given timeStep. If not, throws an error
    */
-  const validateIntervalForResample = (duration: number, timeStep: number) => {
+  const validateIntervalForResample = (
+    duration: number,
+    timeStep: number,
+    errorMessage: string
+  ) => {
     if (duration % timeStep !== 0) {
-      throw new ConfigError(INVALID_UPSAMPLING_RESOLUTION);
+      throw new ConfigError(errorMessage);
     }
   };
 
@@ -560,7 +568,8 @@ export const TimeSync = (
     const array: PluginParams[] = [];
     validateIntervalForResample(
       params.endDate.diff(params.startDate).as('seconds'),
-      params.timeStep
+      params.timeStep,
+      INCOMPATIBLE_RESOLUTION_WITH_GAPS
     );
     const dateRange = Interval.fromDateTimes(params.startDate, params.endDate);
 

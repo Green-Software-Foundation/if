@@ -10,8 +10,12 @@ export const STRINGS = {
     `Provided module \`${path}\` is invalid or not found. ${error ?? ''}
 `,
   INVALID_TIME_NORMALIZATION: 'Start time or end time is missing.',
-  INVALID_UPSAMPLING_RESOLUTION:
-    'Upsampling resolution does not adhere to all constraints',
+  INCOMPATIBLE_RESOLUTION_WITH_INTERVAL:
+    'The upsampling resolution must be a divisor of the given interval, but the provided value does not satisfy this criteria.',
+  INCOMPATIBLE_RESOLUTION_WITH_INPUTS:
+    'The upsampling resolution must be a divisor of all inputs durations, but the provided values do not satisfy this criteria.',
+  INCOMPATIBLE_RESOLUTION_WITH_GAPS:
+    'The upsampling resolution must be a divisor of gaps and paddings in the time-series, but the provided values do not satisfy this criteria.',
   UNEXPECTED_TIME_CONFIG:
     'Unexpected node-level config provided for time-sync plugin.',
   INVALID_TIME_INTERVAL: 'Interval is missing.',

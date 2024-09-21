@@ -19,7 +19,8 @@ const {
 } = ERRORS;
 
 const {
-  INVALID_UPSAMPLING_RESOLUTION,
+  INCOMPATIBLE_RESOLUTION_WITH_INTERVAL,
+  INCOMPATIBLE_RESOLUTION_WITH_GAPS,
   INVALID_OBSERVATION_OVERLAP,
   INVALID_TIME_NORMALIZATION,
   AVOIDING_PADDING_BY_EDGES,
@@ -964,7 +965,7 @@ describe('builtins/time-sync:', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new ConfigError(INVALID_UPSAMPLING_RESOLUTION)
+            new ConfigError(INCOMPATIBLE_RESOLUTION_WITH_INTERVAL)
           );
         }
       });
@@ -989,7 +990,7 @@ describe('builtins/time-sync:', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new ConfigError(INVALID_UPSAMPLING_RESOLUTION)
+            new ConfigError(INCOMPATIBLE_RESOLUTION_WITH_GAPS)
           );
         }
       });
@@ -1017,7 +1018,7 @@ describe('builtins/time-sync:', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new ConfigError(INVALID_UPSAMPLING_RESOLUTION)
+            new ConfigError(INCOMPATIBLE_RESOLUTION_WITH_GAPS)
           );
         }
       });
