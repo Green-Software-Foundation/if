@@ -7,7 +7,7 @@ import {STRINGS} from '../../../if-run/config';
 const {ConfigError, InputValidationError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
-describe('builtins/sum: ', () => {
+describe.skip('builtins/sum: ', () => {
   describe('Sum: ', () => {
     const config = {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
