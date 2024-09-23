@@ -9,9 +9,10 @@ Time sync standardizes the start time, end time and temporal resolution of all o
 The following should be defined in the plugin initialization:
 
 - `start-time`: global start time as ISO 8061 string
-- `stop`: global end time as ISO 8061 string
+- `end-time`: global end time as ISO 8061 string
 - `interval`: temporal resolution in seconds
-- `error-on-padding`: avoid zero/'zeroish' padding (if needed) and error out instead. `False` by defult.
+- `allow-padding`: avoid zero/'zeroish' padding (if needed) and error out instead.
+- `upsampling-resolution`: temporal resolution at which observations will be upsampled, in seconds. Defaults to 1.
 
 #### Inputs:
 
@@ -28,7 +29,7 @@ A manifest file for a tree might contain many nodes each representing some diffe
 We do this by implementing the following logic:
 
 - Shift readings to nearest whole seconds
-- Upsample the time series to a base resolution (1s)
+- Upsample the time series to a base resolution.
 - Resample to desired resolution by batching 1s entries
 - Extrapolate or trim to ensure all time series share global start and end dates
 
@@ -39,6 +40,7 @@ The next section explains each stage in more detail.
 ##### Upsampling rules
 
 A set of `inputs` is naturally a time series because all `observations` include a `timestamp` and a `duration`, measured in seconds.
+
 For each `observation` in `inputs` we check whether the duration is greater than 1 second. If `duration` is greater than 1 second, we create N new `observation` objects, where N is equal to `duration`. This means we have an `observation` for every second between the initial timestamp and the end of the observation period. Each new object receives a timestamp incremented by one second.
 
 This looks as follows:
@@ -54,6 +56,7 @@ This looks as follows:
   {timestamp: '2023-12-12T00:00:04.000Z', duration: 1}
   {timestamp: '2023-12-12T00:00:05.000Z', duration: 1}
 ]
+
 ```
 
 Each `observation` actually includes many key-value pairs. The precise content of the `observation` is not known until runtime because it depends on which plugins have been included in the pipeline. Different values have to be treated differently when we upsample in time. The method we use to upsample depends on the `aggregation-method` defined for each key in `units.yml`.
@@ -151,11 +154,30 @@ For example, for `startTime = 2023-12-12T00:00:00.000Z` and `endTime = 2023-12-1
 ]
 ```
 
-Note that when `error-on-padding` is `true` no padding is performed and the plugin will error out instead.
+Note that when `allow-padding` is `true` no padding is performed and the plugin will error out instead.
 
 ##### Resampling rules
 
 Now we have synchronized, continuous, high resolution time series data, we can resample. To achieve this, we use `interval`, which sets the global temporal resolution for the final, processed time series. `interval` is expressed in units of seconds, which means we can simply batch `observations` together in groups of size `interval`. For each value in each object we either sum, average or copy the values into one single summary object representing each time bucket of size `interval` depending on their `aggregation-method` defined in `aggregation` section in the manifest file. The returned array is the final, synchronized time series at the desired temporal resolution.
+
+#### Setting a custom upsampling resolution
+
+The model defaults to upsampling observations to a 1-second resolution. However, this can lead to unnecessary effort, as upsampling at a coarser resolution is often sufficient, provided it doesn't interfere with the accuracy of resampling. To optimize performance, we can set the `upsampling-resolution` parameter in the configuration to a more appropriate value. The chosen value should meet the following criteria :
+
+- It should evenly divide all observation durations within the dataset.
+- It must be a divisor of the `interval`.
+- It should also divide any gaps between observations, as well as the start and end paddings.
+
+For example, for `interval = 10` and this time-series
+
+```ts
+[
+  {timestamp: '2023-12-12T00:00:00.000Z', duration: 300},
+]
+````
+setting the `upsampling-resolution` to `10s` is preferable to the default behavior.  
+If the default behavior were used, the model would create `300` samples of `1s` each, which would be inefficient. By setting a custom `upsampling-resolution` of `10s`, the model only generates `30` samples, each representing `10s`.
+
 
 #### Assumptions and limitations
 
@@ -173,7 +195,8 @@ Then, you can call `execute()`.
 const config = {
   'start-time': '2023-12-12T00:00:00.000Z',
   'end-time': '2023-12-12T00:00:30.000Z',
-  interval: 10
+  interval: 10,
+  'allow-padding': true,
 }
 const timeSync = TimeSync(config);
 const results = timeSync.execute([
