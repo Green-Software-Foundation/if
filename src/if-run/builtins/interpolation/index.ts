@@ -3,12 +3,16 @@ import {z} from 'zod';
 
 import {PluginParams, ConfigParams, Method} from '@grnsft/if-core/types';
 import {PluginFactory} from '@grnsft/if-core/interfaces';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
-const {X_Y_EQUAL, ARRAY_LENGTH_NON_EMPTY, WITHIN_THE_RANGE} = STRINGS;
+const {X_Y_EQUAL, ARRAY_LENGTH_NON_EMPTY, WITHIN_THE_RANGE, MISSING_CONFIG} =
+  STRINGS;
+
+const {ConfigError} = ERRORS;
 
 export const Interpolation = PluginFactory({
   metadata: {
@@ -16,6 +20,10 @@ export const Interpolation = PluginFactory({
     outputs: {},
   },
   configValidation: (config: ConfigParams) => {
+    if (!config || !Object.keys(config)?.length) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
     const schema = z
       .object({
         method: z.nativeEnum(Method),
@@ -39,7 +47,11 @@ export const Interpolation = PluginFactory({
 
     return validate<z.infer<typeof schema>>(schema, updatedConfig);
   },
-  inputValidation: async (input: PluginParams, config: ConfigParams = {}) => {
+  inputValidation: (
+    input: PluginParams,
+    config: ConfigParams,
+    index: number | undefined
+  ) => {
     const inputParameter = config['input-parameter'];
 
     const schema = z
@@ -57,7 +69,7 @@ export const Interpolation = PluginFactory({
         }
       );
 
-    return validate<z.infer<typeof schema>>(schema, input);
+    return validate<z.infer<typeof schema>>(schema, input, index);
   },
   implementation: async (inputs: PluginParams[], config: ConfigParams) => {
     const {'output-parameter': outputParameter} = config;

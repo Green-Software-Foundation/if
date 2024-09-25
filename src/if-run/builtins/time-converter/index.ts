@@ -2,10 +2,16 @@ import {z} from 'zod';
 
 import {PluginParams, ConfigParams} from '@grnsft/if-core/types';
 import {PluginFactory} from '@grnsft/if-core/interfaces';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
 
 import {TIME_UNITS_IN_SECONDS} from './config';
+
+import {STRINGS} from '../../config';
+
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
 
 export const TimeConverter = PluginFactory({
   metadata: {
@@ -13,6 +19,10 @@ export const TimeConverter = PluginFactory({
     outputs: {},
   },
   configValidation: (config: ConfigParams) => {
+    if (!config || !Object.keys(config)?.length) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
     const timeUnitsValues = Object.keys(TIME_UNITS_IN_SECONDS);
     const originalTimeUnitValuesWithDuration = [
       'duration',
@@ -29,7 +39,7 @@ export const TimeConverter = PluginFactory({
 
     return validate<z.infer<typeof configSchema>>(configSchema, config);
   },
-  inputValidation: async (input: PluginParams, config: ConfigParams = {}) => {
+  inputValidation: (input: PluginParams, config: ConfigParams) => {
     const inputParameter = config['input-parameter'];
 
     const schema = z.object({

@@ -6,18 +6,24 @@ import {parse} from 'csv-parse/sync';
 
 import {ConfigParams, PluginParams} from '@grnsft/if-core/types';
 import {PluginFactory} from '@grnsft/if-core/interfaces';
-import {ERRORS} from '@grnsft/if-core/utils';
+import {ERRORS, validate} from '@grnsft/if-core/utils';
 
 import {STRINGS} from '../../config';
 
-const {FILE_FETCH_FAILED, FILE_READ_FAILED, MISSING_CSV_COLUMN, NO_QUERY_DATA} =
-  STRINGS;
+const {
+  FILE_FETCH_FAILED,
+  FILE_READ_FAILED,
+  MISSING_CSV_COLUMN,
+  MISSING_CONFIG,
+  NO_QUERY_DATA,
+} = STRINGS;
 
 const {
   FetchingFileError,
   ReadFileError,
   MissingCSVColumnError,
   QueryDataNotFoundError,
+  ConfigError,
   CSVParseError,
 } = ERRORS;
 
@@ -26,15 +32,23 @@ export const CSVLookup = PluginFactory({
     inputs: {},
     outputs: {},
   },
-  configValidation: z.object({
-    filepath: z.string(),
-    query: z.record(z.string(), z.string()),
-    output: z
-      .string()
-      .or(z.array(z.string()))
-      .or(z.array(z.array(z.string()))),
-  }),
-  implementation: async (inputs: PluginParams[], config: ConfigParams = {}) => {
+  configValidation: (config: ConfigParams) => {
+    if (!config || !Object.keys(config)?.length) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
+    const configSchema = z.object({
+      filepath: z.string(),
+      query: z.record(z.string(), z.string()),
+      output: z
+        .string()
+        .or(z.array(z.string()))
+        .or(z.array(z.array(z.string()))),
+    });
+
+    return validate<z.infer<typeof configSchema>>(configSchema, config);
+  },
+  implementation: async (inputs: PluginParams[], config: ConfigParams) => {
     /**
      * 1. Tries to retrieve given file (with url or local path).
      * 2. Parses given CSV.

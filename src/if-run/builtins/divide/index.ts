@@ -1,25 +1,34 @@
 import {z} from 'zod';
-import {PluginFactory} from '@grnsft/if-core/interfaces';
+
 import {ConfigParams, PluginParams} from '@grnsft/if-core/types';
+import {PluginFactory} from '@grnsft/if-core/interfaces';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
 
-import {ERRORS} from '@grnsft/if-core/utils';
-
 import {STRINGS} from '../../config';
 
-const {MissingInputDataError} = ERRORS;
-const {MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
+const {MissingInputDataError, ConfigError} = ERRORS;
+const {MISSING_INPUT_DATA, ZERO_DIVISION, MISSING_CONFIG} = STRINGS;
+
 export const Divide = PluginFactory({
   metadata: {
     inputs: {},
     outputs: {},
   },
-  configValidation: z.object({
-    numerator: z.string().min(1),
-    denominator: z.string().or(z.number()),
-    output: z.string(),
-  }),
+  configValidation: (config: ConfigParams) => {
+    if (!config || !Object.keys(config)?.length) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
+    const schema = z.object({
+      numerator: z.string().min(1),
+      denominator: z.string().or(z.number()),
+      output: z.string(),
+    });
+
+    return validate<z.infer<typeof schema>>(schema, config);
+  },
   inputValidation: (input: PluginParams, config: ConfigParams) => {
     const {numerator, denominator} = config;
 
@@ -38,7 +47,7 @@ export const Divide = PluginFactory({
 
     return validate<z.infer<typeof schema>>(schema, input);
   },
-  implementation: async (inputs: PluginParams[], config: ConfigParams = {}) => {
+  implementation: async (inputs: PluginParams[], config: ConfigParams) => {
     const {numerator, denominator, output} = config;
 
     return inputs.map((input, index) => {

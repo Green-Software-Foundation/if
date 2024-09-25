@@ -7,13 +7,19 @@ import {
   ConfigParams,
   ObservationParams,
 } from '@grnsft/if-core/types';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
+
+import {STRINGS} from '../../config';
 
 import {CommonGenerator} from './helpers/common-generator';
 import {RandIntGenerator} from './helpers/rand-int-generator';
 
 import {Generator} from './interfaces/index';
+
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
 
 export const MockObservations = PluginFactory({
   metadata: {
@@ -21,6 +27,10 @@ export const MockObservations = PluginFactory({
     outputs: {},
   },
   configValidation: (config: ConfigParams) => {
+    if (!config || !Object.keys(config)?.length) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
     const schema = z.object({
       'timestamp-from': z.string(),
       'timestamp-to': z.string(),

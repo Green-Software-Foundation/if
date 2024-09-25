@@ -27,17 +27,14 @@ export const Sum = PluginFactory({
     const validationSchema = z.record(z.string(), z.number());
     return validate(validationSchema, inputData);
   },
-  implementation: async (inputs: PluginParams[], config: ConfigParams = {}) => {
+  implementation: async (inputs: PluginParams[], config: ConfigParams) => {
     const {
       'input-parameters': inputParameters,
       'output-parameter': outputParameter,
     } = config;
 
     return inputs.map(input => {
-      const calculatedResult = calculateSum(
-        input,
-        config['input-parameters'] || inputParameters
-      );
+      const calculatedResult = calculateSum(input, inputParameters);
 
       return {
         ...input,
