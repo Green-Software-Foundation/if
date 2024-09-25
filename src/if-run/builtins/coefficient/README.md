@@ -27,13 +27,14 @@ of the parameters of the inputs and outputs
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method object of the parameter
     - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
-    - `component`:  this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
 - `outputs`: describe parameters of the `output-parameter` of the config. Each parameter has:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method object of the parameter
     - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
-    - `component`:  this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
 
 ### Mapping
 
@@ -75,7 +76,7 @@ const parametersMetadata = {inputs: {}, outputs: {}};
 const mapping = {};
 
 const coeff = Coefficient(config, parametersMetadata, mapping);
-const result = coeff.execute([
+const result = await coeff.execute([
   {
     duration: 3600,
     timestamp: '2021-01-01T00:00:00Z',
