@@ -2,12 +2,9 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {Sum} from '../../../if-run/builtins/sum';
 
-import {STRINGS} from '../../../if-run/config';
+const {InputValidationError, WrongArithmeticExpressionError} = ERRORS;
 
-const {ConfigError, InputValidationError} = ERRORS;
-const {MISSING_CONFIG} = STRINGS;
-
-describe.skip('builtins/sum: ', () => {
+describe('builtins/sum: ', () => {
   describe('Sum: ', () => {
     const config = {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
@@ -27,7 +24,7 @@ describe.skip('builtins/sum: ', () => {
     });
 
     describe('execute(): ', () => {
-      it('successfully applies Sum strategy to given input.', () => {
+      it('successfully applies Sum strategy to given input.', async () => {
         expect.assertions(1);
 
         const expectedResult = [
@@ -41,7 +38,7 @@ describe.skip('builtins/sum: ', () => {
           },
         ];
 
-        const result = sum.execute([
+        const result = await sum.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
@@ -54,7 +51,7 @@ describe.skip('builtins/sum: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('successfully executes when `mapping` has valid data.', () => {
+      it('successfully executes when `mapping` has valid data.', async () => {
         expect.assertions(1);
 
         const mapping = {
@@ -79,7 +76,7 @@ describe.skip('builtins/sum: ', () => {
           },
         ];
 
-        const result = sum.execute([
+        const result = await sum.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
@@ -92,7 +89,7 @@ describe.skip('builtins/sum: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('successfully executes when the `mapping` maps output parameter.', () => {
+      it('successfully executes when the `mapping` maps output parameter.', async () => {
         expect.assertions(1);
 
         const mapping = {
@@ -116,7 +113,7 @@ describe.skip('builtins/sum: ', () => {
           },
         ];
 
-        const result = sum.execute([
+        const result = await sum.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
@@ -129,14 +126,14 @@ describe.skip('builtins/sum: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error when config is not provided.', () => {
+      it('throws an error when config is not provided.', async () => {
         const config = undefined;
         const sum = Sum(config!, parametersMetadata, {});
 
         expect.assertions(1);
 
         try {
-          sum.execute([
+          await sum.execute([
             {
               timestamp: '2021-01-01T00:00:00Z',
               duration: 3600,
@@ -146,15 +143,19 @@ describe.skip('builtins/sum: ', () => {
             },
           ]);
         } catch (error) {
-          expect(error).toStrictEqual(new ConfigError(MISSING_CONFIG));
+          expect(error).toStrictEqual(
+            new InputValidationError(
+              '"input-parameters" parameter is required. Error code: invalid_type.,"output-parameter" parameter is required. Error code: invalid_type.'
+            )
+          );
         }
       });
 
-      it('throws an error on missing params in input.', () => {
+      it('throws an error on missing params in input.', async () => {
         expect.assertions(1);
 
         try {
-          sum.execute([
+          await sum.execute([
             {
               duration: 3600,
               timestamp: '2021-01-01T00:00:00Z',
@@ -169,7 +170,7 @@ describe.skip('builtins/sum: ', () => {
         }
       });
 
-      it('returns a result with input params not related to energy.', () => {
+      it('returns a result with input params not related to energy.', async () => {
         expect.assertions(1);
         const newConfig = {
           'input-parameters': ['carbon', 'other-carbon'],
@@ -185,7 +186,7 @@ describe.skip('builtins/sum: ', () => {
             'other-carbon': 2,
           },
         ];
-        const response = sum.execute(data);
+        const response = await sum.execute(data);
 
         const expectedResult = [
           {
@@ -200,7 +201,7 @@ describe.skip('builtins/sum: ', () => {
         expect(response).toEqual(expectedResult);
       });
 
-      it('successfully executes when the config output parameter contains an arithmetic expression.', () => {
+      it('successfully executes when the config output parameter contains an arithmetic expression.', async () => {
         expect.assertions(1);
 
         const config = {
@@ -220,7 +221,7 @@ describe.skip('builtins/sum: ', () => {
           },
         ];
 
-        const result = sum.execute([
+        const result = await sum.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
@@ -233,7 +234,7 @@ describe.skip('builtins/sum: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error the config output parameter has wrong arithmetic expression.', () => {
+      it('throws an error the config output parameter has wrong arithmetic expression.', async () => {
         expect.assertions(2);
 
         const config = {
@@ -244,7 +245,7 @@ describe.skip('builtins/sum: ', () => {
         const sum = Sum(config, parametersMetadata, {});
 
         try {
-          sum.execute([
+          await sum.execute([
             {
               timestamp: '2021-01-01T00:00:00Z',
               duration: 3600,
@@ -256,8 +257,8 @@ describe.skip('builtins/sum: ', () => {
         } catch (error) {
           expect(error).toBeInstanceOf(Error);
           expect(error).toEqual(
-            new InputValidationError(
-              'The `output-parameter` contains an invalid arithmetic expression. It should start with `=` and include the symbols `*`, `+`, `-` and `/`.'
+            new WrongArithmeticExpressionError(
+              `The output parameter \`${config['output-parameter']}\` contains an invalid arithmetic expression. It should start with \`=\` and include the symbols \`*\`, \`+\`, \`-\` and \`/\`.`
             )
           );
         }

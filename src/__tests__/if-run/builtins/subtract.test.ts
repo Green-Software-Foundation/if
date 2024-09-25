@@ -4,12 +4,13 @@ import {Subtract} from '../../../if-run/builtins/subtract';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {InputValidationError, ConfigError} = ERRORS;
+const {InputValidationError, ConfigError, WrongArithmeticExpressionError} =
+  ERRORS;
 
 const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/subtract: ', () => {
-  describe.skip('Subtract: ', () => {
+  describe('Subtract: ', () => {
     const config = {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
       'output-parameter': 'energy/diff',
@@ -176,7 +177,7 @@ describe('builtins/subtract: ', () => {
       });
     });
 
-    it('successfully executes when the config output parameter contains an arithmetic expression.', () => {
+    it('successfully executes when the config output parameter contains an arithmetic expression.', async () => {
       expect.assertions(1);
 
       const config = {
@@ -196,7 +197,7 @@ describe('builtins/subtract: ', () => {
         },
       ];
 
-      const result = subtract.execute([
+      const result = await subtract.execute([
         {
           duration: 3600,
           'cpu/energy': 4,
@@ -209,7 +210,7 @@ describe('builtins/subtract: ', () => {
       expect(result).toStrictEqual(expectedResult);
     });
 
-    it('throws an error the config output parameter has wrong arithmetic expression.', () => {
+    it('throws an error the config output parameter has wrong arithmetic expression.', async () => {
       expect.assertions(2);
 
       const config = {
@@ -229,12 +230,12 @@ describe('builtins/subtract: ', () => {
       ];
 
       try {
-        subtract.execute(inputs);
+        await subtract.execute(inputs);
       } catch (error) {
         expect(error).toBeInstanceOf(Error);
         expect(error).toEqual(
-          new InputValidationError(
-            'The `output-parameter` contains an invalid arithmetic expression. It should start with `=` and include the symbols `*`, `+`, `-` and `/`.'
+          new WrongArithmeticExpressionError(
+            "The output parameter `=2 & 'energy/diff'` contains an invalid arithmetic expression. It should start with `=` and include the symbols `*`, `+`, `-` and `/`."
           )
         );
       }

@@ -153,7 +153,7 @@ describe.skip('builtins/sci-embodied:', () => {
         }
       });
 
-      it('successfully executes when a parameter contains arithmetic expression.', () => {
+      it('successfully executes when a parameter contains arithmetic expression.', async () => {
         const config = {
           'baseline-vcpus': 1,
           'baseline-memory': 16,
@@ -182,7 +182,7 @@ describe.skip('builtins/sci-embodied:', () => {
           },
         ];
 
-        const result = sciEmbodied.execute(inputs);
+        const result = await sciEmbodied.execute(inputs);
 
         expect.assertions(1);
 
@@ -204,7 +204,7 @@ describe.skip('builtins/sci-embodied:', () => {
         ]);
       });
 
-      it('throws an error the `gpu-emissions-constant` parameter has wrong arithmetic expression.', () => {
+      it('throws an error the `gpu-emissions-constant` parameter has wrong arithmetic expression.', async () => {
         const config = {
           'baseline-vcpus': 1,
           'baseline-memory': 16,
@@ -230,7 +230,7 @@ describe.skip('builtins/sci-embodied:', () => {
         expect.assertions(2);
 
         try {
-          sciEmbodied.execute(inputs);
+          await sciEmbodied.execute(inputs);
         } catch (error) {
           expect(error).toBeInstanceOf(Error);
           expect(error).toEqual(

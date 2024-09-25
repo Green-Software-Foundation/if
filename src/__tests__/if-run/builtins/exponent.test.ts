@@ -1,4 +1,3 @@
-import {ExponentConfig} from '@grnsft/if-core/types';
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {STRINGS} from '../../../if-run/config';
@@ -8,7 +7,7 @@ const {InputValidationError, ConfigError} = ERRORS;
 
 const {MISSING_CONFIG} = STRINGS;
 
-describe.skip('builtins/exponent: ', () => {
+describe('builtins/exponent: ', () => {
   describe('Exponent: ', () => {
     const config = {
       'input-parameter': 'energy/base',
@@ -86,6 +85,7 @@ describe.skip('builtins/exponent: ', () => {
 
       it('successfully executes when the `mapping` maps output parameter.', async () => {
         expect.assertions(1);
+
         const mapping = {
           energy: 'energy-result',
         };
@@ -94,6 +94,7 @@ describe.skip('builtins/exponent: ', () => {
           exponent: 3,
           'output-parameter': 'energy',
         };
+
         const exponent = Exponent(config, parametersMetadata, mapping);
         const expectedResult = [
           {
@@ -136,7 +137,7 @@ describe.skip('builtins/exponent: ', () => {
 
       it('throws an error on input param value not numeric.', async () => {
         expect.assertions(1);
-        const input = [
+        const inputs = [
           {
             duration: 3600,
             'energy/base': 'i-am-not-a-number',
@@ -145,7 +146,7 @@ describe.skip('builtins/exponent: ', () => {
         ];
 
         try {
-          await exponent.execute(input);
+          await exponent.execute(inputs);
         } catch (error) {
           expect(error).toStrictEqual(
             new InputValidationError(
@@ -185,7 +186,7 @@ describe.skip('builtins/exponent: ', () => {
         expect(response).toEqual(expectedResult);
       });
 
-      it('successfully executes when a parameter contains arithmetic expression.', () => {
+      it('successfully executes when a parameter contains arithmetic expression.', async () => {
         const config = {
           'input-parameter': "=2*'energy/base'",
           exponent: 3,
@@ -209,7 +210,7 @@ describe.skip('builtins/exponent: ', () => {
           },
         ];
 
-        const result = exponent.execute([
+        const result = await exponent.execute([
           {
             duration: 3600,
             'energy/base': 4,
@@ -220,7 +221,7 @@ describe.skip('builtins/exponent: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error when the `exponent` has wrong arithmetic expression.', () => {
+      it('throws an error when the `exponent` has wrong arithmetic expression.', async () => {
         const config = {
           'input-parameter': "=2*'energy/base'",
           exponent: "3*'mock-param'",
@@ -231,16 +232,12 @@ describe.skip('builtins/exponent: ', () => {
           outputs: {},
         };
 
-        const exponent = Exponent(
-          config as any as ExponentConfig,
-          parametersMetadata,
-          {}
-        );
+        const exponent = Exponent(config, parametersMetadata, {});
 
         expect.assertions(2);
 
         try {
-          exponent.execute([
+          await exponent.execute([
             {
               duration: 3600,
               'energy/base': 4,
@@ -260,12 +257,12 @@ describe.skip('builtins/exponent: ', () => {
 
     it('throws an error on missing config.', async () => {
       const config = undefined;
-      const divide = Exponent(config!, parametersMetadata, {});
+      const exponent = Exponent(config!, parametersMetadata, {});
 
       expect.assertions(1);
 
       try {
-        await divide.execute([
+        await exponent.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,

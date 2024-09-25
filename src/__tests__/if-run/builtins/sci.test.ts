@@ -9,7 +9,7 @@ const {MissingInputDataError, ConfigError, InputValidationError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/sci:', () => {
-  describe.skip('Sci: ', () => {
+  describe('Sci: ', () => {
     const config = {'functional-unit': 'users'};
     const parametersMetadata = {inputs: {}, outputs: {}};
     const sci = Sci(config, parametersMetadata, {});
@@ -225,14 +225,14 @@ describe('builtins/sci:', () => {
       expect(result).toStrictEqual([{...inputs[0], sci: inputs[0].carbon}]);
     });
 
-    it('throws an error on missing config.', () => {
+    it('throws an error on missing config.', async () => {
       const config = undefined;
       const sci = Sci(config!, parametersMetadata, {});
 
       expect.assertions(1);
 
       try {
-        sci.execute([
+        await sci.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
@@ -243,7 +243,7 @@ describe('builtins/sci:', () => {
       }
     });
 
-    it('successfully executes when a parameter contains arithmetic expression.', () => {
+    it('successfully executes when a parameter contains arithmetic expression.', async () => {
       const config = {'functional-unit': '=10*users'};
       const sci = Sci(config, parametersMetadata, {});
       expect.assertions(1);
@@ -258,7 +258,7 @@ describe('builtins/sci:', () => {
           duration: 1,
         },
       ];
-      const result = sci.execute(inputs);
+      const result = await sci.execute(inputs);
 
       expect.assertions(1);
       expect(result).toStrictEqual([
@@ -275,7 +275,7 @@ describe('builtins/sci:', () => {
       ]);
     });
 
-    it('throws an error the `functional-unit` parameter has wrong arithmetic expression.', () => {
+    it('throws an error the `functional-unit` parameter has wrong arithmetic expression.', async () => {
       const config = {'functional-unit': '10*users'};
       const sci = Sci(config, parametersMetadata, {});
       expect.assertions(1);
@@ -294,7 +294,7 @@ describe('builtins/sci:', () => {
       expect.assertions(2);
 
       try {
-        sci.execute(inputs);
+        await sci.execute(inputs);
       } catch (error) {
         expect(error).toBeInstanceOf(Error);
         expect(error).toEqual(

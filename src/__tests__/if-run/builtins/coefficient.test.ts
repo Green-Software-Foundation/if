@@ -3,13 +3,12 @@ import {ERRORS} from '@grnsft/if-core/utils';
 import {Coefficient} from '../../../if-run/builtins/coefficient';
 
 import {STRINGS} from '../../../if-run/config';
-import {CoefficientConfig} from '@grnsft/if-core/types';
 
 const {InputValidationError, ConfigError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/coefficient: ', () => {
-  describe.skip('Coefficient: ', () => {
+  describe('Coefficient: ', () => {
     const config = {
       'input-parameter': 'carbon',
       coefficient: 3,
@@ -29,7 +28,7 @@ describe('builtins/coefficient: ', () => {
     });
 
     describe('execute(): ', () => {
-      it('successfully applies coefficient strategy to given input.', () => {
+      it('successfully applies coefficient strategy to given input.', async () => {
         expect.assertions(1);
 
         const expectedResult = [
@@ -41,7 +40,7 @@ describe('builtins/coefficient: ', () => {
           },
         ];
 
-        const result = coefficient.execute([
+        const result = await coefficient.execute([
           {
             duration: 3600,
             carbon: 3,
@@ -54,7 +53,7 @@ describe('builtins/coefficient: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('succcessfully executes when the mapping has data.', () => {
+      it('succcessfully executes when the mapping has data.', async () => {
         const mapping = {
           carbon: 'carbon-for-production',
         };
@@ -71,7 +70,7 @@ describe('builtins/coefficient: ', () => {
           },
         ];
 
-        const result = coefficient.execute([
+        const result = await coefficient.execute([
           {
             duration: 3600,
             'carbon-for-production': 3,
@@ -84,7 +83,7 @@ describe('builtins/coefficient: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('succcessfully executes when the mapping map output parameter.', () => {
+      it('succcessfully executes when the mapping map output parameter.', async () => {
         const mapping = {
           'carbon-product': 'carbon-result',
         };
@@ -101,7 +100,7 @@ describe('builtins/coefficient: ', () => {
           },
         ];
 
-        const result = coefficient.execute([
+        const result = await coefficient.execute([
           {
             duration: 3600,
             carbon: 3,
@@ -114,7 +113,7 @@ describe('builtins/coefficient: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('successfully executes when a parameter has an arithmetic expression.', () => {
+      it('successfully executes when a parameter has an arithmetic expression.', async () => {
         expect.assertions(1);
         const config = {
           'input-parameter': '=3*carbon',
@@ -136,7 +135,7 @@ describe('builtins/coefficient: ', () => {
           },
         ];
 
-        const result = coefficient.execute([
+        const result = await coefficient.execute([
           {
             duration: 3600,
             carbon: 3,
@@ -149,7 +148,7 @@ describe('builtins/coefficient: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error when the `coefficient` has wrong arithmetic expression.', () => {
+      it('throws an error when the `coefficient` has wrong arithmetic expression.', async () => {
         const config = {
           'input-parameter': 'carbon',
           coefficient: 'mock-param',
@@ -159,16 +158,12 @@ describe('builtins/coefficient: ', () => {
           inputs: {},
           outputs: {},
         };
-        const coefficient = Coefficient(
-          config as any as CoefficientConfig,
-          parametersMetadata,
-          {}
-        );
+        const coefficient = Coefficient(config, parametersMetadata, {});
 
         expect.assertions(2);
 
         try {
-          coefficient.execute([
+          await coefficient.execute([
             {
               duration: 3600,
               carbon: 'some-param',
@@ -185,14 +180,14 @@ describe('builtins/coefficient: ', () => {
         }
       });
 
-      it('throws an error when config is not provided.', () => {
+      it('throws an error when config is not provided.', async () => {
         const config = undefined;
         const coefficient = Coefficient(config!, parametersMetadata, {});
 
         expect.assertions(1);
 
         try {
-          coefficient.execute([
+          await coefficient.execute([
             {
               duration: 3600,
               timestamp: '2021-01-01T00:00:00Z',
@@ -204,7 +199,7 @@ describe('builtins/coefficient: ', () => {
         }
       });
 
-      it('throws an error on missing `input-parameter` param in input.', () => {
+      it('throws an error on missing `input-parameter` param in input.', async () => {
         const invalidConfig = {
           'input-parameter': '',
           coefficient: 3,
@@ -217,7 +212,7 @@ describe('builtins/coefficient: ', () => {
         expect.assertions(1);
 
         try {
-          coefficient.execute([
+          await coefficient.execute([
             {
               duration: 3600,
               timestamp: '2021-01-01T00:00:00Z',
@@ -231,7 +226,7 @@ describe('builtins/coefficient: ', () => {
         }
       });
 
-      it('throws an error on missing `output-parameter` param in input.', () => {
+      it('throws an error on missing `output-parameter` param in input.', async () => {
         const invalidConfig = {
           'input-parameter': 'carbon',
           coefficient: 10,
@@ -243,7 +238,7 @@ describe('builtins/coefficient: ', () => {
 
         expect.assertions(1);
         try {
-          coefficient.execute([
+          await coefficient.execute([
             {
               duration: 3600,
               timestamp: '2021-01-01T00:00:00Z',
