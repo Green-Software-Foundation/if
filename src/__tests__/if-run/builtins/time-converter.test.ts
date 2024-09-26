@@ -29,7 +29,7 @@ describe('builtins/time-converter: ', () => {
     });
 
     describe('execute(): ', () => {
-      it('successfully applies TimeConverter strategy to given input.', () => {
+      it('successfully applies TimeConverter strategy to given input.', async () => {
         expect.assertions(1);
 
         const expectedResult = [
@@ -41,7 +41,7 @@ describe('builtins/time-converter: ', () => {
           },
         ];
 
-        const result = timeConverter.execute([
+        const result = await timeConverter.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
@@ -52,7 +52,7 @@ describe('builtins/time-converter: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('successfully executes when the `mapping` is not empty object.', () => {
+      it('successfully executes when the `mapping` is not empty object.', async () => {
         expect.assertions(1);
 
         const mapping = {
@@ -72,7 +72,7 @@ describe('builtins/time-converter: ', () => {
           },
         ];
 
-        const result = timeConverter.execute([
+        const result = await timeConverter.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
@@ -83,7 +83,7 @@ describe('builtins/time-converter: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('successfully executes when the `mapping` maps output parameter.', () => {
+      it('successfully executes when the `mapping` maps output parameter.', async () => {
         expect.assertions(1);
 
         const mapping = {
@@ -103,7 +103,7 @@ describe('builtins/time-converter: ', () => {
           },
         ];
 
-        const result = timeConverter.execute([
+        const result = await timeConverter.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
@@ -114,14 +114,14 @@ describe('builtins/time-converter: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error when config is not provided.', () => {
+      it('throws an error when config is not provided.', async () => {
         const config = undefined;
         const timeConverter = TimeConverter(config!, parametersMetadata, {});
 
         expect.assertions(1);
 
         try {
-          timeConverter.execute([
+          await timeConverter.execute([
             {
               timestamp: '2021-01-01T00:00:00Z',
               duration: 3600,
@@ -133,11 +133,11 @@ describe('builtins/time-converter: ', () => {
         }
       });
 
-      it('throws an error on missing params in input.', () => {
+      it('throws an error on missing params in input.', async () => {
         expect.assertions(1);
 
         try {
-          timeConverter.execute([
+          await timeConverter.execute([
             {
               timestamp: '2021-01-01T00:00:00Z',
               duration: 3600,
@@ -152,7 +152,7 @@ describe('builtins/time-converter: ', () => {
         }
       });
 
-      it('returns a result when `new-time-unit` is a different time unit than `duration`.', () => {
+      it('returns a result when `new-time-unit` is a different time unit than `duration`.', async () => {
         expect.assertions(1);
         const newConfig = {
           'input-parameter': 'energy-per-year',
@@ -169,7 +169,7 @@ describe('builtins/time-converter: ', () => {
             'energy-per-year': 10000,
           },
         ];
-        const response = timeConverter.execute(data);
+        const response = await timeConverter.execute(data);
         const expectedResult = [
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -182,7 +182,7 @@ describe('builtins/time-converter: ', () => {
         expect(response).toEqual(expectedResult);
       });
 
-      it('successfully executes when the config output parameter contains an arithmetic expression.', () => {
+      it('successfully executes when the config output parameter contains an arithmetic expression.', async () => {
         expect.assertions(1);
 
         const config = {
@@ -202,7 +202,7 @@ describe('builtins/time-converter: ', () => {
           },
         ];
 
-        const result = timeConverter.execute([
+        const result = await timeConverter.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
@@ -213,7 +213,7 @@ describe('builtins/time-converter: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error the config input parameter has wrong arithmetic expression.', () => {
+      it('throws an error the config input parameter has wrong arithmetic expression.', async () => {
         expect.assertions(2);
         const config = {
           'input-parameter': '2*"energy-per-year"',
@@ -225,7 +225,7 @@ describe('builtins/time-converter: ', () => {
         const timeConverter = TimeConverter(config, parametersMetadata, {});
 
         try {
-          timeConverter.execute([
+          await timeConverter.execute([
             {
               timestamp: '2021-01-01T00:00:00Z',
               duration: 3600,

@@ -1,21 +1,8 @@
 import {z} from 'zod';
-import {
-  ERRORS,
-  evaluateInput,
-  evaluateArithmeticOutput,
-  validateArithmeticExpression,
-} from '@grnsft/if-core/utils';
-import {
-  mapConfigIfNeeded,
-  mapOutputIfNeeded,
-} from '@grnsft/if-core/utils/helpers';
-import {
-  ExecutePlugin,
-  PluginParams,
-  MultiplyConfig,
-  PluginParametersMetadata,
-  MappingParams,
-} from '@grnsft/if-core/types';
+
+import {PluginParams, ConfigParams} from '@grnsft/if-core/types';
+import {PluginFactory} from '@grnsft/if-core/interfaces';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
 
@@ -24,52 +11,29 @@ import {STRINGS} from '../../config';
 const {ConfigError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
-export const Multiply = (
-  config: MultiplyConfig,
-  parametersMetadata: PluginParametersMetadata,
-  mapping: MappingParams
-): ExecutePlugin => {
-  const metadata = {
-    kind: 'execute',
-    inputs: parametersMetadata?.inputs,
-    outputs: parametersMetadata?.outputs,
-  };
-
-  /**
-   * Checks config value are valid.
-   */
-  const validateConfig = () => {
-    if (!config) {
+export const Multiply = PluginFactory({
+  metadata: {
+    inputs: {},
+    outputs: {},
+  },
+  configValidation: (config: ConfigParams) => {
+    if (!config || !Object.keys(config)?.length) {
       throw new ConfigError(MISSING_CONFIG);
     }
 
-    const mappedConfig = mapConfigIfNeeded(config, mapping);
-
     const configSchema = z.object({
       'input-parameters': z.array(z.string()),
-      'output-parameter': z
-        .string()
-        .min(1)
-        .refine(param =>
-          validateArithmeticExpression('output-parameter', param)
-        ),
+      'output-parameter': z.string().min(1),
     });
 
-    return validate<z.infer<typeof configSchema>>(configSchema, mappedConfig);
-  };
-
-  /**
-   * Checks for required fields in input.
-   */
-  const validateSingleInput = (
-    input: PluginParams,
-    inputParameters: string[]
-  ) => {
-    const evaluatedInput = evaluateInput(input);
+    return validate<z.infer<typeof configSchema>>(configSchema, config);
+  },
+  inputValidation: (input: PluginParams, config: ConfigParams) => {
+    const inputParameters = config['input-parameters'];
 
     const inputData = inputParameters.reduce(
-      (acc, param) => {
-        acc[param] = evaluatedInput[param];
+      (acc: {[x: string]: any}, param: string | number) => {
+        acc[param] = input[param];
 
         return acc;
       },
@@ -79,43 +43,30 @@ export const Multiply = (
     const validationSchema = z.record(z.string(), z.number());
 
     return validate(validationSchema, inputData);
-  };
-
-  /**
-   * Calculate the product of each input parameter.
-   */
-  const execute = (inputs: PluginParams[]): PluginParams[] => {
-    const safeConfig = validateConfig();
+  },
+  implementation: async (inputs: PluginParams[], config: ConfigParams) => {
     const {
       'input-parameters': inputParameters,
       'output-parameter': outputParameter,
-    } = safeConfig;
+    } = config;
 
     return inputs.map(input => {
-      const safeInput = validateSingleInput(input, inputParameters);
-      const calculatedResult = calculateProduct(safeInput, inputParameters);
+      const calculatedResult = calculateProduct(input, inputParameters);
 
-      const result = {
+      return {
         ...input,
-        ...safeInput,
-        ...evaluateArithmeticOutput(outputParameter, calculatedResult),
+        [outputParameter]: calculatedResult,
       };
-
-      return mapOutputIfNeeded(result, mapping);
     });
-  };
+  },
+  allowArithmeticExpressions: [],
+});
 
-  /**
-   * Calculates the product of the components.
-   */
-  const calculateProduct = (input: PluginParams, inputParameters: string[]) =>
-    inputParameters.reduce(
-      (accumulator, metricToMultiply) => accumulator * input[metricToMultiply],
-      1
-    );
-
-  return {
-    metadata,
-    execute,
-  };
-};
+/**
+ * Calculates the product of the components.
+ */
+const calculateProduct = (input: PluginParams, inputParameters: string[]) =>
+  inputParameters.reduce(
+    (accumulator, metricToMultiply) => accumulator * input[metricToMultiply],
+    1
+  );

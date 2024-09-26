@@ -1,23 +1,8 @@
 import {z, ZodType} from 'zod';
-import {
-  mapConfigIfNeeded,
-  mapOutputIfNeeded,
-} from '@grnsft/if-core/utils/helpers';
-import {
-  ERRORS,
-  evaluateInput,
-  evaluateConfig,
-  evaluateArithmeticOutput,
-  getParameterFromArithmeticExpression,
-  validateArithmeticExpression,
-} from '@grnsft/if-core/utils';
-import {
-  ExecutePlugin,
-  PluginParams,
-  ExponentConfig,
-  PluginParametersMetadata,
-  MappingParams,
-} from '@grnsft/if-core/types';
+
+import {PluginParams, ConfigParams} from '@grnsft/if-core/types';
+import {PluginFactory} from '@grnsft/if-core/interfaces';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
 
@@ -26,126 +11,75 @@ import {STRINGS} from '../../config';
 const {ConfigError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
-export const Exponent = (
-  config: ExponentConfig,
-  parametersMetadata: PluginParametersMetadata,
-  mapping: MappingParams
-): ExecutePlugin => {
-  const metadata = {
-    kind: 'execute',
-    inputs: parametersMetadata?.inputs,
-    outputs: parametersMetadata?.outputs,
-  };
-
-  /**
-   * Checks config value are valid.
-   */
-  const validateConfig = () => {
-    if (!config) {
+export const Exponent = PluginFactory({
+  metadata: {
+    inputs: {},
+    outputs: {},
+  },
+  configValidation: (config: ConfigParams) => {
+    if (!config || !Object.keys(config)?.length) {
       throw new ConfigError(MISSING_CONFIG);
     }
 
-    const mappedConfig = mapConfigIfNeeded(config, mapping);
-    const configSchema = z
-      .object({
-        'input-parameter': z.string().min(1),
-        exponent: z.preprocess(
-          value => validateArithmeticExpression('exponent', value),
-          z.number()
-        ),
-        'output-parameter': z.string().min(1),
-      })
-      .refine(params => {
-        Object.entries(params).forEach(([param, value]) =>
-          validateArithmeticExpression(param, value)
-        );
-
-        return true;
-      });
+    const configSchema = z.object({
+      'input-parameter': z.string().min(1),
+      exponent: z.number(),
+      'output-parameter': z.string().min(1),
+    });
 
     return validate<z.infer<typeof configSchema>>(
       configSchema as ZodType<any>,
-      mappedConfig
+      config
     );
-  };
-
-  /**
-   * Checks for required fields in input.
-   */
-  const validateSingleInput = (
-    input: PluginParams,
-    configInputParameter: string | number
-  ) => {
-    const inputParameter =
-      typeof configInputParameter === 'number'
-        ? configInputParameter
-        : getParameterFromArithmeticExpression(configInputParameter);
-    const evaluatedInput = evaluateInput(input);
-
+  },
+  inputValidation: (input: PluginParams, config: ConfigParams) => {
+    const inputParameter = config['input-parameter'];
     const inputData = {
       [inputParameter]:
         typeof inputParameter === 'number'
           ? inputParameter
-          : evaluatedInput[inputParameter],
+          : input[inputParameter],
     };
     const validationSchema = z.record(z.string(), z.number());
 
-    return validate(validationSchema, inputData);
-  };
-
-  /**
-   * Calculate the input param raised by to the power of the given exponent.
-   */
-  const execute = (inputs: PluginParams[]): PluginParams[] => {
-    const safeConfig = validateConfig();
+    return validate<z.infer<typeof validationSchema>>(
+      validationSchema,
+      inputData
+    );
+  },
+  implementation: async (inputs: PluginParams[], config: ConfigParams = {}) => {
     const {
       'input-parameter': inputParameter,
       exponent,
       'output-parameter': outputParameter,
-    } = safeConfig;
+    } = config;
 
     return inputs.map(input => {
-      const safeInput = validateSingleInput(input, inputParameter);
-      const evaluatedConfig = evaluateConfig({
-        config: safeConfig,
-        input,
-        parametersToEvaluate: ['input-parameter', 'exponent'],
-      });
-
       const calculatedResult = calculateExponent(
-        safeInput,
-        evaluatedConfig['input-parameter'] || inputParameter,
-        evaluatedConfig.exponent || exponent
+        input,
+        inputParameter,
+        exponent
       );
 
-      const result = {
+      return {
         ...input,
-        ...safeInput,
-        ...evaluateArithmeticOutput(outputParameter, calculatedResult),
+        [outputParameter]: calculatedResult,
       };
-
-      return mapOutputIfNeeded(result, mapping);
     });
-  };
+  },
+  allowArithmeticExpressions: ['input-parameter', 'exponent'],
+});
 
-  /**
-   * Calculates the input param raised by the power of a given exponent.
-   */
-  const calculateExponent = (
-    input: PluginParams,
-    inputParameter: string | number,
-    exponent: number
-  ) => {
-    const base =
-      typeof inputParameter === 'number'
-        ? inputParameter
-        : input[inputParameter];
+/**
+ * Calculates the input param raised by the power of a given exponent.
+ */
+const calculateExponent = (
+  input: PluginParams,
+  inputParameter: string | number,
+  exponent: number
+) => {
+  const base =
+    typeof inputParameter === 'number' ? inputParameter : input[inputParameter];
 
-    return Math.pow(base, exponent);
-  };
-
-  return {
-    metadata,
-    execute,
-  };
+  return Math.pow(base, exponent);
 };

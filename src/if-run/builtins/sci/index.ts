@@ -11,12 +11,13 @@ import {allDefined} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
-const {MissingInputDataError} = ERRORS;
+const {MissingInputDataError, ConfigError} = ERRORS;
 const {
   MISSING_FUNCTIONAL_UNIT_CONFIG,
   MISSING_FUNCTIONAL_UNIT_INPUT,
   SCI_MISSING_FN_UNIT,
   ZERO_DIVISION,
+  MISSING_CONFIG,
 } = STRINGS;
 
 export const Sci = PluginFactory({
@@ -52,6 +53,10 @@ export const Sci = PluginFactory({
     },
   },
   configValidation: (config: ConfigParams) => {
+    if (!config || !Object.keys(config)?.length) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
     const schema = z
       .object({
         'functional-unit': z.string(),

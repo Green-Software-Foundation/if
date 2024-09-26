@@ -199,65 +199,80 @@ Details tbc...
 
 ## Plugins
 
-The plugins themselves require some changes to keep them compatible with the refactored IF.
+Plugins require some modifications to remain compatible with the refactored IF interface.
 
-Instead of the old class-based model, plugins are now functions. They conform to the following interface:
+Each plugin follows the `PluginFactory` interface, which is a higher-order function that accepts a `params` object of type `PluginFactoryParams`. This function returns another function (the inner function), which handles the plugin’s `config`, `parametersMetadata`, and `mapping`.
 
 ```ts
-export type PluginInterface = {
-  execute: (inputs: PluginParams[]) => PluginParams[];
-  metadata: {
-    kind: string;
-  };
-  [key: string]: any;
-};
+export const PluginFactory =
+  (params: PluginFactoryParams) =>
+  (
+    config: ConfigParams = {},
+    parametersMetadata: PluginParametersMetadata,
+    mapping: MappingParams
+  ) => ({
+    metadata: {
+      kind: 'execute',
+      inputs: {...params.metadata.inputs, ...parametersMetadata?.inputs},
+      outputs: parametersMetadata?.outputs || params.metadata.outputs,
+    },
+    execute: async (inputs: PluginParams[]) => {
+      // Generic plugin functionality goes here
+      // E.g., mapping, arithmetic operations, validation
+      // Process inputs and mapping logic
+    });
+  })
 ```
 
-The plugin still requires an execute function. This is where you implement the plugin logic.
+Inner Function Parameters:
 
-Here's a minimal example for a plugin that sums some inputs defined in config - see inline comments for some important notes:
+- `config`: This is of type `ConfigParams` and has a default value of an empty object ({}). This might hold configuration settings for the plugin.
+- `parametersMetadata`: A `PluginParametersMetadata` object that describes the metadata for the plugin’s parameters.
+- `mapping`: A `MappingParams` object, describing parameters are mapped.
+
+Implementation Function:
+
+The plugin requires an `implementation` function, where the actual plugin logic is defined.
+Here’s a minimal example of a plugin that sums inputs as defined in the config. See the inline comments for further clarification.
 
 ```ts
-// Here's the function definition - notice that config is passed in here!
-export const Sum = (config: SumConfig): PluginInterface => {
-  const inputParameters = config['input-parameters'] || [];
-  const outputParameter = config['output-parameter'];
+// Here's the function definition!
+export const Sum = PluginFactory({
+  metadata: {
+    inputs: {},
+    outputs: {},
+  },
+  configValidation: z.object({
+    'input-parameters': z.array(z.string()),
+    'output-parameter': z.string().min(1),
+  }),
+  inputValidation: (input: PluginParams, config: ConfigParams) => {
+    return validate(validationSchema, inputData);
+  },
+  implementation: async (inputs: PluginParams[], config: ConfigParams) => {
+    const {
+      'input-parameters': inputParameters,
+      'output-parameter': outputParameter,
+    } = config;
 
-  // we also return metadata now too - you can add more or just use this default
-  const metadata = {
-    kind: 'execute',
-  };
+    return inputs.map(input => {
+      const calculatedResult = calculateSum(input, inputParameters);
 
-  /**
-   * Calculate the sum of the input metrics for each timestamp.
-   */
-  const execute = async (inputs: PluginParams[]): Promise<PluginParams[]> => {
-    inputs.map(input => {
-      return calculateSum(input, inputParameters, outputParameter);
+      return {
+        ...input,
+        [outputParameter]: calculatedResult,
+      };
     });
-    return inputs;
-  };
+  },
+  allowArithmeticExpressions: [],
+});
 
-  /**
-   * Calculates the sum of the energy components.
-   */
-  const calculateSum = (
-    input: PluginParams,
-    inputParameters: string[],
-    outputParameter: string
-  ) => {
-    input[outputParameter] = inputParameters.reduce(
-      (accumulator, metricToSum) => {
-        return accumulator + input[metricToSum];
-      },
-      0
-    );
-  };
-
-  // return the metadata and the execute function
-  return {
-    metadata,
-    execute,
-  };
-};
+/**
+ * Calculates the sum of the energy components.
+ */
+const calculateSum = (input: PluginParams, inputParameters: string[]) =>
+  inputParameters.reduce(
+    (accumulator, metricToSum) => accumulator + input[metricToSum],
+    0
+  );
 ```

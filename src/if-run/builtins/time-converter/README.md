@@ -59,7 +59,7 @@ const config = {
 };
 
 const timeConverter = TimeConverter(config, parametersMetadata);
-const result = timeConverter.execute([
+const result = await timeConverter.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',
     duration: 3600,
