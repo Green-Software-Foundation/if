@@ -7,7 +7,7 @@ import {STRINGS} from '../../../if-run/config';
 const {InputValidationError, ConfigError} = ERRORS;
 const {INVALID_MIN_MAX} = STRINGS;
 
-describe.skip('builtins/mock-observations: ', () => {
+describe('builtins/mock-observations: ', () => {
   const parametersMetadata = {
     inputs: {},
     outputs: {},
