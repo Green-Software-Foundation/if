@@ -238,10 +238,6 @@ Here’s a minimal example of a plugin that sums inputs as defined in the config
 ```ts
 // Here's the function definition!
 export const Sum = PluginFactory({
-  metadata: {
-    inputs: {},
-    outputs: {},
-  },
   configValidation: z.object({
     'input-parameters': z.array(z.string()),
     'output-parameter': z.string().min(1),
