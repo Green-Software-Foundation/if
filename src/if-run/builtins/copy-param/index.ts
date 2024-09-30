@@ -21,10 +21,6 @@ const {MISSING_CONFIG} = STRINGS;
  */
 
 export const Copy = PluginFactory({
-  metadata: {
-    inputs: {},
-    outputs: {},
-  },
   configValidation: (config: ConfigParams) => {
     if (!config || !Object.keys(config)?.length) {
       throw new ConfigError(MISSING_CONFIG);

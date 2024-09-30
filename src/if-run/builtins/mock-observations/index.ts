@@ -22,10 +22,6 @@ const {ConfigError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
 export const MockObservations = PluginFactory({
-  metadata: {
-    inputs: {},
-    outputs: {},
-  },
   configValidation: (config: ConfigParams) => {
     if (!config || !Object.keys(config)?.length) {
       throw new ConfigError(MISSING_CONFIG);

@@ -12,10 +12,6 @@ const {MissingInputDataError, ConfigError} = ERRORS;
 const {MISSING_INPUT_DATA, ZERO_DIVISION, MISSING_CONFIG} = STRINGS;
 
 export const Divide = PluginFactory({
-  metadata: {
-    inputs: {},
-    outputs: {},
-  },
   configValidation: (config: ConfigParams) => {
     if (!config || !Object.keys(config)?.length) {
       throw new ConfigError(MISSING_CONFIG);

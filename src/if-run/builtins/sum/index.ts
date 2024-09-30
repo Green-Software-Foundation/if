@@ -6,10 +6,6 @@ import {PluginParams, ConfigParams} from '@grnsft/if-core/types';
 import {validate} from '../../../common/util/validations';
 
 export const Sum = PluginFactory({
-  metadata: {
-    inputs: {},
-    outputs: {},
-  },
   configValidation: z.object({
     'input-parameters': z.array(z.string()),
     'output-parameter': z.string().min(1),

@@ -15,10 +15,6 @@ const {X_Y_EQUAL, ARRAY_LENGTH_NON_EMPTY, WITHIN_THE_RANGE, MISSING_CONFIG} =
 const {ConfigError} = ERRORS;
 
 export const Interpolation = PluginFactory({
-  metadata: {
-    inputs: {},
-    outputs: {},
-  },
   configValidation: (config: ConfigParams) => {
     if (!config || !Object.keys(config)?.length) {
       throw new ConfigError(MISSING_CONFIG);

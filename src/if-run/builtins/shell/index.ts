@@ -14,10 +14,6 @@ const {ProcessExecutionError, ConfigError} = ERRORS;
 const {MISSING_CONFIG} = STRINGS;
 
 export const Shell = PluginFactory({
-  metadata: {
-    inputs: {},
-    outputs: {},
-  },
   configValidation: (config: ConfigParams) => {
     if (!config) {
       throw new ConfigError(MISSING_CONFIG);
