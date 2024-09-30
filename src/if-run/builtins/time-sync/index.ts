@@ -8,9 +8,9 @@ import {
   PaddingReceipt,
   MappingParams,
   ConfigParams,
+  TimeParams,
+  TimeNormalizerConfig,
 } from '@grnsft/if-core/types';
-
-import {TimeParams, TimeNormalizerConfig} from '../../types/time-sync';
 
 import {validate} from '../../../common/util/validations';
 
@@ -149,6 +149,7 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
       timeStep: number
     ) => {
       const samplesNumber = duration / timeStep;
+
       return value / samplesNumber;
     };
 
@@ -572,7 +573,6 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
       parseDate(a.timestamp).diff(parseDate(b.timestamp)).as('seconds')
     );
 
-    const a = resampleInputs(sortedInputs, timeParams) as PluginParams[];
-    return a;
+    return resampleInputs(sortedInputs, timeParams) as PluginParams[];
   },
 });
