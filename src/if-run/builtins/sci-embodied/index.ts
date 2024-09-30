@@ -1,5 +1,6 @@
 import {z} from 'zod';
 
+import {validateArithmeticExpression} from '@grnsft/if-core/utils';
 import {ConfigParams, PluginParams} from '@grnsft/if-core/types';
 import {PluginFactory} from '@grnsft/if-core/interfaces';
 
@@ -77,18 +78,59 @@ export const SciEmbodied = PluginFactory({
     },
   },
   configValidation: z.object({
-    'baseline-vcpus': z.number().gte(0).default(1),
-    'baseline-memory': z.number().gte(0).default(16),
-    'baseline-emissions': z.number().gte(0).default(1000000),
-    lifespan: z.number().gt(0).default(126144000),
-    'vcpu-emissions-constant': z.number().gte(0).default(100000),
-    'memory-emissions-constant': z
-      .number()
-      .gte(0)
-      .default(533 / 384),
-    'ssd-emissions-constant': z.number().gte(0).default(50000),
-    'hdd-emissions-constant': z.number().gte(0).default(100000),
-    'gpu-emissions-constant': z.number().gte(0).default(150000),
+    'baseline-vcpus': z.preprocess(
+      value => validateArithmeticExpression('baseline-vcpus', value, 'number'),
+      z.number().gte(0).default(1)
+    ),
+    'baseline-memory': z.preprocess(
+      value => validateArithmeticExpression('baseline-memory', value, 'number'),
+      z.number().gte(0).default(16)
+    ),
+    'baseline-emissions': z.preprocess(
+      value =>
+        validateArithmeticExpression('baseline-emissions', value, 'number'),
+      z.number().gte(0).default(1000000)
+    ),
+    lifespan: z.preprocess(
+      value => validateArithmeticExpression('lifespan', value, 'number'),
+      z.number().gt(0).default(126144000)
+    ),
+    'vcpu-emissions-constant': z.preprocess(
+      value =>
+        validateArithmeticExpression(
+          'vcpu-emissions-constant',
+          value,
+          'number'
+        ),
+      z.number().gte(0).default(100000)
+    ),
+    'memory-emissions-constant': z.preprocess(
+      value =>
+        validateArithmeticExpression(
+          'memory-emissions-constant',
+          value,
+          'number'
+        ),
+      z
+        .number()
+        .gte(0)
+        .default(533 / 384)
+    ),
+    'ssd-emissions-constant': z.preprocess(
+      value =>
+        validateArithmeticExpression('ssd-emissions-constant', value, 'number'),
+      z.number().gte(0).default(50000)
+    ),
+    'hdd-emissions-constant': z.preprocess(
+      value =>
+        validateArithmeticExpression('hdd-emissions-constant', value, 'number'),
+      z.number().gte(0).default(100000)
+    ),
+    'gpu-emissions-constant': z.preprocess(
+      value =>
+        validateArithmeticExpression('gpu-emissions-constant', value, 'number'),
+      z.number().gte(0).default(150000)
+    ),
     'output-parameter': z.string().optional(),
   }),
   inputValidation: z.object({

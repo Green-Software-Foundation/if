@@ -1,8 +1,8 @@
 import {z, ZodType} from 'zod';
 
+import {ERRORS, validateArithmeticExpression} from '@grnsft/if-core/utils';
 import {ConfigParams, PluginParams} from '@grnsft/if-core/types';
 import {PluginFactory} from '@grnsft/if-core/interfaces';
-import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
 
@@ -22,7 +22,10 @@ export const Coefficient = PluginFactory({
     }
 
     const configSchema = z.object({
-      coefficient: z.number(),
+      coefficient: z.preprocess(
+        value => validateArithmeticExpression('coefficient', value, 'number'),
+        z.number()
+      ),
       'input-parameter': z.string().min(1),
       'output-parameter': z.string().min(1),
     });
