@@ -704,7 +704,7 @@ describe('builtins/time-sync:', () => {
             timestamp: '2023-12-12T00:00:00.000Z',
             duration: 5,
             'resources-total': 10,
-            'time-allocated': 3,
+            'time-allocated': 3.2,
           },
           {
             timestamp: '2023-12-12T00:00:05.000Z',
@@ -902,7 +902,7 @@ describe('builtins/time-sync:', () => {
         expect(DateTime.fromISO(result[0].timestamp).offset === 0);
       });
 
-      it.skip('successfully executes when the `duration` contains an arithmetic expression.', () => {
+      it('successfully executes when the `duration` contains an arithmetic expression.', async () => {
         expect.assertions(1);
 
         const basicConfig = {
@@ -913,7 +913,7 @@ describe('builtins/time-sync:', () => {
         };
         const timeModel = TimeSync(basicConfig, parametersMetadata, {});
 
-        const result = timeModel.execute([
+        const result = await timeModel.execute([
           {
             timestamp: '2023-12-12T00:00:00.000Z',
             duration: 3,

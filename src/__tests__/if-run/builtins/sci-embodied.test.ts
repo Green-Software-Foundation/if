@@ -4,7 +4,7 @@ import {SciEmbodied} from '../../../if-run/builtins/sci-embodied';
 
 const {InputValidationError} = ERRORS;
 
-describe.skip('builtins/sci-embodied:', () => {
+describe('builtins/sci-embodied:', () => {
   describe('SciEmbodied: ', () => {
     const parametersMetadata = {
       inputs: {},
@@ -43,12 +43,22 @@ describe.skip('builtins/sci-embodied:', () => {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             vCPUs: 2,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
             'embodied-carbon': 31.39269406392694,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             vCPUs: 4,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
             'embodied-carbon': 37.10045662100457,
           },
         ]);
@@ -63,6 +73,7 @@ describe.skip('builtins/sci-embodied:', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
+            'device/cpu-cores': 1,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -79,12 +90,23 @@ describe.skip('builtins/sci-embodied:', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
+            'device/cpu-cores': 1,
             'embodied-carbon': 28.538812785388128,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             'device/cpu-cores': 2,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
             'embodied-carbon': 31.39269406392694,
           },
         ]);
@@ -103,7 +125,6 @@ describe.skip('builtins/sci-embodied:', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
-            'device/cpu-cores': 2,
           },
         ];
 
@@ -115,12 +136,23 @@ describe.skip('builtins/sci-embodied:', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
+            vCPUs: 1,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
             carbon: 28.538812785388128,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
-            'device/cpu-cores': 2,
+            vCPUs: 1,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
             carbon: 28.538812785388128,
           },
         ]);
@@ -146,7 +178,7 @@ describe.skip('builtins/sci-embodied:', () => {
         } catch (error) {
           expect(error).toStrictEqual(
             new InputValidationError(
-              '"vCPUs" parameter is expected number, received string. Error code: invalid_type.'
+              '"vCPUs" parameter is expected number, received string at index 0. Error code: invalid_type.'
             )
           );
           expect(error).toBeInstanceOf(InputValidationError);
@@ -191,6 +223,11 @@ describe.skip('builtins/sci-embodied:', () => {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             vCPUs: 2,
+            gpu: 0,
+            hdd: 0,
+            memory: 16,
+            ssd: 0,
+            'usage-ratio': 1,
             'embodied-carbon': 47.945205479452056,
             'mock-param': 150000,
           },
@@ -198,6 +235,11 @@ describe.skip('builtins/sci-embodied:', () => {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             vCPUs: 4,
+            gpu: 0,
+            hdd: 0,
+            memory: 16,
+            ssd: 0,
+            'usage-ratio': 1,
             'embodied-carbon': 52.51141552511416,
             'mock-param': 100000,
           },
