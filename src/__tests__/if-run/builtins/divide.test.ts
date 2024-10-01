@@ -137,7 +137,7 @@ describe('builtins/divide: ', () => {
         expect(response).toEqual(expectedResult);
       });
 
-      it('successfully executes when a parameter contains arithmetic expression.', () => {
+      it('successfully executes when a parameter contains arithmetic expression.', async () => {
         expect.assertions(1);
 
         const config = {
@@ -154,7 +154,7 @@ describe('builtins/divide: ', () => {
             'vcpus-allocated': 24,
           },
         ];
-        const response = divide.execute(input);
+        const response = await divide.execute(input);
 
         const expectedResult = [
           {
@@ -168,7 +168,7 @@ describe('builtins/divide: ', () => {
         expect(response).toEqual(expectedResult);
       });
 
-      it('throws an error the `numerator` parameter has wrong arithmetic expression.', () => {
+      it('throws an error the `numerator` parameter has wrong arithmetic expression.', async () => {
         const config = {
           numerator: '3*"vcpus-allocated"',
           denominator: 'duration',
@@ -185,7 +185,7 @@ describe('builtins/divide: ', () => {
         ];
         expect.assertions(2);
         try {
-          divide.execute(inputs);
+          await divide.execute(inputs);
         } catch (error) {
           expect(error).toBeInstanceOf(Error);
           expect(error).toEqual(

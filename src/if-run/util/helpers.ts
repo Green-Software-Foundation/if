@@ -54,8 +54,10 @@ export const storeAggregationMethods = (
     const plugin = pluginStorage.get(pluginName);
 
     if ('inputs' in plugin.metadata || 'outputs' in plugin.metadata) {
-      const pluginParameters =
-        {...plugin.metadata.inputs, ...plugin.metadata.outputs} || {};
+      const pluginParameters = {
+        ...plugin.metadata.inputs,
+        ...plugin.metadata.outputs,
+      };
 
       Object.entries(pluginParameters).forEach(
         ([parameterName, parameterMetadata]) => {

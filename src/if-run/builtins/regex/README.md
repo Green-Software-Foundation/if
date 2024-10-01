@@ -26,13 +26,15 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method object of the parameter
     - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
-    - `component`:  this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
 - `outputs`: describe the parameters of the `output` of the config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method object of the parameter
     - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
-    - `component`:  this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
 ### Mapping
 
 The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
@@ -67,7 +69,7 @@ const parametersMetadata = {inputs: {}, outputs: {}};
 const mapping = {};
 const regex = Regex(config, parametersMetadata, mapping);
 
-const input = [
+const inputs = [
   {
     timestamp: '2021-01-01T00:00:00Z',
     duration: 3600,
@@ -75,6 +77,8 @@ const input = [
       'Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz',
   },
 ];
+
+const result = await regex.execute(inputs);
 ```
 
 ## Example manifest

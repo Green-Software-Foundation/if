@@ -43,12 +43,22 @@ describe('builtins/sci-embodied:', () => {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             vCPUs: 2,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
             'embodied-carbon': 31.39269406392694,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             vCPUs: 4,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
             'embodied-carbon': 37.10045662100457,
           },
         ]);
@@ -63,6 +73,7 @@ describe('builtins/sci-embodied:', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
+            'device/cpu-cores': 1,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
@@ -79,12 +90,23 @@ describe('builtins/sci-embodied:', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
+            'device/cpu-cores': 1,
             'embodied-carbon': 28.538812785388128,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             'device/cpu-cores': 2,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
             'embodied-carbon': 31.39269406392694,
           },
         ]);
@@ -103,7 +125,6 @@ describe('builtins/sci-embodied:', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
-            'device/cpu-cores': 2,
           },
         ];
 
@@ -115,12 +136,23 @@ describe('builtins/sci-embodied:', () => {
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
+            vCPUs: 1,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
             carbon: 28.538812785388128,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
-            'device/cpu-cores': 2,
+            vCPUs: 1,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
             carbon: 28.538812785388128,
           },
         ]);
@@ -146,14 +178,14 @@ describe('builtins/sci-embodied:', () => {
         } catch (error) {
           expect(error).toStrictEqual(
             new InputValidationError(
-              '"vCPUs" parameter is expected number, received string. Error code: invalid_type.'
+              '"vCPUs" parameter is expected number, received string at index 0. Error code: invalid_type.'
             )
           );
           expect(error).toBeInstanceOf(InputValidationError);
         }
       });
 
-      it('successfully executes when a parameter contains arithmetic expression.', () => {
+      it('successfully executes when a parameter contains arithmetic expression.', async () => {
         const config = {
           'baseline-vcpus': 1,
           'baseline-memory': 16,
@@ -182,7 +214,7 @@ describe('builtins/sci-embodied:', () => {
           },
         ];
 
-        const result = sciEmbodied.execute(inputs);
+        const result = await sciEmbodied.execute(inputs);
 
         expect.assertions(1);
 
@@ -191,6 +223,11 @@ describe('builtins/sci-embodied:', () => {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             vCPUs: 2,
+            gpu: 0,
+            hdd: 0,
+            memory: 16,
+            ssd: 0,
+            'usage-ratio': 1,
             'embodied-carbon': 47.945205479452056,
             'mock-param': 150000,
           },
@@ -198,13 +235,18 @@ describe('builtins/sci-embodied:', () => {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
             vCPUs: 4,
+            gpu: 0,
+            hdd: 0,
+            memory: 16,
+            ssd: 0,
+            'usage-ratio': 1,
             'embodied-carbon': 52.51141552511416,
             'mock-param': 100000,
           },
         ]);
       });
 
-      it('throws an error the `gpu-emissions-constant` parameter has wrong arithmetic expression.', () => {
+      it('throws an error the `gpu-emissions-constant` parameter has wrong arithmetic expression.', async () => {
         const config = {
           'baseline-vcpus': 1,
           'baseline-memory': 16,
@@ -230,7 +272,7 @@ describe('builtins/sci-embodied:', () => {
         expect.assertions(2);
 
         try {
-          sciEmbodied.execute(inputs);
+          await sciEmbodied.execute(inputs);
         } catch (error) {
           expect(error).toBeInstanceOf(Error);
           expect(error).toEqual(

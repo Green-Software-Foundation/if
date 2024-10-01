@@ -18,14 +18,16 @@ The `parameter-metadata` section contains information about `description`, `unit
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method object of the parameter
     - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
-    - `component`:  this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
 - `outputs`: describe the `sci` parameter which has the following attributes:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: aggregation method object of the parameter
     - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
-    - `component`:  this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
 ### Mapping
 
 The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
@@ -63,10 +65,12 @@ To run the plugin, you must first create an instance of `Sci`. Then, you can cal
 
 ```typescript
 import {Sci} from 'builtins';
+
 const config = {'functional-unit': 'requests'}
 const parametersMetadata = {inputs: {}, outputs: {}};
-const mapping = {};
-const sci = Sci(config, parametersMetadata, mapping);
+
+const sci = Sci(config, parametersMetadata, {});
+
 const results = await sci.execute(
   [
     {

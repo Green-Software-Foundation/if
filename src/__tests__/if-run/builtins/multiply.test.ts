@@ -3,7 +3,8 @@ import {ERRORS} from '@grnsft/if-core/utils';
 import {Multiply} from '../../../if-run/builtins/multiply';
 import {STRINGS} from '../../../if-run/config';
 
-const {InputValidationError, ConfigError} = ERRORS;
+const {InputValidationError, ConfigError, WrongArithmeticExpressionError} =
+  ERRORS;
 
 const {MISSING_CONFIG} = STRINGS;
 
@@ -177,7 +178,7 @@ describe('builtins/multiply: ', () => {
         expect(response).toEqual(expectedResult);
       });
 
-      it('successfully executes when the config output parameter contains arithmetic expression.', () => {
+      it('successfully executes when the config output parameter contains arithmetic expression.', async () => {
         expect.assertions(1);
 
         const config = {
@@ -194,7 +195,7 @@ describe('builtins/multiply: ', () => {
             'memory/energy': 2,
           },
         ];
-        const response = multiply.execute(inputs);
+        const response = await multiply.execute(inputs);
 
         const expectedResult = [
           {
@@ -210,7 +211,7 @@ describe('builtins/multiply: ', () => {
         expect(response).toEqual(expectedResult);
       });
 
-      it('throws an error the config output parameter has wrong arithmetic expression.', () => {
+      it('throws an error the config output parameter has wrong arithmetic expression.', async () => {
         const config = {
           'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
           'output-parameter': '2*energy',
@@ -227,13 +228,14 @@ describe('builtins/multiply: ', () => {
           },
         ];
         expect.assertions(2);
+
         try {
-          multiply.execute(inputs);
+          await multiply.execute(inputs);
         } catch (error) {
           expect(error).toBeInstanceOf(Error);
           expect(error).toEqual(
-            new InputValidationError(
-              'The `output-parameter` contains an invalid arithmetic expression. It should start with `=` and include the symbols `*`, `+`, `-` and `/`.'
+            new WrongArithmeticExpressionError(
+              'The output parameter `2*energy` contains an invalid arithmetic expression. It should start with `=` and include the symbols `*`, `+`, `-` and `/`.'
             )
           );
         }
