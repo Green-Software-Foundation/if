@@ -111,7 +111,8 @@ const debugLog = (level: LogLevel, args: any[], debugMode: boolean) => {
 
   const date = new Date().toISOString();
   const plugin = pluginNameManager.currentPluginName;
-  const isExeption = args[0].includes('**Computing');
+  const isExeption =
+    typeof args[0] === 'string' && args[0].includes('**Computing');
   const message = `${level}: ${date}: ${plugin ? plugin + ': ' : ''}${args.join(
     ', '
   )}`;
