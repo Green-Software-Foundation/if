@@ -1,6 +1,7 @@
 import * as path from 'node:path';
 
 import {ERRORS} from '@grnsft/if-core/utils';
+import {PluginInterface} from '@grnsft/if-core/types';
 
 import {logger} from '../../common/util/logger';
 import {memoizedLog} from '../util/log-memoize';
@@ -8,7 +9,6 @@ import {pluginStorage} from '../util/plugin-storage';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {PluginInterface} from '../types/interface';
 import {Context, PluginOptions} from '../../common/types/manifest';
 import {PluginStorageInterface} from '../types/plugin-storage';
 import {storeAggregationMetrics} from './aggregate';
@@ -42,7 +42,7 @@ const importModuleFrom = async (path: string) => {
 };
 
 /**
- * Imports `module` from given `path`, then checks if it's `ModelPluginInterface` extension.
+ * Imports `module` from given `path` and returns requested `method`.
  */
 const importAndVerifyModule = async (method: string, path: string) => {
   const pluginModule = await importModuleFrom(path);
