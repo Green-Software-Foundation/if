@@ -69,7 +69,7 @@ export const SciEmbodied = PluginFactory({
     outputs: {
       'embodied-carbon': {
         description: 'embodied carbon for a resource, scaled by usage',
-        unit: 'gCO2e',
+        unit: 'gCO2eq',
         'aggregation-method': {
           time: 'sum',
           component: 'sum',
