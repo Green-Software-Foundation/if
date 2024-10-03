@@ -15,18 +15,14 @@ describe('lib/compute: ', () => {
 
         return input;
       }),
-    metadata: {
-      kind: 'execute',
-    },
+    metadata: {},
   });
   const mockObservePlugin = () => ({
     execute: () => [
       {timestamp: '2024-09-02', duration: 40, 'cpu/utilization': 30},
       {timestamp: '2024-09-03', duration: 60, 'cpu/utilization': 40},
     ],
-    metadata: {
-      kind: 'execute',
-    },
+    metadata: {},
   });
   const mockObservePluginTimeSync = () => ({
     execute: () => [
@@ -41,9 +37,7 @@ describe('lib/compute: ', () => {
         'cpu/utilization': 40,
       },
     ],
-    metadata: {
-      kind: 'execute',
-    },
+    metadata: {},
   });
   const mockTimeSync = () => ({
     execute: () => [
@@ -68,9 +62,7 @@ describe('lib/compute: ', () => {
         'cpu/utilization': 40,
       },
     ],
-    metadata: {
-      kind: 'execute',
-    },
+    metadata: {},
   });
   /**
    * Compute params.
