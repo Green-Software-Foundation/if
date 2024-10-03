@@ -2,7 +2,7 @@ import {isDate} from 'node:util/types';
 
 import {Settings, DateTime, DateTimeMaybeValid, Interval} from 'luxon';
 import {z} from 'zod';
-import {ERRORS, evaluateInput} from '@grnsft/if-core/utils';
+import {ERRORS} from '@grnsft/if-core/utils';
 import {
   PluginParams,
   PaddingReceipt,
@@ -173,8 +173,7 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
       i: number,
       params: TimeParams
     ) => {
-      const evaluatedInput = evaluateInput(input);
-      const metrics = Object.keys(evaluatedInput);
+      const metrics = Object.keys(input);
       const timeStep = params.upsamplingResolution;
 
       return metrics.reduce((acc, metric) => {
@@ -201,12 +200,8 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
 
         acc[metric] =
           aggregationParams.time === 'sum'
-            ? convertPerInterval(
-                evaluatedInput[metric],
-                evaluatedInput['duration'],
-                timeStep
-              )
-            : evaluatedInput[metric];
+            ? convertPerInterval(input[metric], input['duration'], timeStep)
+            : input[metric];
 
         return acc;
       }, {} as PluginParams);
