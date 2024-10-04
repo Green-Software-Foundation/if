@@ -1,15 +1,12 @@
 export const STRINGS = {
   MISSING_METHOD: "Initalization param 'method' is missing.",
   MISSING_PATH: "Initalization param 'path' is missing.",
-  UNSUPPORTED_PLUGIN:
-    "Plugin interface doesn't implement 'execute' or 'metadata' methods.",
   NOT_NATIVE_PLUGIN: (path: string) =>
     `
   You are using plugin ${path} which is not part of the Impact Framework standard library. You should do your own research to ensure the plugins are up to date and accurate. They may not be actively maintained.`,
   INVALID_MODULE_PATH: (path: string, error?: any) =>
     `Provided module \`${path}\` is invalid or not found. ${error ?? ''}
 `,
-  INVALID_TIME_NORMALIZATION: 'Start time or end time is missing.',
   INCOMPATIBLE_RESOLUTION_WITH_INTERVAL:
     'The upsampling resolution must be a divisor of the given interval, but the provided value does not satisfy this criteria.',
   INCOMPATIBLE_RESOLUTION_WITH_INPUTS:
@@ -18,21 +15,14 @@ export const STRINGS = {
     'The upsampling resolution must be a divisor of gaps and paddings in the time-series, but the provided values do not satisfy this criteria.',
   UNEXPECTED_TIME_CONFIG:
     'Unexpected node-level config provided for time-sync plugin.',
-  INVALID_TIME_INTERVAL: 'Interval is missing.',
-  AVOIDING_PADDING: (description: string) =>
-    `Avoiding padding at ${description}`,
   AVOIDING_PADDING_BY_EDGES: (start: boolean, end: boolean) =>
     `Avoiding padding at ${
       start && end ? 'start and end' : start ? 'start' : 'end'
     }`,
-  INVALID_AGGREGATION_METHOD: (metric: string) =>
-    `Aggregation is not possible for given ${metric} since method is 'none'.`,
   METRIC_MISSING: (metric: string, index: number) =>
     `Aggregation metric ${metric} is not found in inputs[${index}].`,
   INVALID_GROUP_KEY: (key: string) => `Invalid group ${key}.`,
   REGROUP_ERROR: 'not an array or should contain at least one key',
-  INVALID_EXHAUST_PLUGIN: (pluginName: string) =>
-    `Invalid exhaust plugin: ${pluginName}.`,
   UNKNOWN_PARAM: (name: string) =>
     `Unknown parameter: ${name}. Omitting from the output.`,
   NOT_INITALIZED_PLUGIN: (name: string) =>
@@ -80,8 +70,6 @@ https://if.greensoftware.foundation/major-concepts/manifest-file`,
   /** Plugins messages */
   INVALID_NAME: '`name` config parameter is empty or contains all spaces',
   START_LOWER_END: '`start-time` should be lower than `end-time`',
-  TIMESTAMP_REQUIRED: (index: number) => `required in input[${index}]`,
-  INVALID_DATETIME: (index: number) => `invalid datetime in input[${index}]`,
   X_Y_EQUAL: 'The length of `x` and `y` should be equal',
   ARRAY_LENGTH_NON_EMPTY:
     'the length of the input arrays must be greater than 1',
