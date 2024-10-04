@@ -11,7 +11,6 @@ import {mergeObjects} from '../util/helpers';
 import {STRINGS} from '../config/strings';
 
 import {ComputeParams, Node, PhasedPipeline} from '../types/compute';
-import {isExecute} from '../types/interface';
 
 const {
   MERGING_DEFAULTS_WITH_INPUT_DATA,
@@ -51,6 +50,19 @@ const mergeDefaults = (
   console.debug(MERGING_DEFAULTS_WITH_INPUT_DATA, '\n');
 
   return defaults ? [defaults] : [];
+};
+
+/**
+ * Warns if the `config` is provided in the manifest.
+ */
+const warnIfConfigProvided = (node: any) => {
+  if ('config' in node) {
+    const plugins = Object.keys(node.config || {});
+    const joinedPlugins = plugins.join(', ');
+    const isMore = plugins.length > 1;
+
+    logger.warn(CONFIG_WARN(joinedPlugins, isMore));
+  }
 };
 
 /**
@@ -113,17 +125,15 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       const plugin = params.pluginStorage.get(pluginName);
       const nodeConfig = config && config[pluginName];
 
-      if (isExecute(plugin)) {
-        inputStorage = await plugin.execute(inputStorage, nodeConfig);
-        node.inputs = inputStorage;
+      inputStorage = await plugin.execute(inputStorage, nodeConfig);
+      node.inputs = inputStorage;
 
-        if (params.context.explainer) {
-          addExplainData({
-            pluginName,
-            metadata: plugin.metadata,
-            pluginData: params.context.initialize!.plugins[pluginName],
-          });
-        }
+      if (params.context.explainer) {
+        addExplainData({
+          pluginName,
+          metadata: plugin.metadata,
+          pluginData: params.context.initialize!.plugins[pluginName],
+        });
       }
     }
   }
@@ -164,6 +174,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
    */
   if ((noFlags || params.compute) && pipelineCopy.compute) {
     const originalOutputs = params.append ? node.outputs || [] : [];
+
     while (pipelineCopy.compute.length !== 0) {
       const pluginName = pipelineCopy.compute.shift() as string;
       const plugin = params.pluginStorage.get(pluginName);
@@ -172,19 +183,17 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       console.debug(COMPUTING_PIPELINE_FOR_NODE(pluginName));
       debugLogger.setExecutingPluginName(pluginName);
 
-      if (isExecute(plugin)) {
-        inputStorage = await plugin.execute(inputStorage, nodeConfig);
-        debugLogger.setExecutingPluginName();
+      inputStorage = await plugin.execute(inputStorage, nodeConfig);
+      debugLogger.setExecutingPluginName();
 
-        node.outputs = inputStorage;
+      node.outputs = inputStorage;
 
-        if (params.context.explainer) {
-          addExplainData({
-            pluginName,
-            metadata: plugin.metadata,
-            pluginData: params.context.initialize!.plugins[pluginName],
-          });
-        }
+      if (params.context.explainer) {
+        addExplainData({
+          pluginName,
+          metadata: plugin.metadata,
+          pluginData: params.context.initialize!.plugins[pluginName],
+        });
       }
     }
 
@@ -192,20 +201,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       node.outputs = originalOutputs.concat(node.outputs || []);
     }
   }
+
   console.debug('\n');
-};
-
-/**
- * Warns if the `config` is provided in the manifest.
- */
-const warnIfConfigProvided = (node: any) => {
-  if ('config' in node) {
-    const plugins = Object.keys(node.config || {});
-    const joinedPlugins = plugins.join(', ');
-    const isMore = plugins.length > 1;
-
-    logger.warn(CONFIG_WARN(joinedPlugins, isMore));
-  }
 };
 
 /**

@@ -13,25 +13,25 @@ const {AGGREGATION_TIME_METRICS} = CONFIG;
 
 /**
  * Aggregates child node level metrics. Appends aggregation additional params to metrics.
- * Otherwise iterates over inputs by aggregating per given `metrics`.
+ * Otherwise iterates over outputs by aggregating per given `metrics`.
  */
-export const aggregateInputsIntoOne = (
-  inputs: PluginParams[],
+export const aggregateOutputsIntoOne = (
+  outputs: PluginParams[],
   metrics: string[],
   isTemporal?: boolean
 ) => {
   const metricsWithTime = metrics.concat(AGGREGATION_TIME_METRICS);
 
-  return inputs.reduce((acc, input, index) => {
+  return outputs.reduce((acc, output, index) => {
     for (const metric of metricsWithTime) {
-      if (!(metric in input)) {
+      if (!(metric in output)) {
         throw new MissingAggregationParamError(METRIC_MISSING(metric, index));
       }
 
       /** Checks if metric is timestamp or duration, then adds to aggregated value. */
       if (AGGREGATION_TIME_METRICS.includes(metric)) {
         if (isTemporal) {
-          acc[metric] = input[metric];
+          acc[metric] = output[metric];
         }
       } else {
         const aggregationParams = getAggregationInfoFor(metric);
@@ -43,17 +43,17 @@ export const aggregateInputsIntoOne = (
         }
 
         if (aggregationParams[aggregationType] === 'copy') {
-          acc[metric] = input[metric];
+          acc[metric] = output[metric];
           return acc;
         }
 
         acc[metric] = acc[metric] ?? 0;
-        acc[metric] += parseFloat(input[metric]);
+        acc[metric] += parseFloat(output[metric]);
 
         /** Checks for the last iteration. */
-        if (index === inputs.length - 1) {
+        if (index === outputs.length - 1) {
           if (aggregationParams[aggregationType] === 'avg') {
-            acc[metric] /= inputs.length;
+            acc[metric] /= outputs.length;
           }
         }
       }

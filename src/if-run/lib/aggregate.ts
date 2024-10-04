@@ -9,7 +9,7 @@ import {
   AggregationMetricsWithMethod,
 } from '../../common/types/manifest';
 
-import {aggregateInputsIntoOne} from '../util/aggregation-helper';
+import {aggregateOutputsIntoOne} from '../util/aggregation-helper';
 import {memoizedLog} from '../util/log-memoize';
 
 import {STRINGS} from '../config/strings';
@@ -44,7 +44,7 @@ const temporalAggregation = (node: any, metrics: string[]) => {
 
   for (let i = 0; i < values[0].outputs.length; i++) {
     const ithSliceOfOutputs = getIthElementsFromChildren(node.children, i);
-    outputs.push(aggregateInputsIntoOne(ithSliceOfOutputs, metrics, true));
+    outputs.push(aggregateOutputsIntoOne(ithSliceOfOutputs, metrics, true));
   }
 
   return outputs;
@@ -76,14 +76,14 @@ const aggregateNode = (node: any, aggregationParams: AggregationParamsSure) => {
   if (!node.children) {
     /** `time` aggregation is the new name of `horizontal`. */
     if (type === 'horizontal' || type === 'time' || type === 'both') {
-      node.aggregated = aggregateInputsIntoOne(node.outputs, metrics);
+      node.aggregated = aggregateOutputsIntoOne(node.outputs, metrics);
     }
   } else {
     /** `component` aggregation is the new name of `vertical`. */
     if (type === 'vertical' || type === 'component' || type === 'both') {
       const outputs = temporalAggregation(node, metrics);
       node.outputs = outputs;
-      node.aggregated = aggregateInputsIntoOne(outputs, metrics);
+      node.aggregated = aggregateOutputsIntoOne(outputs, metrics);
     }
   }
 };

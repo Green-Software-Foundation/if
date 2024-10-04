@@ -212,7 +212,6 @@ export const PluginFactory =
     mapping: MappingParams
   ) => ({
     metadata: {
-      kind: 'execute',
       inputs: {...params.metadata.inputs, ...parametersMetadata?.inputs},
       outputs: parametersMetadata?.outputs || params.metadata.outputs,
     },

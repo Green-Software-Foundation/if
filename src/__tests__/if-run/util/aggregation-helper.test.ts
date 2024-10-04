@@ -4,7 +4,7 @@ import {PluginParams} from '@grnsft/if-core/types';
 
 import {AggregationParams} from '../../../common/types/manifest';
 
-import {aggregateInputsIntoOne} from '../../../if-run/util/aggregation-helper';
+import {aggregateOutputsIntoOne} from '../../../if-run/util/aggregation-helper';
 import {storeAggregationMetrics} from '../../../if-run/lib/aggregate';
 
 import {STRINGS} from '../../../if-run/config';
@@ -33,7 +33,7 @@ describe('util/aggregation-helper: ', () => {
     });
   });
 
-  describe('aggregateInputsIntoOne(): ', () => {
+  describe('aggregateOutputsIntoOne(): ', () => {
     it('throws error if aggregation criteria is not found in input.', () => {
       const inputs: PluginParams[] = [{timestamp: '', duration: 10}];
       const metrics: string[] = ['cpu/utilization'];
@@ -42,7 +42,7 @@ describe('util/aggregation-helper: ', () => {
       expect.assertions(2);
 
       try {
-        aggregateInputsIntoOne(inputs, metrics, isTemporal);
+        aggregateOutputsIntoOne(inputs, metrics, isTemporal);
       } catch (error) {
         expect(error).toBeInstanceOf(MissingAggregationParamError);
 
@@ -71,7 +71,7 @@ describe('util/aggregation-helper: ', () => {
         duration: 10,
         carbon: inputs[0].carbon + inputs[1].carbon,
       };
-      const aggregated = aggregateInputsIntoOne(inputs, metrics, isTemporal);
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
       expect(aggregated).toEqual(expectedValue);
     });
 
@@ -86,7 +86,7 @@ describe('util/aggregation-helper: ', () => {
       const expectedValue = {
         carbon: inputs[0].carbon + inputs[1].carbon,
       };
-      const aggregated = aggregateInputsIntoOne(inputs, metrics, isTemporal);
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
       expect(aggregated).toEqual(expectedValue);
     });
 
@@ -121,7 +121,7 @@ describe('util/aggregation-helper: ', () => {
           (inputs[0]['cpu/utilization'] + inputs[1]['cpu/utilization']) /
           inputs.length,
       };
-      const aggregated = aggregateInputsIntoOne(inputs, metrics, isTemporal);
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
       expect(aggregated).toEqual(expectedValue);
       expect(aggregated.timestamp).toBeUndefined();
       expect(aggregated.duration).toBeUndefined();
