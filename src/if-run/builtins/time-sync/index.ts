@@ -31,11 +31,11 @@ const {
   INCOMPATIBLE_RESOLUTION_WITH_INTERVAL,
   INCOMPATIBLE_RESOLUTION_WITH_GAPS,
   INCOMPATIBLE_RESOLUTION_WITH_INPUTS,
-  INVALID_TIME_NORMALIZATION,
   INVALID_OBSERVATION_OVERLAP,
   AVOIDING_PADDING_BY_EDGES,
   INVALID_DATE_TYPE,
   START_LOWER_END,
+  MISSING_CONFIG,
 } = STRINGS;
 
 /**
@@ -75,8 +75,8 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
     },
   },
   configValidation: (config: ConfigParams): TimeNormalizerConfig => {
-    if (config === undefined) {
-      throw new ConfigError(INVALID_TIME_NORMALIZATION);
+    if (!config || !Object.keys(config)?.length) {
+      throw new ConfigError(MISSING_CONFIG);
     }
 
     const schema = z
