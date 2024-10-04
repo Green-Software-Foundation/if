@@ -96,19 +96,19 @@ execution:
     /Users/manushak/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
     /Users/manushak/Documents/Projects/Green-Software/if/src/if-run/index.ts -m
     manifests/examples/pipelines/pipeline-teads-sci.yml -o
-    manifests/outputs/pipelines/pipeline-teads-sci.yml
+    manifests/outputs/pipelines/pipeline-teads-sci.yaml
   environment:
     if-version: 0.6.0
     os: macOS
     os-version: 14.6.1
     node-version: 18.20.4
-    date-time: 2024-09-12T06:13:31.812Z (UTC)
+    date-time: 2024-10-04T09:52:09.777Z (UTC)
     dependencies:
       - '@babel/core@7.22.10'
       - '@babel/preset-typescript@7.23.3'
       - '@commitlint/cli@18.6.0'
       - '@commitlint/config-conventional@18.6.0'
-      - '@grnsft/if-core@0.0.22'
+      - '@grnsft/if-core@0.0.25'
       - '@jest/globals@29.7.0'
       - '@types/jest@29.5.8'
       - '@types/js-yaml@4.0.9'
@@ -205,6 +205,12 @@ tree:
           cpu-energy-raw: 0.000020833333333333333
           vcpu-ratio: 8
           cpu-energy-kwh: 0.0000026041666666666666
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.007927447995941146
           carbon-operational: 0.0020833333333333333
           carbon: 0.010010781329274479
@@ -229,6 +235,12 @@ tree:
           cpu-energy-raw: 0.000059375
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000007421875
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970574
           carbon-operational: 0.0059375
           carbon: 0.045574739979705736
@@ -253,6 +265,12 @@ tree:
           cpu-energy-raw: 0.00007267361111111111
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000009084201388888889
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.05549213597158803
           carbon-operational: 0.007267361111111111
           carbon: 0.06275949708269914
@@ -277,6 +295,12 @@ tree:
           cpu-energy-raw: 0.00031145833333333335
           vcpu-ratio: 8
           cpu-energy-kwh: 0.00003893229166666667
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.2378234398782344
           carbon-operational: 0.031145833333333334
           carbon: 0.2689692732115677

@@ -58,11 +58,12 @@
   "homepage": "https://greensoftware.foundation",
   "keywords": [
     "engine",
+    "framework",
     "green software foundation",
     "greensoftware",
     "if",
     "impact",
-    "models"
+    "plugins"
   ],
   "license": "MIT",
   "publishConfig": {

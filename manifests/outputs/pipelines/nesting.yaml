@@ -247,20 +247,19 @@ execution:
   command: >-
     /Users/manushak/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
     /Users/manushak/Documents/Projects/Green-Software/if/src/if-run/index.ts -m
-    manifests/examples/pipelines/nesting.yml -o
     manifests/outputs/pipelines/nesting.yaml
   environment:
     if-version: 0.6.0
     os: macOS
     os-version: 14.6.1
     node-version: 18.20.4
-    date-time: 2024-09-12T11:46:37.516Z (UTC)
+    date-time: 2024-10-04T11:05:09.727Z (UTC)
     dependencies:
       - '@babel/core@7.22.10'
       - '@babel/preset-typescript@7.23.3'
       - '@commitlint/cli@18.6.0'
       - '@commitlint/config-conventional@18.6.0'
-      - '@grnsft/if-core@0.0.22'
+      - '@grnsft/if-core@0.0.25'
       - '@jest/globals@29.7.0'
       - '@types/jest@29.5.8'
       - '@types/js-yaml@4.0.9'
@@ -361,6 +360,12 @@ tree:
           cpu-energy-raw: 0.00006833333333333335
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000008541666666666668
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970573
           carbon-operational: 0.006833333333333334
           carbon: 0.04647057331303907
@@ -385,6 +390,12 @@ tree:
           cpu-energy-raw: 0.00005340277777777778
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006675347222222222
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970574
           carbon-operational: 0.005340277777777777
           carbon: 0.044977517757483515
@@ -409,6 +420,12 @@ tree:
           cpu-energy-raw: 0.00005190972222222222
           vcpu-ratio: 8
           cpu-energy-kwh: 0.0000064887152777777775
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970574
           carbon-operational: 0.005190972222222222
           carbon: 0.04482821220192795
@@ -433,6 +450,12 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
           carbon: 0.04482821220192795
@@ -457,6 +480,12 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
           carbon: 0.04482821220192795
@@ -481,6 +510,12 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
           carbon: 0.04482821220192795
@@ -505,6 +540,12 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
           carbon: 0.04482821220192795
@@ -529,6 +570,12 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
           carbon: 0.04482821220192795
@@ -553,6 +600,12 @@ tree:
           cpu-energy-raw: 0.000031145833333333336
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000003893229166666667
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.02378234398782344
           carbon-operational: 0.0031145833333333334
           carbon: 0.02689692732115677
@@ -577,6 +630,12 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 8
           cpu-energy-kwh: 0
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0
           carbon-operational: 0
           carbon: 0
@@ -601,6 +660,12 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 8
           cpu-energy-kwh: 0
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0
           carbon-operational: 0
           carbon: 0
@@ -625,6 +690,12 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 8
           cpu-energy-kwh: 0
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0
           carbon-operational: 0
           carbon: 0
@@ -703,6 +774,12 @@ tree:
           cpu-energy-raw: 0.00006833333333333335
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000008541666666666668
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970573
           carbon-operational: 0.006833333333333334
           carbon: 0.04647057331303907
@@ -727,6 +804,12 @@ tree:
           cpu-energy-raw: 0.00005340277777777778
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006675347222222222
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970574
           carbon-operational: 0.005340277777777777
           carbon: 0.044977517757483515
@@ -751,6 +834,12 @@ tree:
           cpu-energy-raw: 0.00005190972222222222
           vcpu-ratio: 8
           cpu-energy-kwh: 0.0000064887152777777775
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970574
           carbon-operational: 0.005190972222222222
           carbon: 0.04482821220192795
@@ -775,6 +864,12 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
           carbon: 0.04482821220192795
@@ -799,6 +894,12 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
           carbon: 0.04482821220192795
@@ -823,6 +924,12 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
           carbon: 0.04482821220192795
@@ -847,6 +954,12 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
           carbon: 0.04482821220192795
@@ -871,6 +984,12 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
           carbon: 0.04482821220192795
@@ -895,6 +1014,12 @@ tree:
           cpu-energy-raw: 0.000031145833333333336
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000003893229166666667
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0.02378234398782344
           carbon-operational: 0.0031145833333333334
           carbon: 0.02689692732115677
@@ -919,6 +1044,12 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 8
           cpu-energy-kwh: 0
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0
           carbon-operational: 0
           carbon: 0
@@ -943,6 +1074,12 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 8
           cpu-energy-kwh: 0
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0
           carbon-operational: 0
           carbon: 0
@@ -967,6 +1104,12 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 8
           cpu-energy-kwh: 0
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 0
           carbon-operational: 0
           carbon: 0
@@ -1047,6 +1190,12 @@ tree:
               cpu-energy-raw: 0.00006833333333333335
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000008541666666666668
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970573
               carbon-operational: 0.006833333333333334
               carbon: 0.04647057331303907
@@ -1071,6 +1220,12 @@ tree:
               cpu-energy-raw: 0.00005340277777777778
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006675347222222222
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970574
               carbon-operational: 0.005340277777777777
               carbon: 0.044977517757483515
@@ -1095,6 +1250,12 @@ tree:
               cpu-energy-raw: 0.00005190972222222222
               vcpu-ratio: 8
               cpu-energy-kwh: 0.0000064887152777777775
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970574
               carbon-operational: 0.005190972222222222
               carbon: 0.04482821220192795
@@ -1119,6 +1280,12 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
               carbon: 0.04482821220192795
@@ -1143,6 +1310,12 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
               carbon: 0.04482821220192795
@@ -1167,6 +1340,12 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
               carbon: 0.04482821220192795
@@ -1191,6 +1370,12 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
               carbon: 0.04482821220192795
@@ -1215,6 +1400,12 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
               carbon: 0.04482821220192795
@@ -1239,6 +1430,12 @@ tree:
               cpu-energy-raw: 0.000031145833333333336
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000003893229166666667
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.02378234398782344
               carbon-operational: 0.0031145833333333334
               carbon: 0.02689692732115677
@@ -1263,6 +1460,12 @@ tree:
               cpu-energy-raw: 0
               vcpu-ratio: 8
               cpu-energy-kwh: 0
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0
               carbon-operational: 0
               carbon: 0
@@ -1287,6 +1490,12 @@ tree:
               cpu-energy-raw: 0
               vcpu-ratio: 8
               cpu-energy-kwh: 0
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0
               carbon-operational: 0
               carbon: 0
@@ -1311,6 +1520,12 @@ tree:
               cpu-energy-raw: 0
               vcpu-ratio: 8
               cpu-energy-kwh: 0
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0
               carbon-operational: 0
               carbon: 0
@@ -1389,6 +1604,12 @@ tree:
               cpu-energy-raw: 0.00006833333333333335
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000008541666666666668
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970573
               carbon-operational: 0.006833333333333334
               carbon: 0.04647057331303907
@@ -1413,6 +1634,12 @@ tree:
               cpu-energy-raw: 0.00005340277777777778
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006675347222222222
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970574
               carbon-operational: 0.005340277777777777
               carbon: 0.044977517757483515
@@ -1437,6 +1664,12 @@ tree:
               cpu-energy-raw: 0.00005190972222222222
               vcpu-ratio: 8
               cpu-energy-kwh: 0.0000064887152777777775
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970574
               carbon-operational: 0.005190972222222222
               carbon: 0.04482821220192795
@@ -1461,6 +1694,12 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
               carbon: 0.04482821220192795
@@ -1485,6 +1724,12 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
               carbon: 0.04482821220192795
@@ -1509,6 +1754,12 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
               carbon: 0.04482821220192795
@@ -1533,6 +1784,12 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
               carbon: 0.04482821220192795
@@ -1557,6 +1814,12 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
               carbon: 0.04482821220192795
@@ -1581,6 +1844,12 @@ tree:
               cpu-energy-raw: 0.000031145833333333336
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000003893229166666667
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0.02378234398782344
               carbon-operational: 0.0031145833333333334
               carbon: 0.02689692732115677
@@ -1605,6 +1874,12 @@ tree:
               cpu-energy-raw: 0
               vcpu-ratio: 8
               cpu-energy-kwh: 0
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0
               carbon-operational: 0
               carbon: 0
@@ -1629,6 +1904,12 @@ tree:
               cpu-energy-raw: 0
               vcpu-ratio: 8
               cpu-energy-kwh: 0
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0
               carbon-operational: 0
               carbon: 0
@@ -1653,6 +1934,12 @@ tree:
               cpu-energy-raw: 0
               vcpu-ratio: 8
               cpu-energy-kwh: 0
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
               embodied-carbon: 0
               carbon-operational: 0
               carbon: 0
