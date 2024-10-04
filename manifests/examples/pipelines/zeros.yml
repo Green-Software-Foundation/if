@@ -6,7 +6,7 @@ initialize:
     "sum-zero-and-one":
       path: "builtin"
       method: Sum
-      global-config:
+      config:
         input-parameters:
           - some-value
           - zero-value
@@ -14,7 +14,7 @@ initialize:
     "sum-zero-and-zero":
       path: "builtin"
       method: Sum
-      global-config:
+      config:
         input-parameters:
           - zero-value
           - zero-value
@@ -22,7 +22,7 @@ initialize:
     "subtract-one-and-zero":
       path: "builtin"
       method: Subtract
-      global-config:
+      config:
         input-parameters:
           - some-value
           - zero-value
@@ -30,7 +30,7 @@ initialize:
     "subtract-zero-and-zero":
       path: "builtin"
       method: Sum
-      global-config:
+      config:
         input-parameters:
           - zero-value
           - zero-value
@@ -38,7 +38,7 @@ initialize:
     "subtract-zero-and-one":
       path: "builtin"
       method: Subtract
-      global-config:
+      config:
         input-parameters:
           - zero-value
           - some-value
@@ -46,61 +46,61 @@ initialize:
     "coefficient-one-times-zero":
       path: "builtin"
       method: Coefficient
-      global-config:
+      config:
         input-parameter: zero-value
         coefficient: 1
         output-parameter: zero-times-one-coefficient
     "coefficient-zero-times-one":
       path: "builtin"
       method: Coefficient
-      global-config:
+      config:
         input-parameter: some-value
         coefficient: 0
         output-parameter: one-times-zero-coefficient
     "coefficient-zero-times-zero":
       path: "builtin"
       method: Coefficient
-      global-config:
+      config:
         input-parameter: zero-value
         coefficient: 0
         output-parameter: zero-times-zero-coefficient
     "multiply-one-times-zero":
       path: "builtin"
       method: Multiply
-      global-config:
+      config:
         input-parameters: ["some-value", "zero-value"]
         output-parameter: "one-times-zero"
     "multiply-zero-times-one":
       path: "builtin"
       method: Multiply
-      global-config:
+      config:
         input-parameters: ["zero-value", "zero-value"]
         output-parameter: "zero-times-one"
     exponent-one-to-zero:
       method: Exponent
-      path: 'builtin'
-      global-config:
-        input-parameter: 'some-value'
+      path: "builtin"
+      config:
+        input-parameter: "some-value"
         exponent: 0
-        output-parameter: 'one-raised-to-zero-power'
+        output-parameter: "one-raised-to-zero-power"
     exponent-zero-to-zero:
       method: Exponent
-      path: 'builtin'
-      global-config:
-        input-parameter: 'zero-value'
+      path: "builtin"
+      config:
+        input-parameter: "zero-value"
         exponent: 0
-        output-parameter: 'zero-raised-to-zero-power'
+        output-parameter: "zero-raised-to-zero-power"
     exponent-zero-to-one:
       method: Exponent
-      path: 'builtin'
-      global-config:
-        input-parameter: 'zero-value'
+      path: "builtin"
+      config:
+        input-parameter: "zero-value"
         exponent: 1
-        output-parameter: 'zero-raised-to-first-power'
+        output-parameter: "zero-raised-to-first-power"
     "sci":
       path: "builtin"
       method: Sci
-      global-config:
+      config:
         functional-unit: "zero-value"
 tree:
   children:

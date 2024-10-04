@@ -4,7 +4,7 @@ import {MockObservations} from '../../../if-run/builtins/mock-observations';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {InputValidationError, GlobalConfigError} = ERRORS;
+const {InputValidationError, ConfigError} = ERRORS;
 const {INVALID_MIN_MAX} = STRINGS;
 
 describe('builtins/mock-observations: ', () => {
@@ -12,28 +12,25 @@ describe('builtins/mock-observations: ', () => {
     inputs: {},
     outputs: {},
   };
-
   describe('init: ', () => {
     it('successfully initalized.', () => {
-      const mockObservations = MockObservations(
-        {
-          'timestamp-from': '2023-07-06T00:00',
-          'timestamp-to': '2023-07-06T00:01',
-          duration: 5,
-          components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
-          generators: {
-            common: {
-              region: 'uk-west',
-              'common-key': 'common-val',
-            },
-            randint: {
-              'cpu/utilization': {min: 10, max: 95},
-              'memory/utilization': {min: 10, max: 85},
-            },
+      const config = {
+        'timestamp-from': '2023-07-06T00:00',
+        'timestamp-to': '2023-07-06T00:01',
+        duration: 5,
+        components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
+        generators: {
+          common: {
+            region: 'uk-west',
+            'common-key': 'common-val',
+          },
+          randint: {
+            'cpu/utilization': {min: 10, max: 95},
+            'memory/utilization': {min: 10, max: 85},
           },
         },
-        parametersMetadata
-      );
+      };
+      const mockObservations = MockObservations(config, parametersMetadata, {});
 
       expect(mockObservations).toHaveProperty('metadata');
       expect(mockObservations).toHaveProperty('execute');
@@ -57,7 +54,7 @@ describe('builtins/mock-observations: ', () => {
           },
         },
       };
-      const mockObservations = MockObservations(config, parametersMetadata);
+      const mockObservations = MockObservations(config, parametersMetadata, {});
       const result = await mockObservations.execute([]);
 
       expect.assertions(1);
@@ -98,6 +95,70 @@ describe('builtins/mock-observations: ', () => {
       ]);
     });
 
+    it('executes successfully when `mapping` is provided.', async () => {
+      const config = {
+        'timestamp-from': '2023-07-06T00:00',
+        'timestamp-to': '2023-07-06T00:01',
+        duration: 30,
+        components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
+        generators: {
+          common: {
+            region: 'uk-west',
+            'common-key': 'common-val',
+          },
+          randint: {
+            'cpu/util': {min: 10, max: 11},
+          },
+        },
+      };
+      const mapping = {
+        'cpu/utilization': 'cpu/util',
+      };
+      const mockObservations = MockObservations(
+        config,
+        parametersMetadata,
+        mapping
+      );
+      const result = await mockObservations.execute([]);
+
+      expect.assertions(1);
+
+      expect(result).toStrictEqual([
+        {
+          timestamp: '2023-07-06T00:00:00.000Z',
+          duration: 30,
+          'common-key': 'common-val',
+          'instance-type': 'A1',
+          region: 'uk-west',
+          'cpu/util': 10,
+        },
+        {
+          timestamp: '2023-07-06T00:00:30.000Z',
+          duration: 30,
+          'common-key': 'common-val',
+          'instance-type': 'A1',
+          region: 'uk-west',
+          'cpu/util': 10,
+        },
+        {
+          timestamp: '2023-07-06T00:00:00.000Z',
+          duration: 30,
+          'common-key': 'common-val',
+          'instance-type': 'B1',
+          region: 'uk-west',
+          'cpu/util': 10,
+        },
+        {
+          timestamp: '2023-07-06T00:00:30.000Z',
+          duration: 30,
+          'common-key': 'common-val',
+          'instance-type': 'B1',
+          region: 'uk-west',
+          'cpu/util': 10,
+        },
+      ]);
+    });
+
     it('throws an error when the `min` is greater then `max` of `randint` config.', async () => {
       const config = {
         'timestamp-from': '2023-07-06T00:00',
@@ -117,13 +178,13 @@ describe('builtins/mock-observations: ', () => {
 
       expect.assertions(2);
 
-      const mockObservations = MockObservations(config, parametersMetadata);
+      const mockObservations = MockObservations(config, parametersMetadata, {});
       try {
         await mockObservations.execute([]);
       } catch (error) {
-        expect(error).toBeInstanceOf(GlobalConfigError);
+        expect(error).toBeInstanceOf(ConfigError);
         expect(error).toEqual(
-          new GlobalConfigError(INVALID_MIN_MAX('cpu/utilization'))
+          new ConfigError(INVALID_MIN_MAX('cpu/utilization'))
         );
       }
     });
@@ -135,11 +196,14 @@ describe('builtins/mock-observations: ', () => {
         duration: 5,
         components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
       };
-
       expect.assertions(2);
 
       try {
-        const mockObservations = MockObservations(config, parametersMetadata);
+        const mockObservations = MockObservations(
+          config,
+          parametersMetadata,
+          {}
+        );
         await mockObservations.execute([]);
       } catch (error) {
         expect(error).toBeInstanceOf(InputValidationError);
@@ -169,11 +233,14 @@ describe('builtins/mock-observations: ', () => {
           },
         },
       };
-
       expect.assertions(2);
 
       try {
-        const mockObservations = MockObservations(config, parametersMetadata);
+        const mockObservations = MockObservations(
+          config,
+          parametersMetadata,
+          {}
+        );
         await mockObservations.execute([]);
       } catch (error) {
         expect(error).toBeInstanceOf(InputValidationError);
@@ -185,23 +252,25 @@ describe('builtins/mock-observations: ', () => {
       expect.assertions(2);
 
       try {
-        const mockObservations = MockObservations(
-          {
-            'timestamp-from': '2023-07-06T00:00',
-            'timestamp-to': '2023-07-06T00:01',
-            components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
-            generators: {
-              common: {
-                region: 'uk-west',
-                'common-key': 'common-val',
-              },
-              randint: {
-                'cpu/utilization': {min: 10, max: 95},
-                'memory/utilization': {min: 10, max: 85},
-              },
+        const config = {
+          'timestamp-from': '2023-07-06T00:00',
+          'timestamp-to': '2023-07-06T00:01',
+          components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
+          generators: {
+            common: {
+              region: 'uk-west',
+              'common-key': 'common-val',
+            },
+            randint: {
+              'cpu/utilization': {min: 10, max: 95},
+              'memory/utilization': {min: 10, max: 85},
             },
           },
-          parametersMetadata
+        };
+        const mockObservations = MockObservations(
+          config,
+          parametersMetadata,
+          {}
         );
         await mockObservations.execute([]);
       } catch (error) {
@@ -218,25 +287,26 @@ describe('builtins/mock-observations: ', () => {
       expect.assertions(2);
 
       try {
-        const mockObservations = MockObservations(
-          {
-            'timestamp-from': '2023-07-06T00:00',
-            duration: 5,
-            components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
-            generators: {
-              common: {
-                region: 'uk-west',
-                'common-key': 'common-val',
-              },
-              randint: {
-                'cpu/utilization': {min: 10, max: 95},
-                'memory/utilization': {min: 10, max: 85},
-              },
+        const config = {
+          'timestamp-from': '2023-07-06T00:00',
+          duration: 5,
+          components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
+          generators: {
+            common: {
+              region: 'uk-west',
+              'common-key': 'common-val',
+            },
+            randint: {
+              'cpu/utilization': {min: 10, max: 95},
+              'memory/utilization': {min: 10, max: 85},
             },
           },
-          parametersMetadata
+        };
+        const mockObservations = MockObservations(
+          config,
+          parametersMetadata,
+          {}
         );
-
         await mockObservations.execute([]);
       } catch (error) {
         expect(error).toBeInstanceOf(InputValidationError);
@@ -252,25 +322,26 @@ describe('builtins/mock-observations: ', () => {
       expect.assertions(2);
 
       try {
-        const mockObservations = MockObservations(
-          {
-            'timestamp-to': '2023-07-06T00:01',
-            duration: 5,
-            components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
-            generators: {
-              common: {
-                region: 'uk-west',
-                'common-key': 'common-val',
-              },
-              randint: {
-                'cpu/utilization': {min: 10, max: 95},
-                'memory/utilization': {min: 10, max: 85},
-              },
+        const config = {
+          'timestamp-to': '2023-07-06T00:01',
+          duration: 5,
+          components: [{'instance-type': 'A1'}, {'instance-type': 'B1'}],
+          generators: {
+            common: {
+              region: 'uk-west',
+              'common-key': 'common-val',
+            },
+            randint: {
+              'cpu/utilization': {min: 10, max: 95},
+              'memory/utilization': {min: 10, max: 85},
             },
           },
-          parametersMetadata
+        };
+        const mockObservations = MockObservations(
+          config,
+          parametersMetadata,
+          {}
         );
-
         await mockObservations.execute([]);
       } catch (error) {
         expect(error).toBeInstanceOf(InputValidationError);
@@ -296,7 +367,7 @@ describe('builtins/mock-observations: ', () => {
           randint: null,
         },
       };
-      const mockObservations = MockObservations(config, parametersMetadata);
+      const mockObservations = MockObservations(config, parametersMetadata, {});
 
       expect.assertions(2);
 
@@ -326,7 +397,7 @@ describe('builtins/mock-observations: ', () => {
           },
         },
       };
-      const mockObservations = MockObservations(config, parametersMetadata);
+      const mockObservations = MockObservations(config, parametersMetadata, {});
 
       expect.assertions(2);
 

@@ -10,7 +10,7 @@ For example, you could add `cpu/energy` and `network/energy` and name the result
 
 ### Plugin config
 
-Two parameters are required in global config: `input-parameters` and `output-parameter`.
+Two parameters are required in config: `input-parameters` and `output-parameter`.
 
 `input-parameters`: an array of strings. Each string should match an existing key in the `inputs` array
 `output-parameter`: a string defining the name to use to add the result of summing the input parameters to the output array.
@@ -19,16 +19,32 @@ Two parameters are required in global config: `input-parameters` and `output-par
 
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
-- `inputs`: describe parameters of the `input-parameters` of the global config. Each parameter has:
+- `inputs`: describe parameters of the `input-parameters` of the config. Each parameter has:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
 
-- `outputs`: describe the parameter of the `output-parameter` of the global config. The parameter has the following attributes:
+- `outputs`: describe the parameter of the `output-parameter` of the config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
+
+```yaml
+sum:
+  method: Sum
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
 
 ### Inputs
 
@@ -36,7 +52,7 @@ All of `input-parameters` must be available in the input array.
 
 ## Returns
 
-- `output-parameter`: the sum of all `input-parameters` with the parameter name defined by `output-parameter` in global config.
+- `output-parameter`: the sum of all `input-parameters` with the parameter name defined by `output-parameter` in config.
 
 ## Calculation
 
@@ -53,9 +69,14 @@ const config = {
   inputParameters: ['cpu/energy', 'network/energy'],
   outputParameter: 'energy',
 };
+const parametersMetadata = {inputs: {}, outputs: {}};
+const = mapping {
+  'cpu/energy': 'energy-from-cpu',
+  'network/energy': 'energy-from-network',
+};
 
-const sum = Sum(config, parametersMetadata);
-const result = sum.execute([
+const sum = Sum(config, parametersMetadata, mapping);
+const result = await sum.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',
     duration: 3600,
@@ -78,7 +99,7 @@ initialize:
     sum:
       method: Sum
       path: 'builtin'
-      global-config:
+      config:
         input-parameters: ['cpu/energy', 'network/energy']
         output-parameter: 'energy'
       parameter-metadata:
@@ -86,16 +107,28 @@ initialize:
           cpu/energy:
             description: energy consumed by the cpu
             unit: kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
+            aggregation-method:
+              time: sum
+              component: sum
           network/energy:
             description: energy consumed by data ingress and egress
             unit: kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
+            aggregation-method:
+              time: sum
+              component: sum
         outputs:
           energy:
             description: sum of energy components
             unit: kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
 tree:
   children:
     child:
@@ -121,9 +154,9 @@ The results will be saved to a new `yaml` file in `./examples/outputs`.
 
 `Sum` exposes two of the IF error classes.
 
-### GlobalConfigError
+### ConfigError
 
-You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+You will receive an error starting `ConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
 

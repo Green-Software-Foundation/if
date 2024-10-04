@@ -1,5 +1,5 @@
 name: demo
-description: 
+description:
 tags:
 initialize:
   plugins:
@@ -7,7 +7,7 @@ initialize:
       kind: plugin
       method: MockObservations
       path: "builtin"
-      global-config:
+      config:
         timestamp-from: 2023-07-06T00:00
         timestamp-to: 2023-07-06T00:01
         duration: 60
@@ -28,7 +28,7 @@ initialize:
     sum:
       path: "builtin"
       method: Sum
-      global-config:
+      config:
         input-parameters:
           - cpu/utilization
           - memory/utilization

@@ -6,7 +6,6 @@ export const tree = {
   children: {
     'child-1': {
       pipeline: ['teads-curve', 'sum', 'sci-embodied', 'sci-o', 'sci'],
-      config: null,
       defaults: {
         'cpu/thermal-design-power': 100,
         'grid/carbon-intensity': 800,
@@ -44,8 +43,8 @@ export const tree = {
           'resources-reserved': 1,
           'resources-total': 8,
           'cpu/energy': 0.000008888888888888888,
-          "carbon-plus-energy'": 10.000008888888889,
-          'carbon-embodied': 0.0000020256215119228817,
+          'carbon-plus-energy': 10.000008888888889,
+          'embodied-carbon': 0.0000020256215119228817,
           'carbon-operational': 4000,
           carbon: 4000.0000020256216,
           sci: 240000.0001215373,
@@ -55,7 +54,6 @@ export const tree = {
     },
     'child-2': {
       pipeline: ['teads-curve', 'sum', 'sci-embodied', 'sci-o', 'sci'],
-      config: null,
       defaults: {
         'cpu/thermal-design-power': 100,
         'grid/carbon-intensity': 800,
@@ -94,7 +92,7 @@ export const tree = {
           'resources-total': 8,
           'cpu/energy': 0.00001650338753387534,
           "carbon-plus-energy'": 10.000016503387533,
-          'carbon-embodied': 0.0000020256215119228817,
+          'embodied-carbon': 0.0000020256215119228817,
           'carbon-operational': 4000,
           carbon: 4000.0000020256216,
           sci: 240000.0001215373,
@@ -126,14 +124,14 @@ export const context: Context = {
       'teads-curve': {
         path: '@grnsft/if-unofficial-plugins',
         method: 'TeadsCurve',
-        'global-config': {
+        config: {
           interpolation: 'spline',
         },
       },
       sum: {
         path: '@grnsft/if-plugins',
         method: 'Sum',
-        'global-config': {
+        config: {
           'input-parameters': ['cpu/energy', 'network/energy'],
           'output-parameter': "carbon-plus-energy'",
         },
@@ -149,7 +147,7 @@ export const context: Context = {
       sci: {
         path: '@grnsft/if-plugins',
         method: 'Sci',
-        'global-config': {
+        config: {
           'functional-unit': 'requests',
         },
       },

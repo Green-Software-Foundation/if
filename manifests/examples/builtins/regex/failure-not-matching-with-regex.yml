@@ -6,9 +6,9 @@ initialize:
     regex:
       method: Regex
       path: "builtin"
-      global-config:
+      config:
         parameter: physical-processor
-        match: ^
+        match: ^$
         output: cpu/name
 tree:
   children:

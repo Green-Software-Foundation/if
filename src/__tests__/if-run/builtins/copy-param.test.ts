@@ -4,12 +4,12 @@ import {Copy} from '../../../if-run/builtins/copy-param';
 
 import {STRINGS} from '../../../if-run/config';
 
-const {GlobalConfigError, InputValidationError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {ConfigError, InputValidationError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
 
 describe('builtins/copy: ', () => {
   describe('Copy: ', () => {
-    const globalConfig = {
+    const config = {
       'keep-existing': true,
       from: 'original',
       to: 'copy',
@@ -18,7 +18,7 @@ describe('builtins/copy: ', () => {
       inputs: {},
       outputs: {},
     };
-    const copy = Copy(globalConfig, parametersMetadata);
+    const copy = Copy(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -28,7 +28,7 @@ describe('builtins/copy: ', () => {
     });
 
     describe('execute(): ', () => {
-      it('successfully applies Copy strategy to given input.', () => {
+      it('successfully applies Copy strategy to given input.', async () => {
         expect.assertions(1);
 
         const expectedResult = [
@@ -40,7 +40,7 @@ describe('builtins/copy: ', () => {
           },
         ];
 
-        const result = copy.execute([
+        const result = await copy.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
@@ -51,14 +51,70 @@ describe('builtins/copy: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error when global config is not provided.', () => {
+      it('successfully executed when `mapping` has valid data.', async () => {
+        expect.assertions(1);
+
+        const mapping = {
+          original: 'from',
+        };
+
+        const copy = Copy(config, parametersMetadata, mapping);
+        const expectedResult = [
+          {
+            duration: 3600,
+            from: 'hello',
+            copy: 'hello',
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = await copy.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            from: 'hello',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('successfully executed when the `mapping` map output parameter.', async () => {
+        expect.assertions(1);
+
+        const mapping = {
+          copy: 'result',
+        };
+
+        const copy = Copy(config, parametersMetadata, mapping);
+        const expectedResult = [
+          {
+            duration: 3600,
+            original: 'hello',
+            result: 'hello',
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = await copy.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            original: 'hello',
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('throws an error when config is not provided.', async () => {
         const config = undefined;
-        const copy = Copy(config!, parametersMetadata);
+        const copy = Copy(config!, parametersMetadata, {});
 
         expect.assertions(1);
 
         try {
-          copy.execute([
+          await copy.execute([
             {
               timestamp: '2021-01-01T00:00:00Z',
               duration: 3600,
@@ -66,23 +122,21 @@ describe('builtins/copy: ', () => {
             },
           ]);
         } catch (error) {
-          expect(error).toStrictEqual(
-            new GlobalConfigError(MISSING_GLOBAL_CONFIG)
-          );
+          expect(error).toStrictEqual(new ConfigError(MISSING_CONFIG));
         }
       });
 
-      it('throws an error on missing params in input.', () => {
-        const globalConfig = {
+      it('throws an error on missing params in input.', async () => {
+        const config = {
           'keep-existing': true,
           from: 'original',
           to: 'copy',
         };
-        const copy = Copy(globalConfig, parametersMetadata);
+        const copy = Copy(config, parametersMetadata, {});
         expect.assertions(1);
 
         try {
-          copy.execute([
+          await copy.execute([
             {
               duration: 3600,
               timestamp: '2021-01-01T00:00:00Z',
@@ -91,20 +145,21 @@ describe('builtins/copy: ', () => {
         } catch (error) {
           expect(error).toStrictEqual(
             new InputValidationError(
-              '"original" parameter is required. Error code: invalid_type.'
+              '"original" parameter is required. Error code: invalid_union.'
             )
           );
         }
       });
-      it('does not persist the original value when keep-existing==false.', () => {
+
+      it('does not persist the original value when keep-existing==false.', async () => {
         expect.assertions(1);
-        const globalConfig = {
+        const config = {
           'keep-existing': false,
           from: 'original',
           to: 'copy',
         };
-        const copy = Copy(globalConfig, parametersMetadata);
 
+        const copy = Copy(config, parametersMetadata, {});
         const expectedResult = [
           {
             duration: 3600,
@@ -113,7 +168,7 @@ describe('builtins/copy: ', () => {
           },
         ];
 
-        const result = copy.execute([
+        const result = await copy.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
@@ -122,6 +177,36 @@ describe('builtins/copy: ', () => {
         ]);
 
         expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('successfully executes when the `from` contains arithmetic expression.', async () => {
+        const config = {
+          'keep-existing': false,
+          from: '=3*size',
+          to: 'if-size',
+        };
+        const copy = Copy(config, parametersMetadata, {});
+
+        const inputs = [
+          {
+            timestamp: '2024-07-05T13:45:48.398Z',
+            duration: 3600,
+            size: 0.05,
+          },
+        ];
+
+        const expectedResult = [
+          {
+            timestamp: '2024-07-05T13:45:48.398Z',
+            duration: 3600,
+            'if-size': 0.15000000000000002,
+          },
+        ];
+
+        expect.assertions(1);
+        const result = await copy.execute(inputs);
+
+        expect(result).toEqual(expectedResult);
       });
     });
   });

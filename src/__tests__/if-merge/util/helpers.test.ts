@@ -27,7 +27,7 @@ jest.mock('../../../if-run/builtins/export-yaml', () => ({
             multiply: {
               path: 'builtin',
               method: 'Multiply',
-              'global-config': {
+              config: {
                 'input-parameters': ['cpu/utilization', 'duration'],
                 'output-parameter': 'cpu-times-duration',
               },
@@ -50,10 +50,10 @@ jest.mock('../../../if-run/builtins/export-yaml', () => ({
 }));
 
 describe('if-merge/util/helpers: ', () => {
-  const consopleSpy = jest.spyOn(global.console, 'log');
+  const consoleSpy = jest.spyOn(global.console, 'log');
 
   beforeEach(() => {
-    consopleSpy.mockReset();
+    consoleSpy.mockReset();
   });
 
   describe('mergeManifests(): ', () => {
@@ -103,7 +103,7 @@ describe('if-merge/util/helpers: ', () => {
           multiply: {
             path: 'builtin',
             method: 'Multiply',
-            'global-config': {
+            config: {
               'input-parameters': ['cpu/utilization', 'duration'],
               'output-parameter': 'cpu-times-duration',
             },
@@ -149,7 +149,7 @@ describe('if-merge/util/helpers: ', () => {
       await mergeManifests(mockCommandArgs);
 
       expect.assertions(1);
-      expect(consopleSpy).toHaveBeenCalledTimes(1);
+      expect(consoleSpy).toHaveBeenCalledTimes(1);
     });
 
     it('gets YAML files when there is only one manifest.', async () => {

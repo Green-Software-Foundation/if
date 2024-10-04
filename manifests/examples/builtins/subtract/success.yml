@@ -6,7 +6,7 @@ initialize:
     subtract:
       method: Subtract
       path: "builtin"
-      global-config:
+      config:
         input-parameters: ["cpu/energy", "network/energy"]
         output-parameter: "energy/diff"
 tree:

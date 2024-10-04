@@ -6,7 +6,7 @@ initialize:
     subtract:
       path: builtin
       method: Subtract
-      global-config:
+      config:
         input-parameters:
           - cpu/energy
           - network/energy
