@@ -250,9 +250,7 @@ describe('builtins/time-sync:', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new InputValidationError(
-              '"start-time" parameter is required. Error code: invalid_type.,"end-time" parameter is required. Error code: invalid_type.,"interval" parameter is required. Error code: invalid_type.,"allow-padding" parameter is required. Error code: invalid_type.'
-            )
+            new ConfigError('Config is not provided.')
           );
         }
       });
