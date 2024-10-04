@@ -16,20 +16,19 @@ execution:
   command: >-
     /Users/manushak/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
     /Users/manushak/Documents/Projects/Green-Software/if/src/if-run/index.ts -m
-    manifests/examples/builtins/sci-embodied/scenario-1.yml -o
-    manifests/outputs/builtins/sci-embodied/scenario-1.yml
+    manifests/outputs/builtins/sci-embodied/scenario-1.yaml
   environment:
     if-version: 0.6.0
     os: macOS
     os-version: 14.6.1
     node-version: 18.20.4
-    date-time: 2024-09-12T06:14:16.990Z (UTC)
+    date-time: 2024-10-04T09:06:05.353Z (UTC)
     dependencies:
       - '@babel/core@7.22.10'
       - '@babel/preset-typescript@7.23.3'
       - '@commitlint/cli@18.6.0'
       - '@commitlint/config-conventional@18.6.0'
-      - '@grnsft/if-core@0.0.22'
+      - '@grnsft/if-core@0.0.25'
       - '@jest/globals@29.7.0'
       - '@types/jest@29.5.8'
       - '@types/js-yaml@4.0.9'
@@ -73,10 +72,20 @@ tree:
         - timestamp: 2023-08-06T00:00
           duration: 3600
           hdd: 2
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 34.24657534246575
         - timestamp: 2023-08-06T10:00
           duration: 3600
           hdd: 2
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          gpu: 0
+          usage-ratio: 1
           embodied-carbon: 34.24657534246575
       aggregated:
         embodied-carbon: 68.4931506849315
