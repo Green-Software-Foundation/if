@@ -8,7 +8,6 @@ initialize:
     'time-sync':
       method: TimeSync
       path: 'builtin'
-      config:
 tree:
   children:
     child:
