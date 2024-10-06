@@ -1,32 +1,28 @@
 export const STRINGS = {
   MISSING_METHOD: "Initalization param 'method' is missing.",
   MISSING_PATH: "Initalization param 'path' is missing.",
-  UNSUPPORTED_PLUGIN:
-    "Plugin interface doesn't implement 'execute' or 'metadata' methods.",
   NOT_NATIVE_PLUGIN: (path: string) =>
     `
   You are using plugin ${path} which is not part of the Impact Framework standard library. You should do your own research to ensure the plugins are up to date and accurate. They may not be actively maintained.`,
   INVALID_MODULE_PATH: (path: string, error?: any) =>
     `Provided module \`${path}\` is invalid or not found. ${error ?? ''}
 `,
-  INVALID_TIME_NORMALIZATION: 'Start time or end time is missing.',
+  INCOMPATIBLE_RESOLUTION_WITH_INTERVAL:
+    'The upsampling resolution must be a divisor of the given interval, but the provided value does not satisfy this criteria.',
+  INCOMPATIBLE_RESOLUTION_WITH_INPUTS:
+    'The upsampling resolution must be a divisor of all inputs durations, but the provided values do not satisfy this criteria.',
+  INCOMPATIBLE_RESOLUTION_WITH_GAPS:
+    'The upsampling resolution must be a divisor of gaps and paddings in the time-series, but the provided values do not satisfy this criteria.',
   UNEXPECTED_TIME_CONFIG:
     'Unexpected node-level config provided for time-sync plugin.',
-  INVALID_TIME_INTERVAL: 'Interval is missing.',
-  AVOIDING_PADDING: (description: string) =>
-    `Avoiding padding at ${description}`,
   AVOIDING_PADDING_BY_EDGES: (start: boolean, end: boolean) =>
     `Avoiding padding at ${
       start && end ? 'start and end' : start ? 'start' : 'end'
     }`,
-  INVALID_AGGREGATION_METHOD: (metric: string) =>
-    `Aggregation is not possible for given ${metric} since method is 'none'.`,
   METRIC_MISSING: (metric: string, index: number) =>
     `Aggregation metric ${metric} is not found in inputs[${index}].`,
   INVALID_GROUP_KEY: (key: string) => `Invalid group ${key}.`,
   REGROUP_ERROR: 'not an array or should contain at least one key',
-  INVALID_EXHAUST_PLUGIN: (pluginName: string) =>
-    `Invalid exhaust plugin: ${pluginName}.`,
   UNKNOWN_PARAM: (name: string) =>
     `Unknown parameter: ${name}. Omitting from the output.`,
   NOT_INITALIZED_PLUGIN: (name: string) =>
@@ -46,15 +42,24 @@ Note that for the '--output' option you also need to define the output type in y
   CHECKING_AGGREGATION_METHOD: (unitName: string) =>
     `Checking aggregation method for ${unitName}`,
   INITIALIZING_PLUGINS: 'Initializing plugins',
-  INITIALIZING_PLUGIN: (pluginName: string) => `Initializing ${pluginName}`,
+  INITIALIZING_PLUGIN: (pluginName: string) =>
+    `Initializing \`${pluginName}\` instance`,
   LOADING_PLUGIN_FROM_PATH: (pluginName: string, path: string) =>
     `Loading ${pluginName} from ${path}`,
   COMPUTING_PIPELINE_FOR_NODE: (nodeName: string) =>
-    `Computing pipeline for \`${nodeName}\``,
+    `Running compute pipeline: \`${nodeName}\` plugin`,
+  COMPUTING_COMPONENT_PIPELINE: (component: string) =>
+    `**Computing \`${component}\` pipeline**`,
+  REGROUPING: 'Regrouping',
+  OBSERVING: (nodeName: string) =>
+    `Running observe pipeline: \`${nodeName}\` plugin`,
   MERGING_DEFAULTS_WITH_INPUT_DATA: 'Merging defaults with input data',
   AGGREGATING_OUTPUTS: 'Aggregating outputs',
   AGGREGATING_NODE: (nodeName: string) => `Aggregating node ${nodeName}`,
-  PREPARING_OUTPUT_DATA: 'Preparing output data',
+  PREPARING_OUTPUT_DATA: () => {
+    console.debug('\n');
+    return 'Preparing output data';
+  },
   EXPORTING_TO_YAML_FILE: (savepath: string) =>
     `Exporting to yaml file: ${savepath}`,
   EMPTY_PIPELINE: `You're using an old style manifest. Please update for phased execution. More information can be found here: 
@@ -63,11 +68,8 @@ https://if.greensoftware.foundation/major-concepts/manifest-file`,
   OUTPUT_REQUIRED:
     'Output path is required, please make sure output is configured properly.',
   /** Plugins messages */
-  INVALID_NAME:
-    '`name` global config parameter is empty or contains all spaces',
+  INVALID_NAME: '`name` config parameter is empty or contains all spaces',
   START_LOWER_END: '`start-time` should be lower than `end-time`',
-  TIMESTAMP_REQUIRED: (index: number) => `required in input[${index}]`,
-  INVALID_DATETIME: (index: number) => `invalid datetime in input[${index}]`,
   X_Y_EQUAL: 'The length of `x` and `y` should be equal',
   ARRAY_LENGTH_NON_EMPTY:
     'the length of the input arrays must be greater than 1',
@@ -84,13 +86,11 @@ https://if.greensoftware.foundation/major-concepts/manifest-file`,
   SCI_MISSING_FN_UNIT: (functionalUnit: string) =>
     `'carbon' and ${functionalUnit} should be present in your input data.`,
   MISSING_FUNCTIONAL_UNIT_CONFIG:
-    '`functional-unit` should be provided in your global config',
+    '`functional-unit` should be provided in your config',
   MISSING_FUNCTIONAL_UNIT_INPUT:
     '`functional-unit` value is missing from input data or it is not a positive integer',
   REGEX_MISMATCH: (input: any, match: string) =>
     `\`${input}\` does not match the ${match} regex expression`,
-  SCI_EMBODIED_ERROR: (unit: string) =>
-    `invalid number. please provide it as \`${unit}\` to input`,
   MISSING_MIN_MAX: 'Config is missing min or max value',
   INVALID_MIN_MAX: (name: string) =>
     `Min value should not be greater than or equal to max value of ${name}`,
@@ -106,7 +106,18 @@ ${message}`,
 ${error}`,
   ZERO_DIVISION: (moduleName: string, index: number) =>
     `-- SKIPPING -- DivisionByZero: you are attempting to divide by zero in ${moduleName} plugin : inputs[${index}]\n`,
-  MISSING_GLOBAL_CONFIG: 'Global config is not provided.',
+  MISSING_CONFIG: 'Config is not provided.',
   MISSING_INPUT_DATA: (param: string) =>
     `${param} is missing from the input array, or has nullish value.`,
+  CONFIG_WARN: (plugins: string, isMore: boolean) => {
+    const withoutPlugins =
+      'You have included node-level config in your manifest. IF no longer supports node-level config. The manifest should be refactored to accept all its node-level config from config or input data.';
+    const withPlugins = `You have included node-level config in your manifest to support \`${plugins}\` plugin${
+      isMore ? 's' : ''
+    }. IF no longer supports node-level config. \`${plugins}\` plugin${
+      isMore ? 's' : ''
+    } should be refactored to accept all its config from config or input data.`;
+
+    return plugins.length ? withPlugins : withoutPlugins;
+  },
 };

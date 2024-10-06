@@ -6,7 +6,7 @@ initialize:
     time-converter:
       method: TimeConverter
       path: builtin
-      global-config:
+      config:
         input-parameter: "energy-per-year"
         original-time-unit: "year"
         new-time-unit: "duration"
@@ -15,8 +15,8 @@ tree:
   children:
     child:
       pipeline:
-        - time-converter
-      config:
+        compute:
+          - time-converter
       defaults:
         energy-per-year: 10000
       inputs:

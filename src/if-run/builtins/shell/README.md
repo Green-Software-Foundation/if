@@ -4,7 +4,7 @@ The `shell` is a wrapper enabling plugins implemented in any other programming l
 
 ## Parameters
 
-### Plugin global config
+### Plugin config
 
 The plugin should be initialized as follows:
 
@@ -14,7 +14,7 @@ initialize:
     shell:
       method: Shell
       path: 'builtin'
-      global-config:
+      config:
         command: python3 /usr/local/bin/sampler
 ```
 
@@ -30,12 +30,16 @@ The `parameter-metadata` section contains information about `description`, `unit
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
 
 - `outputs`: describe the output parameter. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
 
 ### Inputs
 
@@ -53,7 +57,11 @@ The specific return types depend on the plugin being invoked. Typically, we woul
 To run the plugin, you must first create an instance of `Shell` and call its `execute()` to run the external plugin.
 
 ```typescript
-const output = Shell({command: '/usr/local/bin/sampler'});
+const config = {
+  command: '/usr/local/bin/sampler',
+};
+const parametersMetadata = {inputs: {}, outputs: {}};
+const output = Shell(config, parametersMetadata);
 const result = await output.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',
@@ -85,7 +93,7 @@ initialize:
     sampler:
       method: Shell
       path: 'builtin'
-      global-config:
+      config:
         command: python3 /usr/local/bin/sampler
 tree:
   children:
@@ -112,7 +120,7 @@ initialize:
     sampler:
       method: Shell
       path: 'builtin'
-      global-config:
+      config:
         command: python3 /usr/local/bin/sampler
 tree:
   children:

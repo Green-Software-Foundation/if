@@ -6,7 +6,7 @@ initialize:
     multiply:
       path: builtin
       method: Multiply
-      global-config:
+      config:
         input-parameters:
           - cpu/energy
           - network/energy

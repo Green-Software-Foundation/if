@@ -10,7 +10,7 @@ For example, you could multiply `cpu/energy` and `network/energy` and name the r
 
 ### Plugin config
 
-Two parameters are required in global config: `input-parameters` and `output-parameter`.
+Two parameters are required in config: `input-parameters` and `output-parameter`.
 
 `input-parameters`: an array of strings. Each string should match an existing key in the `inputs` array
 `output-parameter`: a string defining the name to use to add the product of the input parameters to the output array.
@@ -19,16 +19,32 @@ Two parameters are required in global config: `input-parameters` and `output-par
 
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
-- `inputs`: describe parameters of the `input-parameters` of the global config. Each parameter has:
+- `inputs`: describe parameters of the `input-parameters` of the config. Each parameter has:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
 
-- `outputs`: describe the parameter of the `output-parameter` of the global config. The parameter has the following attributes:
+- `outputs`: describe the parameter of the `output-parameter` of the config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
+
+```yaml
+multiply:
+  method: Multiply
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
 
 ### Inputs
 
@@ -36,7 +52,7 @@ All of `input-parameters` must be available in the input array.
 
 ## Returns
 
-- `output-parameter`: the product of all `input-parameters` with the parameter name defined by `output-parameter` in global config.
+- `output-parameter`: the product of all `input-parameters` with the parameter name defined by `output-parameter` in config.
 
 ## Calculation
 
@@ -56,7 +72,9 @@ const config = {
   outputParameter: 'energy-product',
 };
 
-const multiply = Multiply(config, parametersMetadata);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const multiply = Multiply(config, parametersMetadata, mapping);
 const result = await multiply.execute([
   {
     duration: 3600,
@@ -69,7 +87,7 @@ const result = await multiply.execute([
 
 ## Example manifest
 
-IF users will typically call the plugin as part of a pipeline defined in a manifest file. In this case, instantiating the plugin is handled by `ie` and does not have to be done explicitly by the user. The following is an example manifest that calls `multiply`:
+IF users will typically call the plugin as part of a pipeline defined in a manifest file. In this case, instantiating the plugin is handled by `if-run` and does not have to be done explicitly by the user. The following is an example manifest that calls `multiply`:
 
 ```yaml
 name: multiply-demo
@@ -80,7 +98,7 @@ initialize:
     multiply:
       method: Multiply
       path: 'builtin'
-      global-config:
+      config:
         input-parameters: ['cpu/energy', 'network/energy']
         output-parameter: 'energy-product'
 tree:

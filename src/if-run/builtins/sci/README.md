@@ -4,7 +4,7 @@
 
 ## Parameters
 
-### Plugin global config
+### Plugin config
 
 - `functional-unit`: the name of the functional unit in which to express the carbon impact (required)
 
@@ -16,17 +16,34 @@ The `parameter-metadata` section contains information about `description`, `unit
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
 
 - `outputs`: describe the `sci` parameter which has the following attributes:
+
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
+
+```yaml
+sci:
+  method: Sci
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
 
 ### Inputs
 
 - `carbon`: total carbon in gCO2eq (required)
-- `functional-unit`: whatever `functional-unit` you define in global config also has to be present in each input, for example if you provide `functional-unit: requests` in global config, `requests` must be present in your input data.
+- `functional-unit`: whatever `functional-unit` you define in config also has to be present in each input, for example if you provide `functional-unit: requests` in config, `requests` must be present in your input data.
 
 ## Returns
 
@@ -49,11 +66,15 @@ To run the plugin, you must first create an instance of `Sci`. Then, you can cal
 ```typescript
 import {Sci} from 'builtins';
 
-const sci = Sci({'functional-unit': 'requests'});
+const config = {'functional-unit': 'requests'}
+const parametersMetadata = {inputs: {}, outputs: {}};
+
+const sci = Sci(config, parametersMetadata, {});
+
 const results = await sci.execute(
   [
     {
-      'carbon': 5'
+      'carbon': 5
       duration: 1,
       requests: 100,
     },
@@ -63,7 +84,7 @@ const results = await sci.execute(
 
 ## Example manifest
 
-IF users will typically call the plugin as part of a pipeline defined in a `manifest` file. In this case, instantiating the plugin is handled by `ie` and does not have to be done explicitly by the user.
+IF users will typically call the plugin as part of a pipeline defined in a `manifest` file. In this case, instantiating the plugin is handled by `if-run` and does not have to be done explicitly by the user.
 
 The following is an example `manifest` that calls `sci`:
 
@@ -76,7 +97,7 @@ initialize:
     sci:
       method: Sci
       path: 'builtin'
-      global-config:
+      config:
         functional-unit: 'requests'
 tree:
   children:

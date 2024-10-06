@@ -1,5 +1,5 @@
+import {PluginInterface} from '@grnsft/if-core/types';
 import {pluginStorage} from '../util/plugin-storage';
-import {PluginInterface} from './interface';
 
 export type PluginStorage = {
   [key: string]: PluginInterface;

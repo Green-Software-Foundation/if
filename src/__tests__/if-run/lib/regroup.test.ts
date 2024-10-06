@@ -54,7 +54,75 @@ describe('lib/regroup: ', () => {
         },
       };
 
-      const result = Regroup(inputs, groups);
+      const result = Regroup(inputs, [], groups);
+      expect(result).toEqual(expectedOutput);
+    });
+
+    it('groups inputs combined with outputs correctly.', () => {
+      const inputs = [
+        {
+          timestamp: '2023-07-06T00:00',
+          region: 'uk-west',
+        },
+        {
+          timestamp: '2023-07-06T05:00',
+          region: 'uk-east1',
+        },
+        {
+          timestamp: '2023-07-06T10:00',
+          region: 'uk-east1',
+        },
+      ];
+      const outputs = [
+        {
+          timestamp: '2022-06-06T00:00',
+          region: 'uk-west',
+        },
+        {
+          timestamp: '2022-06-06T05:00',
+          region: 'uk-east2',
+        },
+      ];
+      const groups = ['region'];
+
+      const expectedOutput = {
+        'uk-west': {
+          inputs: [
+            {
+              region: 'uk-west',
+              timestamp: '2023-07-06T00:00',
+            },
+          ],
+          outputs: [
+            {
+              timestamp: '2022-06-06T00:00',
+              region: 'uk-west',
+            },
+          ],
+        },
+        'uk-east1': {
+          inputs: [
+            {
+              timestamp: '2023-07-06T05:00',
+              region: 'uk-east1',
+            },
+            {
+              timestamp: '2023-07-06T10:00',
+              region: 'uk-east1',
+            },
+          ],
+        },
+        'uk-east2': {
+          outputs: [
+            {
+              timestamp: '2022-06-06T05:00',
+              region: 'uk-east2',
+            },
+          ],
+        },
+      };
+
+      const result = Regroup(inputs, outputs, groups);
       expect(result).toEqual(expectedOutput);
     });
 
@@ -81,7 +149,7 @@ describe('lib/regroup: ', () => {
 
       expect.assertions(2);
       try {
-        Regroup(inputs, groups!);
+        Regroup(inputs, [], groups!);
       } catch (error) {
         expect(error).toBeInstanceOf(InputValidationError);
         expect(error).toEqual(
@@ -113,7 +181,7 @@ describe('lib/regroup: ', () => {
 
       expect.assertions(2);
       try {
-        Regroup(inputs, groups);
+        Regroup(inputs, [], groups);
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidGroupingError);
         expect(error).toEqual(
@@ -130,7 +198,7 @@ describe('lib/regroup: ', () => {
 
       expect.assertions(2);
       try {
-        Regroup(inputs, groups);
+        Regroup(inputs, [], groups);
       } catch (error) {
         expect(error).toBeInstanceOf(InputValidationError);
         expect(error).toEqual(
@@ -149,7 +217,7 @@ describe('lib/regroup: ', () => {
 
       expect.assertions(2);
       try {
-        Regroup(inputs, groups);
+        Regroup(inputs, [], groups);
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidGroupingError);
         expect(error).toEqual(

@@ -1,12 +1,12 @@
 name: shell
-description: falure with `global-config.command` being number instead od string
+description: falure with `config.command` being number instead od string
 tags: null
 initialize:
   plugins:
     shell:
       method: Shell
       path: builtin
-      global-config:
+      config:
         command: 1000
 execution:
   status: fail

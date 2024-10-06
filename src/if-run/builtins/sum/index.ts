@@ -1,75 +1,19 @@
 import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
-import {
-  ExecutePlugin,
-  PluginParams,
-  SumConfig,
-  PluginParametersMetadata,
-} from '@grnsft/if-core/types';
+
+import {PluginFactory} from '@grnsft/if-core/interfaces';
+import {PluginParams, ConfigParams} from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
 
-import {STRINGS} from '../../config';
-
-const {GlobalConfigError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
-
-export const Sum = (
-  globalConfig: SumConfig,
-  parametersMetadata: PluginParametersMetadata
-): ExecutePlugin => {
-  const metadata = {
-    kind: 'execute',
-    inputs: parametersMetadata?.inputs,
-    outputs: parametersMetadata?.outputs,
-  };
-
-  /**
-   * Calculate the sum of each input-paramters.
-   */
-  const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateGlobalConfig();
-    const inputParameters = safeGlobalConfig['input-parameters'];
-    const outputParameter = safeGlobalConfig['output-parameter'];
-
-    return inputs.map(input => {
-      validateSingleInput(input, inputParameters);
-
-      return {
-        ...input,
-        [outputParameter]: calculateSum(input, inputParameters),
-      };
-    });
-  };
-
-  /**
-   * Checks global config value are valid.
-   */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
-    }
-
-    const globalConfigSchema = z.object({
-      'input-parameters': z.array(z.string()),
-      'output-parameter': z.string().min(1),
-    });
-
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
-  };
-
-  /**
-   * Checks for required fields in input.
-   */
-  const validateSingleInput = (
-    input: PluginParams,
-    inputParameters: string[]
-  ) => {
+export const Sum = PluginFactory({
+  configValidation: z.object({
+    'input-parameters': z.array(z.string()),
+    'output-parameter': z.string().min(1),
+  }),
+  inputValidation: (input: PluginParams, config: ConfigParams) => {
+    const inputParameters = config['input-parameters'];
     const inputData = inputParameters.reduce(
-      (acc, param) => {
+      (acc: {[x: string]: any}, param: string | number) => {
         acc[param] = input[param];
 
         return acc;
@@ -77,22 +21,31 @@ export const Sum = (
       {} as Record<string, number>
     );
     const validationSchema = z.record(z.string(), z.number());
-    validate(validationSchema, inputData);
+    return validate(validationSchema, inputData);
+  },
+  implementation: async (inputs: PluginParams[], config: ConfigParams) => {
+    const {
+      'input-parameters': inputParameters,
+      'output-parameter': outputParameter,
+    } = config;
 
-    return input;
-  };
+    return inputs.map(input => {
+      const calculatedResult = calculateSum(input, inputParameters);
 
-  /**
-   * Calculates the sum of the energy components.
-   */
-  const calculateSum = (input: PluginParams, inputParameters: string[]) =>
-    inputParameters.reduce(
-      (accumulator, metricToSum) => accumulator + input[metricToSum],
-      0
-    );
+      return {
+        ...input,
+        [outputParameter]: calculatedResult,
+      };
+    });
+  },
+  allowArithmeticExpressions: [],
+});
 
-  return {
-    metadata,
-    execute,
-  };
-};
+/**
+ * Calculates the sum of the energy components.
+ */
+const calculateSum = (input: PluginParams, inputParameters: string[]) =>
+  inputParameters.reduce(
+    (accumulator, metricToSum) => accumulator + input[metricToSum],
+    0
+  );

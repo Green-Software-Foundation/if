@@ -6,7 +6,7 @@ initialize:
     interpolation:
       path: builtin
       method: Interpolation
-      global-config:
+      config:
         method: linear
         x:
           - 0

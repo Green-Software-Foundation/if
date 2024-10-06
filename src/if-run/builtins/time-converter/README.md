@@ -10,7 +10,7 @@ For example, you could add `energy-per-year`, the time unit `year`, and the new 
 
 ### Plugin config
 
-These parameters are required in global config:
+These parameters are required in config:
 
 - `input-parameter`: a string that should match an existing key in the `inputs` array
 - `original-time-unit`: a string that defines the time unit of the `input-parameter`. The original time unit should be a valid unit, like `year`, `month`, `day`, `hour` and so on
@@ -21,13 +21,13 @@ These parameters are required in global config:
 
 The `parameter-metadata` section contains information about `description` and `unit` of the parameters of the inputs and outputs
 
-- `inputs`: describe parameters of the `input-parameter` of the global config. Each parameter has:
+- `inputs`: describe parameters of the `input-parameter` of the config. Each parameter has:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: the aggregation method of the parameter (can be `sum`, `avg` or `none`)
 
-- `outputs`: describe the parameter of the `output-parameter` of the global config. The parameter has the following attributes:
+- `outputs`: describe the parameter of the `output-parameter` of the config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
   - `aggregation-method`: the aggregation method of the parameter (can be `sum`, `avg` or `none`)
@@ -38,7 +38,7 @@ The `input-parameter` must be available in the input array.
 
 ## Returns
 
-- `output-parameter`: the converted energy of the `input-parameter` with the parameter name defined by `output-parameter` in global config.
+- `output-parameter`: the converted energy of the `input-parameter` with the parameter name defined by `output-parameter` in config.
 
 ## Calculation
 
@@ -59,7 +59,7 @@ const config = {
 };
 
 const timeConverter = TimeConverter(config, parametersMetadata);
-const result = timeConverter.execute([
+const result = await timeConverter.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',
     duration: 3600,
@@ -81,7 +81,7 @@ initialize:
     time-converter:
       method: TimeConverter
       path: builtin
-      global-config:
+      config:
         input-parameter: 'energy-per-year'
         original-time-unit: 'year'
         new-time-unit: 'duration'
@@ -111,9 +111,9 @@ The results will be saved to a new `yaml` file in `./examples/outputs`.
 
 `TimeConverter` exposes two of the IF error classes.
 
-### GlobalConfigError
+### ConfigError
 
-You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+You will receive an error starting `ConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
 

@@ -1,3 +1,4 @@
+import {AGGREGATION_METHODS} from '@grnsft/if-core/consts';
 import {PluginParams} from '@grnsft/if-core/types';
 
 import {debugLogger} from '../../common/util/debug-logger';
@@ -8,10 +9,8 @@ import {
   AggregationMetricsWithMethod,
 } from '../../common/types/manifest';
 
-import {aggregateInputsIntoOne} from '../util/aggregation-helper';
+import {aggregateOutputsIntoOne} from '../util/aggregation-helper';
 import {memoizedLog} from '../util/log-memoize';
-
-import {AggregationMetric} from '../types/aggregation';
 
 import {STRINGS} from '../config/strings';
 
@@ -39,13 +38,13 @@ const getIthElementsFromChildren = (children: any, i: number) => {
  * 1. Gets the i'th element from each childrens outputs (treating children as rows and we are after a column of data).
  * 2. Now we just aggregate over the `ithSliceOfOutputs` the same as we did for the normal outputs.
  */
-const temporalAggregation = (node: any, metrics: AggregationMetric[]) => {
+const temporalAggregation = (node: any, metrics: string[]) => {
   const outputs: PluginParams[] = [];
   const values: any = Object.values(node.children);
 
   for (let i = 0; i < values[0].outputs.length; i++) {
     const ithSliceOfOutputs = getIthElementsFromChildren(node.children, i);
-    outputs.push(aggregateInputsIntoOne(ithSliceOfOutputs, metrics, true));
+    outputs.push(aggregateOutputsIntoOne(ithSliceOfOutputs, metrics, true));
   }
 
   return outputs;
@@ -63,9 +62,7 @@ const temporalAggregation = (node: any, metrics: AggregationMetric[]) => {
  * 5. Now a grouping node has it's own outputs, it can horizotnally aggregate them.
  */
 const aggregateNode = (node: any, aggregationParams: AggregationParamsSure) => {
-  const metrics: AggregationMetric[] = aggregationParams!.metrics.map(
-    metric => ({[metric]: 'none'})
-  );
+  const metrics = aggregationParams!.metrics;
   const type = aggregationParams!.type;
 
   if (node.children) {
@@ -77,14 +74,16 @@ const aggregateNode = (node: any, aggregationParams: AggregationParamsSure) => {
   }
 
   if (!node.children) {
-    if (type === 'horizontal' || type === 'both') {
-      node.aggregated = aggregateInputsIntoOne(node.outputs, metrics);
+    /** `time` aggregation is the new name of `horizontal`. */
+    if (type === 'horizontal' || type === 'time' || type === 'both') {
+      node.aggregated = aggregateOutputsIntoOne(node.outputs, metrics);
     }
   } else {
-    if (type === 'vertical' || type === 'both') {
+    /** `component` aggregation is the new name of `vertical`. */
+    if (type === 'vertical' || type === 'component' || type === 'both') {
       const outputs = temporalAggregation(node, metrics);
       node.outputs = outputs;
-      node.aggregated = aggregateInputsIntoOne(outputs, metrics);
+      node.aggregated = aggregateOutputsIntoOne(outputs, metrics);
     }
   }
 };
@@ -126,13 +125,13 @@ export const storeAggregationMetrics = (
  * Creates an encapsulated object to retrieve the metrics.
  */
 const metricManager = (() => {
-  let metric: AggregationMetric;
+  let metric: AggregationMetricsWithMethod;
 
   const manager = {
     get metrics() {
       return metric;
     },
-    set metrics(value: AggregationMetric) {
+    set metrics(value: AggregationMetricsWithMethod) {
       metric = value;
     },
   };
@@ -141,21 +140,25 @@ const metricManager = (() => {
 })();
 
 /**
- * Returns aggregation method for given `unitName`. If doesn't exist then returns value `sum`.
+ * Returns aggregation method for given `metric`.
  */
-export const getAggregationMethod = (unitName: string) => {
+export const getAggregationInfoFor = (metric: string) => {
   debugLogger.setExecutingPluginName();
-  memoizedLog(console.debug, CHECKING_AGGREGATION_METHOD(unitName));
+  memoizedLog(console.debug, '\n');
+  memoizedLog(console.debug, CHECKING_AGGREGATION_METHOD(metric));
   const aggregationMetricsStorage = storeAggregationMetrics();
 
   if (
     aggregationMetricsStorage &&
-    Object.keys(aggregationMetricsStorage).includes(unitName)
+    Object.keys(aggregationMetricsStorage).includes(metric)
   ) {
-    return aggregationMetricsStorage[unitName];
+    return aggregationMetricsStorage[metric];
   }
 
-  memoizedLog(logger.warn, UNKNOWN_PARAM(unitName));
+  memoizedLog(logger.warn, UNKNOWN_PARAM(metric));
 
-  return undefined;
+  return {
+    time: AGGREGATION_METHODS[3],
+    component: AGGREGATION_METHODS[3],
+  };
 };
