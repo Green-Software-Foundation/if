@@ -67,9 +67,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build project
-        run: npm run build
-
       - name: Initialize git user email
         run: git config --global user.email "${{ vars.RELEASE_USER_EMAIL }}"
 
