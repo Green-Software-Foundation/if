@@ -7,12 +7,12 @@
     "email": "info@gsf.com"
   },
   "bin": {
-    "if-diff": "./build/if-diff/index.js",
-    "if-run": "./build/if-run/index.js",
-    "if-env": "./build/if-env/index.js",
-    "if-check": "./build/if-check/index.js",
-    "if-csv": "./build/if-csv/index.js",
-    "if-merge": "./build/if-merge/index.js"
+    "if-diff": "build/if-diff/index.js",
+    "if-run": "build/if-run/index.js",
+    "if-env": "build/if-env/index.js",
+    "if-check": "build/if-check/index.js",
+    "if-csv": "build/if-csv/index.js",
+    "if-merge": "build/if-merge/index.js"
   },
   "bugs": {
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
@@ -70,7 +70,7 @@
     "access": "public"
   },
   "repository": {
-    "url": "https://github.com/Green-Software-Foundation/if"
+    "url": "git+https://github.com/Green-Software-Foundation/if.git"
   },
   "scripts": {
     "build": "npm run clean && tsc --project tsconfig.build.json",
@@ -87,7 +87,7 @@
     "lint": "gts lint",
     "pre-commit": "lint-staged",
     "prepare": "husky install",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "release": "release-it",
     "test": "jest --verbose --testPathPattern=src/__tests__/"
   },
