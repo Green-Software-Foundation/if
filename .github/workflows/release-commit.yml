@@ -67,6 +67,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build project
+        run: npm run build
+
       - name: Initialize git user email
         run: git config --global user.email "${{ vars.RELEASE_USER_EMAIL }}"
 
@@ -94,4 +97,4 @@ jobs:
       - name: Create pull request
         run: gh pr create -B ${{ vars.RELEASE_BRANCH_NAME }} -H $PR_BRANCH_NAME --title "Release ${{github.event.release.tag_name}}" --body "${{github.event.release.body}}"
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
