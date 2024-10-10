@@ -94,4 +94,4 @@ jobs:
       - name: Create pull request
         run: gh pr create -B ${{ vars.RELEASE_BRANCH_NAME }} -H $PR_BRANCH_NAME --title "Release ${{github.event.release.tag_name}}" --body "${{github.event.release.body}}"
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
