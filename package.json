@@ -87,6 +87,7 @@
     "lint": "gts lint",
     "pre-commit": "lint-staged",
     "prepare": "husky install",
+    "prepublish": "npm run build",
     "release": "release-it",
     "test": "jest --verbose --testPathPattern=src/__tests__/"
   },
