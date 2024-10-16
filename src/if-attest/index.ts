@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable no-process-exit */
-import {ethers, Wallet} from 'ethers';
-import {ManifestInfo} from './types/types';
+import { ethers, Wallet } from 'ethers';
+import { ManifestInfo } from './types/types';
 import * as YAML from 'js-yaml';
 import {
   EAS,
@@ -9,14 +9,14 @@ import {
   SignedOffchainAttestation,
   // OffchainAttestationVersion,
 } from '@ethereum-attestation-service/eas-sdk';
-import {execPromise} from '../common/util/helpers';
-import {openYamlFileAsObject} from '../common/util/yaml';
-import {Manifest} from '../common/types/manifest';
-import {logger} from '../common/util/logger';
-import {parseIfAttestArgs} from './util/args';
+import { execPromise } from '../common/util/helpers';
+import { openYamlFileAsObject } from '../common/util/yaml';
+import { Manifest } from '../common/types/manifest';
+import { logger } from '../common/util/logger';
+import { parseIfAttestArgs } from './util/args';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
-import {SCHEMA} from './util/schema';
+import { SCHEMA } from './util/schema';
 
 const packageJson = require('../../package.json');
 dotenv.config();
@@ -63,17 +63,17 @@ const IfAttest = async () => {
     console.log(responseMessage);
   } else {
     console.log('creating attestation to save locally');
+
     const offchainAttestation = await createOffchainAttestaton(
       eas,
       signer,
       encodedData
     );
-    console.log('Attestation: \n', offchainAttestation);
+    const offchainAttestationWithSignerInfo = addSignerInfoToAttestation(offchainAttestation, signer)
+
     fs.writeFile(
       'Attestation.txt',
-      JSON.stringify(offchainAttestation, (_, v) =>
-        typeof v === 'bigint' ? v.toString() : v
-      ),
+      offchainAttestationWithSignerInfo,
       err => {
         if (err) throw err;
       }
@@ -86,25 +86,36 @@ const createOffchainAttestaton = async (
   signer: Wallet,
   encodedData: string
 ): Promise<SignedOffchainAttestation> => {
-  
   const offchain = await eas.getOffchain();
 
   const attestation = await offchain.signOffchainAttestation(
     {
       recipient: signer.address, //can provide an ethereum address for the attested org if needed- here it's the signer address
       expirationTime: BigInt(0),
-      time: BigInt(Math.floor(Date.now()/1000)),
+      time: BigInt(Math.floor(Date.now() / 1000)),
       revocable: true, // Be aware that if your schema is not revocable, this MUST be false
-      nonce: 0n,
       schema: UID,
       refUID:
         '0x0000000000000000000000000000000000000000000000000000000000000000',
       data: encodedData,
     },
-    signer
+    signer,
+    {
+      verifyOnchain: false,
+    },
   );
   return attestation;
 };
+
+
+const addSignerInfoToAttestation = (attestation: SignedOffchainAttestation, signer: Wallet): string => {
+  const prefix: string = "{\"sig\":";
+  const suffix: string = `, "signer":${JSON.stringify(signer.address)}}`
+  return prefix + JSON.stringify(attestation, (_, v) =>
+    typeof v === 'bigint' ? v.toString() : v
+  ) + suffix
+}
+
 
 // const verifyOffchainAttestation = async (attestation: SignedOffchainAttestation, eas: EAS) => {
 //   const offchain = await eas.getOffchain();
@@ -136,16 +147,16 @@ const sendAttestationTx = async (
 const encodeSchema = (manifestInfo: ManifestInfo) => {
   const schemaEncoder = new SchemaEncoder(SCHEMA);
   const encodedData = schemaEncoder.encodeData([
-    {name: 'start', value: manifestInfo.start, type: 'string'},
-    {name: 'end', value: manifestInfo.end, type: 'string'},
-    {name: 'hash', value: manifestInfo.hash, type: 'bytes32'},
-    {name: 'if', value: manifestInfo.if, type: 'string'},
-    {name: 'verified', value: manifestInfo.verified, type: 'bool'},
-    {name: 'sci', value: manifestInfo.sci, type: 'uint64'},
-    {name: 'energy', value: manifestInfo.energy, type: 'uint64'},
-    {name: 'carbon', value: manifestInfo.carbon, type: 'uint64'},
-    {name: 'level', value: manifestInfo.level, type: 'uint8'},
-    {name: 'quality', value: manifestInfo.quality, type: 'uint8'},
+    { name: 'start', value: manifestInfo.start, type: 'string' },
+    { name: 'end', value: manifestInfo.end, type: 'string' },
+    { name: 'hash', value: manifestInfo.hash, type: 'bytes32' },
+    { name: 'if', value: manifestInfo.if, type: 'string' },
+    { name: 'verified', value: manifestInfo.verified, type: 'bool' },
+    { name: 'sci', value: manifestInfo.sci, type: 'uint64' },
+    { name: 'energy', value: manifestInfo.energy, type: 'uint64' },
+    { name: 'carbon', value: manifestInfo.carbon, type: 'uint64' },
+    { name: 'level', value: manifestInfo.level, type: 'uint8' },
+    { name: 'quality', value: manifestInfo.quality, type: 'uint8' },
     {
       name: 'functionalUnit',
       value: manifestInfo.functionalUnit,
