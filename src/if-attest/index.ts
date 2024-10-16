@@ -3,13 +3,19 @@
 import {ethers, Wallet} from 'ethers';
 import {ManifestInfo} from './types/types';
 import * as YAML from 'js-yaml';
-import {EAS, SchemaEncoder} from '@ethereum-attestation-service/eas-sdk';
+import {
+  EAS,
+  SchemaEncoder,
+  SignedOffchainAttestation,
+} from '@ethereum-attestation-service/eas-sdk';
 import {execPromise} from '../common/util/helpers';
 import {openYamlFileAsObject} from '../common/util/yaml';
 import {Manifest} from '../common/types/manifest';
 import {logger} from '../common/util/logger';
+import {parseIfAttestArgs} from './util/args';
 import * as dotenv from 'dotenv';
-import {RegisterSchema} from './util/register-eas-schema';
+import * as fs from 'fs';
+import {SCHEMA} from './util/schema';
 
 const packageJson = require('../../package.json');
 dotenv.config();
@@ -28,19 +34,75 @@ const createSigningWallet = (): Wallet => {
   return signer;
 };
 
-const IfAttest = async (manifestPath: string) => {
+const IfAttest = async () => {
+  const commandArgs = await parseIfAttestArgs();
+  const manifestPath = commandArgs.manifest;
+
   const signer = createSigningWallet();
   const eas = new EAS(EAS_CONTRACT_ADDRESS_SEPOLIA);
   eas.connect(signer);
 
-  RegisterSchema();
+  //todo: make level and functional-unit CLI args
+  const level = 1;
+  const functionalUnit = 'site-visits';
+  const manifestInfo = await getManifestInfo(
+    manifestPath,
+    level,
+    functionalUnit
+  );
 
-  //todo: make level a CLI args
-  const level = 0;
-  const manifestInfo = await getManifestInfo(manifestPath, level);
+  console.log('Manifest info:', manifestInfo);
+
   const encodedData = encodeSchema(manifestInfo);
-  const responseMessage = await sendAttestationTx(eas, signer, encodedData);
-  console.log(responseMessage);
+  console.log('successfully encoded data');
+
+  if (commandArgs.blockchain) {
+    console.log('creating attestation to post to blockchain');
+    const responseMessage = await sendAttestationTx(eas, signer, encodedData);
+    console.log(responseMessage);
+  } else {
+    console.log('creating attestation to save locally');
+    const offchainAttestation = await createOffchainAttestaton(
+      eas,
+      signer,
+      encodedData
+    );
+    console.log('Attestation: \n', offchainAttestation);
+    fs.writeFile(
+      'Attestation.txt',
+      JSON.stringify(offchainAttestation, (_, v) =>
+        typeof v === 'bigint' ? v.toString() : v
+      ),
+      err => {
+        if (err) throw err;
+      }
+    );
+  }
+};
+
+const createOffchainAttestaton = async (
+  eas: EAS,
+  signer: Wallet,
+  encodedData: string
+): Promise<SignedOffchainAttestation> => {
+  const offchain = await eas.getOffchain();
+
+  const attestation: SignedOffchainAttestation =
+    await offchain.signOffchainAttestation(
+      {
+        recipient: signer.address, //can provide an ethereum address for the attested org if needed- here it's the signer address
+        expirationTime: BigInt(0),
+        time: BigInt(Date.now()),
+        revocable: true, // Be aware that if your schema is not revocable, this MUST be false
+        schema: UID,
+        refUID:
+          '0x0000000000000000000000000000000000000000000000000000000000000000',
+        data: encodedData,
+      },
+      signer
+    );
+
+  return attestation;
 };
 
 const sendAttestationTx = async (
@@ -62,21 +124,23 @@ const sendAttestationTx = async (
 };
 
 const encodeSchema = (manifestInfo: ManifestInfo) => {
-  const schemaEncoder = new SchemaEncoder(
-    'string start, string end, bytes32 hash, string if, bool verified, uint8 sci, string unit, uint8 energy, uint8 carbon, uint8 level'
-  );
+  const schemaEncoder = new SchemaEncoder(SCHEMA);
   const encodedData = schemaEncoder.encodeData([
     {name: 'start', value: manifestInfo.start, type: 'string'},
     {name: 'end', value: manifestInfo.end, type: 'string'},
     {name: 'hash', value: manifestInfo.hash, type: 'bytes32'},
     {name: 'if', value: manifestInfo.if, type: 'string'},
     {name: 'verified', value: manifestInfo.verified, type: 'bool'},
-    {name: 'sci', value: manifestInfo.sci, type: 'uint8'},
-    {name: 'unit', value: manifestInfo.unit, type: 'string'},
-    {name: 'energy', value: manifestInfo.energy, type: 'uint8'},
-    {name: 'carbon', value: manifestInfo.carbon, type: 'uint8'},
-    {name: 'quality', value: manifestInfo.quality, type: 'uint8'},
+    {name: 'sci', value: manifestInfo.sci, type: 'uint64'},
+    {name: 'energy', value: manifestInfo.energy, type: 'uint64'},
+    {name: 'carbon', value: manifestInfo.carbon, type: 'uint64'},
     {name: 'level', value: manifestInfo.level, type: 'uint8'},
+    {name: 'quality', value: manifestInfo.quality, type: 'uint8'},
+    {
+      name: 'functionalUnit',
+      value: manifestInfo.functionalUnit,
+      type: 'string',
+    },
   ]);
   return encodedData;
 };
@@ -100,13 +164,12 @@ const getManifestEnd = (manifest: Manifest): string => {
 
 const getManifestInfo = async (
   manifestPath: string,
-  level: number
+  level: number,
+  functionalUnit: string
 ): Promise<ManifestInfo> => {
   const manifest = await openYamlFileAsObject<Manifest>(manifestPath);
 
   // const functionalUnitStub = file.initialize.plugins.sci['global-config']['functional-unit'] ??  '';
-  const functionalUnitStub = 'request'; //todo: DO NOT HARDCODE!
-  const unit = 'carbon per ' + functionalUnitStub;
 
   const info: ManifestInfo = {
     start: getManifestStart(manifest),
@@ -115,11 +178,11 @@ const getManifestInfo = async (
     if: GetIfVersion(),
     verified: await runIfCheck(manifestPath),
     sci: manifest.tree.aggregated.sci ?? 0,
-    unit: unit ?? '',
     energy: manifest.tree.aggregated.energy ?? 0,
     carbon: manifest.tree.aggregated.carbon ?? 0,
-    quality: manifest.tree.aggregated.quality ?? 0,
     level: level,
+    quality: 1, // quality not yet functional in IF,
+    functionalUnit: functionalUnit,
   };
 
   return info;
@@ -141,7 +204,7 @@ const runIfCheck = async (manifestPath: string): Promise<boolean> => {
     cwd: process.env.CURRENT_DIR || process.cwd(),
   });
 
-  if (response.stdout.includes('if-check could not verify')) {
+  if (response.stdout.includes('if-check could not verify the manifest')) {
     console.log('IF-CHECK: verification was unsuccessful. Files do not match');
     return false;
   }
@@ -150,11 +213,9 @@ const runIfCheck = async (manifestPath: string): Promise<boolean> => {
   return true;
 };
 
-IfAttest('/home/joe/Code/if/manifests/outputs/coefficient.yaml').catch(
-  error => {
-    if (error instanceof Error) {
-      logger.error(error);
-      process.exit(2);
-    }
+IfAttest().catch(error => {
+  if (error instanceof Error) {
+    logger.error(error);
+    process.exit(2);
   }
-);
+});

@@ -1,9 +1,13 @@
-import {SchemaRegistry} from '@ethereum-attestation-service/eas-sdk';
-import {ethers} from 'ethers';
+import { SchemaRegistry } from '@ethereum-attestation-service/eas-sdk';
+import { ethers } from 'ethers';
 import * as dotenv from 'dotenv';
-import {SCHEMA} from '../util/schema';
+import { SCHEMA } from '../util/schema';
 
 dotenv.config();
+
+/**
+ * NOTE THAT YOU CAN ALSO CREATE A SCHEMA USING https://sepolia.easscan.org/schema/create
+ */
 
 const INFURA_API_KEY: string = process.env.INFURA_API_KEY ?? '';
 const REGISTRY_CONTRACT_ADDRESS: string =
@@ -24,10 +28,11 @@ export const RegisterSchema = async () => {
   const revocable = true;
   const transaction = await schemaRegistry.register({
     schema,
+    resolverAddress: undefined,
     revocable,
   });
 
-  // Wait for transaction to be validated
+  //Wait for transaction to be validated
   await transaction.wait();
 
   console.log('Transaction was successful: \n', transaction.data);
