@@ -99,8 +99,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     });
   }
 
-  let inputStorage = structuredClone(node.inputs) as PluginParams[];
-  inputStorage = mergeDefaults(inputStorage, defaults);
+  let outputStorage = structuredClone(node.inputs) as PluginParams[];
+  outputStorage = mergeDefaults(outputStorage, defaults);
   const pipelineCopy = structuredClone(pipeline) || {};
 
   /** Checks if pipeline is not an array or empty object. */
@@ -125,8 +125,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       const plugin = params.pluginStorage.get(pluginName);
       const nodeConfig = config && config[pluginName];
 
-      inputStorage = await plugin.execute(inputStorage, nodeConfig);
-      node.inputs = inputStorage;
+      outputStorage = await plugin.execute(outputStorage, nodeConfig);
+      node.inputs = outputStorage;
 
       if (params.context.explainer) {
         addExplainData({
@@ -145,7 +145,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     const originalOutputs = params.append ? node.outputs || [] : [];
 
     node.children = Regroup(
-      inputStorage,
+      outputStorage,
       originalOutputs,
       pipelineCopy.regroup
     );
@@ -183,10 +183,11 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       console.debug(COMPUTING_PIPELINE_FOR_NODE(pluginName));
       debugLogger.setExecutingPluginName(pluginName);
 
-      inputStorage = await plugin.execute(inputStorage, nodeConfig);
+      outputStorage = await plugin.execute(outputStorage, nodeConfig);
+      console.log(outputStorage);
       debugLogger.setExecutingPluginName();
 
-      node.outputs = inputStorage;
+      node.outputs = outputStorage;
 
       if (params.context.explainer) {
         addExplainData({
