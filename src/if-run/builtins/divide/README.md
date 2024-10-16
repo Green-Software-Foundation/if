@@ -16,16 +16,32 @@ You provide the names of the values you want to divide, and a name to use to add
 
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
-- `inputs`: describe the parameter of the `numerator` of the global config. The parameter has the following attributes:
+- `inputs`: describe the parameter of the `numerator` of the config. The parameter has the following attributes:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
 
 - `outputs`: describe the parameter of the `denominator` of the global config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
+
+```yaml
+divide:
+  method: Divide
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
 
 ### Inputs
 
@@ -35,7 +51,7 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ## Returns
 
-- `output`: the division of `numerator` with the parameter name into `denominator` with the parameter name defined by `output` in global config.
+- `output`: the division of `numerator` with the parameter name into `denominator` with the parameter name defined by `output` in config.
 
 The plugin throws an exception if the division result is not a number.
 
@@ -52,20 +68,24 @@ output = input0 / input1
 To run the plugin, you must first create an instance of `Divide`. Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
+const config = {
   numerator: 'vcpus-allocated',
   denominator: 2,
   output: 'cpu/number-cores',
 };
-const divide = Divide(globalConfig, parametersMetadata);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {
+  'vcpus-allocated': 'vcpus-distributed',
+};
+const divide = Divide(config, parametersMetadata, mapping);
 
-const input = [
+const result = await divide.execute([
   {
     timestamp: '2021-01-01T00:00:00Z',
     duration: 3600,
     'vcpus-allocated': 24,
   },
-];
+]);
 ```
 
 ## Example manifest
@@ -81,10 +101,12 @@ initialize:
     divide:
       method: Divide
       path: 'builtin'
-      global-config:
+      config:
         numerator: vcpus-allocated
         denominator: 2
         output: cpu/number-cores
+      mapping:
+        vcpus-allocated: vcpus-distributed
 tree:
   children:
     child:
@@ -94,7 +116,7 @@ tree:
       inputs:
         - timestamp: 2023-08-06T00:00
           duration: 3600
-          vcpus-allocated: 24
+          vcpus-distributed: 24
 ```
 
 You can run this example by saving it as `./examples/manifests/divide.yml` and executing the following command from the project root:
@@ -110,9 +132,9 @@ The results will be saved to a new `yaml` file in `./examples/outputs`.
 
 `Divide` exposes two of IF's error classes.
 
-### GlobalConfigError
+### ConfigError
 
-You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+You will receive an error starting `ConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
 

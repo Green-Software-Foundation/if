@@ -38,6 +38,12 @@ export const CONFIG = {
       alias: 'h',
       description: '[prints out the above help instruction]',
     },
+    append: {
+      type: Boolean,
+      optional: true,
+      alias: 'a',
+      description: '[append to outputs, instead of overwriting]',
+    },
     debug: {
       type: Boolean,
       optional: true,
@@ -71,5 +77,5 @@ export const CONFIG = {
   } as ParseOptions<any>,
   GITHUB_PATH: 'https://github.com',
   NATIVE_PLUGIN: 'if-plugins',
-  AGGREGATION_ADDITIONAL_PARAMS: ['timestamp', 'duration'],
+  AGGREGATION_TIME_METRICS: ['timestamp', 'duration'],
 };

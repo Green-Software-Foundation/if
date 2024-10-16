@@ -1,5 +1,5 @@
 name: time-sync
-description: missing global config
+description: missing config
 tags:
 initialize:
   output:
@@ -7,12 +7,7 @@ initialize:
   plugins:
     'time-sync':
       method: TimeSync
-      path: "builtin"
-      global-config: 
-        # start-time: '2023-12-12T00:00:00.000Z'
-        # end-time: '2023-12-12T00:01:00.000Z'
-        # interval: 5
-        # allow-padding: true
+      path: 'builtin'
 tree:
   children:
     child:

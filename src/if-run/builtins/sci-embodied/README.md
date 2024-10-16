@@ -2,135 +2,136 @@
 
 Software systems cause emissions through the hardware that they operate on, both through the energy that the physical hardware consumes and the emissions associated with manufacturing the hardware. Embodied carbon refers to the carbon emitted during the manufacture and eventual disposal of a component. It is added to the operational carbon (carbon emitted when a component is used) to give an overall SCI score.
 
-Read more on [embodied carbon](https://github.com/Green-Software-Foundation/sci/blob/main/Software_Carbon_Intensity/Software_Carbon_Intensity_Specification.md#embodied-emissions)
+Read more on [embodied carbon](https://github.com/Green-Software-Foundation/sci/blob/main/Software_Carbon_Intensity/Software_Carbon_Intensity_Specification.md#embodied-emissions).
+
+Our plugin follows the Cloud Carbon Footprint methodology for calculating embodied carbon and extends it to scale down the total embodied carbon for a piece of hardware by the portion of it that should be allocated to a particular application, using a `usage-ratio` and `time`. The `usage-ratio` is a term that can be used to scale by, for example, the storage you actually use on a shared server, rather than the total storage available for that hardware, or the time you are active compared to the hardware lifespan.
+
 
 ## Parameters
 
-### Plugin config
+### Plugin Configuration
 
-Not Needed
+The `SciEmbodied` plugin requires a configuration object and parameter metadata (optional) to do the calculation.
 
-### Plugin parameter metadata
+### Plugin Parameter Metadata
 
-The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
+The `parameter-metadata` section contains information about the `description`, `unit`, and `aggregation-method` of the input and output parameters.
 
-- `inputs`: describe the parameters of the `inputs`. Each parameter has:
+- `inputs`: Describes the parameters for the input data. Each parameter includes:
+  - `description`: A brief description of the parameter.
+  - `unit`: The unit of measurement for the parameter.
+  - `aggregation-method`: The method used to aggregate this parameter (`sum`, `avg`, or `none`).
 
-  - `description`: description of the parameter
-  - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+- `outputs`: Describes the `embodied-carbon` parameter, which includes:
+  - `description`: A brief description of the parameter.
+  - `unit`: The unit of measurement for the parameter.
+  - `aggregation-method`: The method used to aggregate this parameter (`sum`, `avg`, or `none`).
 
-- `outputs`: describe the `carbon-embodied` parameter. The parameter has the following attributes:
-  - `description`: description of the parameter
-  - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
+
+```yaml
+sci-embodied:
+  method: SciEmbodied
+  path: 'builtins'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
+
+### Config
+
+`baseline-vcpus`: the number of CPUs to use in the baseline server, defaults tothe CCF value of 1,
+`baseline-memory`: the amount of memory to use in the baseline server, defaults tothe CCF value of 16,
+`baseline-emissions`: the embodied carbon assumed to represent a baseline server, in g
+`lifespan`: the lifespan of the device, in seconds. Defaults to 4 years (126144000 seconds),
+`time`: the time to consider when scaling the total device embodied carbon, if not given defaults to `duration`
+`vcpu-emissions-constant`: emissions for a CPU in gCO2e. Defaults tothe CCF value (100000),
+`memory-emissions-constant`: value used in calculating emissions due to memory, defaults to the CCf value of 533/384
+`ssd-emissions-constant`: emissions for a SSD in gCO2e. Defaults tothe CCF value (50000),
+`hdd-emissions-constant`: emissions for a CPU in gCO2e. Defaults tothe CCF value (100000),
+`gpu-emissions-constant`: emissions for a GPU in gCO2e. Defaults tothe CCF value (150000),
+`output-parameter`: name to give the output value, defaults to `embodied-carbon`
+
+Note that if you do not provide any config at all, we will fallback to defaults for everything, equivalent to setting the baseline server equal to the CCF version, which has 1000000g of embodied emissions.
 
 ### Inputs
 
-- `device/emissions-embodied`: the sum of Life Cycle Assessment (LCA) emissions for the component
-- `device/expected-lifespan`: the length of time, in seconds, between a component's manufacture and its disposal
-- `resources-reserved`: the number of resources reserved for use by the software
-- `resources-total`: the total number of resources available
-- `duration`: the amount of time covered by an observation, in this context it is used as the share of the total life span of the hardware reserved for use by an application, in seconds.
+- `vCPUs`: number of CPUs available on device
+- `memory`: amount of RAM available on device, in GB
+- `ssd`: number of SSD drives mounted on device
+- `hdd`: number of HDD drives mounted on device
+- `gpu`: number of GPUs available on device
+- `duration`: The length of time the hardware is reserved for use by the software, in seconds.
+- `time`: the time to use for scalign the total embodied carbon per timestap, if you do not want to use `duration`
+- `usage-ratio`: the ratio by which to scale down the total embodied carbon according to your usage, e.g. for a shared storage server the total storage divided by your actual storage.
 
-> Note that if you have a plugin pipeline that adds `vcpus-allocated` and `vcpus-total` to each observation, such as the `cloud-metadata` plugin, those values will be used **in preference** to the given `resources-reserved` and `resources-total` fields.
+Note that if you do not provide any inputs at all, we fall back to defaults that are equivalent to using the full resources of the baseline server, scaled only by `duration`.
 
-## Returns
+### Outputs
 
-- `carbon-embodied`: the carbon emitted in manufacturing and disposing of a component, in gCO2eq
+- `embodied-carbon`: The total embodied emissions for the component, measured in gCO2e, per timestep.
 
 ## Calculation
 
-To calculate the embodied carbon, `m` for a software application, use the equation:
+The plugin calculates the total embodied carbon emissions using the following steps:
 
-```
-m = te * ts * rs
-```
-
-Where:
-
-- `device/emissions-embodied` = Total embodied emissions; the sum of Life Cycle Assessment (LCA) emissions for the component.
-
-- `timeShare` = Time-share; the share of the total life span of the hardware reserved for use by an application.
-
-  - `timeShare` is calculated as `duration/'device/expected-lifespan'`, where:
-    - `duration` = the length of time the hardware is reserved for use by the software.
-    - `device/expected-lifespan` = Expected lifespan: the length of time, in seconds, between a component's manufacture and its disposal.
-
-- `resourceShare` = Resource-share; the share of the total available resources of the hardware reserved for use by an application.
-  - `resourceShare` is calculated as `resources-reserved/resources-total`, where:
-    - `resources-reserved` = Resources reserved; the number of resources reserved for use by the software.
-    - `resources-total` = Total Resources; the total number of resources available.
+   - CPU emissions (`cpuE`) are calculated based on the difference between allocated vCPUs and baseline vCPUs.
+   - Memory emissions (`memoryE`) are calculated based on the difference between allocated memory and baseline memory.
+   - Emissions for HDD, SSD, and GPU are also calculated based on their respective differences from baseline values.
+   - The total embodied emissions are calculated by summing the baseline emissions with the above components scaling by the usage ratio and time.
 
 ## Implementation
 
-IF implements the plugin based on the logic described above. To run the plugin, you must first create an instance of `SciEmbodied`. Then, you can call `execute()` to return `m`.
-
-## Usage
-
-The following snippet demonstrates how to call the `sci-embodied` plugin from Typescript.
+The plugin can be instantiated and executed as follows:
 
 ```typescript
 import {SciEmbodied} from 'builtins';
 
-const sciEmbodied = SciEmbodied();
+const sciEmbodied = SciEmbodied(config, parametersMetadata, {});
 const results = await sciEmbodied.execute([
   {
-    'device/emissions-embodied': 200, // in gCO2e for total resource units
-    duration: 60 * 60 * 24 * 30, // time reserved in seconds, can point to another field "duration"
-    'device/expected-lifespan': 60 * 60 * 24 * 365 * 4, // lifespan in seconds (4 years)
-    'resources-reserved': 1, // resource units reserved / used
-    'resources-total': 1, // total resource units available
+    duration: 3600, // time reserved in seconds
+    vCPUs: 2,       // allocated vCPUs
+    memory: 32,     // allocated memory in GB
+    ssd: 100,       // allocated SSD storage in GB
+    hdd: 1000,      // allocated HDD storage in GB
+    gpu: 1,         // allocated GPUs
   },
 ]);
+
+console.log(results);
 ```
 
-## Example manifest
+# Example Manifest
 
-IF users will typically call the plugin as part of a pipeline defined in a `manifest` file. In this case, instantiating the plugin is handled by `ie` and does not have to be done explicitly by the user. The following is an example `manifest` that calls `sci-embodied`:
+IF users will typically call the plugin as part of a pipeline defined in a `manifest` file. In this case, instantiating the plugin is handled by `if-run` and does not have to be done explicitly by the user. The following is an example `manifest` that calls `sci-embodied`:
 
 ```yaml
 name: sci-embodied
-description: simple demo invoking sci-embodied
+description: demo invoking sci-embodied
 tags:
 initialize:
   plugins:
     sci-embodied:
       method: SciEmbodied
       path: 'builtins'
+      mapping:
+        device/emissions-embodied: device/carbon-footprint
 tree:
   children:
     child:
       pipeline:
         compute:
-          - sci-embodied # duration & config -> embodied
-      defaults:
-        device/emissions-embodied: 1533.120 # gCO2eq
-        device/expected-lifespan: 3 # 3 years in seconds
-        resources-reserved: 1
-        resources-total: 8
+          - sci-embodied
       inputs:
-        - timestamp: 2023-07-06T00:00
+        - timestamp: 2024-08-19T00:00
           duration: 3600
 ```
 
-You can run this example `manifest` by executing the following command from the project root:
+To run this example manifest, use the following command:
 
-```sh
+```bash
 npm i -g @grnsft/if
-if-run --manifest manifests/plugins/sci-embodied.yml --output manifests/outputs/sci-embodied.yml
+if-run --manifest manifests/plugins/sci-embodied/success.yml --output manifests/outputs/success.yml
 ```
-
-The results will be saved to a new `yaml` file in `./examples/outputs`.
-
-## Errors
-
-`SciEmbodied` uses one of IF's error classes
-
-### `SciEmbodiedError`
-
-This error class is used to describe a problem with one of the input values to `sci-embodied`. This is typically due to an incorrect type or a reference to a value that is not available.
-
-You will receive a specific error message explaining which parameter is problematic, and you can check and replace where appropriate.
-
-For more information on our error classes, please visit [our docs](https://if.greensoftware.foundation/reference/errors

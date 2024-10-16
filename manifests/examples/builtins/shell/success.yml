@@ -5,8 +5,8 @@ initialize:
   plugins:
     shell:
       method: Shell
-      path: 'builtin'
-      global-config:
+      path: "builtin"
+      config:
         command: python3 /usr/local/bin/sampler
 tree:
   children:

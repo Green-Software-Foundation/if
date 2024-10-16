@@ -1,7 +1,7 @@
 name: regroup
 description:
 initialize:
-  plugins:
+  plugins: {}
 tree:
   children:
     my-app:

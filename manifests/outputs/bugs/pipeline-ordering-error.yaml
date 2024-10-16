@@ -8,7 +8,7 @@ initialize:
     interpolate:
       method: Interpolation
       path: builtin
-      global-config:
+      config:
         method: linear
         x:
           - 0
@@ -25,7 +25,7 @@ initialize:
     cpu-factor-to-wattage:
       method: Multiply
       path: builtin
-      global-config:
+      config:
         input-parameters:
           - cpu-factor
           - cpu/thermal-design-power
@@ -33,7 +33,7 @@ initialize:
     wattage-times-duration:
       method: Multiply
       path: builtin
-      global-config:
+      config:
         input-parameters:
           - cpu-wattage
           - duration
@@ -41,21 +41,21 @@ initialize:
     wattage-to-energy-kwh:
       method: Divide
       path: builtin
-      global-config:
+      config:
         numerator: cpu-wattage-times-duration
         denominator: 3600000
         output: cpu-energy-raw
     calculate-vcpu-ratio:
       method: Divide
       path: builtin
-      global-config:
+      config:
         numerator: vcpus-total
         denominator: vcpus-allocated
         output: vcpu-ratio
     correct-cpu-energy-for-vcpu-ratio:
       method: Divide
       path: builtin
-      global-config:
+      config:
         numerator: cpu-energy-raw
         denominator: vcpu-ratio
         output: cpu-energy-kwh

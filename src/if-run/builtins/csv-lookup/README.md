@@ -61,12 +61,28 @@ The `parameter-metadata` section contains information about `description`, `unit
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
 
 - `outputs`: describe the parameters in the `output` of the config block. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
+
+```yaml
+cloud-metadata:
+  method: CSVLookup
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
 
 ### Inputs
 
@@ -78,7 +94,7 @@ The input data with the requested csv content appended to it.
 
 ## Plugin logic
 
-1. Validates global config which contains `filepath`, `query` and `output`.
+1. Validates config which contains `filepath`, `query` and `output`.
 2. Tries to retrieve given file (with url or local path).
 3. Parses given CSV.
 4. Filters requested information from CSV.
@@ -90,7 +106,7 @@ The input data with the requested csv content appended to it.
 To run the plugin, you must first create an instance of `CSVLookup`. Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
+const config = {
   filepath: 'https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv',
   query: {
     'cloud-provider': 'cloud/provider'
@@ -99,9 +115,11 @@ const globalConfig = {
   },
   output: ['cpu-tdp', 'tdp'],
 };
-const csvLookup = CSVLookup(globalConfig);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const csvLookup = CSVLookup(config, parametersMetadata, mapping);
 
-const input = [
+const result = await csvLookup.execute([
   {
     timestamp: '2023-08-06T00:00'
     duration: 3600
@@ -109,7 +127,7 @@ const input = [
     'cloud/provider': gcp
     'cloud/region': asia-east
   },
-];
+]);
 ```
 
 ## Example manifest
@@ -125,12 +143,14 @@ initialize:
     cloud-metadata:
       method: CSVLookup
       path: 'builtin'
-      global-config:
+      config:
         filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
         query:
           cloud-provider: 'cloud/provider'
           cloud-region: 'cloud/region'
         output: '*'
+      mapping:
+        cloud/region: cloud/area
 tree:
   children:
     child:
@@ -141,7 +161,7 @@ tree:
         - timestamp: 2023-08-06T00:00
           duration: 3600
           cloud/provider: Google Cloud
-          cloud/region: europe-north1
+          cloud/area: europe-north1
 ```
 
 You can run this example by saving it as `./examples/manifests/csv-lookup.yml` and executing the following command from the project root:
@@ -177,9 +197,9 @@ This error is caused by the `CsvLookup` plugin failing to find data that matches
 
 This error arises due to problems parsing CSV data into IF. This can occur when the CSV data is incorrectly formatted or contains unexpected characters that IF does not recognize. These errors are expected to be unusual edge cases as incorrectly formatted data will usually be identified during file loading and cause a `ReadFileError`. To debug, check your CSV file for any unexpected formatting or unusual characters.
 
-### GlobalConfigError
+### ConfigError
 
-You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+You will receive an error starting `ConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
 

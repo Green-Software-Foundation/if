@@ -3,6 +3,9 @@ import {PluginParams} from '@grnsft/if-core/types';
 import {PluginStorageInterface} from './plugin-storage';
 import {Context} from '../../common/types/manifest';
 
+/**
+ * @todo: remove NodeConfig after some period
+ */
 export type NodeConfig = {
   [key: string]: Record<string, any>;
 };
@@ -22,6 +25,7 @@ export type ComputeParams = {
   observe?: Boolean;
   regroup?: Boolean;
   compute?: Boolean;
+  append?: boolean;
 };
 
 export type Node = {

@@ -1,9 +1,9 @@
 import {ERRORS} from '@grnsft/if-core/utils';
+import {PluginInterface} from '@grnsft/if-core/types';
 
 import {STRINGS} from '../config';
 
 import {PluginStorage} from '../types/plugin-storage';
-import {PluginInterface} from '../types/interface';
 
 const {PluginInitializationError} = ERRORS;
 const {NOT_INITALIZED_PLUGIN} = STRINGS;

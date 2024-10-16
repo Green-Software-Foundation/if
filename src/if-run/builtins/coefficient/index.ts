@@ -1,92 +1,67 @@
-import {z} from 'zod';
-import {ERRORS} from '@grnsft/if-core/utils';
-import {
-  CoefficientConfig,
-  ExecutePlugin,
-  PluginParametersMetadata,
-  PluginParams,
-} from '@grnsft/if-core/types';
+import {z, ZodType} from 'zod';
+
+import {ERRORS, validateArithmeticExpression} from '@grnsft/if-core/utils';
+import {ConfigParams, PluginParams} from '@grnsft/if-core/types';
+import {PluginFactory} from '@grnsft/if-core/interfaces';
 
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
-const {GlobalConfigError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
 
-export const Coefficient = (
-  globalConfig: CoefficientConfig,
-  parametersMetadata: PluginParametersMetadata
-): ExecutePlugin => {
-  const metadata = {
-    kind: 'execute',
-    inputs: parametersMetadata?.inputs,
-    outputs: parametersMetadata?.outputs,
-  };
+export const Coefficient = PluginFactory({
+  configValidation: (config: ConfigParams) => {
+    if (!config || !Object.keys(config)?.length) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
 
-  /**
-   * Calculate the product of each input parameter.
-   */
-  const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateGlobalConfig();
-    const inputParameter = safeGlobalConfig['input-parameter'];
-    const outputParameter = safeGlobalConfig['output-parameter'];
-    const coefficient = safeGlobalConfig['coefficient'];
-
-    return inputs.map(input => {
-      validateSingleInput(input, inputParameter);
-
-      return {
-        ...input,
-        [outputParameter]: calculateProduct(input, inputParameter, coefficient),
-      };
+    const configSchema = z.object({
+      coefficient: z.preprocess(
+        value => validateArithmeticExpression('coefficient', value, 'number'),
+        z.number()
+      ),
+      'input-parameter': z.string().min(1),
+      'output-parameter': z.string().min(1),
     });
-  };
 
-  /**
-   * Checks for required fields in input.
-   */
-  const validateSingleInput = (input: PluginParams, inputParameter: string) => {
+    return validate<z.infer<typeof configSchema>>(
+      configSchema as ZodType<any>,
+      config
+    );
+  },
+  inputValidation: (input: PluginParams, config: ConfigParams) => {
     const inputData = {
-      'input-parameter': input[inputParameter],
+      'input-parameter': input[config['input-parameter']],
     };
     const validationSchema = z.record(z.string(), z.number());
     validate(validationSchema, inputData);
 
     return input;
-  };
+  },
+  implementation: async (inputs: PluginParams[], config: ConfigParams) => {
+    const {
+      'input-parameter': inputParameter,
+      'output-parameter': outputParameter,
+      coefficient,
+    } = config;
 
-  /**
-   * Calculates the product of the energy components.
-   */
-  const calculateProduct = (
-    input: PluginParams,
-    inputParameter: string,
-    coefficient: number
-  ) => input[inputParameter] * coefficient;
+    return inputs.map(input => ({
+      ...input,
+      [outputParameter]: calculateProduct(input, inputParameter, coefficient),
+    }));
+  },
+  allowArithmeticExpressions: ['input-parameter', 'coefficient'],
+});
 
-  /**
-   * Checks global config value are valid.
-   */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
-    }
-
-    const globalConfigSchema = z.object({
-      coefficient: z.number(),
-      'input-parameter': z.string().min(1),
-      'output-parameter': z.string().min(1),
-    });
-
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
-  };
-
-  return {
-    metadata,
-    execute,
-  };
-};
+/**
+ * Calculates the product of the energy components.
+ */
+const calculateProduct = (
+  input: PluginParams,
+  inputParameter: string | number,
+  coefficient: number
+) =>
+  (isNaN(Number(inputParameter)) ? input[inputParameter] : inputParameter) *
+  coefficient;

@@ -1,47 +1,34 @@
 import {z} from 'zod';
-import {
-  ExecutePlugin,
-  PluginParams,
-  MultiplyConfig,
-  PluginParametersMetadata,
-} from '@grnsft/if-core/types';
+
+import {PluginParams, ConfigParams} from '@grnsft/if-core/types';
+import {PluginFactory} from '@grnsft/if-core/interfaces';
+import {ERRORS} from '@grnsft/if-core/utils';
 
 import {validate} from '../../../common/util/validations';
 
-export const Multiply = (
-  globalConfig: MultiplyConfig,
-  parametersMetadata: PluginParametersMetadata
-): ExecutePlugin => {
-  const metadata = {
-    kind: 'execute',
-    inputs: parametersMetadata?.inputs,
-    outputs: parametersMetadata?.outputs,
-  };
+import {STRINGS} from '../../config';
 
-  /**
-   * Checks global config value are valid.
-   */
-  const validateGlobalConfig = () => {
-    const globalConfigSchema = z.object({
+const {ConfigError} = ERRORS;
+const {MISSING_CONFIG} = STRINGS;
+
+export const Multiply = PluginFactory({
+  configValidation: (config: ConfigParams) => {
+    if (!config || !Object.keys(config)?.length) {
+      throw new ConfigError(MISSING_CONFIG);
+    }
+
+    const configSchema = z.object({
       'input-parameters': z.array(z.string()),
       'output-parameter': z.string().min(1),
     });
 
-    return validate<z.infer<typeof globalConfigSchema>>(
-      globalConfigSchema,
-      globalConfig
-    );
-  };
+    return validate<z.infer<typeof configSchema>>(configSchema, config);
+  },
+  inputValidation: (input: PluginParams, config: ConfigParams) => {
+    const inputParameters = config['input-parameters'];
 
-  /**
-   * Checks for required fields in input.
-   */
-  const validateSingleInput = (
-    input: PluginParams,
-    inputParameters: string[]
-  ) => {
     const inputData = inputParameters.reduce(
-      (acc, param) => {
+      (acc: {[x: string]: any}, param: string | number) => {
         acc[param] = input[param];
 
         return acc;
@@ -51,40 +38,31 @@ export const Multiply = (
 
     const validationSchema = z.record(z.string(), z.number());
 
-    validate(validationSchema, inputData);
-
-    return input;
-  };
-
-  /**
-   * Calculate the product of each input parameter.
-   */
-  const execute = (inputs: PluginParams[]): PluginParams[] => {
-    const safeGlobalConfig = validateGlobalConfig();
-    const inputParameters = safeGlobalConfig['input-parameters'];
-    const outputParameter = safeGlobalConfig['output-parameter'];
+    return validate(validationSchema, inputData);
+  },
+  implementation: async (inputs: PluginParams[], config: ConfigParams) => {
+    const {
+      'input-parameters': inputParameters,
+      'output-parameter': outputParameter,
+    } = config;
 
     return inputs.map(input => {
-      validateSingleInput(input, inputParameters);
+      const calculatedResult = calculateProduct(input, inputParameters);
 
       return {
         ...input,
-        [outputParameter]: calculateProduct(input, inputParameters),
+        [outputParameter]: calculatedResult,
       };
     });
-  };
+  },
+  allowArithmeticExpressions: [],
+});
 
-  /**
-   * Calculates the product of the components.
-   */
-  const calculateProduct = (input: PluginParams, inputParameters: string[]) =>
-    inputParameters.reduce(
-      (accumulator, metricToMultiply) => accumulator * input[metricToMultiply],
-      1
-    );
-
-  return {
-    metadata,
-    execute,
-  };
-};
+/**
+ * Calculates the product of the components.
+ */
+const calculateProduct = (input: PluginParams, inputParameters: string[]) =>
+  inputParameters.reduce(
+    (accumulator, metricToMultiply) => accumulator * input[metricToMultiply],
+    1
+  );

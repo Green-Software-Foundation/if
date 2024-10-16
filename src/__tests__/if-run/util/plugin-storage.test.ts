@@ -20,7 +20,7 @@ describe('util/pluginStorage: ', () => {
     const pluginName = 'mock-plugin';
     const pluginBody = {
       execute: () => [{}],
-      metadata: {kind: 'mock-kind'},
+      metadata: {},
     };
 
     describe('get(): ', () => {

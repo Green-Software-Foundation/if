@@ -8,7 +8,7 @@ initialize:
     interpolate:
       path: builtin
       method: Interpolation
-      global-config:
+      config:
         method: linear
         x:
           - 0
@@ -25,7 +25,7 @@ initialize:
     cpu-factor-to-wattage:
       path: builtin
       method: Multiply
-      global-config:
+      config:
         input-parameters:
           - cpu-factor
           - cpu/thermal-design-power
@@ -33,7 +33,7 @@ initialize:
     wattage-times-duration:
       path: builtin
       method: Multiply
-      global-config:
+      config:
         input-parameters:
           - cpu-wattage
           - duration
@@ -41,21 +41,21 @@ initialize:
     wattage-to-energy-kwh:
       path: builtin
       method: Divide
-      global-config:
+      config:
         numerator: cpu-wattage-times-duration
         denominator: 3600000
         output: cpu-energy-raw
     calculate-vcpu-ratio:
       path: builtin
       method: Divide
-      global-config:
+      config:
         numerator: vcpus-total
         denominator: vcpus-allocated
         output: vcpu-ratio
     correct-cpu-energy-for-vcpu-ratio:
       path: builtin
       method: Divide
-      global-config:
+      config:
         numerator: cpu-energy-raw
         denominator: vcpu-ratio
         output: cpu-energy-kwh
@@ -65,7 +65,7 @@ initialize:
     operational-carbon:
       path: builtin
       method: Multiply
-      global-config:
+      config:
         input-parameters:
           - cpu-energy-kwh
           - grid/carbon-intensity
@@ -73,34 +73,42 @@ initialize:
     sci:
       path: builtin
       method: Sci
-      global-config:
+      config:
         functional-unit: component
     sum-carbon:
       path: builtin
       method: Sum
-      global-config:
+      config:
         input-parameters:
           - carbon-operational
-          - carbon-embodied
+          - embodied-carbon
         output-parameter: carbon
+    time-sync:
+      path: builtin
+      method: TimeSync
+      config:
+        start-time: '2023-12-12T00:00:00.000Z'
+        end-time: '2023-12-12T00:01:00.000Z'
+        interval: 5
+        allow-padding: true
 execution:
   command: >-
-    /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
-    /Users/mariamkhalatova/Projects/UK/if/src/if-run/index.ts -m
+    /Users/manushak/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
+    /Users/manushak/Documents/Projects/Green-Software/if/src/if-run/index.ts -m
     manifests/examples/pipelines/pipeline-teads-sci.yml -o
-    manifests/outputs/pipelines/pipeline-teads-sci
+    manifests/outputs/pipelines/pipeline-teads-sci.yaml
   environment:
-    if-version: 0.5.0
+    if-version: 0.6.0
     os: macOS
-    os-version: '14.5'
-    node-version: 18.14.2
-    date-time: 2024-07-19T06:32:50.994Z (UTC)
+    os-version: 14.6.1
+    node-version: 18.20.4
+    date-time: 2024-10-04T09:52:09.777Z (UTC)
     dependencies:
       - '@babel/core@7.22.10'
       - '@babel/preset-typescript@7.23.3'
       - '@commitlint/cli@18.6.0'
       - '@commitlint/config-conventional@18.6.0'
-      - '@grnsft/if-core@0.0.10'
+      - '@grnsft/if-core@0.0.25'
       - '@jest/globals@29.7.0'
       - '@types/jest@29.5.8'
       - '@types/js-yaml@4.0.9'
@@ -125,7 +133,7 @@ execution:
       - typescript-cubic-spline@1.0.1
       - typescript@5.2.2
       - winston@3.11.0
-      - zod@3.22.4
+      - zod@3.23.8
   status: success
 tree:
   children:
@@ -142,7 +150,6 @@ tree:
           - operational-carbon
           - sum-carbon
           - sci
-      config: null
       defaults:
         cpu/thermal-design-power: 100
         grid/carbon-intensity: 800
@@ -198,10 +205,16 @@ tree:
           cpu-energy-raw: 0.000020833333333333333
           vcpu-ratio: 8
           cpu-energy-kwh: 0.0000026041666666666666
-          carbon-embodied: 0.0000020256215119228817
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.007927447995941146
           carbon-operational: 0.0020833333333333333
-          carbon: 0.002085358954845256
-          sci: 0.002085358954845256
+          carbon: 0.010010781329274479
+          sci: 0.010010781329274479
         - timestamp: '2023-12-12T00:00:01.000Z'
           duration: 5
           cpu/utilization: 20
@@ -222,10 +235,16 @@ tree:
           cpu-energy-raw: 0.000059375
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000007421875
-          carbon-embodied: 0.000010128107559614407
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970574
           carbon-operational: 0.0059375
-          carbon: 0.005947628107559615
-          sci: 0.005947628107559615
+          carbon: 0.045574739979705736
+          sci: 0.045574739979705736
         - timestamp: '2023-12-12T00:00:06.000Z'
           duration: 7
           cpu/utilization: 15
@@ -246,10 +265,16 @@ tree:
           cpu-energy-raw: 0.00007267361111111111
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000009084201388888889
-          carbon-embodied: 0.00001417935058346017
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.05549213597158803
           carbon-operational: 0.007267361111111111
-          carbon: 0.007281540461694571
-          sci: 0.007281540461694571
+          carbon: 0.06275949708269914
+          sci: 0.06275949708269914
         - timestamp: '2023-12-12T00:00:13.000Z'
           duration: 30
           cloud/instance-type: A1
@@ -270,7 +295,13 @@ tree:
           cpu-energy-raw: 0.00031145833333333335
           vcpu-ratio: 8
           cpu-energy-kwh: 0.00003893229166666667
-          carbon-embodied: 0.00006076864535768645
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.2378234398782344
           carbon-operational: 0.031145833333333334
-          carbon: 0.03120660197869102
-          sci: 0.03120660197869102
+          carbon: 0.2689692732115677
+          sci: 0.2689692732115677

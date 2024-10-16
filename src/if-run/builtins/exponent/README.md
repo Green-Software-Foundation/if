@@ -10,7 +10,7 @@ For example, you use `cpu/energy` as base and `network/energy` as and name the r
 
 ### Plugin config
 
-Three parameters are required in global config: `input-parameter`, `exponent` and `output-parameter`.
+Three parameters are required in config: `input-parameter`, `exponent` and `output-parameter`.
 
 `input-parameter`: a string defining the base. Must match an existing key in the `inputs` array
 `exponent`: a number defining the exponent.
@@ -20,16 +20,32 @@ Three parameters are required in global config: `input-parameter`, `exponent` an
 
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
-- `inputs`: describe the parameter of the `input-parameter` of the global config. The parameter has the following attributes:
+- `inputs`: describe the parameter of the `input-parameter` of the config. The parameter has the following attributes:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
 
-- `outputs`: describe the parameter of the `output-parameter` of the global config. The parameter has the following attributes::
+- `outputs`: describe the parameter of the `output-parameter` of the config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
+
+```yaml
+exponent:
+  method: Exponent
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
 
 ### Inputs
 
@@ -37,7 +53,7 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ## Returns
 
-- `output-parameter`: `input-parameter` raised by `exponent` with the parameter name defined by `output-parameter` in global config.
+- `output-parameter`: `input-parameter` raised by `exponent` with the parameter name defined by `output-parameter` in config.
 
 ## Calculation
 
@@ -53,12 +69,14 @@ To run the plugin, you must first create an instance of `Exponent`. Then, you ca
 import {Exponent} from 'builtins';
 
 const config = {
-  inputParameter: ['cpu/energy'],
-  exponent: 2
-  outputParameter: 'energy',
+    inputParameter: ['cpu/energy'],
+    exponent: 2
+    outputParameter: 'energy',
 };
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
 
-const exponent = Exponent(config);
+const exponent = Exponent(config, parametersMetadata, mapping);
 const result = await exponent.execute([
   {
     duration: 3600,
@@ -82,7 +100,7 @@ initialize:
     exponent:
       method: Exponent
       path: 'builtin'
-      global-config:
+      config:
         input-parameter: 'cpu/energy'
         exponent: 2
         output-parameter: 'energy'

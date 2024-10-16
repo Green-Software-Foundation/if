@@ -37,7 +37,7 @@ describe('common/util/helpers: ', () => {
       const response = await parseManifestFromStdin();
       const expectedMessage =
         '\nname: mock-name\ndescription: mock-description\n';
-
+      expect.assertions(1);
       expect(response).toEqual(expectedMessage);
     });
   });

@@ -1,12 +1,12 @@
 name: demo
-description: 
+description:
 tags:
 initialize:
   plugins:
     "sum":
       path: "builtin"
       method: Sum
-      global-config:
+      config:
         input-parameters:
           - cpu/energy
           - network/energy
@@ -14,14 +14,14 @@ initialize:
     "coefficient":
       path: "builtin"
       method: Coefficient
-      global-config:
+      config:
         input-parameter: energy
         coefficient: 2
         output-parameter: energy-doubled
     "multiply":
       path: "builtin"
       method: Multiply
-      global-config:
+      config:
         input-parameters: ["cpu/utilization", "duration"]
         output-parameter: "cpu-times-duration"
 tree:
@@ -29,7 +29,7 @@ tree:
     child-1:
       pipeline:
         observe:
-        compute: 
+        compute:
           - sum
           - coefficient
           - multiply

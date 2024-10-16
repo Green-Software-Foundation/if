@@ -3,24 +3,18 @@
 
 - [`if`](https://github.com/Green-Software-Foundation/if)
     - source code for the IF
+- [`if-core`](https://github.com/Green-Software-Foundation/if-core)
+    - helper types, interfaces and utilities for IF and plugin development
 - [`if-plugins`](https://github.com/Green-Software-Foundation/if-plugins) **DEPRECATED**
     - source code for standard library of plugins
     - IF core team commit to maintaining these plugins 
-- [`if-unofficial-plugins`](https://github.com/Green-Software-Foundation/if-unofficial-plugins)
+- [`if-unofficial-plugins`](https://github.com/Green-Software-Foundation/if-unofficial-plugins) **DEPRECATED**
     - source code for plugins relying on third-party data/APIs
     - intended to be deprecated and removed in mid-term future
     - plugins in this repo should be handed over to relevant organizations to maintain
 - [`if-plugin-template`](https://github.com/Green-Software-Foundation/if-plugin-template)
     - template for new plugins
     - intended for builders to bootstrap IF-compatible plugin development
-- [`if-standards`](https://github.com/Green-Software-Foundation/if-standards)
-    - not currently used, but intended to be the home of params.ts
-    - will have a dedicated discussion board and governance to set IF standards
-- [`if-exhaust plugins`](https://github.com/Green-Software-Foundation/if-exhaust-plugins)
-    - not currently used
-    - intended to become a separate repo just for exhaust plugins
-    - requires strict rules from if
-
 
 ## Branch names and purposes
 

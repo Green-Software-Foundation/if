@@ -2,10 +2,7 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {SciEmbodied} from '../../../if-run/builtins/sci-embodied';
 
-import {STRINGS} from '../../../if-run/config';
-
 const {InputValidationError} = ERRORS;
-const {SCI_EMBODIED_ERROR} = STRINGS;
 
 describe('builtins/sci-embodied:', () => {
   describe('SciEmbodied: ', () => {
@@ -13,7 +10,7 @@ describe('builtins/sci-embodied:', () => {
       inputs: {},
       outputs: {},
     };
-    const sciEmbodied = SciEmbodied(parametersMetadata);
+    const sciEmbodied = SciEmbodied({}, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -27,19 +24,13 @@ describe('builtins/sci-embodied:', () => {
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'resources-reserved': 1,
-            'resources-total': 1,
+            duration: 3600,
+            vCPUs: 2,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30 * 2,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'resources-reserved': 1,
-            'resources-total': 1,
+            duration: 3600,
+            vCPUs: 4,
           },
         ];
 
@@ -50,34 +41,44 @@ describe('builtins/sci-embodied:', () => {
         expect(result).toStrictEqual([
           {
             timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'resources-reserved': 1,
-            'resources-total': 1,
-            'carbon-embodied': 4.10958904109589,
+            duration: 3600,
+            vCPUs: 2,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
+            'embodied-carbon': 31.39269406392694,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30 * 2,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'resources-reserved': 1,
-            'resources-total': 1,
-            'carbon-embodied': 4.10958904109589 * 2,
+            duration: 3600,
+            vCPUs: 4,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
+            'embodied-carbon': 37.10045662100457,
           },
         ]);
       });
 
-      it('returns a result when `vcpus-allocated` and `vcpus-total` are in the input.', async () => {
+      it('executes when `mapping` has valid data.', async () => {
+        const mapping = {
+          vCPUs: 'device/cpu-cores',
+        };
+        const sciEmbodied = SciEmbodied({}, parametersMetadata, mapping);
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'vcpus-allocated': 1,
-            'vcpus-total': 1,
+            duration: 3600,
+            'device/cpu-cores': 1,
+          },
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'device/cpu-cores': 2,
           },
         ];
 
@@ -88,37 +89,42 @@ describe('builtins/sci-embodied:', () => {
         expect(result).toStrictEqual([
           {
             timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'vcpus-allocated': 1,
-            'vcpus-total': 1,
-            'carbon-embodied': 4.10958904109589,
+            duration: 3600,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
+            'device/cpu-cores': 1,
+            'embodied-carbon': 28.538812785388128,
+          },
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'device/cpu-cores': 2,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
+            'embodied-carbon': 31.39269406392694,
           },
         ]);
       });
 
-      it('returns a result when `vcpus-allocated` and `vcpus-total` are preferred to `resources-reserved` and `resources-total`.', async () => {
+      it('executes when the `mapping` maps output parameter.', async () => {
+        const mapping = {
+          'embodied-carbon': 'carbon',
+        };
+        const sciEmbodied = SciEmbodied({}, parametersMetadata, mapping);
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'resources-reserved': 2,
-            'resources-total': 2,
-            'vcpus-allocated': 1,
-            'vcpus-total': 1,
+            duration: 3600,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30 * 2,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'vcpus-allocated': 1,
-            'vcpus-total': 1,
-            'resources-reserved': 2,
-            'resources-total': 2,
+            duration: 3600,
           },
         ];
 
@@ -129,92 +135,40 @@ describe('builtins/sci-embodied:', () => {
         expect(result).toStrictEqual([
           {
             timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'vcpus-allocated': 1,
-            'vcpus-total': 1,
-            'carbon-embodied': 4.10958904109589,
-            'resources-reserved': 2,
-            'resources-total': 2,
+            duration: 3600,
+            vCPUs: 1,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
+            carbon: 28.538812785388128,
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30 * 2,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'vcpus-allocated': 1,
-            'vcpus-total': 1,
-            'carbon-embodied': 4.10958904109589 * 2,
-            'resources-reserved': 2,
-            'resources-total': 2,
-          },
-        ]);
-      });
-
-      it('returns a result when `vcpus-allocated` and `vcpus-total` are miised.', async () => {
-        const inputs = [
-          {
-            timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'resources-reserved': 1,
-            'resources-total': 1,
-          },
-          {
-            timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30 * 2,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'resources-reserved': 1,
-            'resources-total': 1,
-          },
-        ];
-
-        const result = await sciEmbodied.execute(inputs);
-
-        expect.assertions(1);
-
-        expect(result).toStrictEqual([
-          {
-            timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'carbon-embodied': 4.10958904109589,
-            'resources-reserved': 1,
-            'resources-total': 1,
-          },
-          {
-            timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30 * 2,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'carbon-embodied': 4.10958904109589 * 2,
-            'resources-reserved': 1,
-            'resources-total': 1,
+            duration: 3600,
+            vCPUs: 1,
+            memory: 16,
+            gpu: 0,
+            hdd: 0,
+            ssd: 0,
+            'usage-ratio': 1,
+            carbon: 28.538812785388128,
           },
         ]);
       });
 
-      it('throws an error when `device/emissions-embodied` is string.', async () => {
+      it('throws an error when `vCPUs` is string.', async () => {
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 60 * 60 * 24 * 30,
-            'device/emissions-embodied': '10,00',
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'resources-reserved': 1,
-            'resources-total': 1,
+            vCPUs: 'string',
           },
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 60 * 60 * 24 * 30 * 2,
-            'device/emissions-embodied': 200,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'resources-reserved': 1,
-            'resources-total': 1,
+            vCPUs: 'string',
           },
         ];
 
@@ -224,48 +178,94 @@ describe('builtins/sci-embodied:', () => {
         } catch (error) {
           expect(error).toStrictEqual(
             new InputValidationError(
-              `"device/emissions-embodied" parameter is ${SCI_EMBODIED_ERROR(
-                'gco2e'
-              )}. Error code: invalid_union.`
+              '"vCPUs" parameter is expected number, received string at index 0. Error code: invalid_type.'
             )
           );
           expect(error).toBeInstanceOf(InputValidationError);
         }
       });
 
-      it('throws an exception on missing `device/emissions-embodied`.', async () => {
-        const errorMessage =
-          '"device/emissions-embodied" parameter is required. Error code: invalid_union.';
+      it('successfully executes when a parameter contains arithmetic expression.', async () => {
+        const config = {
+          'baseline-vcpus': 1,
+          'baseline-memory': 16,
+          lifespan: 157680000,
+          'baseline-emissions': 2000000,
+          'vcpu-emissions-constant': 100000,
+          'memory-emissions-constant': 1172,
+          'ssd-emissions-constant': 50000,
+          'hdd-emissions-constant': 1 * 100000,
+          'gpu-emissions-constant': '= 2 * "mock-param"',
+          'output-parameter': 'embodied-carbon',
+        };
+        const sciEmbodied = SciEmbodied(config, parametersMetadata, {});
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            'device/expected-lifespan': 60 * 60 * 24 * 365 * 4,
-            'vcpus-allocated': 1,
-            'vcpus-total': 1,
+            duration: 3600,
+            vCPUs: 2,
+            'mock-param': 150000,
+          },
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            vCPUs: 4,
+            'mock-param': 100000,
           },
         ];
 
-        expect.assertions(2);
+        const result = await sciEmbodied.execute(inputs);
 
-        try {
-          await sciEmbodied.execute(inputs);
-        } catch (error) {
-          expect(error).toStrictEqual(new InputValidationError(errorMessage));
-          expect(error).toBeInstanceOf(InputValidationError);
-        }
+        expect.assertions(1);
+
+        expect(result).toStrictEqual([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            vCPUs: 2,
+            gpu: 0,
+            hdd: 0,
+            memory: 16,
+            ssd: 0,
+            'usage-ratio': 1,
+            'embodied-carbon': 47.945205479452056,
+            'mock-param': 150000,
+          },
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            vCPUs: 4,
+            gpu: 0,
+            hdd: 0,
+            memory: 16,
+            ssd: 0,
+            'usage-ratio': 1,
+            'embodied-carbon': 52.51141552511416,
+            'mock-param': 100000,
+          },
+        ]);
       });
 
-      it('throws an exception on missing `device/expected-lifespan`.', async () => {
-        const errorMessage =
-          '"device/expected-lifespan" parameter is required. Error code: invalid_union.';
+      it('throws an error the `gpu-emissions-constant` parameter has wrong arithmetic expression.', async () => {
+        const config = {
+          'baseline-vcpus': 1,
+          'baseline-memory': 16,
+          lifespan: 157680000,
+          'baseline-emissions': 2000000,
+          'vcpu-emissions-constant': 100000,
+          'memory-emissions-constant': 1172,
+          'ssd-emissions-constant': 50000,
+          'hdd-emissions-constant': 1 * 100000,
+          'gpu-emissions-constant': '2 * "mock-param"',
+          'output-parameter': 'embodied-carbon',
+        };
+        const sciEmbodied = SciEmbodied(config, parametersMetadata, {});
         const inputs = [
           {
             timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            'device/emissions-embodied': 200,
-            'vcpus-allocated': 1,
-            'vcpus-total': 1,
+            duration: 3600,
+            vCPUs: 2,
+            'mock-param': 150000,
           },
         ];
 
@@ -274,33 +274,10 @@ describe('builtins/sci-embodied:', () => {
         try {
           await sciEmbodied.execute(inputs);
         } catch (error) {
-          expect(error).toStrictEqual(new InputValidationError(errorMessage));
-          expect(error).toBeInstanceOf(InputValidationError);
-        }
-      });
-
-      it('throws an exception on invalid values.', async () => {
-        const inputs = [
-          {
-            timestamp: '2021-01-01T00:00:00Z',
-            duration: 60 * 60 * 24 * 30,
-            'device/emissions-embodied': '200',
-            'vcpus-allocated': true,
-            'vcpus-total': 1,
-          },
-        ];
-
-        expect.assertions(2);
-
-        try {
-          await sciEmbodied.execute(inputs);
-        } catch (error) {
-          expect(error).toBeInstanceOf(InputValidationError);
-          expect(error).toStrictEqual(
+          expect(error).toBeInstanceOf(Error);
+          expect(error).toEqual(
             new InputValidationError(
-              `"device/emissions-embodied" parameter is ${SCI_EMBODIED_ERROR(
-                'gco2e'
-              )}. Error code: invalid_union.`
+              'The `gpu-emissions-constant` contains an invalid arithmetic expression. It should start with `=` and include the symbols `*`, `+`, `-` and `/`.'
             )
           );
         }

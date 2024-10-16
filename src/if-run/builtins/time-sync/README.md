@@ -9,9 +9,10 @@ Time sync standardizes the start time, end time and temporal resolution of all o
 The following should be defined in the plugin initialization:
 
 - `start-time`: global start time as ISO 8061 string
-- `stop`: global end time as ISO 8061 string
+- `end-time`: global end time as ISO 8061 string
 - `interval`: temporal resolution in seconds
-- `error-on-padding`: avoid zero/'zeroish' padding (if needed) and error out instead. `False` by defult.
+- `allow-padding`: avoid zero/'zeroish' padding (if needed) and error out instead.
+- `upsampling-resolution`: temporal resolution at which observations will be upsampled, in seconds. Defaults to 1.
 
 #### Inputs:
 
@@ -28,7 +29,7 @@ A manifest file for a tree might contain many nodes each representing some diffe
 We do this by implementing the following logic:
 
 - Shift readings to nearest whole seconds
-- Upsample the time series to a base resolution (1s)
+- Upsample the time series to a base resolution.
 - Resample to desired resolution by batching 1s entries
 - Extrapolate or trim to ensure all time series share global start and end dates
 
@@ -39,6 +40,7 @@ The next section explains each stage in more detail.
 ##### Upsampling rules
 
 A set of `inputs` is naturally a time series because all `observations` include a `timestamp` and a `duration`, measured in seconds.
+
 For each `observation` in `inputs` we check whether the duration is greater than 1 second. If `duration` is greater than 1 second, we create N new `observation` objects, where N is equal to `duration`. This means we have an `observation` for every second between the initial timestamp and the end of the observation period. Each new object receives a timestamp incremented by one second.
 
 This looks as follows:
@@ -54,6 +56,7 @@ This looks as follows:
   {timestamp: '2023-12-12T00:00:04.000Z', duration: 1}
   {timestamp: '2023-12-12T00:00:05.000Z', duration: 1}
 ]
+
 ```
 
 Each `observation` actually includes many key-value pairs. The precise content of the `observation` is not known until runtime because it depends on which plugins have been included in the pipeline. Different values have to be treated differently when we upsample in time. The method we use to upsample depends on the `aggregation-method` defined for each key in `units.yml`.
@@ -118,7 +121,7 @@ Note that when `error-on-padding` is `true` no gap-filling is performed and the 
 
 ##### Trimming and padding
 
-To ensure parity across all the components in a tree, we need to synchronize the start and end times for all time series. To do this, we pass the `time-sync` plugin plugin some global config: `startTime`, `endTime` and `interval`. The `startTime` is the timestamp where _all_ input arrays across the entire tree should begin, and `endTime` is the timestamp where _all_ input arrays across the entire tree should end. `interval` is the time resolution we ultimately want to resample to.
+To ensure parity across all the components in a tree, we need to synchronize the start and end times for all time series. To do this, we pass the `time-sync` plugin plugin some config: `startTime`, `endTime` and `interval`. The `startTime` is the timestamp where _all_ input arrays across the entire tree should begin, and `endTime` is the timestamp where _all_ input arrays across the entire tree should end. `interval` is the time resolution we ultimately want to resample to.
 
 To synchronize the time series start and end we check the first element of `inputs` for each node in the tree and determine whether it is earlier, later or equal to the global start time. If it is equal then no action is required. If the `input` start time is earlier than the global start time, we simply discard entries from the front of the array until the start times are aligned. If the `input` start time is after the global start time, then we pad with our "zero-observation" object - one for every second separating the global start time from the `input` start time. The same process is repeated for the end time - we either trim away `input` data or pad it out with "zero-observation" objects.
 
@@ -151,11 +154,30 @@ For example, for `startTime = 2023-12-12T00:00:00.000Z` and `endTime = 2023-12-1
 ]
 ```
 
-Note that when `error-on-padding` is `true` no padding is performed and the plugin will error out instead.
+Note that when `allow-padding` is `true` no padding is performed and the plugin will error out instead.
 
 ##### Resampling rules
 
 Now we have synchronized, continuous, high resolution time series data, we can resample. To achieve this, we use `interval`, which sets the global temporal resolution for the final, processed time series. `interval` is expressed in units of seconds, which means we can simply batch `observations` together in groups of size `interval`. For each value in each object we either sum, average or copy the values into one single summary object representing each time bucket of size `interval` depending on their `aggregation-method` defined in `aggregation` section in the manifest file. The returned array is the final, synchronized time series at the desired temporal resolution.
+
+#### Setting a custom upsampling resolution
+
+The model defaults to upsampling observations to a 1-second resolution. However, this can lead to unnecessary effort, as upsampling at a coarser resolution is often sufficient, provided it doesn't interfere with the accuracy of resampling. To optimize performance, we can set the `upsampling-resolution` parameter in the configuration to a more appropriate value. The chosen value should meet the following criteria :
+
+- It should evenly divide all observation durations within the dataset.
+- It must be a divisor of the `interval`.
+- It should also divide any gaps between observations, as well as the start and end paddings.
+
+For example, for `interval = 10` and this time-series
+
+```ts
+[
+  {timestamp: '2023-12-12T00:00:00.000Z', duration: 300},
+]
+````
+setting the `upsampling-resolution` to `10s` is preferable to the default behavior.  
+If the default behavior were used, the model would create `300` samples of `1s` each, which would be inefficient. By setting a custom `upsampling-resolution` of `10s`, the model only generates `30` samples, each representing `10s`.
+
 
 #### Assumptions and limitations
 
@@ -170,12 +192,13 @@ To run the plugin, you must first create an instance of `TimeSync`.
 Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
+const config = {
   'start-time': '2023-12-12T00:00:00.000Z',
   'end-time': '2023-12-12T00:00:30.000Z',
-  interval: 10
+  interval: 10,
+  'allow-padding': true,
 }
-const timeSync = TimeSync(globalConfig);
+const timeSync = TimeSync(config);
 const results = timeSync.execute([
   {
     timestamp: '2023-12-12T00:00:00.000Z'
@@ -213,8 +236,8 @@ initialize:
       method: TeadsCurve
       path: '@grnsft/if-unofficial-plugins'
     sci-e:
-      method: SciE
-      path: '@grnsft/if-plugins'
+      method: SciEmbodied
+      path: 'builtin'
     sci-embodied:
       path: 'builtin'
       method: SciEmbodied
@@ -224,10 +247,11 @@ initialize:
     time-sync:
       method: TimeSync
       path: builtin
-      global-config:
+      config:
         start-time: '2023-12-12T00:00:00.000Z' # ISO timestamp
         end-time: '2023-12-12T00:01:00.000Z' # ISO timestamp
         interval: 5 # seconds
+        allow-padding: true
 tree:
   children:
     child: # an advanced grouping node
@@ -238,19 +262,16 @@ tree:
           - sci-embodied
           - sci-o
           - time-sync
-      config:
-        teads-curve:
-          cpu/thermal-design-power: 65
-        sci-embodied:
-          device/emissions-embodied: 251000 # gCO2eq
-          time-reserved: 3600 # 1 hour in s
-          device/expected-lifespan: 126144000 # 4 years in seconds
-          resources-reserved: 1
-          resources-total: 1
-        sci-o:
-          grid/carbon-intensity: 457 # gCO2/kwh
       children:
         child-1:
+          defaults:
+            device/emissions-embodied: 251000 # gCO2eq
+            time-reserved: 3600 # 1 hour in s
+            device/expected-lifespan: 126144000 # 4 years in seconds
+            resources-reserved: 1
+            resources-total: 1
+            grid/carbon-intensity: 457 # gCO2/kwh
+            cpu/thermal-design-power: 65
           inputs:
             - timestamp: '2023-12-12T00:00:00.000Z'
               duration: 10
@@ -260,6 +281,7 @@ tree:
               requests: 300
             - timestamp: '2023-12-12T00:00:10.000Z'
               duration: 10
+              cpu/thermal-design-power: 65
               cpu/utilization: 20
               carbon: 200
               energy: 200

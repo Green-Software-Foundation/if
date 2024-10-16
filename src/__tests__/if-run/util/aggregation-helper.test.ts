@@ -1,13 +1,10 @@
+import {AGGREGATION_METHODS} from '@grnsft/if-core/consts';
 import {ERRORS} from '@grnsft/if-core/utils';
 import {PluginParams} from '@grnsft/if-core/types';
 
 import {AggregationParams} from '../../../common/types/manifest';
 
-import {aggregateInputsIntoOne} from '../../../if-run/util/aggregation-helper';
-import {
-  AGGREGATION_METHODS,
-  AggregationMetric,
-} from '../../../if-run/types/aggregation';
+import {aggregateOutputsIntoOne} from '../../../if-run/util/aggregation-helper';
 import {storeAggregationMetrics} from '../../../if-run/lib/aggregate';
 
 import {STRINGS} from '../../../if-run/config';
@@ -22,21 +19,30 @@ describe('util/aggregation-helper: ', () => {
       type: 'horizontal',
     };
     const convertedMetrics = metricStorage.metrics.map((metric: string) => ({
-      [metric]: AGGREGATION_METHODS[2],
+      [metric]: {
+        time: AGGREGATION_METHODS[2],
+        component: AGGREGATION_METHODS[2],
+      },
     }));
     storeAggregationMetrics(...convertedMetrics);
+    storeAggregationMetrics({
+      carbon: {
+        time: 'sum',
+        component: 'sum',
+      },
+    });
   });
 
-  describe('aggregateInputsIntoOne(): ', () => {
+  describe('aggregateOutputsIntoOne(): ', () => {
     it('throws error if aggregation criteria is not found in input.', () => {
       const inputs: PluginParams[] = [{timestamp: '', duration: 10}];
-      const metrics: AggregationMetric[] = [{'cpu/utilization': 'sum'}];
+      const metrics: string[] = ['cpu/utilization'];
       const isTemporal = false;
 
       expect.assertions(2);
 
       try {
-        aggregateInputsIntoOne(inputs, metrics, isTemporal);
+        aggregateOutputsIntoOne(inputs, metrics, isTemporal);
       } catch (error) {
         expect(error).toBeInstanceOf(MissingAggregationParamError);
 
@@ -47,11 +53,17 @@ describe('util/aggregation-helper: ', () => {
     });
 
     it('passes `timestamp`, `duration` to aggregator if aggregation is temporal.', () => {
+      storeAggregationMetrics({
+        carbon: {
+          time: 'sum',
+          component: 'sum',
+        },
+      });
       const inputs: PluginParams[] = [
         {timestamp: '', duration: 10, carbon: 10},
         {timestamp: '', duration: 10, carbon: 20},
       ];
-      const metrics: AggregationMetric[] = [{carbon: 'sum'}];
+      const metrics: string[] = ['carbon'];
       const isTemporal = true;
 
       const expectedValue = {
@@ -59,7 +71,7 @@ describe('util/aggregation-helper: ', () => {
         duration: 10,
         carbon: inputs[0].carbon + inputs[1].carbon,
       };
-      const aggregated = aggregateInputsIntoOne(inputs, metrics, isTemporal);
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
       expect(aggregated).toEqual(expectedValue);
     });
 
@@ -68,13 +80,13 @@ describe('util/aggregation-helper: ', () => {
         {timestamp: '', duration: 10, carbon: 10},
         {timestamp: '', duration: 10, carbon: 20},
       ];
-      const metrics: AggregationMetric[] = [{carbon: 'sum'}];
+      const metrics: string[] = ['carbon'];
       const isTemporal = false;
 
       const expectedValue = {
         carbon: inputs[0].carbon + inputs[1].carbon,
       };
-      const aggregated = aggregateInputsIntoOne(inputs, metrics, isTemporal);
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
       expect(aggregated).toEqual(expectedValue);
     });
 
@@ -84,16 +96,24 @@ describe('util/aggregation-helper: ', () => {
         type: 'horizontal',
       };
       const convertedMetrics = metricStorage.metrics.map((metric: string) => ({
-        [metric]: AGGREGATION_METHODS[2],
+        [metric]: {
+          time: AGGREGATION_METHODS[2],
+          component: AGGREGATION_METHODS[2],
+        },
       }));
       storeAggregationMetrics(...convertedMetrics);
-      storeAggregationMetrics({'cpu/utilization': 'avg'});
+      storeAggregationMetrics({
+        'cpu/utilization': {
+          time: 'avg',
+          component: 'avg',
+        },
+      });
 
       const inputs: PluginParams[] = [
         {timestamp: '', duration: 10, 'cpu/utilization': 10},
         {timestamp: '', duration: 10, 'cpu/utilization': 90},
       ];
-      const metrics: AggregationMetric[] = [{'cpu/utilization': 'avg'}];
+      const metrics: string[] = ['cpu/utilization'];
       const isTemporal = false;
 
       const expectedValue = {
@@ -101,7 +121,7 @@ describe('util/aggregation-helper: ', () => {
           (inputs[0]['cpu/utilization'] + inputs[1]['cpu/utilization']) /
           inputs.length,
       };
-      const aggregated = aggregateInputsIntoOne(inputs, metrics, isTemporal);
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
       expect(aggregated).toEqual(expectedValue);
       expect(aggregated.timestamp).toBeUndefined();
       expect(aggregated.duration).toBeUndefined();
