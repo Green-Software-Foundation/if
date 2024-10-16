@@ -7,6 +7,7 @@ import {
   EAS,
   SchemaEncoder,
   SignedOffchainAttestation,
+  // OffchainAttestationVersion,
 } from '@ethereum-attestation-service/eas-sdk';
 import {execPromise} from '../common/util/helpers';
 import {openYamlFileAsObject} from '../common/util/yaml';
@@ -85,25 +86,34 @@ const createOffchainAttestaton = async (
   signer: Wallet,
   encodedData: string
 ): Promise<SignedOffchainAttestation> => {
+  
   const offchain = await eas.getOffchain();
 
-  const attestation: SignedOffchainAttestation =
-    await offchain.signOffchainAttestation(
-      {
-        recipient: signer.address, //can provide an ethereum address for the attested org if needed- here it's the signer address
-        expirationTime: BigInt(0),
-        time: BigInt(Date.now()),
-        revocable: true, // Be aware that if your schema is not revocable, this MUST be false
-        schema: UID,
-        refUID:
-          '0x0000000000000000000000000000000000000000000000000000000000000000',
-        data: encodedData,
-      },
-      signer
-    );
-
+  const attestation = await offchain.signOffchainAttestation(
+    {
+      recipient: signer.address, //can provide an ethereum address for the attested org if needed- here it's the signer address
+      expirationTime: BigInt(0),
+      time: BigInt(Math.floor(Date.now()/1000)),
+      revocable: true, // Be aware that if your schema is not revocable, this MUST be false
+      nonce: 0n,
+      schema: UID,
+      refUID:
+        '0x0000000000000000000000000000000000000000000000000000000000000000',
+      data: encodedData,
+    },
+    signer
+  );
   return attestation;
 };
+
+// const verifyOffchainAttestation = async (attestation: SignedOffchainAttestation, eas: EAS) => {
+//   const offchain = await eas.getOffchain();
+//   const isValidAttestation = offchain.verifyOffchainAttestationSignature(
+//     attestation.signature.toString(),
+//     attestation.
+//   );
+
+// }
 
 const sendAttestationTx = async (
   eas: EAS,
