@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable no-process-exit */
-import { ethers, Wallet } from 'ethers';
-import { ManifestInfo } from './types/types';
+import {ethers, Wallet} from 'ethers';
+import {ManifestInfo} from './types/types';
 import * as YAML from 'js-yaml';
 import {
   EAS,
@@ -9,14 +9,14 @@ import {
   SignedOffchainAttestation,
   // OffchainAttestationVersion,
 } from '@ethereum-attestation-service/eas-sdk';
-import { execPromise } from '../common/util/helpers';
-import { openYamlFileAsObject } from '../common/util/yaml';
-import { Manifest } from '../common/types/manifest';
-import { logger } from '../common/util/logger';
-import { parseIfAttestArgs } from './util/args';
+import {execPromise} from '../common/util/helpers';
+import {openYamlFileAsObject} from '../common/util/yaml';
+import {Manifest} from '../common/types/manifest';
+import {logger} from '../common/util/logger';
+import {parseIfAttestArgs} from './util/args';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
-import { SCHEMA } from './util/schema';
+import {SCHEMA} from './util/schema';
 
 const packageJson = require('../../package.json');
 dotenv.config();
@@ -36,9 +36,11 @@ const createSigningWallet = (): Wallet => {
 };
 
 const IfAttest = async () => {
+  console.debug('starting attestation');
   const commandArgs = await parseIfAttestArgs();
   const manifestPath = commandArgs.manifest;
 
+  console.debug('creating Ethereum account');
   const signer = createSigningWallet();
   const eas = new EAS(EAS_CONTRACT_ADDRESS_SEPOLIA);
   eas.connect(signer);
@@ -46,38 +48,36 @@ const IfAttest = async () => {
   //todo: make level and functional-unit CLI args
   const level = 1;
   const functionalUnit = 'site-visits';
+
   const manifestInfo = await getManifestInfo(
     manifestPath,
     level,
     functionalUnit
   );
 
-  console.log('Manifest info:', manifestInfo);
-
   const encodedData = encodeSchema(manifestInfo);
-  console.log('successfully encoded data');
+  console.debug('successfully encoded attestation data');
 
   if (commandArgs.blockchain) {
     console.log('creating attestation to post to blockchain');
     const responseMessage = await sendAttestationTx(eas, signer, encodedData);
-    console.log(responseMessage);
+    fs.writeFile('tx-info.txt', responseMessage, err => {
+      if (err) throw err;
+    });
   } else {
     console.log('creating attestation to save locally');
-
     const offchainAttestation = await createOffchainAttestaton(
       eas,
       signer,
       encodedData
     );
-    const offchainAttestationWithSignerInfo = addSignerInfoToAttestation(offchainAttestation, signer)
-
-    fs.writeFile(
-      'Attestation.txt',
-      offchainAttestationWithSignerInfo,
-      err => {
-        if (err) throw err;
-      }
+    const offchainAttestationWithSignerInfo = addSignerInfoToAttestation(
+      offchainAttestation,
+      signer
     );
+    fs.writeFile('Attestation.txt', offchainAttestationWithSignerInfo, err => {
+      if (err) throw err;
+    });
   }
 };
 
@@ -102,29 +102,25 @@ const createOffchainAttestaton = async (
     signer,
     {
       verifyOnchain: false,
-    },
+    }
   );
   return attestation;
 };
 
-
-const addSignerInfoToAttestation = (attestation: SignedOffchainAttestation, signer: Wallet): string => {
-  const prefix: string = "{\"sig\":";
-  const suffix: string = `, "signer":${JSON.stringify(signer.address)}}`
-  return prefix + JSON.stringify(attestation, (_, v) =>
-    typeof v === 'bigint' ? v.toString() : v
-  ) + suffix
-}
-
-
-// const verifyOffchainAttestation = async (attestation: SignedOffchainAttestation, eas: EAS) => {
-//   const offchain = await eas.getOffchain();
-//   const isValidAttestation = offchain.verifyOffchainAttestationSignature(
-//     attestation.signature.toString(),
-//     attestation.
-//   );
-
-// }
+const addSignerInfoToAttestation = (
+  attestation: SignedOffchainAttestation,
+  signer: Wallet
+): string => {
+  const prefix = '{"sig":';
+  const suffix = `, "signer":${JSON.stringify(signer.address)}}`;
+  return (
+    prefix +
+    JSON.stringify(attestation, (_, v) =>
+      typeof v === 'bigint' ? v.toString() : v
+    ) +
+    suffix
+  );
+};
 
 const sendAttestationTx = async (
   eas: EAS,
@@ -147,16 +143,16 @@ const sendAttestationTx = async (
 const encodeSchema = (manifestInfo: ManifestInfo) => {
   const schemaEncoder = new SchemaEncoder(SCHEMA);
   const encodedData = schemaEncoder.encodeData([
-    { name: 'start', value: manifestInfo.start, type: 'string' },
-    { name: 'end', value: manifestInfo.end, type: 'string' },
-    { name: 'hash', value: manifestInfo.hash, type: 'bytes32' },
-    { name: 'if', value: manifestInfo.if, type: 'string' },
-    { name: 'verified', value: manifestInfo.verified, type: 'bool' },
-    { name: 'sci', value: manifestInfo.sci, type: 'uint64' },
-    { name: 'energy', value: manifestInfo.energy, type: 'uint64' },
-    { name: 'carbon', value: manifestInfo.carbon, type: 'uint64' },
-    { name: 'level', value: manifestInfo.level, type: 'uint8' },
-    { name: 'quality', value: manifestInfo.quality, type: 'uint8' },
+    {name: 'start', value: manifestInfo.start, type: 'string'},
+    {name: 'end', value: manifestInfo.end, type: 'string'},
+    {name: 'hash', value: manifestInfo.hash, type: 'bytes32'},
+    {name: 'if', value: manifestInfo.if, type: 'string'},
+    {name: 'verified', value: manifestInfo.verified, type: 'bool'},
+    {name: 'sci', value: manifestInfo.sci, type: 'uint64'},
+    {name: 'energy', value: manifestInfo.energy, type: 'uint64'},
+    {name: 'carbon', value: manifestInfo.carbon, type: 'uint64'},
+    {name: 'level', value: manifestInfo.level, type: 'uint8'},
+    {name: 'quality', value: manifestInfo.quality, type: 'uint8'},
     {
       name: 'functionalUnit',
       value: manifestInfo.functionalUnit,
@@ -202,7 +198,7 @@ const getManifestInfo = async (
     energy: manifest.tree.aggregated.energy ?? 0,
     carbon: manifest.tree.aggregated.carbon ?? 0,
     level: level,
-    quality: 1, // quality not yet functional in IF,
+    quality: 1, // quality score not yet functional in IF,
     functionalUnit: functionalUnit,
   };
 
