@@ -183,7 +183,6 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       console.debug(COMPUTING_PIPELINE_FOR_NODE(pluginName));
       debugLogger.setExecutingPluginName(pluginName);
 
-      console.log(outputStorage);
       outputStorage = await plugin.execute(outputStorage, nodeConfig);
       console.log(outputStorage);
       debugLogger.setExecutingPluginName();
