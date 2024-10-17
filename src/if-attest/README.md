@@ -99,6 +99,14 @@ Attestations are just snippets of data that conform to some predefined schema an
 
 We are using the [Ethereum Attestation Service](https://attest.org/) to bootstrap our attestations. They have deployed the attestation smart contracts on Ethereum and many other associated blockchains, such as layer 2's and testnets. Layer 2's are cheaper, faster blockchains that settle to the main Ethereum blockchain periodically. Testnets are blockchains that use tokens of no real world value and are typically used to test smart contracts befor they are deployed on a "real" network.
 
+Here's an example of a raw attestation. If you run `if-attest` configured to create local attestations, you'll get a text file that looks like this:
+
+```
+{"sig":{"version":2,"uid":"0x047d38b6d175fe8a36a597863b7d8d94939aa2fd4b4f19831229c95f5eda5604","domain":{"name":"EAS Attestation","version":"0.26","chainId":"11155111","verifyingContract":"0xC2679fBD37d54388Ce493F1DB75320D236e1815e"},"primaryType":"Attest","message":{"version":2,"recipient":"0xc8317137B5c511ef9CE1762CE498FE16950EF42d","expirationTime":"0","time":"1729173300","revocable":true,"schema":"0x11fdca810433efc2d5b9fe8305b39669e8d0feb81f699a767fe48ce26fcf6a6c","refUID":"0x0000000000000000000000000000000000000000000000000000000000000000","data":"0x000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000000001a020d034e94040bf5b40ff76f9568155cacbc7ed0d488a8fcea8dc37bd24b0d0dd00000000000000000000000000000000000000000000000000000000000001e00000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000001e0000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000000f0000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000002200000000000000000000000000000000000000000000000000000000000000010323032332d30382d30365430303a3030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010323032332d30382d30365430303a3030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005302e372e30000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b736974652d766973697473000000000000000000000000000000000000000000","salt":"0x0951f85ad71286a55562608cfba8cad023820a78cce8fd5df2a1498af0812505"},"types":{"Attest":[{"name":"version","type":"uint16"},{"name":"schema","type":"bytes32"},{"name":"recipient","type":"address"},{"name":"time","type":"uint64"},{"name":"expirationTime","type":"uint64"},{"name":"revocable","type":"bool"},{"name":"refUID","type":"bytes32"},{"name":"data","type":"bytes"},{"name":"salt","type":"bytes32"}]},"signature":{"v":27,"r":"0xea4ac79da011dd364b69cfb45cce6e9b5d71444861d0bb44456d7e50f433f981","s":"0x4106232e9af816c465657e10d39612c958f5b6f552d637c9cff5469ee7634333"}}, "signer":"0xc8317137B5c511ef9CE1762CE498FE16950EF42d"}
+```
+
+OK, it's not super human readable. This is because the manifest data is hex-encoded. Everything you need to verify the signatuire and recover the manifest summary data is here.
+
 
 ## Onchain vs offchain attestations
 
@@ -143,11 +151,11 @@ SCHEMA_UID: '0x9f074eced91e2c6952fdf5734ec1d8cc05e1e1d07eaa442f07746b7d8a422c0e'
 For an onchain attestation
 
 ```
-npm run if-attest -- -manifest ./manifests/outputs/example.yaml --blockchain true
+npm run if-attest -- -manifest ./manifests/outputs/example.yaml --blockchain true --level 3 --unit site-visits
 ```
 
 For an offchain attestation
 
 ```
-npm run if-attest -- --manifest ./manifests/outputs/example.yaml --blockchain false
+npm run if-attest -- --manifest ./manifests/outputs/example.yaml --blockchain false --level 3 --unit site-visits
 ```

@@ -1,7 +1,7 @@
 import {SchemaRegistry} from '@ethereum-attestation-service/eas-sdk';
 import {ethers} from 'ethers';
 import * as dotenv from 'dotenv';
-import {SCHEMA} from '../util/schema';
+import {SCHEMA} from './schema';
 
 dotenv.config();
 

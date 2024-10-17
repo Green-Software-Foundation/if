@@ -19,6 +19,18 @@ export const CONFIG = {
       description:
         '[Boolean to toggle posting attestation to blockchain (true to post, false to save locally)]',
     },
+    level: {
+      type: Number,
+      optional: true,
+      alias: 'l',
+      description: '[Audit level being attested to - integers from 1-5]',
+    },
+    unit: {
+      type: String,
+      optional: true,
+      alias: 'u',
+      description: '[The functional unit used to calculate SCI]',
+    },
   } as ArgumentConfig<IFAttestArgs>,
   HELP: {
     helpArg: 'help',
