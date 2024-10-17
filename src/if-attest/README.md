@@ -151,11 +151,11 @@ SCHEMA_UID: '0x9f074eced91e2c6952fdf5734ec1d8cc05e1e1d07eaa442f07746b7d8a422c0e'
 For an onchain attestation
 
 ```
-npm run if-attest -- -manifest ./manifests/outputs/example.yaml --blockchain true
+npm run if-attest -- -manifest ./manifests/outputs/example.yaml --blockchain true --level 3 --unit site-visits
 ```
 
 For an offchain attestation
 
 ```
-npm run if-attest -- --manifest ./manifests/outputs/example.yaml --blockchain false
+npm run if-attest -- --manifest ./manifests/outputs/example.yaml --blockchain false --level 3 --unit site-visits
 ```

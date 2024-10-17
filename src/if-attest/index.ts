@@ -1,14 +1,19 @@
 #!/usr/bin/env node
 /* eslint-disable no-process-exit */
-import {
-  EAS,
-} from '@ethereum-attestation-service/eas-sdk';
-import { logger } from '../common/util/logger';
-import { parseIfAttestArgs } from './util/args';
+import {EAS} from '@ethereum-attestation-service/eas-sdk';
+import {logger} from '../common/util/logger';
+import {parseIfAttestArgs} from './util/args';
 import * as fs from 'fs';
 import {createSigningWallet} from './util/ethereum-utils';
-import {addSignerInfoToAttestation, createOffchainAttestaton} from './util/offchain-attestation-utils';
-import {sendAttestationTx, encodeSchema, getManifestInfo } from './util/attestation-utils';
+import {
+  addSignerInfoToAttestation,
+  createOffchainAttestaton,
+} from './util/offchain-attestation-utils';
+import {
+  sendAttestationTx,
+  encodeSchema,
+  getManifestInfo,
+} from './util/attestation-utils';
 
 const EAS_CONTRACT_ADDRESS_SEPOLIA: string =
   process.env.EAS_CONTRACT_ADDRESS_SEPOLIA ?? '';
@@ -26,7 +31,7 @@ const IfAttest = async () => {
   const signer = createSigningWallet();
   const eas = new EAS(EAS_CONTRACT_ADDRESS_SEPOLIA);
 
-  console.debug('creating signer object')
+  console.debug('creating signer object');
   eas.connect(signer);
 
   const manifestInfo = await getManifestInfo(
@@ -60,7 +65,6 @@ const IfAttest = async () => {
     });
   }
 };
-
 
 IfAttest().catch(error => {
   if (error instanceof Error) {
