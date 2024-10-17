@@ -35,7 +35,7 @@ const validateAndParseIfAttestArgs = () => {
  * Checks if the `manifests` command is provided and they are valid manifests files or a folder.
  */
 export const parseIfAttestArgs = async () => {
-  const {manifest, blockchain} = validateAndParseIfAttestArgs();
+  const {manifest, blockchain, level, unit} = validateAndParseIfAttestArgs();
 
   const response = prependFullFilePath(manifest);
   const isManifestFileExists = await isFileExists(response);
@@ -49,5 +49,5 @@ export const parseIfAttestArgs = async () => {
     throw new CliSourceFileError(MANIFEST_IS_NOT_YAML(manifest));
   }
 
-  return {manifest, blockchain};
+  return {manifest, blockchain, level, unit};
 };
