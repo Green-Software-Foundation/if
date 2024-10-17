@@ -14,7 +14,9 @@ The concept is as follows:
 
 ## Why is an attestation valuable?
 
-Only the holder of the private key can possibly sign with the given signature. Anyone can recover the public key associated with a signature to be sure it was really the named attester who sent the transaction. It also creates an immutabnle snapshot of your manifest details.
+Only the holder of the private key can possibly sign with the given signature. Anyone can recover the public key associated with a signature to be sure it was really the named attester who sent the transaction. It also creates an immutabnle snapshot of your manifest details. The manifest details inclue an adit level from 1-5 that the signer is attesting, effectively using their private key to confirm that the manifest meets some predefined level of quality. In doing so, they are effectively staking some reputation on the veracity of the data. Every private key is associated with a public key/address that should be shared by the attester, linking their signatures to their real world identity.
+
+You can think of an attestation as a trust token - it represents some amount of staked reputation that you as an end user can use to make your own judgments about how trustworthy a manifest is. For example, maybe you don;t trust a manifest because some of the data is redacted. What if the manifest provider exposed the redacted data to a trusted third party under an NDA who then re-executed the manifest with all the original raw data and attested that the SCI score and total carbon were correct? What about if they attested at a level that meant that they fully audited the input data, including independently observing the target system themselves? What if that attester was the GSF? Or an audit firm? Or a government agency? What if ten diverse attesters all attested to the data? Each attestation is a token of additional trustworthiness. There might not be a firm boundary between trustworthy and untrustworthy, just like there's no fixed amount of money that makes separates rich or not rich, but attestations are signals that accumulate up to form a trust picture for a given manifest.
 
 
 ## What is actually attested to?
@@ -57,7 +59,7 @@ You could also design a system where an attestation includes a link to another a
 
 ## How to use `if-attest`
 
-`if-attest` makes use of some cryptography libraries built for Ethereum. This means an Ethereum key pair is needed. The key pair is commonly referred to as an `account`. It comprises a private key (64 hex characters, 32 bytes) and a public key (128 hex characters, 64 bytes). The Ethereum address is a 40 hex character string resulting from applying the Keccak-256 hash function to the public key and selecting the last 40 characters. The address is prefixed with `0x` toi indicate that it is hex encoded.
+`if-attest` makes use of some cryptography libraries built for Ethereum. This means an Ethereum key pair is needed. The key pair is commonly referred to as an `account`. It comprises a private key (64 hex characters, 32 bytes) and a public key (128 hex characters, 64 bytes). The Ethereum address is a 40 hex character string resulting from applying the Keccak-256 hash function to the public key and selecting the last 40 characters. The address is prefixed with `0x` to indicate that it is hex encoded.
 
 
 ### Create an Ethereum account
@@ -92,6 +94,9 @@ We are using these Ethereum tools to do our signing and attesting, so you need t
 > **Creating an Ethereum account is free and can be kept entirely local to your machine - it is just a pair of keys. You can do this without ever interacting with Ethereum itself** 
 
 >Whatever your opinions on crypto, one of the things it has given the world is easier access and richer tooling over private key cryptography.  We're using it here for an application that's entirely non-financial, but benefits from accessible cryptography and the ability to post to a public, immutable database in the form of a public blockchain.
+
+If you already have an Ethereum account, you can import it - but please make sure it is a throwaway developer account, not one that you use for anything money-related! Also, never, never, NEVER NEVER push your private key to a Github repository. make sure `.gitignore` contains `.env` and check every time you push that your private key isn't leaked anywhere in your commits. There are bots continually scanning github for leaked keys - if you ever accidentally push your keys, assume they are instantly compromised and abandon that account forever. Once `if-attest` is beyond the protoype stage we'll ship some tooling to prevent the key from ever having to be in environment variables.
+
 
 ## Attestations
 
