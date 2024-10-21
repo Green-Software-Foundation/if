@@ -79,6 +79,7 @@ export const Interpolation = PluginFactory({
         return {
           ...input,
           [inputParameter]: 0,
+          [outputParameter]: 0,
         };
       }
 
