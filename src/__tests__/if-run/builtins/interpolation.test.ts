@@ -90,6 +90,7 @@ describe('builtins/interpolation: ', () => {
             timestamp: '2023-07-06T00:00',
             duration: 3600,
             'cpu/utilization': 0,
+            'interpolation-result': 0,
           },
         ];
 
