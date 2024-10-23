@@ -54,12 +54,13 @@ export const Interpolation = PluginFactory({
       .object({
         timestamp: z.string().or(z.date()),
         duration: z.number(),
-        [inputParameter]: z.number().gt(0),
+        [inputParameter]: z.number().gte(0).or(z.literal('off')),
       })
       .refine(
         data =>
-          data[inputParameter] >= config.x[0] &&
-          data[inputParameter] <= config.x[config.x.length - 1],
+          (data[inputParameter] >= config.x[0] &&
+            data[inputParameter] <= config.x[config.x.length - 1]) ||
+          data[inputParameter] === 'off',
         {
           message: WITHIN_THE_RANGE,
         }
@@ -68,14 +69,23 @@ export const Interpolation = PluginFactory({
     return validate<z.infer<typeof schema>>(schema, input, index);
   },
   implementation: async (inputs: PluginParams[], config: ConfigParams) => {
-    const {'output-parameter': outputParameter} = config;
+    const {
+      'input-parameter': inputParameter,
+      'output-parameter': outputParameter,
+    } = config;
 
     return inputs.map(input => {
-      const calculatedResult = calculateResult(config, input);
+      if (input[inputParameter] === 'off') {
+        return {
+          ...input,
+          [inputParameter]: 0,
+          [outputParameter]: 0,
+        };
+      }
 
       return {
         ...input,
-        [outputParameter]: calculatedResult,
+        [outputParameter]: calculateResult(config, input),
       };
     });
   },
@@ -169,7 +179,8 @@ const getPolynomialInterpolation = (
   return result;
 };
 
+/**
+ * Sorts given point items in ascending order.
+ */
 const sortPoints = (items: number[]) =>
-  items.sort((a: number, b: number) => {
-    return a - b;
-  });
+  items.sort((a: number, b: number) => a - b);

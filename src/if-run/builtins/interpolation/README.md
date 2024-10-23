@@ -62,7 +62,7 @@ The plugin expects the following input parameters:
 
 - `timestamp`: a timestamp for the input (required)
 - `duration`: the amount of time, in seconds, that the input covers. (required)
-- `[input-parameter]` - a field whose name matches the string provided to input-parameter in config (i.e. if the input-parameter in config is cpu/utilisation then cpu-utilisation must exist in the input data)
+- `[input-parameter]` - a field whose name matches the string provided to input-parameter in config (i.e. if the input-parameter in config is cpu/utilisation then cpu-utilisation must exist in the input data). Value can be greater or equal to 0. For modeling server which totally turned off, `off` value can be used.
 
 ## Output
 

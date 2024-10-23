@@ -55,6 +55,50 @@ describe('builtins/interpolation: ', () => {
         expect(result).toEqual(outputs);
       });
 
+      it('returns valid output parameter if input parameter is 0.', async () => {
+        const inputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/utilization': 0,
+          },
+        ];
+        const outputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/utilization': 0,
+            'interpolation-result': 0.12,
+          },
+        ];
+
+        const result = await plugin.execute(inputs);
+
+        expect(result).toEqual(outputs);
+      });
+
+      it('returns no output parameter if input parameter is `off`.', async () => {
+        const inputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/utilization': 'off',
+          },
+        ];
+        const outputs = [
+          {
+            timestamp: '2023-07-06T00:00',
+            duration: 3600,
+            'cpu/utilization': 0,
+            'interpolation-result': 0,
+          },
+        ];
+
+        const result = await plugin.execute(inputs);
+
+        expect(result).toEqual(outputs);
+      });
+
       it('returns result when `mapping` has valid data.', async () => {
         const mapping = {
           'cpu/utilization': 'cpu/util',
