@@ -13,10 +13,6 @@ describe('lib/explain: ', () => {
     const mockData = {
       pluginName: 'divide',
       metadata: {kind: 'execute', inputs: undefined, outputs: undefined},
-      pluginData: {
-        path: 'builtin',
-        method: 'Divide',
-      },
     };
 
     addExplainData(mockData);
@@ -50,30 +46,29 @@ describe('lib/explain: ', () => {
           },
         },
       },
-      pluginData: {
-        path: 'builtin',
-        method: 'Sum',
-      },
     };
 
     const expectedResult = {
-      'cpu/energy': {
-        plugins: ['sum'],
-        unit: 'kWh',
-        description: 'energy consumed by the cpu',
-        'aggregation-method': 'sum',
-      },
-      'network/energy': {
-        plugins: ['sum'],
-        unit: 'kWh',
-        description: 'energy consumed by data ingress and egress',
-        'aggregation-method': 'sum',
-      },
-      'energy-sum': {
-        plugins: ['sum'],
-        unit: 'kWh',
-        description: 'sum of energy components',
-        'aggregation-method': 'sum',
+      sum: {
+        inputs: {
+          'cpu/energy': {
+            unit: 'kWh',
+            description: 'energy consumed by the cpu',
+            'aggregation-method': 'sum',
+          },
+          'network/energy': {
+            unit: 'kWh',
+            description: 'energy consumed by data ingress and egress',
+            'aggregation-method': 'sum',
+          },
+        },
+        outputs: {
+          'energy-sum': {
+            unit: 'kWh',
+            description: 'sum of energy components',
+            'aggregation-method': 'sum',
+          },
+        },
       },
     };
 
@@ -111,42 +106,50 @@ describe('lib/explain: ', () => {
           },
         },
       },
-      pluginData: {
-        path: 'builtin',
-        method: 'Sum',
-      },
     };
 
     const expectedResult = {
-      'cpu/energy': {
-        plugins: ['sum', 'sum-energy'],
-        unit: 'kWh',
-        description: 'energy consumed by the cpu',
-        'aggregation-method': 'sum',
+      sum: {
+        inputs: {
+          'cpu/energy': {
+            unit: 'kWh',
+            description: 'energy consumed by the cpu',
+            'aggregation-method': 'sum',
+          },
+          'network/energy': {
+            unit: 'kWh',
+            description: 'energy consumed by data ingress and egress',
+            'aggregation-method': 'sum',
+          },
+        },
+        outputs: {
+          'energy-sum': {
+            unit: 'kWh',
+            description: 'sum of energy components',
+            'aggregation-method': 'sum',
+          },
+        },
       },
-      'network/energy': {
-        plugins: ['sum'],
-        unit: 'kWh',
-        description: 'energy consumed by data ingress and egress',
-        'aggregation-method': 'sum',
-      },
-      'energy-sum': {
-        plugins: ['sum'],
-        unit: 'kWh',
-        description: 'sum of energy components',
-        'aggregation-method': 'sum',
-      },
-      'memory/energy': {
-        plugins: ['sum-energy'],
-        unit: 'kWh',
-        description: 'energy consumed by data from memory',
-        'aggregation-method': 'sum',
-      },
-      'total/energy': {
-        plugins: ['sum-energy'],
-        unit: 'kWh',
-        description: 'sum of energy components',
-        'aggregation-method': 'sum',
+      'sum-energy': {
+        inputs: {
+          'cpu/energy': {
+            unit: 'kWh',
+            description: 'energy consumed by the cpu',
+            'aggregation-method': 'sum',
+          },
+          'memory/energy': {
+            unit: 'kWh',
+            description: 'energy consumed by data from memory',
+            'aggregation-method': 'sum',
+          },
+        },
+        outputs: {
+          'total/energy': {
+            unit: 'kWh',
+            description: 'sum of energy components',
+            'aggregation-method': 'sum',
+          },
+        },
       },
     };
 
@@ -183,10 +186,6 @@ describe('lib/explain: ', () => {
             'aggregation-method': 'sum',
           },
         },
-      },
-      pluginData: {
-        path: 'builtin',
-        method: 'Sum',
       },
     };
 
@@ -238,10 +237,6 @@ describe('lib/explain: ', () => {
             },
           },
         },
-      },
-      pluginData: {
-        path: 'builtin',
-        method: 'Sum',
       },
     };
 
