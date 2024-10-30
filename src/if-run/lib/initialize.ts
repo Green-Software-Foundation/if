@@ -3,6 +3,8 @@ import * as path from 'node:path';
 import {ERRORS} from '@grnsft/if-core/utils';
 import {PluginInterface} from '@grnsft/if-core/types';
 
+import {storeAggregationMetrics} from './aggregate';
+
 import {logger} from '../../common/util/logger';
 import {memoizedLog} from '../util/log-memoize';
 import {pluginStorage} from '../util/plugin-storage';
@@ -11,7 +13,6 @@ import {CONFIG, STRINGS} from '../config';
 
 import {Context, PluginOptions} from '../../common/types/manifest';
 import {PluginStorageInterface} from '../types/plugin-storage';
-import {storeAggregationMetrics} from './aggregate';
 
 const {
   PluginInitializationError,
