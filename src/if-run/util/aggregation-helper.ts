@@ -39,12 +39,12 @@ export const aggregateOutputsIntoOne = (
         const aggregationType = isTemporal ? 'component' : 'time';
 
         if (aggregationParams[aggregationType] === 'none') {
-          return acc;
+          continue;
         }
 
         if (aggregationParams[aggregationType] === 'copy') {
           acc[metric] = output[metric];
-          return acc;
+          continue;
         }
 
         acc[metric] = acc[metric] ?? 0;
