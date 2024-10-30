@@ -184,7 +184,6 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       debugLogger.setExecutingPluginName(pluginName);
 
       outputStorage = await plugin.execute(outputStorage, nodeConfig);
-      console.log(outputStorage);
       debugLogger.setExecutingPluginName();
 
       node.outputs = outputStorage;
