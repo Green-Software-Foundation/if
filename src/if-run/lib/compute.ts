@@ -132,7 +132,6 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
         addExplainData({
           pluginName,
           metadata: plugin.metadata,
-          pluginData: params.context.initialize!.plugins[pluginName],
         });
       }
     }
@@ -184,6 +183,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       debugLogger.setExecutingPluginName(pluginName);
 
       outputStorage = await plugin.execute(outputStorage, nodeConfig);
+
       debugLogger.setExecutingPluginName();
 
       node.outputs = outputStorage;
@@ -192,7 +192,6 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
         addExplainData({
           pluginName,
           metadata: plugin.metadata,
-          pluginData: params.context.initialize!.plugins[pluginName],
         });
       }
     }
