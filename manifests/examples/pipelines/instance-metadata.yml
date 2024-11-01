@@ -6,7 +6,7 @@ initialize:
     cloud-instance-metadata:
       path: builtin
       method: CSVLookup
-      global-config:
+      config:
         filepath: >-
           https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-azure-instances.csv
         query:
@@ -15,7 +15,7 @@ initialize:
     extract-processor-name:
       path: builtin
       method: Regex
-      global-config:
+      config:
         parameter: cpu-model-name
         match: /^([^,])+/g
         output: cpu/name

@@ -3,22 +3,31 @@ import {PluginParams} from '@grnsft/if-core/types';
 import {Regroup} from './regroup';
 import {addExplainData} from './explain';
 
-import {mergeObjects} from '../util/helpers';
 import {debugLogger} from '../../common/util/debug-logger';
 import {logger} from '../../common/util/logger';
+
+import {mergeObjects} from '../util/helpers';
 
 import {STRINGS} from '../config/strings';
 
 import {ComputeParams, Node, PhasedPipeline} from '../types/compute';
-import {isExecute} from '../types/interface';
 
-const {MERGING_DEFAULTS_WITH_INPUT_DATA, EMPTY_PIPELINE} = STRINGS;
+const {
+  MERGING_DEFAULTS_WITH_INPUT_DATA,
+  EMPTY_PIPELINE,
+  CONFIG_WARN,
+  COMPUTING_PIPELINE_FOR_NODE,
+  COMPUTING_COMPONENT_PIPELINE,
+  REGROUPING,
+  OBSERVING,
+} = STRINGS;
 
 /**
  * Traverses all child nodes based on children grouping.
  */
 const traverse = async (children: any, params: ComputeParams) => {
   for (const child in children) {
+    console.debug(COMPUTING_COMPONENT_PIPELINE(child));
     await computeNode(children[child], params);
   }
 };
@@ -38,9 +47,22 @@ const mergeDefaults = (
     return response;
   }
 
-  console.debug(MERGING_DEFAULTS_WITH_INPUT_DATA);
+  console.debug(MERGING_DEFAULTS_WITH_INPUT_DATA, '\n');
 
   return defaults ? [defaults] : [];
+};
+
+/**
+ * Warns if the `config` is provided in the manifest.
+ */
+const warnIfConfigProvided = (node: any) => {
+  if ('config' in node) {
+    const plugins = Object.keys(node.config || {});
+    const joinedPlugins = plugins.join(', ');
+    const isMore = plugins.length > 1;
+
+    logger.warn(CONFIG_WARN(joinedPlugins, isMore));
+  }
 };
 
 /**
@@ -65,6 +87,9 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   const defaults = node.defaults || params.defaults;
   const noFlags = !params.observe && !params.regroup && !params.compute;
 
+  debugLogger.setExecutingPluginName();
+  warnIfConfigProvided(node);
+
   if (node.children) {
     return traverse(node.children, {
       ...params,
@@ -74,8 +99,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     });
   }
 
-  let inputStorage = structuredClone(node.inputs) as PluginParams[];
-  inputStorage = mergeDefaults(inputStorage, defaults);
+  let outputStorage = structuredClone(node.inputs) as PluginParams[];
+  outputStorage = mergeDefaults(outputStorage, defaults);
   const pipelineCopy = structuredClone(pipeline) || {};
 
   /** Checks if pipeline is not an array or empty object. */
@@ -94,20 +119,20 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   if ((noFlags || params.observe) && pipelineCopy.observe) {
     while (pipelineCopy.observe.length !== 0) {
       const pluginName = pipelineCopy.observe.shift() as string;
+      console.debug(OBSERVING(pluginName));
+      debugLogger.setExecutingPluginName(pluginName);
+
       const plugin = params.pluginStorage.get(pluginName);
       const nodeConfig = config && config[pluginName];
 
-      if (isExecute(plugin)) {
-        inputStorage = await plugin.execute(inputStorage, nodeConfig);
-        node.inputs = inputStorage;
+      outputStorage = await plugin.execute(outputStorage, nodeConfig);
+      node.inputs = outputStorage;
 
-        if (params.context.explainer) {
-          addExplainData({
-            pluginName,
-            metadata: plugin.metadata,
-            pluginData: params.context.initialize!.plugins[pluginName],
-          });
-        }
+      if (params.context.explainer) {
+        addExplainData({
+          pluginName,
+          metadata: plugin.metadata,
+        });
       }
     }
   }
@@ -116,9 +141,19 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
    * If regroup is requested, execute regroup strategy, delete child's inputs, outputs and empty regroup array.
    */
   if ((noFlags || params.regroup) && pipelineCopy.regroup) {
-    node.children = Regroup(inputStorage, pipelineCopy.regroup);
+    const originalOutputs = params.append ? node.outputs || [] : [];
+
+    node.children = Regroup(
+      outputStorage,
+      originalOutputs,
+      pipelineCopy.regroup
+    );
+
     delete node.inputs;
     delete node.outputs;
+
+    debugLogger.setExecutingPluginName();
+    console.debug(REGROUPING);
 
     return traverse(node.children, {
       ...params,
@@ -131,30 +166,42 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     });
   }
 
+  console.debug('\n');
+
   /**
    * If iteration is on compute plugin, then executes compute plugins and sets the outputs value.
    */
   if ((noFlags || params.compute) && pipelineCopy.compute) {
+    const originalOutputs = params.append ? node.outputs || [] : [];
+
     while (pipelineCopy.compute.length !== 0) {
       const pluginName = pipelineCopy.compute.shift() as string;
       const plugin = params.pluginStorage.get(pluginName);
       const nodeConfig = config && config[pluginName];
 
-      if (isExecute(plugin)) {
-        inputStorage = await plugin.execute(inputStorage, nodeConfig);
-        node.outputs = inputStorage;
+      console.debug(COMPUTING_PIPELINE_FOR_NODE(pluginName));
+      debugLogger.setExecutingPluginName(pluginName);
 
-        if (params.context.explainer) {
-          addExplainData({
-            pluginName,
-            metadata: plugin.metadata,
-            pluginData: params.context.initialize!.plugins[pluginName],
-          });
-        }
-        debugLogger.setExecutingPluginName();
+      outputStorage = await plugin.execute(outputStorage, nodeConfig);
+
+      debugLogger.setExecutingPluginName();
+
+      node.outputs = outputStorage;
+
+      if (params.context.explainer) {
+        addExplainData({
+          pluginName,
+          metadata: plugin.metadata,
+        });
       }
     }
+
+    if (params.append) {
+      node.outputs = originalOutputs.concat(node.outputs || []);
+    }
   }
+
+  console.debug('\n');
 };
 
 /**

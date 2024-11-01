@@ -6,7 +6,7 @@ initialize:
     tdp-finder:
       path: builtin
       method: CSVLookup
-      global-config:
+      config:
         filepath: >-
           https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/tdp-data-1.csv
         query:

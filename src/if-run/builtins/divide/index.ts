@@ -1,56 +1,20 @@
 import {z} from 'zod';
+
+import {ConfigParams, PluginParams} from '@grnsft/if-core/types';
+import {PluginFactory} from '@grnsft/if-core/interfaces';
 import {ERRORS} from '@grnsft/if-core/utils';
-import {
-  ExecutePlugin,
-  PluginParams,
-  ConfigParams,
-  PluginParametersMetadata,
-} from '@grnsft/if-core/types';
 
 import {validate} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
-const {GlobalConfigError, MissingInputDataError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG, MISSING_INPUT_DATA, ZERO_DIVISION} = STRINGS;
+const {MissingInputDataError, ConfigError} = ERRORS;
+const {MISSING_INPUT_DATA, ZERO_DIVISION, MISSING_CONFIG} = STRINGS;
 
-export const Divide = (
-  globalConfig: ConfigParams,
-  parametersMetadata: PluginParametersMetadata
-): ExecutePlugin => {
-  const metadata = {
-    kind: 'execute',
-    inputs: parametersMetadata?.inputs,
-    outputs: parametersMetadata?.outputs,
-  };
-
-  /**
-   * Calculate the division of each input parameter.
-   */
-  const execute = (inputs: PluginParams[]) => {
-    const safeGlobalConfig = validateGlobalConfig();
-    const {numerator, denominator, output} = safeGlobalConfig;
-
-    return inputs.map((input, index) => {
-      const safeInput = Object.assign(
-        {},
-        input,
-        validateSingleInput(input, {numerator, denominator})
-      );
-
-      return {
-        ...input,
-        [output]: calculateDivide(safeInput, index, {numerator, denominator}),
-      };
-    });
-  };
-
-  /**
-   * Checks global config value are valid.
-   */
-  const validateGlobalConfig = () => {
-    if (!globalConfig) {
-      throw new GlobalConfigError(MISSING_GLOBAL_CONFIG);
+export const Divide = PluginFactory({
+  configValidation: (config: ConfigParams) => {
+    if (!config || !Object.keys(config)?.length) {
+      throw new ConfigError(MISSING_CONFIG);
     }
 
     const schema = z.object({
@@ -59,20 +23,10 @@ export const Divide = (
       output: z.string(),
     });
 
-    return validate<z.infer<typeof schema>>(schema, globalConfig);
-  };
-
-  /**
-   * Checks for required fields in input.
-   */
-  const validateSingleInput = (
-    input: PluginParams,
-    params: {
-      numerator: string;
-      denominator: number | string;
-    }
-  ) => {
-    const {numerator, denominator} = params;
+    return validate<z.infer<typeof schema>>(schema, config);
+  },
+  inputValidation: (input: PluginParams, config: ConfigParams) => {
+    const {numerator, denominator} = config;
 
     const schema = z
       .object({
@@ -88,32 +42,48 @@ export const Divide = (
       });
 
     return validate<z.infer<typeof schema>>(schema, input);
-  };
+  },
+  implementation: async (inputs: PluginParams[], config: ConfigParams) => {
+    const {numerator, denominator, output} = config;
 
-  /**
-   * Calculates the division of the given parameter.
-   */
-  const calculateDivide = (
-    input: PluginParams,
-    index: number,
-    params: {
-      numerator: string;
-      denominator: number | string;
-    }
-  ) => {
-    const {denominator, numerator} = params;
-    const finalDenominator = input[denominator] || denominator;
+    return inputs.map((input, index) => {
+      const calculatedResult = calculateDivide(input, index, {
+        numerator: input.numerator || numerator,
+        denominator: input.denominator || denominator,
+      });
 
-    if (finalDenominator === 0) {
-      console.warn(ZERO_DIVISION(Divide.name, index));
-      return input[numerator];
-    }
+      return {
+        ...input,
+        [output]: calculatedResult,
+      };
+    });
+  },
+  allowArithmeticExpressions: ['numerator', 'denominator'],
+});
 
-    return input[numerator] / finalDenominator;
-  };
+/**
+ * Calculates the division of the given parameter.
+ */
+const calculateDivide = (
+  input: PluginParams,
+  index: number,
+  params: {
+    numerator: number | string;
+    denominator: number | string;
+  }
+) => {
+  const {denominator, numerator} = params;
+  const finalDenominator =
+    typeof denominator === 'number'
+      ? denominator
+      : input[denominator] || denominator;
+  const finalNumerator =
+    typeof numerator === 'number' ? numerator : input[numerator];
 
-  return {
-    metadata,
-    execute,
-  };
+  if (finalDenominator === 0) {
+    console.warn(ZERO_DIVISION(Divide.name, index));
+    return finalNumerator;
+  }
+
+  return finalNumerator / finalDenominator;
 };

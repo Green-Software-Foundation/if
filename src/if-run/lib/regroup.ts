@@ -7,74 +7,82 @@ import {validate} from '../../common/util/validations';
 import {STRINGS} from '../config';
 
 const {InvalidGroupingError} = ERRORS;
-
 const {INVALID_GROUP_KEY, REGROUP_ERROR} = STRINGS;
 
 /**
- * Grouping strategy.
+ * Creates structure to insert inputs by groups.
  */
-export const Regroup = (inputs: PluginParams[], groups: string[]) => {
-  /**
-   * Creates structure to insert inputs by groups.
-   */
-  const appendGroup = (value: PluginParams, object: any, groups: string[]) => {
-    if (groups.length > 0) {
-      const group = groups.shift() as string;
-
-      object.children = object.children ?? {};
-      object.children[group] = object.children[group] ?? {};
-
-      if (groups.length === 0) {
-        if (
-          object.children[group].inputs &&
-          object.children[group].inputs.length > 0
-        ) {
-          object.children[group].inputs.push(value);
-        } else {
-          object.children[group].inputs = [value];
-        }
-      }
-
-      appendGroup(value, object.children[group], groups);
-    }
-
+const appendGroup = (
+  value: PluginParams,
+  object: any,
+  target: string,
+  groups: string[]
+): any => {
+  if (groups.length === 0) {
+    object[target] = object[target] || [];
+    object[target].push(value);
     return object;
+  }
+
+  const group = groups.shift()!;
+  object.children = object.children || {};
+  object.children[group] = object.children[group] || {};
+
+  return appendGroup(value, object.children[group], target, groups);
+};
+
+/**
+ * Validates the groups array.
+ */
+const validateGroups = (groups: string[]): string[] => {
+  const inputData = {regroup: groups};
+  const validationSchema = z.record(
+    z.string(),
+    z.array(z.string(), {message: REGROUP_ERROR}).min(1)
+  );
+
+  validate(validationSchema, inputData);
+
+  return groups;
+};
+
+/**
+ * Looks up a group key value in the input.
+ */
+const lookupGroupKey = (input: PluginParams, groupKey: string): string => {
+  if (!input[groupKey]) {
+    throw new InvalidGroupingError(INVALID_GROUP_KEY(groupKey));
+  }
+
+  return input[groupKey];
+};
+
+/**
+ * Regroups inputs and outputs based on the given group keys.
+ */
+export const Regroup = (
+  inputs: PluginParams[],
+  outputs: PluginParams[],
+  groups: string[]
+): any => {
+  const validatedGroups = validateGroups(groups);
+
+  const appendToAccumulator = (
+    items: PluginParams[],
+    acc: any,
+    target: string
+  ) => {
+    for (const item of items) {
+      const groupsWithData = validatedGroups.map(groupKey =>
+        lookupGroupKey(item, groupKey)
+      );
+      appendGroup(item, acc, target, groupsWithData);
+    }
   };
 
-  /**
-   * Validates groups array.
-   */
-  const validateGroups = (regroup: string[]) => {
-    const inputData = {regroup};
-    const validationSchema = z.record(
-      z.string(),
-      z.array(z.string(), {message: REGROUP_ERROR}).min(1)
-    );
+  const acc = {} as any;
+  appendToAccumulator(inputs, acc, 'inputs');
+  appendToAccumulator(outputs, acc, 'outputs');
 
-    validate(validationSchema, inputData);
-
-    return groups;
-  };
-
-  /**
-   * Interates over inputs, grabs group values for each one.
-   * Based on grouping, initializes the structure.
-   */
-  return inputs.reduce((acc, input) => {
-    const validtedGroups = validateGroups(groups);
-    const groupsWithData = validtedGroups.map(groupType => {
-      if (!input[groupType]) {
-        throw new InvalidGroupingError(INVALID_GROUP_KEY(groupType));
-      }
-
-      return input[groupType];
-    });
-
-    acc = {
-      ...acc,
-      ...appendGroup(input, acc, groupsWithData),
-    };
-
-    return acc;
-  }, {} as any).children;
+  return acc.children;
 };

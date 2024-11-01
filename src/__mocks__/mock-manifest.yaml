@@ -6,7 +6,7 @@ initialize:
     memory-energy-from-memory-util:
       path: builtin
       method: Coefficient
-      global-config:
+      config:
         input-parameter: memory/utilization
         coefficient: 0.0001
         output-parameter: memory/energy
@@ -59,7 +59,6 @@ tree:
       pipeline:
         compute:
           - memory-energy-from-memory-util
-      config: null
       inputs:
         - timestamp: 2023-12-12T00:00:00.000Z
           duration: 3600

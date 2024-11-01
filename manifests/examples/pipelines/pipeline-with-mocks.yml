@@ -11,7 +11,7 @@ initialize:
       kind: plugin
       method: MockObservations
       path: "builtin"
-      global-config:
+      config:
         timestamp-from: "2023-12-12T00:00:00.000Z"
         timestamp-to: "2023-12-12T00:00:13.000Z"
         duration: 30
@@ -29,23 +29,31 @@ initialize:
           timestamp:
             description: refers to the time of occurrence of the input
             unit: RFC3339
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
           duration:
             description: refers to the duration of the input
             unit: seconds
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
           cloud/instance-type:
             description: type of Cloud Instance name used in the cloud provider APIs
             unit: none
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
           cloud/region:
             description: region cloud instance
             unit: none
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
     interpolate:
       method: Interpolation
       path: "builtin"
-      global-config:
+      config:
         method: linear
         x: [0, 10, 50, 100]
         y: [0.12, 0.32, 0.75, 1.02]
@@ -56,16 +64,20 @@ initialize:
           cpu/utilization:
             description: refers to CPU utilization.
             unit: percentage
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
         outputs:
           cpu-factor:
             description: result of interpolate
             unit: kWh
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
     cpu-factor-to-wattage:
       method: Multiply
       path: builtin
-      global-config:
+      config:
         input-parameters: ["cpu-factor", "cpu/thermal-design-power"]
         output-parameter: "cpu-wattage"
       parameter-metadata:
@@ -73,20 +85,26 @@ initialize:
           cpu-factor:
             description: result of interpolate
             unit: kWh
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
           cpu/thermal-design-power:
             description: thermal design power for a processor
             unit: kWh
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
         outputs:
           cpu-wattage:
             description: the energy used by the CPU
             unit: kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     wattage-times-duration:
       method: Multiply
       path: builtin
-      global-config:
+      config:
         input-parameters: ["cpu-wattage", "duration"]
         output-parameter: "cpu-wattage-times-duration"
       parameter-metadata:
@@ -94,20 +112,26 @@ initialize:
           cpu-wattage:
             description: Energy used by the CPU
             unit: kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
           duration:
             description: Duration of the observation
             unit: seconds
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
         outputs:
           cpu-wattage-times-duration:
             description: CPU wattage multiplied by duration
             unit: kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     wattage-to-energy-kwh:
       method: Divide
       path: "builtin"
-      global-config:
+      config:
         numerator: cpu-wattage-times-duration
         denominator: 3600000
         output: cpu-energy-raw
@@ -116,16 +140,20 @@ initialize:
           cpu-wattage-times-duration:
             description: CPU wattage multiplied by duration
             unit: kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
         outputs:
           cpu-energy-raw:
             description: Raw energy used by CPU in kWh
             unit: kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     calculate-vcpu-ratio:
       method: Divide
       path: "builtin"
-      global-config:
+      config:
         numerator: vcpus-total
         denominator: vcpus-allocated
         output: vcpu-ratio
@@ -134,20 +162,26 @@ initialize:
           vcpus-total:
             description: total number of vcpus available on a particular resource
             unit: count
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
           vcpus-allocated:
             description: number of vcpus allocated to particular resource
             unit: count
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
         outputs:
           vcpu-ratio:
             description: Ratio of vCPUs
             unit: none
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
     correct-cpu-energy-for-vcpu-ratio:
       method: Divide
       path: "builtin"
-      global-config:
+      config:
         numerator: cpu-energy-raw
         denominator: vcpu-ratio
         output: cpu-energy-kwh
@@ -156,23 +190,29 @@ initialize:
           cpu-energy-raw:
             description: Raw energy used by CPU in kWh
             unit: kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
           vcpu-ratio:
             description: Ratio of vCPUs
             unit: none
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
         outputs:
           cpu-energy-kwh:
             description: Corrected CPU energy in kWh
             unit: kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     sci-embodied:
       path: "builtin"
       method: SciEmbodied
     operational-carbon:
       method: Multiply
       path: builtin
-      global-config:
+      config:
         input-parameters: ["cpu-energy-kwh", "grid/carbon-intensity"]
         output-parameter: "carbon-operational"
       parameter-metadata:
@@ -180,59 +220,75 @@ initialize:
           cpu-energy-kwh:
             description: Corrected CPU energy in kWh
             unit: kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
           grid/carbon-intensity:
             description: Carbon intensity for the grid
             unit: gCO2eq/kWh
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
         outputs:
           carbon-operational:
             description: Operational carbon footprint
             unit: gCO2eq
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     sum-carbon:
       path: "builtin"
       method: Sum
-      global-config:
+      config:
         input-parameters:
           - carbon-operational
-          - carbon-embodied
+          - embodied-carbon
         output-parameter: carbon
       parameter-metadata:
         inputs:
           carbon-operational:
             description: Operational carbon footprint
             unit: gCO2eq
-            aggregation-method: sum
-          carbon-embodied:
+            aggregation-method:
+              time: sum
+              component: sum
+          embodied-carbon:
             description: Embodied carbon footprint
             unit: gCO2eq
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
         outputs:
           carbon:
             description: Total carbon footprint
             unit: gCO2eq
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     sci:
       path: "builtin"
       method: Sci
-      global-config:
+      config:
         functional-unit: "requests"
       parameter-metadata:
         inputs:
           requests:
             description: expressed the final SCI value
             unit: none
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
         outputs:
           sci:
             description: Scientific Carbon Intensity
             unit: none
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
     time-sync:
       method: TimeSync
       path: "builtin"
-      global-config:
+      config:
         start-time: "2023-12-12T00:00:00.000Z"
         end-time: "2023-12-12T00:01:00.000Z"
         interval: 5
@@ -266,6 +322,7 @@ tree:
         device/expected-lifespan: 94608000 # 3 years in seconds
         vcpus-total: 8
         vcpus-allocated: 1
+        requests: 50
       inputs:
     child-2:
       pipeline:
@@ -294,4 +351,5 @@ tree:
         device/expected-lifespan: 94608000 # 3 years in seconds
         vcpus-total: 8
         vcpus-allocated: 1
+        requests: 50
       inputs:

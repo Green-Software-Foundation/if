@@ -1,3 +1,0 @@
-[submodule "third-party/ccf-coefficients"]
-	path = third-party/ccf-coefficients
-	url = https://github.com/cloud-carbon-footprint/ccf-coefficients

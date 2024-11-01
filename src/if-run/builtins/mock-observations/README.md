@@ -11,7 +11,7 @@ The mode currently mocks 2 types of observation data:
 - Common key-value pairs, that are generated statically and are the same for each generated observation/input (see 'helpers/CommonGenerator.ts')
 - Randomly generated integer values for predefined keys (see 'helpers/RandIntGenerator.ts')
 
-### Plugin global config
+### Plugin config
 
 - `timestamp-from`, `timestamp-to` and `duration` define time buckets for which to generate observations.
 - `generators` define which fields to generate for each observation
@@ -25,12 +25,29 @@ The `parameter-metadata` section contains information about `description`, `unit
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
 
 - `outputs`: describe the output parameters. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
+
+```yaml
+mock-observations:
+  kind: plugin
+  method: MockObservations
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
 
 ### Authentication
 
@@ -38,13 +55,13 @@ N/A
 
 ### Inputs
 
-The plugin's `global-config` section in the manifest file determines its behaviour.
+The plugin's `config` section in the manifest file determines its behaviour.
 'inputs' section is ignored.
 
 ### Typescript Usage
 
 ```typescript
-const mockObservations = MockObservations({
+const config = {
   'timestamp-from': '2023-07-06T00:00',
   'timestamp-to': '2023-07-06T00:10',
   duration: 60,
@@ -56,7 +73,10 @@ const mockObservations = MockObservations({
       region: 'uk-west',
     },
   },
-});
+};
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const mockObservations = MockObservations(config, parametersMetadata, mapping);
 const result = await mockObservations.execute([]);
 ```
 
@@ -74,7 +94,7 @@ initialize:
       kind: plugin
       method: MockObservations
       path: 'builtin'
-      global-config:
+      config:
         timestamp-from: 2023-07-06T00:00
         timestamp-to: 2023-07-06T00:10
         duration: 60

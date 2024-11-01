@@ -2,14 +2,11 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {Sum} from '../../../if-run/builtins/sum';
 
-import {STRINGS} from '../../../if-run/config';
-
-const {GlobalConfigError, InputValidationError} = ERRORS;
-const {MISSING_GLOBAL_CONFIG} = STRINGS;
+const {InputValidationError, WrongArithmeticExpressionError} = ERRORS;
 
 describe('builtins/sum: ', () => {
   describe('Sum: ', () => {
-    const globalConfig = {
+    const config = {
       'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
       'output-parameter': 'energy',
     };
@@ -17,7 +14,7 @@ describe('builtins/sum: ', () => {
       inputs: {},
       outputs: {},
     };
-    const sum = Sum(globalConfig, parametersMetadata);
+    const sum = Sum(config, parametersMetadata, {});
 
     describe('init: ', () => {
       it('successfully initalized.', () => {
@@ -27,7 +24,7 @@ describe('builtins/sum: ', () => {
     });
 
     describe('execute(): ', () => {
-      it('successfully applies Sum strategy to given input.', () => {
+      it('successfully applies Sum strategy to given input.', async () => {
         expect.assertions(1);
 
         const expectedResult = [
@@ -41,7 +38,7 @@ describe('builtins/sum: ', () => {
           },
         ];
 
-        const result = sum.execute([
+        const result = await sum.execute([
           {
             timestamp: '2021-01-01T00:00:00Z',
             duration: 3600,
@@ -54,14 +51,89 @@ describe('builtins/sum: ', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('throws an error when global config is not provided.', () => {
+      it('successfully executes when `mapping` has valid data.', async () => {
+        expect.assertions(1);
+
+        const mapping = {
+          'cpu/energy': 'energy-from-cpu',
+          'network/energy': 'energy-from-network',
+        };
+        const config = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': 'energy',
+        };
+
+        const sum = Sum(config, parametersMetadata, mapping);
+
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy-from-cpu': 1,
+            'energy-from-network': 1,
+            'memory/energy': 1,
+            energy: 3,
+          },
+        ];
+
+        const result = await sum.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'energy-from-cpu': 1,
+            'energy-from-network': 1,
+            'memory/energy': 1,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('successfully executes when the `mapping` maps output parameter.', async () => {
+        expect.assertions(1);
+
+        const mapping = {
+          energy: 'total/energy',
+        };
+        const config = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': 'energy',
+        };
+
+        const sum = Sum(config, parametersMetadata, mapping);
+
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 1,
+            'network/energy': 1,
+            'memory/energy': 1,
+            'total/energy': 3,
+          },
+        ];
+
+        const result = await sum.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 1,
+            'network/energy': 1,
+            'memory/energy': 1,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('throws an error when config is not provided.', async () => {
         const config = undefined;
-        const sum = Sum(config!, parametersMetadata);
+        const sum = Sum(config!, parametersMetadata, {});
 
         expect.assertions(1);
 
         try {
-          sum.execute([
+          await sum.execute([
             {
               timestamp: '2021-01-01T00:00:00Z',
               duration: 3600,
@@ -72,16 +144,18 @@ describe('builtins/sum: ', () => {
           ]);
         } catch (error) {
           expect(error).toStrictEqual(
-            new GlobalConfigError(MISSING_GLOBAL_CONFIG)
+            new InputValidationError(
+              '"input-parameters" parameter is required. Error code: invalid_type.,"output-parameter" parameter is required. Error code: invalid_type.'
+            )
           );
         }
       });
 
-      it('throws an error on missing params in input.', () => {
+      it('throws an error on missing params in input.', async () => {
         expect.assertions(1);
 
         try {
-          sum.execute([
+          await sum.execute([
             {
               duration: 3600,
               timestamp: '2021-01-01T00:00:00Z',
@@ -96,13 +170,13 @@ describe('builtins/sum: ', () => {
         }
       });
 
-      it('returns a result with input params not related to energy.', () => {
+      it('returns a result with input params not related to energy.', async () => {
         expect.assertions(1);
         const newConfig = {
           'input-parameters': ['carbon', 'other-carbon'],
           'output-parameter': 'carbon-sum',
         };
-        const sum = Sum(newConfig, parametersMetadata);
+        const sum = Sum(newConfig, parametersMetadata, {});
 
         const data = [
           {
@@ -112,7 +186,7 @@ describe('builtins/sum: ', () => {
             'other-carbon': 2,
           },
         ];
-        const response = sum.execute(data);
+        const response = await sum.execute(data);
 
         const expectedResult = [
           {
@@ -125,6 +199,69 @@ describe('builtins/sum: ', () => {
         ];
 
         expect(response).toEqual(expectedResult);
+      });
+
+      it('successfully executes when the config output parameter contains an arithmetic expression.', async () => {
+        expect.assertions(1);
+
+        const config = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': "=2*'energy'",
+        };
+
+        const sum = Sum(config, parametersMetadata, {});
+        const expectedResult = [
+          {
+            duration: 3600,
+            'cpu/energy': 1,
+            'network/energy': 1,
+            'memory/energy': 1,
+            energy: 6,
+            timestamp: '2021-01-01T00:00:00Z',
+          },
+        ];
+
+        const result = await sum.execute([
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'cpu/energy': 1,
+            'network/energy': 1,
+            'memory/energy': 1,
+          },
+        ]);
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('throws an error the config output parameter has wrong arithmetic expression.', async () => {
+        expect.assertions(2);
+
+        const config = {
+          'input-parameters': ['cpu/energy', 'network/energy', 'memory/energy'],
+          'output-parameter': "2*'energy'",
+        };
+
+        const sum = Sum(config, parametersMetadata, {});
+
+        try {
+          await sum.execute([
+            {
+              timestamp: '2021-01-01T00:00:00Z',
+              duration: 3600,
+              'cpu/energy': 1,
+              'network/energy': 1,
+              'memory/energy': 1,
+            },
+          ]);
+        } catch (error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error).toEqual(
+            new WrongArithmeticExpressionError(
+              `The output parameter \`${config['output-parameter']}\` contains an invalid arithmetic expression. It should start with \`=\` and include the symbols \`*\`, \`+\`, \`-\` and \`/\`.`
+            )
+          );
+        }
       });
     });
   });

@@ -20,16 +20,32 @@ Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-26
 
 The `parameter-metadata` section contains information about `description`, `unit` and `aggregation-method` of the parameters of the inputs and outputs
 
-- `inputs`: describe the parameter of the `parameter` value of the global config. The parameter has the following attributes:
+- `inputs`: describe the parameter of the `parameter` value of the config. The parameter has the following attributes:
 
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
 
-- `outputs`: describe the parameters of the `output` of the global config. The parameter has the following attributes:
+- `outputs`: describe the parameters of the `output` of the config. The parameter has the following attributes:
   - `description`: description of the parameter
   - `unit`: unit of the parameter
-  - `aggregation-method`: aggregation method of the parameter (it can be `sum`, `avg` or `none`)
+  - `aggregation-method`: aggregation method object of the parameter
+    - `time`: this value is used for `horizontal` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+    - `component`: this value is used for `vertical` aggregation. It can be of the following values: `sum`, `avg`, `copy`, or `none`.
+
+### Mapping
+
+The `mapping` block is an optional block. It is added in the plugin section and allows the plugin to receive a parameter from the input with a different name than the one the plugin uses for data manipulation. The parameter with the mapped name will not appear in the outputs. It also maps the output parameter of the plugin. The structure of the `mapping` block is:
+
+```yaml
+regex:
+  method: Regex
+  path: 'builtin'
+  mapping:
+    'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
+```
 
 ### Inputs
 
@@ -37,21 +53,23 @@ The `parameter-metadata` section contains information about `description`, `unit
 
 ## Returns
 
-- `output`: The match of the `parameter` value using the `match` regex defined in the global config. If the `match` regex includes the global flag (`g`), a string containing all matches separated by spaces.
+- `output`: The match of the `parameter` value using the `match` regex defined in the config. If the `match` regex includes the global flag (`g`), a string containing all matches separated by spaces.
 
 ## Implementation
 
 To run the plugin, you must first create an instance of `Regex`. Then, you can call `execute()`.
 
 ```typescript
-const globalConfig = {
+const config = {
   parameter: 'physical-processor',
   match: '^[^,]+',
   output: 'cpu/name',
 };
-const regex = Regex(globalConfig);
+const parametersMetadata = {inputs: {}, outputs: {}};
+const mapping = {};
+const regex = Regex(config, parametersMetadata, mapping);
 
-const input = [
+const inputs = [
   {
     timestamp: '2021-01-01T00:00:00Z',
     duration: 3600,
@@ -59,6 +77,8 @@ const input = [
       'Intel® Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-2673 v4 2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz',
   },
 ];
+
+const result = await regex.execute(inputs);
 ```
 
 ## Example manifest
@@ -74,7 +94,7 @@ initialize:
     regex:
       method: Regex
       path: 'builtin'
-      global-config:
+      config:
         parameter: physical-processor
         match: ^[^,]+
         output: cpu/name
@@ -112,9 +132,9 @@ Every element in the `inputs` array must contain:
 - `duration`
 - whatever value you passed to `parameter`
 
-### `GlobalConfigError`
+### `ConfigError`
 
-You will receive an error starting `GlobalConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
+You will receive an error starting `ConfigError: ` if you have not provided the expected configuration data in the plugin's `initialize` block.
 
 The required parameters are:
 

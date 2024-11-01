@@ -1,47 +1,47 @@
 name: carbon-intensity plugin demo
-description: 
+description:
 tags:
 initialize:
   plugins:
     interpolate:
       method: Interpolation
-      path: 'builtin'
-      global-config:
+      path: "builtin"
+      config:
         method: linear
         x: [0, 10, 50, 100]
         y: [0.12, 0.32, 0.75, 1.02]
-        input-parameter: 'cpu/utilization'
-        output-parameter: 'cpu-factor'
+        input-parameter: "cpu/utilization"
+        output-parameter: "cpu-factor"
     cpu-factor-to-wattage:
       method: Multiply
       path: builtin
-      global-config:
+      config:
         input-parameters: ["cpu-factor", "thermal-design-power"]
         output-parameter: "cpu-wattage"
     wattage-times-duration:
       method: Multiply
       path: builtin
-      global-config:
+      config:
         input-parameters: ["cpu-wattage", "duration"]
         output-parameter: "cpu-wattage-times-duration"
     wattage-to-energy-kwh:
       method: Divide
       path: "builtin"
-      global-config:
+      config:
         numerator: cpu-wattage-times-duration
         denominator: 3600000
         output: cpu-energy-raw
     calculate-vcpu-ratio:
       method: Divide
       path: "builtin"
-      global-config:
+      config:
         numerator: vcpus-total
         denominator: vcpus-allocated
         output: vcpu-ratio
     correct-cpu-energy-for-vcpu-ratio:
       method: Divide
       path: "builtin"
-      global-config:
+      config:
         numerator: cpu-energy-raw
         denominator: vcpu-ratio
         output: cpu-energy-kwh

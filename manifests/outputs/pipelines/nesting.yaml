@@ -13,14 +13,14 @@ initialize:
     interpolate:
       path: builtin
       method: Interpolation
-      global-config:
+      config:
         method: linear
         x:
           - 0
           - 10
           - 50
           - 100
-        "y":
+        'y':
           - 0.12
           - 0.32
           - 0.75
@@ -32,16 +32,20 @@ initialize:
           cpu/utilization:
             unit: percentage
             description: refers to CPU utilization.
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: sum
         outputs:
           cpu-factor:
             unit: kWh
             description: result of interpolate
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
     cpu-factor-to-wattage:
       path: builtin
       method: Multiply
-      global-config:
+      config:
         input-parameters:
           - cpu-factor
           - cpu/thermal-design-power
@@ -51,20 +55,26 @@ initialize:
           cpu-factor:
             unit: kWh
             description: result of interpolate
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
           cpu/thermal-design-power:
             unit: kWh
             description: thermal design power for a processor
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
         outputs:
           cpu-wattage:
             unit: kWh
             description: the energy used by the CPU
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     wattage-times-duration:
       path: builtin
       method: Multiply
-      global-config:
+      config:
         input-parameters:
           - cpu-wattage
           - duration
@@ -72,7 +82,7 @@ initialize:
     wattage-to-energy-kwh:
       path: builtin
       method: Divide
-      global-config:
+      config:
         numerator: cpu-wattage-times-duration
         denominator: 3600000
         output: cpu-energy-raw
@@ -81,16 +91,20 @@ initialize:
           cpu-wattage-times-duration:
             unit: kWh
             description: CPU wattage multiplied by duration
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
         outputs:
           cpu-energy-raw:
             unit: kWh
             description: Raw energy used by CPU in kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     calculate-vcpu-ratio:
       path: builtin
       method: Divide
-      global-config:
+      config:
         numerator: vcpus-total
         denominator: vcpus-allocated
         output: vcpu-ratio
@@ -99,11 +113,13 @@ initialize:
           vcpu-ratio:
             unit: none
             description: Ratio of vCPUs
-            aggregation-method: none
+            aggregation-method:
+              time: copy
+              component: copy
     correct-cpu-energy-for-vcpu-ratio:
       path: builtin
       method: Divide
-      global-config:
+      config:
         numerator: cpu-energy-raw
         denominator: vcpu-ratio
         output: cpu-energy-kwh
@@ -113,7 +129,7 @@ initialize:
     operational-carbon:
       path: builtin
       method: Multiply
-      global-config:
+      config:
         input-parameters:
           - cpu-energy-kwh
           - grid/carbon-intensity
@@ -123,56 +139,70 @@ initialize:
           cpu-energy-kwh:
             unit: kWh
             description: Corrected CPU energy in kWh
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
           grid/carbon-intensity:
             unit: gCO2eq/kWh
             description: Carbon intensity for the grid
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
         outputs:
           carbon-operational:
             unit: gCO2eq
             description: Operational carbon footprint
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     sci:
       path: builtin
       method: Sci
-      global-config:
+      config:
         functional-unit: requests
       parameter-metadata:
         inputs:
           requests:
             unit: none
             description: expressed the final SCI value
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
     sum-carbon:
       path: builtin
       method: Sum
-      global-config:
+      config:
         input-parameters:
           - carbon-operational
-          - carbon-embodied
+          - embodied-carbon
         output-parameter: carbon
       parameter-metadata:
         inputs:
           carbon-operational:
+            unit: gCO2eq
             description: Operational carbon footprint
+            aggregation-method:
+              time: sum
+              component: sum
+          embodied-carbon:
             unit: gCO2eq
-            aggregation-method: sum
-          carbon-embodied:
             description: Embodied carbon footprint
-            unit: gCO2eq
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
         outputs:
           carbon:
-            description: Total carbon footprint
             unit: gCO2eq
-            aggregation-method: sum
+            description: Total carbon footprint
+            aggregation-method:
+              time: sum
+              component: sum
     time-sync:
       path: builtin
       method: TimeSync
-      global-config:
-        start-time: "2023-12-12T00:00:00.000Z"
-        end-time: "2023-12-12T00:01:00.000Z"
+      config:
+        start-time: '2023-12-12T00:00:00.000Z'
+        end-time: '2023-12-12T00:01:00.000Z'
         interval: 5
         allow-padding: true
       parameter-metadata:
@@ -180,50 +210,61 @@ initialize:
           timestamp:
             unit: RFC3339
             description: refers to the time of occurrence of the input
-            aggregation-method: none
+            aggregation-method:
+              time: none
+              component: none
           duration:
             unit: seconds
             description: refers to the duration of the input
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
           cloud/instance-type:
             unit: none
             description: type of Cloud Instance name used in the cloud provider APIs
-            aggregation-method: none
+            aggregation-method:
+              time: copy
+              component: copy
           cloud/region:
             unit: none
             description: region cloud instance
-            aggregation-method: none
+            aggregation-method:
+              time: copy
+              component: copy
           time-reserved:
             unit: seconds
             description: time reserved for a component
-            aggregation-method: avg
+            aggregation-method:
+              time: avg
+              component: avg
           network/energy:
             unit: kWh
             description: Energy consumed by the Network of the component
-            aggregation-method: sum
+            aggregation-method:
+              time: sum
+              component: sum
 execution:
   command: >-
-    /Users/mariamkhalatova/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
-    /Users/mariamkhalatova/Projects/UK/if/src/if-run/index.ts -m
-    manifests/examples/pipelines/nesting.yml -o
-    manifests/outputs/pipelines/nesting-1.yaml
+    /Users/manushak/.npm/_npx/1bf7c3c15bf47d04/node_modules/.bin/ts-node
+    /Users/manushak/Documents/Projects/Green-Software/if/src/if-run/index.ts -m
+    manifests/outputs/pipelines/nesting.yaml
   environment:
-    if-version: 0.5.0
+    if-version: 0.6.0
     os: macOS
-    os-version: "14.5"
-    node-version: 18.14.2
-    date-time: 2024-07-31T13:17:29.944Z (UTC)
+    os-version: 14.6.1
+    node-version: 18.20.4
+    date-time: 2024-10-04T11:05:09.727Z (UTC)
     dependencies:
-      - "@babel/core@7.22.10"
-      - "@babel/preset-typescript@7.23.3"
-      - "@commitlint/cli@18.6.0"
-      - "@commitlint/config-conventional@18.6.0"
-      - "@grnsft/if-core@0.0.16"
-      - "@jest/globals@29.7.0"
-      - "@types/jest@29.5.8"
-      - "@types/js-yaml@4.0.9"
-      - "@types/luxon@3.4.2"
-      - "@types/node@20.9.0"
+      - '@babel/core@7.22.10'
+      - '@babel/preset-typescript@7.23.3'
+      - '@commitlint/cli@18.6.0'
+      - '@commitlint/config-conventional@18.6.0'
+      - '@grnsft/if-core@0.0.25'
+      - '@jest/globals@29.7.0'
+      - '@types/jest@29.5.8'
+      - '@types/js-yaml@4.0.9'
+      - '@types/luxon@3.4.2'
+      - '@types/node@20.9.0'
       - axios-mock-adapter@1.22.0
       - axios@1.7.2
       - cross-env@7.0.3
@@ -270,28 +311,28 @@ tree:
           - time-sync
           - sci
       inputs:
-        - timestamp: "2023-12-12T00:00:00.000Z"
+        - timestamp: '2023-12-12T00:00:00.000Z'
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 1
           cpu/utilization: 50
           network/energy: 0.000001
           requests: 50
-        - timestamp: "2023-12-12T00:00:01.000Z"
+        - timestamp: '2023-12-12T00:00:01.000Z'
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
           requests: 60
-        - timestamp: "2023-12-12T00:00:06.000Z"
+        - timestamp: '2023-12-12T00:00:06.000Z'
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
           requests: 70
-        - timestamp: "2023-12-12T00:00:13.000Z"
+        - timestamp: '2023-12-12T00:00:13.000Z'
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -299,7 +340,7 @@ tree:
           network/energy: 0.000001
           requests: 55
       outputs:
-        - timestamp: "2023-12-12T00:00:00.000Z"
+        - timestamp: '2023-12-12T00:00:00.000Z'
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 5
@@ -308,9 +349,9 @@ tree:
           requests: 98
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 2759.6159999999995
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 170294400
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.4065
@@ -319,11 +360,17 @@ tree:
           cpu-energy-raw: 0.00006833333333333335
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000008541666666666668
-          carbon-embodied: 0.000010128107559614409
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970573
           carbon-operational: 0.006833333333333334
-          carbon: 0.0068434614408929475
-          sci: 0.00006983123919278518
-        - timestamp: "2023-12-12T00:00:05.000Z"
+          carbon: 0.04647057331303907
+          sci: 0.0004741895236024395
+        - timestamp: '2023-12-12T00:00:05.000Z'
           duration: 5
           cpu/utilization: 13
           cloud/instance-type: A1
@@ -332,9 +379,9 @@ tree:
           requests: 52
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 1182.6925714285712
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 72983314.28571428
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.30975
@@ -343,11 +390,17 @@ tree:
           cpu-energy-raw: 0.00005340277777777778
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006675347222222222
-          carbon-embodied: 0.000010128107559614407
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970574
           carbon-operational: 0.005340277777777777
-          carbon: 0.005350405885337391
-          sci: 0.0001028924208718729
-        - timestamp: "2023-12-12T00:00:10.000Z"
+          carbon: 0.044977517757483515
+          sci: 0.0008649522645669907
+        - timestamp: '2023-12-12T00:00:10.000Z'
           duration: 5
           cpu/utilization: 12
           cloud/instance-type: A1
@@ -356,9 +409,9 @@ tree:
           requests: 33.666666666666664
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 759.2594285714285
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 46853485.71428572
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.29900000000000004
@@ -367,11 +420,17 @@ tree:
           cpu-energy-raw: 0.00005190972222222222
           vcpu-ratio: 8
           cpu-energy-kwh: 0.0000064887152777777775
-          carbon-embodied: 0.000010128107559614407
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970574
           carbon-operational: 0.005190972222222222
-          carbon: 0.0052011003297818366
-          sci: 0.0001544881286073813
-        - timestamp: "2023-12-12T00:00:15.000Z"
+          carbon: 0.04482821220192795
+          sci: 0.0013315310555028106
+        - timestamp: '2023-12-12T00:00:15.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -380,9 +439,9 @@ tree:
           requests: 9.166666666666666
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 255.51999999999998
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 15768000
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.29900000000000004
@@ -391,11 +450,17 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
-          carbon-embodied: 0.000010128107559614409
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
-          carbon: 0.005201100329781837
-          sci: 0.0005673927632489277
-        - timestamp: "2023-12-12T00:00:20.000Z"
+          carbon: 0.04482821220192795
+          sci: 0.004890350422028504
+        - timestamp: '2023-12-12T00:00:20.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -404,9 +469,9 @@ tree:
           requests: 9.166666666666666
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 255.51999999999998
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 15768000
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.29900000000000004
@@ -415,11 +480,17 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
-          carbon-embodied: 0.000010128107559614409
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
-          carbon: 0.005201100329781837
-          sci: 0.0005673927632489277
-        - timestamp: "2023-12-12T00:00:25.000Z"
+          carbon: 0.04482821220192795
+          sci: 0.004890350422028504
+        - timestamp: '2023-12-12T00:00:25.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -428,9 +499,9 @@ tree:
           requests: 9.166666666666666
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 255.51999999999998
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 15768000
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.29900000000000004
@@ -439,11 +510,17 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
-          carbon-embodied: 0.000010128107559614409
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
-          carbon: 0.005201100329781837
-          sci: 0.0005673927632489277
-        - timestamp: "2023-12-12T00:00:30.000Z"
+          carbon: 0.04482821220192795
+          sci: 0.004890350422028504
+        - timestamp: '2023-12-12T00:00:30.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -452,9 +529,9 @@ tree:
           requests: 9.166666666666666
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 255.51999999999998
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 15768000
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.29900000000000004
@@ -463,11 +540,17 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
-          carbon-embodied: 0.000010128107559614409
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
-          carbon: 0.005201100329781837
-          sci: 0.0005673927632489277
-        - timestamp: "2023-12-12T00:00:35.000Z"
+          carbon: 0.04482821220192795
+          sci: 0.004890350422028504
+        - timestamp: '2023-12-12T00:00:35.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -476,9 +559,9 @@ tree:
           requests: 9.166666666666666
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 255.51999999999998
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 15768000
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.29900000000000004
@@ -487,11 +570,17 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
-          carbon-embodied: 0.000010128107559614409
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
-          carbon: 0.005201100329781837
-          sci: 0.0005673927632489277
-        - timestamp: "2023-12-12T00:00:40.000Z"
+          carbon: 0.04482821220192795
+          sci: 0.004890350422028504
+        - timestamp: '2023-12-12T00:00:40.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -500,9 +589,9 @@ tree:
           requests: 5.5
           cpu/thermal-design-power: 60
           grid/carbon-intensity: 480
-          device/emissions-embodied: 153.312
+          device/emissions-embodied: 1533.12
           time-reserved: 2160.2
-          device/expected-lifespan: 9460800
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.22425
@@ -511,11 +600,17 @@ tree:
           cpu-energy-raw: 0.000031145833333333336
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000003893229166666667
-          carbon-embodied: 0.000006076864535768645
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.02378234398782344
           carbon-operational: 0.0031145833333333334
-          carbon: 0.003120660197869102
-          sci: 0.0005673927632489276
-        - timestamp: "2023-12-12T00:00:45.000Z"
+          carbon: 0.02689692732115677
+          sci: 0.004890350422028503
+        - timestamp: '2023-12-12T00:00:45.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -524,9 +619,9 @@ tree:
           requests: 0
           cpu/thermal-design-power: 0
           grid/carbon-intensity: 0
-          device/emissions-embodied: 0
+          device/emissions-embodied: 1533.12
           time-reserved: 0.8
-          device/expected-lifespan: 0
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0
@@ -535,11 +630,17 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 8
           cpu-energy-kwh: 0
-          carbon-embodied: 0
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0
           carbon-operational: 0
           carbon: 0
           sci: 0
-        - timestamp: "2023-12-12T00:00:50.000Z"
+        - timestamp: '2023-12-12T00:00:50.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -548,9 +649,9 @@ tree:
           requests: 0
           cpu/thermal-design-power: 0
           grid/carbon-intensity: 0
-          device/emissions-embodied: 0
+          device/emissions-embodied: 1533.12
           time-reserved: 0.8
-          device/expected-lifespan: 0
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0
@@ -559,11 +660,17 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 8
           cpu-energy-kwh: 0
-          carbon-embodied: 0
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0
           carbon-operational: 0
           carbon: 0
           sci: 0
-        - timestamp: "2023-12-12T00:00:55.000Z"
+        - timestamp: '2023-12-12T00:00:55.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -572,9 +679,9 @@ tree:
           requests: 0
           cpu/thermal-design-power: 0
           grid/carbon-intensity: 0
-          device/emissions-embodied: 0
+          device/emissions-embodied: 1533.12
           time-reserved: 0.8
-          device/expected-lifespan: 0
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0
@@ -583,36 +690,18 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 8
           cpu-energy-kwh: 0
-          carbon-embodied: 0
-          carbon-operational: 0
-          carbon: 0
-          sci: 0
-        - timestamp: "2023-12-12T00:01:00.000Z"
-          duration: 1
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          cpu/utilization: 0
-          network/energy: 0
-          requests: 0
-          cpu/thermal-design-power: 0
-          grid/carbon-intensity: 0
-          device/emissions-embodied: 0
-          time-reserved: 1
-          device/expected-lifespan: 0
-          vcpus-allocated: 1
-          vcpus-total: 8
-          cpu-factor: 0
-          cpu-wattage: 0
-          cpu-wattage-times-duration: 0
-          cpu-energy-raw: 0
-          vcpu-ratio: 8
-          cpu-energy-kwh: 0
-          carbon-embodied: 0
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0
           carbon-operational: 0
           carbon: 0
           sci: 0
       aggregated:
-        carbon: 0.04652112950279046
+        carbon: 0.3873142916032471
     child-1:
       defaults:
         cpu/thermal-design-power: 100
@@ -636,28 +725,28 @@ tree:
           - time-sync
           - sci
       inputs:
-        - timestamp: "2023-12-12T00:00:00.000Z"
+        - timestamp: '2023-12-12T00:00:00.000Z'
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 1
           cpu/utilization: 50
           network/energy: 0.000001
           requests: 10
-        - timestamp: "2023-12-12T00:00:01.000Z"
+        - timestamp: '2023-12-12T00:00:01.000Z'
           duration: 5
           cpu/utilization: 20
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
           requests: 90
-        - timestamp: "2023-12-12T00:00:06.000Z"
+        - timestamp: '2023-12-12T00:00:06.000Z'
           duration: 7
           cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 0.000001
           requests: 30
-        - timestamp: "2023-12-12T00:00:13.000Z"
+        - timestamp: '2023-12-12T00:00:13.000Z'
           duration: 30
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -665,7 +754,7 @@ tree:
           network/energy: 0.000001
           requests: 22
       outputs:
-        - timestamp: "2023-12-12T00:00:00.000Z"
+        - timestamp: '2023-12-12T00:00:00.000Z'
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 5
@@ -674,9 +763,9 @@ tree:
           requests: 82
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 2759.6159999999995
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 170294400
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.4065
@@ -685,11 +774,17 @@ tree:
           cpu-energy-raw: 0.00006833333333333335
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000008541666666666668
-          carbon-embodied: 0.000010128107559614409
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970573
           carbon-operational: 0.006833333333333334
-          carbon: 0.0068434614408929475
-          sci: 0.0000834568468401579
-        - timestamp: "2023-12-12T00:00:05.000Z"
+          carbon: 0.04647057331303907
+          sci: 0.0005667143086955984
+        - timestamp: '2023-12-12T00:00:05.000Z'
           duration: 5
           cpu/utilization: 13
           cloud/instance-type: A1
@@ -698,9 +793,9 @@ tree:
           requests: 35.14285714285714
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 1182.6925714285712
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 72983314.28571428
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.30975
@@ -709,11 +804,17 @@ tree:
           cpu-energy-raw: 0.00005340277777777778
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006675347222222222
-          carbon-embodied: 0.000010128107559614407
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970574
           carbon-operational: 0.005340277777777777
-          carbon: 0.005350405885337391
-          sci: 0.00015224732194049487
-        - timestamp: "2023-12-12T00:00:10.000Z"
+          carbon: 0.044977517757483515
+          sci: 0.0012798480662698562
+        - timestamp: '2023-12-12T00:00:10.000Z'
           duration: 5
           cpu/utilization: 12
           cloud/instance-type: A1
@@ -722,9 +823,9 @@ tree:
           requests: 14.323809523809523
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 759.2594285714285
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 46853485.71428572
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.29900000000000004
@@ -733,11 +834,17 @@ tree:
           cpu-energy-raw: 0.00005190972222222222
           vcpu-ratio: 8
           cpu-energy-kwh: 0.0000064887152777777775
-          carbon-embodied: 0.000010128107559614407
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970574
           carbon-operational: 0.005190972222222222
-          carbon: 0.0052011003297818366
-          sci: 0.000363108733129716
-        - timestamp: "2023-12-12T00:00:15.000Z"
+          carbon: 0.04482821220192795
+          sci: 0.0031296291763314066
+        - timestamp: '2023-12-12T00:00:15.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -746,9 +853,9 @@ tree:
           requests: 3.6666666666666665
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 255.51999999999998
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 15768000
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.29900000000000004
@@ -757,11 +864,17 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
-          carbon-embodied: 0.000010128107559614409
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
-          carbon: 0.005201100329781837
-          sci: 0.0014184819081223194
-        - timestamp: "2023-12-12T00:00:20.000Z"
+          carbon: 0.04482821220192795
+          sci: 0.01222587605507126
+        - timestamp: '2023-12-12T00:00:20.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -770,9 +883,9 @@ tree:
           requests: 3.6666666666666665
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 255.51999999999998
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 15768000
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.29900000000000004
@@ -781,11 +894,17 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
-          carbon-embodied: 0.000010128107559614409
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
-          carbon: 0.005201100329781837
-          sci: 0.0014184819081223194
-        - timestamp: "2023-12-12T00:00:25.000Z"
+          carbon: 0.04482821220192795
+          sci: 0.01222587605507126
+        - timestamp: '2023-12-12T00:00:25.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -794,9 +913,9 @@ tree:
           requests: 3.6666666666666665
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 255.51999999999998
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 15768000
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.29900000000000004
@@ -805,11 +924,17 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
-          carbon-embodied: 0.000010128107559614409
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
-          carbon: 0.005201100329781837
-          sci: 0.0014184819081223194
-        - timestamp: "2023-12-12T00:00:30.000Z"
+          carbon: 0.04482821220192795
+          sci: 0.01222587605507126
+        - timestamp: '2023-12-12T00:00:30.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -818,9 +943,9 @@ tree:
           requests: 3.6666666666666665
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 255.51999999999998
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 15768000
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.29900000000000004
@@ -829,11 +954,17 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
-          carbon-embodied: 0.000010128107559614409
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
-          carbon: 0.005201100329781837
-          sci: 0.0014184819081223194
-        - timestamp: "2023-12-12T00:00:35.000Z"
+          carbon: 0.04482821220192795
+          sci: 0.01222587605507126
+        - timestamp: '2023-12-12T00:00:35.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -842,9 +973,9 @@ tree:
           requests: 3.6666666666666665
           cpu/thermal-design-power: 80
           grid/carbon-intensity: 640
-          device/emissions-embodied: 255.51999999999998
+          device/emissions-embodied: 1533.12
           time-reserved: 2880
-          device/expected-lifespan: 15768000
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.29900000000000004
@@ -853,11 +984,17 @@ tree:
           cpu-energy-raw: 0.00005190972222222223
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000006488715277777778
-          carbon-embodied: 0.000010128107559614409
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.03963723997970573
           carbon-operational: 0.005190972222222222
-          carbon: 0.005201100329781837
-          sci: 0.0014184819081223194
-        - timestamp: "2023-12-12T00:00:40.000Z"
+          carbon: 0.04482821220192795
+          sci: 0.01222587605507126
+        - timestamp: '2023-12-12T00:00:40.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -866,9 +1003,9 @@ tree:
           requests: 2.1999999999999997
           cpu/thermal-design-power: 60
           grid/carbon-intensity: 480
-          device/emissions-embodied: 153.312
+          device/emissions-embodied: 1533.12
           time-reserved: 2160.2
-          device/expected-lifespan: 9460800
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0.22425
@@ -877,11 +1014,17 @@ tree:
           cpu-energy-raw: 0.000031145833333333336
           vcpu-ratio: 8
           cpu-energy-kwh: 0.000003893229166666667
-          carbon-embodied: 0.000006076864535768645
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0.02378234398782344
           carbon-operational: 0.0031145833333333334
-          carbon: 0.003120660197869102
-          sci: 0.0014184819081223194
-        - timestamp: "2023-12-12T00:00:45.000Z"
+          carbon: 0.02689692732115677
+          sci: 0.01222587605507126
+        - timestamp: '2023-12-12T00:00:45.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -890,9 +1033,9 @@ tree:
           requests: 0
           cpu/thermal-design-power: 0
           grid/carbon-intensity: 0
-          device/emissions-embodied: 0
+          device/emissions-embodied: 1533.12
           time-reserved: 0.8
-          device/expected-lifespan: 0
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0
@@ -901,11 +1044,17 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 8
           cpu-energy-kwh: 0
-          carbon-embodied: 0
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0
           carbon-operational: 0
           carbon: 0
           sci: 0
-        - timestamp: "2023-12-12T00:00:50.000Z"
+        - timestamp: '2023-12-12T00:00:50.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -914,9 +1063,9 @@ tree:
           requests: 0
           cpu/thermal-design-power: 0
           grid/carbon-intensity: 0
-          device/emissions-embodied: 0
+          device/emissions-embodied: 1533.12
           time-reserved: 0.8
-          device/expected-lifespan: 0
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0
@@ -925,11 +1074,17 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 8
           cpu-energy-kwh: 0
-          carbon-embodied: 0
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0
           carbon-operational: 0
           carbon: 0
           sci: 0
-        - timestamp: "2023-12-12T00:00:55.000Z"
+        - timestamp: '2023-12-12T00:00:55.000Z'
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
@@ -938,9 +1093,9 @@ tree:
           requests: 0
           cpu/thermal-design-power: 0
           grid/carbon-intensity: 0
-          device/emissions-embodied: 0
+          device/emissions-embodied: 1533.12
           time-reserved: 0.8
-          device/expected-lifespan: 0
+          device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
           cpu-factor: 0
@@ -949,36 +1104,18 @@ tree:
           cpu-energy-raw: 0
           vcpu-ratio: 8
           cpu-energy-kwh: 0
-          carbon-embodied: 0
-          carbon-operational: 0
-          carbon: 0
-          sci: 0
-        - timestamp: "2023-12-12T00:01:00.000Z"
-          duration: 1
-          cloud/instance-type: A1
-          cloud/region: uk-west
-          cpu/utilization: 0
-          network/energy: 0
-          requests: 0
-          cpu/thermal-design-power: 0
-          grid/carbon-intensity: 0
-          device/emissions-embodied: 0
-          time-reserved: 1
-          device/expected-lifespan: 0
-          vcpus-allocated: 1
-          vcpus-total: 8
-          cpu-factor: 0
-          cpu-wattage: 0
-          cpu-wattage-times-duration: 0
-          cpu-energy-raw: 0
-          vcpu-ratio: 8
-          cpu-energy-kwh: 0
-          carbon-embodied: 0
+          vCPUs: 1
+          memory: 16
+          ssd: 0
+          hdd: 0
+          gpu: 0
+          usage-ratio: 1
+          embodied-carbon: 0
           carbon-operational: 0
           carbon: 0
           sci: 0
       aggregated:
-        carbon: 0.04652112950279046
+        carbon: 0.3873142916032471
     child-2:
       children:
         child-2-0:
@@ -1004,28 +1141,28 @@ tree:
               - time-sync
               - sci
           inputs:
-            - timestamp: "2023-12-12T00:00:00.000Z"
+            - timestamp: '2023-12-12T00:00:00.000Z'
               cloud/instance-type: A1
               cloud/region: uk-west
               duration: 1
               cpu/utilization: 50
               network/energy: 0.000001
               requests: 50
-            - timestamp: "2023-12-12T00:00:01.000Z"
+            - timestamp: '2023-12-12T00:00:01.000Z'
               duration: 5
               cpu/utilization: 20
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 0.000001
               requests: 65
-            - timestamp: "2023-12-12T00:00:06.000Z"
+            - timestamp: '2023-12-12T00:00:06.000Z'
               duration: 7
               cpu/utilization: 15
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 0.000001
               requests: 80
-            - timestamp: "2023-12-12T00:00:13.000Z"
+            - timestamp: '2023-12-12T00:00:13.000Z'
               duration: 30
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1033,7 +1170,7 @@ tree:
               network/energy: 0.000001
               requests: 40
           outputs:
-            - timestamp: "2023-12-12T00:00:00.000Z"
+            - timestamp: '2023-12-12T00:00:00.000Z'
               cloud/instance-type: A1
               cloud/region: uk-west
               duration: 5
@@ -1042,9 +1179,9 @@ tree:
               requests: 102
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 2759.6159999999995
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 170294400
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.4065
@@ -1053,11 +1190,17 @@ tree:
               cpu-energy-raw: 0.00006833333333333335
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000008541666666666668
-              carbon-embodied: 0.000010128107559614409
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970573
               carbon-operational: 0.006833333333333334
-              carbon: 0.0068434614408929475
-              sci: 0.00006709275922444067
-            - timestamp: "2023-12-12T00:00:05.000Z"
+              carbon: 0.04647057331303907
+              sci: 0.00045559385601018696
+            - timestamp: '2023-12-12T00:00:05.000Z'
               duration: 5
               cpu/utilization: 13
               cloud/instance-type: A1
@@ -1066,9 +1209,9 @@ tree:
               requests: 58.71428571428572
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 1182.6925714285712
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 72983314.28571428
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.30975
@@ -1077,11 +1220,17 @@ tree:
               cpu-energy-raw: 0.00005340277777777778
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006675347222222222
-              carbon-embodied: 0.000010128107559614407
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970574
               carbon-operational: 0.005340277777777777
-              carbon: 0.005350405885337391
-              sci: 0.0000911261343001502
-            - timestamp: "2023-12-12T00:00:10.000Z"
+              carbon: 0.044977517757483515
+              sci: 0.0007660404484242933
+            - timestamp: '2023-12-12T00:00:10.000Z'
               duration: 5
               cpu/utilization: 12
               cloud/instance-type: A1
@@ -1090,9 +1239,9 @@ tree:
               requests: 36.952380952380956
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 759.2594285714285
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 46853485.71428572
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.29900000000000004
@@ -1101,11 +1250,17 @@ tree:
               cpu-energy-raw: 0.00005190972222222222
               vcpu-ratio: 8
               cpu-energy-kwh: 0.0000064887152777777775
-              carbon-embodied: 0.000010128107559614407
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970574
               carbon-operational: 0.005190972222222222
-              carbon: 0.0052011003297818366
-              sci: 0.00014075142645028166
-            - timestamp: "2023-12-12T00:00:15.000Z"
+              carbon: 0.04482821220192795
+              sci: 0.0012131346085573285
+            - timestamp: '2023-12-12T00:00:15.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1114,9 +1269,9 @@ tree:
               requests: 6.666666666666666
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 255.51999999999998
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 15768000
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.29900000000000004
@@ -1125,11 +1280,17 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
-              carbon-embodied: 0.000010128107559614409
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
-              carbon: 0.005201100329781837
-              sci: 0.0007801650494672756
-            - timestamp: "2023-12-12T00:00:20.000Z"
+              carbon: 0.04482821220192795
+              sci: 0.006724231830289193
+            - timestamp: '2023-12-12T00:00:20.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1138,9 +1299,9 @@ tree:
               requests: 6.666666666666666
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 255.51999999999998
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 15768000
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.29900000000000004
@@ -1149,11 +1310,17 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
-              carbon-embodied: 0.000010128107559614409
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
-              carbon: 0.005201100329781837
-              sci: 0.0007801650494672756
-            - timestamp: "2023-12-12T00:00:25.000Z"
+              carbon: 0.04482821220192795
+              sci: 0.006724231830289193
+            - timestamp: '2023-12-12T00:00:25.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1162,9 +1329,9 @@ tree:
               requests: 6.666666666666666
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 255.51999999999998
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 15768000
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.29900000000000004
@@ -1173,11 +1340,17 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
-              carbon-embodied: 0.000010128107559614409
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
-              carbon: 0.005201100329781837
-              sci: 0.0007801650494672756
-            - timestamp: "2023-12-12T00:00:30.000Z"
+              carbon: 0.04482821220192795
+              sci: 0.006724231830289193
+            - timestamp: '2023-12-12T00:00:30.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1186,9 +1359,9 @@ tree:
               requests: 6.666666666666666
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 255.51999999999998
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 15768000
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.29900000000000004
@@ -1197,11 +1370,17 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
-              carbon-embodied: 0.000010128107559614409
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
-              carbon: 0.005201100329781837
-              sci: 0.0007801650494672756
-            - timestamp: "2023-12-12T00:00:35.000Z"
+              carbon: 0.04482821220192795
+              sci: 0.006724231830289193
+            - timestamp: '2023-12-12T00:00:35.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1210,9 +1389,9 @@ tree:
               requests: 6.666666666666666
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 255.51999999999998
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 15768000
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.29900000000000004
@@ -1221,11 +1400,17 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
-              carbon-embodied: 0.000010128107559614409
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
-              carbon: 0.005201100329781837
-              sci: 0.0007801650494672756
-            - timestamp: "2023-12-12T00:00:40.000Z"
+              carbon: 0.04482821220192795
+              sci: 0.006724231830289193
+            - timestamp: '2023-12-12T00:00:40.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1234,9 +1419,9 @@ tree:
               requests: 4
               cpu/thermal-design-power: 60
               grid/carbon-intensity: 480
-              device/emissions-embodied: 153.312
+              device/emissions-embodied: 1533.12
               time-reserved: 2160.2
-              device/expected-lifespan: 9460800
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.22425
@@ -1245,11 +1430,17 @@ tree:
               cpu-energy-raw: 0.000031145833333333336
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000003893229166666667
-              carbon-embodied: 0.000006076864535768645
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.02378234398782344
               carbon-operational: 0.0031145833333333334
-              carbon: 0.003120660197869102
-              sci: 0.0007801650494672755
-            - timestamp: "2023-12-12T00:00:45.000Z"
+              carbon: 0.02689692732115677
+              sci: 0.006724231830289192
+            - timestamp: '2023-12-12T00:00:45.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1258,9 +1449,9 @@ tree:
               requests: 0
               cpu/thermal-design-power: 0
               grid/carbon-intensity: 0
-              device/emissions-embodied: 0
+              device/emissions-embodied: 1533.12
               time-reserved: 0.8
-              device/expected-lifespan: 0
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0
@@ -1269,11 +1460,17 @@ tree:
               cpu-energy-raw: 0
               vcpu-ratio: 8
               cpu-energy-kwh: 0
-              carbon-embodied: 0
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0
               carbon-operational: 0
               carbon: 0
               sci: 0
-            - timestamp: "2023-12-12T00:00:50.000Z"
+            - timestamp: '2023-12-12T00:00:50.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1282,9 +1479,9 @@ tree:
               requests: 0
               cpu/thermal-design-power: 0
               grid/carbon-intensity: 0
-              device/emissions-embodied: 0
+              device/emissions-embodied: 1533.12
               time-reserved: 0.8
-              device/expected-lifespan: 0
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0
@@ -1293,11 +1490,17 @@ tree:
               cpu-energy-raw: 0
               vcpu-ratio: 8
               cpu-energy-kwh: 0
-              carbon-embodied: 0
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0
               carbon-operational: 0
               carbon: 0
               sci: 0
-            - timestamp: "2023-12-12T00:00:55.000Z"
+            - timestamp: '2023-12-12T00:00:55.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1306,9 +1509,9 @@ tree:
               requests: 0
               cpu/thermal-design-power: 0
               grid/carbon-intensity: 0
-              device/emissions-embodied: 0
+              device/emissions-embodied: 1533.12
               time-reserved: 0.8
-              device/expected-lifespan: 0
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0
@@ -1317,36 +1520,18 @@ tree:
               cpu-energy-raw: 0
               vcpu-ratio: 8
               cpu-energy-kwh: 0
-              carbon-embodied: 0
-              carbon-operational: 0
-              carbon: 0
-              sci: 0
-            - timestamp: "2023-12-12T00:01:00.000Z"
-              duration: 1
-              cloud/instance-type: A1
-              cloud/region: uk-west
-              cpu/utilization: 0
-              network/energy: 0
-              requests: 0
-              cpu/thermal-design-power: 0
-              grid/carbon-intensity: 0
-              device/emissions-embodied: 0
-              time-reserved: 1
-              device/expected-lifespan: 0
-              vcpus-allocated: 1
-              vcpus-total: 8
-              cpu-factor: 0
-              cpu-wattage: 0
-              cpu-wattage-times-duration: 0
-              cpu-energy-raw: 0
-              vcpu-ratio: 8
-              cpu-energy-kwh: 0
-              carbon-embodied: 0
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0
               carbon-operational: 0
               carbon: 0
               sci: 0
           aggregated:
-            carbon: 0.04652112950279046
+            carbon: 0.3873142916032471
         child-2-1:
           defaults:
             cpu/thermal-design-power: 100
@@ -1370,28 +1555,28 @@ tree:
               - time-sync
               - sci
           inputs:
-            - timestamp: "2023-12-12T00:00:00.000Z"
+            - timestamp: '2023-12-12T00:00:00.000Z'
               cloud/instance-type: A1
               cloud/region: uk-west
               duration: 1
               cpu/utilization: 50
               network/energy: 0.000001
               requests: 50
-            - timestamp: "2023-12-12T00:00:01.000Z"
+            - timestamp: '2023-12-12T00:00:01.000Z'
               duration: 5
               cpu/utilization: 20
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 0.000001
               requests: 50
-            - timestamp: "2023-12-12T00:00:06.000Z"
+            - timestamp: '2023-12-12T00:00:06.000Z'
               duration: 7
               cpu/utilization: 15
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 0.000001
               requests: 60
-            - timestamp: "2023-12-12T00:00:13.000Z"
+            - timestamp: '2023-12-12T00:00:13.000Z'
               duration: 30
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1399,7 +1584,7 @@ tree:
               network/energy: 0.000001
               requests: 40
           outputs:
-            - timestamp: "2023-12-12T00:00:00.000Z"
+            - timestamp: '2023-12-12T00:00:00.000Z'
               cloud/instance-type: A1
               cloud/region: uk-west
               duration: 5
@@ -1408,9 +1593,9 @@ tree:
               requests: 90
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 2759.6159999999995
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 170294400
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.4065
@@ -1419,11 +1604,17 @@ tree:
               cpu-energy-raw: 0.00006833333333333335
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000008541666666666668
-              carbon-embodied: 0.000010128107559614409
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970573
               carbon-operational: 0.006833333333333334
-              carbon: 0.0068434614408929475
-              sci: 0.00007603846045436609
-            - timestamp: "2023-12-12T00:00:05.000Z"
+              carbon: 0.04647057331303907
+              sci: 0.0005163397034782119
+            - timestamp: '2023-12-12T00:00:05.000Z'
               duration: 5
               cpu/utilization: 13
               cloud/instance-type: A1
@@ -1432,9 +1623,9 @@ tree:
               requests: 44.28571428571428
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 1182.6925714285712
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 72983314.28571428
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.30975
@@ -1443,11 +1634,17 @@ tree:
               cpu-energy-raw: 0.00005340277777777778
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006675347222222222
-              carbon-embodied: 0.000010128107559614407
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970574
               carbon-operational: 0.005340277777777777
-              carbon: 0.005350405885337391
-              sci: 0.00012081561676568304
-            - timestamp: "2023-12-12T00:00:10.000Z"
+              carbon: 0.044977517757483515
+              sci: 0.00101562136871737
+            - timestamp: '2023-12-12T00:00:10.000Z'
               duration: 5
               cpu/utilization: 12
               cloud/instance-type: A1
@@ -1456,9 +1653,9 @@ tree:
               requests: 28.38095238095238
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 759.2594285714285
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 46853485.71428572
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.29900000000000004
@@ -1467,11 +1664,17 @@ tree:
               cpu-energy-raw: 0.00005190972222222222
               vcpu-ratio: 8
               cpu-energy-kwh: 0.0000064887152777777775
-              carbon-embodied: 0.000010128107559614407
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970574
               carbon-operational: 0.005190972222222222
-              carbon: 0.0052011003297818366
-              sci: 0.0001832602465191587
-            - timestamp: "2023-12-12T00:00:15.000Z"
+              carbon: 0.04482821220192795
+              sci: 0.0015795175440276629
+            - timestamp: '2023-12-12T00:00:15.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1480,9 +1683,9 @@ tree:
               requests: 6.666666666666666
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 255.51999999999998
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 15768000
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.29900000000000004
@@ -1491,11 +1694,17 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
-              carbon-embodied: 0.000010128107559614409
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
-              carbon: 0.005201100329781837
-              sci: 0.0007801650494672756
-            - timestamp: "2023-12-12T00:00:20.000Z"
+              carbon: 0.04482821220192795
+              sci: 0.006724231830289193
+            - timestamp: '2023-12-12T00:00:20.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1504,9 +1713,9 @@ tree:
               requests: 6.666666666666666
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 255.51999999999998
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 15768000
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.29900000000000004
@@ -1515,11 +1724,17 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
-              carbon-embodied: 0.000010128107559614409
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
-              carbon: 0.005201100329781837
-              sci: 0.0007801650494672756
-            - timestamp: "2023-12-12T00:00:25.000Z"
+              carbon: 0.04482821220192795
+              sci: 0.006724231830289193
+            - timestamp: '2023-12-12T00:00:25.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1528,9 +1743,9 @@ tree:
               requests: 6.666666666666666
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 255.51999999999998
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 15768000
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.29900000000000004
@@ -1539,11 +1754,17 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
-              carbon-embodied: 0.000010128107559614409
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
-              carbon: 0.005201100329781837
-              sci: 0.0007801650494672756
-            - timestamp: "2023-12-12T00:00:30.000Z"
+              carbon: 0.04482821220192795
+              sci: 0.006724231830289193
+            - timestamp: '2023-12-12T00:00:30.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1552,9 +1773,9 @@ tree:
               requests: 6.666666666666666
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 255.51999999999998
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 15768000
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.29900000000000004
@@ -1563,11 +1784,17 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
-              carbon-embodied: 0.000010128107559614409
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
-              carbon: 0.005201100329781837
-              sci: 0.0007801650494672756
-            - timestamp: "2023-12-12T00:00:35.000Z"
+              carbon: 0.04482821220192795
+              sci: 0.006724231830289193
+            - timestamp: '2023-12-12T00:00:35.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1576,9 +1803,9 @@ tree:
               requests: 6.666666666666666
               cpu/thermal-design-power: 80
               grid/carbon-intensity: 640
-              device/emissions-embodied: 255.51999999999998
+              device/emissions-embodied: 1533.12
               time-reserved: 2880
-              device/expected-lifespan: 15768000
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.29900000000000004
@@ -1587,11 +1814,17 @@ tree:
               cpu-energy-raw: 0.00005190972222222223
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000006488715277777778
-              carbon-embodied: 0.000010128107559614409
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.03963723997970573
               carbon-operational: 0.005190972222222222
-              carbon: 0.005201100329781837
-              sci: 0.0007801650494672756
-            - timestamp: "2023-12-12T00:00:40.000Z"
+              carbon: 0.04482821220192795
+              sci: 0.006724231830289193
+            - timestamp: '2023-12-12T00:00:40.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1600,9 +1833,9 @@ tree:
               requests: 4
               cpu/thermal-design-power: 60
               grid/carbon-intensity: 480
-              device/emissions-embodied: 153.312
+              device/emissions-embodied: 1533.12
               time-reserved: 2160.2
-              device/expected-lifespan: 9460800
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0.22425
@@ -1611,11 +1844,17 @@ tree:
               cpu-energy-raw: 0.000031145833333333336
               vcpu-ratio: 8
               cpu-energy-kwh: 0.000003893229166666667
-              carbon-embodied: 0.000006076864535768645
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0.02378234398782344
               carbon-operational: 0.0031145833333333334
-              carbon: 0.003120660197869102
-              sci: 0.0007801650494672755
-            - timestamp: "2023-12-12T00:00:45.000Z"
+              carbon: 0.02689692732115677
+              sci: 0.006724231830289192
+            - timestamp: '2023-12-12T00:00:45.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1624,9 +1863,9 @@ tree:
               requests: 0
               cpu/thermal-design-power: 0
               grid/carbon-intensity: 0
-              device/emissions-embodied: 0
+              device/emissions-embodied: 1533.12
               time-reserved: 0.8
-              device/expected-lifespan: 0
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0
@@ -1635,11 +1874,17 @@ tree:
               cpu-energy-raw: 0
               vcpu-ratio: 8
               cpu-energy-kwh: 0
-              carbon-embodied: 0
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0
               carbon-operational: 0
               carbon: 0
               sci: 0
-            - timestamp: "2023-12-12T00:00:50.000Z"
+            - timestamp: '2023-12-12T00:00:50.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1648,9 +1893,9 @@ tree:
               requests: 0
               cpu/thermal-design-power: 0
               grid/carbon-intensity: 0
-              device/emissions-embodied: 0
+              device/emissions-embodied: 1533.12
               time-reserved: 0.8
-              device/expected-lifespan: 0
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0
@@ -1659,11 +1904,17 @@ tree:
               cpu-energy-raw: 0
               vcpu-ratio: 8
               cpu-energy-kwh: 0
-              carbon-embodied: 0
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0
               carbon-operational: 0
               carbon: 0
               sci: 0
-            - timestamp: "2023-12-12T00:00:55.000Z"
+            - timestamp: '2023-12-12T00:00:55.000Z'
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
@@ -1672,9 +1923,9 @@ tree:
               requests: 0
               cpu/thermal-design-power: 0
               grid/carbon-intensity: 0
-              device/emissions-embodied: 0
+              device/emissions-embodied: 1533.12
               time-reserved: 0.8
-              device/expected-lifespan: 0
+              device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
               cpu-factor: 0
@@ -1683,117 +1934,93 @@ tree:
               cpu-energy-raw: 0
               vcpu-ratio: 8
               cpu-energy-kwh: 0
-              carbon-embodied: 0
-              carbon-operational: 0
-              carbon: 0
-              sci: 0
-            - timestamp: "2023-12-12T00:01:00.000Z"
-              duration: 1
-              cloud/instance-type: A1
-              cloud/region: uk-west
-              cpu/utilization: 0
-              network/energy: 0
-              requests: 0
-              cpu/thermal-design-power: 0
-              grid/carbon-intensity: 0
-              device/emissions-embodied: 0
-              time-reserved: 1
-              device/expected-lifespan: 0
-              vcpus-allocated: 1
-              vcpus-total: 8
-              cpu-factor: 0
-              cpu-wattage: 0
-              cpu-wattage-times-duration: 0
-              cpu-energy-raw: 0
-              vcpu-ratio: 8
-              cpu-energy-kwh: 0
-              carbon-embodied: 0
+              vCPUs: 1
+              memory: 16
+              ssd: 0
+              hdd: 0
+              gpu: 0
+              usage-ratio: 1
+              embodied-carbon: 0
               carbon-operational: 0
               carbon: 0
               sci: 0
           aggregated:
-            carbon: 0.04652112950279046
+            carbon: 0.3873142916032471
       outputs:
-        - carbon: 0.013686922881785895
-          timestamp: "2023-12-12T00:00:00.000Z"
+        - carbon: 0.09294114662607814
+          timestamp: '2023-12-12T00:00:00.000Z'
           duration: 5
-        - carbon: 0.010700811770674782
-          timestamp: "2023-12-12T00:00:05.000Z"
+        - carbon: 0.08995503551496703
+          timestamp: '2023-12-12T00:00:05.000Z'
           duration: 5
-        - carbon: 0.010402200659563673
-          timestamp: "2023-12-12T00:00:10.000Z"
+        - carbon: 0.0896564244038559
+          timestamp: '2023-12-12T00:00:10.000Z'
           duration: 5
-        - carbon: 0.010402200659563675
-          timestamp: "2023-12-12T00:00:15.000Z"
+        - carbon: 0.0896564244038559
+          timestamp: '2023-12-12T00:00:15.000Z'
           duration: 5
-        - carbon: 0.010402200659563675
-          timestamp: "2023-12-12T00:00:20.000Z"
+        - carbon: 0.0896564244038559
+          timestamp: '2023-12-12T00:00:20.000Z'
           duration: 5
-        - carbon: 0.010402200659563675
-          timestamp: "2023-12-12T00:00:25.000Z"
+        - carbon: 0.0896564244038559
+          timestamp: '2023-12-12T00:00:25.000Z'
           duration: 5
-        - carbon: 0.010402200659563675
-          timestamp: "2023-12-12T00:00:30.000Z"
+        - carbon: 0.0896564244038559
+          timestamp: '2023-12-12T00:00:30.000Z'
           duration: 5
-        - carbon: 0.010402200659563675
-          timestamp: "2023-12-12T00:00:35.000Z"
+        - carbon: 0.0896564244038559
+          timestamp: '2023-12-12T00:00:35.000Z'
           duration: 5
-        - carbon: 0.006241320395738204
-          timestamp: "2023-12-12T00:00:40.000Z"
-          duration: 5
-        - carbon: 0
-          timestamp: "2023-12-12T00:00:45.000Z"
+        - carbon: 0.05379385464231354
+          timestamp: '2023-12-12T00:00:40.000Z'
           duration: 5
         - carbon: 0
-          timestamp: "2023-12-12T00:00:50.000Z"
+          timestamp: '2023-12-12T00:00:45.000Z'
           duration: 5
         - carbon: 0
-          timestamp: "2023-12-12T00:00:55.000Z"
+          timestamp: '2023-12-12T00:00:50.000Z'
           duration: 5
         - carbon: 0
-          timestamp: "2023-12-12T00:01:00.000Z"
-          duration: 1
+          timestamp: '2023-12-12T00:00:55.000Z'
+          duration: 5
       aggregated:
-        carbon: 0.09304225900558093
+        carbon: 0.7746285832064942
   outputs:
-    - carbon: 0.02737384576357179
-      timestamp: "2023-12-12T00:00:00.000Z"
+    - carbon: 0.18588229325215627
+      timestamp: '2023-12-12T00:00:00.000Z'
       duration: 5
-    - carbon: 0.021401623541349564
-      timestamp: "2023-12-12T00:00:05.000Z"
+    - carbon: 0.17991007102993406
+      timestamp: '2023-12-12T00:00:05.000Z'
       duration: 5
-    - carbon: 0.020804401319127346
-      timestamp: "2023-12-12T00:00:10.000Z"
+    - carbon: 0.1793128488077118
+      timestamp: '2023-12-12T00:00:10.000Z'
       duration: 5
-    - carbon: 0.02080440131912735
-      timestamp: "2023-12-12T00:00:15.000Z"
+    - carbon: 0.1793128488077118
+      timestamp: '2023-12-12T00:00:15.000Z'
       duration: 5
-    - carbon: 0.02080440131912735
-      timestamp: "2023-12-12T00:00:20.000Z"
+    - carbon: 0.1793128488077118
+      timestamp: '2023-12-12T00:00:20.000Z'
       duration: 5
-    - carbon: 0.02080440131912735
-      timestamp: "2023-12-12T00:00:25.000Z"
+    - carbon: 0.1793128488077118
+      timestamp: '2023-12-12T00:00:25.000Z'
       duration: 5
-    - carbon: 0.02080440131912735
-      timestamp: "2023-12-12T00:00:30.000Z"
+    - carbon: 0.1793128488077118
+      timestamp: '2023-12-12T00:00:30.000Z'
       duration: 5
-    - carbon: 0.02080440131912735
-      timestamp: "2023-12-12T00:00:35.000Z"
+    - carbon: 0.1793128488077118
+      timestamp: '2023-12-12T00:00:35.000Z'
       duration: 5
-    - carbon: 0.012482640791476408
-      timestamp: "2023-12-12T00:00:40.000Z"
-      duration: 5
-    - carbon: 0
-      timestamp: "2023-12-12T00:00:45.000Z"
+    - carbon: 0.10758770928462708
+      timestamp: '2023-12-12T00:00:40.000Z'
       duration: 5
     - carbon: 0
-      timestamp: "2023-12-12T00:00:50.000Z"
+      timestamp: '2023-12-12T00:00:45.000Z'
       duration: 5
     - carbon: 0
-      timestamp: "2023-12-12T00:00:55.000Z"
+      timestamp: '2023-12-12T00:00:50.000Z'
       duration: 5
     - carbon: 0
-      timestamp: "2023-12-12T00:01:00.000Z"
-      duration: 1
+      timestamp: '2023-12-12T00:00:55.000Z'
+      duration: 5
   aggregated:
-    carbon: 0.18608451801116185
+    carbon: 1.5492571664129884

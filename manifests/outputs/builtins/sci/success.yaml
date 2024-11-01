@@ -6,7 +6,7 @@ initialize:
     sci:
       path: builtin
       method: Sci
-      global-config:
+      config:
         functional-unit: requests
 execution:
   command: >-

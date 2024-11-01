@@ -1,6 +1,9 @@
 import * as path from 'node:path';
 
 import {ERRORS} from '@grnsft/if-core/utils';
+import {PluginInterface} from '@grnsft/if-core/types';
+
+import {storeAggregationMetrics} from './aggregate';
 
 import {logger} from '../../common/util/logger';
 import {memoizedLog} from '../util/log-memoize';
@@ -8,10 +11,8 @@ import {pluginStorage} from '../util/plugin-storage';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {PluginInterface} from '../types/interface';
 import {Context, PluginOptions} from '../../common/types/manifest';
 import {PluginStorageInterface} from '../types/plugin-storage';
-import {storeAggregationMetrics} from './aggregate';
 
 const {
   PluginInitializationError,
@@ -42,7 +43,7 @@ const importModuleFrom = async (path: string) => {
 };
 
 /**
- * Imports `module` from given `path`, then checks if it's `ModelPluginInterface` extension.
+ * Imports `module` from given `path` and returns requested `method`.
  */
 const importAndVerifyModule = async (method: string, path: string) => {
   const pluginModule = await importModuleFrom(path);
@@ -56,7 +57,7 @@ const importAndVerifyModule = async (method: string, path: string) => {
  * Imports module, then checks if it's a valid plugin.
  */
 const handModule = (method: string, pluginPath: string) => {
-  console.debug(LOADING_PLUGIN_FROM_PATH(method, pluginPath));
+  console.debug(LOADING_PLUGIN_FROM_PATH(method, pluginPath), '\n');
 
   if (pluginPath === 'builtin') {
     pluginPath = path.normalize(`${__dirname}/../builtins`);
@@ -75,7 +76,7 @@ const handModule = (method: string, pluginPath: string) => {
 };
 
 /**
- * Initializes plugin with global config.
+ * Initializes plugin with config.
  */
 const initPlugin = async (
   initPluginParams: PluginOptions
@@ -83,11 +84,10 @@ const initPlugin = async (
   const {
     method,
     path,
-    'global-config': globalConfig,
+    mapping,
+    config,
     'parameter-metadata': parameterMetadata,
   } = initPluginParams!;
-
-  console.debug(INITIALIZING_PLUGIN(method));
 
   if (!method) {
     throw new MissingPluginMethodError(MISSING_METHOD);
@@ -99,26 +99,32 @@ const initPlugin = async (
 
   const plugin = await handModule(method, path);
 
-  return plugin(globalConfig, parameterMetadata);
+  return plugin(config, parameterMetadata, mapping);
 };
 
 /**
  * Registers all plugins from `manifest`.`initialize` property.
+ * 1. Initalizes plugin storage.
+ * 2. Iterates over plugin names array.
+ * 3. While iteration, initalizes current plugin, gathers it's parameters (input/output).
+ *    Then stores the aggregation metrics for each parameter to override stub values.
  */
 export const initialize = async (
   context: Context
 ): Promise<PluginStorageInterface> => {
-  console.debug(INITIALIZING_PLUGINS);
+  console.debug(INITIALIZING_PLUGINS, '\n');
   const {plugins} = context.initialize;
   const storage = pluginStorage();
 
   for await (const pluginName of Object.keys(plugins)) {
+    console.debug(INITIALIZING_PLUGIN(pluginName));
+
     const plugin = await initPlugin(plugins[pluginName]);
     const parameters = {...plugin.metadata.inputs, ...plugin.metadata.outputs};
 
-    Object.keys(parameters).forEach(key => {
+    Object.keys(parameters).forEach(current => {
       storeAggregationMetrics({
-        [key]: parameters[key]['aggregation-method'],
+        [current]: parameters[current]['aggregation-method'],
       });
     });
 

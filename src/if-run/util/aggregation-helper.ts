@@ -3,51 +3,57 @@ import {PluginParams} from '@grnsft/if-core/types';
 
 import {CONFIG, STRINGS} from '../config';
 
-import {AggregationMetric, AggregationResult} from '../types/aggregation';
+import {AggregationResult} from '../types/aggregation';
 
-import {getAggregationMethod} from '../lib/aggregate';
+import {getAggregationInfoFor} from '../lib/aggregate';
 
 const {MissingAggregationParamError} = ERRORS;
 const {METRIC_MISSING} = STRINGS;
-const {AGGREGATION_ADDITIONAL_PARAMS} = CONFIG;
+const {AGGREGATION_TIME_METRICS} = CONFIG;
 
 /**
- * Aggregates child node level metrics. Validates if metric aggregation type is `none`, then rejects with error.
- * Appends aggregation additional params to metrics. Otherwise iterates over inputs by aggregating per given `metrics`.
+ * Aggregates child node level metrics. Appends aggregation additional params to metrics.
+ * Otherwise iterates over outputs by aggregating per given `metrics`.
  */
-export const aggregateInputsIntoOne = (
-  inputs: PluginParams[],
-  metrics: AggregationMetric[],
+export const aggregateOutputsIntoOne = (
+  outputs: PluginParams[],
+  metrics: string[],
   isTemporal?: boolean
 ) => {
-  const metricsKeys: string[] = metrics.map(metric => Object.keys(metric)[0]);
-  const extendedMetrics = [...metricsKeys, ...AGGREGATION_ADDITIONAL_PARAMS];
+  const metricsWithTime = metrics.concat(AGGREGATION_TIME_METRICS);
 
-  return inputs.reduce((acc, input, index) => {
-    for (const metric of extendedMetrics) {
-      if (!(metric in input)) {
+  return outputs.reduce((acc, output, index) => {
+    for (const metric of metricsWithTime) {
+      if (!(metric in output)) {
         throw new MissingAggregationParamError(METRIC_MISSING(metric, index));
       }
 
       /** Checks if metric is timestamp or duration, then adds to aggregated value. */
-      if (AGGREGATION_ADDITIONAL_PARAMS.includes(metric)) {
+      if (AGGREGATION_TIME_METRICS.includes(metric)) {
         if (isTemporal) {
-          acc[metric] = input[metric];
+          acc[metric] = output[metric];
         }
       } else {
-        const method = getAggregationMethod(metric);
+        const aggregationParams = getAggregationInfoFor(metric);
+        /** Checks either its a temporal aggregation (vertical), then chooses `component`, otherwise `time`.  */
+        const aggregationType = isTemporal ? 'component' : 'time';
 
-        if (!method) {
-          return acc;
+        if (aggregationParams[aggregationType] === 'none') {
+          continue;
+        }
+
+        if (aggregationParams[aggregationType] === 'copy') {
+          acc[metric] = output[metric];
+          continue;
         }
 
         acc[metric] = acc[metric] ?? 0;
-        acc[metric] += parseFloat(input[metric]);
+        acc[metric] += parseFloat(output[metric]);
 
         /** Checks for the last iteration. */
-        if (index === inputs.length - 1) {
-          if (method === 'avg') {
-            acc[metric] /= inputs.length;
+        if (index === outputs.length - 1) {
+          if (aggregationParams[aggregationType] === 'avg') {
+            acc[metric] /= outputs.length;
           }
         }
       }
