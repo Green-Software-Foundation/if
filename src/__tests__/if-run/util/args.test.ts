@@ -30,12 +30,34 @@ jest.mock('ts-command-line-args', () => ({
           manifest: 'manifest-mock.yaml',
           'no-output': false,
         };
+      case 'no-output-true':
+        return {
+          manifest: 'manifest-mock.yaml',
+          'no-output': true,
+        };
+      case 'append':
+        return {
+          manifest: 'manifest-mock.yaml',
+          append: true,
+        };
       default:
         return {
           manifest: 'mock-manifest.yaml',
           output: 'mock-output',
         };
     }
+  },
+}));
+
+const mockWarn = jest.fn(message => {
+  if (process.env.LOGGER === 'true') {
+    expect(message).toEqual(NO_OUTPUT);
+  }
+});
+
+jest.mock('../../../common/util/logger', () => ({
+  logger: {
+    warn: mockWarn,
   },
 }));
 
@@ -47,8 +69,10 @@ import {ERRORS} from '@grnsft/if-core/utils';
 import {parseIfRunProcessArgs} from '../../../if-run/util/args';
 
 import {STRINGS as COMMON_STRINGS} from '../../../common/config';
+import {STRINGS} from '../../../if-run/config/strings';
 
 const {SOURCE_IS_NOT_YAML, MANIFEST_IS_MISSING} = COMMON_STRINGS;
+const {NO_OUTPUT} = STRINGS;
 const {CliSourceFileError, ParseCliParamsError} = ERRORS;
 
 describe('if-run/util/args: ', () => {
@@ -156,6 +180,45 @@ describe('if-run/util/args: ', () => {
       const expectedResult = {
         inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
         outputOptions: {},
+      };
+
+      expect(response).toEqual(expectedResult);
+    });
+
+    it('executes when `no-output` and manifest persist.', () => {
+      process.env.LOGGER = 'true';
+      process.env.result = 'no-output-true';
+      const manifestPath = 'manifest-mock.yaml';
+
+      const response = parseIfRunProcessArgs();
+      const expectedResult = {
+        inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
+        compute: undefined,
+        debug: undefined,
+        observe: undefined,
+        outputOptions: {
+          noOutput: true,
+        },
+        regroup: undefined,
+      };
+
+      expect.assertions(2);
+      expect(response).toEqual(expectedResult);
+    });
+
+    it('executes when `append` is provided.', () => {
+      process.env.result = 'append';
+      const manifestPath = 'manifest-mock.yaml';
+
+      const response = parseIfRunProcessArgs();
+      const expectedResult = {
+        append: true,
+        inputPath: path.normalize(`${processRunningPath}/${manifestPath}`),
+        compute: undefined,
+        debug: undefined,
+        observe: undefined,
+        outputOptions: {},
+        regroup: undefined,
       };
 
       expect(response).toEqual(expectedResult);
