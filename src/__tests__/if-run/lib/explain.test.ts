@@ -9,10 +9,25 @@ const {ManifestValidationError} = ERRORS;
 const {AGGREGATION_UNITS_NOT_MATCH, AGGREGATION_METHODS_NOT_MATCH} = STRINGS;
 
 describe('lib/explain: ', () => {
+  it('returns empty object when `inputs` and `outputs` of `metadata` are empty.', () => {
+    const mockData = {
+      pluginName: 'coefficient',
+      metadata: {
+        inputs: {},
+        outputs: {},
+      },
+    };
+
+    // @ts-ignore
+    addExplainData(mockData);
+    expect.assertions(1);
+    expect(explain()).toEqual({});
+  });
+
   it('missing explain data if `inputs` and `outputs` of `metadata` are `undefined`.', () => {
     const mockData = {
       pluginName: 'divide',
-      metadata: {kind: 'execute', inputs: undefined, outputs: undefined},
+      metadata: {inputs: undefined, outputs: undefined},
     };
 
     addExplainData(mockData);

@@ -2,6 +2,11 @@
 jest.mock('mockavizta', () => require('../../../__mocks__/plugin'), {
   virtual: true,
 });
+
+jest.mock('sci-embodied', () => require('../../../__mocks__/plugin'), {
+  virtual: true,
+});
+
 jest.mock(
   '../../../if-run/builtins',
   () => require('../../../__mocks__/plugin'),
@@ -26,8 +31,8 @@ const {
 } = ERRORS;
 const {MISSING_METHOD, MISSING_PATH, INVALID_MODULE_PATH} = STRINGS;
 
-describe('lib/initalize: ', () => {
-  describe('initalize(): ', () => {
+describe('lib/initialize: ', () => {
+  describe('initialize(): ', () => {
     it('creates instance with get and set methods.', async () => {
       const context = {initialize: {plugins: {}}};
       // @ts-ignore
@@ -210,6 +215,49 @@ describe('lib/initalize: ', () => {
           )
         );
       }
+    });
+
+    it('checks if parameter-metadata is provided.', async () => {
+      const context = {
+        initialize: {
+          plugins: {
+            'sci-embodied': {
+              path: 'sci-embodied',
+              method: 'SciEmbodied',
+              'parameter-metadata': {
+                inputs: {
+                  vCPUs: {
+                    description: 'number of CPUs allocated to an application',
+                    unit: 'CPUs',
+                    'aggregation-method': {
+                      time: 'copy',
+                      component: 'copy',
+                    },
+                  },
+                },
+                outputs: {
+                  'embodied-carbon': {
+                    description:
+                      'embodied carbon for a resource, scaled by usage',
+                    unit: 'gCO2eq',
+                    'aggregation-method': {
+                      time: 'sum',
+                      component: 'sum',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      };
+      // @ts-ignore
+      const storage = await initialize(context);
+
+      const pluginName = Object.keys(context.initialize.plugins)[0];
+      const module = storage.get(pluginName);
+      expect(module).toHaveProperty('execute');
+      expect(module).toHaveProperty('metadata');
     });
   });
 });
