@@ -74,16 +74,16 @@ We perform regular reviews inline with the information provided below.  All rele
 - At least one of the project's primary developers MUST know of common kinds of errors that lead to vulnerabilities in this kind of software, as well as at least one method to counter or mitigate each of them - ✅ 
 
 ### Use basic good cryptographic practices
-- https://www.bestpractices.dev/en/criteria/0#0.crypto_published - ✅ uses HTTPS for WebAPI, N/A for CLI
-- https://www.bestpractices.dev/en/criteria/0#0.crypto_floss - ✅ uses dotnet 8.0 implementations
-- https://www.bestpractices.dev/en/criteria/0#0.crypto_keylength - ✅ uses dotnet 8.0 implementations
-- https://www.bestpractices.dev/en/criteria/0#0.crypto_working - ✅ uses dotnet 8.0 implementations
-- https://www.bestpractices.dev/en/criteria/0#0.crypto_password_storage - ✅ ⚠️  uses dotnet 8.0 implementations
-- https://www.bestpractices.dev/en/criteria/0#0.crypto_random - ✅ uses dotnet 8.0 implementatons for HTTPS
+- https://www.bestpractices.dev/en/criteria/0#0.crypto_published - ✅ n/a
+- https://www.bestpractices.dev/en/criteria/0#0.crypto_floss - ✅ n/a 
+- https://www.bestpractices.dev/en/criteria/0#0.crypto_keylength - ✅ n/a
+- https://www.bestpractices.dev/en/criteria/0#0.crypto_working - ✅ n/a
+- https://www.bestpractices.dev/en/criteria/0#0.crypto_password_storage - ✅ n/a
+- https://www.bestpractices.dev/en/criteria/0#0.crypto_random - ✅ n/a
 
 ### Secured delivery against man-in-the-middle (MITM) attacks
-- Delivery mechanisms that counters MITM - ✅ uses HTTPS
-- Cyrptographic hash NOT retrived over HTTP - ✅  uses HTTPS
+- Delivery mechanisms that counters MITM - ✅ n/a
+- Cyrptographic hash NOT retrived over HTTP - ✅  n/a
 
 ### Publicly known vulnerabilities fixed
 - No unpatched vulnerabilities of medium or higher severity that have been publicly known for more than 60 day - ✅ no such vulnerabilities
@@ -93,7 +93,7 @@ We perform regular reviews inline with the information provided below.  All rele
 
 ## Analysis
 ### Static code analysis
-- At least one FLOSS static code analysis tool - ✅ uses `npm fix` for linting and error surfacing.
+- At least one FLOSS static code analysis tool - ❌.
 - All medium and higher severity exploitable vulnerabilities discovered with static code analysis MUST be fixed in a timely way after they are confirmed - ✅ We have not yet had any exploitable vulnerabilities reported, but the GSF team will respond promptly to any disclosed issues.
 
 ### Dynamic code analysis
