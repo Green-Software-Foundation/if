@@ -330,7 +330,7 @@ describe('builtins/interpolation: ', () => {
         }
       });
 
-      it('throws an when the config is not provided.', async () => {
+      it('throws an error when the config is not provided.', async () => {
         const config = undefined;
         const plugin = Interpolation(config!, parametersMetadata, {});
 

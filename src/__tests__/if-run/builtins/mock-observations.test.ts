@@ -5,7 +5,7 @@ import {MockObservations} from '../../../if-run/builtins/mock-observations';
 import {STRINGS} from '../../../if-run/config';
 
 const {InputValidationError, ConfigError} = ERRORS;
-const {INVALID_MIN_MAX} = STRINGS;
+const {INVALID_MIN_MAX, MISSING_CONFIG} = STRINGS;
 
 describe('builtins/mock-observations: ', () => {
   const parametersMetadata = {
@@ -410,6 +410,19 @@ describe('builtins/mock-observations: ', () => {
             '"generators.common" parameter is expected object, received null. Error code: invalid_type.'
           )
         );
+      }
+    });
+
+    it('throws an error when the config is not provided.', async () => {
+      const config = undefined;
+      const plugin = MockObservations(config!, parametersMetadata, {});
+
+      expect.assertions(2);
+      try {
+        await plugin.execute([]);
+      } catch (error) {
+        expect(error).toBeInstanceOf(ConfigError);
+        expect(error).toEqual(new ConfigError(MISSING_CONFIG));
       }
     });
   });
