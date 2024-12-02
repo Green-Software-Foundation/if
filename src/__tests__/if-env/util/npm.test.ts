@@ -14,6 +14,14 @@ jest.mock('../../../common/util/logger', () => ({
   },
 }));
 
+jest.mock('../../../../package.json', () => ({
+  description: 'Mocked description',
+  author: 'Mocked Author',
+  bugs: {},
+  engines: {},
+  homepage: 'Mocked homepage',
+}));
+
 jest.mock('../../../common/util/helpers', () => {
   const originalModule = jest.requireActual('../../../if-run/util/helpers');
 
@@ -74,6 +82,25 @@ describe('util/npm: ', () => {
 
       expect.assertions(2);
       expect(result).toBe(packageJsonPath);
+    });
+
+    it('returns the node_modules path if it exists.', async () => {
+      const folderPath = path.resolve(__dirname, 'npm-node-test');
+      const packageJsonPath = path.resolve(folderPath, 'package.json');
+      const expectedPath = path.resolve(
+        __dirname,
+        'npm-node-test/node_modules'
+      );
+      const fsRmSpy = jest.spyOn(fs, 'rm');
+
+      isFileExists('false');
+
+      const result = await initPackageJsonIfNotExists(folderPath);
+
+      expect.assertions(3);
+
+      expect(result).toBe(packageJsonPath);
+      expect(fsRmSpy).toHaveBeenCalledWith(expectedPath, {recursive: true});
     });
   });
 
@@ -191,7 +218,29 @@ describe('util/npm: ', () => {
       });
     });
 
-    it('returns an empty object if no matches found', () => {
+    it('extracts a plugin path with its matching version from dependencies.', () => {
+      const plugins: ManifestPlugin = {
+        'cloud-metadata': {
+          path: 'grnsft/if-plugins',
+          method: 'CloudMetadata',
+        },
+      };
+      const dependencies = [
+        '@commitlint/config-conventional@18.6.0',
+        '@grnsft/if-core@0.0.7',
+        'grnsft/if-plugins@v0.3.2',
+        '@jest/globals@29.7.0',
+      ];
+
+      const result = extractPathsWithVersion(plugins, dependencies);
+
+      expect.assertions(1);
+      expect(result).toEqual({
+        'grnsft/if-plugins': '^v0.3.2',
+      });
+    });
+
+    it('returns an empty object if no matches found.', () => {
       const plugins: ManifestPlugin = {
         'cloud-metadata': {
           path: '@grnsft/if-plugins',
@@ -219,6 +268,9 @@ describe('util/npm: ', () => {
 
   describe('updatePackageJsonProperties(): ', () => {
     it('updates the package.json properties correctly.', async () => {
+      process.env.PACKAGE = 'true';
+      jest.unmock('../../../../package.json');
+
       const packageJsonPath = path.join(folderPath, 'package.json-npm1');
 
       const expectedPackageJsonContent = JSON.stringify(
@@ -243,6 +295,67 @@ describe('util/npm: ', () => {
       await updatePackageJsonProperties(packageJsonPath, true);
 
       expect.assertions(8);
+
+      expect(fsReadSpy).toHaveBeenCalledWith(packageJsonPath, 'utf8');
+    });
+
+    it('updates the package.json properties when the name is missing.', async () => {
+      process.env.PACKAGE = 'false';
+
+      const packageJsonPath = path.join(folderPath, 'package.json-npm2');
+
+      const expectedPackageJsonContent = JSON.stringify(
+        {
+          description: 'mock-description',
+          author: {},
+          bugs: {},
+          engines: {},
+          homepage: 'mock-homepage',
+          dependencies: {
+            '@grnsft/if-plugins': '^0.3.3-beta.0',
+          },
+        },
+        null,
+        2
+      );
+
+      const fsReadSpy = jest
+        .spyOn(fs, 'readFile')
+        .mockResolvedValue(expectedPackageJsonContent);
+      await updatePackageJsonProperties(packageJsonPath, true);
+
+      expect.assertions(8);
+
+      expect(fsReadSpy).toHaveBeenCalledWith(packageJsonPath, 'utf8');
+      expect(fs.readFile).toHaveBeenCalledWith(packageJsonPath, 'utf8');
+    });
+
+    it('updates the package.json properties when package.json is empty.', async () => {
+      const packageJsonPath = path.join(folderPath, 'package.json-npm2');
+
+      jest.unmock('../../../../package.json');
+
+      const expectedPackageJsonContent = JSON.stringify(
+        {
+          description: 'mock-description',
+          author: {},
+          bugs: {},
+          engines: {},
+          homepage: 'mock-homepage',
+          dependencies: {
+            '@grnsft/if-plugins': '^0.3.3-beta.0',
+          },
+        },
+        null,
+        2
+      );
+
+      const fsReadSpy = jest
+        .spyOn(fs, 'readFile')
+        .mockResolvedValue(expectedPackageJsonContent);
+      await updatePackageJsonProperties(packageJsonPath, false);
+
+      expect.assertions(7);
 
       expect(fsReadSpy).toHaveBeenCalledWith(packageJsonPath, 'utf8');
     });
