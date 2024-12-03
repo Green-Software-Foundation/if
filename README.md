@@ -3,7 +3,7 @@
 [![Node.js CI](https://github.com/Green-Software-Foundation/if/actions/workflows/nodejs-ci.yml/badge.svg)](https://github.com/Green-Software-Foundation/if/actions/workflows/nodejs-ci.yml)
 
 > [!IMPORTANT]
-> Graduated Project This project is a Graduated Project, supported by the Green Software Foundation. The publicly available version documented in the README is trusted by the GSF. New versions of the project may be released, or it may move to the Maintained or Retired Stage at any moment.
+> Graduated Project: This project is a Graduated Project, supported by the Green Software Foundation. The publicly available version documented in the README is trusted by the GSF. New versions of the project may be released, or it may move to the Maintained or Retired Stage at any moment.
 
 **Our documentation is online at [if.greensoftware.foundation](https://if.greensoftware.foundation/)**
 
