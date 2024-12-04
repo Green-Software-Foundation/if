@@ -137,6 +137,36 @@ describe('builtins/divide: ', () => {
         expect(response).toEqual(expectedResult);
       });
 
+      it('returns a result when `denominator` is arithmetic expression.', async () => {
+        expect.assertions(1);
+        const config = {
+          numerator: 'vcpus-allocated',
+          denominator: '=duration*3',
+          output: 'vcpus-allocated-per-second',
+        };
+
+        const divide = Divide(config, parametersMetadata, {});
+        const input = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'vcpus-allocated': 24,
+          },
+        ];
+        const response = await divide.execute(input);
+
+        const expectedResult = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            duration: 3600,
+            'vcpus-allocated': 24,
+            'vcpus-allocated-per-second': 24 / (3600 * 3),
+          },
+        ];
+
+        expect(response).toEqual(expectedResult);
+      });
+
       it('successfully executes when a parameter contains arithmetic expression.', async () => {
         expect.assertions(1);
 

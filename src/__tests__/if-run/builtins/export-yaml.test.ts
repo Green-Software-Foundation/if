@@ -24,8 +24,8 @@ describe('builtins/export-yaml: ', () => {
       });
     });
 
-    describe('execute', () => {
-      it('returns result with correct arguments', async () => {
+    describe('execute(): ', () => {
+      it('returns result with correct arguments.', async () => {
         const outputPath = 'outputPath.yaml';
 
         await exportYaml.execute(tree, context, outputPath);
@@ -33,6 +33,17 @@ describe('builtins/export-yaml: ', () => {
         expect(saveYamlFileAs).toHaveBeenCalledWith(
           {...context, tree},
           outputPath
+        );
+      });
+
+      it('returns result when path name is without extension.', async () => {
+        const outputPath = 'outputPath';
+
+        await exportYaml.execute(tree, context, outputPath);
+
+        expect(saveYamlFileAs).toHaveBeenCalledWith(
+          {...context, tree},
+          'outputPath.yaml'
         );
       });
 

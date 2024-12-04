@@ -110,5 +110,21 @@ describe('lib/compare: ', () => {
       const expectedResponse = {path: '1', source: undefined, target: 2};
       expect(response).toEqual(expectedResponse);
     });
+
+    it('executes when path is the `initialize`.', () => {
+      const a = {
+        tree: {
+          inputs: [1, 2],
+        },
+      };
+      const b = {
+        tree: {
+          inputs: [1, 2],
+        },
+      };
+
+      const response = compare(a, b, 'initialize');
+      expect(Object.keys(response).length).toEqual(0);
+    });
   });
 });

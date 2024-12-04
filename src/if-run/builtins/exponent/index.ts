@@ -31,10 +31,7 @@ export const Exponent = PluginFactory({
   inputValidation: (input: PluginParams, config: ConfigParams) => {
     const inputParameter = config['input-parameter'];
     const inputData = {
-      [inputParameter]:
-        typeof inputParameter === 'number'
-          ? inputParameter
-          : input[inputParameter],
+      [inputParameter]: input[inputParameter],
     };
     const validationSchema = z.record(z.string(), z.number());
 
@@ -43,7 +40,7 @@ export const Exponent = PluginFactory({
       inputData
     );
   },
-  implementation: async (inputs: PluginParams[], config: ConfigParams = {}) => {
+  implementation: async (inputs: PluginParams[], config: ConfigParams) => {
     const {
       'input-parameter': inputParameter,
       exponent,

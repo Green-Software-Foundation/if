@@ -18,6 +18,10 @@ export const readFile = async (filePath: string) => {
     throw new Error('file not found');
   }
 
+  if (filePath.includes('fail-yaml')) {
+    throw new Error('file not found');
+  }
+
   if (filePath.includes('fail-csv-reader.csv')) {
     return `
 cpu-cores-available,≈ç≈¬˚∆∑∂´®øˆ´cpu-cores-utilized,     ---- cpu-manufacturer,cpu-model-name,cpu-tdp,gpu-count,gpu-model-name,Hardware Information on AWS Documentation & Comments,instance-class,instance-storage,memory-available,platform-memory,release-date,storage-drives
@@ -79,6 +83,15 @@ export const writeFile = async (pathToFile: string, content: string) => {
     for (const property in fileContentObject) {
       expect(parsedContent).toHaveProperty(property);
     }
+  } else if (pathToFile.includes('package.json-npm2')) {
+    const updatedPath = pathToFile.replace('-npm2', '');
+    const fileContent = await fsAsync.readFile(updatedPath, 'utf8');
+    const fileContentObject = JSON.parse(fileContent);
+    const parsedContent = JSON.parse(content);
+
+    for (const property in fileContentObject) {
+      expect(parsedContent).toHaveProperty(property);
+    }
   } else if (pathToFile.includes('package.json-npm')) {
     const updatedPath = pathToFile.replace('-npm', '');
     const fileContent = await fsAsync.readFile(updatedPath, 'utf8');
@@ -112,7 +125,7 @@ export const appendFile = (file: string, appendContent: string) =>
   `${file}${appendContent}`;
 
 export const stat = async (filePath: string) => {
-  if (filePath === 'true') {
+  if (filePath === 'true' || filePath === 'mock-path') {
     return true;
   } else {
     throw new Error('File not found.');
@@ -128,7 +141,7 @@ export const access = async (directoryPath: string) => {
 };
 
 export const unlink = async (filePath: string) => {
-  if (filePath === 'true') {
+  if (filePath === 'true' || filePath === 'mock-path') {
     return;
   } else {
     throw new Error('File not found.');
@@ -148,6 +161,10 @@ export const readdir = (directoryPath: string) => {
     return ['subdir/file2.yml', 'file1.yaml'];
   }
 
+  if (directoryPath.includes('mock-nested-directory')) {
+    return ['mock-sub-directory'];
+  }
+
   return [];
 };
 
@@ -155,7 +172,8 @@ export const lstat = (filePath: string) => {
   if (
     filePath.includes('mock-directory') ||
     filePath.includes('mock-sub-directory/subdir') ||
-    filePath === 'true'
+    filePath === 'true' ||
+    filePath.includes('npm-node-test')
   ) {
     return {
       isDirectory: () => true,
@@ -168,4 +186,12 @@ export const lstat = (filePath: string) => {
     };
   }
   return;
+};
+
+export const rm = (path: string) => {
+  if (path.includes('npm-node-test')) {
+    return;
+  } else {
+    throw new Error('File not found.');
+  }
 };

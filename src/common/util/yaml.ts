@@ -28,7 +28,7 @@ export const saveYamlFileAs = async (object: any, pathToFile: string) => {
     await fs.mkdir(dirPath, {recursive: true});
     const yamlString = YAML.dump(object, {noRefs: true});
 
-    return fs.writeFile(pathToFile, yamlString);
+    return await fs.writeFile(pathToFile, yamlString);
   } catch (error: any) {
     throw new WriteFileError(error.message);
   }

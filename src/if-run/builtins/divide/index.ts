@@ -74,9 +74,7 @@ const calculateDivide = (
 ) => {
   const {denominator, numerator} = params;
   const finalDenominator =
-    typeof denominator === 'number'
-      ? denominator
-      : input[denominator] || denominator;
+    typeof denominator === 'number' ? denominator : input[denominator];
   const finalNumerator =
     typeof numerator === 'number' ? numerator : input[numerator];
 
