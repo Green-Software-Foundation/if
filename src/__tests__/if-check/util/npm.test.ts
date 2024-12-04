@@ -25,7 +25,7 @@ jest.mock('../../../common/util/helpers', () => {
           break;
         case 'if-check':
           expect(param).toEqual(
-            "npm run if-env  -- -m ./src/__mocks__/mock-manifest.yaml && npm run if-run  -- -m ./src/__mocks__/mock-manifest.yaml -o src/__mocks__/re-mock-manifest &&  node -p 'Boolean(process.stdout.isTTY)' | npm run if-diff  -- -s src/__mocks__/re-mock-manifest.yaml -t ./src/__mocks__/mock-manifest.yaml"
+            "npm run if-env  -- -m ./src/__mocks__/mock-manifest.yaml && npm run if-run  -- -m ./src/__mocks__/mock-manifest.yaml -o src/__mocks__/re-mock-manifest && node -p 'Boolean(process.stdout.isTTY)' | npm run if-diff  -- -s src/__mocks__/re-mock-manifest.yaml -t ./src/__mocks__/mock-manifest.yaml"
           );
           break;
       }
