@@ -27,21 +27,46 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   const sanitizedManifest = escapeShellArg(manifest);
   const sanitizedExecutedManifest = escapeShellArg(executedManifest);
 
-  const ifEnvCommand = `${
-    isGlobal ? 'if-env' : 'npm run if-env'
-  } ${prefixFlag} -- -m ${sanitizedManifest}`;
-  const ifRunCommand = `${
-    isGlobal ? 'if-run' : 'npm run if-run'
-  } ${prefixFlag} -- -m ${sanitizedManifest} -o ${sanitizedExecutedManifest}`;
-  const ttyCommand = "node -p 'Boolean(process.stdout.isTTY)'";
-  const ifDiffCommand = `${
-    isGlobal ? 'if-diff' : 'npm run if-diff'
-  } ${prefixFlag} -- -s ${sanitizedExecutedManifest}.yaml -t ${sanitizedManifest}`;
+  const ifEnvCommand = [
+    isGlobal ? 'if-env' : 'npm run if-env',
+    '--',
+    ...(prefixFlag === '' ? [] : prefixFlag),
+    '-m',
+    sanitizedManifest,
+  ];
 
-  const fullCommand =
-    [ifEnvCommand, ifRunCommand, ttyCommand].join(' && ') +
-    ` | ${ifDiffCommand}`;
+  const ifRunCommand = [
+    isGlobal ? 'if-run' : 'npm run if-run',
+    '--',
+    ...(prefixFlag === '' ? [] : prefixFlag),
+    '-m',
+    sanitizedManifest,
+    '-o',
+    sanitizedExecutedManifest,
+  ];
 
+  const ttyCommand = ['node', '-p', "'Boolean(process.stdout.isTTY)'"];
+  const ifDiffCommand = [
+    isGlobal ? 'if-diff' : 'npm run if-diff',
+    '--',
+    ...(prefixFlag === '' ? [] : prefixFlag),
+    '-s',
+    `${sanitizedExecutedManifest}.yaml`,
+    '-t',
+    sanitizedManifest,
+  ];
+
+  const fullCommand = [
+    ...ifEnvCommand,
+    '&&',
+    ...ifRunCommand,
+    '&&',
+    ...ttyCommand,
+    '|',
+    ...ifDiffCommand,
+  ].join(' ');
+
+  // Execute the full command
   await execPromise(fullCommand, {
     cwd: process.env.CURRENT_DIR || process.cwd(),
   });
