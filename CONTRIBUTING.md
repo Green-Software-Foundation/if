@@ -168,7 +168,7 @@ $ git push origin <topic-branch-name>
 
 ### Step 6: Pull Request
 
-Open a Pull Request from your fork of the repository to the `dev` branch of the IF repository with a clear title and description according to [template](.github/PULL_REQUEST_TEMPLATE.md).
+Open a Pull Request from your fork of the repository to the `main` branch of the IF repository with a clear title and description according to [template](.github/PULL_REQUEST_TEMPLATE.md).
 
 Pull requests will not be reviewed unless they pass all CI. This includes a lint check and running our unit tests.
 
