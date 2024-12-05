@@ -24,9 +24,14 @@ jest.mock('../../../common/util/helpers', () => {
           expect(param).toEqual('npm init -y');
           break;
         case 'if-check':
-          expect(param).toEqual(
-            "npm run if-env -- -m ./src/__mocks__/mock-manifest.yaml && npm run if-run -- -m ./src/__mocks__/mock-manifest.yaml -o src/__mocks__/re-mock-manifest && node -p 'Boolean(process.stdout.isTTY)' | npm run if-diff -- -s src/__mocks__/re-mock-manifest.yaml -t ./src/__mocks__/mock-manifest.yaml"
-          );
+          expect(
+            [
+              'npm run if-env -- -m ./src/__mocks__/mock-manifest.yaml',
+              'npm run if-run -- -m ./src/__mocks__/mock-manifest.yaml -o src/__mocks__/re-mock-manifest',
+              "node -p 'Boolean(process.stdout.isTTY)'",
+              'npm run if-diff -- -s src/__mocks__/re-mock-manifest.yaml -t ./src/__mocks__/mock-manifest.yaml',
+            ].includes(param)
+          ).toBeTruthy();
           break;
       }
       return;
@@ -45,7 +50,7 @@ describe('if-check/util/npm: ', () => {
 
       await executeCommands(manifest, false);
 
-      expect.assertions(2);
+      expect.assertions(5);
       expect(logSpy).toHaveBeenCalledWith(
         '✔ if-check successfully verified mock-manifest.yaml\n'
       );
