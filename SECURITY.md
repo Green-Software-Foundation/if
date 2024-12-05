@@ -93,7 +93,7 @@ We perform regular reviews inline with the information provided below.  All rele
 
 ## Analysis
 ### Static code analysis
-- At least one FLOSS static code analysis tool - ❌.
+- At least one FLOSS static code analysis tool - ✅ CodeQL is integrated into our CI/CD.
 - All medium and higher severity exploitable vulnerabilities discovered with static code analysis MUST be fixed in a timely way after they are confirmed - ✅ We have not yet had any exploitable vulnerabilities reported, but the GSF team will respond promptly to any disclosed issues.
 
 ### Dynamic code analysis
