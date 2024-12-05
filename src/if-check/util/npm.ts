@@ -56,18 +56,25 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
     sanitizedManifest,
   ];
 
-  const fullCommand = [
-    ...ifEnvCommand,
-    '&&',
-    ...ifRunCommand,
-    '&&',
-    ...ttyCommand,
-    '|',
-    ...ifDiffCommand,
-  ].join(' ');
+  // Execute ifEnvCommand
+  await execPromise(ifEnvCommand.join(' '), {
+    cwd: process.env.CURRENT_DIR || process.cwd(),
+  });
 
-  // Execute the full command
-  await execPromise(fullCommand, {
+  // Execute ifRunCommand
+  await execPromise(ifRunCommand.join(' '), {
+    cwd: process.env.CURRENT_DIR || process.cwd(),
+  });
+
+  // Execute ttyCommand and capture its output
+  const ttyResult = await execPromise(ttyCommand.join(' '), {
+    cwd: process.env.CURRENT_DIR || process.cwd(),
+  });
+
+  // Pipe ttyResult into ifDiffCommand
+  const diffCommand = ifDiffCommand.join(' ');
+  const tty = ttyResult && ttyResult.stdout.trim();
+  await execPromise(`${tty ? `${tty} | ` : ''}${diffCommand}`, {
     cwd: process.env.CURRENT_DIR || process.cwd(),
   });
 
