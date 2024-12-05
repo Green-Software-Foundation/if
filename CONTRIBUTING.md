@@ -70,7 +70,7 @@ The mapping of severity to label is as follows:
 | 4        | H     |
 | 5        | H     |
 
-During the bug triage we will also discuss a remediation plan for the bug. This will be communicated in the comments on the bug report. For high urgency bugs, the fix will be implemented as soon as possible, maybe reorganizing our current work to accommodate it. For medium priority bugs, we will schedule the fix in the next available sprint. Low priority bugs will be backlogged and addressed when there is developer time available. Low priority bugs will also be tagged `help-wanted` so that they can be addressed by community members.
+The fix will be implemented for high-urgency bugs as soon as possible. Low priority bugs will be backlogged and addressed when there is developer time available. Low priority bugs will also be tagged `help-wanted` so that they can be addressed by community members.
 
 Not every bug will be fixed. We may decide *not* to fix a bug in cases such as:
 
