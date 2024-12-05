@@ -1,5 +1,5 @@
 import * as path from 'node:path';
-import {execPromise} from '../../common/util/helpers';
+import {execFileSync} from 'child_process';
 import {getFileName, removeFileIfExists} from '../../common/util/fs';
 import {STRINGS} from '../config';
 
@@ -30,7 +30,7 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   const ifEnvCommand = [
     isGlobal ? 'if-env' : 'npm run if-env',
     '--',
-    ...(prefixFlag === '' ? [] : prefixFlag),
+    ...(prefixFlag === '' ? [] : [prefixFlag]),
     '-m',
     sanitizedManifest,
   ];
@@ -38,45 +38,48 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   const ifRunCommand = [
     isGlobal ? 'if-run' : 'npm run if-run',
     '--',
-    ...(prefixFlag === '' ? [] : prefixFlag),
+    ...(prefixFlag === '' ? [] : [prefixFlag]),
     '-m',
     sanitizedManifest,
     '-o',
     sanitizedExecutedManifest,
   ];
 
-  const ttyCommand = ['node', '-p', "'Boolean(process.stdout.isTTY)'"];
+  const ttyCommand = ['node', '-p', 'Boolean(process.stdout.isTTY)'];
   const ifDiffCommand = [
     isGlobal ? 'if-diff' : 'npm run if-diff',
     '--',
-    ...(prefixFlag === '' ? [] : prefixFlag),
+    ...(prefixFlag === '' ? [] : [prefixFlag]),
     '-s',
     `${sanitizedExecutedManifest}.yaml`,
     '-t',
     sanitizedManifest,
   ];
 
-  // Execute ifEnvCommand
-  await execPromise(ifEnvCommand.join(' '), {
+  execFileSync(ifEnvCommand[0], ifEnvCommand.slice(1), {
     cwd: process.env.CURRENT_DIR || process.cwd(),
   });
 
-  // Execute ifRunCommand
-  await execPromise(ifRunCommand.join(' '), {
+  execFileSync(ifRunCommand[0], ifRunCommand.slice(1), {
     cwd: process.env.CURRENT_DIR || process.cwd(),
   });
 
-  // Execute ttyCommand and capture its output
-  const ttyResult = await execPromise(ttyCommand.join(' '), {
+  execFileSync(ttyCommand[0], ttyCommand.slice(1), {
     cwd: process.env.CURRENT_DIR || process.cwd(),
   });
 
-  // Pipe ttyResult into ifDiffCommand
-  const diffCommand = ifDiffCommand.join(' ');
-  const tty = ttyResult && ttyResult.stdout.trim();
-  await execPromise(`${tty ? `${tty} | ` : ''}${diffCommand}`, {
+  const ttyResult = execFileSync(ttyCommand[0], ttyCommand.slice(1), {
     cwd: process.env.CURRENT_DIR || process.cwd(),
   });
+
+  const tty = ttyResult && ttyResult.toString().trim();
+  execFileSync(
+    `${tty ? `${tty} | ` : ''}${ifDiffCommand[0]}`,
+    ifDiffCommand.slice(1),
+    {
+      cwd: process.env.CURRENT_DIR || process.cwd(),
+    }
+  );
 
   if (!cwd) {
     await removeFileIfExists(`${manifestDirPath}/package.json`);
