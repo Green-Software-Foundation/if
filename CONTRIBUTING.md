@@ -191,7 +191,7 @@ We prefer not to use abbreviations of contractions in parameter names.
 
 Using fully descriptive names makes the code more readable, which in turn helps reviewers and anyone else aiming to understand how the plugin works. 
 
-It also helps to avoid ambiguity and naming collisions within and across plugins. Your name should describe what an element does as precisely as practically possible.
+It also helps to avoid ambiguity and naming collisions within and across plugins. Ensure that names clearly and precisely describe the purpose of an element to make its functionality immediately apparent.
 
 For example, we prefer `functionalUnit` to `funcUnit`, `fUnit`, or any other abbreviation.
 
