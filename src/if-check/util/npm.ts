@@ -28,7 +28,8 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   const sanitizedExecutedManifest = escapeShellArg(executedManifest);
 
   const ifEnvCommand = [
-    isGlobal ? 'if-env' : 'npm run if-env',
+    isGlobal ? 'if-env' : 'npm',
+    ...(isGlobal ? [] : ['run', 'if-env']),
     '--',
     ...(prefixFlag === '' ? [] : [prefixFlag]),
     '-m',
@@ -36,7 +37,8 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   ];
 
   const ifRunCommand = [
-    isGlobal ? 'if-run' : 'npm run if-run',
+    isGlobal ? 'if-run' : 'npm',
+    ...(isGlobal ? [] : ['run', 'if-run']),
     '--',
     ...(prefixFlag === '' ? [] : [prefixFlag]),
     '-m',
@@ -47,7 +49,8 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
 
   const ttyCommand = ['node', '-p', 'Boolean(process.stdout.isTTY)'];
   const ifDiffCommand = [
-    isGlobal ? 'if-diff' : 'npm run if-diff',
+    isGlobal ? 'if-diff' : 'npm',
+    ...(isGlobal ? [] : ['run', 'if-diff']),
     '--',
     ...(prefixFlag === '' ? [] : [prefixFlag]),
     '-s',
@@ -58,6 +61,7 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
 
   execFileSync(ifEnvCommand[0], ifEnvCommand.slice(1), {
     cwd: process.env.CURRENT_DIR || process.cwd(),
+    shell: true,
   });
 
   execFileSync(ifRunCommand[0], ifRunCommand.slice(1), {
@@ -73,13 +77,15 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   });
 
   const tty = ttyResult && ttyResult.toString().trim();
-  execFileSync(
-    `${tty ? `${tty} | ` : ''}${ifDiffCommand[0]}`,
-    ifDiffCommand.slice(1),
-    {
-      cwd: process.env.CURRENT_DIR || process.cwd(),
-    }
-  );
+  const fullCommand = `${tty === 'true' ? 'tty |' : ''} ${ifDiffCommand.join(
+    ' '
+  )}`;
+
+  execFileSync(fullCommand, {
+    cwd: process.env.CURRENT_DIR || process.cwd(),
+    stdio: 'inherit',
+    shell: true,
+  });
 
   if (!cwd) {
     await removeFileIfExists(`${manifestDirPath}/package.json`);
