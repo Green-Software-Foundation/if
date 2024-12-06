@@ -4,7 +4,11 @@ import {ERRORS} from '@grnsft/if-core/utils';
 
 import {Shell} from '../../../if-run/builtins/shell';
 
-const {InputValidationError, ProcessExecutionError} = ERRORS;
+import {STRINGS} from '../../../if-run/config';
+
+const {InputValidationError, ProcessExecutionError, ConfigError} = ERRORS;
+
+const {MISSING_CONFIG} = STRINGS;
 
 jest.mock('child_process');
 jest.mock('js-yaml');
@@ -66,12 +70,8 @@ describe('builtins/shell', () => {
         try {
           await shell.execute(invalidInputs);
         } catch (error) {
-          expect(error).toBeInstanceOf(InputValidationError);
-          expect(error).toStrictEqual(
-            new InputValidationError(
-              '"command" parameter is required. Error code: invalid_type.'
-            )
-          );
+          expect(error).toBeInstanceOf(ConfigError);
+          expect(error).toStrictEqual(new ConfigError(MISSING_CONFIG));
         }
       });
 
@@ -98,6 +98,26 @@ describe('builtins/shell', () => {
           );
         }
       });
+    });
+
+    it('throws an error when the config is not provided.', async () => {
+      const config = undefined;
+      const plugin = Shell(config!, parametersMetadata, {});
+      const inputs = [
+        {
+          duration: 3600,
+          timestamp: '2022-01-01T00:00:00Z',
+        },
+      ];
+
+      expect.assertions(2);
+
+      try {
+        await plugin.execute(inputs);
+      } catch (error) {
+        expect(error).toBeInstanceOf(ConfigError);
+        expect(error).toEqual(new ConfigError(MISSING_CONFIG));
+      }
     });
   });
 });

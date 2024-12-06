@@ -93,7 +93,7 @@ describe('util/fs: ', () => {
       expect(fsReaddirSpy).toHaveBeenCalledWith('/mock-empty-directory');
     });
 
-    it('returns YAML files in the directory', async () => {
+    it('returns YAML files in the directory.', async () => {
       const fsReaddirSpy = jest.spyOn(fs, 'readdir');
       jest
         .spyOn(fs, 'lstat')
@@ -108,19 +108,29 @@ describe('util/fs: ', () => {
       expect(fsReaddirSpy).toHaveBeenCalledWith('/mock-directory');
     });
 
-    it('recursively finds YAML files in nested directories.', async () => {
+    it('recursively finds YAML files if the directory exists.', async () => {
       const fsReaddirSpy = jest.spyOn(fs, 'readdir');
-      jest
-        .spyOn(fs, 'lstat')
-        .mockResolvedValue({isDirectory: () => false} as any);
-      const result = await getYamlFiles('/mock-sub-directory');
+
+      jest.spyOn(fs, 'lstat').mockImplementation((path: any) => {
+        return Promise.resolve({
+          isDirectory: () => {
+            if (path.endsWith('.yaml') || path.endsWith('.yml')) {
+              return false;
+            }
+            return true;
+          },
+        } as any);
+      });
+
+      const path = '/mock-nested-directory';
+      const result = await getYamlFiles(path);
 
       expect.assertions(2);
       expect(result).toEqual([
-        '/mock-sub-directory/subdir/file2.yml',
-        '/mock-sub-directory/file1.yaml',
+        '/mock-nested-directory/mock-sub-directory/subdir/file2.yml',
+        '/mock-nested-directory/mock-sub-directory/file1.yaml',
       ]);
-      expect(fsReaddirSpy).toHaveBeenCalledWith('/mock-directory');
+      expect(fsReaddirSpy).toHaveBeenCalledWith(path);
     });
   });
 

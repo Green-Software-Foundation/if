@@ -2,11 +2,20 @@
 const mockWarn = jest.fn();
 const mockError = jest.fn();
 
+jest.mock('process');
+
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {andHandle, mergeObjects} from '../../../if-run/util/helpers';
 
 const {WriteFileError} = ERRORS;
+
+class CustomError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'CustomError';
+  }
+}
 
 jest.mock('../../../common/util/logger', () => ({
   logger: {
@@ -26,12 +35,29 @@ describe('if-run/util/helpers: ', () => {
       mockError.mockReset();
     });
 
-    it('logs error in case of error is unknown.', () => {
+    it('logs error in case of the error is known.', () => {
       const message = 'mock-message';
 
       andHandle(new WriteFileError(message));
       expect(mockWarn).toHaveBeenCalledTimes(0);
       expect(mockError).toHaveBeenCalledTimes(1);
+    });
+
+    it('logs error in case of the error is unknown.', () => {
+      const exitSpy = jest
+        .spyOn(process, 'exit')
+        .mockImplementation((code?: number | undefined): never => {
+          throw new Error(`Mocked process.exit with code: ${code}`);
+        });
+
+      const message = 'mock-message';
+
+      try {
+        andHandle(new CustomError(message));
+      } catch (error) {
+        expect(exitSpy).toHaveBeenCalledWith(2);
+        expect(mockError).toHaveBeenCalledTimes(2);
+      }
     });
   });
 

@@ -126,5 +126,50 @@ describe('util/aggregation-helper: ', () => {
       expect(aggregated.timestamp).toBeUndefined();
       expect(aggregated.duration).toBeUndefined();
     });
+
+    it('executes when aggregation properties are `none`.', () => {
+      storeAggregationMetrics({
+        carbon: {
+          time: 'none',
+          component: 'none',
+        },
+      });
+      const inputs: PluginParams[] = [
+        {timestamp: '', duration: 10, carbon: 10},
+        {timestamp: '', duration: 10, carbon: 20},
+      ];
+      const metrics: string[] = ['carbon'];
+      const isTemporal = true;
+
+      const expectedValue = {
+        timestamp: '',
+        duration: 10,
+      };
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
+      expect(aggregated).toEqual(expectedValue);
+    });
+
+    it('executes when aggregation properties are `copy`.', () => {
+      storeAggregationMetrics({
+        carbon: {
+          time: 'copy',
+          component: 'copy',
+        },
+      });
+      const inputs: PluginParams[] = [
+        {timestamp: '', duration: 10, carbon: 10},
+        {timestamp: '', duration: 10, carbon: 20},
+      ];
+      const metrics: string[] = ['carbon'];
+      const isTemporal = true;
+
+      const expectedValue = {
+        timestamp: '',
+        duration: 10,
+        carbon: 20,
+      };
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
+      expect(aggregated).toEqual(expectedValue);
+    });
   });
 });

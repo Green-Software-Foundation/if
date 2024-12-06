@@ -8,6 +8,7 @@ The following document is a rule set of guidelines for contributing.
 
 - [What and when to contribute](#what-and-when-to-contribute)
 - [Reporting bugs](#reporting-bugs)
+- [Disclosing vulnerabilities](#disclosing-vulnerabilities)
 - [Code Contributions](#code-contributions)
   - [Step 1: Fork](#step-1-fork)
   - [Step 2: Branch](#step-2-branch)
@@ -37,27 +38,27 @@ We appreciate bug reports! If you experience an issue with IF, you can report it
 3. Click on `Create New Issue` and select the `Bug Report` template.
 4. Fill out the requested information.
 
-The more detailed information you provide in the bug report, the easier it will be for us to diagnose, triage and resolve your issue. We ask for some simple information about your issue, including a description of the error, the expected behaviour, the actual behaviour and the steps we can take to reproduce the error in our local environments. We also then prompt you to provide a link to [Stackblitz](https://stackblitz.com/) or a similar online environment where we can run your manifest and observe the error. If you prefer _not_ to send a link, we would appreciate a copy of the manifest file that you ran to produce the error, information about your runtime environment and any additional code that's required to reproduce the error. This is all designed to enable us to reproduce the same error and debug it for you as quickly as possible.
+The more detailed information you provide in the bug report, the easier it will be for us to diagnose, triage, and resolve your issue. We ask for some simple information about your issue, including a description of the error, the expected behaviour, the actual behaviour and the steps we can take to reproduce the error in our local environments. We also then prompt you to provide a link to [Stackblitz](https://stackblitz.com/) or a similar online environment where we can run your manifest and observe the error. If you prefer *not* to send a link, we would appreciate a copy of the manifest file that you ran to produce the error, information about your runtime environment, and any additional code that's required to reproduce the error. This is all designed to enable us to reproduce the same error and debug it for you as quickly as possible.
 
-Once a suitably detailed bug report exists, we will triage it. Triage means that the core team will examine the issue and assign an urgency label - either Low, Medium or High.
+Once a suitably detailed bug report exists, we will triage it. Triage means that the core team will examine the issue and assign an urgency label - either Low, Medium or High. 
 
 The assessment rubric is as follows:
 
-|                                                                                                                       | Consequence                                                                              | Severity |
-| --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------- |
-| Bugs in IF core leading to incorrect calculations                                                                     | unusable framework                                                                       | 5        |
-| Bugs in builtins leading to incorrect calculations                                                                    | core pathways fail, IF very limited in functionality                                     | 5        |
-| Bugs in template                                                                                                      | Harder to build plugins, ecosystem growth is impacted                                    | 2        |
-| Bugs in docs                                                                                                          | product does not match expectation, hard to debug, frustration, loss of adoption         | 2        |
-| Security flaw: privacy related                                                                                        | leak user data, unlikely to achieve adoption in serious orgs                             | 5        |
-| Security flaw: permissions escalation                                                                                 | expose user to malware                                                                   | 5        |
-| Code not addressing user needs                                                                                        | no product market fit, loss of adoption                                                  | 5        |
-| Communication failures within team                                                                                    | Conflicting or duplicating work, frustration, morale damage                              | 4        |
-| Communication failures with community                                                                                 | we lose product market fit, we do not have good community retention, reputational damage | 3        |
-| Communication failures with leadership                                                                                | product does not meet business goals                                                     | 3        |
-| License compliance failures, including in supply chain (e.g. exposing privileged api responses for free via a plugin) | 4                                                                                        |
-| Bugs affecting releases                                                                                               | users stuck on old versions                                                              | 4        |
-| Strategy failures                                                                                                     | no product market fit                                                                    | 2        |
+|                                                                                                                        | Consequence                                                                              | Severity |
+| ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------- |
+| Bugs in IF core leading to incorrect calculations                                                                      | unusable framework                                                                       | 5        |
+| Bugs in builtins leading to incorrect calculations                                                                     | core pathways fail, IF very limited in functionality                                     | 5        |
+| Bugs in template                                                                                                       | Harder to build plugins, ecosystem growth is impacted                                    | 2        |
+| Bugs in docs                                                                                                           | product does not match expectation, hard to debug, frustration, loss of adoption         | 2        |
+| Security flaw: privacy related                                                                                         | leak user data, unlikely to achieve adoption in serious orgs                             | 5        |
+| Security flaw: permissions escalation                                                                                  | expose user to malware                                                                   | 5        |
+| Code not addressing user needs                                                                                         | no product market fit, loss of adoption                                                  | 5        |
+| Communication failures within team                                                                                     | Conflicting or duplicating work, frustration, morale damage                              | 4        |
+| Communication failures with community                                                                                  | we lose product market fit, we do not have good community retention, reputational damage | 3        |
+| Communication failures with leadership                                                                                 | product does not meet business goals                                                     | 3        |
+| License compliance failures, including in supply chain (e.g. exposing privileged api responses for free via  a plugin) | 4                                                                                        |
+| Bugs affecting releases                                                                                                | users stuck on old versions                                                              | 4        |
+| Strategy failures                                                                                                      | no product market fit                                                                    | 2        |
 
 The mapping of severity to label is as follows:
 
@@ -69,9 +70,9 @@ The mapping of severity to label is as follows:
 | 4        | H     |
 | 5        | H     |
 
-For high urgency bugs, the fix will be implemented as soon as possible. Low priority bugs will be backlogged and addressed when there is developer time available. Low priority bugs will also be tagged `help-wanted` so that they can be addressed by community members.
+The fix will be implemented for high-urgency bugs as soon as possible. Low priority bugs will be backlogged and addressed when there is developer time available. Low priority bugs will also be tagged `help-wanted` so that they can be addressed by community members.
 
-Not every bug will be fixed. We may decide _not_ to fix a bug in cases such as:
+Not every bug will be fixed. We may decide *not* to fix a bug in cases such as:
 
 - fixing the bug has some detrimental side effect elsewhere in the product
 - the bug has a fix coming soon as part of another upgrade
@@ -80,17 +81,30 @@ Not every bug will be fixed. We may decide _not_ to fix a bug in cases such as:
 
 The bug will be labelled `fix-now`, `fix-later` or `wont-fix` to reflect our remediation plan and details will be provided in issue comments.
 
+## Disclosing vulnerabilities
+
+If you discover a security vulnerability in IF, please report it to if-disclosures@greensoftware.foundation.
+
+Include the following information:
+
+- description of the issue
+- steps to reproduce
+- steps to fix, if known
+
+The IF team will respond as quickly as possible. Post-graduation there will be no full-time development team, but GSF staff will aim to get the vulnerability patched as quickly as possible, aiming for <=14 day response time.
+
+
 ## Code Contributions
 
 ### Step 1: Fork
 
 Fork the project on [GitHub](https://github.com/Green-Software-Foundation/if)
 
-You then have your own copy of the repository that you can change.
+You then have your own copy of the repository that you can change. 
 
 ### Step 2: Branch
 
-Create new branch in your forked copy of the `if` repository, which will contain your new feature, fix or change.
+Create new branch in your forked copy of the `if` repository, which will contain your new feature, fix or change. 
 
 ```bash
 $ git checkout -b <topic-branch-name>
@@ -108,7 +122,7 @@ $ git config --global user.email "user@example.com"
 Each commit should cover one change to one resource. You should not add multiple changes to a single commit.
 Commit message should clearly describe on which resource changes are made.
 For the commit message, we adhere to the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
-Conventional commits are organized with a type, a scope and a description. The type can be one of:
+Conventional commits are organized with a type, a scope and a description. The type can be one of: 
 
 - 'feat',
 - 'fix',
@@ -129,10 +143,10 @@ Here's an example of a valid commit message:
 feat(lib): initial commit for time-sync logic
 ```
 
-or
+or 
 
 ```
-test(lib): in teads-curve add unit test to check that error is raised on missing tdp param
+test(lib): in teads-curve add unit test to check that error is raised on missing tdp param 
 ```
 
 Run `npm run fix` before commiting. If your commit message does not conform to the conventional commit specification or if you have not run `npm run fix` your commit will not satisfy the commitlint check.
@@ -142,7 +156,7 @@ Add and commit with your commit message:
 ```bash
 $ git add my/changed/files
 $ git commit -m "<type-of-commit>(<my-optional-scope>): <my-commit-message>"
-```
+```  
 
 ### Step 5: Push
 
@@ -162,7 +176,7 @@ Pull requests will not be reviewed unless they pass all CI. This includes a lint
 
 ### Code structuring patterns
 
-Avoid having functions which are responsible to do multiple things at the same time. Make sure one function/method does one thing, and does it well.
+Avoid having functions which are responsible to do multiple things at the same time. Make sure one function/method does one thing, and does it well. 
 
 ### Functional Programming
 
@@ -170,11 +184,12 @@ We have a preference towards functional programming styles in the IF. This is be
 
 We recommend starting with these [basic principles and guidelines](https://dev.to/jamesrweb/principles-of-functional-programming-4b7c) for functional programming.
 
+
 ### Naming conventions
 
-We prefer not to use abbreviations of contractions in parameter names.
+We prefer not to use abbreviations of contractions in parameter names. 
 
-Using fully descriptive names makes the code more readable, which in turn helps reviewers and anyone else aiming to understand how the plugin works.
+Using fully descriptive names makes the code more readable, which in turn helps reviewers and anyone else aiming to understand how the plugin works. 
 
 It also helps to avoid ambiguity and naming collisions within and across plugins. Ensure that names clearly and precisely describe the purpose of an element to make its functionality immediately apparent.
 
@@ -188,6 +203,7 @@ In yaml files, we prefer to use kebab-case (`like-this`) for field names. For ex
 `functional-unit` is the unit in which to express an SCI value.
 
 Global constants can be given capitalized names, such as `TIME_UNITS_IN_SECONDS`.
+
 
 #### Documentation
 
@@ -205,10 +221,9 @@ const logMessage = (message: string) => console.log(message)
 
 ### Writing tests
 
-One test file should be responsible for one module. `describe` blocks should be used for module and function/method description. First `describe` should follow `resource/module: ` pattern. Second describe title should follow `method(): ` pattern. Test units can use `it` blocks whose title should exactly describe behaviour and input argument.
+One test file should be responsible for one module. `describe` blocks should be used for module and function/method description. First `describe` should follow `resource/module: ` pattern. Second describe title should follow  `method(): ` pattern. Test units can use `it` blocks whose title should exactly describe behaviour and input argument.
 
-See example:
-
+See example: 
 ```ts
 describe('util/args: ', () => {
    describe('parseProcessArgument(): ', () => {
@@ -234,9 +249,11 @@ To help us to diagnose and debug your issue, please provide either a [Stackblitz
 - links to any code (e.g. your own plugin code), it must be available online,
 - runtime information such as OS, node version, package.json, IF version
 
-High severity bugs will be fixed as soon as possible, whereas medium and low severity bug fixes will likely be backlogged for attention in the next available sprint.
+Reported bugs will be discussed among the team in a weekly bug triage and be assigned a severity (low, medium or high). 
+
+High severity bugs will be fixed as soon as possible, whereas medium and low severity bug fixes will likely be backlogged for attention in the next available sprint. 
 
 In some cases, we might decide not to fix certain bugs if they are low severity, either because we anticipate fixes coming soon as part of already-scheduled upgrades or because we think the fixes make "good first issues" for community contributors.
 Community members are welcome to report any issue they face and also work on fixing the low priority bugs.
 
-_[⬅️ back to the root](/README.md#ief)_
+*[⬅️ back to the root](/README.md#ief)*

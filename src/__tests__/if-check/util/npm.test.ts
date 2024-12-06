@@ -11,22 +11,29 @@ jest.mock('../../../common/util/logger', () => ({
   },
 }));
 
-jest.mock('../../../common/util/helpers', () => {
-  const originalModule = jest.requireActual('../../../common/util/helpers');
+jest.mock('child_process', () => {
+  const originalModule = jest.requireActual('child_process');
   return {
     ...originalModule,
-    execPromise: async (param: any) => {
+    execFileSync: (file: any, args: any) => {
       switch (process.env.NPM_INSTALL) {
         case 'true':
-          expect(param).toEqual('npm install @grnsft/if@0.3.3-beta.0');
+          expect(file).toEqual('npm install @grnsft/if@0.3.3-beta.0');
           break;
         case 'npm init -y':
-          expect(param).toEqual('npm init -y');
+          expect(file).toEqual('npm init -y');
           break;
         case 'if-check':
-          expect(param).toEqual(
-            "npm run if-env  -- -m ./src/__mocks__/mock-manifest.yaml && npm run if-run  -- -m ./src/__mocks__/mock-manifest.yaml -o src/__mocks__/re-mock-manifest &&  node -p 'Boolean(process.stdout.isTTY)' | npm run if-diff  -- -s src/__mocks__/re-mock-manifest.yaml -t ./src/__mocks__/mock-manifest.yaml"
-          );
+          expect(
+            [
+              'npm run if-env -- -m ./src/__mocks__/mock-manifest.yaml',
+              'npm run if-run -- -m ./src/__mocks__/mock-manifest.yaml -o src/__mocks__/re-mock-manifest',
+              'node -p Boolean(process.stdout.isTTY)',
+              'npm run if-diff -- -s src/__mocks__/re-mock-manifest.yaml -t ./src/__mocks__/mock-manifest.yaml',
+            ].includes(
+              Array.isArray(args) ? `${file} ${args.join(' ')}` : file.trim()
+            )
+          ).toBeTruthy();
           break;
       }
       return;
@@ -45,7 +52,7 @@ describe('if-check/util/npm: ', () => {
 
       await executeCommands(manifest, false);
 
-      expect.assertions(2);
+      expect.assertions(6);
       expect(logSpy).toHaveBeenCalledWith(
         '✔ if-check successfully verified mock-manifest.yaml\n'
       );
