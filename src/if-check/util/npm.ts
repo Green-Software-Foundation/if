@@ -1,5 +1,5 @@
 import * as path from 'node:path';
-import {execPromise} from '../../common/util/helpers';
+import {execFileSync} from 'child_process';
 import {getFileName, removeFileIfExists} from '../../common/util/fs';
 import {STRINGS} from '../config';
 
@@ -28,47 +28,63 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   const sanitizedExecutedManifest = escapeShellArg(executedManifest);
 
   const ifEnvCommand = [
-    isGlobal ? 'if-env' : 'npm run if-env',
+    isGlobal ? 'if-env' : 'npm',
+    ...(isGlobal ? [] : ['run', 'if-env']),
     '--',
-    ...(prefixFlag === '' ? [] : prefixFlag),
+    ...(prefixFlag === '' ? [] : [prefixFlag]),
     '-m',
     sanitizedManifest,
   ];
 
   const ifRunCommand = [
-    isGlobal ? 'if-run' : 'npm run if-run',
+    isGlobal ? 'if-run' : 'npm',
+    ...(isGlobal ? [] : ['run', 'if-run']),
     '--',
-    ...(prefixFlag === '' ? [] : prefixFlag),
+    ...(prefixFlag === '' ? [] : [prefixFlag]),
     '-m',
     sanitizedManifest,
     '-o',
     sanitizedExecutedManifest,
   ];
 
-  const ttyCommand = ['node', '-p', "'Boolean(process.stdout.isTTY)'"];
+  const ttyCommand = ['node', '-p', 'Boolean(process.stdout.isTTY)'];
   const ifDiffCommand = [
-    isGlobal ? 'if-diff' : 'npm run if-diff',
+    isGlobal ? 'if-diff' : 'npm',
+    ...(isGlobal ? [] : ['run', 'if-diff']),
     '--',
-    ...(prefixFlag === '' ? [] : prefixFlag),
+    ...(prefixFlag === '' ? [] : [prefixFlag]),
     '-s',
     `${sanitizedExecutedManifest}.yaml`,
     '-t',
     sanitizedManifest,
   ];
 
-  const fullCommand = [
-    ...ifEnvCommand,
-    '&&',
-    ...ifRunCommand,
-    '&&',
-    ...ttyCommand,
-    '|',
-    ...ifDiffCommand,
-  ].join(' ');
-
-  // Execute the full command
-  await execPromise(fullCommand, {
+  execFileSync(ifEnvCommand[0], ifEnvCommand.slice(1), {
     cwd: process.env.CURRENT_DIR || process.cwd(),
+    shell: true,
+  });
+
+  execFileSync(ifRunCommand[0], ifRunCommand.slice(1), {
+    cwd: process.env.CURRENT_DIR || process.cwd(),
+  });
+
+  execFileSync(ttyCommand[0], ttyCommand.slice(1), {
+    cwd: process.env.CURRENT_DIR || process.cwd(),
+  });
+
+  const ttyResult = execFileSync(ttyCommand[0], ttyCommand.slice(1), {
+    cwd: process.env.CURRENT_DIR || process.cwd(),
+  });
+
+  const tty = ttyResult && ttyResult.toString().trim();
+  const fullCommand = `${tty === 'true' ? 'tty |' : ''} ${ifDiffCommand.join(
+    ' '
+  )}`;
+
+  execFileSync(fullCommand, {
+    cwd: process.env.CURRENT_DIR || process.cwd(),
+    stdio: 'inherit',
+    shell: true,
   });
 
   if (!cwd) {
