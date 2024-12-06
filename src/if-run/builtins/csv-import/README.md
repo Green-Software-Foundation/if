@@ -158,21 +158,21 @@ The results will be saved to a new `yaml` file in `manifests/outputs`.
 
 ## Errors
 
-`CSVImport` exposes six of the IF error classes.
+`CSVImport` exposes five of the IF error classes.
 
 ### FetchingFileError
 
 This error is caused by problems finding the file at the path provided in the `filepath`. If the file is on your local filesystem, you can check that the file is definitely there. For a remote file, check your internet connection. You can check your connection to the server using a tool such as `ping` or `curl`. if you still experience problems, you could retrieve the remote file onto your local filesystem using a tool such as `wget`.
 
-### ReadFileError,
+### ReadFileError
 
 This error is caused by problems reading the CSV file provided in the `filepath`. To fix it, check that the file contains valid CSV data. The file should have a `.csv` file extension and the data inside should be formatted correctly.
 
-### MissingCSVColumnError,
+### MissingCSVColumnError
 
 This error is caused by `CsvImport` failing to find a column in the CSV file whose name matches what was provided in `query`. To debug, check that you do not have any typos in your `query` and confirm that the requested column name definitely exists in the target file.
 
-### CSVParseError,
+### CSVParseError
 
 This error arises due to problems parsing CSV data into IF. This can occur when the CSV data is incorrectly formatted or contains unexpected characters that IF does not recognize. These errors are expected to be unusual edge cases as incorrectly formatted data will usually be identified during file loading and cause a `ReadFileError`. To debug, check your CSV file for any unexpected formatting or unusual characters.
 
