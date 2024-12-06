@@ -30,7 +30,9 @@ jest.mock('child_process', () => {
               'npm run if-run -- -m ./src/__mocks__/mock-manifest.yaml -o src/__mocks__/re-mock-manifest',
               'node -p Boolean(process.stdout.isTTY)',
               'npm run if-diff -- -s src/__mocks__/re-mock-manifest.yaml -t ./src/__mocks__/mock-manifest.yaml',
-            ].includes(`${file} ${args.join(' ')}`)
+            ].includes(
+              Array.isArray(args) ? `${file} ${args.join(' ')}` : file.trim()
+            )
           ).toBeTruthy();
           break;
       }
