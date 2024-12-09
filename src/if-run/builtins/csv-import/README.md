@@ -13,7 +13,7 @@ For example, for the following CSV:
 | 2022 | Google Cloud   | asia-east2      | Hong Kong  | HK         | HK           | Hong Kong | 22.3,114.2       | 0.28       |            |                        | 0          | 453                        |                                   |                                |                                  | 360                   |
 | 2022 | Google Cloud   | asia-northeast1 | Tokyo      | JP-TK      | JP-TK        | Tokyo     | 35.6897,139.692  | 0.28       |            |                        | 0          | 463                        |                                   |                                |                                  | 463                   |
 
-You could select all the data for the cloud provider `Google Cloud` in the region `asia-east2` using the following configuration:
+You could select all the data in the `csv` file using the following configuration:
 
 ```yaml
 filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
