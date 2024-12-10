@@ -1,8 +1,8 @@
-# CSV Lookup Plugin
+# CSV Import Plugin
 
-`csv-lookup` is a generic plugin that enables you to select arbitrary data from a given csv file and add it to your manifest file's `input` data.
+`csv-import` is a versatile plugin that allows you to extract specific data from a CSV file and seamlessly integrate it into the `input` data of your manifest file.
 
-You provide path to the target csv file plus some query parameters. The filepath can point to a location on the local filesystem or it can be a URL for an online resource. The query parameters include the column names for the target data you want to return (can be one column name, multiple column names or all column names, indicated using `"*"`), plus the column names and values you want to use as selectors.
+You provide path to the target csv file. The file path can reference either a local file on your system or a URL pointing to an online resource.
 
 For example, for the following CSV:
 
@@ -13,24 +13,18 @@ For example, for the following CSV:
 | 2022 | Google Cloud   | asia-east2      | Hong Kong  | HK         | HK           | Hong Kong | 22.3,114.2       | 0.28       |            |                        | 0          | 453                        |                                   |                                |                                  | 360                   |
 | 2022 | Google Cloud   | asia-northeast1 | Tokyo      | JP-TK      | JP-TK        | Tokyo     | 35.6897,139.692  | 0.28       |            |                        | 0          | 463                        |                                   |                                |                                  | 463                   |
 
-You could select all the data for the cloud provider `Google Cloud` in the region `asia-east2` using the following configuration:
+You could select all the data in the `csv` file using the following configuration:
 
 ```yaml
 filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
-query:
-  cloud-provider: 'cloud/provider'
-  cloud-region: 'cloud/region'
 output: '*'
 ```
-
-Notice that the query parameters are key/value pairs where the key is the column name in the target CSV and the value is a **reference to a value** in your `input` data (_not_ an actual value - a reference). This is to enable you to chain CSV lookups together based on information from other plugins in your pipeline.
 
 ## Parameters
 
 ### Plugin config
 
 - `filepath` - path to a csv file, either on the local filesystem or on the internet
-- `query` - an array of key/value pairs where the key is a column name in the target csv and the value is a parameter from inputs
 - `output` - the columns to grab data from and add to output data - should support wildcard or multiple values.
 
 The plugin also supports data renaming. This means you can grab data from a named column but push it into your manifest file data under another name, for example, maybe we want to grab data from the `processor-name` column in the target csv and add it to the manifest file data as `processor-id` because this is the name expected by some other plugin in your piepline. You can do this by passing comma separated values in arrays.
@@ -46,12 +40,10 @@ output:
   [['processor-name', 'processor-model-id'], ['tdp', 'thermal-design-power']]
 ```
 
-All the following values are valid for the `output` field:
-
-- `"*"`
-- `"tdp"`
-- `["processor-name", "processor-model-id"]`
-- `[["processor-name", "processor-model-id"],["tdp","thermal-design-power"]]`
+- `"*"` - indicating all columns should be selected
+- `"tdp"` - indicating that only column `tdp` should be selected
+- `["processor-name", "processor-model-id"]` - indicating that only column `processor-name` should be selected and output as `processor-model-id`
+- `[["processor-name", "processor-model-id"],["tdp", "thermal-design-power"]]` - indicating that the `processor-name` and `tdp` columns should be selected with `processor-name` output as `processor-model-id` and `tdp` as `thermal-design-power`
 
 ### Plugin parameter metadata
 
@@ -78,7 +70,7 @@ The `mapping` block is an optional block. It is added in the plugin section and 
 
 ```yaml
 cloud-metadata:
-  method: CSVLookup
+  method: CSVImport
   path: 'builtin'
   mapping:
     'parameter-name-in-the-plugin': 'parameter-name-in-the-input'
@@ -86,7 +78,7 @@ cloud-metadata:
 
 ### Inputs
 
-There are no strict requirements on input for this plugin because they depend upon the contents of the target CSV and your input data at the time the CSV lookup is invoked. Please make sure you are requesting data from columns that exist in the target csv file and that your query values are available in your `input` data.
+There are no strict requirements on input for this plugin because they depend upon the contents of the target CSV and your input data at the time the CSV import is invoked. Please make sure you are requesting data from columns that exist in the target csv file and that your query values are available in your `input` data.
 
 ## Returns
 
@@ -94,32 +86,26 @@ The input data with the requested csv content appended to it.
 
 ## Plugin logic
 
-1. Validates config which contains `filepath`, `query` and `output`.
+1. Validates config which contains `filepath` and `output`.
 2. Tries to retrieve given file (with url or local path).
 3. Parses given CSV.
 4. Filters requested information from CSV.
-5. Adds new key-value pairs to the input data
-6. Returns enriched input data
+5. Returns enriched input data
 
 ## Implementation
 
-To run the plugin, you must first create an instance of `CSVLookup`. Then, you can call `execute()`.
+To run the plugin, you must first create an instance of `CSVImport`. Then, you can call `execute()`.
 
 ```typescript
 const config = {
   filepath: 'https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv',
-  query: {
-    'cloud-provider': 'cloud/provider'
-	  region: 'cloud/region'
-	  'instance-type': 'cloud/instance-type'
-  },
   output: ['cpu-tdp', 'tdp'],
 };
 const parametersMetadata = {inputs: {}, outputs: {}};
 const mapping = {};
-const csvLookup = CSVLookup(config, parametersMetadata, mapping);
+const csvImport = CSVImport(config, parametersMetadata, mapping);
 
-const result = await csvLookup.execute([
+const result = await csvImport.execute([
   {
     timestamp: '2023-08-06T00:00'
     duration: 3600
@@ -132,22 +118,19 @@ const result = await csvLookup.execute([
 
 ## Example manifest
 
-IF users will typically call the plugin as part of a pipeline defined in a manifest file. In this case, instantiating the plugin is handled by `if` and does not have to be done explicitly by the user. The following is an example manifest that calls `csv-lookup`:
+IF users will typically call the plugin as part of a pipeline defined in a manifest file. In this case, instantiating the plugin is handled by `if` and does not have to be done explicitly by the user. The following is an example manifest that calls `csv-import`:
 
 ```yaml
-name: csv-lookup-demo
+name: csv-import-demo
 description:
 tags:
 initialize:
   plugins:
     cloud-metadata:
-      method: CSVLookup
+      method: CSVImport
       path: 'builtin'
       config:
         filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
-        query:
-          cloud-provider: 'cloud/provider'
-          cloud-region: 'cloud/region'
         output: '*'
       mapping:
         cloud/region: cloud/area
@@ -164,18 +147,18 @@ tree:
           cloud/area: europe-north1
 ```
 
-You can run this example by saving it as `./examples/manifests/csv-lookup.yml` and executing the following command from the project root:
+You can run this example by saving it as `./examples/manifests/csv-import.yml` and executing the following command from the project root:
 
 ```sh
 npm i -g @grnsft/if
-if-run --manifest manifests/plugins/csv-lookup.yml --output manifests/outputs/csv-lookup
+if-run --manifest manifests/plugins/csv-import.yml --output manifests/outputs/csv-import
 ```
 
 The results will be saved to a new `yaml` file in `manifests/outputs`.
 
 ## Errors
 
-`CSVLookup` exposes six of the IF error classes.
+`CSVImport` exposes five of the IF error classes.
 
 ### FetchingFileError
 
@@ -187,11 +170,7 @@ This error is caused by problems reading the CSV file provided in the `filepath`
 
 ### MissingCSVColumnError
 
-This error is caused by `CsvLookup` failing to find a column in the CSV file whose name matches what was provided in `query`. To debug, check that you do not have any typos in your `query` and confirm that the requested column name definitely exists in the target file.
-
-### QueryDataNotFoundError
-
-This error is caused by the `CsvLookup` plugin failing to find data that matches your query. Try revising your query parameters.
+This error is caused by `CsvImport` failing to find a column in the CSV file whose name matches what was provided in `query`. To debug, check that you do not have any typos in your `query` and confirm that the requested column name definitely exists in the target file.
 
 ### CSVParseError
 
@@ -204,7 +183,6 @@ You will receive an error starting `ConfigError: ` if you have not provided the 
 The required parameters are:
 
 - `filepath`: This must be a path to a csv file
-- `query`: this must be an array of key-value pairs where the key is a string containing a column name an the value is a string containing the name of a value in `inputs`
 - `output`: this must be a string containing a name or a wildcard character (`"*"`)
 
 You can fix this error by checking you are providing valid values for each parameter in the config.

@@ -1,0 +1,22 @@
+name: csv-import
+description: successful path
+tags:
+initialize:
+  plugins:
+    data-import:
+      method: CSVImport
+      path: 'builtin'
+      config:
+        filepath: manifests/examples/builtins/csv-import/test.csv
+        # filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv
+        output: '*'
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - data-import
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 300
+          physical-processor: AMD 3020e
