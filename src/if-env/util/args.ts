@@ -3,7 +3,7 @@ import {parse} from 'ts-command-line-args';
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {isFileExists} from '../../common/util/fs';
-import {prependFullFilePath} from '../../common/util/helpers';
+import {prependFullFilePath, runHelpCommand} from '../../common/util/helpers';
 import {checkIfFileIsYaml} from '../../common/util/yaml';
 
 import {CONFIG} from '../config';
@@ -23,7 +23,7 @@ const validateAndParseIfEnvArgs = () => {
     return parse<IFEnvArgs>(ARGS, HELP);
   } catch (error) {
     if (error instanceof Error) {
-      throw new ParseCliParamsError(error.message);
+      runHelpCommand('if-env');
     }
 
     throw error;

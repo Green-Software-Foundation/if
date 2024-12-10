@@ -2,7 +2,7 @@ import {parse} from 'ts-command-line-args';
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {isDirectoryExists, isFileExists} from '../../common/util/fs';
-import {prependFullFilePath} from '../../common/util/helpers';
+import {prependFullFilePath, runHelpCommand} from '../../common/util/helpers';
 import {checkIfFileIsYaml} from '../../common/util/yaml';
 
 import {CONFIG, STRINGS} from '../config';
@@ -31,7 +31,7 @@ const validateAndParseIfCheckArgs = () => {
     return parse<IFCheckArgs>(ARGS, HELP);
   } catch (error) {
     if (error instanceof Error) {
-      throw new ParseCliParamsError(error.message);
+      runHelpCommand('if-check');
     }
 
     throw error;
