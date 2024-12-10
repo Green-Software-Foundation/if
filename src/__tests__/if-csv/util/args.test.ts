@@ -23,13 +23,12 @@ jest.mock('ts-command-line-args', () => ({
   __esModule: true,
   parse: () => {
     switch (process.env.result) {
+      case 'manifest':
+        return {
+          manifest: 'manifest-mock.yml',
+        };
       case 'manifest-is-missing':
         return {};
-      case 'manifest-install-provided':
-        return {
-          install: true,
-          manifest: 'mock-manifest.yaml',
-        };
       case 'manifest-is-not-yaml':
         return {manifest: 'manifest'};
       case 'env-throw-error':
@@ -47,7 +46,7 @@ jest.mock('ts-command-line-args', () => ({
 
 import {ERRORS} from '@grnsft/if-core/utils';
 
-import {parseIfEnvArgs} from '../../../if-env/util/args';
+import {parseIfCsvArgs} from '../../../if-csv/util/args';
 
 import {STRINGS} from '../../../common/config';
 
@@ -58,26 +57,29 @@ const {SOURCE_IS_NOT_YAML, MANIFEST_NOT_FOUND} = STRINGS;
 describe('util/args: ', () => {
   const originalEnv = process.env;
 
-  describe('parseIfEnvArgs(): ', () => {
-    it('executes if `manifest` is missing.', async () => {
+  describe('parseIfCsvArgs(): ', () => {
+    it('successfully executes when `manifest` is specified.', async () => {
       process.env.fileExists = 'true';
-      process.env.result = 'manifest-is-missing';
-      const response = await parseIfEnvArgs();
+      process.env.result = 'manifest';
+      const response = await parseIfCsvArgs();
 
       expect.assertions(1);
 
-      expect(response).toEqual({install: undefined});
+      expect(response).toEqual({
+        manifest: 'manifest-mock.yml',
+        output: undefined,
+        params: undefined,
+      });
     });
 
-    it('executes if `manifest` and `install` are provided.', async () => {
+    it('executes if `manifest` is missing.', async () => {
       process.env.fileExists = 'true';
-      process.env.result = 'manifest-install-provided';
+      process.env.result = 'manifest-is-missing';
+      const response = await parseIfCsvArgs();
 
-      const response = await parseIfEnvArgs();
+      expect.assertions(1);
 
-      expect.assertions(2);
-      expect(response).toHaveProperty('install');
-      expect(response).toHaveProperty('manifest');
+      expect(response).toEqual({});
     });
 
     it('throws an error if `manifest` is not a yaml.', async () => {
@@ -86,7 +88,7 @@ describe('util/args: ', () => {
       expect.assertions(1);
 
       try {
-        await parseIfEnvArgs();
+        await parseIfCsvArgs();
       } catch (error) {
         if (error instanceof Error) {
           expect(error).toEqual(new CliSourceFileError(SOURCE_IS_NOT_YAML));
@@ -99,7 +101,7 @@ describe('util/args: ', () => {
       expect.assertions(1);
 
       try {
-        await parseIfEnvArgs();
+        await parseIfCsvArgs();
       } catch (error) {
         if (error instanceof Error) {
           expect(error).toEqual(new ParseCliParamsError(MANIFEST_NOT_FOUND));
@@ -116,11 +118,11 @@ describe('util/args: ', () => {
 
       process.env.result = 'env-throw-error';
 
-      await expect(parseIfEnvArgs()).rejects.toThrow('process.exit(1) called');
+      await expect(parseIfCsvArgs()).rejects.toThrow('process.exit(1) called');
 
       expect(execFileSync).toHaveBeenCalledWith(
         'npm',
-        ['run', 'if-env', '--silent', '--', '-h'],
+        ['run', 'if-csv', '--silent', '--', '-h'],
         {
           cwd: process.env.CURRENT_DIR || process.cwd(),
           stdio: 'inherit',
@@ -134,7 +136,7 @@ describe('util/args: ', () => {
       expect.assertions(1);
 
       try {
-        await parseIfEnvArgs();
+        await parseIfCsvArgs();
       } catch (error) {
         expect(error).toEqual('mock-error');
       }
