@@ -1,3 +1,5 @@
+import {ERRORS} from '@grnsft/if-core/utils';
+
 jest.mock('fs/promises', () => require('../../../__mocks__/fs'));
 
 import {
@@ -5,6 +7,8 @@ import {
   openYamlFileAsObject,
   saveYamlFileAs,
 } from '../../../common/util/yaml';
+
+const {ReadFileError} = ERRORS;
 
 describe('util/yaml: ', () => {
   describe('checkIfFileIsYaml(): ', () => {
@@ -40,6 +44,17 @@ describe('util/yaml: ', () => {
 
       expect(typeof result).toBe(expectedType);
       expect(result.name).toBe(expectedYamlName);
+    });
+
+    it('throws an error when file is not valid yaml.', async () => {
+      expect.assertions(2);
+
+      try {
+        await openYamlFileAsObject<any>('fail-yaml');
+      } catch (error) {
+        expect(error).toBeInstanceOf(ReadFileError);
+        expect(error).toEqual(new ReadFileError('file not found'));
+      }
     });
   });
 

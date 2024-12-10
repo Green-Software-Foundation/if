@@ -93,4 +93,30 @@ describe('util/debug-logger: ', () => {
 
     expect(debugSpy).not.toHaveBeenCalled();
   });
+
+  it('logs empty messages when the message is `\n`.', () => {
+    console.debug('\n');
+
+    expect(logSpy).toHaveBeenCalledTimes(1);
+    expect(logSpy).toHaveBeenCalledWith();
+  });
+
+  it('logs messages when the message contains `**Computing`.', () => {
+    const logMessage = '**Computing some pipline message';
+    console.debug(logMessage);
+
+    expect(debugSpy).toHaveBeenCalledTimes(1);
+    expect(debugSpy).toHaveBeenCalledWith(expect.stringContaining(logMessage));
+  });
+
+  it('logs messages when the message is a number.', () => {
+    const logMessage = 10;
+    console.debug(logMessage);
+
+    expect(debugSpy).toHaveBeenCalledTimes(1);
+    expect(debugSpy).toHaveBeenCalledWith(expect.stringContaining('DEBUG:'));
+    expect(debugSpy).toHaveBeenCalledWith(
+      expect.stringContaining(logMessage.toString())
+    );
+  });
 });

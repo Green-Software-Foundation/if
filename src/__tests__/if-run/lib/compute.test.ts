@@ -1,4 +1,28 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+const mockWarn = jest.fn(message => {
+  if (process.env.LOGGER === 'true') {
+    expect(message).toEqual(
+      'You have included node-level config in your manifest to support `params` plugin. IF no longer supports node-level config. `params` plugin should be refactored to accept all its config from config or input data.'
+    );
+  } else if (process.env.LOGGER === 'empty') {
+    expect(message).toEqual(
+      'You have included node-level config in your manifest. IF no longer supports node-level config. The manifest should be refactored to accept all its node-level config from config or input data.'
+    );
+  } else if (process.env.LOGGER === 'invalid') {
+    expect(message).toEqual(
+      `You're using an old style manifest. Please update for phased execution. More information can be found here: 
+https://if.greensoftware.foundation/major-concepts/manifest-file`
+    );
+  }
+});
+
+jest.mock('../../../common/util/logger', () => ({
+  logger: {
+    warn: mockWarn,
+  },
+}));
+
+import * as explainer from '../../../if-run/lib/explain';
 
 import {compute} from '../../../if-run/lib/compute';
 import {ComputeParams} from '../../../if-run/types/compute';
@@ -69,6 +93,27 @@ describe('lib/compute: ', () => {
    */
   const paramsExecute: ComputeParams = {
     // @ts-ignore
+    context: {
+      name: 'mock-name',
+      initialize: {
+        plugins: {
+          mock: {
+            path: 'mockavizta',
+            method: 'Mockavizta',
+          },
+        },
+      },
+    },
+    pluginStorage: pluginStorage()
+      .set('mock', mockExecutePlugin())
+      .set('mock-observe', mockObservePlugin())
+      .set('mock-observe-time-sync', mockObservePluginTimeSync())
+      .set('time-sync', mockTimeSync()),
+  };
+
+  const observeParamsExecute: ComputeParams = {
+    // @ts-ignore
+    observe: {},
     context: {
       name: 'mock-name',
       initialize: {
@@ -326,7 +371,32 @@ describe('lib/compute: ', () => {
         ...tree.children.mockChild.outputs,
         ...mockExecutePlugin().execute(tree.children.mockChild.inputs),
       ];
+
+      expect.assertions(2);
       expect(response.children.mockChild.outputs).toHaveLength(4);
+      expect(response.children.mockChild.outputs).toEqual(expectedResult);
+    });
+
+    it('computes simple tree with append when outputs is null.', async () => {
+      const tree = {
+        children: {
+          mockChild: {
+            pipeline: {compute: ['mock']},
+            inputs: [
+              {timestamp: 'mock-timestamp-1', region: 'eu-west'},
+              {timestamp: 'mock-timestamp-2', region: 'eu-west'},
+            ],
+            outputs: undefined,
+          },
+        },
+      };
+      const response = await compute(tree, paramsExecuteWithAppend);
+      const expectedResult = mockExecutePlugin().execute(
+        tree.children.mockChild.inputs
+      );
+
+      expect.assertions(2);
+      expect(response.children.mockChild.outputs).toHaveLength(2);
       expect(response.children.mockChild.outputs).toEqual(expectedResult);
     });
   });
@@ -360,6 +430,32 @@ describe('lib/compute: ', () => {
         ],
       },
     };
+    expect(response.children.mockChild.children).toEqual(expectedResponse);
+  });
+
+  it('computes simple tree with regroup and append, with existing outputs preserved and without new outputs.', async () => {
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {regroup: ['region'], compute: ['mock']},
+          inputs: [{timestamp: 'mock-timestamp-1', region: 'uk-east'}],
+        },
+      },
+    };
+    const response = await compute(tree, paramsExecuteWithAppend);
+    const expectedResponse = {
+      'uk-east': {
+        inputs: [{region: 'uk-east', timestamp: 'mock-timestamp-1'}],
+        outputs: [
+          {
+            newField: 'mock-newField',
+            region: 'uk-east',
+            timestamp: 'mock-timestamp-1',
+          },
+        ],
+      },
+    };
+
     expect(response.children.mockChild.children).toEqual(expectedResponse);
   });
 
@@ -406,6 +502,201 @@ describe('lib/compute: ', () => {
       {timestamp: '2024-09-03', duration: 60, 'cpu/utilization': 40},
     ];
 
+    expect.assertions(1);
     expect(response.children.mockChild.inputs).toEqual(expectedResult);
+  });
+
+  it('computes simple tree with observe plugin.', async () => {
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {observe: ['mock-observe']},
+        },
+      },
+    };
+
+    const response = await compute(tree, paramsExecute);
+    const expectedResult = [
+      {timestamp: '2024-09-02', duration: 40, 'cpu/utilization': 30},
+      {timestamp: '2024-09-03', duration: 60, 'cpu/utilization': 40},
+    ];
+
+    expect.assertions(1);
+    expect(response.children.mockChild.inputs).toEqual(expectedResult);
+  });
+
+  it('observes simple tree with observe plugin.', async () => {
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {observe: ['mock-observe']},
+        },
+      },
+    };
+
+    const response = await compute(tree, observeParamsExecute);
+    const expectedResult = [
+      {timestamp: '2024-09-02', duration: 40, 'cpu/utilization': 30},
+      {timestamp: '2024-09-03', duration: 60, 'cpu/utilization': 40},
+    ];
+
+    expect.assertions(1);
+    expect(response.children.mockChild.inputs).toEqual(expectedResult);
+  });
+
+  it('observes simple tree with config.', async () => {
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {observe: ['mock-observe']},
+          config: {},
+        },
+      },
+    };
+
+    const response = await compute(tree, observeParamsExecute);
+    const expectedResult = [
+      {timestamp: '2024-09-02', duration: 40, 'cpu/utilization': 30},
+      {timestamp: '2024-09-03', duration: 60, 'cpu/utilization': 40},
+    ];
+
+    expect.assertions(1);
+    expect(response.children.mockChild.inputs).toEqual(expectedResult);
+  });
+
+  it('warns when pipeline is null.', async () => {
+    process.env.LOGGER = 'invalid';
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: null,
+        },
+      },
+    };
+    paramsExecute.context.explainer = false;
+    const response = await compute(tree, paramsExecute);
+
+    expect.assertions(2);
+    expect(response.children.mockChild.inputs).toEqual(undefined);
+
+    process.env.LOGGER = undefined;
+  });
+
+  it('warns when pipeline is an empty object.', async () => {
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {},
+        },
+      },
+    };
+    paramsExecute.context.explainer = false;
+    const response = await compute(tree, paramsExecute);
+
+    expect.assertions(1);
+    expect(response.children.mockChild.inputs).toEqual(undefined);
+  });
+
+  it('warns when config is provided in the tree.', async () => {
+    process.env.LOGGER = 'true';
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {compute: ['mock']},
+          config: {params: 5},
+          inputs: [
+            {timestamp: 'mock-timestamp-1', duration: 10},
+            {timestamp: 'mock-timestamp-2', duration: 10},
+          ],
+        },
+      },
+    };
+    paramsExecute.context.explainer = false;
+    const response = await compute(tree, paramsExecute);
+    const expectedResult = mockExecutePlugin().execute(
+      tree.children.mockChild.inputs
+    );
+
+    expect.assertions(2);
+
+    expect(response.children.mockChild.outputs).toEqual(expectedResult);
+    process.env.LOGGER = undefined;
+  });
+
+  it('warns when config is provided in the tree and it is null.', async () => {
+    process.env.LOGGER = 'empty';
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {compute: ['mock']},
+          config: null,
+          inputs: [
+            {timestamp: 'mock-timestamp-1', duration: 10},
+            {timestamp: 'mock-timestamp-2', duration: 10},
+          ],
+        },
+      },
+    };
+    paramsExecute.context.explainer = false;
+    const response = await compute(tree, paramsExecute);
+    const expectedResult = mockExecutePlugin().execute(
+      tree.children.mockChild.inputs
+    );
+
+    expect.assertions(2);
+
+    expect(response.children.mockChild.outputs).toEqual(expectedResult);
+    process.env.LOGGER = undefined;
+  });
+
+  it('observes simple tree with execute plugin and explain property.', async () => {
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {observe: ['mock-observe']},
+        },
+      },
+    };
+
+    paramsExecute.context.explainer = true;
+
+    const explainerSpy = jest.spyOn(explainer, 'addExplainData');
+
+    const response = await compute(tree, paramsExecute);
+    const expectedResult = [
+      {timestamp: '2024-09-02', duration: 40, 'cpu/utilization': 30},
+      {timestamp: '2024-09-03', duration: 60, 'cpu/utilization': 40},
+    ];
+
+    expect.assertions(2);
+
+    expect(response.children.mockChild.inputs).toEqual(expectedResult);
+    expect(explainerSpy).toHaveBeenCalledWith({
+      metadata: {},
+      pluginName: 'mock-observe',
+    });
+  });
+
+  it('computes simple tree with execute plugin and explain property.', async () => {
+    const tree = {
+      children: {
+        mockChild: {
+          pipeline: {compute: ['mock']},
+          inputs: [
+            {timestamp: 'mock-timestamp-1', duration: 10},
+            {timestamp: 'mock-timestamp-2', duration: 10},
+          ],
+        },
+      },
+    };
+
+    paramsExecute.context.explainer = true;
+
+    const response = await compute(tree, paramsExecute);
+    const expectedResult = mockExecutePlugin().execute(
+      tree.children.mockChild.inputs
+    );
+
+    expect(response.children.mockChild.outputs).toEqual(expectedResult);
   });
 });

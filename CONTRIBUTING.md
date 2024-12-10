@@ -8,6 +8,7 @@ The following document is a rule set of guidelines for contributing.
 
 - [What and when to contribute](#what-and-when-to-contribute)
 - [Reporting bugs](#reporting-bugs)
+- [Disclosing vulnerabilities](#disclosing-vulnerabilities)
 - [Code Contributions](#code-contributions)
   - [Step 1: Fork](#step-1-fork)
   - [Step 2: Branch](#step-2-branch)
@@ -37,16 +38,16 @@ We appreciate bug reports! If you experience an issue with IF, you can report it
 3. Click on `Create New Issue` and select the `Bug Report` template.
 4. Fill out the requested information.
 
-The more detailed information you provide in the bug report, the easier it will be for us to diagnose, triage and resolve your issue. We ask for some simple information about your issue, including a description of the error, the expected behaviour, the actual behaviour and the stepos we can take to reproduce the error in our local environments. We also then prompt you to provide a link to [Stackblitz](https://stackblitz.com/) or a similar online environment where we can run your manifest and observe the error. If you prefer *not* to send a link, we would appreciate a copy of the manifest file that you ran to produce the error, information about your runtime environment and any additional code that's required to reproduce the error. This is all designed to enable us to reproduce the same error and debug it for you as quickly as possible.
+The more detailed information you provide in the bug report, the easier it will be for us to diagnose, triage, and resolve your issue. We ask for some simple information about your issue, including a description of the error, the expected behaviour, the actual behaviour and the steps we can take to reproduce the error in our local environments. We also then prompt you to provide a link to [Stackblitz](https://stackblitz.com/) or a similar online environment where we can run your manifest and observe the error. If you prefer *not* to send a link, we would appreciate a copy of the manifest file that you ran to produce the error, information about your runtime environment, and any additional code that's required to reproduce the error. This is all designed to enable us to reproduce the same error and debug it for you as quickly as possible.
 
-Once a suitably detailed bug report exists, we will triage it. We hold weekly triage calls on Tuesdays. In most cases, the triage call will be the core team's first interaction with the bug, although in some cases we may engage asynchronously in advance of the call. Triage means that the core team will examine the issue and assign an urgency label - either Low, Medium or High. 
+Once a suitably detailed bug report exists, we will triage it. Triage means that the core team will examine the issue and assign an urgency label - either Low, Medium or High. 
 
 The assessment rubric is as follows:
 
 |                                                                                                                        | Consequence                                                                              | Severity |
 | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------- |
 | Bugs in IF core leading to incorrect calculations                                                                      | unusable framework                                                                       | 5        |
-| Bugs in builtins leading to incorrect calculations                                                                   | core pathways fail, IF very limited in functionality                                     | 5        |
+| Bugs in builtins leading to incorrect calculations                                                                     | core pathways fail, IF very limited in functionality                                     | 5        |
 | Bugs in template                                                                                                       | Harder to build plugins, ecosystem growth is impacted                                    | 2        |
 | Bugs in docs                                                                                                           | product does not match expectation, hard to debug, frustration, loss of adoption         | 2        |
 | Security flaw: privacy related                                                                                         | leak user data, unlikely to achieve adoption in serious orgs                             | 5        |
@@ -69,7 +70,7 @@ The mapping of severity to label is as follows:
 | 4        | H     |
 | 5        | H     |
 
-During the bug triage we will also discuss a remediation plan for the bug. This will be communicated in the comments on the bug report. For high urgency bugs, the fix will be implemented as soon as possible, maybe reorganizing our current work to accommodate it. For medium priority bugs, we will schedule the fix in the next available sprint. Low priority bugs will be backlogged and addressed when there is developer time available. Low priority bugs will also be tagged `help-wanted` so that they can be addressed by community members.
+The fix will be implemented for high-urgency bugs as soon as possible. Low priority bugs will be backlogged and addressed when there is developer time available. Low priority bugs will also be tagged `help-wanted` so that they can be addressed by community members.
 
 Not every bug will be fixed. We may decide *not* to fix a bug in cases such as:
 
@@ -79,6 +80,18 @@ Not every bug will be fixed. We may decide *not* to fix a bug in cases such as:
 - the bug is contentious for some reason and there is reputational or community risks associated with the fix
 
 The bug will be labelled `fix-now`, `fix-later` or `wont-fix` to reflect our remediation plan and details will be provided in issue comments.
+
+## Disclosing vulnerabilities
+
+If you discover a security vulnerability in IF, please report it to if-disclosures@greensoftware.foundation.
+
+Include the following information:
+
+- description of the issue
+- steps to reproduce
+- steps to fix, if known
+
+The IF team will respond as quickly as possible. Post-graduation there will be no full-time development team, but GSF staff will aim to get the vulnerability patched as quickly as possible, aiming for <=14 day response time.
 
 
 ## Code Contributions
@@ -155,7 +168,7 @@ $ git push origin <topic-branch-name>
 
 ### Step 6: Pull Request
 
-Open a Pull Request from your fork of the repository to the `dev` branch of the IF repository with a clear title and description according to [template](.github/PULL_REQUEST_TEMPLATE.md).
+Open a Pull Request from your fork of the repository to the `main` branch of the IF repository with a clear title and description according to [template](.github/PULL_REQUEST_TEMPLATE.md).
 
 Pull requests will not be reviewed unless they pass all CI. This includes a lint check and running our unit tests.
 
@@ -178,7 +191,7 @@ We prefer not to use abbreviations of contractions in parameter names.
 
 Using fully descriptive names makes the code more readable, which in turn helps reviewers and anyone else aiming to understand how the plugin works. 
 
-It also helps to avoid ambiguity and naming collisions within and across plugins. Your name should describe what an element does as precisely as practically possible.
+It also helps to avoid ambiguity and naming collisions within and across plugins. Ensure that names clearly and precisely describe the purpose of an element to make its functionality immediately apparent.
 
 For example, we prefer `functionalUnit` to `funcUnit`, `fUnit`, or any other abbreviation.
 
