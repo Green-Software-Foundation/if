@@ -20,6 +20,12 @@ export const CONFIG = {
       alias: 't',
       description: '[path to the target file',
     },
+    help: {
+      type: Boolean,
+      optional: true,
+      alias: 'h',
+      description: '[prints out the above help instruction]',
+    },
   } as ArgumentConfig<IFDiffArgs>,
   HELP: {
     helpArg: 'help',

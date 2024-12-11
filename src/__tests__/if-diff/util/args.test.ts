@@ -1,3 +1,5 @@
+import {execFileSync} from 'child_process';
+
 jest.mock('ts-command-line-args', () => ({
   __esModule: true,
   parse: () => {
@@ -32,6 +34,16 @@ jest.mock('ts-command-line-args', () => ({
     }
   },
 }));
+
+jest.mock('child_process', () => {
+  const originalModule = jest.requireActual('child_process');
+  return {
+    ...originalModule,
+    execFileSync: jest.fn(() => {
+      return 'Command executed successfully';
+    }),
+  };
+});
 
 import {ERRORS} from '@grnsft/if-core/utils';
 
@@ -104,17 +116,26 @@ describe('util/args: ', () => {
       expect(response).toHaveProperty('sourcePath');
     });
 
-    it('throws error if parsing failed.', () => {
-      process.env.result = 'diff-throw-error';
-      expect.assertions(1);
+    it('runs help command if the passed argument is incorrect.', () => {
+      expect.assertions(3);
+      jest.spyOn(process, 'exit').mockImplementation((code?: number) => {
+        expect(code).toEqual(1);
+        throw new Error(`process.exit(${code}) called`);
+      });
 
-      try {
-        parseIfDiffArgs();
-      } catch (error) {
-        if (error instanceof Error) {
-          expect(error).toEqual(new ParseCliParamsError('mock-error'));
+      process.env.result = 'diff-throw-error';
+
+      expect(() => parseIfDiffArgs()).toThrow('process.exit(1) called');
+
+      expect(execFileSync).toHaveBeenCalledWith(
+        'npm',
+        ['run', 'if-diff', '--silent', '--', '-h'],
+        {
+          cwd: process.env.CURRENT_DIR || process.cwd(),
+          stdio: 'inherit',
+          shell: false,
         }
-      }
+      );
     });
 
     it('throws error if parsing failed (not instance of error).', () => {

@@ -27,6 +27,12 @@ export const CONFIG = {
       description:
         '[command to generate the package.json in the command working directory]',
     },
+    help: {
+      type: Boolean,
+      optional: true,
+      alias: 'h',
+      description: '[prints out the above help instruction]',
+    },
   } as ArgumentConfig<IFEnvArgs>,
   HELP: {
     helpArg: 'help',

@@ -2,7 +2,7 @@ import {parse} from 'ts-command-line-args';
 import {ERRORS} from '@grnsft/if-core/utils';
 
 import {isFileExists, isDirectoryExists} from '../../common/util/fs';
-import {prependFullFilePath} from '../../common/util/helpers';
+import {prependFullFilePath, runHelpCommand} from '../../common/util/helpers';
 import {checkIfFileIsYaml} from '../../common/util/yaml';
 
 import {STRINGS as COMMON_STRINGS} from '../../common/config';
@@ -24,7 +24,9 @@ const validateAndParseIfMergeArgs = () => {
     return parse<IFMergeArgs>(ARGS, HELP);
   } catch (error) {
     if (error instanceof Error) {
-      throw new ParseCliParamsError(error.message);
+      console.log(error.message);
+
+      runHelpCommand('if-merge');
     }
 
     throw error;

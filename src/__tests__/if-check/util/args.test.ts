@@ -1,3 +1,15 @@
+import {execFileSync} from 'child_process';
+
+jest.mock('child_process', () => {
+  const originalModule = jest.requireActual('child_process');
+  return {
+    ...originalModule,
+    execFileSync: jest.fn(() => {
+      return 'Command executed successfully';
+    }),
+  };
+});
+
 jest.mock('../../../common/util/fs', () => ({
   isFileExists: () => {
     if (process.env.fileExists === 'true') {
@@ -151,17 +163,28 @@ describe('if-check/util: ', () => {
       }
     });
 
-    it('throws an error if parsing failed.', async () => {
-      process.env.result = 'env-throw-error';
-      expect.assertions(1);
+    it('runs help command if the passed argument is incorrect.', async () => {
+      expect.assertions(3);
+      jest.spyOn(process, 'exit').mockImplementation((code?: number) => {
+        expect(code).toEqual(1);
+        throw new Error(`process.exit(${code}) called`);
+      });
 
-      try {
-        await parseIfCheckArgs();
-      } catch (error) {
-        if (error instanceof Error) {
-          expect(error).toEqual(new ParseCliParamsError('mock-error'));
+      process.env.result = 'env-throw-error';
+
+      await expect(parseIfCheckArgs()).rejects.toThrow(
+        'process.exit(1) called'
+      );
+
+      expect(execFileSync).toHaveBeenCalledWith(
+        'npm',
+        ['run', 'if-check', '--silent', '--', '-h'],
+        {
+          cwd: process.env.CURRENT_DIR || process.cwd(),
+          stdio: 'inherit',
+          shell: false,
         }
-      }
+      );
     });
 
     it('throws error if parsing failed (not instance of error).', async () => {

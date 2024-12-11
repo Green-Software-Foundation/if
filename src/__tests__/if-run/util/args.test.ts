@@ -1,3 +1,16 @@
+import {execFileSync} from 'child_process';
+
+jest.mock('child_process', () => {
+  const originalModule = jest.requireActual('child_process');
+  return {
+    ...originalModule,
+    execFileSync: jest.fn(() => {
+      // Simulate a successful execution
+      return 'Command executed successfully';
+    }),
+  };
+});
+
 jest.mock('ts-command-line-args', () => ({
   __esModule: true,
   parse: () => {
@@ -73,12 +86,12 @@ import {STRINGS} from '../../../if-run/config/strings';
 
 const {SOURCE_IS_NOT_YAML, MANIFEST_IS_MISSING} = COMMON_STRINGS;
 const {NO_OUTPUT} = STRINGS;
-const {CliSourceFileError, ParseCliParamsError} = ERRORS;
+const {CliSourceFileError} = ERRORS;
 
 describe('if-run/util/args: ', () => {
   describe('parseIfRunProcessArgs(): ', () => {
     it('throws error if there is no argument passed.', () => {
-      expect.assertions(4);
+      expect.assertions(3);
 
       process.env.result = 'error'; // used for mocking
 
@@ -86,14 +99,6 @@ describe('if-run/util/args: ', () => {
         parseIfRunProcessArgs();
       } catch (error) {
         expect(error).toEqual(MANIFEST_IS_MISSING);
-      }
-
-      process.env.result = 'throw-error-object';
-
-      try {
-        parseIfRunProcessArgs();
-      } catch (error) {
-        expect(error).toEqual(new ParseCliParamsError(MANIFEST_IS_MISSING));
       }
 
       process.env.result = 'manifest-is-missing';
@@ -104,6 +109,27 @@ describe('if-run/util/args: ', () => {
         expect(error).toBeInstanceOf(CliSourceFileError);
         expect(error).toEqual(new CliSourceFileError(MANIFEST_IS_MISSING));
       }
+    });
+
+    it('runs help command if the passed argument is incorrect.', () => {
+      expect.assertions(3);
+      jest.spyOn(process, 'exit').mockImplementation((code?: number) => {
+        expect(code).toEqual(1);
+        throw new Error(`process.exit(${code}) called`);
+      });
+
+      process.env.result = 'throw-error-object';
+
+      expect(() => parseIfRunProcessArgs()).toThrow('process.exit(1) called');
+      expect(execFileSync).toHaveBeenCalledWith(
+        'npm',
+        ['run', 'if-run', '--silent', '--', '-h'],
+        {
+          cwd: process.env.CURRENT_DIR || process.cwd(),
+          stdio: 'inherit',
+          shell: false,
+        }
+      );
     });
 
     it('returns manifest path.', () => {
