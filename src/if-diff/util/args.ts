@@ -24,6 +24,8 @@ const validateAndParseIfDiffArgs = () => {
     return parse<IFDiffArgs>(ARGS, HELP);
   } catch (error) {
     if (error instanceof Error) {
+      console.log(error.message);
+
       runHelpCommand('if-diff');
     }
 

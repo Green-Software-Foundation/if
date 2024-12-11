@@ -23,6 +23,8 @@ const validateAndParseIfEnvArgs = () => {
     return parse<IFEnvArgs>(ARGS, HELP);
   } catch (error) {
     if (error instanceof Error) {
+      console.log(error.message);
+
       runHelpCommand('if-env');
     }
 
