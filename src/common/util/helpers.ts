@@ -70,6 +70,8 @@ export const parseManifestFromStdin = async () => {
  * Runs the --help command when the entered command is incorrect.
  */
 export const runHelpCommand = (command: string) => {
+  console.log(`Here are the supported flags for the \`${command}\` command:`);
+
   const isGlobal = !!process.env.npm_config_global;
   const ifCommand = [
     isGlobal ? command : 'npm',
