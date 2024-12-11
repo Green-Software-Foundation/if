@@ -37,7 +37,7 @@ const validateAndParseProcessArgs = () => {
  * 2. If output params are missing, warns user about it.
  * 3. Otherwise checks if `manifest` param is there, then processes with checking if it's a yaml file.
  *    If it is, then returns object containing full path.
- * 4. If params are missing or invalid, run `--help` command.
+ * 4. If params are missing or invalid, runs `--help` command.
  */
 export const parseIfRunProcessArgs = (): ProcessArgsOutputs => {
   const {
