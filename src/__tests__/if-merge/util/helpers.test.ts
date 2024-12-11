@@ -36,7 +36,11 @@ jest.mock('../../../if-run/builtins/export-yaml', () => ({
         },
       };
 
-      if (process.env.CONTEXT !== 'default-name-description') {
+      if (process.env.CONTEXT === 'output-file-name') {
+        expectedContext.name = 'mock name';
+        expectedContext.description = 'mock description';
+        expect(outputPath).toBe('mock-outputPath/merged-manifest');
+      } else if (process.env.CONTEXT !== 'default-name-description') {
         expectedContext.name = 'mock name';
         expectedContext.description = 'mock description';
         expect(outputPath).toBe('mock-outputPath');
@@ -135,6 +139,28 @@ describe('if-merge/util/helpers: ', () => {
       expect(load).toHaveBeenCalledTimes(2);
     });
 
+    it('merges manifests correctly when the output end with `/`.', async () => {
+      process.env.CONTEXT = 'output-file-name';
+
+      const mockCommandArgs = {
+        manifests: ['manifest1.yaml', 'manifest2.yaml'],
+        output: 'mock-outputPath/',
+        name: 'mock name',
+        description: 'mock description',
+      };
+      (getFileName as jest.Mock).mockImplementation(file =>
+        file.replace('.yaml', '')
+      );
+      (load as jest.Mock).mockResolvedValue({rawManifest: mockRawManifest});
+
+      await mergeManifests(mockCommandArgs);
+
+      expect.assertions(4);
+
+      expect(getFileName).toHaveBeenCalledTimes(2);
+      expect(load).toHaveBeenCalledTimes(2);
+    });
+
     it('successfully prints merged manifests when the `output` is not provided.', async () => {
       (getFileName as jest.Mock).mockImplementation(file =>
         file.replace('.yaml', '')
@@ -153,6 +179,7 @@ describe('if-merge/util/helpers: ', () => {
     });
 
     it('gets YAML files when there is only one manifest.', async () => {
+      process.env.CONTEXT = undefined;
       const singleManifestArgs = {
         manifests: ['mock-dir'],
         output: 'mock-outputPath',

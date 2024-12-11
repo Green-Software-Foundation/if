@@ -64,6 +64,10 @@ const saveMergedManifest = async (
   context: Context,
   outputPath: string | undefined
 ) => {
+  if (outputPath?.endsWith('/')) {
+    outputPath += 'merged-manifest';
+  }
+
   const output = {
     outputPath,
     noOutput: false,
