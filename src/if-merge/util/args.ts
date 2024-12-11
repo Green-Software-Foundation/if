@@ -24,6 +24,8 @@ const validateAndParseIfMergeArgs = () => {
     return parse<IFMergeArgs>(ARGS, HELP);
   } catch (error) {
     if (error instanceof Error) {
+      console.log(error.message);
+
       runHelpCommand('if-merge');
     }
 
