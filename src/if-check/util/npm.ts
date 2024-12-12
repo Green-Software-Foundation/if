@@ -30,7 +30,7 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   const ifEnvCommand = [
     isGlobal ? 'if-env' : 'npm',
     ...(isGlobal ? [] : ['run', 'if-env']),
-    '--',
+    isGlobal ? '' : '--',
     ...(prefixFlag === '' ? [] : [prefixFlag]),
     '-m',
     sanitizedManifest,
@@ -39,7 +39,7 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   const ifRunCommand = [
     isGlobal ? 'if-run' : 'npm',
     ...(isGlobal ? [] : ['run', 'if-run']),
-    '--',
+    isGlobal ? '' : '--',
     ...(prefixFlag === '' ? [] : [prefixFlag]),
     '-m',
     sanitizedManifest,
@@ -51,7 +51,7 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
   const ifDiffCommand = [
     isGlobal ? 'if-diff' : 'npm',
     ...(isGlobal ? [] : ['run', 'if-diff']),
-    '--',
+    isGlobal ? '' : '--',
     ...(prefixFlag === '' ? [] : [prefixFlag]),
     '-s',
     `${sanitizedExecutedManifest}.yaml`,
