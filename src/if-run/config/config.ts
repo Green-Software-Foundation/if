@@ -20,12 +20,6 @@ export const CONFIG = {
       alias: 'o',
       description: '[path to the output file]',
     },
-    'override-params': {
-      type: String,
-      optional: true,
-      alias: 'p',
-      description: '[path to a parameter file that overrides our defaults]',
-    },
     'no-output': {
       type: Boolean,
       optional: true,

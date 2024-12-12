@@ -1,5 +1,7 @@
+#!/usr/bin/env node
+/* eslint-disable no-process-exit */
 import {createInterface} from 'node:readline/promises';
-import {exec} from 'child_process';
+import {exec, execFileSync} from 'child_process';
 import * as path from 'path';
 import {promisify} from 'util';
 
@@ -62,4 +64,27 @@ export const parseManifestFromStdin = async () => {
   }
 
   return match![1];
+};
+
+/**
+ * Runs the --help command when the entered command is incorrect.
+ */
+export const runHelpCommand = (command: string) => {
+  console.log(`Here are the supported flags for the \`${command}\` command:`);
+
+  const isGlobal = !!process.env.npm_config_global;
+  const ifCommand = [
+    isGlobal ? command : 'npm',
+    ...(isGlobal ? ['--silent'] : ['run', command, '--silent']),
+    '--',
+    '-h',
+  ];
+
+  execFileSync(ifCommand[0], ifCommand.slice(1), {
+    cwd: process.env.CURRENT_DIR || process.cwd(),
+    stdio: 'inherit',
+    shell: false,
+  });
+
+  process.exit(1);
 };
