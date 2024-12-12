@@ -20,6 +20,12 @@ export const CONFIG = {
       alias: 'd',
       description: '[path to the manifests directory]',
     },
+    help: {
+      type: Boolean,
+      optional: true,
+      alias: 'h',
+      description: '[prints out the above help instruction]',
+    },
   } as ArgumentConfig<IFCheckArgs>,
   HELP: {
     helpArg: 'help',

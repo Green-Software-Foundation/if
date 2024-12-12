@@ -32,6 +32,12 @@ export const CONFIG = {
       alias: 'd',
       description: '[decription of the merged manifest]',
     },
+    help: {
+      type: Boolean,
+      optional: true,
+      alias: 'h',
+      description: '[prints out the above help instruction]',
+    },
   } as unknown as ArgumentConfig<IFMergeArgs>,
   HELP: {
     helpArg: 'help',
