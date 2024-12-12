@@ -6,6 +6,7 @@ import {PluginFactory} from '@grnsft/if-core/interfaces';
 import {ERRORS, validate} from '@grnsft/if-core/utils';
 
 import {STRINGS} from '../../config';
+
 import {
   fieldAccessor,
   nanifyEmptyValues,
@@ -13,11 +14,11 @@ import {
   retrieveFile,
 } from '../util/csv-helpers';
 
-const {MISSING_CONFIG, NO_QUERY_DATA} = STRINGS;
+const {MISSING_CONFIG} = STRINGS;
 
-const {QueryDataNotFoundError, ConfigError} = ERRORS;
+const {ConfigError} = ERRORS;
 
-export const CSVLookup = PluginFactory({
+export const CSVImport = PluginFactory({
   configValidation: (config: ConfigParams) => {
     if (!config || !Object.keys(config)?.length) {
       throw new ConfigError(MISSING_CONFIG);
@@ -25,7 +26,6 @@ export const CSVLookup = PluginFactory({
 
     const configSchema = z.object({
       filepath: z.string(),
-      query: z.record(z.string(), z.string()),
       output: z
         .string()
         .or(z.array(z.string()))
@@ -40,31 +40,15 @@ export const CSVLookup = PluginFactory({
      * 2. Parses given CSV.
      * 3. Filters requested information from CSV.
      */
-    const {filepath, query, output} = config;
+    const {filepath, output} = config;
     const file = await retrieveFile(filepath);
     const parsedCSV = parseCSVFile(file);
 
-    return inputs.map(input => {
-      /** Collects query values from input. */
-      const queryData: any = {};
-      const queryKeys = Object.keys(query);
-      queryKeys.forEach(queryKey => {
-        const queryValue = query[queryKey];
-        queryData[queryKey] = input[queryValue];
-      });
+    const result = parsedCSV?.map((input: PluginParams) =>
+      filterOutput(input, output)
+    );
 
-      /** Gets related data from CSV. */
-      const relatedData = parsedCSV.find(withCriteria(queryData));
-
-      if (!relatedData) {
-        throw new QueryDataNotFoundError(NO_QUERY_DATA);
-      }
-
-      return {
-        ...input,
-        ...filterOutput(relatedData, {output, query}),
-      };
-    });
+    return [...inputs, ...result];
   },
 });
 
@@ -76,20 +60,9 @@ export const CSVLookup = PluginFactory({
  */
 const filterOutput = (
   dataFromCSV: any,
-  params: {
-    output: string | string[] | string[][];
-    query: Record<string, any>;
-  }
+  output: string | string[] | string[][]
 ) => {
-  const {output, query} = params;
-
   if (output === '*') {
-    const keys = Object.keys(query);
-
-    keys.forEach(key => {
-      delete dataFromCSV[key];
-    });
-
     return nanifyEmptyValues(dataFromCSV);
   }
 
@@ -117,15 +90,4 @@ const filterOutput = (
   return {
     [output]: fieldAccessor(output, dataFromCSV),
   };
-};
-
-/**
- * Asserts CSV record with query data.
- */
-const withCriteria = (queryData: Record<string, any>) => (csvRecord: any) => {
-  const ifMatchesCriteria = Object.keys(queryData).map(
-    (key: string) => csvRecord[key] == queryData[key]
-  );
-
-  return ifMatchesCriteria.every(value => value === true);
 };
