@@ -12,7 +12,7 @@ import {
   nanifyEmptyValues,
   parseCSVFile,
   retrieveFile,
-} from '../util/helpers';
+} from '../util/csv-helpers';
 
 const {MISSING_CONFIG} = STRINGS;
 
