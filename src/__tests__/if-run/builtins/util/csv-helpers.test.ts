@@ -8,7 +8,7 @@ import {
   nanifyEmptyValues,
   fieldAccessor,
   parseCSVFile,
-} from '../../../../if-run/builtins/util/helpers';
+} from '../../../../if-run/builtins/util/csv-helpers';
 
 import {ERRORS} from '@grnsft/if-core/utils';
 import {STRINGS} from '../../../../if-run/config';
