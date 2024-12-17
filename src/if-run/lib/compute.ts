@@ -22,12 +22,15 @@ const {
   OBSERVING,
 } = STRINGS;
 
+const childNames = new Set();
+
 /**
  * Traverses all child nodes based on children grouping.
  */
 const traverse = async (children: any, params: ComputeParams) => {
   for (const child in children) {
     console.debug(COMPUTING_COMPONENT_PIPELINE(child));
+    childNames.add(child);
     await computeNode(children[child], params);
   }
 };
@@ -129,6 +132,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       node.inputs = outputStorage;
 
       if (params.context.explainer) {
+        console.log('reached here');
         addExplainData({
           pluginName,
           metadata: plugin.metadata,
@@ -143,27 +147,40 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   if ((noFlags || params.regroup) && pipelineCopy.regroup) {
     const originalOutputs = params.append ? node.outputs || [] : [];
 
-    node.children = Regroup(
-      outputStorage,
-      originalOutputs,
-      pipelineCopy.regroup
+    // Grabs all the values according to grouping criteria.
+    const regroupValues = pipelineCopy.regroup
+      .map(group => [...new Set(outputStorage.map(output => output[group]))])
+      .flat();
+    // Checks if regroup values are present in the children list.
+    const isRegrouped = regroupValues.every(one =>
+      [...childNames].includes(one)
     );
+    console.log(isRegrouped);
+    console.log(regroupValues);
 
-    delete node.inputs;
-    delete node.outputs;
+    if (!isRegrouped) {
+      node.children = Regroup(
+        outputStorage,
+        originalOutputs,
+        pipelineCopy.regroup
+      );
 
-    debugLogger.setExecutingPluginName();
-    console.debug(REGROUPING);
+      delete node.inputs;
+      delete node.outputs;
 
-    return traverse(node.children, {
-      ...params,
-      pipeline: {
-        ...pipelineCopy,
-        regroup: undefined,
-      },
-      defaults,
-      config,
-    });
+      debugLogger.setExecutingPluginName();
+      console.debug(REGROUPING);
+
+      return traverse(node.children, {
+        ...params,
+        pipeline: {
+          ...pipelineCopy,
+          regroup: undefined,
+        },
+        defaults,
+        config,
+      });
+    }
   }
 
   console.debug('\n');
