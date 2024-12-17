@@ -135,10 +135,6 @@ describe('lib/compute: ', () => {
   const paramsExecuteWithAppend = {...paramsExecute, append: true};
 
   describe('compute(): ', () => {
-    beforeEach(() => {
-      jest.resetModules();
-    });
-
     it('computes simple tree with execute plugin.', async () => {
       const {compute} = require('../../../if-run/lib/compute');
       const tree = {
