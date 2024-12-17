@@ -187,6 +187,32 @@ describe('lib/compute: ', () => {
       expect(response.children.mockChild.children).toEqual(expectedResponse);
     });
 
+    it('skips regrouping on already regrouped data.', async () => {
+      const {compute} = require('../../../if-run/lib/compute');
+      const expectedResponse = {
+        'uk-west': {
+          inputs: [{region: 'uk-west', timestamp: 'mock-timestamp-1'}],
+        },
+        'uk-east': {
+          inputs: [
+            {region: 'uk-east', timestamp: 'mock-timestamp-2'},
+            {region: 'uk-east', timestamp: 'mock-timestamp-3'},
+          ],
+        },
+      };
+      const tree = {
+        children: {
+          mockChild: {
+            pipeline: {regroup: ['region']},
+            children: expectedResponse,
+          },
+        },
+      };
+      const response = await compute(tree, paramsExecute);
+
+      expect(response.children.mockChild.children).toEqual(expectedResponse);
+    });
+
     it('computes simple tree with regroup, grouping inputs and outputs.', async () => {
       const {compute} = require('../../../if-run/lib/compute');
       const tree = {
