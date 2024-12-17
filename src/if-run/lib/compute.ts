@@ -132,7 +132,6 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       node.inputs = outputStorage;
 
       if (params.context.explainer) {
-        console.log('reached here');
         addExplainData({
           pluginName,
           metadata: plugin.metadata,
@@ -155,8 +154,6 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     const isRegrouped = regroupValues.every(one =>
       [...childNames].includes(one)
     );
-    console.log(isRegrouped);
-    console.log(regroupValues);
 
     if (!isRegrouped) {
       node.children = Regroup(
