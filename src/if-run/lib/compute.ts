@@ -20,6 +20,7 @@ const {
   COMPUTING_COMPONENT_PIPELINE,
   REGROUPING,
   OBSERVING,
+  SKIPPING_REGROUP,
 } = STRINGS;
 
 const childNames = new Set();
@@ -177,6 +178,8 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
         defaults,
         config,
       });
+    } else {
+      console.debug(SKIPPING_REGROUP);
     }
   }
 
