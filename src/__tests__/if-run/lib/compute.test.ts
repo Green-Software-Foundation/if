@@ -22,13 +22,14 @@ jest.mock('../../../common/util/logger', () => ({
   },
 }));
 
-import * as explainer from '../../../if-run/lib/explain';
-
-import {compute} from '../../../if-run/lib/compute';
 import {ComputeParams} from '../../../if-run/types/compute';
 import {pluginStorage} from '../../../if-run/util/plugin-storage';
 
 describe('lib/compute: ', () => {
+  beforeEach(() => {
+    jest.resetModules();
+  });
+
   /**
    * Mock plugins.
    */
@@ -135,6 +136,7 @@ describe('lib/compute: ', () => {
 
   describe('compute(): ', () => {
     it('computes simple tree with execute plugin.', async () => {
+      const {compute} = require('../../../if-run/lib/compute');
       const tree = {
         children: {
           mockChild: {
@@ -156,6 +158,7 @@ describe('lib/compute: ', () => {
     });
 
     it('computes simple tree with regroup on inputs only (no compute).', async () => {
+      const {compute} = require('../../../if-run/lib/compute');
       const tree = {
         children: {
           mockChild: {
@@ -184,7 +187,34 @@ describe('lib/compute: ', () => {
       expect(response.children.mockChild.children).toEqual(expectedResponse);
     });
 
+    it('skips regrouping on already regrouped data.', async () => {
+      const {compute} = require('../../../if-run/lib/compute');
+      const expectedResponse = {
+        'uk-west': {
+          inputs: [{region: 'uk-west', timestamp: 'mock-timestamp-1'}],
+        },
+        'uk-east': {
+          inputs: [
+            {region: 'uk-east', timestamp: 'mock-timestamp-2'},
+            {region: 'uk-east', timestamp: 'mock-timestamp-3'},
+          ],
+        },
+      };
+      const tree = {
+        children: {
+          mockChild: {
+            pipeline: {regroup: ['region']},
+            children: expectedResponse,
+          },
+        },
+      };
+      const response = await compute(tree, paramsExecute);
+
+      expect(response.children.mockChild.children).toEqual(expectedResponse);
+    });
+
     it('computes simple tree with regroup, grouping inputs and outputs.', async () => {
+      const {compute} = require('../../../if-run/lib/compute');
       const tree = {
         children: {
           mockChild: {
@@ -232,6 +262,7 @@ describe('lib/compute: ', () => {
     });
 
     it('computes simple tree with defaults and execute plugin.', async () => {
+      const {compute} = require('../../../if-run/lib/compute');
       const tree = {
         children: {
           mockChild: {
@@ -259,6 +290,7 @@ describe('lib/compute: ', () => {
     });
 
     it('computes nested tree with defaults and execute plugin.', async () => {
+      const {compute} = require('../../../if-run/lib/compute');
       const tree = {
         children: {
           mockChild1: {
@@ -308,6 +340,7 @@ describe('lib/compute: ', () => {
     });
 
     it('computes simple tree with no defaults and no inputs with execute plugin.', async () => {
+      const {compute} = require('../../../if-run/lib/compute');
       const tree = {
         children: {
           mockChild: {
@@ -323,6 +356,7 @@ describe('lib/compute: ', () => {
     });
 
     it('computes simple tree with defaults and no inputs with execute plugin.', async () => {
+      const {compute} = require('../../../if-run/lib/compute');
       const tree = {
         children: {
           mockChild: {
@@ -343,6 +377,7 @@ describe('lib/compute: ', () => {
     });
 
     it('computes simple tree with append, preserving existing outputs.', async () => {
+      const {compute} = require('../../../if-run/lib/compute');
       const tree = {
         children: {
           mockChild: {
@@ -378,6 +413,7 @@ describe('lib/compute: ', () => {
     });
 
     it('computes simple tree with append when outputs is null.', async () => {
+      const {compute} = require('../../../if-run/lib/compute');
       const tree = {
         children: {
           mockChild: {
@@ -402,6 +438,7 @@ describe('lib/compute: ', () => {
   });
 
   it('computes simple tree with regroup and append, with existing outputs preserved and regrouped without re-computing.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
     const tree = {
       children: {
         mockChild: {
@@ -434,6 +471,7 @@ describe('lib/compute: ', () => {
   });
 
   it('computes simple tree with regroup and append, with existing outputs preserved and without new outputs.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
     const tree = {
       children: {
         mockChild: {
@@ -460,6 +498,7 @@ describe('lib/compute: ', () => {
   });
 
   it('computes simple tree with regroup and no append, with existing outputs that are removed.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
     const tree = {
       children: {
         mockChild: {
@@ -488,6 +527,7 @@ describe('lib/compute: ', () => {
   });
 
   it('computes simple tree with observe plugin.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
     const tree = {
       children: {
         mockChild: {
@@ -507,6 +547,7 @@ describe('lib/compute: ', () => {
   });
 
   it('computes simple tree with observe plugin.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
     const tree = {
       children: {
         mockChild: {
@@ -526,6 +567,7 @@ describe('lib/compute: ', () => {
   });
 
   it('observes simple tree with observe plugin.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
     const tree = {
       children: {
         mockChild: {
@@ -545,6 +587,7 @@ describe('lib/compute: ', () => {
   });
 
   it('observes simple tree with config.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
     const tree = {
       children: {
         mockChild: {
@@ -565,6 +608,7 @@ describe('lib/compute: ', () => {
   });
 
   it('warns when pipeline is null.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
     process.env.LOGGER = 'invalid';
     const tree = {
       children: {
@@ -583,6 +627,7 @@ describe('lib/compute: ', () => {
   });
 
   it('warns when pipeline is an empty object.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
     const tree = {
       children: {
         mockChild: {
@@ -598,6 +643,7 @@ describe('lib/compute: ', () => {
   });
 
   it('warns when config is provided in the tree.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
     process.env.LOGGER = 'true';
     const tree = {
       children: {
@@ -624,6 +670,7 @@ describe('lib/compute: ', () => {
   });
 
   it('warns when config is provided in the tree and it is null.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
     process.env.LOGGER = 'empty';
     const tree = {
       children: {
@@ -650,6 +697,8 @@ describe('lib/compute: ', () => {
   });
 
   it('observes simple tree with execute plugin and explain property.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
+    const explainer = require('../../../if-run/lib/explain');
     const tree = {
       children: {
         mockChild: {
@@ -678,6 +727,7 @@ describe('lib/compute: ', () => {
   });
 
   it('computes simple tree with execute plugin and explain property.', async () => {
+    const {compute} = require('../../../if-run/lib/compute');
     const tree = {
       children: {
         mockChild: {

@@ -51,6 +51,7 @@ Note that for the '--output' option you also need to define the output type in y
   COMPUTING_COMPONENT_PIPELINE: (component: string) =>
     `**Computing \`${component}\` pipeline**`,
   REGROUPING: 'Regrouping',
+  SKIPPING_REGROUP: 'Already correctly grouped - skipping regrouping.',
   OBSERVING: (nodeName: string) =>
     `Running observe pipeline: \`${nodeName}\` plugin`,
   MERGING_DEFAULTS_WITH_INPUT_DATA: 'Merging defaults with input data',

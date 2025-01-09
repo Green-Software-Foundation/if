@@ -1,8 +1,23 @@
+import {execFileSync} from 'child_process';
+
 jest.mock('node:readline/promises', () =>
   require('../../../__mocks__/readline')
 );
 
-import {parseManifestFromStdin} from '../../../common/util/helpers';
+jest.mock('child_process', () => {
+  const originalModule = jest.requireActual('child_process');
+  return {
+    ...originalModule,
+    execFileSync: jest.fn(() => {
+      return 'Command executed successfully';
+    }),
+  };
+});
+
+import {
+  parseManifestFromStdin,
+  runHelpCommand,
+} from '../../../common/util/helpers';
 
 describe('common/util/helpers: ', () => {
   describe('parseManifestFromStdin(): ', () => {
@@ -40,5 +55,51 @@ describe('common/util/helpers: ', () => {
       expect.assertions(1);
       expect(response).toEqual(expectedMessage);
     });
+  });
+
+  describe('runHelpCommand(): ', () => {
+    const originalEnv = process.env;
+    it('calls process.exit with code 1 on error.', () => {
+      expect.assertions(3);
+
+      jest.spyOn(process, 'exit').mockImplementation((code?: number) => {
+        expect(code).toEqual(1);
+        throw new Error(`process.exit(${code}) called`);
+      });
+
+      expect(() => runHelpCommand('if-run')).toThrow('process.exit(1) called');
+      expect(execFileSync).toHaveBeenCalledWith(
+        'npm',
+        ['run', 'if-run', '--silent', '--', '-h'],
+        {
+          cwd: process.env.CURRENT_DIR || process.cwd(),
+          stdio: 'inherit',
+          shell: false,
+        }
+      );
+    });
+
+    it('executes when the script runs from the global.', () => {
+      expect.assertions(3);
+      process.env.npm_config_global = 'true';
+
+      jest.spyOn(process, 'exit').mockImplementation((code?: number) => {
+        expect(code).toEqual(1);
+        throw new Error(`process.exit(${code}) called`);
+      });
+
+      expect(() => runHelpCommand('if-run')).toThrow('process.exit(1) called');
+      expect(execFileSync).toHaveBeenCalledWith(
+        'if-run',
+        ['--silent', '--', '-h'],
+        {
+          cwd: process.env.CURRENT_DIR || process.cwd(),
+          stdio: 'inherit',
+          shell: false,
+        }
+      );
+    });
+
+    process.env = originalEnv;
   });
 });

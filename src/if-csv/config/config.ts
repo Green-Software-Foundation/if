@@ -25,6 +25,12 @@ export const CONFIG = {
       alias: 'p',
       description: '[parameter to export]',
     },
+    help: {
+      type: Boolean,
+      optional: true,
+      alias: 'h',
+      description: '[prints out the above help instruction]',
+    },
   } as ArgumentConfig<IFCsvArgs>,
   HELP: {
     helpArg: 'help',
