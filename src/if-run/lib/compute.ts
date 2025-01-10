@@ -1,6 +1,6 @@
 import {PluginParams} from '@grnsft/if-core/types';
 
-import {Regroup} from './regroup';
+import {isRegrouped, Regroup} from './regroup';
 import {addExplainData} from './explain';
 
 import {debugLogger} from '../../common/util/debug-logger';
@@ -23,7 +23,7 @@ const {
   SKIPPING_REGROUP,
 } = STRINGS;
 
-const childNames = new Set();
+const childNames = new Set<string>();
 
 /**
  * Traverses all child nodes based on children grouping.
@@ -147,16 +147,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   if ((noFlags || params.regroup) && pipelineCopy.regroup) {
     const originalOutputs = params.append ? node.outputs || [] : [];
 
-    // Grabs all the values according to grouping criteria.
-    const regroupValues = pipelineCopy.regroup
-      .map(group => [...new Set(outputStorage.map(output => output[group]))])
-      .flat();
-    // Checks if regroup values are present in the children list.
-    const isRegrouped = regroupValues.every(one =>
-      [...childNames].includes(one)
-    );
-
-    if (!isRegrouped) {
+    if (!isRegrouped(pipelineCopy.regroup, outputStorage, childNames)) {
       node.children = Regroup(
         outputStorage,
         originalOutputs,
