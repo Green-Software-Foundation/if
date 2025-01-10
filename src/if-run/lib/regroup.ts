@@ -86,3 +86,20 @@ export const Regroup = (
 
   return acc.children;
 };
+
+/**
+ * Grabs all the values according to grouping criteria, then
+ *  checks if regroup values are present in the children list.
+ */
+export const isRegrouped = (
+  groups: string[],
+  outputStorage: PluginParams[],
+  childNames: Set<string>
+) => {
+  const validatedGroups = validateGroups(groups);
+  const regroupValues = validatedGroups
+    .map(group => [...new Set(outputStorage.map(output => output[group]))])
+    .flat();
+
+  return regroupValues.every(one => [...childNames].includes(one));
+};
