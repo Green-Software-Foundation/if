@@ -110,7 +110,7 @@ describe('util/debug-logger: ', () => {
   });
 
   it('logs messages when the message is a number.', () => {
-    const logMessage = 11;
+    const logMessage = 10;
     console.debug(logMessage);
 
     expect(debugSpy).toHaveBeenCalledTimes(1);
