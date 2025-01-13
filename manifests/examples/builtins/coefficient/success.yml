@@ -1,0 +1,22 @@
+name: coefficient-demo
+description: successful path
+tags:
+initialize:
+  plugins:
+    coefficient:
+      method: Coefficient
+      path: "builtin"
+      config:
+        input-parameter: "carbon"
+        coefficient: 3
+        output-parameter: "carbon-product"
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - coefficient
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          carbon: 30

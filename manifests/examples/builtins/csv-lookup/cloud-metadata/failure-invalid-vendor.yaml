@@ -1,0 +1,26 @@
+name: cloud-metadata
+description: failure with invalid `inputs.cloud/vendor`
+tags:
+initialize:
+  plugins:
+    cloud-metadata:
+      path: builtin
+      method: CSVLookup
+      config:
+        filepath: >-
+          https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv
+        query:
+          instance-class: cloud/vendor
+        output: ["cpu-cores-utilized", "cloud/instance-type"]
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - cloud-metadata
+      inputs:
+        - timestamp: 2023-07-06T00:00 # [KEYWORD] [NO-SUBFIELDS] time when measurement occurred
+          cloud/vendor: gcp
+          cloud/instance-type: m5n.large
+          duration: 100
+          cpu/utilization: 10

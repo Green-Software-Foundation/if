@@ -1,0 +1,79 @@
+name: carbon-intensity plugin demo
+description:
+tags:
+initialize:
+  plugins:
+    interpolate:
+      method: Interpolation
+      path: "builtin"
+      config:
+        method: linear
+        x: [0, 10, 50, 100]
+        y: [0.12, 0.32, 0.75, 1.02]
+        input-parameter: "cpu/utilization"
+        output-parameter: "cpu-factor"
+    cpu-factor-to-wattage:
+      method: Multiply
+      path: builtin
+      config:
+        input-parameters: ["cpu-factor", "thermal-design-power"]
+        output-parameter: "cpu-wattage"
+    wattage-times-duration:
+      method: Multiply
+      path: builtin
+      config:
+        input-parameters: ["cpu-wattage", "duration"]
+        output-parameter: "cpu-wattage-times-duration"
+    wattage-to-energy-kwh:
+      method: Divide
+      path: "builtin"
+      config:
+        numerator: cpu-wattage-times-duration
+        denominator: 3600000
+        output: cpu-energy-raw
+    calculate-vcpu-ratio:
+      method: Divide
+      path: "builtin"
+      config:
+        numerator: vcpus-total
+        denominator: vcpus-allocated
+        output: vcpu-ratio
+    correct-cpu-energy-for-vcpu-ratio:
+      method: Divide
+      path: "builtin"
+      config:
+        numerator: cpu-energy-raw
+        denominator: vcpu-ratio
+        output: cpu-energy-kwh
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - interpolate
+          - cpu-factor-to-wattage
+          - wattage-times-duration
+          - wattage-to-energy-kwh
+          - calculate-vcpu-ratio
+          - correct-cpu-energy-for-vcpu-ratio
+      defaults:
+        thermal-design-power: 100
+        vcpus-total: 8
+        vcpus-allocated: 2
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 360
+          cpu/utilization: 1
+          carbon: 30
+        - timestamp: 2023-09-06T00:00
+          duration: 360
+          carbon: 30
+          cpu/utilization: 10
+        - timestamp: 2023-10-06T00:00
+          duration: 360
+          carbon: 30
+          cpu/utilization: 50
+        - timestamp: 2023-10-06T00:00
+          duration: 360
+          carbon: 30
+          cpu/utilization: 100

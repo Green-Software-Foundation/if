@@ -1,0 +1,21 @@
+name: shell
+description: successful path
+tags:
+initialize:
+  plugins:
+    shell:
+      method: Shell
+      path: "builtin"
+      config:
+        command: python3 /usr/local/bin/sampler
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - shell
+      inputs:
+        - timestamp: "2023-11-02T10:35:31.820Z"
+          duration: 3600
+          cpu/energy: 0.002
+          memory/energy: 0.000005

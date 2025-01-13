@@ -1,0 +1,86 @@
+name: groupby
+description: successful path
+initialize:
+  plugins:
+    "sum":
+      path: "builtin"
+      method: Sum
+      config:
+        input-parameters:
+          - cpu/energy
+          - network/energy
+        output-parameter: energy
+tree:
+  children:
+    my-app:
+      pipeline:
+        observe:
+        regroup:
+          - cloud/instance-type
+          - cloud/region
+        compute:
+      children:
+        uk-west:
+          inputs:
+            - timestamp: 2023-07-06T00:00
+              duration: 300
+              cloud/instance-type: A1
+              cloud/region: uk-west
+              cpu/utilization: 99
+            - timestamp: 2023-07-06T05:00
+              duration: 300
+              cloud/instance-type: A1
+              cloud/region: uk-west
+              cpu/utilization: 23
+            - timestamp: 2023-07-06T10:00
+              duration: 300
+              cloud/instance-type: A1
+              cloud/region: uk-west
+              cpu/utilization: 12
+            - timestamp: 2023-07-06T00:00
+              duration: 300
+              cloud/instance-type: B1
+              cloud/region: uk-west
+              cpu/utilization: 11
+            - timestamp: 2023-07-06T05:00
+              duration: 300
+              cloud/instance-type: B1
+              cloud/region: uk-west
+              cpu/utilization: 67
+            - timestamp: 2023-07-06T10:00
+              duration: 300
+              cloud/instance-type: B1
+              cloud/region: uk-west
+              cpu/utilization: 1
+        uk-east:
+          inputs:
+            - timestamp: 2023-07-06T00:00
+              duration: 300
+              cloud/instance-type: A1
+              cloud/region: uk-east
+              cpu/utilization: 9
+            - timestamp: 2023-07-06T05:00
+              duration: 300
+              cloud/instance-type: A1
+              cloud/region: uk-east
+              cpu/utilization: 23
+            - timestamp: 2023-07-06T10:00
+              duration: 300
+              cloud/instance-type: A1
+              cloud/region: uk-east
+              cpu/utilization: 12
+            - timestamp: 2023-07-06T00:00
+              duration: 300
+              cloud/instance-type: B1
+              cloud/region: uk-east
+              cpu/utilization: 11
+            - timestamp: 2023-07-06T05:00
+              duration: 300
+              cloud/instance-type: B1
+              cloud/region: uk-east
+              cpu/utilization: 67
+            - timestamp: 2023-07-06T10:00
+              duration: 300
+              cloud/instance-type: B1
+              cloud/region: uk-east
+              cpu/utilization: 1

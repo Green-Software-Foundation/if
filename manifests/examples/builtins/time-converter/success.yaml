@@ -1,0 +1,24 @@
+name: time-converter demo
+description: successful path
+tags:
+initialize:
+  plugins:
+    time-converter:
+      method: TimeConverter
+      path: builtin
+      config:
+        input-parameter: "energy-per-year"
+        original-time-unit: "year"
+        new-time-unit: "duration"
+        output-parameter: "energy-per-duration"
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - time-converter
+      defaults:
+        energy-per-year: 10000
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600

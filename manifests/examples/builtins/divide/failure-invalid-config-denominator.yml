@@ -1,0 +1,36 @@
+name: divide
+description: failure when `config.denominator` is string
+tags:
+initialize:
+  plugins:
+    cloud-metadata:
+      path: builtin
+      method: CSVLookup
+      config:
+        filepath: >-
+          https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/cloud-metdata-aws-instances.csv
+        query:
+          instance-class: cloud/instance-type
+        output: ["cpu-cores-utilized", "vcpus-allocated"]
+    divide:
+      method: Divide
+      path: "builtin"
+      config:
+        numerator: vcpus-allocated
+        denominator: "vcpus"
+        output: cpu/number-cores
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - cloud-metadata
+          - divide
+      defaults:
+        cloud/vendor: aws
+        cloud/instance-type: m5n.large
+        cpu/name: Intel® Core™ i7-1185G7
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          cpu/utilization: 80
