@@ -535,14 +535,17 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
       return calculateGCD(combined);
     };
 
+    const upsamplingResolution =
+      config['upsampling-resolution'] ||
+      findResamplingResolution(inputs, config.interval);
+    console.log(`Choosen upsampling resolution is ${upsamplingResolution}\n`);
+
     const timeParams = {
       startTime: DateTime.fromISO(config['start-time'] as string),
       endTime: DateTime.fromISO(config['end-time'] as string),
       interval: config.interval,
       allowPadding: config['allow-padding'],
-      upsamplingResolution: config['upsampling-resolution']
-        ? config['upsampling-resolution']
-        : findResamplingResolution(inputs, config.interval),
+      upsamplingResolution,
     };
 
     validateIntervalForResample(
