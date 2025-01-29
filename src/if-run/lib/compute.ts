@@ -26,7 +26,8 @@ const {
 const childNames = new Set();
 
 /**
- * Traverses all child nodes based on children grouping.
+ * Traverses through the children nodes and computes each child node.
+ * It also adds the child name to the `childNames` set.
  */
 const traverse = async (children: any, params: ComputeParams) => {
   for (const child in children) {
