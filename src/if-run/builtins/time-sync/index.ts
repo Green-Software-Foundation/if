@@ -216,6 +216,7 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
       timeStep: number
     ) => {
       const metrics = Object.keys(input);
+
       return metrics.reduce((acc, metric) => {
         if (metric === 'timestamp') {
           acc[metric] =
