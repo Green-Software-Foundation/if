@@ -13,7 +13,7 @@ const escapeShellArg = (str: string) => str.replace(/([`$\\&;|*?<>])/g, '\\$1');
 /**
  * Executes a series of npm commands based on the provided manifest file.
  */
-export const executeCommands = async (manifest: string, cwd: boolean) => {
+export const executeCommands = async (manifest: string) => {
   const isGlobal = !!process.env.npm_config_global;
   const manifestDirPath = path.dirname(manifest);
   const manifestFileName = getFileName(manifest);
@@ -87,10 +87,7 @@ export const executeCommands = async (manifest: string, cwd: boolean) => {
     shell: true,
   });
 
-  if (!cwd) {
-    await removeFileIfExists(`${manifestDirPath}/package.json`);
-  }
-
+  await removeFileIfExists(`${manifestDirPath}/package.json`);
   await removeFileIfExists(`${executedManifest}.yaml`);
 
   console.log(IF_CHECK_VERIFIED(path.basename(manifest)));
