@@ -32,7 +32,7 @@ const IfCheck = async () => {
     const manifest = commandArgs.manifest;
 
     try {
-      await executeCommands(manifest, false);
+      await executeCommands(manifest);
     } catch (error: any) {
       const fileName = path.basename(manifest);
       const executedFile = manifest
@@ -63,7 +63,7 @@ const IfCheck = async () => {
       console.log(IF_CHECK_EXECUTING(fileRelativePath));
 
       try {
-        await executeCommands(file, true);
+        await executeCommands(file);
       } catch (error: any) {
         const fileName = path.basename(file);
         const executedFile = file
