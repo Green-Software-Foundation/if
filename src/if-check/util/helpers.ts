@@ -9,8 +9,8 @@ export const logStdoutFailMessage = (error: any, fileName: string) => {
   console.log(IF_CHECK_FAILED(fileName));
 
   const stdout = error.stdout;
-  const logs = stdout.split('\n\n');
-  const failMessage = logs[logs.length - 1];
+  const logs = stdout ? stdout.split('\n\n') : `${error.message}\n`;
+  const failMessage = Array.isArray(logs) ? logs[logs.length - 1] : logs;
 
   console.log(failMessage);
   return IF_CHECK_SUMMARY_ERROR_MESSAGE(fileName, failMessage);
