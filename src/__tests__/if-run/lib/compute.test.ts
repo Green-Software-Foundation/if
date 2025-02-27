@@ -34,12 +34,17 @@ describe('lib/compute: ', () => {
    * Mock plugins.
    */
   const mockExecutePlugin = () => ({
-    execute: (inputs: any) =>
-      inputs.map((input: any) => {
-        input.newField = 'mock-newField';
+    execute: (inputs: any) => {
+      if (Array.isArray(inputs) && inputs.length > 0) {
+        return inputs.map((input: any) => {
+          input.newField = 'mock-newField';
 
-        return input;
-      }),
+          return input;
+        });
+      }
+
+      return [{newField: 'mock-newField'}];
+    },
     metadata: {},
   });
   const mockObservePlugin = () => ({
@@ -366,7 +371,7 @@ describe('lib/compute: ', () => {
             defaults: {
               carbon: 10,
             },
-            input: [],
+            inputs: undefined,
           },
         },
       };

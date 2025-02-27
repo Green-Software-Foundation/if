@@ -44,11 +44,9 @@ const mergeDefaults = (
   defaults: PluginParams | undefined
 ) => {
   if (inputs) {
-    const response = defaults
+    return defaults
       ? inputs.map(input => mergeObjects(defaults, input))
       : inputs;
-
-    return response;
   }
 
   console.debug(MERGING_DEFAULTS_WITH_INPUT_DATA, '\n');
@@ -103,8 +101,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     });
   }
 
-  let outputStorage = structuredClone(node.inputs) as PluginParams[];
-  outputStorage = mergeDefaults(outputStorage, defaults);
+  let outputStorage = (structuredClone(node.inputs) as PluginParams[]) || [];
   const pipelineCopy = structuredClone(pipeline) || {};
 
   /** Checks if pipeline is not an array or empty object. */
@@ -139,6 +136,19 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
         });
       }
     }
+
+    /**
+     * Merges defaults with inputs after observing.
+     * Defaults are needed to be merged after observing because observing can change the inputs.
+     */
+    node.inputs = mergeDefaults(outputStorage, defaults);
+  }
+
+  /**
+   * If observe is not requested, then merge defaults with inputs.
+   */
+  if (!params.observe && outputStorage.length > 0) {
+    outputStorage = mergeDefaults(outputStorage, defaults);
   }
 
   /**
@@ -190,7 +200,17 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       console.debug(COMPUTING_PIPELINE_FOR_NODE(pluginName));
       debugLogger.setExecutingPluginName(pluginName);
 
+      /** Keep previous state to check after computation. */
+      const previousOutputsState = outputStorage;
+
       outputStorage = await plugin.execute(outputStorage, nodeConfig);
+
+      /**
+       * If there are no previous inputs/outputs (compute phase initalizes values), then merge defaults with outputs postfactum.
+       */
+      if (previousOutputsState.length === 0 && outputStorage.length > 0) {
+        outputStorage = mergeDefaults(outputStorage, defaults);
+      }
 
       debugLogger.setExecutingPluginName();
 

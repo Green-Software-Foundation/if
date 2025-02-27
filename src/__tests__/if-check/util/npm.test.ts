@@ -102,7 +102,7 @@ describe('if-check/util/npm: ', () => {
       const manifest = './src/__mocks__/mock-manifest.yaml';
       const logSpy = jest.spyOn(global.console, 'log');
 
-      await executeCommands(manifest, false);
+      await executeCommands(manifest);
 
       expect.assertions(6);
       expect(logSpy).toHaveBeenCalledWith(
@@ -116,7 +116,7 @@ describe('if-check/util/npm: ', () => {
       const manifest = './src/__mocks__/mock-manifest.yaml';
       const logSpy = jest.spyOn(global.console, 'log');
 
-      await executeCommands(manifest, false);
+      await executeCommands(manifest);
 
       expect.assertions(6);
       expect(logSpy).toHaveBeenCalledWith(
@@ -132,7 +132,7 @@ describe('if-check/util/npm: ', () => {
       const manifest = './src/__mocks__/mock-manifest.yaml';
       const logSpy = jest.spyOn(global.console, 'log');
 
-      await executeCommands(manifest, false);
+      await executeCommands(manifest);
 
       expect.assertions(6);
       expect(logSpy).toHaveBeenCalledWith(
@@ -149,7 +149,7 @@ describe('if-check/util/npm: ', () => {
       const manifest = './src/__mocks__/mock-manifest.yaml';
       const logSpy = jest.spyOn(global.console, 'log');
 
-      await executeCommands(manifest, false);
+      await executeCommands(manifest);
 
       expect.assertions(6);
       expect(logSpy).toHaveBeenCalledWith(
