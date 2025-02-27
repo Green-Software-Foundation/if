@@ -304,7 +304,7 @@ describe('builtins/divide: ', () => {
     it('throws an error when `denominator` is string.', async () => {
       const config = {
         numerator: 'vcpus-allocated',
-        denominator: '10',
+        denominator: 'mock-denominator',
         output: 'vcpus-allocated-per-second',
       };
 
