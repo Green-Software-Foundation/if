@@ -1,7 +1,7 @@
 {
   "name": "@grnsft/if",
   "description": "Impact Framework",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
@@ -57,6 +57,7 @@
   },
   "homepage": "https://greensoftware.foundation",
   "keywords": [
+    "carbonization",
     "engine",
     "framework",
     "green software foundation",
