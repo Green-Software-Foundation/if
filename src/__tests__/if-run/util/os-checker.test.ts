@@ -10,7 +10,7 @@ jest.mock('os', () => ({
   release: () => 'm.m.m',
 }));
 jest.mock('../../../common/util/helpers', () => ({
-  execPromise: async () => {
+  execFilePromise: async () => {
     if (process.env.KIND === 'darwin' && process.env.REJECT === 'true')
       return {
         stdout: '',
@@ -37,10 +37,8 @@ BuildVersion:     23D60
     if (process.env.KIND === 'linux') {
       return {
         stdout: `
-Distributor ID: Ubuntu
-Description:    Ubuntu 22.04.4 LTS
-Release:        22.04
-Codename:       jammy
+Distributor ID:\tUbuntu
+Description:\tUbuntu 22.04.4 LTS
       `,
       };
     }
@@ -48,8 +46,9 @@ Codename:       jammy
     if (process.env.KIND === 'win32') {
       return {
         stdout: `
-OS Name:                   Microsoft Windows 11 Enterprise
-OS Version:                10.0.22631 N/A Build 22631
+Caption     : Microsoft Windows 11 Enterprise\r
+Version     : 10.0.22631\r
+BuildNumber : 22631\r
       `,
       };
     }

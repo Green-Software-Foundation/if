@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 /* eslint-disable no-process-exit */
 import {createInterface} from 'node:readline/promises';
-import {exec, execFileSync} from 'child_process';
+import {exec, execFile, execFileSync} from 'child_process';
 import * as path from 'path';
 import {promisify} from 'util';
 
 /**
- * Promise version of Node's `exec` from `child-process`.
+ * Promise version of Node's `exec` and `execFile` from `child-process`.
  */
 export const execPromise = promisify(exec);
+export const execFilePromise = promisify(execFile);
 
 /**
  * Prepends process path to given `filePath`.
