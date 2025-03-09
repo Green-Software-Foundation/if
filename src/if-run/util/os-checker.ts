@@ -1,6 +1,6 @@
 import {release, platform} from 'os';
 
-import {execPromise} from '../../common/util/helpers';
+import {execFilePromise} from '../../common/util/helpers';
 
 /**
  * Executes `lsb_release -a` command in terminal.
@@ -15,11 +15,11 @@ import {execPromise} from '../../common/util/helpers';
  * Parses os and os-version from the response.
  */
 const getLinuxInfo = async () => {
-  const {stdout} = await execPromise('lsb_release -a');
+  const {stdout} = await execFilePromise('lsb_release', ['-id']);
 
   const parseLinuxVersion = (lsbReleaseResponse: string) => {
     const regex =
-      /Distributor ID: ([^\n]+)\nDescription: +([^ ]+) +([^ ]+) +(.+)\n/;
+      /^Distributor ID:\t(.+)\nDescription:\t([^ ]+) +([^ ]+) +(.+)$/m;
     const match = lsbReleaseResponse.match(regex);
 
     return {
@@ -32,28 +32,30 @@ const getLinuxInfo = async () => {
 };
 
 /**
- * Executes in CMD `systeminfo | findstr /B /C:"OS Name" /B /C:"OS Version"` command.
+ * Executes in CMD `powershell -Command "Get-WmiObject Win32_OperatingSystem | Format-List -Property Caption, Version, BuildNumber"` command.
  *
  * ```
- * OS Name:                   Microsoft Windows 11 Enterprise
- * OS Version:                10.0.22631 N/A Build 22631
+ * Caption     : Microsoft Windows 11 Enterprise\r
+ * Version     : 10.0.22631\r
+ * BuildNumber : 22631\r
  * ```
  *
  * Parses os and os-version from the response.
  */
 const getWindowsInfo = async () => {
-  const {stdout} = await execPromise(
-    'systeminfo | findstr /B /C:"OS Name" /B /C:"OS Version"'
-  );
+  const {stdout} = await execFilePromise('powershell', [
+    '-Command',
+    'Get-WmiObject Win32_OperatingSystem | Format-List -Property Caption, Version, BuildNumber',
+  ]);
 
   const parseWindowsInfo = (systemInfoResponse: string) => {
     const regex =
-      /OS Name:\s+([^\n]+)\nOS Version:\s+([\d.]+)\s+(N\/A\s+Build\s+(\d+))/;
+      /^Caption\s*:\s*(.*)\r?\nVersion\s*:\s*(.*)\r?\nBuildNumber\s*:\s*(.*)$/m;
     const match = systemInfoResponse.match(regex);
 
     return {
       os: match ? match[1] : platform(),
-      'os-version': match ? `${match[2]} ${match[3]}` : release(),
+      'os-version': match ? `${match[2]} N/A Build ${match[3]}` : release(),
     };
   };
 
@@ -72,7 +74,7 @@ const getWindowsInfo = async () => {
  * Parses os and os version from the response.
  */
 const getMacVersion = async () => {
-  const {stdout} = await execPromise('sw_vers');
+  const {stdout} = await execFilePromise('sw_vers');
 
   const parseMacInfo = (swVersResponse: string) => {
     const productNameRegex = /ProductName:\s*(.+)/;
