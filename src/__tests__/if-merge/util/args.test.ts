@@ -159,12 +159,10 @@ describe('if-merge/util/args: ', () => {
       );
 
       expect(execFileSync).toHaveBeenCalledWith(
-        'npm',
-        ['run', 'if-merge', '--silent', '--', '-h'],
+        process.execPath,
+        [...process.execArgv, process.argv[1], '-h'],
         {
-          cwd: process.env.CURRENT_DIR || process.cwd(),
           stdio: 'inherit',
-          shell: false,
         }
       );
     });
