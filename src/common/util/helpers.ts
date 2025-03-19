@@ -73,18 +73,8 @@ export const parseManifestFromStdin = async () => {
 export const runHelpCommand = (command: string) => {
   console.log(`Here are the supported flags for the \`${command}\` command:`);
 
-  const isGlobal = !!process.env.npm_config_global;
-  const ifCommand = [
-    isGlobal ? command : 'npm',
-    ...(isGlobal ? ['--silent'] : ['run', command, '--silent']),
-    '--',
-    '-h',
-  ];
-
-  execFileSync(ifCommand[0], ifCommand.slice(1), {
-    cwd: process.env.CURRENT_DIR || process.cwd(),
+  execFileSync(process.execPath, [...process.execArgv, process.argv[1], '-h'], {
     stdio: 'inherit',
-    shell: false,
   });
 
   process.exit(1);

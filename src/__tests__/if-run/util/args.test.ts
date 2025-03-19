@@ -122,12 +122,10 @@ describe('if-run/util/args: ', () => {
 
       expect(() => parseIfRunProcessArgs()).toThrow('process.exit(1) called');
       expect(execFileSync).toHaveBeenCalledWith(
-        'npm',
-        ['run', 'if-run', '--silent', '--', '-h'],
+        process.execPath,
+        [...process.execArgv, process.argv[1], '-h'],
         {
-          cwd: process.env.CURRENT_DIR || process.cwd(),
           stdio: 'inherit',
-          shell: false,
         }
       );
     });

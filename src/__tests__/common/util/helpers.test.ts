@@ -58,7 +58,6 @@ describe('common/util/helpers: ', () => {
   });
 
   describe('runHelpCommand(): ', () => {
-    const originalEnv = process.env;
     it('calls process.exit with code 1 on error.', () => {
       expect.assertions(3);
 
@@ -69,37 +68,12 @@ describe('common/util/helpers: ', () => {
 
       expect(() => runHelpCommand('if-run')).toThrow('process.exit(1) called');
       expect(execFileSync).toHaveBeenCalledWith(
-        'npm',
-        ['run', 'if-run', '--silent', '--', '-h'],
+        process.execPath,
+        [...process.execArgv, process.argv[1], '-h'],
         {
-          cwd: process.env.CURRENT_DIR || process.cwd(),
           stdio: 'inherit',
-          shell: false,
         }
       );
     });
-
-    it('executes when the script runs from the global.', () => {
-      expect.assertions(3);
-      process.env.npm_config_global = 'true';
-
-      jest.spyOn(process, 'exit').mockImplementation((code?: number) => {
-        expect(code).toEqual(1);
-        throw new Error(`process.exit(${code}) called`);
-      });
-
-      expect(() => runHelpCommand('if-run')).toThrow('process.exit(1) called');
-      expect(execFileSync).toHaveBeenCalledWith(
-        'if-run',
-        ['--silent', '--', '-h'],
-        {
-          cwd: process.env.CURRENT_DIR || process.cwd(),
-          stdio: 'inherit',
-          shell: false,
-        }
-      );
-    });
-
-    process.env = originalEnv;
   });
 });
