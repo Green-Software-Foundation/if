@@ -15,13 +15,7 @@ export const execFilePromise = promisify(execFile);
  * Prepends process path to given `filePath`.
  */
 export const prependFullFilePath = (filePath: string) => {
-  const processRunningPath = process.cwd();
-
-  if (path.isAbsolute(filePath)) {
-    return filePath;
-  }
-
-  return path.normalize(`${processRunningPath}/${filePath}`);
+  return path.resolve(process.env.CURRENT_DIR || process.cwd(), filePath);
 };
 
 /**
