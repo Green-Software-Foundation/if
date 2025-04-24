@@ -2,7 +2,7 @@
 /* eslint-disable no-process-exit */
 import * as path from 'path';
 
-import {getYamlFiles, removeFileIfExists} from '../common/util/fs';
+import {getYamlFiles} from '../common/util/fs';
 import {debugLogger} from '../common/util/debug-logger';
 import {logger} from '../common/util/logger';
 
@@ -35,15 +35,7 @@ const IfCheck = async () => {
       await executeCommands(manifest);
     } catch (error: any) {
       const fileName = path.basename(manifest);
-      const executedFile = manifest
-        .replace(fileName, `re-${fileName}`)
-        .replace('yml', 'yaml');
-      const manifestDirPath = path.dirname(manifest);
-
       logStdoutFailMessage(error, fileName);
-
-      await removeFileIfExists(`${manifestDirPath}/package.json`);
-      await removeFileIfExists(executedFile);
     }
   } else {
     const failedLogs = {count: 0, message: ''};
@@ -66,15 +58,9 @@ const IfCheck = async () => {
         await executeCommands(file);
       } catch (error: any) {
         const fileName = path.basename(file);
-        const executedFile = file
-          .replace(fileName, `re-${fileName}`)
-          .replace('yml', 'yaml');
-
         const failedFilesLog = logStdoutFailMessage(error, fileName);
         failedLogs.message = failedLogs.message.concat(failedFilesLog);
         failedLogs.count++;
-
-        await removeFileIfExists(executedFile);
       }
     }
 
