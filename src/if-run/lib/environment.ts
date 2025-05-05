@@ -1,5 +1,3 @@
-import {DateTime} from 'luxon';
-
 import {osInfo} from '../util/os-checker';
 import {execPromise} from '../../common/util/helpers';
 import {Manifest} from '../../common/types/manifest';
@@ -12,24 +10,20 @@ const packageJson = require('../../../package.json');
 const {CAPTURING_RUNTIME_ENVIRONMENT_DATA} = STRINGS;
 
 /**
- * 1. Gets the high-resolution real time when the application starts.
- * 2. Converts the high-resolution time to milliseconds.
+ * 1. Gets the process uptime (the number of seconds the current Node.js process has been running).
+ * 2. Converts the uptime to milliseconds.
  * 3. Gets the current DateTime.
  * 4. Subtracts the milliseconds from the current DateTime.
  */
 const getProcessStartingTimestamp = () => {
-  const startTime = process.hrtime();
+  const seconds = process.uptime();
+  const milliseconds = seconds * 1000;
 
-  const [seconds, nanoseconds] = process.hrtime(startTime);
-  const milliseconds = seconds * 1000 + nanoseconds / 1e6;
+  const currentDateTime = Date.now();
 
-  const currentDateTime = DateTime.local();
+  const applicationStartDateTime = currentDateTime - milliseconds;
 
-  const applicationStartDateTime = currentDateTime.minus({
-    milliseconds: milliseconds,
-  });
-
-  return applicationStartDateTime.toUTC().toString();
+  return new Date(applicationStartDateTime).toISOString();
 };
 
 /**
