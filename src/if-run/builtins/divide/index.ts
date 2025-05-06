@@ -79,7 +79,7 @@ const calculateDivide = (
     typeof numerator === 'number' ? numerator : input[numerator];
 
   if (finalDenominator === 0) {
-    console.warn(ZERO_DIVISION(Divide.name, index));
+    console.warn(ZERO_DIVISION('Divide', index));
     return finalNumerator;
   }
 

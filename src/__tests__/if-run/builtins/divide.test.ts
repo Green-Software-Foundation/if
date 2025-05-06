@@ -274,6 +274,7 @@ describe('builtins/divide: ', () => {
     });
 
     it('throws an error when `denominator` is 0.', async () => {
+      const mockConsoleWarn = jest.spyOn(console, 'warn').mockImplementation();
       const config = {
         numerator: 'vcpus-allocated',
         denominator: 0,
@@ -281,7 +282,7 @@ describe('builtins/divide: ', () => {
       };
       const divide = Divide(config, parametersMetadata, {});
 
-      expect.assertions(1);
+      expect.assertions(3);
 
       const response = await divide.execute([
         {
@@ -299,6 +300,11 @@ describe('builtins/divide: ', () => {
           'vcpus-allocated-per-second': 24,
         },
       ]);
+
+      expect(mockConsoleWarn).toHaveBeenCalled();
+      expect(mockConsoleWarn).toHaveBeenCalledWith(
+        '-- SKIPPING -- DivisionByZero: you are attempting to divide by zero in Divide plugin : inputs[0]\n'
+      );
     });
 
     it('throws an error when `denominator` is string.', async () => {

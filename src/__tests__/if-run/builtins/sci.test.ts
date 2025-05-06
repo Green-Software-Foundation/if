@@ -206,6 +206,7 @@ describe('builtins/sci:', () => {
     });
 
     it('fallbacks to carbon value, if functional unit is 0.', async () => {
+      const mockConsoleWarn = jest.spyOn(console, 'warn').mockImplementation();
       const config = {'functional-unit': 'requests'};
       const sci = Sci(config, parametersMetadata, {});
       const inputs = [
@@ -220,9 +221,14 @@ describe('builtins/sci:', () => {
       ];
       const result = await sci.execute(inputs);
 
-      expect.assertions(1);
+      expect.assertions(3);
 
       expect(result).toStrictEqual([{...inputs[0], sci: inputs[0].carbon}]);
+
+      expect(mockConsoleWarn).toHaveBeenCalled();
+      expect(mockConsoleWarn).toHaveBeenCalledWith(
+        '-- SKIPPING -- DivisionByZero: you are attempting to divide by zero in Sci plugin : inputs[0]\n'
+      );
     });
 
     it('throws an error on missing config.', async () => {

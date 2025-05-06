@@ -92,7 +92,7 @@ export const Sci = PluginFactory({
         : config['functional-unit'];
 
       if (functionalUnit === 0) {
-        console.warn(ZERO_DIVISION(Sci.name, index));
+        console.warn(ZERO_DIVISION('Sci', index));
 
         return {
           ...input,
