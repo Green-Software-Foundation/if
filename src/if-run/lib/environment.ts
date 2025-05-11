@@ -44,11 +44,11 @@ const flattenDependencies = (dependencies: [string, PackageDependency][]) =>
   });
 
 /**
- * 1. Runs `npm list --json`.
+ * 1. Runs `npm list --json --omit=dev`.
  * 2. Parses json data and converts to list.
  */
 const listDependencies = async () => {
-  const {stdout} = await execPromise('npm list --json');
+  const {stdout} = await execPromise('npm list --json --omit=dev');
   const npmListResponse: NpmListResponse = JSON.parse(stdout);
 
   if (npmListResponse.dependencies) {
