@@ -76,7 +76,7 @@
   "scripts": {
     "build": "npm run clean && tsc --project tsconfig.build.json",
     "clean": "rimraf build/",
-    "coverage": "jest --verbose --coverage --testPathPattern=src/__tests__/",
+    "coverage": "jest --verbose --coverage",
     "fix": "gts fix",
     "fix:package": "fixpack",
     "if-check": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-check/index.ts",
@@ -90,7 +90,7 @@
     "prepare": "husky install",
     "prepublishOnly": "npm run build",
     "release": "release-it",
-    "test": "jest --verbose --testPathPattern=src/__tests__/"
+    "test": "jest --verbose"
   },
   "stability": "stable"
 }

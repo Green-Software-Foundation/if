@@ -2,6 +2,7 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  testMatch: ['<rootDir>/src/__tests__/**/*.[jt]s'],
   transform: {
     '^.+\\.ts?$': [
       'ts-jest',
@@ -10,6 +11,9 @@ module.exports = {
       },
     ],
   },
-  modulePathIgnorePatterns: ['./build'],
-  coveragePathIgnorePatterns: ['src/.*/config/.*', 'src/.*/types/.*'],
+  modulePathIgnorePatterns: ['<rootDir>/build/'],
+  coveragePathIgnorePatterns: [
+    '<rootDir>/src/.*/config/.*',
+    '<rootDir>/src/.*/types/.*',
+  ],
 };
