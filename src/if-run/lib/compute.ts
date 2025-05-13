@@ -23,16 +23,18 @@ const {
   SKIPPING_REGROUP,
 } = STRINGS;
 
-const childNames = new Set<string>();
-
 /**
  * Traverses all child nodes based on children grouping.
  */
-const traverse = async (children: any, params: ComputeParams) => {
+const traverse = async (
+  children: any,
+  childNames: Set<string>,
+  params: ComputeParams
+) => {
   for (const child in children) {
     console.debug(COMPUTING_COMPONENT_PIPELINE(child));
     childNames.add(child);
-    await computeNode(children[child], params);
+    await computeNode(children[child], childNames, params);
   }
 };
 
@@ -83,7 +85,11 @@ const warnIfConfigProvided = (node: any) => {
  * 7. Compute plugins are used to do desired computations and appending the result to outputs
  *    (isolated execution can be achived by passing `--compute` flag to CLI command).
  */
-const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
+const computeNode = async (
+  node: Node,
+  childNames: Set<string>,
+  params: ComputeParams
+): Promise<any> => {
   const pipeline = node.pipeline || (params.pipeline as PhasedPipeline);
   const config = node.config || params.config;
   const defaults = node.defaults || params.defaults;
@@ -93,7 +99,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   warnIfConfigProvided(node);
 
   if (node.children) {
-    return traverse(node.children, {
+    return traverse(node.children, childNames, {
       ...params,
       pipeline,
       defaults,
@@ -170,7 +176,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       debugLogger.setExecutingPluginName();
       console.debug(REGROUPING);
 
-      return traverse(node.children, {
+      return traverse(node.children, childNames, {
         ...params,
         pipeline: {
           ...pipelineCopy,
@@ -238,7 +244,9 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
 export const compute = async (tree: any, params: ComputeParams) => {
   const copyOfTree = structuredClone(tree);
 
-  await computeNode(copyOfTree, params);
+  const childNames = new Set<string>();
+
+  await computeNode(copyOfTree, childNames, params);
 
   return copyOfTree;
 };

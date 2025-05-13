@@ -1,6 +1,6 @@
 import {osInfo} from '../util/os-checker';
 import {execPromise} from '../../common/util/helpers';
-import {Manifest} from '../../common/types/manifest';
+import type {Execution, Manifest} from '../../common/types/manifest';
 
 import {STRINGS} from '../config/strings';
 import {NpmListResponse, PackageDependency} from '../types/environment';
@@ -61,11 +61,9 @@ const listDependencies = async () => {
 };
 
 /**
- * Injects execution information (command, environment) to existing manifest.
+ * Get execution information (command, environment).
  */
-export const injectEnvironment = async (
-  manifest: Manifest
-): Promise<Manifest> => {
+export const getExecution = async (): Promise<Execution> => {
   console.debug(CAPTURING_RUNTIME_ENVIRONMENT_DATA);
 
   const dependencies = await listDependencies();
@@ -73,18 +71,25 @@ export const injectEnvironment = async (
   const dateTime = `${getProcessStartingTimestamp()} (UTC)`;
 
   return {
-    ...manifest,
-    execution: {
-      status: 'success',
-      command: process.argv.join(' '),
-      environment: {
-        'if-version': packageJson.version,
-        os: info.os,
-        'os-version': info['os-version'],
-        'node-version': process.versions.node,
-        'date-time': dateTime,
-        dependencies,
-      },
+    status: 'success',
+    command: process.argv.join(' '),
+    environment: {
+      'if-version': packageJson.version,
+      os: info.os,
+      'os-version': info['os-version'],
+      'node-version': process.versions.node,
+      'date-time': dateTime,
+      dependencies,
     },
   };
 };
+
+/**
+ * Injects execution information (command, environment) to existing manifest.
+ */
+export const injectEnvironment = async (
+  manifest: Manifest
+): Promise<Manifest> => ({
+  ...manifest,
+  execution: await getExecution(),
+});
