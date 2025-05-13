@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: disabled-plugins
+  labels:
+    {{- include "if.labels" . | nindent 4 }}
+data:
+  disabledPlugins.txt: |
+    {{- range .Values.disabledPlugins }}
+    {{- . | nindent 4 }}
+    {{- end }}
