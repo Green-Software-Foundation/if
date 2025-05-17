@@ -11,7 +11,7 @@ const mockWarn = jest.fn(message => {
   } else if (process.env.LOGGER === 'invalid') {
     expect(message).toEqual(
       `You're using an old style manifest. Please update for phased execution. More information can be found here: 
-https://if.greensoftware.foundation/major-concepts/manifest-file`
+https://if.greensoftware.foundation/major-concepts/imp-file`
     );
   }
 });
