@@ -30,7 +30,7 @@ export const STRINGS = {
   NO_OUTPUT: `
 You have not added an output command: 
 --output <savepath>: will save your output data to the given filepath (do not provide file extension)
-Note that for the '--output' option you also need to define the output type in your manifest file. See https://if.greensoftware.foundation/major-concepts/manifest-file#initialize`,
+Note that for the '--output' option you also need to define the output type in your manifest file. See https://if.greensoftware.foundation/major-concepts/imp-file#initialize`,
   UNSUPPORTED_ERROR: (errorName: string) =>
     `UnsupportedErrorClass: plugin threw error class: ${errorName} that is not recognized by Impact Framework`,
   /** Debugging logs */
@@ -64,7 +64,7 @@ Note that for the '--output' option you also need to define the output type in y
   EXPORTING_TO_YAML_FILE: (savepath: string) =>
     `Exporting to yaml file: ${savepath}`,
   EMPTY_PIPELINE: `You're using an old style manifest. Please update for phased execution. More information can be found here: 
-https://if.greensoftware.foundation/major-concepts/manifest-file`,
+https://if.greensoftware.foundation/major-concepts/imp-file`,
   /** Exhaust messages */
   OUTPUT_REQUIRED:
     'Output path is required, please make sure output is configured properly.',
