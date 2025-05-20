@@ -1,0 +1,26 @@
+name: sci
+description: failure with `config.sci.functional-unit` value being number
+tags:
+initialize:
+  plugins:
+    sci:
+      kind: plugin
+      method: Sci
+      path: "builtin"
+      # config:
+      #   functional-unit: 1 minute
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - sci
+      defaults:
+        functional-unit: 999 # factor to convert per time to per f.unit
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
+          energy: 5
+          carbon-operational: 5
+          carbon-embodied: 0.02
+          requests: 100

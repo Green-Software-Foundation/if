@@ -2,6 +2,7 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  testMatch: ['<rootDir>/src/__tests__/**/*.[jt]s'],
   transform: {
     '^.+\\.ts?$': [
       'ts-jest',
@@ -10,10 +11,9 @@ module.exports = {
       },
     ],
   },
-  modulePathIgnorePatterns: [
-    './build',
-    './src/__tests__/unit/lib/manifest',
-    './src/__tests__/integration/helpers',
-    './src/__tests__/integration/test-data',
+  modulePathIgnorePatterns: ['<rootDir>/build/'],
+  coveragePathIgnorePatterns: [
+    '<rootDir>/src/.*/config/.*',
+    '<rootDir>/src/.*/types/.*',
   ],
 };

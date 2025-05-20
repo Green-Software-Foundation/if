@@ -1,0 +1,25 @@
+name: csv-lookup-demo
+description:
+tags:
+initialize:
+  plugins:
+    cloud-metadata:
+      method: CSVLookup
+      path: "builtin"
+      config:
+        filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/region-metadata.csv
+        query:
+          cloud-provider: "cloud/provider"
+          cloud-region: "cloud/region"
+        output: ["em-zone-id", "renamed-em-zone-data"]
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - cloud-metadata
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          cloud/provider: Google Cloud
+          cloud/region: asia-east1

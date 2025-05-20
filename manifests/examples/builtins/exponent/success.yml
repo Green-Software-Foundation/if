@@ -1,0 +1,23 @@
+name: exponent demo
+description:
+tags:
+initialize:
+  plugins:
+    exponent:
+      method: Exponent
+      path: "builtin"
+      config:
+        input-parameter: "cpu/energy"
+        exponent: 2
+        output-parameter: "energy"
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - exponent
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          cpu/energy: 0.001
+          network/energy: 0.001

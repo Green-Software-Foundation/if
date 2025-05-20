@@ -1,28 +1,30 @@
 {
   "name": "@grnsft/if",
   "description": "Impact Framework",
-  "version": "0.4.0-beta.0",
+  "version": "1.0.2",
   "author": {
     "name": "Green Software Foundation",
     "email": "info@gsf.com"
   },
   "bin": {
-    "ie": "./build/index.js",
-    "if-diff": "./build/diff.js"
+    "if-diff": "build/if-diff/index.js",
+    "if-run": "build/if-run/index.js",
+    "if-env": "build/if-env/index.js",
+    "if-check": "build/if-check/index.js",
+    "if-csv": "build/if-csv/index.js",
+    "if-merge": "build/if-merge/index.js"
   },
   "bugs": {
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
   },
   "dependencies": {
-    "@commitlint/cli": "^18.6.0",
-    "@commitlint/config-conventional": "^18.6.0",
+    "@grnsft/if-core": "^0.0.30",
     "axios": "^1.7.2",
     "csv-parse": "^5.5.6",
     "csv-stringify": "^6.4.6",
     "js-yaml": "^4.1.0",
     "luxon": "^3.4.4",
     "ts-command-line-args": "^2.5.1",
-    "typescript": "^5.1.6",
     "typescript-cubic-spline": "^1.0.1",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
@@ -30,12 +32,15 @@
   "devDependencies": {
     "@babel/core": "^7.22.10",
     "@babel/preset-typescript": "^7.22.5",
+    "@commitlint/cli": "^18.6.0",
+    "@commitlint/config-conventional": "^18.6.0",
     "@jest/globals": "^29.6.1",
     "@types/jest": "^29.5.7",
     "@types/js-yaml": "^4.0.5",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.8.9",
     "axios-mock-adapter": "^1.22.0",
+    "cross-env": "7.0.3",
     "fixpack": "^4.0.0",
     "gts": "^5.0.0",
     "husky": "^8.0.0",
@@ -43,7 +48,8 @@
     "lint-staged": "^15.2.2",
     "release-it": "^16.3.0",
     "rimraf": "^5.0.5",
-    "ts-jest": "^29.1.1"
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.1.6"
   },
   "engines": {
     "node": ">=18",
@@ -51,37 +57,40 @@
   },
   "homepage": "https://greensoftware.foundation",
   "keywords": [
+    "carbonization",
     "engine",
+    "framework",
     "green software foundation",
     "greensoftware",
     "if",
     "impact",
-    "models"
+    "plugins"
   ],
   "license": "MIT",
-  "main": "build/index.js",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
-    "url": "https://github.com/Green-Software-Foundation/if"
+    "url": "git+https://github.com/Green-Software-Foundation/if.git"
   },
   "scripts": {
     "build": "npm run clean && tsc --project tsconfig.build.json",
     "clean": "rimraf build/",
-    "coverage": "jest --verbose --coverage --testPathPattern=src/__tests__/unit",
+    "coverage": "jest --verbose --coverage",
     "fix": "gts fix",
     "fix:package": "fixpack",
-    "ie": "npx ts-node src/index.ts",
-    "if-diff": "npx ts-node src/diff.ts",
+    "if-check": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-check/index.ts",
+    "if-csv": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-csv/index.ts",
+    "if-diff": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-diff/index.ts",
+    "if-env": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-env/index.ts",
+    "if-merge": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-merge/index.ts",
+    "if-run": "cross-env CURRENT_DIR=$(node -p \"process.env.INIT_CWD\") npx ts-node src/if-run/index.ts",
     "lint": "gts lint",
     "pre-commit": "lint-staged",
     "prepare": "husky install",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "release": "release-it",
-    "test": "jest --verbose --testPathPattern=src/__tests__/unit",
-    "test:integration": "jest --verbose --testPathPattern=src/__tests__/integration"
+    "test": "jest --verbose"
   },
-  "stability": "stable",
-  "types": "src/index.d.ts"
+  "stability": "stable"
 }

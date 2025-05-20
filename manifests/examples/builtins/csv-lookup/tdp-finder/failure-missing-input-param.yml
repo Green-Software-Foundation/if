@@ -1,0 +1,22 @@
+name: tdp-finder
+description: failure with `inputs` missing `physical-processor` param
+tags:
+initialize:
+  plugins:
+    tdp-finder:
+      method: CSVLookup
+      path: "builtin"
+      config:
+        filepath: https://raw.githubusercontent.com/Green-Software-Foundation/if-data/main/tdp-data-1.csv
+        query:
+          name: physical-processor
+        output: "tdp"
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - tdp-finder
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 300

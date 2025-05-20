@@ -1,0 +1,46 @@
+name: demo
+description:
+tags:
+initialize:
+  plugins:
+    mock-observations:
+      kind: plugin
+      method: MockObservations
+      path: "builtin"
+      config:
+        timestamp-from: 2023-07-06T00:00
+        timestamp-to: 2023-07-06T00:01
+        duration: 60
+        components:
+          - cloud/instance-type: A1
+          - cloud/instance-type: B1
+        generators:
+          common:
+            region: uk-west
+            common-key: common-val
+          randint:
+            cpu/utilization:
+              min: 1
+              max: 99
+            memory/utilization:
+              min: 1
+              max: 99
+    sum:
+      path: "builtin"
+      method: Sum
+      config:
+        input-parameters:
+          - cpu/utilization
+          - memory/utilization
+        output-parameter: util-sum
+tree:
+  children:
+    child:
+      pipeline:
+        observe:
+          - mock-observations
+        regroup:
+          - cloud/instance-type
+        compute:
+          - sum
+      inputs: null

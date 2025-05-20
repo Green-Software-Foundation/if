@@ -1,0 +1,42 @@
+name: regroup
+description:
+initialize:
+  plugins: {}
+tree:
+  children:
+    my-app:
+      pipeline:
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 300
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          cpu/utilization: 99
+        - timestamp: 2023-07-06T05:00
+          duration: 300
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          cpu/utilization: 23
+        - timestamp: 2023-07-06T10:00
+          duration: 300
+          cloud/instance-type: A1
+          cloud/region: uk-west
+          cpu/utilization: 12
+        - timestamp: 2023-07-06T00:00 # note this time restarts at the start timstamp
+          duration: 300
+          cloud/instance-type: B1
+          cloud/region: uk-west
+          cpu/utilization: 11
+        - timestamp: 2023-07-06T05:00
+          duration: 300
+          cloud/instance-type: B1
+          cloud/region: uk-west
+          cpu/utilization: 67
+        - timestamp: 2023-07-06T10:00
+          duration: 300
+          #cloud/instance-type: B1  -- missing value
+          cloud/region: uk-west
+          cpu/utilization: 1

@@ -1,0 +1,24 @@
+name: sci
+description: missing input value (carbon-embodied)
+tags:
+initialize:
+  #
+  plugins:
+    sci:
+      kind: plugin
+      method: Sci
+      path: "builtin"
+      config:
+        functional-unit: requests
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - sci
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
+          energy: 5
+          carbon-operational: 5
+          requests: 100

@@ -5,25 +5,12 @@ on:
       - release
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - run: npm ci
-      - run: npm test
-
-  publish-npm:
-    needs: build
+  release-publish-npm:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: main
-          
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -32,6 +19,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Run integration tests
+        run: npm run if-check -- -d manifests/outputs
 
       - name: Initialize git user email
         run: git config --global user.email "${{ env.RELEASE_USER_EMAIL }}"
@@ -59,6 +52,11 @@ jobs:
 
           echo "LATEST_RELEASE_NAME=$LATEST_RELEASE_NAME" >> $GITHUB_ENV
           echo "IS_PRE_RELEASE=$IS_PRE_RELEASE" >> $GITHUB_ENV
+
+      - name: Fetch and checkout to release branch
+        run: |
+          git fetch --all
+          git checkout ${{ vars.RELEASE_BRANCH_NAME }}
 
       - name: Publish to npm (pre-release)
         if: env.IS_PRE_RELEASE == 'true'
