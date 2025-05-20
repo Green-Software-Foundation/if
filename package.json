@@ -18,7 +18,7 @@
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
   },
   "dependencies": {
-    "@grnsft/if-core": "^0.0.29",
+    "@grnsft/if-core": "^0.0.30",
     "axios": "^1.7.2",
     "csv-parse": "^5.5.6",
     "csv-stringify": "^6.4.6",
