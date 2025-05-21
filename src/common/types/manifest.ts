@@ -5,6 +5,8 @@ import {manifestSchema} from '../util/validations';
 
 export type Manifest = z.infer<typeof manifestSchema>;
 
+export type Execution = NonNullable<Manifest['execution']>;
+
 export type GlobalPlugins = Manifest['initialize']['plugins'];
 
 export type PluginOptions = GlobalPlugins[string];

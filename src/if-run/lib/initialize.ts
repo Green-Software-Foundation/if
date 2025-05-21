@@ -32,6 +32,34 @@ const {
 } = STRINGS;
 
 /**
+ * Whether to output warnings for external plugins
+ */
+let enableExternalPluginWarning = true;
+
+/**
+ * Set whether to output warnings for external plugins.
+ * @param enable true if warnings for external plugins should be output
+ */
+export const setExternalPluginWarning = (enable: boolean) => {
+  enableExternalPluginWarning = enable;
+};
+
+/**
+ * List of plugins to disable
+ */
+let disabledPlugins = new Set<string>();
+
+/**
+ * Set plugins to be disabled.
+ * Each element is specified in the format `plugin-path:method-name`.
+ * Built-in plugins are specified as `builtin:method-name`.
+ * @param pluginsToBeDisabled List of plugins to be disabled
+ */
+export const setDisabledPlugins = (pluginsToBeDisabled: Set<string>) => {
+  disabledPlugins = pluginsToBeDisabled;
+};
+
+/**
  * Imports module by given `path`.
  */
 const importModuleFrom = async (path: string) => {
@@ -60,6 +88,11 @@ const handModule = (method: string, pluginPath: string) => {
   console.debug(LOADING_PLUGIN_FROM_PATH(method, pluginPath), '\n');
 
   if (pluginPath === 'builtin') {
+    if (disabledPlugins.has('builtin:' + method)) {
+      throw new PluginInitializationError(
+        INVALID_MODULE_PATH(`builtin:${method}`)
+      );
+    }
     pluginPath = path.normalize(`${__dirname}/../builtins`);
   } else {
     if (pluginPath?.startsWith(GITHUB_PATH)) {
@@ -67,7 +100,17 @@ const handModule = (method: string, pluginPath: string) => {
       pluginPath = parts[parts.length - 1];
     }
 
-    if (!pluginPath.includes(NATIVE_PLUGIN)) {
+    pluginPath = path.normalize(pluginPath);
+    if (
+      pluginPath.startsWith('../') ||
+      disabledPlugins.has(`${pluginPath}:${method}`)
+    ) {
+      throw new PluginInitializationError(
+        INVALID_MODULE_PATH(`${pluginPath}:${method}`)
+      );
+    }
+
+    if (enableExternalPluginWarning && !pluginPath.includes(NATIVE_PLUGIN)) {
       memoizedLog(logger.warn, NOT_NATIVE_PLUGIN(pluginPath));
     }
   }
