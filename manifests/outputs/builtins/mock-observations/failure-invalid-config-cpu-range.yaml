@@ -6,7 +6,6 @@ tags: null
 initialize:
   plugins:
     mock-observations:
-      kind: plugin
       method: MockObservations
       path: builtin
       config:

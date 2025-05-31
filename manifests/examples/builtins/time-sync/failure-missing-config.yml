@@ -2,8 +2,6 @@ name: time-sync
 description: missing config
 tags:
 initialize:
-  output:
-    - yaml
   plugins:
     'time-sync':
       method: TimeSync
