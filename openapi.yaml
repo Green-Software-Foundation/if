@@ -1,0 +1,424 @@
+openapi: 3.0.3
+info:
+  title: Impact Framework Web API
+  description: |-
+    This API provides key feature of Impact Framework (IF) as a Web API.
+  license:
+    name: MIT license
+    url: https://github.com/Green-Software-Foundation/if/blob/main/LICENSE
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Impact Framework
+  url: https://if.greensoftware.foundation/
+components:
+  schemas:
+    aggregation-method-type:
+      type: string
+      enum:
+        - sum
+        - avg
+        - none
+        - copy
+    aggregation-method:
+      type: object
+      properties:
+        time:
+          $ref: '#/components/schemas/aggregation-method-type'
+        component:
+          $ref: '#/components/schemas/aggregation-method-type'
+      required:
+        - time
+        - component
+      additionalProperties: false
+    aggregation-type:
+      type: string
+      enum:
+        - horizontal
+        - time
+        - vertical
+        - component
+        - both
+    metadata:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          unit:
+            type: string
+          description:
+            type: string
+          aggregation-method:
+            $ref: '#/components/schemas/aggregation-method'
+        required:
+          - unit
+          - description
+          - aggregation-method
+        additionalProperties: false
+      nullable: true
+    parameter-metadata:
+      type: object
+      properties:
+        inputs:
+          $ref: '#/components/schemas/metadata'
+        outputs:
+          $ref: '#/components/schemas/metadata'
+      additionalProperties: false
+    manifest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        tags:
+          type: object
+          properties:
+            kind:
+              type: string
+              nullable: true
+            complexity:
+              type: string
+              nullable: true
+            category:
+              type: string
+              nullable: true
+          additionalProperties: false
+          nullable: true
+        explainer:
+          type: boolean
+        explain:
+          type: object
+        aggregation:
+          type: object
+          properties:
+            metrics:
+              type: array
+              items:
+                type: string
+            type:
+              $ref: '#/components/schemas/aggregation-type'
+            skip-components:
+              type: array
+              items:
+                type: string
+          required:
+            - metrics
+            - type
+          additionalProperties: false
+          nullable: true
+        initialize:
+          type: object
+          properties:
+            plugins:
+              type: object
+              additionalProperties:
+                type: object
+                properties:
+                  path:
+                    type: string
+                  method:
+                    type: string
+                  mapping:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  config:
+                    type: object
+                  parameter-metadata:
+                    $ref: '#/components/schemas/parameter-metadata'
+                required:
+                  - path
+                  - method
+                additionalProperties: false
+          required:
+            - plugins
+          additionalProperties: false
+        execution:
+          type: object
+          properties:
+            command:
+              type: string
+            environment:
+              type: object
+              properties:
+                if-version:
+                  type: string
+                os:
+                  type: string
+                os-version:
+                  type: string
+                node-version:
+                  type: string
+                date-time:
+                  type: string
+                dependencies:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - if-version
+                - os
+                - os-version
+                - node-version
+                - date-time
+                - dependencies
+              additionalProperties: false
+            status:
+              type: string
+            error:
+              type: string
+          required:
+            - status
+          additionalProperties: false
+        tree:
+          type: object
+      required:
+        - name
+        - initialize
+        - tree
+      additionalProperties: false
+  examples:
+    request-yaml:
+      summary: 'sample request YAML'
+      value:
+        name: demo
+        initialize:
+          plugins:
+            double-a-value:
+              path: 'builtin'
+              method: Coefficient
+              config:
+                input-parameter: "cpu/utilization"
+                coefficient: 2
+                output-parameter: "cpu-utilization-doubled"
+        tree:
+          children:
+            child-0:
+              pipeline:
+                compute:
+                  - double-a-value
+              inputs:
+                - timestamp: 2023-07-06T00:00
+                  duration: 1
+                  cpu/utilization: 20
+                - timestamp: 2023-07-06T00:01
+                  duration: 1
+                  cpu/utilization: 80
+    request-json:
+      summary: 'sample request JSON'
+      value:
+        {
+          "name": "demo",
+          "initialize": {
+            "plugins": {
+              "double-a-value": {
+                "path": "builtin",
+                "method": "Coefficient",
+                "config": {
+                  "input-parameter": "cpu/utilization",
+                  "coefficient": 2,
+                  "output-parameter": "cpu-utilization-doubled"
+                }
+              }
+            }
+          },
+          "tree": {
+            "children": {
+              "child-0": {
+                "pipeline": {
+                  "compute": [
+                    "double-a-value"
+                  ]
+                },
+                "inputs": [
+                  {
+                    "timestamp": "2023-07-06T00:00",
+                    "duration": 1,
+                    "cpu/utilization": 20
+                  },
+                  {
+                    "timestamp": "2023-07-06T00:01",
+                    "duration": 1,
+                    "cpu/utilization": 80
+                  }
+                ]
+              }
+            }
+          }
+        }
+    response-yaml:
+      summary: 'sample response YAML'
+      value:
+        name: demo
+        initialize:
+          plugins:
+            double-a-value:
+              path: builtin
+              method: Coefficient
+              config:
+                input-parameter: cpu/utilization
+                coefficient: 2
+                output-parameter: cpu-utilization-doubled
+        execution:
+          command: /usr/bin/node /usr/local/bin/if-api
+          environment:
+            if-version: 1.0.1
+            os: Ubuntu
+            os-version: 24.04.2 LTS
+            node-version: 18.19.1
+            date-time: 2025-05-08T06:26:22.727Z (UTC)
+            dependencies: []
+          status: success
+        tree:
+          children:
+            child-0:
+              pipeline:
+                compute:
+                  - double-a-value
+              inputs:
+                - timestamp: 2023-07-06T00:00
+                  duration: 1
+                  cpu/utilization: 20
+                - timestamp: 2023-07-06T00:01
+                  duration: 1
+                  cpu/utilization: 80
+              outputs:
+                - timestamp: 2023-07-06T00:00
+                  duration: 1
+                  cpu/utilization: 20
+                  cpu-utilization-doubled: 40
+                - timestamp: 2023-07-06T00:01
+                  duration: 1
+                  cpu/utilization: 80
+                  cpu-utilization-doubled: 160
+    response-json:
+      summary: 'sample response JSON'
+      value:
+        {
+          "name": "demo",
+          "initialize": {
+            "plugins": {
+              "double-a-value": {
+                "path": "builtin",
+                "method": "Coefficient",
+                "config": {
+                  "input-parameter": "cpu/utilization",
+                  "coefficient": 2,
+                  "output-parameter": "cpu-utilization-doubled"
+                }
+              }
+            }
+          },
+          "execution": {
+            "command": "/usr/bin/node /usr/local/bin/if-api",
+            "environment": {
+              "if-version": "1.0.1",
+              "os": "Ubuntu",
+              "os-version": "24.04.2 LTS",
+              "node-version": "18.19.1",
+              "date-time": "2025-05-08T06:30:00.855Z (UTC)",
+              "dependencies": []
+            },
+            "status": "success"
+          },
+          "tree": {
+            "children": {
+              "child-0": {
+                "pipeline": {
+                  "compute": [
+                    "double-a-value"
+                  ]
+                },
+                "inputs": [
+                  {
+                    "timestamp": "2023-07-06T00:00",
+                    "duration": 1,
+                    "cpu/utilization": 20
+                  },
+                  {
+                    "timestamp": "2023-07-06T00:01",
+                    "duration": 1,
+                    "cpu/utilization": 80
+                  }
+                ],
+                "outputs": [
+                  {
+                    "timestamp": "2023-07-06T00:00",
+                    "duration": 1,
+                    "cpu/utilization": 20,
+                    "cpu-utilization-doubled": 40
+                  },
+                  {
+                    "timestamp": "2023-07-06T00:01",
+                    "duration": 1,
+                    "cpu/utilization": 80,
+                    "cpu-utilization-doubled": 160
+                  }
+                ]
+              }
+            }
+          }
+        }
+paths:
+  /v1/run:
+    post:
+      summary: Execute `if-run` with given manifest.
+      operationId: ifRun
+      parameters:
+        - in: query
+          name: observe
+          schema:
+            type: boolean
+          required: false
+          description: "executes only observe pipeline of the manifest"
+        - in: query
+          name: aggregate
+          schema:
+            type: boolean
+          required: false
+          description: "executes only regroup pipeline of the manifest"
+        - in: query
+          name: compute
+          schema:
+            type: boolean
+          required: false
+          description: "executes only compute pipeline of the manifest"
+      requestBody:
+        description: IF Manifest
+        content:
+          application/yaml:
+            schema:
+              $ref: '#/components/schemas/manifest'
+            examples:
+              sample:
+                $ref: '#/components/examples/request-yaml'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/manifest'
+            examples:
+              sample:
+                $ref: '#/components/examples/request-json'
+        required: true
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/yaml:
+              schema:
+                $ref: '#/components/schemas/manifest'
+              examples:
+                success:
+                  $ref: '#/components/examples/response-yaml'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/manifest'
+              examples:
+                success:
+                  $ref: '#/components/examples/response-json'
+        '400':
+          description: Validation Error
+        '415':
+          description: Invalid Content Type
+        '500':
+          description: Internal Server Error
