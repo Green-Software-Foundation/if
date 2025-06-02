@@ -10,7 +10,7 @@ import {mergeObjects} from '../util/helpers';
 
 import {STRINGS} from '../config/strings';
 
-import {ComputeParams, Node, PhasedPipeline} from '../types/compute';
+import type {ComputeParams, Node} from '../types/compute';
 
 const {
   MERGING_DEFAULTS_WITH_INPUT_DATA,
@@ -27,14 +27,13 @@ const {
  * Traverses all child nodes based on children grouping.
  */
 const traverse = async (
-  children: any,
-  childNames: Set<string>,
+  children: Record<string, Node>,
+  childNames: readonly string[],
   params: ComputeParams
-) => {
+): Promise<void> => {
   for (const child in children) {
     console.debug(COMPUTING_COMPONENT_PIPELINE(child));
-    childNames.add(child);
-    await computeNode(children[child], childNames, params);
+    await computeNode(children[child], [...childNames, child], params);
   }
 };
 
@@ -44,7 +43,7 @@ const traverse = async (
 const mergeDefaults = (
   inputs: PluginParams[],
   defaults: PluginParams | undefined
-) => {
+): PluginParams[] => {
   if (inputs) {
     return defaults
       ? inputs.map(input => mergeObjects(defaults, input))
@@ -59,7 +58,7 @@ const mergeDefaults = (
 /**
  * Warns if the `config` is provided in the manifest.
  */
-const warnIfConfigProvided = (node: any) => {
+const warnIfConfigProvided = (node: Node): void => {
   if ('config' in node) {
     const plugins = Object.keys(node.config || {});
     const joinedPlugins = plugins.join(', ');
@@ -87,16 +86,20 @@ const warnIfConfigProvided = (node: any) => {
  */
 const computeNode = async (
   node: Node,
-  childNames: Set<string>,
+  childNames: readonly string[],
   params: ComputeParams
-): Promise<any> => {
-  const pipeline = node.pipeline || (params.pipeline as PhasedPipeline);
+): Promise<void> => {
+  const pipeline = node.pipeline || params.pipeline;
   const config = node.config || params.config;
   const defaults = node.defaults || params.defaults;
   const noFlags = !params.observe && !params.regroup && !params.compute;
 
   debugLogger.setExecutingPluginName();
   warnIfConfigProvided(node);
+
+  if (node.pipeline) {
+    childNames = [];
+  }
 
   if (node.children) {
     return traverse(node.children, childNames, {
@@ -107,7 +110,7 @@ const computeNode = async (
     });
   }
 
-  let outputStorage = (structuredClone(node.inputs) as PluginParams[]) || [];
+  let outputStorage = structuredClone(node.inputs) || [];
   const pipelineCopy = structuredClone(pipeline) || {};
 
   /** Checks if pipeline is not an array or empty object. */
@@ -244,9 +247,7 @@ const computeNode = async (
 export const compute = async (tree: any, params: ComputeParams) => {
   const copyOfTree = structuredClone(tree);
 
-  const childNames = new Set<string>();
-
-  await computeNode(copyOfTree, childNames, params);
+  await computeNode(copyOfTree, [], params);
 
   return copyOfTree;
 };
