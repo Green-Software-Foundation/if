@@ -1,0 +1,72 @@
+name: regroup
+description: successful path
+initialize:
+  plugins: {}
+execution:
+  command: >-
+    /usr/bin/node /home/mitsuru/if/build/if-run -m
+    manifests/examples/features/regroup/success.yml -o
+    manifests/outputs/features/regroup/success.yaml
+  environment:
+    if-version: 1.0.2
+    os: Ubuntu
+    os-version: 24.04.2 LTS
+    node-version: 18.19.1
+    date-time: 2025-06-03T00:12:17.558Z (UTC)
+    dependencies:
+      - '@grnsft/if-core@0.0.30'
+      - axios@1.8.3
+      - csv-parse@5.5.6
+      - csv-stringify@6.4.6
+      - express@5.1.0
+      - js-yaml@4.1.0
+      - luxon@3.4.4
+      - ts-command-line-args@2.5.1
+      - typescript-cubic-spline@1.0.1
+      - winston@3.11.0
+      - zod@3.23.8
+  status: success
+tree:
+  children:
+    my-app:
+      pipeline:
+        regroup:
+          - cloud/region
+          - cloud/instance-type
+      children:
+        uk-west:
+          children:
+            A1:
+              inputs:
+                - timestamp: 2023-07-06T00:00
+                  duration: 300
+                  cloud/instance-type: A1
+                  cloud/region: uk-west
+                  cpu/utilization: 99
+                - timestamp: 2023-07-06T05:00
+                  duration: 300
+                  cloud/instance-type: A1
+                  cloud/region: uk-west
+                  cpu/utilization: 23
+                - timestamp: 2023-07-06T10:00
+                  duration: 300
+                  cloud/instance-type: A1
+                  cloud/region: uk-west
+                  cpu/utilization: 12
+            B1:
+              inputs:
+                - timestamp: 2023-07-06T00:00
+                  duration: 300
+                  cloud/instance-type: B1
+                  cloud/region: uk-west
+                  cpu/utilization: 11
+                - timestamp: 2023-07-06T05:00
+                  duration: 300
+                  cloud/instance-type: B1
+                  cloud/region: uk-west
+                  cpu/utilization: 67
+                - timestamp: 2023-07-06T10:00
+                  duration: 300
+                  cloud/instance-type: B1
+                  cloud/region: uk-west
+                  cpu/utilization: 1
