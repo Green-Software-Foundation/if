@@ -1,0 +1,10 @@
+# ignore all
+*
+
+# exclude only necessary items
+!src/common
+!src/if-*
+!package*.json
+!tsconfig.json
+!tsconfig.build.json
+!bin/docker-entrypoint.sh

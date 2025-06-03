@@ -86,6 +86,18 @@ Note that in `if-api`, the following builtin plugins are disabled by default for
 
 Please refer to the documentation for detailed usage instructions, including how to enable these plugins.
 
+### Using Docker Container
+
+The Impact Framework API server can also be run as a Docker container.
+The official image is provided at `ghcr.io/green-software-foundation/if`, so you can run the container with the following command.
+
+```sh
+# Run with default port (3000)
+$ docker run --rm -p 3000:3000 ghcr.io/green-software-foundation/if
+```
+
+Please refer to [`CONTAINER.md`](CONTAINER.md) for how to install external plugins during container execution and how to build custom images.
+
 ## Documentation
 
 Please read our documentation at [if.greensoftware.foundation](https://if.greensoftware.foundation/)
