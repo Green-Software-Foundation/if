@@ -29,7 +29,7 @@ export type ComputeParams = {
 };
 
 export type Node = {
-  children?: any;
+  children?: Record<string, Node>;
   pipeline?: PhasedPipeline;
   config?: NodeConfig;
   defaults?: PluginParams;

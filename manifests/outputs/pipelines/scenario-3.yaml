@@ -1,0 +1,126 @@
+name: groupby
+description: successful path
+initialize:
+  plugins:
+    sum:
+      path: builtin
+      method: Sum
+      config:
+        input-parameters:
+          - cpu/energy
+          - network/energy
+        output-parameter: energy
+execution:
+  command: >-
+    /usr/bin/node /home/mitsuru/if/build/if-run -m
+    manifests/examples/pipelines/scenario-3.yml -o
+    manifests/outputs/pipelines/scenario-3.yaml
+  environment:
+    if-version: 1.0.2
+    os: Ubuntu
+    os-version: 24.04.2 LTS
+    node-version: 18.19.1
+    date-time: 2025-06-02T14:32:40.906Z (UTC)
+    dependencies:
+      - '@grnsft/if-core@0.0.30'
+      - axios@1.8.3
+      - csv-parse@5.5.6
+      - csv-stringify@6.4.6
+      - express@5.1.0
+      - js-yaml@4.1.0
+      - luxon@3.4.4
+      - ts-command-line-args@2.5.1
+      - typescript-cubic-spline@1.0.1
+      - winston@3.11.0
+      - zod@3.23.8
+  status: success
+tree:
+  children:
+    my-app:
+      pipeline:
+        observe: null
+        regroup:
+          - cloud/instance-type
+          - cloud/region
+        compute: null
+      children:
+        uk-west:
+          children:
+            A1:
+              children:
+                uk-west:
+                  inputs:
+                    - timestamp: 2023-07-06T00:00
+                      duration: 300
+                      cloud/instance-type: A1
+                      cloud/region: uk-west
+                      cpu/utilization: 99
+                    - timestamp: 2023-07-06T05:00
+                      duration: 300
+                      cloud/instance-type: A1
+                      cloud/region: uk-west
+                      cpu/utilization: 23
+                    - timestamp: 2023-07-06T10:00
+                      duration: 300
+                      cloud/instance-type: A1
+                      cloud/region: uk-west
+                      cpu/utilization: 12
+            B1:
+              children:
+                uk-west:
+                  inputs:
+                    - timestamp: 2023-07-06T00:00
+                      duration: 300
+                      cloud/instance-type: B1
+                      cloud/region: uk-west
+                      cpu/utilization: 11
+                    - timestamp: 2023-07-06T05:00
+                      duration: 300
+                      cloud/instance-type: B1
+                      cloud/region: uk-west
+                      cpu/utilization: 67
+                    - timestamp: 2023-07-06T10:00
+                      duration: 300
+                      cloud/instance-type: B1
+                      cloud/region: uk-west
+                      cpu/utilization: 1
+        uk-east:
+          children:
+            A1:
+              children:
+                uk-east:
+                  inputs:
+                    - timestamp: 2023-07-06T00:00
+                      duration: 300
+                      cloud/instance-type: A1
+                      cloud/region: uk-east
+                      cpu/utilization: 9
+                    - timestamp: 2023-07-06T05:00
+                      duration: 300
+                      cloud/instance-type: A1
+                      cloud/region: uk-east
+                      cpu/utilization: 23
+                    - timestamp: 2023-07-06T10:00
+                      duration: 300
+                      cloud/instance-type: A1
+                      cloud/region: uk-east
+                      cpu/utilization: 12
+            B1:
+              children:
+                uk-east:
+                  inputs:
+                    - timestamp: 2023-07-06T00:00
+                      duration: 300
+                      cloud/instance-type: B1
+                      cloud/region: uk-east
+                      cpu/utilization: 11
+                    - timestamp: 2023-07-06T05:00
+                      duration: 300
+                      cloud/instance-type: B1
+                      cloud/region: uk-east
+                      cpu/utilization: 67
+                    - timestamp: 2023-07-06T10:00
+                      duration: 300
+                      cloud/instance-type: B1
+                      cloud/region: uk-east
+                      cpu/utilization: 1
