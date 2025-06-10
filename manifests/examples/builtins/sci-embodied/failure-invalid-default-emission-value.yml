@@ -1,0 +1,22 @@
+name: sci-embodied
+description: failure with `vCPUs` being string instead of number
+tags:
+initialize:
+  plugins:
+    "sci-embodied": # a model that calculates m from te, tir, el, rr and rtor
+      method: SciEmbodied
+      path: "builtin"
+tree:
+  children:
+    child:
+      pipeline:
+        compute:
+          - sci-embodied # duration & config -> embodied
+      defaults:
+        vCPUs: fail
+        time-reserved: 3600 # 1hr in seconds
+        resources-reserved: 1
+        resources-total: 8
+      inputs:
+        - timestamp: 2023-07-06T00:00
+          duration: 3600
