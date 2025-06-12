@@ -1,0 +1,11 @@
+{{- if .Values.npmrc -}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: npmrc
+  labels:
+    {{- include "if.labels" . | nindent 4 }}
+stringData:
+  .npmrc: |
+    {{- .Values.npmrc | nindent 4 }}
+{{- end }}
