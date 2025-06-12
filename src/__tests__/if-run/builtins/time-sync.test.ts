@@ -945,7 +945,7 @@ describe('builtins/time-sync:', () => {
         expect(result).toStrictEqual(expectedResult);
       });
 
-      it('should throw an error if the upsampling resolution is not compatible with the interval', async () => {
+      it('should throw an error if the upsampling resolution is not compatible with the interval (interval is bigger than upsampling).', async () => {
         const basicConfig = {
           'start-time': '2023-12-12T00:00:00.000Z',
           'end-time': '2023-12-12T00:00:03.000Z',
@@ -970,7 +970,7 @@ describe('builtins/time-sync:', () => {
         }
       });
 
-      it('should throw an error if the upsampling resolution is not compatible with paddings', async () => {
+      it('should throw an error if the upsampling resolution is not compatible with paddings (interval is equal to upsampling).', async () => {
         const basicConfig = {
           'start-time': '2023-12-12T00:00:00.000Z',
           'end-time': '2023-12-12T00:00:12.000Z',

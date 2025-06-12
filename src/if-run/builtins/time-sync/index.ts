@@ -216,6 +216,7 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
       timeStep: number
     ) => {
       const metrics = Object.keys(input);
+
       return metrics.reduce((acc, metric) => {
         if (metric === 'timestamp') {
           acc[metric] =
@@ -483,15 +484,70 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
       }, [] as PluginParams[]);
 
     /** Implementation */
+    /**
+     * Calculates the greatest common divisor (GCD) of two numbers using the Euclidean algorithm.
+     */
+    const greatestCommonDivisor = (a: number, b: number): number => {
+      while (b !== 0) {
+        [a, b] = [b, a % b];
+      }
+
+      return a;
+    };
+
+    /**
+     * Calculates the greatest common divisor (GCD) of an array of numbers.
+     */
+    const calculateGCD = (numbers: number[]) =>
+      numbers.reduce((acc, val) => greatestCommonDivisor(acc, val));
+
+    /**
+     * Returns an array of unique values from the given array.
+     */
+    const getUniqueValues = (arr: number[]) => Array.from(new Set(arr));
+
+    /**
+     * Finds the most efficient resampling resolution based on the given inputs and user-defined interval.
+     *
+     * This function calculates the greatest common divisor (GCD) of the combined unique values from:
+     * - A: All unique values of (timestamp + duration) for each input.
+     * - B: All unique values of (next timestamp - current timestamp + duration) for each input.
+     */
+    const findResamplingResolution = (
+      inputs: PluginParams[],
+      userInterval: number
+    ): number => {
+      const A: number[] = [];
+      const B: number[] = [];
+
+      for (let i = 0; i < inputs.length - 1; i++) {
+        const currentTimestamp = parseDate(inputs[i].timestamp).toMillis();
+        const nextTimestamp = parseDate(inputs[i + 1].timestamp).toMillis();
+
+        A.push(currentTimestamp + inputs[i].duration);
+        B.push(nextTimestamp - currentTimestamp + inputs[i].duration);
+      }
+
+      const uniqueA = getUniqueValues(A);
+      const uniqueB = getUniqueValues(B);
+      const combined = [...uniqueA, ...uniqueB, userInterval];
+
+      return calculateGCD(combined);
+    };
+
+    const upsamplingResolution =
+      config['upsampling-resolution'] ||
+      findResamplingResolution(inputs, config.interval);
+    console.log(`Choosen upsampling resolution is ${upsamplingResolution}\n`);
+
     const timeParams = {
       startTime: DateTime.fromISO(config['start-time'] as string),
       endTime: DateTime.fromISO(config['end-time'] as string),
       interval: config.interval,
       allowPadding: config['allow-padding'],
-      upsamplingResolution: config['upsampling-resolution']
-        ? config['upsampling-resolution']
-        : 1,
+      upsamplingResolution,
     };
+
     validateIntervalForResample(
       timeParams.interval,
       timeParams.upsamplingResolution,
