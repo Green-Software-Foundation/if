@@ -20,7 +20,7 @@ export const getParametersWithMetadata = (plugins: IFPlugin[]) => {
   );
 };
 
-const extractParametersWithMetadata = (plugin: IFPlugin) => {
+export const extractParametersWithMetadata = (plugin: IFPlugin) => {
   if (!plugin['parameter-metadata']) return [];
   const {inputs, outputs} = plugin['parameter-metadata'];
   return [
@@ -29,13 +29,13 @@ const extractParametersWithMetadata = (plugin: IFPlugin) => {
   ];
 };
 
-const extractParameters = (
+export const extractParameters = (
   config: Record<string, any> | undefined,
   keys: string[]
 ) => {
   if (!config) return [];
   return keys.flatMap(key => {
-    if (key in config && typeof config[key] === 'string') {
+    if (key in config && isStringOrStringArray(config[key])) {
       return config[key];
     }
     return [];
@@ -61,4 +61,14 @@ export const calculateMetadataCoverage = (
   );
 
   return {percentage, missingParameters};
+};
+
+const isStringOrStringArray = (parameter: unknown): boolean => {
+  if (typeof parameter === 'string') {
+    return true;
+  }
+  if (Array.isArray(parameter)) {
+    return parameter.every(item => typeof item === 'string');
+  }
+  return false;
 };
