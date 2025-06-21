@@ -42,7 +42,6 @@ const impactEngine = async () => {
 
   try {
     const {tree, ...context} = validateManifest(envManifest);
-
     const pluginStorage = await initialize(context);
     const computedTree = await compute(tree, {
       context,
