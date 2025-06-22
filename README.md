@@ -98,6 +98,24 @@ $ docker run --rm -p 3000:3000 ghcr.io/green-software-foundation/if
 
 Please refer to [`CONTAINER.md`](CONTAINER.md) for how to install external plugins during container execution and how to build custom images.
 
+### Using API server with Kubernetes
+
+The Impact Framework also provides a helm chart for running the API server on a Kubernetes cluster.
+The helm chart is provided in OCI format on GitHub Container Registry, so you need to specify `oci:` when referencing the chart.
+
+```sh
+$ helm install if oci://ghcr.io/green-software-foundation/charts/if
+```
+
+By default, a `ClusterIP` service is deployed, so you can access the API server by running `kubectl port-forward`.
+
+```sh
+$ kubectl port-forward svc/if 3000:3000 &
+$ curl -H "Content-Type: application/yaml" --data-binary @manifest.yaml http://localhost:3000/v1/run
+```
+
+For detailed usage including external plugin installation and NodePort configuration, please refer to [`HELM_CHART.md`](HELM_CHART.md).
+
 ## Documentation
 
 Please read our documentation at [if.greensoftware.foundation](https://if.greensoftware.foundation/)

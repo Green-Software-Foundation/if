@@ -1,0 +1,144 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "if.fullname" . }}
+  labels:
+    {{- include "if.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "if.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "if.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "if.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ .Chart.Name }}
+        {{- with .Values.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args:
+        {{- range .Values.args }}
+        - {{ . }}
+        {{- end }}
+        {{- if .Values.disableExternalPluginWarning }}
+        - --disableExternalPluginWarning
+        {{- end }}
+        {{- if .Values.debug }}
+        - --debug
+        {{- end }}
+        ports:
+        - name: http
+          containerPort: 3000
+        {{- with .Values.livenessProbe }}
+        livenessProbe:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.readinessProbe }}
+        readinessProbe:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.startupProbe }}
+        startupProbe:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.env }}
+        {{- if or .secret .configMap .existingSecret.name .existingConfigMap.name }}
+        envFrom:
+        {{- end }}
+        {{- if .secret }}
+        - secretRef:
+            name: env-vars
+        {{- end }}
+        {{- if .configMap }}
+        - configMapRef:
+            name: env-vars
+        {{- end }}
+        {{- if .existingSecret.name }}
+        - secretRef:
+            name: {{ .existingSecret.name }}
+            {{- with .existingSecret.prefix }}
+            prefix: {{ . }}
+            {{- end }}
+        {{- end }}
+        {{- if .existingConfigMap.name }}
+        - configMapRef:
+            name: {{ .existingConfigMap.name }}
+            {{- with .existingConfigMap.prefix }}
+            prefix: {{ . }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        volumeMounts:
+        - name: disabled-plugins
+          mountPath: /app/disabledPlugins.txt
+          subPath: disabledPlugins.txt
+        {{- if .Values.additionalPlugins }}
+        - name: additional-plugins
+          mountPath: /app/plugins.txt
+          subPath: plugins.txt
+        {{- end }}
+        {{- if .Values.npmrc }}
+        - name: npmrc
+          mountPath: /app/.npmrc
+          subPath: .npmrc
+        {{- end }}
+        {{- with .Values.volumeMounts }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      volumes:
+      - name: disabled-plugins
+        configMap:
+          name: disabled-plugins
+      {{- if .Values.additionalPlugins }}
+      - name: additional-plugins
+        configMap:
+          name: additional-plugins
+      {{- end }}
+      {{- if .Values.npmrc }}
+      - name: npmrc
+        secret:
+          secretName: npmrc
+      {{- end }}
+      {{- with .Values.volumes }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
