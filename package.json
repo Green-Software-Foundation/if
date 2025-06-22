@@ -13,7 +13,8 @@
     "if-check": "build/if-check/index.js",
     "if-csv": "build/if-csv/index.js",
     "if-merge": "build/if-merge/index.js",
-    "if-api": "build/if-api/index.js"
+    "if-api": "build/if-api/index.js",
+    "if-metadata-check": "build/if-metadata-check/index.js"
   },
   "bugs": {
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
