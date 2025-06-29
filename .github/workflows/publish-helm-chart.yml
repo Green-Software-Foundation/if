@@ -1,0 +1,61 @@
+name: Publish Helm Chart
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: publish-helm-chart
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check chart version
+        id: check-chart
+        run: |
+          OWNER_TYPE=`gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /users/${{ github.repository_owner }} --jq .type`
+          if [ "$OWNER_TYPE" == 'Organization' ]; then
+            PREFIX=/orgs
+          else
+            PREFIX=/users
+          fi
+          ENDPOINT="$PREFIX/${{ github.repository_owner }}/packages/container/charts%2Fif/versions"
+
+          CHART_VERSION=`yq .version helm-chart/Chart.yaml`
+          EXISTS=`gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $ENDPOINT --jq "any(.[]; .metadata.container.tags[]? == \"$CHART_VERSION\")" || true`
+          if [ "$EXISTS" == 'true' ]; then
+            echo "::error::$CHART_VERSION already exists"
+            exit 1
+          fi
+
+          CHART_NAME=`yq .name helm-chart/Chart.yaml`
+          echo "name=$CHART_NAME" >> $GITHUB_OUTPUT
+          echo "version=$CHART_VERSION" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Packaging
+        run: |
+          APP_VERSION=`gh release list --repo ${{ github.repository }} --json name,isLatest --jq '.[] | select(.isLatest) | .name'`
+          helm package --app-version $APP_VERSION helm-chart
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Push the chart to GHCR
+        run: |
+          OWNER_LOWER=${GITHUB_REPOSITORY_OWNER,,}
+          helm push ${{ steps.check-chart.outputs.name }}-${{ steps.check-chart.outputs.version }}.tgz "oci://ghcr.io/$OWNER_LOWER/charts"
