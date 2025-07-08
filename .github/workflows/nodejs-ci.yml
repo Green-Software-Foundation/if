@@ -7,17 +7,19 @@ jobs:
       pull-requests: write # this allows to show carbon and energy data table in PRs
     steps:
       - name: Eco CI Energy Estimation - Initialize
-        uses: green-coding-solutions/eco-ci-energy-estimation@v4.0-rc3
-
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
         with:
           task: start-measurement
+          send-data: true
+          co2-calculation-method: "constant"
+          co2-grid-intensity-constant: 383
         continue-on-error: true
 
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Eco CI Energy Estimation - Get Measurement
-        uses: green-coding-solutions/eco-ci-energy-estimation@v4.0-rc3
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
 
         with:
           task: get-measurement
@@ -31,7 +33,7 @@ jobs:
           cache: 'npm'
 
       - name: Eco CI Energy Estimation - Get Measurement
-        uses: green-coding-solutions/eco-ci-energy-estimation@v4.0-rc3
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
 
         with:
           task: get-measurement
@@ -43,7 +45,7 @@ jobs:
         run: npm install
 
       - name: Eco CI Energy Estimation - Get Measurement
-        uses: green-coding-solutions/eco-ci-energy-estimation@v4.0-rc3
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
 
         with:
           task: get-measurement
@@ -55,7 +57,7 @@ jobs:
         run: npm run lint
 
       - name: Eco CI Energy Estimation - Get Measurement
-        uses: green-coding-solutions/eco-ci-energy-estimation@v4.0-rc3
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
 
         with:
           task: get-measurement
@@ -67,7 +69,7 @@ jobs:
         run: npm run test --silent
 
       - name: Eco CI Energy Estimation - Get Measurement
-        uses: green-coding-solutions/eco-ci-energy-estimation@v4.0-rc3
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
 
         with:
           task: get-measurement
@@ -75,11 +77,9 @@ jobs:
         continue-on-error: true
 
       - name: Eco CI Energy Estimation - End Measurement
-        uses: green-coding-solutions/eco-ci-energy-estimation@v4.0-rc3
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
 
         with:
           task: display-results
-          send-data: true
           pr-comment: true
         continue-on-error: true
-
