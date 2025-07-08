@@ -1,7 +1,16 @@
 name: Release commit
+# Temporarily disabled - uncomment to re-enable
 on:
-  release:
-    types: [published]
+  # release:
+  #   types: [published]
+  # Dummy trigger to prevent workflow from running, 
+  # To re-enable the workflow, simply uncomment the release trigger section and remove the workflow_dispatch section
+  workflow_dispatch:
+    inputs:
+      dummy:
+        description: 'Dummy input to prevent automatic triggering'
+        required: false
+        default: 'disabled'
 
 env: 
   PR_BRANCH_NAME: release-${{ github.event.release.tag_name }}
