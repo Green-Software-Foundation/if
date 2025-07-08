@@ -1,8 +1,17 @@
 name: Release publish NPM / container image
+# Temporarily disabled - uncomment to re-enable
 on:
-  push:
-    branches:
-      - release
+  # push:
+  #   branches:
+  #     - release
+  # Dummy trigger to prevent workflow from running
+  # To re-enable the workflow, simply uncomment the push trigger section and remove the workflow_dispatch section
+  workflow_dispatch:
+    inputs:
+      dummy:
+        description: 'Dummy input to prevent automatic triggering'
+        required: false
+        default: 'disabled'
 
 jobs:
   final-check-before-release:
