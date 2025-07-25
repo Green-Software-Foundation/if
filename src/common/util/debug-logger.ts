@@ -1,3 +1,5 @@
+import {getStorage} from '../../common/util/storage';
+
 import {STRINGS} from '../../if-run/config';
 
 const logMessagesKeys: (keyof typeof STRINGS)[] = [
@@ -48,28 +50,10 @@ const overrideConsoleMethods = (debugMode: boolean) => {
 };
 
 /**
- * Creates an encapsulated object to retrieve the plugin name.
- */
-const pluginNameManager = (() => {
-  let pluginName: string | undefined = '';
-
-  const manager = {
-    get currentPluginName() {
-      return pluginName;
-    },
-    set currentPluginName(value: string | undefined) {
-      pluginName = value;
-    },
-  };
-
-  return manager;
-})();
-
-/**
  * Sets the name of the currently executing plugin.
  */
 const setExecutingPluginName = (pluginName?: string) => {
-  pluginNameManager.currentPluginName = pluginName;
+  getStorage().currentPluginName = pluginName;
 };
 
 /**
@@ -110,7 +94,7 @@ const debugLog = (level: LogLevel, args: any[], debugMode: boolean) => {
   }
 
   const date = new Date().toISOString();
-  const plugin = pluginNameManager.currentPluginName;
+  const plugin = getStorage().currentPluginName;
   const isExeption =
     typeof args[0] === 'string' && args[0].includes('**Computing');
   const message = `${level}: ${date}: ${plugin ? plugin + ': ' : ''}${args.join(

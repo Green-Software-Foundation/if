@@ -3,6 +3,7 @@ import {PluginParams} from '@grnsft/if-core/types';
 
 import {debugLogger} from '../../common/util/debug-logger';
 import {logger} from '../../common/util/logger';
+import {getStorage} from '../../common/util/storage';
 import {
   AggregationParams,
   AggregationParamsSure,
@@ -112,32 +113,14 @@ export const storeAggregationMetrics = (
   aggregationMetrics?: AggregationMetricsWithMethod
 ) => {
   if (aggregationMetrics) {
-    metricManager.metrics = {
-      ...metricManager.metrics,
+    getStorage().metrics = {
+      ...getStorage().metrics,
       ...aggregationMetrics,
     };
   }
 
-  return metricManager.metrics;
+  return getStorage().metrics;
 };
-
-/**
- * Creates an encapsulated object to retrieve the metrics.
- */
-const metricManager = (() => {
-  let metric: AggregationMetricsWithMethod;
-
-  const manager = {
-    get metrics() {
-      return metric;
-    },
-    set metrics(value: AggregationMetricsWithMethod) {
-      metric = value;
-    },
-  };
-
-  return manager;
-})();
 
 /**
  * Returns aggregation method for given `metric`.

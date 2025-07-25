@@ -1,0 +1,13 @@
+{{- if .Values.additionalPlugins -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: additional-plugins
+  labels:
+    {{- include "if.labels" . | nindent 4 }}
+data:
+  plugins.txt: |
+    {{- range .Values.additionalPlugins }}
+    {{- . | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -10,7 +10,7 @@ import {mergeObjects} from '../util/helpers';
 
 import {STRINGS} from '../config/strings';
 
-import {ComputeParams, Node, PhasedPipeline} from '../types/compute';
+import type {ComputeParams, Node} from '../types/compute';
 
 const {
   MERGING_DEFAULTS_WITH_INPUT_DATA,
@@ -23,16 +23,17 @@ const {
   SKIPPING_REGROUP,
 } = STRINGS;
 
-const childNames = new Set<string>();
-
 /**
  * Traverses all child nodes based on children grouping.
  */
-const traverse = async (children: any, params: ComputeParams) => {
+const traverse = async (
+  children: Record<string, Node>,
+  childNames: readonly string[],
+  params: ComputeParams
+): Promise<void> => {
   for (const child in children) {
     console.debug(COMPUTING_COMPONENT_PIPELINE(child));
-    childNames.add(child);
-    await computeNode(children[child], params);
+    await computeNode(children[child], [...childNames, child], params);
   }
 };
 
@@ -42,7 +43,7 @@ const traverse = async (children: any, params: ComputeParams) => {
 const mergeDefaults = (
   inputs: PluginParams[],
   defaults: PluginParams | undefined
-) => {
+): PluginParams[] => {
   if (inputs) {
     return defaults
       ? inputs.map(input => mergeObjects(defaults, input))
@@ -57,7 +58,7 @@ const mergeDefaults = (
 /**
  * Warns if the `config` is provided in the manifest.
  */
-const warnIfConfigProvided = (node: any) => {
+const warnIfConfigProvided = (node: Node): void => {
   if ('config' in node) {
     const plugins = Object.keys(node.config || {});
     const joinedPlugins = plugins.join(', ');
@@ -83,8 +84,12 @@ const warnIfConfigProvided = (node: any) => {
  * 7. Compute plugins are used to do desired computations and appending the result to outputs
  *    (isolated execution can be achived by passing `--compute` flag to CLI command).
  */
-const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
-  const pipeline = node.pipeline || (params.pipeline as PhasedPipeline);
+const computeNode = async (
+  node: Node,
+  childNames: readonly string[],
+  params: ComputeParams
+): Promise<void> => {
+  const pipeline = node.pipeline || params.pipeline;
   const config = node.config || params.config;
   const defaults = node.defaults || params.defaults;
   const noFlags = !params.observe && !params.regroup && !params.compute;
@@ -92,8 +97,12 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
   debugLogger.setExecutingPluginName();
   warnIfConfigProvided(node);
 
+  if (node.pipeline) {
+    childNames = [];
+  }
+
   if (node.children) {
-    return traverse(node.children, {
+    return traverse(node.children, childNames, {
       ...params,
       pipeline,
       defaults,
@@ -101,7 +110,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
     });
   }
 
-  let outputStorage = (structuredClone(node.inputs) as PluginParams[]) || [];
+  let outputStorage = structuredClone(node.inputs) || [];
   const pipelineCopy = structuredClone(pipeline) || {};
 
   /** Checks if pipeline is not an array or empty object. */
@@ -170,7 +179,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
       debugLogger.setExecutingPluginName();
       console.debug(REGROUPING);
 
-      return traverse(node.children, {
+      return traverse(node.children, childNames, {
         ...params,
         pipeline: {
           ...pipelineCopy,
@@ -238,7 +247,7 @@ const computeNode = async (node: Node, params: ComputeParams): Promise<any> => {
 export const compute = async (tree: any, params: ComputeParams) => {
   const copyOfTree = structuredClone(tree);
 
-  await computeNode(copyOfTree, params);
+  await computeNode(copyOfTree, [], params);
 
   return copyOfTree;
 };

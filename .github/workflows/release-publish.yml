@@ -1,12 +1,16 @@
-name: Release publish NPM
+name: Release publish NPM / container image
 on:
   push:
     branches:
       - release
 
 jobs:
-  release-publish-npm:
+  final-check-before-release:
     runs-on: ubuntu-latest
+    outputs:
+      latest-release-name: ${{ steps.release-info.outputs.latest-release-name }}
+      is-pre-release: ${{ steps.release-info.outputs.is-pre-release }}
+      container-release-tag: ${{ steps.release-info.outputs.container-release-tag }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -14,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           registry-url: https://registry.npmjs.org/
 
       - name: Install dependencies
@@ -26,18 +30,17 @@ jobs:
       - name: Run integration tests
         run: npm run if-check -- -d manifests/outputs
 
-      - name: Initialize git user email
-        run: git config --global user.email "${{ env.RELEASE_USER_EMAIL }}"
+      - name: Archive checked source tree (to keep permissions)
+        run: tar cfz /tmp/src.tar.gz .
 
-      - name: Initialize git user name
-        run: git config --global user.name "Release publish workflow"
-
-      - name: Initialize npm config
-        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Upload checked source tree for the release
+        uses: actions/upload-artifact@v4
+        with:
+          name: src
+          path: /tmp/src.tar.gz
 
       - name: Fetch latest release info
+        id: release-info
         run: |
           RELEASE_JSON=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/releases")
@@ -50,24 +53,85 @@ jobs:
           LATEST_RELEASE_NAME=$(echo "$RELEASE_JSON" | jq -r '.[0].name')
           IS_PRE_RELEASE=$(echo "$RELEASE_JSON" | jq -r '.[0].prerelease')
 
-          echo "LATEST_RELEASE_NAME=$LATEST_RELEASE_NAME" >> $GITHUB_ENV
-          echo "IS_PRE_RELEASE=$IS_PRE_RELEASE" >> $GITHUB_ENV
+          echo "latest-release-name=$LATEST_RELEASE_NAME" >> $GITHUB_OUTPUT
+          echo "is-pre-release=$IS_PRE_RELEASE" >> $GITHUB_OUTPUT
+          if [ "$IS_PRE_RELEASE" == 'true' ]; then
+            echo "container-release-tag=pre" >> $GITHUB_OUTPUT
+          else
+            echo "container-release-tag=latest" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Fetch and checkout to release branch
-        run: |
-          git fetch --all
-          git checkout ${{ vars.RELEASE_BRANCH_NAME }}
+  release-publish-npm:
+    needs: [ final-check-before-release ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download source tree for the release
+        uses: actions/download-artifact@v4
+        with:
+          name: src
+          path: ${{ github.workspace }}
 
-      - name: Publish to npm (pre-release)
-        if: env.IS_PRE_RELEASE == 'true'
-        run: npm publish --tag beta
+      - name: Extract source tree
+        run: tar xfz src.tar.gz
+
+      - name: Initialize npm config
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish to npm
-        if: env.IS_PRE_RELEASE == 'false'
-        run: npm publish
+        run: |
+          CMD="npm publish"
+          if [ "${{ needs.final-check-before-release.outputs.is-pre-release }}" == 'true' ]; then
+            CMD="$CMD --tag beta"
+          fi
+          $CMD
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  release-container-image:
+    needs: [ final-check-before-release ]
+    permissions:
+      packages: write
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: ghcr.io
+    steps:
+      - name: Download source tree for the release
+        uses: actions/download-artifact@v4
+        with:
+          name: src
+          path: ${{ github.workspace }}
+
+      - name: Extract source tree
+        run: tar xfz src.tar.gz
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Extract metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          tags: |
+            type=raw,value=${{ needs.final-check-before-release.outputs.container-release-tag }}
+            type=raw,value=${{ needs.final-check-before-release.outputs.latest-release-name }}
+            type=sha
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
+
+      - name: Build and push container image
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: false
