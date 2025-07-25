@@ -22,7 +22,10 @@ export const aggregateOutputsIntoOne = (
 ) => {
   const metricsWithTime = metrics.concat(AGGREGATION_TIME_METRICS);
 
-  return outputs.reduce((acc, output, index) => {
+  type MedianBuckets = Record<string, number[]>;
+  const medianBuckets: MedianBuckets = {};
+
+  const result = outputs.reduce((acc, output, index) => {
     for (const metric of metricsWithTime) {
       if (!(metric in output)) {
         throw new MissingAggregationParamError(METRIC_MISSING(metric, index));
@@ -38,6 +41,15 @@ export const aggregateOutputsIntoOne = (
         /** Checks either its a temporal aggregation (vertical), then chooses `component`, otherwise `time`.  */
         const aggregationType = isTemporal ? 'component' : 'time';
 
+        const method = aggregationParams[aggregationType] as
+          | 'none'
+          | 'copy'
+          | 'sum'
+          | 'avg'
+          | 'min'
+          | 'max'
+          | 'median';
+
         if (aggregationParams[aggregationType] === 'none') {
           continue;
         }
@@ -47,18 +59,68 @@ export const aggregateOutputsIntoOne = (
           continue;
         }
 
-        acc[metric] = acc[metric] ?? 0;
-        acc[metric] += parseFloat(output[metric]);
+        const n = Number(output[metric]);
+        const value = Number.isFinite(n) ? n : 0;
+
+        switch (method) {
+          case 'median': {
+            if (!medianBuckets[metric]) medianBuckets[metric] = [];
+            medianBuckets[metric]!.push(value);
+            break;
+          }
+          case 'min': {
+            const cur = (acc[metric] as number) ?? Number.POSITIVE_INFINITY;
+            acc[metric] = Math.min(cur, value);
+            break;
+          }
+          case 'max': {
+            const cur = (acc[metric] as number) ?? Number.NEGATIVE_INFINITY;
+            acc[metric] = Math.max(cur, value);
+            break;
+          }
+          case 'sum':
+          case 'avg': {
+            const cur = (acc[metric] as number) ?? 0;
+            acc[metric] = cur + value;
+            break;
+          }
+          default: {
+            throw new Error(
+              'Unsupported aggregation method: ${(String(method)} for ${metric}'
+            );
+            break;
+          }
+        }
 
         /** Checks for the last iteration. */
         if (index === outputs.length - 1) {
-          if (aggregationParams[aggregationType] === 'avg') {
+          switch (method) {
+            case 'avg': {
             acc[metric] /= outputs.length;
+            break;
           }
+          case 'median': {
+              const arr = medianBuckets[metric] ?? [];
+              if (arr.length === 0) {
+                acc[metric] = 0;
+              } else {
+                arr.sort((a, b) => a - b);
+                const mid = Math.floor(arr.length / 2);
+                acc[metric] =
+                  arr.length % 2 === 0
+                    ? (arr[mid - 1] + arr[mid]) / 2
+                    : arr[mid];
+              }
+              break;
+            }
+            default:
+              break;
         }
       }
     }
+  }
 
     return acc;
   }, {} as AggregationResult);
+  return result;
 };

@@ -14,7 +14,7 @@ execution:
     node-version: 18.19.1
     date-time: 2025-06-03T00:12:17.558Z (UTC)
     dependencies:
-      - '@grnsft/if-core@0.0.30'
+      - '@grnsft/if-core@0.0.31'
       - axios@1.8.3
       - csv-parse@5.5.6
       - csv-stringify@6.4.6

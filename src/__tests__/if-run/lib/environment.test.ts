@@ -47,7 +47,7 @@ describe('lib/environment: ', () => {
 
       expect.assertions(1);
       expect(response).toHaveProperty('execution');
-    }, 6000);
+    }, 5000);
 
     it('checks `execution` to have `command` and `environment` props.', async () => {
       // @ts-ignore

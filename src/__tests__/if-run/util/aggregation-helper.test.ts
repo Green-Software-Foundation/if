@@ -171,5 +171,121 @@ describe('util/aggregation-helper: ', () => {
       const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
       expect(aggregated).toEqual(expectedValue);
     });
+    it('executes when aggregation properties are `min`.', () => {
+      storeAggregationMetrics({
+        carbon: {
+          time: 'min',
+          component: 'min',
+        },
+      });
+      const inputs: PluginParams[] = [
+        {timestamp: '', duration: 10, carbon: 10},
+        {timestamp: '', duration: 10, carbon: 20},
+      ];
+      const metrics: string[] = ['carbon'];
+      const isTemporal = true;
+
+      const expectedValue = {
+        timestamp: '',
+        duration: 10,
+        carbon: 10,
+      };
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
+      expect(aggregated).toEqual(expectedValue);
+    });
+    it('executes when aggregation properties are `max`.', () => {
+      storeAggregationMetrics({
+        carbon: {
+          time: 'max',
+          component: 'max',
+        },
+      });
+      const inputs: PluginParams[] = [
+        {timestamp: '', duration: 10, carbon: 10},
+        {timestamp: '', duration: 10, carbon: 30},
+        {timestamp: '', duration: 10, carbon: 20},
+      ];
+      const metrics: string[] = ['carbon'];
+      const isTemporal = true;
+
+      const expectedValue = {
+        timestamp: '',
+        duration: 10,
+        carbon: 30,
+      };
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
+      expect(aggregated).toEqual(expectedValue);
+    });
+    it('executes when aggregation properties are `median` for odd length.', () => {
+      storeAggregationMetrics({
+        carbon: {
+          time: 'median',
+          component: 'median',
+        },
+      });
+      const inputs: PluginParams[] = [
+        {timestamp: '', duration: 10, carbon: 1},
+        {timestamp: '', duration: 10, carbon: 9},
+        {timestamp: '', duration: 10, carbon: 5},
+      ];
+      const metrics: string[] = ['carbon'];
+      const isTemporal = true;
+
+      const expectedValue = {
+        timestamp: '',
+        duration: 10,
+        carbon: 5,
+      };
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
+      expect(aggregated).toEqual(expectedValue);
+    });
+    it('executes when aggregation properties are `median` for even length.', () => {
+      storeAggregationMetrics({
+        carbon: {
+          time: 'median',
+          component: 'median',
+        },
+      });
+      const inputs: PluginParams[] = [
+        {timestamp: '', duration: 10, carbon: 1},
+        {timestamp: '', duration: 10, carbon: 100},
+        {timestamp: '', duration: 10, carbon: 9},
+        {timestamp: '', duration: 10, carbon: 4},
+      ];
+      const metrics: string[] = ['carbon'];
+      const isTemporal = true;
+
+      const expectedValue = {
+        timestamp: '',
+        duration: 10,
+        carbon: (4 + 9) / 2,
+      };
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
+      expect(aggregated).toEqual(expectedValue);
+    });
+    it('coerces numeric strings and ignores non-finite values when reducing', () => {
+      storeAggregationMetrics({
+        carbon: {
+          time: 'min',
+          component: 'min',
+        },
+      });
+      const inputs: PluginParams[] = [
+        {timestamp: '', duration: 10, carbon: 10},
+        {timestamp: '', duration: 10, carbon: -2.5},
+        {timestamp: '', duration: 10, carbon: 'NaN'},
+        {timestamp: '', duration: 10, carbon: undefined},
+      ];
+      const metrics: string[] = ['carbon'];
+      const isTemporal = true;
+
+      const expectedValue = {
+        timestamp: '',
+        duration: 10,
+        carbon: -2.5,
+      };
+      const aggregated = aggregateOutputsIntoOne(inputs, metrics, isTemporal);
+      expect(aggregated).toEqual(expectedValue);
+    });
   });
 });

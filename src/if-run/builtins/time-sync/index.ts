@@ -140,6 +140,12 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
       throw new InvalidDateInInputError(INVALID_DATE_TYPE(date));
     };
 
+    const isConstantMethod = (method: string): boolean =>
+      method === 'copy' ||
+      method === 'min' ||
+      method === 'max' ||
+      method === 'median'; 
+
     /**
      * Calculates minimal factor.
      */
@@ -258,7 +264,7 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
           return acc;
         }
 
-        if (aggregationParams.time === 'copy') {
+        if (isConstantMethod(aggregationParams.time)) {
           acc[metric] = input[metric];
           return acc;
         }
@@ -336,7 +342,7 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
             return;
           }
 
-          if (aggregationParams.time === 'copy') {
+          if (isConstantMethod(aggregationParams.time)) {
             acc[metric] = input[metric];
 
             return;

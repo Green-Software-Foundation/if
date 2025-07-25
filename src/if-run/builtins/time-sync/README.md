@@ -92,6 +92,8 @@ Sometimes there might be discontinuities in the time series between one `observa
 
 To solve this problem, for all but the first `observation` in the `inputs` array, we grab the `timestamp` and `duration` from the previous `observation` and check that `timestamp[N] + duration[N] == timestamp[N+1]`. If this condition is not satisfied, we backfill the missing data with a "zero-observation" which is identical to the surrounding observations except any values whose `aggregation-method` is `sum` are set to zero. This is equivalent to assuming that when there is no data available, the app being monitored is switched off.
 
+For metrics whose `aggregation-method` is `min`, `max` or `median`, Time-Sync treats them as constant-like during normalization, so the gap is backfilled by copying the most recent available value rather than zeroing it. This preserves the semantic meaning of these statistics until they are properly reduced during the later aggregation stage.
+
 The end result of this gap-filling is that we have continuous 1 second resolution data that can be resampled to a new temporal resolution.
 
 ```ts
@@ -178,6 +180,7 @@ For example, for `interval = 10` and this time-series
 setting the `upsampling-resolution` to `10s` is preferable to the default behavior.  
 If the default behavior were used, the model would create `300` samples of `1s` each, which would be inefficient. By setting a custom `upsampling-resolution` of `10s`, the model only generates `30` samples, each representing `10s`.
 
+While for `sum`, the value is divided evenly across the slice so that the sum over the original duration is preserved, for `avg` or `copy` or `min` or `max` or `median`, it is treated like a per-second constant because using a base resolution can significantly reduce computation while still preserving the statistical meaning of these values during normalization.
 
 #### Assumptions and limitations
 
