@@ -14,7 +14,8 @@
     "if-csv": "build/if-csv/index.js",
     "if-merge": "build/if-merge/index.js",
     "if-api": "build/if-api/index.js",
-    "if-metadata-check": "build/if-metadata-check/index.js"
+    "if-metadata-check": "build/if-metadata-check/index.js",
+    "if-viz": "build/if-viz/index.js"
   },
   "bugs": {
     "url": "https://github.com/Green-Software-Foundation/if/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
@@ -27,6 +28,7 @@
     "express": "^5.1.0",
     "js-yaml": "^4.1.0",
     "luxon": "^3.4.4",
+    "open": "^11.0.0",
     "ts-command-line-args": "^2.5.1",
     "typescript-cubic-spline": "^1.0.1",
     "winston": "^3.11.0",

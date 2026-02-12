@@ -14,3 +14,4 @@ src/__tests__/integration/manifest
 examples/outputs
 with-plugins/*
 !with-plugins/Dockerfile
+.scratch/
