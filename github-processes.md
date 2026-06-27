@@ -23,7 +23,7 @@
 #### `main`
 - target branch for PRs and releases
 - PRs can be merged into `main` with two core team reviews, one being QA
-- pushing directly to `main` is forbidden - all changes are by PR (except the automated version-bump commit from the release workflow)
+- pushing directly to `main` is forbidden - all changes are by PR (except the signed version-bump commit from the release workflow)
 - PRs will not be merged if they do not pass CI/CD
 - npm packages are published from `main` when a GitHub Release is published
 
@@ -76,17 +76,18 @@ These repositories still use two branches: `main` and `release`.
 2. In GitHub, go to **Releases → Draft a new release**.
 3. Create a tag on `main` using the `v` prefix (for example `v1.2.0` or `v1.2.0-beta.0`).
 4. Check **Set as a pre-release** for beta releases. This publishes to npm with the `beta` dist-tag; stable releases use `latest`.
-5. Publish the release. CI runs tests, bumps `package.json` / `package-lock.json` on `main`, commits the change, and publishes to npm.
+5. Publish the release. CI runs tests, bumps `package.json` / `package-lock.json` on `main`, pushes a signed commit, and publishes to npm.
 
-The version-bump commit is GPG-signed in CI so it satisfies branch protection on `main`. Configure these repository settings first:
+The version-bump commit uses the same SSH signing key as local commits. Configure these repository settings first:
 
-- **Variable** `RELEASE_USER_EMAIL` — email on the GitHub account that owns the signing key
-- **Variable** `RELEASE_USER_NAME` — name used for release commits (for example `GSF Release Bot`)
-- **Secret** `RELEASE_GPG_PRIVATE_KEY` — armored GPG private key for that account
-- **Secret** `RELEASE_GPG_PASSPHRASE` — key passphrase, if any (omit or leave empty if none)
+- **Variable** `RELEASE_USER_EMAIL` — email on your GitHub account (for example `narhovhannisian@gmail.com`)
+- **Variable** `RELEASE_USER_NAME` — optional; name used for release commits
+- **Secret** `RELEASE_SSH_PRIVATE_KEY` — the same SSH **private** key you use locally for commit signing
 - **Secret** `NPM_TOKEN` — npm publish token
 
-The matching GPG public key must be added to the GitHub account for `RELEASE_USER_EMAIL`.
+The matching SSH **public** key must be added to GitHub under **Settings → SSH and GPG keys → New SSH key → Signing Key**.
+
+To retry a failed release without publishing a new GitHub Release, go to **Actions → Release → Run workflow**, enter the tag (for example `v1.1.1`), and run it.
 
 We use [semantic versioning](https://semver.org/) to number our releases.
 
