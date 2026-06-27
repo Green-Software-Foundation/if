@@ -144,7 +144,7 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
       method === 'copy' ||
       method === 'min' ||
       method === 'max' ||
-      method === 'median'; 
+      method === 'median';
 
     /**
      * Calculates minimal factor.

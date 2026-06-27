@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+concurrency:
+  group: release-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Run integration tests
+        run: npm run if-check -- -d manifests/outputs
+
+      - name: Resolve release version
+        id: version
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          VERSION="${TAG#v}"
+          if [ -z "$VERSION" ] || [ "$VERSION" = "$TAG" ]; then
+            echo "::error::Release tag must start with 'v' (for example v1.2.0)."
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event.release.prerelease }}" = "true" ]; then
+            echo "npm-dist-tag=beta" >> "$GITHUB_OUTPUT"
+          else
+            echo "npm-dist-tag=latest" >> "$GITHUB_OUTPUT"
+          fi
+
+      # main requires verified commits; unsigned github-actions[bot] commits were the
+      # original release workflow failure mode
+      - name: Import release signing key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.RELEASE_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.RELEASE_GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Bump version and commit
+        run: |
+          RELEASE_NAME="${{ vars.RELEASE_USER_NAME }}"
+          if [ -z "$RELEASE_NAME" ]; then
+            RELEASE_NAME="GSF Release Bot"
+          fi
+          git config user.name "$RELEASE_NAME"
+          git config user.email "${{ vars.RELEASE_USER_EMAIL }}"
+          npm version "${{ steps.version.outputs.version }}" --no-git-tag-version --allow-same-version
+          if git diff --quiet package.json package-lock.json; then
+            echo "package.json already at ${{ steps.version.outputs.version }}, skipping commit"
+          else
+            HUSKY=0 git commit -S -s -am "chore(release): ${{ steps.version.outputs.version }}"
+            git push origin HEAD:${{ github.event.repository.default_branch }}
+          fi
+
+      - name: Publish to npm
+        run: npm publish --tag "${{ steps.version.outputs.npm-dist-tag }}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

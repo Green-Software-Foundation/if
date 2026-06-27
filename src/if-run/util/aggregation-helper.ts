@@ -86,7 +86,7 @@ export const aggregateOutputsIntoOne = (
           }
           default: {
             throw new Error(
-              'Unsupported aggregation method: ${(String(method)} for ${metric}'
+              `Unsupported aggregation method: ${String(method)} for ${metric}`
             );
             break;
           }
@@ -96,10 +96,10 @@ export const aggregateOutputsIntoOne = (
         if (index === outputs.length - 1) {
           switch (method) {
             case 'avg': {
-            acc[metric] /= outputs.length;
-            break;
-          }
-          case 'median': {
+              acc[metric] /= outputs.length;
+              break;
+            }
+            case 'median': {
               const arr = medianBuckets[metric] ?? [];
               if (arr.length === 0) {
                 acc[metric] = 0;
@@ -115,10 +115,10 @@ export const aggregateOutputsIntoOne = (
             }
             default:
               break;
+          }
         }
       }
     }
-  }
 
     return acc;
   }, {} as AggregationResult);

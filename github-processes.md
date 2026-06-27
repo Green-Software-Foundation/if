@@ -18,10 +18,18 @@
 
 ## Branch names and purposes
 
-Our main repositories all have two branches: `main` and `release`.
-Here are the rules applied to each branch:
+### `if`
 
-### `if`, `if-plugins`, `if-unofficial-plugins` and `if-exhaust-plugins`
+#### `main`
+- target branch for PRs and releases
+- PRs can be merged into `main` with two core team reviews, one being QA
+- pushing directly to `main` is forbidden - all changes are by PR (except the automated version-bump commit from the release workflow)
+- PRs will not be merged if they do not pass CI/CD
+- npm packages are published from `main` when a GitHub Release is published
+
+### `if-plugins`, `if-unofficial-plugins` and `if-exhaust-plugins`
+
+These repositories still use two branches: `main` and `release`.
 
 #### `main`
 - target branch for PRs
@@ -56,20 +64,35 @@ Here are the rules applied to each branch:
 
 ### When can we break our rules?
 
-- `release` branches have the strictest rules. We should never override the process outlined above for `release` branches in any repository.
+- `release` branches (where used) have the strictest rules. We should never override the process outlined above for `release` branches in those repositories.
 - On `main` we can be slightly more flexible. It is acceptable to skip QA for PRs that only change typos, documentation or comments. Any changes to source code or tests should be QA approved before merge.
 - In emergency scenarios where an urgent hotfix is required it might be required to skip QA review on `main` branches - this should only happen with QA authorization so QA can retroactively test as soon as possible.
 
 ### How to create a release
 
-Creating a release of `if`, `if-plugins` or `if-unofficial-plugins` is achieved by following these steps:
+#### `if`
 
-1) core team member creates a tagged release on `main`
-2) new tagged release triggers automatic commit to be pushed to `main` that updates package and lock files that include new version numbers
-3) `main` branch is manually merged into `release` by core team member
-4) merging into release triggers automatic new release to be created on npm
+1. Ensure `main` contains the changes you want to ship and QA has approved.
+2. In GitHub, go to **Releases → Draft a new release**.
+3. Create a tag on `main` using the `v` prefix (for example `v1.2.0` or `v1.2.0-beta.0`).
+4. Check **Set as a pre-release** for beta releases. This publishes to npm with the `beta` dist-tag; stable releases use `latest`.
+5. Publish the release. CI runs tests, bumps `package.json` / `package-lock.json` on `main`, commits the change, and publishes to npm.
 
-We use [semantic versioning](https://semver.org/) to number our releases. 
+The version-bump commit is GPG-signed in CI so it satisfies branch protection on `main`. Configure these repository settings first:
+
+- **Variable** `RELEASE_USER_EMAIL` — email on the GitHub account that owns the signing key
+- **Variable** `RELEASE_USER_NAME` — name used for release commits (for example `GSF Release Bot`)
+- **Secret** `RELEASE_GPG_PRIVATE_KEY` — armored GPG private key for that account
+- **Secret** `RELEASE_GPG_PASSPHRASE` — key passphrase, if any (omit or leave empty if none)
+- **Secret** `NPM_TOKEN` — npm publish token
+
+The matching GPG public key must be added to the GitHub account for `RELEASE_USER_EMAIL`.
+
+We use [semantic versioning](https://semver.org/) to number our releases.
+
+#### `if-plugins` and `if-unofficial-plugins`
+
+Follow the release process documented in those repositories (merge `main` into `release`, then publish from `release`). 
 ## DCO
 
 We require contributors to conform to the DCO agreement on our repositories. This means either signing commits or explicitly adding a DCO commit message. This ensures all contributors agree to the conditions imposed by our licenses and adhere to our expected practices. The DCO must be satisfied in order to PRs to be merged.
@@ -128,11 +151,11 @@ We aim to release fortnightly, every other Tuesday. We release npm packages for 
 
 ## Hotfixes
 
-We will hotfix by raising PRs into `release` when necessary. These PRs require sign-off by a core developer and our QA engineer. 
+For `if`, hotfixes are raised as PRs into `main`, then shipped via a GitHub Release once QA approves.
 
-If more than two hotfixes are required on a particular release, the team will call a spike meeting to determine the causes of the bugs, identify any changes required to our QA process and determine next steps for fixing the release. 
+For repositories that use a `release` branch, we hotfix by raising PRs into `release` when necessary. Those PRs require sign-off by a core developer and our QA engineer.
 
-Hotfixes on release can be merged back into `main` when they have been fully QA tested.
+If more than two hotfixes are required on a particular release, the team will call a spike meeting to determine the causes of the bugs, identify any changes required to our QA process and determine next steps for fixing the release.
 
 We intend for hotfixes to be as infrequent as possible.
 
