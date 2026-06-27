@@ -3,9 +3,20 @@ name: Release
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag (for example v1.1.1)
+        required: true
+        type: string
+      prerelease:
+        description: Publish to npm with the beta dist-tag
+        required: false
+        type: boolean
+        default: false
 
 concurrency:
-  group: release-${{ github.event.release.tag_name }}
+  group: release-${{ github.event.release.tag_name || inputs.tag }}
   cancel-in-progress: false
 
 jobs:
@@ -14,6 +25,17 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Validate secrets
+        run: |
+          if [ -z "${{ secrets.RELEASE_SSH_PRIVATE_KEY }}" ]; then
+            echo "::error::Missing RELEASE_SSH_PRIVATE_KEY. Add the SSH private key you use for commit signing (same as locally)."
+            exit 1
+          fi
+          if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
+            echo "::error::Missing NPM_TOKEN."
+            exit 1
+          fi
+
       - name: Checkout main
         uses: actions/checkout@v4
         with:
@@ -23,7 +45,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           registry-url: https://registry.npmjs.org/
 
       - name: Install dependencies
@@ -37,35 +59,57 @@ jobs:
 
       - name: Resolve release version
         id: version
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_PRERELEASE: ${{ github.event.release.prerelease }}
+          INPUT_TAG: ${{ github.event.inputs.tag }}
+          INPUT_PRERELEASE: ${{ github.event.inputs.prerelease }}
         run: |
-          TAG="${{ github.event.release.tag_name }}"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            TAG="$INPUT_TAG"
+            if [ "$INPUT_PRERELEASE" = "true" ]; then
+              IS_PRERELEASE=true
+            else
+              IS_PRERELEASE=false
+            fi
+          else
+            TAG="$RELEASE_TAG"
+            if [ "$RELEASE_PRERELEASE" = "true" ]; then
+              IS_PRERELEASE=true
+            else
+              IS_PRERELEASE=false
+            fi
+          fi
+
           VERSION="${TAG#v}"
           if [ -z "$VERSION" ] || [ "$VERSION" = "$TAG" ]; then
             echo "::error::Release tag must start with 'v' (for example v1.2.0)."
             exit 1
           fi
+
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          if [ "${{ github.event.release.prerelease }}" = "true" ]; then
+          if [ "$IS_PRERELEASE" = "true" ]; then
             echo "npm-dist-tag=beta" >> "$GITHUB_OUTPUT"
           else
             echo "npm-dist-tag=latest" >> "$GITHUB_OUTPUT"
           fi
 
-      # main requires verified commits; unsigned github-actions[bot] commits were the
-      # original release workflow failure mode
-      - name: Import release signing key
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.RELEASE_GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.RELEASE_GPG_PASSPHRASE }}
-          git_user_signingkey: true
-          git_commit_gpgsign: true
+      - name: Configure SSH commit signing
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.RELEASE_SSH_PRIVATE_KEY }}" > ~/.ssh/release_signing_key
+          chmod 600 ~/.ssh/release_signing_key
+          ssh-keygen -y -f ~/.ssh/release_signing_key > ~/.ssh/release_signing_key.pub
+          git config --global gpg.format ssh
+          git config --global user.signingkey ~/.ssh/release_signing_key.pub
+          git config --global commit.gpgsign true
 
       - name: Bump version and commit
         run: |
           RELEASE_NAME="${{ vars.RELEASE_USER_NAME }}"
           if [ -z "$RELEASE_NAME" ]; then
-            RELEASE_NAME="GSF Release Bot"
+            RELEASE_NAME="Narek Hovhannisyan"
           fi
           git config user.name "$RELEASE_NAME"
           git config user.email "${{ vars.RELEASE_USER_EMAIL }}"
