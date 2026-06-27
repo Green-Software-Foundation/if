@@ -82,10 +82,13 @@ The version-bump commit uses the same SSH signing key as local commits. Configur
 
 - **Variable** `RELEASE_USER_EMAIL` — email on your GitHub account (for example `narhovhannisian@gmail.com`)
 - **Variable** `RELEASE_USER_NAME` — optional; name used for release commits
+- **Secret** `RELEASE_DEPLOY_KEY` — private key for the repo deploy key (write access)
 - **Secret** `RELEASE_SSH_PRIVATE_KEY` — the same SSH **private** key you use locally for commit signing
 - **Secret** `NPM_TOKEN` — npm publish token
 
-The matching SSH **public** key must be added to GitHub under **Settings → SSH and GPG keys → New SSH key → Signing Key**.
+Add the deploy key under **Settings → Deploy keys** (write access). Add **Deploy keys** to the ruleset bypass list for `main` so the release workflow can push directly.
+
+The matching SSH **public** signing key must be added to your GitHub account under **Settings → SSH and GPG keys → Signing Key** (this is separate from the deploy key).
 
 To retry a failed release without publishing a new GitHub Release, go to **Actions → Release → Run workflow**, enter the tag (for example `v1.1.1`), and run it.
 
