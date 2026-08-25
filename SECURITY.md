@@ -1,100 +1,80 @@
-# Security Policy
+# Green Software Foundation Security Policy
+
+The Green Software Foundation (GSF) takes the security of its executable tooling seriously. GSF is hosted as Joint Development Foundation Projects, LLC, Green Software Foundation Series — an affiliate of the Linux Foundation acting as an **Open-Source Software Steward** under the EU Cyber Resilience Act (CRA).
+
+This policy outlines how to report security vulnerabilities, our response SLAs, and our coordinated disclosure process.
+
+---
+
+## Scope
+
+This policy covers GSF's executable, network-connected tooling:
+
+| Deliverable / Component | Repository | Supported | Notes |
+| :--- | :--- | :---: | :--- |
+| Impact Framework (CLI + API server) | `Green-Software-Foundation/if` | **Yes** | Graduated Project; `if-run` CLI and `if-api` network server |
+| Impact Framework plugins | `Green-Software-Foundation/if-plugins` | **Yes** | Plugin ecosystem for the Impact Framework |
+| Carmen (Carbon Measurement Engine) | `Green-Software-Foundation/if-carmen` | **Yes** | Standalone daemon / Kubernetes sidecar; alpha stage, formal GSF approval in progress |
+| Carbon Aware SDK | `Green-Software-Foundation/carbon-aware-sdk` | **Yes** | WebApi + CLI; production use includes UBS, Vestas |
+| Harmony | `Green-Software-Foundation/harmony` | **Yes** | Existing `docs/SECURITY.md` under review against the CRA bar |
+| Badges / Credentials | `Green-Software-Foundation/credentials` | **Yes** | No existing security policy; drafted from scratch here |
+| Reference Implementations | `Green-Software-Foundation/reference-implementations` | **Yes** | Educational/illustrative runnable code, not production tooling |
+| Software Carbon Intensity (SCI) Specification | `Green-Software-Foundation/sci` | **No** | Methodology/scoring standard only, no executable code — not a Product with Digital Elements (PDE) under the CRA |
+
+*Note: Carmen is in active alpha-stage development for the broader community, distinct from its production maturity at Amadeus. Harmony and Badges/Credentials are newly confirmed in scope and are covered directly under this policy rather than tracked separately. Reference Implementations is included as executable code GSF produces and releases, though its educational, non-production character is relevant to how a reported issue here should be triaged. As new repositories reach "executable tooling" status, they will be brought under the scope of this policy.*
+
+---
 
 ## Reporting a Vulnerability
 
-To report a security issue, please email if-disclosures@greensoftware.foundation with a description of the issue, steps required to reproduce the issue, affected versions and, if known, mitigations for the issue.
+If you discover a security vulnerability in any of the tools listed above, **please do not open a public GitHub issue or discuss it in public channels.** Public disclosure before a fix is available puts downstream adopters at risk.
 
-Our contributors are comprised of volunteers so we cannot guarantee a specific response time, but someone from our team will reply and address the issue as soon as possible.
+### How to Submit a Private Report
+Please report security vulnerabilities through one of the following channels:
 
-# Security Review
+1. **GitHub Private Vulnerability Reporting (Preferred):**
+   Navigate to the **Security** tab of the affected repository, click on **Advisories**, and select **Report a vulnerability**.
+2. **Encrypted / Private Email:**
+   Send your report to **security@greensoftware.foundation**.
 
-We perform regular reviews inline with the information provided below.  All releases go through these reviews but multiple people in the project team prior to release as part of our quality and security review.
+### What to Include in Your Report
+To help us triage and resolve the issue quickly, please include:
+* The affected repository, component, and commit SHA/version.
+* A clear description of the vulnerability and its potential security impact.
+* Step-by-step instructions or a proof-of-concept (PoC) to reproduce the issue.
+* Any potential mitigations or remediations you have identified.
 
-## Basics
-### Basic Project Website Content
-- Describe what the project does - ✅  in README and homepage at https://if.greensoftware.foundation
-- Provide info how to obtain/provide feedback and contribute - ✅ https://if.greensoftware.foundation/community
-- Explain contribution process - ✅ https://github.com/Green-Software-Foundation/if/blob/main/CONTRIBUTING.md
+---
 
-### FLOSS license
-- Must be released as FLOSS - ✅ MIT License https://github.com/Green-Software-Foundation/if/blob/main/LICENSE
-- Must post the license - ✅ https://github.com/Green-Software-Foundation/if/blob/main/LICENSE
-- Also approved by OSI - ✅  https://opensource.org/license/MIT/
+## Vulnerability Handling & Response SLAs
 
-### Documentation
-- Provides basic documentation - ✅ https://if.greensoftware.foundation
+Upon receiving a private security report, GSF maintainers will adhere to the following response timeline:
 
-### Other
-- Project site, downloads etc must support HTTPS with TLS - ✅ using GitHub to host which supports this https://github.com/Green-Software-Foundation/if
-- Have mechanism for discussion - ✅ github issues https://github.com/Green-Software-Foundation/if/issues, discussion board https://github.com/Green-Software-Foundation/if/discussions and mailing list at if-community@greensoftware.foundaton
-- Project must be maintained - ✅ actively maintaned by GSF and its members
+* **Acknowledgment:** Receipt of report acknowledged within **72 hours**.
+* **Triage & Assessment:** Initial validation, severity assessment (CVSS), and impact analysis completed within **7 business days**.
+* **Remediation & Advisory:** Fix developed, tested, and coordinated for release alongside a security advisory within a mutually agreed disclosure window (typically 30–90 days, depending on complexity).
 
-## Change control
-###  Public VCS repo
-- Readable public VCS repo - ✅ yes, Github https://github.com/Green-Software-Foundation/if
-- Track changes - ✅ yes, Git https://github.com/Green-Software-Foundation/if/commits/main
-- Interim versions between releases available for review - ✅ yes, interim versions actively developed and availble on the `main` branch https://github.com/Green-Software-Foundation/if
+---
 
-### Unique versioning numbering
-- Unique indentifier for each release - ✅ https://github.com/Green-Software-Foundation/if/releases
+## Coordinated Disclosure & CRA Compliance
 
-### Release notes
-- Human readable release notes for each release (not git log) - ✅ https://github.com/Green-Software-Foundation/if/releases
-- Address each publicly known vulnerability - ✅ N/A, no vulnerability reported yet
+GSF follows Coordinated Vulnerability Disclosure (CVD) principles in accordance with OpenSSF and Linux Foundation guidance.
 
-## Reporting
-### Bug reporting process
-- Process to submit bugs - ✅ https://github.com/Green-Software-Foundation/if/blob/main/CONTRIBUTING.md#reporting-bugs
-- Must acknowledge bugs (reply) submitted between 2-12 months - ✅ each bug has at least an acknowledgement or was opened by a maintainer (so acknowledged by a maintainer): https://github.com/Green-Software-Foundation/if/issues?q=is%3Aopen+is%3Aissue+label%3Abug
-- Publicly available archive for reports and responses - ✅ github issues: https://github.com/Green-Software-Foundation/if/issues?q=is%3Aopen+is%3Aissue+label%3Abug
+### 1. EU CRA Steward Escalation Protocol
+In compliance with Article 24 and Article 14 of the EU Cyber Resilience Act (Regulation (EU) 2024/2847):
+* **Actively Exploited Zero-Days & Severe Incidents:** If a reported vulnerability is determined to be actively exploited in the wild, or if a severe cybersecurity incident affects GSF's development infrastructure, GSF will immediately escalate the issue to Linux Foundation Security (`security@linuxfoundation.org`).
+* **EU Authority Reporting Timeline:** LF Security will coordinate the required notifications to the European Union Agency for Cybersecurity (ENISA) via the Single Reporting Platform (SRP) and designated National CSIRTs, in accordance with the mandatory legal timeframes:
+  * **Early warning:** within **24 hours** of becoming aware of an actively exploited vulnerability or severe incident. *("Becoming aware" means credible confirmation — often reached during the 7-business-day triage step above — not the moment a report is first received. If a report already shows clear evidence of active exploitation, the clock starts immediately.)*
+  * **Vulnerability / incident notification:** within **72 hours**, providing general information on the vulnerability, its nature, and any mitigations taken. *(Measured from the same "becoming aware" point as the early warning above, not a fresh 72-hour count.)*
+  * **Final report:** no later than **14 days** after a corrective or mitigating measure is available for an actively exploited vulnerability (**1 month** for a severe incident), including a description of the issue, severity, and remediation details. *(This deadline is measured from fix availability, not from the awareness date.)*
 
-## Vulnerability report process
-- Have a vulnerability report process - ✅ Included in CONTRIBUTING.md
-- Private vulnerability if supported must include info how to send - ✅ N/A (allowed) - no private vulnerability reporting set up but proposed
-- Initial response time for vulnerability submitted in last 6 months must be <= 14 days - ✅ N/A (allowed) - no vulnerabilities have yet been reported. Response times for bugs and other issues have been <14 days, post-graduation development will be by volunteers and open source developer community, so we can't guarantee a time to resolution.
+### 2. Downstream Security Advisories
+Once a fix is available, GSF will publish a machine-readable GitHub Security Advisory (GHSA) and request a CVE identifier where applicable. This provides full transparency to organisations integrating GSF tooling into their own carbon measurement and reporting pipelines.
 
-## Quality
-### Working build system
-- Must provide a working build system - ✅ IF is a locally running NodeJS app. We do provide a devcontainer for eays environment setup. Installation is simply achieved using `npm i @grnsft/if`.
+---
 
-### Automated test suite
-- Have at least one automated test suite and documentation how to run it - ✅  We have a comprehensive set of unit tests and a library of becnhmark manifest files that act as integration tests. These can be run locally, and they are executed as part of our CI/CD on any PRs into `main`.
+## Contact
 
-## New functionaility testing
-- Formal/informal policy for adding tests for new features - ✅ Test suite in CI/CD checks for breaking changes in PRs. Any new feature must include unit tests and an example manifest that demonstrates usage.
-- Evidence of policy being adhered to - ✅ 
-
-### Warning flags
-- Compiler warning flags or linter tools for code quality/errors - ✅ CodeQL analysis in automated CI : https://github.com/Green-Software-Foundation/carbon-aware-sdk/blob/dev/.github/workflows/1-pr.yaml#L82
-- Address warnings from these tools - ✅ blocking PRs on fail
-
-## Security
-### Secure development knowledge
-- At least one primary developer who knows how to design secure software - ✅ Manushak and Narek are both primary developers and have broad experience.
-- At least one of the project's primary developers MUST know of common kinds of errors that lead to vulnerabilities in this kind of software, as well as at least one method to counter or mitigate each of them - ✅ 
-
-### Use basic good cryptographic practices
-- https://www.bestpractices.dev/en/criteria/0#0.crypto_published - ✅ n/a
-- https://www.bestpractices.dev/en/criteria/0#0.crypto_floss - ✅ n/a 
-- https://www.bestpractices.dev/en/criteria/0#0.crypto_keylength - ✅ n/a
-- https://www.bestpractices.dev/en/criteria/0#0.crypto_working - ✅ n/a
-- https://www.bestpractices.dev/en/criteria/0#0.crypto_password_storage - ✅ n/a
-- https://www.bestpractices.dev/en/criteria/0#0.crypto_random - ✅ n/a
-
-### Secured delivery against man-in-the-middle (MITM) attacks
-- Delivery mechanisms that counters MITM - ✅ n/a
-- Cyrptographic hash NOT retrived over HTTP - ✅  n/a
-
-### Publicly known vulnerabilities fixed
-- No unpatched vulnerabilities of medium or higher severity that have been publicly known for more than 60 day - ✅ no such vulnerabilities
-
-### Other security issues
-- Public repo doesnt leak private credential - ✅ does not do that.
-
-## Analysis
-### Static code analysis
-- At least one FLOSS static code analysis tool - ✅ CodeQL is integrated into our CI/CD.
-- All medium and higher severity exploitable vulnerabilities discovered with static code analysis MUST be fixed in a timely way after they are confirmed - ✅ We have not yet had any exploitable vulnerabilities reported, but the GSF team will respond promptly to any disclosed issues.
-
-### Dynamic code analysis
-- All medium and higher severity exploitable vulnerabilities discovered with dynamic code analysis MUST be fixed in a timely way after they are confirmed. - ✅ We have not yet had any exploitable vulnerabilities reported, but the GSF team will respond promptly to any disclosed issues.
+* **GSF Security Team:** `security@greensoftware.foundation`
+* **Linux Foundation Security Services:** `security@linuxfoundation.org`
+* **Documentation:** [if.greensoftware.foundation](https://if.greensoftware.foundation) · [greensoftware.foundation](https://greensoftware.foundation)
