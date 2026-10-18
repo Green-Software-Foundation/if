@@ -348,20 +348,18 @@ export const TimeSync = PluginFactory<TimeNormalizerConfig>({
             return;
           }
 
+          acc[metric] += input[metric];
+
           /**
-           * If timeslot contains records more than one, then divide each metric by the timeslot length,
-           *  so that their sum yields the timeslot average.
+           * If timeslot contains records more than one, then divide the summed metric by the timeslot length,
+           *  so that it yields the timeslot average.
            */
           if (
             inputsInTimeslot.length > 1 &&
             index === inputsInTimeslot.length - 1
           ) {
             acc[metric] /= inputsInTimeslot.length;
-
-            return;
           }
-
-          acc[metric] += input[metric];
         });
 
         return acc;
