@@ -344,17 +344,17 @@ tree:
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 5
-          cpu/utilization: 22
+          cpu/utilization: 26
           network/energy: 0.0000018
           requests: 98
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.4065
+          cpu-factor: 0.492
           cpu-wattage: 109.19999999999999
           cpu-wattage-times-duration: 246
           cpu-energy-raw: 0.00006833333333333335
@@ -372,19 +372,19 @@ tree:
           sci: 0.0004741895236024395
         - timestamp: '2023-12-12T00:00:05.000Z'
           duration: 5
-          cpu/utilization: 13
+          cpu/utilization: 16
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 7.714285714285713e-7
           requests: 52
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.30975
+          cpu-factor: 0.3845
           cpu-wattage: 29.907142857142862
           cpu-wattage-times-duration: 192.25
           cpu-energy-raw: 0.00005340277777777778
@@ -402,19 +402,19 @@ tree:
           sci: 0.0008649522645669907
         - timestamp: '2023-12-12T00:00:10.000Z'
           duration: 5
-          cpu/utilization: 12
+          cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 4.952380952380952e-7
           requests: 33.666666666666664
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.29900000000000004
+          cpu-factor: 0.37375
           cpu-wattage: 18.50952380952381
           cpu-wattage-times-duration: 186.875
           cpu-energy-raw: 0.00005190972222222222
@@ -434,17 +434,17 @@ tree:
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
+          cpu/utilization: 15
           network/energy: 1.6666666666666668e-7
           requests: 9.166666666666666
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.29900000000000004
+          cpu-factor: 0.37375
           cpu-wattage: 6.229166666666667
           cpu-wattage-times-duration: 186.875
           cpu-energy-raw: 0.00005190972222222223
@@ -464,17 +464,17 @@ tree:
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
+          cpu/utilization: 15
           network/energy: 1.6666666666666668e-7
           requests: 9.166666666666666
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.29900000000000004
+          cpu-factor: 0.37375
           cpu-wattage: 6.229166666666667
           cpu-wattage-times-duration: 186.875
           cpu-energy-raw: 0.00005190972222222223
@@ -494,17 +494,17 @@ tree:
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
+          cpu/utilization: 15
           network/energy: 1.6666666666666668e-7
           requests: 9.166666666666666
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.29900000000000004
+          cpu-factor: 0.37375
           cpu-wattage: 6.229166666666667
           cpu-wattage-times-duration: 186.875
           cpu-energy-raw: 0.00005190972222222223
@@ -524,17 +524,17 @@ tree:
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
+          cpu/utilization: 15
           network/energy: 1.6666666666666668e-7
           requests: 9.166666666666666
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.29900000000000004
+          cpu-factor: 0.37375
           cpu-wattage: 6.229166666666667
           cpu-wattage-times-duration: 186.875
           cpu-energy-raw: 0.00005190972222222223
@@ -554,17 +554,17 @@ tree:
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
+          cpu/utilization: 15
           network/energy: 1.6666666666666668e-7
           requests: 9.166666666666666
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.29900000000000004
+          cpu-factor: 0.37375
           cpu-wattage: 6.229166666666667
           cpu-wattage-times-duration: 186.875
           cpu-energy-raw: 0.00005190972222222223
@@ -590,7 +590,7 @@ tree:
           cpu/thermal-design-power: 60
           grid/carbon-intensity: 480
           device/emissions-embodied: 1533.12
-          time-reserved: 2160.2
+          time-reserved: 2160.4
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
@@ -620,7 +620,7 @@ tree:
           cpu/thermal-design-power: 0
           grid/carbon-intensity: 0
           device/emissions-embodied: 1533.12
-          time-reserved: 0.8
+          time-reserved: 1
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
@@ -650,7 +650,7 @@ tree:
           cpu/thermal-design-power: 0
           grid/carbon-intensity: 0
           device/emissions-embodied: 1533.12
-          time-reserved: 0.8
+          time-reserved: 1
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
@@ -680,7 +680,7 @@ tree:
           cpu/thermal-design-power: 0
           grid/carbon-intensity: 0
           device/emissions-embodied: 1533.12
-          time-reserved: 0.8
+          time-reserved: 1
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
@@ -758,17 +758,17 @@ tree:
           cloud/instance-type: A1
           cloud/region: uk-west
           duration: 5
-          cpu/utilization: 22
+          cpu/utilization: 26
           network/energy: 0.0000018
           requests: 82
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.4065
+          cpu-factor: 0.492
           cpu-wattage: 109.19999999999999
           cpu-wattage-times-duration: 246
           cpu-energy-raw: 0.00006833333333333335
@@ -786,19 +786,19 @@ tree:
           sci: 0.0005667143086955984
         - timestamp: '2023-12-12T00:00:05.000Z'
           duration: 5
-          cpu/utilization: 13
+          cpu/utilization: 16
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 7.714285714285713e-7
           requests: 35.14285714285714
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.30975
+          cpu-factor: 0.3845
           cpu-wattage: 29.907142857142862
           cpu-wattage-times-duration: 192.25
           cpu-energy-raw: 0.00005340277777777778
@@ -816,19 +816,19 @@ tree:
           sci: 0.0012798480662698562
         - timestamp: '2023-12-12T00:00:10.000Z'
           duration: 5
-          cpu/utilization: 12
+          cpu/utilization: 15
           cloud/instance-type: A1
           cloud/region: uk-west
           network/energy: 4.952380952380952e-7
           requests: 14.323809523809523
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.29900000000000004
+          cpu-factor: 0.37375
           cpu-wattage: 18.50952380952381
           cpu-wattage-times-duration: 186.875
           cpu-energy-raw: 0.00005190972222222222
@@ -848,17 +848,17 @@ tree:
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
+          cpu/utilization: 15
           network/energy: 1.6666666666666668e-7
           requests: 3.6666666666666665
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.29900000000000004
+          cpu-factor: 0.37375
           cpu-wattage: 6.229166666666667
           cpu-wattage-times-duration: 186.875
           cpu-energy-raw: 0.00005190972222222223
@@ -878,17 +878,17 @@ tree:
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
+          cpu/utilization: 15
           network/energy: 1.6666666666666668e-7
           requests: 3.6666666666666665
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.29900000000000004
+          cpu-factor: 0.37375
           cpu-wattage: 6.229166666666667
           cpu-wattage-times-duration: 186.875
           cpu-energy-raw: 0.00005190972222222223
@@ -908,17 +908,17 @@ tree:
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
+          cpu/utilization: 15
           network/energy: 1.6666666666666668e-7
           requests: 3.6666666666666665
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.29900000000000004
+          cpu-factor: 0.37375
           cpu-wattage: 6.229166666666667
           cpu-wattage-times-duration: 186.875
           cpu-energy-raw: 0.00005190972222222223
@@ -938,17 +938,17 @@ tree:
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
+          cpu/utilization: 15
           network/energy: 1.6666666666666668e-7
           requests: 3.6666666666666665
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.29900000000000004
+          cpu-factor: 0.37375
           cpu-wattage: 6.229166666666667
           cpu-wattage-times-duration: 186.875
           cpu-energy-raw: 0.00005190972222222223
@@ -968,17 +968,17 @@ tree:
           duration: 5
           cloud/instance-type: A1
           cloud/region: uk-west
-          cpu/utilization: 12
+          cpu/utilization: 15
           network/energy: 1.6666666666666668e-7
           requests: 3.6666666666666665
-          cpu/thermal-design-power: 80
-          grid/carbon-intensity: 640
+          cpu/thermal-design-power: 100
+          grid/carbon-intensity: 800
           device/emissions-embodied: 1533.12
-          time-reserved: 2880
+          time-reserved: 3600
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
-          cpu-factor: 0.29900000000000004
+          cpu-factor: 0.37375
           cpu-wattage: 6.229166666666667
           cpu-wattage-times-duration: 186.875
           cpu-energy-raw: 0.00005190972222222223
@@ -1004,7 +1004,7 @@ tree:
           cpu/thermal-design-power: 60
           grid/carbon-intensity: 480
           device/emissions-embodied: 1533.12
-          time-reserved: 2160.2
+          time-reserved: 2160.4
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
@@ -1034,7 +1034,7 @@ tree:
           cpu/thermal-design-power: 0
           grid/carbon-intensity: 0
           device/emissions-embodied: 1533.12
-          time-reserved: 0.8
+          time-reserved: 1
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
@@ -1064,7 +1064,7 @@ tree:
           cpu/thermal-design-power: 0
           grid/carbon-intensity: 0
           device/emissions-embodied: 1533.12
-          time-reserved: 0.8
+          time-reserved: 1
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
@@ -1094,7 +1094,7 @@ tree:
           cpu/thermal-design-power: 0
           grid/carbon-intensity: 0
           device/emissions-embodied: 1533.12
-          time-reserved: 0.8
+          time-reserved: 1
           device/expected-lifespan: 94608000
           vcpus-allocated: 1
           vcpus-total: 8
@@ -1174,17 +1174,17 @@ tree:
               cloud/instance-type: A1
               cloud/region: uk-west
               duration: 5
-              cpu/utilization: 22
+              cpu/utilization: 26
               network/energy: 0.0000018
               requests: 102
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.4065
+              cpu-factor: 0.492
               cpu-wattage: 109.19999999999999
               cpu-wattage-times-duration: 246
               cpu-energy-raw: 0.00006833333333333335
@@ -1202,19 +1202,19 @@ tree:
               sci: 0.00045559385601018696
             - timestamp: '2023-12-12T00:00:05.000Z'
               duration: 5
-              cpu/utilization: 13
+              cpu/utilization: 16
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 7.714285714285713e-7
               requests: 58.71428571428572
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.30975
+              cpu-factor: 0.3845
               cpu-wattage: 29.907142857142862
               cpu-wattage-times-duration: 192.25
               cpu-energy-raw: 0.00005340277777777778
@@ -1232,19 +1232,19 @@ tree:
               sci: 0.0007660404484242933
             - timestamp: '2023-12-12T00:00:10.000Z'
               duration: 5
-              cpu/utilization: 12
+              cpu/utilization: 15
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 4.952380952380952e-7
               requests: 36.952380952380956
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.29900000000000004
+              cpu-factor: 0.37375
               cpu-wattage: 18.50952380952381
               cpu-wattage-times-duration: 186.875
               cpu-energy-raw: 0.00005190972222222222
@@ -1264,17 +1264,17 @@ tree:
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
-              cpu/utilization: 12
+              cpu/utilization: 15
               network/energy: 1.6666666666666668e-7
               requests: 6.666666666666666
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.29900000000000004
+              cpu-factor: 0.37375
               cpu-wattage: 6.229166666666667
               cpu-wattage-times-duration: 186.875
               cpu-energy-raw: 0.00005190972222222223
@@ -1294,17 +1294,17 @@ tree:
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
-              cpu/utilization: 12
+              cpu/utilization: 15
               network/energy: 1.6666666666666668e-7
               requests: 6.666666666666666
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.29900000000000004
+              cpu-factor: 0.37375
               cpu-wattage: 6.229166666666667
               cpu-wattage-times-duration: 186.875
               cpu-energy-raw: 0.00005190972222222223
@@ -1324,17 +1324,17 @@ tree:
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
-              cpu/utilization: 12
+              cpu/utilization: 15
               network/energy: 1.6666666666666668e-7
               requests: 6.666666666666666
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.29900000000000004
+              cpu-factor: 0.37375
               cpu-wattage: 6.229166666666667
               cpu-wattage-times-duration: 186.875
               cpu-energy-raw: 0.00005190972222222223
@@ -1354,17 +1354,17 @@ tree:
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
-              cpu/utilization: 12
+              cpu/utilization: 15
               network/energy: 1.6666666666666668e-7
               requests: 6.666666666666666
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.29900000000000004
+              cpu-factor: 0.37375
               cpu-wattage: 6.229166666666667
               cpu-wattage-times-duration: 186.875
               cpu-energy-raw: 0.00005190972222222223
@@ -1384,17 +1384,17 @@ tree:
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
-              cpu/utilization: 12
+              cpu/utilization: 15
               network/energy: 1.6666666666666668e-7
               requests: 6.666666666666666
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.29900000000000004
+              cpu-factor: 0.37375
               cpu-wattage: 6.229166666666667
               cpu-wattage-times-duration: 186.875
               cpu-energy-raw: 0.00005190972222222223
@@ -1420,7 +1420,7 @@ tree:
               cpu/thermal-design-power: 60
               grid/carbon-intensity: 480
               device/emissions-embodied: 1533.12
-              time-reserved: 2160.2
+              time-reserved: 2160.4
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
@@ -1450,7 +1450,7 @@ tree:
               cpu/thermal-design-power: 0
               grid/carbon-intensity: 0
               device/emissions-embodied: 1533.12
-              time-reserved: 0.8
+              time-reserved: 1
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
@@ -1480,7 +1480,7 @@ tree:
               cpu/thermal-design-power: 0
               grid/carbon-intensity: 0
               device/emissions-embodied: 1533.12
-              time-reserved: 0.8
+              time-reserved: 1
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
@@ -1510,7 +1510,7 @@ tree:
               cpu/thermal-design-power: 0
               grid/carbon-intensity: 0
               device/emissions-embodied: 1533.12
-              time-reserved: 0.8
+              time-reserved: 1
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
@@ -1588,17 +1588,17 @@ tree:
               cloud/instance-type: A1
               cloud/region: uk-west
               duration: 5
-              cpu/utilization: 22
+              cpu/utilization: 26
               network/energy: 0.0000018
               requests: 90
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.4065
+              cpu-factor: 0.492
               cpu-wattage: 109.19999999999999
               cpu-wattage-times-duration: 246
               cpu-energy-raw: 0.00006833333333333335
@@ -1616,19 +1616,19 @@ tree:
               sci: 0.0005163397034782119
             - timestamp: '2023-12-12T00:00:05.000Z'
               duration: 5
-              cpu/utilization: 13
+              cpu/utilization: 16
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 7.714285714285713e-7
               requests: 44.28571428571428
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.30975
+              cpu-factor: 0.3845
               cpu-wattage: 29.907142857142862
               cpu-wattage-times-duration: 192.25
               cpu-energy-raw: 0.00005340277777777778
@@ -1646,19 +1646,19 @@ tree:
               sci: 0.00101562136871737
             - timestamp: '2023-12-12T00:00:10.000Z'
               duration: 5
-              cpu/utilization: 12
+              cpu/utilization: 15
               cloud/instance-type: A1
               cloud/region: uk-west
               network/energy: 4.952380952380952e-7
               requests: 28.38095238095238
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.29900000000000004
+              cpu-factor: 0.37375
               cpu-wattage: 18.50952380952381
               cpu-wattage-times-duration: 186.875
               cpu-energy-raw: 0.00005190972222222222
@@ -1678,17 +1678,17 @@ tree:
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
-              cpu/utilization: 12
+              cpu/utilization: 15
               network/energy: 1.6666666666666668e-7
               requests: 6.666666666666666
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.29900000000000004
+              cpu-factor: 0.37375
               cpu-wattage: 6.229166666666667
               cpu-wattage-times-duration: 186.875
               cpu-energy-raw: 0.00005190972222222223
@@ -1708,17 +1708,17 @@ tree:
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
-              cpu/utilization: 12
+              cpu/utilization: 15
               network/energy: 1.6666666666666668e-7
               requests: 6.666666666666666
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.29900000000000004
+              cpu-factor: 0.37375
               cpu-wattage: 6.229166666666667
               cpu-wattage-times-duration: 186.875
               cpu-energy-raw: 0.00005190972222222223
@@ -1738,17 +1738,17 @@ tree:
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
-              cpu/utilization: 12
+              cpu/utilization: 15
               network/energy: 1.6666666666666668e-7
               requests: 6.666666666666666
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.29900000000000004
+              cpu-factor: 0.37375
               cpu-wattage: 6.229166666666667
               cpu-wattage-times-duration: 186.875
               cpu-energy-raw: 0.00005190972222222223
@@ -1768,17 +1768,17 @@ tree:
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
-              cpu/utilization: 12
+              cpu/utilization: 15
               network/energy: 1.6666666666666668e-7
               requests: 6.666666666666666
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.29900000000000004
+              cpu-factor: 0.37375
               cpu-wattage: 6.229166666666667
               cpu-wattage-times-duration: 186.875
               cpu-energy-raw: 0.00005190972222222223
@@ -1798,17 +1798,17 @@ tree:
               duration: 5
               cloud/instance-type: A1
               cloud/region: uk-west
-              cpu/utilization: 12
+              cpu/utilization: 15
               network/energy: 1.6666666666666668e-7
               requests: 6.666666666666666
-              cpu/thermal-design-power: 80
-              grid/carbon-intensity: 640
+              cpu/thermal-design-power: 100
+              grid/carbon-intensity: 800
               device/emissions-embodied: 1533.12
-              time-reserved: 2880
+              time-reserved: 3600
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
-              cpu-factor: 0.29900000000000004
+              cpu-factor: 0.37375
               cpu-wattage: 6.229166666666667
               cpu-wattage-times-duration: 186.875
               cpu-energy-raw: 0.00005190972222222223
@@ -1834,7 +1834,7 @@ tree:
               cpu/thermal-design-power: 60
               grid/carbon-intensity: 480
               device/emissions-embodied: 1533.12
-              time-reserved: 2160.2
+              time-reserved: 2160.4
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
@@ -1864,7 +1864,7 @@ tree:
               cpu/thermal-design-power: 0
               grid/carbon-intensity: 0
               device/emissions-embodied: 1533.12
-              time-reserved: 0.8
+              time-reserved: 1
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
@@ -1894,7 +1894,7 @@ tree:
               cpu/thermal-design-power: 0
               grid/carbon-intensity: 0
               device/emissions-embodied: 1533.12
-              time-reserved: 0.8
+              time-reserved: 1
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8
@@ -1924,7 +1924,7 @@ tree:
               cpu/thermal-design-power: 0
               grid/carbon-intensity: 0
               device/emissions-embodied: 1533.12
-              time-reserved: 0.8
+              time-reserved: 1
               device/expected-lifespan: 94608000
               vcpus-allocated: 1
               vcpus-total: 8

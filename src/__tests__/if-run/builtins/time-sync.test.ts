@@ -643,13 +643,13 @@ describe('builtins/time-sync:', () => {
             timestamp: '2023-12-12T00:00:00.000Z',
             duration: 5,
             'resources-total': 10,
-            'time-reserved': 3.2,
+            'time-reserved': 3.4,
           },
           {
             timestamp: '2023-12-12T00:00:05.000Z',
             duration: 4,
             'resources-total': 10,
-            'time-reserved': 3.75,
+            'time-reserved': 4,
           },
         ];
 
@@ -702,13 +702,59 @@ describe('builtins/time-sync:', () => {
             timestamp: '2023-12-12T00:00:00.000Z',
             duration: 5,
             'resources-total': 10,
-            'time-allocated': 3.2,
+            'time-allocated': 3.4,
           },
           {
             timestamp: '2023-12-12T00:00:05.000Z',
             duration: 4,
             'resources-total': 10,
-            'time-allocated': 3.75,
+            'time-allocated': 4,
+          },
+        ];
+
+        expect(result).toStrictEqual(expectedResult);
+      });
+
+      it('averages every value in the interval when aggregation-method is avg.', async () => {
+        const basicConfig = {
+          'start-time': '2023-12-12T00:00:00.000Z',
+          'end-time': '2023-12-12T00:00:10.000Z',
+          interval: 5,
+          'allow-padding': true,
+        };
+
+        storeAggregationMetrics({
+          'memory/utilization': {
+            time: 'avg',
+            component: 'avg',
+          },
+        });
+
+        const timeModel = TimeSync(basicConfig, parametersMetadata, {});
+
+        const result = await timeModel.execute([
+          {
+            timestamp: '2023-12-12T00:00:00.000Z',
+            duration: 5,
+            'memory/utilization': 10,
+          },
+          {
+            timestamp: '2023-12-12T00:00:05.000Z',
+            duration: 5,
+            'memory/utilization': 20,
+          },
+        ]);
+
+        const expectedResult = [
+          {
+            timestamp: '2023-12-12T00:00:00.000Z',
+            duration: 5,
+            'memory/utilization': 10,
+          },
+          {
+            timestamp: '2023-12-12T00:00:05.000Z',
+            duration: 5,
+            'memory/utilization': 20,
           },
         ];
 
