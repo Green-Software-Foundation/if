@@ -11,14 +11,22 @@ import {allDefined} from '../../../common/util/validations';
 
 import {STRINGS} from '../../config';
 
-const {MissingInputDataError, ConfigError} = ERRORS;
+const {MissingInputDataError, ConfigError, InputValidationError} = ERRORS;
 const {
   MISSING_FUNCTIONAL_UNIT_CONFIG,
   MISSING_FUNCTIONAL_UNIT_INPUT,
+  INVALID_FUNCTIONAL_UNIT_INPUT,
   SCI_MISSING_FN_UNIT,
   ZERO_DIVISION,
   MISSING_CONFIG,
 } = STRINGS;
+
+/**
+ * Checks if the functional unit `value` is `null`, an empty string or `false`.
+ * These values pass the `>= 0` check, but division by them returns `Infinity`.
+ */
+const isNonNumericFunctionalUnitValue = (value: unknown) =>
+  value === null || value === '' || value === false;
 
 export const Sci = PluginFactory({
   metadata: {
@@ -72,6 +80,12 @@ export const Sci = PluginFactory({
 
     if (!(functionalUnit in input && input[functionalUnit] >= 0)) {
       throw new MissingInputDataError(MISSING_FUNCTIONAL_UNIT_INPUT);
+    }
+
+    if (isNonNumericFunctionalUnitValue(input[functionalUnit])) {
+      throw new InputValidationError(
+        INVALID_FUNCTIONAL_UNIT_INPUT(functionalUnit, input[functionalUnit])
+      );
     }
 
     const schema = z
