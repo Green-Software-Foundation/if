@@ -123,7 +123,7 @@ The results will be saved to a new `yaml` file.
 
 ## Errors
 
-`SCI` uses one of the IF error classes.
+`SCI` uses the following IF error classes.
 
 ### `MissingInputDataError`
 
