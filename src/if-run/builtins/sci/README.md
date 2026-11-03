@@ -136,6 +136,10 @@ Every element in the `inputs` array must contain:
 - `carbon`: a numeric value named `carbon` must exist in the inputs array
 - whatever value you passed to `functional-unit`
 
+### `InputValidationError`
+
+This error arises when the `functional-unit` value in an input is `null`, an empty string or `false`. The value should be a number. Numeric zero is still accepted: the plugin warns and returns the `carbon` value.
+
 ### Validation errors
 
 There is also a validation step that checks that the `functional-unit` was provided in the plugin config. If you see an error reporting this value as missing, please check you have provided it.
