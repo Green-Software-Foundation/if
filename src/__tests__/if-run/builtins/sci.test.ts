@@ -6,7 +6,7 @@ import {STRINGS} from '../../../if-run/config';
 
 const {MissingInputDataError, ConfigError, InputValidationError} = ERRORS;
 
-const {MISSING_CONFIG} = STRINGS;
+const {MISSING_CONFIG, INVALID_FUNCTIONAL_UNIT_INPUT} = STRINGS;
 
 describe('builtins/sci:', () => {
   describe('Sci: ', () => {
@@ -202,6 +202,76 @@ describe('builtins/sci:', () => {
         } catch (error) {
           expect(error).toBeInstanceOf(MissingInputDataError);
         }
+      });
+
+      it.each([null, '', false])(
+        'throws an error if functional unit value is %p.',
+        async value => {
+          const config = {'functional-unit': 'requests'};
+          const sci = Sci(config, parametersMetadata, {});
+          const inputs = [
+            {
+              timestamp: '2021-01-01T00:00:00Z',
+              carbon: 10,
+              duration: 60,
+              requests: value,
+            },
+          ];
+
+          expect.assertions(1);
+
+          try {
+            await sci.execute(inputs);
+          } catch (error) {
+            expect(error).toStrictEqual(
+              new InputValidationError(
+                INVALID_FUNCTIONAL_UNIT_INPUT('requests', value)
+              )
+            );
+          }
+        }
+      );
+
+      it('divides by functional unit value if it is a numeric string.', async () => {
+        const config = {'functional-unit': 'requests'};
+        const sci = Sci(config, parametersMetadata, {});
+        const inputs = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            carbon: 10,
+            duration: 60,
+            requests: '4',
+          },
+        ];
+        const result = await sci.execute(inputs);
+
+        expect.assertions(1);
+
+        expect(result).toStrictEqual([{...inputs[0], requests: 4, sci: 2.5}]);
+      });
+
+      it('fallbacks to carbon value, if functional unit is `0` string.', async () => {
+        const mockConsoleWarn = jest
+          .spyOn(console, 'warn')
+          .mockImplementation();
+        const config = {'functional-unit': 'requests'};
+        const sci = Sci(config, parametersMetadata, {});
+        const inputs = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            carbon: 10,
+            duration: 60,
+            requests: '0',
+          },
+        ];
+        const result = await sci.execute(inputs);
+
+        expect.assertions(2);
+
+        expect(result).toStrictEqual([{...inputs[0], requests: 0, sci: 10}]);
+        expect(mockConsoleWarn).toHaveBeenCalledWith(
+          '-- SKIPPING -- DivisionByZero: you are attempting to divide by zero in Sci plugin : inputs[0]\n'
+        );
       });
     });
 
