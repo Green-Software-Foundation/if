@@ -123,7 +123,7 @@ The results will be saved to a new `yaml` file.
 
 ## Errors
 
-`SCI` uses one of the IF error classes.
+`SCI` uses the following IF error classes.
 
 ### `MissingInputDataError`
 
@@ -135,6 +135,10 @@ Every element in the `inputs` array must contain:
 - `duration`
 - `carbon`: a numeric value named `carbon` must exist in the inputs array
 - whatever value you passed to `functional-unit`
+
+### `InputValidationError`
+
+This error arises when the `functional-unit` value in an input is `null`, `false`, an empty string or a whitespace-only string (for example `' '` or `'\t'`). The value should be a number. Numeric zero is still accepted: the plugin warns and returns the `carbon` value.
 
 ### Validation errors
 

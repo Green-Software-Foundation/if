@@ -90,6 +90,10 @@ https://if.greensoftware.foundation/major-concepts/imp-file`,
     '`functional-unit` should be provided in your config',
   MISSING_FUNCTIONAL_UNIT_INPUT:
     '`functional-unit` value is missing from input data or it is not a positive integer',
+  INVALID_FUNCTIONAL_UNIT_INPUT: (functionalUnit: string, value: unknown) =>
+    `The functional unit \`${functionalUnit}\` in input data should be a number, but got \`${JSON.stringify(
+      value
+    )}\`.`,
   REGEX_MISMATCH: (input: any, match: string) =>
     `\`${input}\` does not match the ${match} regex expression`,
   MISSING_MIN_MAX: 'Config is missing min or max value',
