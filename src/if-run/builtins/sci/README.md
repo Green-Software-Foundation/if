@@ -138,7 +138,7 @@ Every element in the `inputs` array must contain:
 
 ### `InputValidationError`
 
-This error arises when the `functional-unit` value in an input is `null`, an empty string or `false`. The value should be a number. Numeric zero is still accepted: the plugin warns and returns the `carbon` value.
+This error arises when the `functional-unit` value in an input is `null`, `false`, an empty string or a whitespace-only string (for example `' '` or `'\t'`). The value should be a number. Numeric zero is still accepted: the plugin warns and returns the `carbon` value.
 
 ### Validation errors
 
