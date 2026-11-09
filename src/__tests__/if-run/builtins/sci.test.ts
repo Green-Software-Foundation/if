@@ -204,7 +204,7 @@ describe('builtins/sci:', () => {
         }
       });
 
-      it.each([null, '', false])(
+      it.each([null, '', false, ' ', '\t', '\n'])(
         'throws an error if functional unit value is %p.',
         async value => {
           const config = {'functional-unit': 'requests'};
@@ -241,6 +241,24 @@ describe('builtins/sci:', () => {
             carbon: 10,
             duration: 60,
             requests: '4',
+          },
+        ];
+        const result = await sci.execute(inputs);
+
+        expect.assertions(1);
+
+        expect(result).toStrictEqual([{...inputs[0], requests: 4, sci: 2.5}]);
+      });
+
+      it('divides by functional unit value if it is a padded numeric string.', async () => {
+        const config = {'functional-unit': 'requests'};
+        const sci = Sci(config, parametersMetadata, {});
+        const inputs = [
+          {
+            timestamp: '2021-01-01T00:00:00Z',
+            carbon: 10,
+            duration: 60,
+            requests: ' 4 ',
           },
         ];
         const result = await sci.execute(inputs);
