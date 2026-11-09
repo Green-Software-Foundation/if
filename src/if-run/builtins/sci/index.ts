@@ -22,11 +22,14 @@ const {
 } = STRINGS;
 
 /**
- * Checks if the functional unit `value` is `null`, an empty string or `false`.
- * These values pass the `>= 0` check, but division by them returns `Infinity`.
+ * Checks if the functional unit `value` is `null`, `false` or a string that is
+ * empty or whitespace-only. These values pass the `>= 0` check, but division
+ * by them returns `Infinity`.
  */
 const isNonNumericFunctionalUnitValue = (value: unknown) =>
-  value === null || value === '' || value === false;
+  value === null ||
+  value === false ||
+  (typeof value === 'string' && value.trim() === '');
 
 export const Sci = PluginFactory({
   metadata: {
